@@ -29,13 +29,13 @@
 </html>
 
 <?php
-  if(isset($_POST['submit'])){
-    include 'connect.php'; // connect to database
+  if (isset($_POST['submit'])) {
+      include 'connect.php'; // connect to database
     include 'functions.php';
 
-    $txt = SanitizeAndEscapeString($con, $_POST['text']);
-    $title = SanitizeAndEscapeString($con, $_POST['title']);
+      $txt = SanitizeAndEscapeString($con, $_POST['text']);
+      $title = SanitizeAndEscapeString($con, $_POST['title']);
 
-    $result = mysqli_query($con, "INSERT INTO texts (textTitle, text) VALUES ('$title', '$txt') ") or die(mysqli_error($con));
+      $result = mysqli_query($con, "INSERT INTO texts (textTitle, text) VALUES ('$title', '$txt') ") or die(mysqli_error($con));
   }
  ?>

@@ -26,16 +26,15 @@
 
 <?php
 if (isset($_POST['word'])) {
-  include 'connect.php'; // connect to database
+    include 'connect.php'; // connect to database
   include 'functions.php';
 
-  $word = SanitizeAndEscapeString($con, $_POST['word']);
-  $translation = SanitizeAndEscapeString($con, $_POST['translation']);
+    $word = SanitizeAndEscapeString($con, $_POST['word']);
+    $translation = SanitizeAndEscapeString($con, $_POST['translation']);
   //$image = sanitizeString($con, $_POST['image']);
   $tags = SanitizeAndEscapeString($con, $_POST['tags']);
 
-  $result = mysqli_query($con, "INSERT INTO words (word, wordTranslation, tags) VALUES ('$word', '$translation', '$tags') ") or die(mysqli_error($con));
-
+    $result = mysqli_query($con, "INSERT INTO words (word, wordTranslation, tags) VALUES ('$word', '$translation', '$tags') ") or die(mysqli_error($con));
 }
 ?>
 
