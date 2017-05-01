@@ -1,45 +1,28 @@
 <?php require_once('header.php') ?>
 
 	<!-- *****************************************************************************************************************
-	 BLUE WRAP
-	 ***************************************************************************************************************** -->
-	<div id="blue">
-	    <div class="container">
-			<div class="row">
-				<h3>Contact.</h3>
-			</div><!-- /row -->
-	    </div> <!-- /container -->
-	</div><!-- /blue -->
-
-	<!-- *****************************************************************************************************************
-	 CONTACT FORMS
+	 TABS
 	 ***************************************************************************************************************** -->
 
 	 <div class="container mtb">
 	 	<div class="row">
 	 		<div class="col-lg-8">
-	 			<h4>Just Get In Touch!</h4>
-	 			<div class="hline"></div>
-		 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-		 			<form role="form">
-					  <div class="form-group">
-					    <label for="InputName1">Your Name</label>
-					    <input type="email" class="form-control" id="exampleInputEmail1">
-					  </div>
-					  <div class="form-group">
-					    <label for="InputEmail1">Email address</label>
-					    <input type="email" class="form-control" id="exampleInputEmail1">
-					  </div>
-					  <div class="form-group">
-					    <label for="InputSubject1">Subject</label>
-					    <input type="email" class="form-control" id="exampleInputEmail1">
-					  </div>
-					  <div class="form-group">
-					  	<label for="message1">Message</label>
-					  	<textarea class="form-control" id="message1" rows="3"></textarea>
-					  </div>
-					  <button type="submit" class="btn btn-theme">Submit</button>
-					</form>
+				<!-- Tabs  -->
+				<ul class="nav nav-tabs">
+						<li class="nav active"><a href="#library" data-toggle="tab">Library</a></li>
+						<li class="nav"><a href="#wordlist" data-toggle="tab">Word list</a></li>
+						<li class="nav"><a href="#statistics" data-toggle="tab">Statistics</a></li>
+						<li class="nav"><a href="#flashcards" data-toggle="tab">Flashcards</a></li>
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div class="tab-pane fade in active" id="library"><?php require_once('show_texts.php') ?></div>
+					<div class="tab-pane fade" id="wordlist"><?php require_once('show_words.php') ?></div>
+					<div class="tab-pane fade" id="statistics"><?php require_once('show_stats.php') ?></div>
+					<div class="tab-pane fade" id="flashcards"><?php require_once('show_flashcards.php') ?></div>
+				</div>
+
 			</div><! --/col-lg-8 -->
 
 	 		<div class="col-lg-4">
