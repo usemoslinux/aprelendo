@@ -29,8 +29,3 @@
 
       return $text;
   }
-
-  function colorizeSelWord($text, $word)
-  {
-    return preg_replace("/\b".$word."\b(?![^<]*>)/ui", "<span class='word learning'>$0</span>", "$text");
-  }
