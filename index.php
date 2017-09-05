@@ -17,7 +17,7 @@
 
 				<!-- Tab panes -->
 				<div class="tab-content">
-					<div class="tab-pane fade in active" id="library"><?php require_once('show_texts.php') ?></div>
+					<div class="tab-pane fade in active" id="library"><?php require_once('listtexts.php') ?></div>
 					<div class="tab-pane fade" id="wordlist"><?php require_once('show_words.php') ?></div>
 					<div class="tab-pane fade" id="statistics"><?php require_once('show_stats.php') ?></div>
 					<div class="tab-pane fade" id="flashcards"><?php require_once('show_flashcards.php') ?></div>

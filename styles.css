@@ -52,3 +52,13 @@ a, a:hover, a:focus {
 .lvl5 {
 	 border-bottom: 2px solid #DDFFDD;
 }
+
+.forget {
+	margin-right: 10px;
+	margin-top: 2px;
+}
+
+.big-close {
+	font-size: 35px;
+	margin-top: 2px !important;
+}

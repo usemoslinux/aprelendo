@@ -50,31 +50,30 @@
     </div>
 
 
-    <!-- Modal window -->
-    <div id="myModal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button id="btnremove" type="button" data-dismiss="modal" class="btn btn-danger">Forget</button>
-            <button id="btnadd" type="button" class="btn btn-primary btn-success pull-right" data-dismiss="modal">Add</button>
-          </div>
-          <div class="modal-body" id="definitions">
-            <iframe id="dicFrame" style="width:100%;" frameborder="0"></iframe>
-          </div>
-        </div>
-      </div>
-    </div>
 
   </body>
 </html>
 
+<!-- Modal window -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close big-close" data-dismiss="modal">&times;</button>
+        <button type="button" data-dismiss="modal" class="btn btn-danger pull-right forget">Forget</button>
+        <h4>Dictionary</h4>
+      </div>
+      <div class="modal-body" id="definitions">
+        <iframe id="dicFrame" style="width:100%;" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 
   $(document).ready(function() {
-
-    selword = null;
 
     $(document).on("click", "a", function(){
       // show dictionary
@@ -83,52 +82,32 @@
 
       $('#dicFrame').attr('height', $(window).height()-150);
       $('#dicFrame').attr('src', url);
-      selword = $(this);
-    });
 
-    $('#btnadd').on("click", function() {
       // add word to "words" table
       $.ajax({
         type: "POST",
         url: "addword.php",
-        data: { word: selword.text() },
-        success: function(){ // if successful, underline word
-          var element = selword;
+        data: { word: this.text },
+        context: this,
+        success: function(data){ // if successful, underline word
+          //$(this).toggleClass('word learning');
+          var element = $(this);
           var word = element.text().toLowerCase();
           $('a').each(function(){
-            linkword = selword.text().toLowerCase();
+            linkword = $(this).text().toLowerCase();
             if (word == linkword) {
               // remove old underlining if it already exists
-              if (selword.parent().hasClass('word')) {
-                selword.parent().replaceWith(selword);
+              if ($(this).parent().hasClass('word')) {
+                $(this).parent().replaceWith($(this));
               }
               // add 'new' underlining
-              selword.wrap("<span class='word new'></span>");
+              $(this).wrap("<span class='word new'></span>");
             }
           });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
           alert("Oops! There was an error adding the word to the database.");
         }
-      });
-    });
-
-    $('#btnremove').on('click', function(){
-      $.ajax({
-        type: "POST",
-        url: "removeword.php",
-        data: { word: selword.text() },
-        success: function(){
-            if (selword.parent().hasClass('learning')) {
-              selword.parent().removeClass('word learning');
-            } else if (selword.parent().hasClass('new')) {
-                selword.parent().removeClass('word new');
-            }
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-          alert("Oops! There was an error removing the word from the database.");
-        }
-
       });
     });
 
