@@ -51,3 +51,5 @@
         </div><!--/.nav-collapse -->
       </div>
     </div>
+
+    <?php require_once('../private/init.php'); ?>

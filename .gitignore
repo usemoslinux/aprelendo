@@ -1,5 +1,6 @@
 .htaccess
 .remote-sync.json
-temp.php
-test.php
 php-info.php
+temp/
+/private/passwords.php
+todo.md

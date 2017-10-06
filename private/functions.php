@@ -1,4 +1,5 @@
 <?php
+
 function addParagraphs($text) // Add paragraph elements to text
 {
   $lf = chr(10);
@@ -18,7 +19,7 @@ function addlinks($text)
 
 function colorizeWords($text)
 {
-  require 'connect.php';
+  require 'db_connect.php';
 
   $result = mysqli_query($con, 'SELECT word, wordStatus FROM words') or die(mysqli_error($con));
   while ($row = mysqli_fetch_assoc($result)) {
@@ -29,3 +30,5 @@ function colorizeWords($text)
 
   return $text;
 }
+
+?>

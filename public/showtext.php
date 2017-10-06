@@ -19,8 +19,7 @@
           <?php
             ini_set('max_execution_time', 300); //300 seconds = 5 minutes
             $time_start = microtime(true);
-            require_once 'connect.php'; // connect to database
-            require_once 'functions.php'; // used for addParagraphs, addLinks & colorizeWords
+            require_once('../private/init.php'); // connect to database
 
             $id = mysqli_real_escape_string($con, $_GET['id']);
 
@@ -50,30 +49,31 @@
     </div>
 
 
+    <!-- Modal window -->
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button id="btnremove" type="button" data-dismiss="modal" class="btn btn-danger">Forget</button>
+            <button id="btnadd" type="button" class="btn btn-primary btn-success pull-right" data-dismiss="modal">Add</button>
+          </div>
+          <div class="modal-body" id="definitions">
+            <iframe id="dicFrame" style="width:100%;" frameborder="0"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </body>
 </html>
 
-<!-- Modal window -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close big-close" data-dismiss="modal">&times;</button>
-        <button type="button" data-dismiss="modal" class="btn btn-danger pull-right forget">Forget</button>
-        <h4>Dictionary</h4>
-      </div>
-      <div class="modal-body" id="definitions">
-        <iframe id="dicFrame" style="width:100%;" frameborder="0"></iframe>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script>
 
   $(document).ready(function() {
+
+    selword = null;
 
     $(document).on("click", "a", function(){
       // show dictionary
@@ -82,32 +82,60 @@
 
       $('#dicFrame').attr('height', $(window).height()-150);
       $('#dicFrame').attr('src', url);
+      selword = $(this);
+    });
 
+    $('#btnadd').on("click", function() {
       // add word to "words" table
       $.ajax({
         type: "POST",
         url: "addword.php",
-        data: { word: this.text },
-        context: this,
-        success: function(data){ // if successful, underline word
-          //$(this).toggleClass('word learning');
-          var element = $(this);
-          var word = element.text().toLowerCase();
-          $('a').each(function(){
-            linkword = $(this).text().toLowerCase();
-            if (word == linkword) {
-              // remove old underlining if it already exists
-              if ($(this).parent().hasClass('word')) {
-                $(this).parent().replaceWith($(this));
-              }
-              // add 'new' underlining
-              $(this).wrap("<span class='word new'></span>");
-            }
-          });
+        data: { word: selword.text() },
+        success: function(){ // if successful, underline word
+          var filter = $('a').filter(function() { return $(this).text().toLowerCase() === selword.text().toLowerCase() });
+          if (selword.parent().hasClass('word')) {
+            filter.parent().replaceWith(selword);
+          }
+          filter.wrap("<span class='word new'></span>");
+          // var element = selword;
+          // var word = element.text().toLowerCase();
+          // $('a').each(function(){
+          //   var linkword = selword.text().toLowerCase();
+          //   if (word == linkword) {
+          //     // remove old underlining if it already exists
+          //     if (selword.parent().hasClass('word')) {
+          //       selword.parent().replaceWith(selword);
+          //     }
+          //     // add 'new' underlining
+          //     selword.wrap("<span class='word new'></span>");
+          //   }
+          // });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
           alert("Oops! There was an error adding the word to the database.");
         }
+      });
+    });
+
+    $('#btnremove').on('click', function(){
+      $.ajax({
+        type: "POST",
+        url: "removeword.php",
+        data: { word: selword.text() },
+        success: function(){
+          var filter = $('.word').filter(function() { return $(this).text().toLowerCase() === selword.text().toLowerCase() });
+          //var filter = '.learning:contains(' + selword.text() + ')';
+
+          if (selword.parent().hasClass('word learning')) {
+            filter.removeClass('word learning');
+          } else if (selword.parent().hasClass('word new')) {
+            filter.removeClass('word new');
+          }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+          alert("Oops! There was an error removing the word from the database.");
+        }
+
       });
     });
 

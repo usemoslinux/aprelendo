@@ -29,5 +29,6 @@
 
 # BUGS
 
+- error when user enters http://localhost/showtext.php without and id
 
 # ROADMAP
