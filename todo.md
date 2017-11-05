@@ -1,34 +1,62 @@
-# STRUCTURE
-
-- listtexts.php: shows article list
-- showtext.php: shows article > #dicFrame: modal frame that shows dictionary when user clicks a word
-- finishedreading.php: called when user clicks the "finished reading" button
-
-- addtext: ui to add new texts
-- addword: called to add new words to the db
-
-- functions.php: stores global functions
-- connect.php: stores functions to connect to the db
-
-
-# ADDTEXT.PHP
-
-- BUG: handle errors (like text too long or string too long for title)
-
-# ADDWORD.PHP
-
-- when i click a word, underline all occurrences of that same word in the text (in another color? > easier to identify when clicking "finished reading")
-
-# TODO
-
-- agregar otros idiomas
-- mejorar diseño
-- agregar audio del texto
-- agregar rss
-- agregar posibilidad de seleccionar frases
-
-# BUGS
-
-- error when user enters http://localhost/showtext.php without and id
-
 # ROADMAP
+
+
+## ALPHA
+
+- [ ] Finish building basic layout for "My Texts" tab
+
+  - [x] Build basic structure
+
+  - [x] Implement "Delete"
+
+  - [x] Implement search box
+
+  - [ ] Show "total words" & "status"
+
+  - [ ] Implement "mark as read" (mark as read & archive are the same thing? remove archive option?)
+
+  - [x] Correct footer's 4th column
+
+  - [ ] Implement "add text" button (in right column?)
+
+    - [ ] Show addtext.php inside MyTexts tab & redo layout
+
+  - [ ] Implement pagination
+
+- [ ] Restructure folders
+
+- [ ] Apply new theme
+
+- [ ] Add audio
+
+- [ ] Add support for more than one language
+
+- [ ] Add support to import rss texts
+
+- [ ] Add support for ebook uploading
+
+## BUGS
+
+- [x] footer.php: are all the bootstrap javascript files loading correctly?
+
+- [ ] showtext.php: show error when user enters without and id ?
+
+- [ ] addtext.php: handle errors (like text too long or string too long for title)
+
+## BETA
+
+- [feature] Enable login w/facebook or google
+
+- [feature] Add support for phrases and multi-word selection
+
+
+
+
+<form class="" action="" method="post">
+  <div class="input-group searchbox">
+    <input type="text" id="search" name="searchtext" class="form-control" placeholder="Search...">
+    <div class="input-group-btn">
+      <button type="submit" name="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+    </div>
+  </div>
+</form>

@@ -1,19 +1,13 @@
-body {
-	font: 16px/1 sans-serif;
-	line-height: 1.5;
-}
-
-p {
-	font-family: 'Roboto','Arial','Helvetica',sans-serif;
-	font-size: 140%;
-	font-weight: 300;
-	text-align: justify;
-	margin-top: 1.5em;
+#textdiv > p {
+	font-family: 'Georgia','Times New Roman',serif;
+	line-height: 1.6em;
+	font-size: 1.4em;
+	/*text-align: justify;*/
 }
 
 h1 {
 	font-family: 'Georgia','Times New Roman',serif;
-	font-size: 200%;
+	line-height: 1em;
 }
 
 .tooltip {
@@ -61,4 +55,14 @@ a, a:hover, a:focus {
 .big-close {
 	font-size: 35px;
 	margin-top: 2px !important;
+}
+
+.searchbox {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.nopadding {
+  padding-right:0;
+  padding-left:0;
 }

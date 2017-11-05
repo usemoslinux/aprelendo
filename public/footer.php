@@ -30,21 +30,14 @@
         </p>
       </div>
 
-    </div><! --/row -->
-  </div><! --/container -->
- </div><! --/footerwrap -->
+    </div>
+  </div>
+ </div>
 
   <!-- Bootstrap core JavaScript
   ================================================== -->
-  <!-- Placed at the end of the document so the pages load faster -->
+  <!-- Placed at the end of the document so pages load faster -->
 <script src="js/bootstrap.min.js"></script>
-<script src="js/retina-1.1.0.js"></script>
-<script src="js/jquery.hoverdir.js"></script>
-<script src="js/jquery.hoverex.min.js"></script>
-<script src="js/jquery.prettyPhoto.js"></script>
-<script src="js/jquery.isotope.min.js"></script>
-<script src="js/custom.js"></script>
-
 
 </body>
 </html>

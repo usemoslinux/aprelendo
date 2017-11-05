@@ -1,22 +1,24 @@
-<form class="" action="addtext.php" method="post">
-  <div class="formgroup">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" class="form-control" autofocus></textarea>
-  </div>
-  <div class="formgroup">
-    <label for="text">Text:</label>
-    <textarea id="text" name="text" class="form-control" rows="16" cols="80"></textarea>
-  </div>
-  <button type="submit" name="submit" class="btn btn-default">save</button>
-  <button type="button" name="cancel" class="btn btn-default">cancel</button>
-</form>
+<?php require_once('header.php') ?>
 
-<?php
-  if (isset($_POST['submit'])) {
-    require_once('../private/init.php'); // connect to database
+<div class="container mtb">
+  <div class="row">
+    <div class="col-lg-12">
 
-    $text = mysqli_real_escape_string($con, $_POST['text']);
-    $title = mysqli_real_escape_string($con, $_POST['title']);
-    $result = mysqli_query($con, "INSERT INTO texts (textTitle, text) VALUES ('$title', '$text') ") or die(mysqli_error($con));
-  }
- ?>
+      <form action="../private/addtext.php" method="post">
+        <div class="form-group">
+          <label for="title">Title:</label>
+          <input type="text" id="title" name="title" class="form-control" autofocus></textarea>
+        </div>
+        <div class="form-group">
+          <label for="text">Text:</label>
+          <textarea id="text" name="text" class="form-control" rows="16" cols="80"></textarea>
+        </div>
+        <button type="button" name="cancel" class="btn btn-danger" onclick="window.location='/'">Cancel</button>
+        <button type="submit" name="submit" class="btn btn-success">Save</button>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<?php require_once('footer.php') ?>

@@ -4,7 +4,7 @@
 
 define('DB_SERVER', 'localhost');
 define('DB_NAME', 'langx');
-define('DB_USER', 'root');
-define('DB_PASSWORD', 'glorfindel');
+define('DB_USER', 'username');
+define('DB_PASSWORD', 'password');
 
 ?>
