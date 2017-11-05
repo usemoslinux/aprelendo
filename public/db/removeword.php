@@ -1,7 +1,7 @@
 <?php
 
   if (isset($_POST['word'])) {
-    require_once('../private/init.php'); // connect to database
+    require_once('dbinit.php'); // connect to database
 
     $word = mysqli_real_escape_string($con, $_POST['word']);
 

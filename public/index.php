@@ -15,7 +15,7 @@
 
 				<!-- Tab panes: content inside tabs -->
 				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane fade in active" id="mytexts"><?php require_once(PRIVATE_PATH . 'listtexts.php') ?></div>
+					<div role="tabpanel" class="tab-pane fade in active" id="mytexts"><?php require_once('listtexts.php') ?></div>
 					<div role="tabpanel" class="tab-pane fade" id="rss">chau</div>
 				</div>
 			</div>

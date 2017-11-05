@@ -19,7 +19,7 @@ function addlinks($text)
 
 function colorizeWords($text)
 {
-  require 'db_connect.php';
+  require 'db/dbconnect.php';
 
   $result = mysqli_query($con, 'SELECT word, wordStatus FROM words') or die(mysqli_error($con));
   while ($row = mysqli_fetch_assoc($result)) {

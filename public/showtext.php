@@ -19,7 +19,8 @@
         <?php
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
         $time_start = microtime(true);
-        require_once('../private/init.php'); // connect to database
+        require_once('db/dbinit.php'); // connect to database
+        require_once('functions.php');
 
         $id = mysqli_real_escape_string($con, $_GET['id']);
 
@@ -90,7 +91,7 @@ $(document).ready(function() {
     // add word to "words" table
     $.ajax({
       type: "POST",
-      url: "addword.php",
+      url: "db/addword.php",
       data: { word: selword.text() },
       success: function(){ // if successful, underline word
         var filter = $('a').filter(function() { return $(this).text().toLowerCase() === selword.text().toLowerCase() });
@@ -121,7 +122,7 @@ $(document).ready(function() {
   $('#btnremove').on('click', function(){
     $.ajax({
       type: "POST",
-      url: "removeword.php",
+      url: "db/removeword.php",
       data: { word: selword.text() },
       success: function(){
         var filter = $('.word').filter(function() { return $(this).text().toLowerCase() === selword.text().toLowerCase() });

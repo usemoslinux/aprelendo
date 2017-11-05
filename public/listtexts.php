@@ -54,7 +54,7 @@ function print_table_content($textID, $textTitle) {
 
 // show page
 
-require_once('../private/init.php'); // connect to database
+require_once('db/dbinit.php'); // connect to database
 
 if (isset($_POST['submit'])) { // if the page is loaded because user searched for something, show search results
   $searchtext = mysqli_real_escape_string($con, $_POST['searchtext']);
@@ -83,28 +83,26 @@ if (isset($_POST['submit'])) { // if the page is loaded because user searched fo
 <script type="text/javascript">
 $(document).ready(function() {
 
+  // action menu implementation
+
+  // action: delete (deletes selected texts from db)
   $("#mDelete").on("click", function() {
-
     idText = null;
-
     $("input[type=checkbox]:checked").each(function() {
       id = $(this).attr('data-idText');
       parentTR = $(this).closest('tr');
-
       $.ajax({
-        url: 'removetext.php',
+        url: 'db/removetext.php',
         type: 'POST',
         data: {idText: id},
         success: function() {
           parentTR.remove();
         },
         error: function (request, status, error) {
-          alert(request.responseText);
+          alert("There was an error when trying to delete the selected texts. Refresh the page and try again.");
         }
       });
-
     });
-
   });
 
 });

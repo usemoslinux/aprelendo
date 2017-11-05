@@ -52,4 +52,4 @@
       </div>
     </div>
 
-    <?php require_once('../private/init.php'); ?>
+    <?php require_once('db/dbinit.php'); ?>

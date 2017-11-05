@@ -1,7 +1,7 @@
 <?php
 
   if (isset($_POST['idText'])) {
-    require_once('../private/init.php'); // connect to database
+    require_once('dbinit.php'); // connect to database
 
     $id = mysqli_real_escape_string($con, $_POST['idText']);
 

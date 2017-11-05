@@ -23,7 +23,9 @@
 
   - [ ] Implement pagination
 
-- [ ] Restructure folders
+- [x] Restructure folders
+
+- [ ] Remove finished reading (file & implementation in showtext.php)?
 
 - [ ] Apply new theme
 
