@@ -17,9 +17,9 @@
 
   - [x] Correct footer's 4th column
 
-  - [ ] Implement "add text" button (in right column?)
+  - [x] Implement "add text" button
 
-    - [ ] Show addtext.php inside MyTexts tab & redo layout
+    - [x] Show addtext.php inside MyTexts tab & redo layout
 
   - [ ] Implement pagination
 
