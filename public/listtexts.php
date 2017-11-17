@@ -1,19 +1,19 @@
-  <div class="row">
-      <div class="col-md-9 col-xs-8 col-md-auto">
-        <form class="" action="" method="post">
-          <div class="input-group searchbox">
-            <input type="text" id="search" name="searchtext" class="form-control" placeholder="Search...">
-            <div class="input-group-btn">
-              <button type="submit" name="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
-            </div>
+<div class="row flex">
+    <div class="col-xs-12 col-md-9">
+      <form class="" action="" method="post">
+        <div class="input-group searchbox">
+          <input type="text" id="search" name="searchtext" class="form-control" placeholder="Search...">
+          <div class="input-group-btn">
+            <button type="submit" name="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
           </div>
-        </form>
-      </div>
-      <div class="col searchbox">
-        <button type="button" name="btn-addtext" class="btn btn-default" onclick="window.location='addtext.php'"><span class="glyphicon glyphicon-plus"></span> Add text</button>
-        <button type="file" name="btn-upload" class="btn btn-success"><span class="glyphicon glyphicon-upload"></span> Upload text</button>
-      </div>
-  </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-xs-12 col-md-3 searchbox">
+      <button type="button" name="btn-addtext" class="btn btn-default" onclick="window.location='addtext.php'"><span class="glyphicon glyphicon-plus"></span> Add text</button>
+      <button type="file" name="btn-upload" class="btn btn-success"><span class="glyphicon glyphicon-upload"></span> Upload text</button>
+    </div>
+</div>
 
 <?php
 // functions to print table header, contents & footer

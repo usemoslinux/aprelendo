@@ -25,9 +25,13 @@
 
 - [x] Restructure folders
 
-- [ ] Remove finished reading (file & implementation in showtext.php)?
+- [x] Apply new theme
 
-- [ ] Apply new theme
+- [ ] Add "back" button in showtext.php ?
+
+- [ ] Add minutes to read
+
+- [ ] Remove finished reading (file & implementation in showtext.php)?
 
 - [ ] Add audio
 
@@ -37,28 +41,28 @@
 
 - [ ] Add support for ebook uploading
 
+- [ ] Add configuration options (select dictionary, fonts, etc.)
+
 ## BUGS
+
+- [ ] listtexts.php: deletion not working well when selecting multiple texts
+
+- [ ] listtexts.php: don't show table header when no text in db
+
+- [ ] listtexts.php: enable actions only when at least 1 text is selected
+
+- [ ] listtexts.php: confirm deletion ?
+
+- [ ] listtexts.php: when search fails, focus on input box again (to search once again) ?
 
 - [x] footer.php: are all the bootstrap javascript files loading correctly?
 
 - [ ] showtext.php: show error when user enters without and id ?
 
-- [ ] addtext.php: handle errors (like text too long or string too long for title)
+- [ ] addtext.php: handle errors (like empty fields, text too long or string too long for title)
 
 ## BETA
 
 - [feature] Enable login w/facebook or google
 
 - [feature] Add support for phrases and multi-word selection
-
-
-
-
-<form class="" action="" method="post">
-  <div class="input-group searchbox">
-    <input type="text" id="search" name="searchtext" class="form-control" placeholder="Search...">
-    <div class="input-group-btn">
-      <button type="submit" name="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
-    </div>
-  </div>
-</form>

@@ -31,4 +31,15 @@ function colorizeWords($text)
   return $text;
 }
 
+function estimated_reading_time($text)
+{
+  $word_count = str_word_count($text);
+  $reading_time = $word_count / 200;
+  $mins = floor($reading_time);
+  $secs = $reading_time - $mins;
+  $reading_time = $mins + (($secs < 30) ? 0 : 1);
+
+  return $reading_time;
+}
+
 ?>

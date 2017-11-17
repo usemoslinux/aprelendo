@@ -427,3 +427,13 @@ a, a:hover, a:focus {
   padding-right:0;
   padding-left:0;
 }
+
+@media screen and (min-width: 768px) {
+  .flex { display: flex; flex-wrap: wrap; }
+  .flex > .col-md-3 { flex: 1; max-width: 247px;  }
+	.flex > .col-md-9 { flex: 1; width: auto; }
+}
+
+.estimated-reading-time {
+    margin: 0 0 15px 0;
+}

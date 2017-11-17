@@ -32,6 +32,11 @@
 
         $text = $row['text']; // display text
 
+        echo '<div id="reader-estimated-time">' .
+              estimated_reading_time($text) . ' minutes</div>';
+
+        echo '<hr>';
+
         $text = colorizeWords($text);
         $text = addlinks($text);
         //$text = "";
