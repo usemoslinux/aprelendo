@@ -94,6 +94,18 @@ a:focus {
 .navbar-brand {
 	font-family: 'Raleway', sans-serif;
 	font-weight: 900;
+	background-image: url('/images/logo-langx.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	padding-left: 64px;
+	margin-left: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .navbar > .container .navbar-brand,
+  .navbar > .container-fluid .navbar-brand {
+    margin-left: 15px !important;
+  }
 }
 
 .navbar-header .navbar-brand {
@@ -436,4 +448,33 @@ a, a:hover, a:focus {
 
 .estimated-reading-time {
     margin: 0 0 15px 0;
+}
+
+audio, video {
+	width: 100%;
+}
+
+/* 	#######################################################
+		ADD FORM
+		####################################################### */
+
+.add-form input, .add-form textarea {
+  border-left: 3px solid;
+  border-radius: 5px;
+  transition: border-color .5s ease-out;
+}
+
+.add-form input:optional {
+  border-left-color: #999;
+}
+
+.add-form input:required, .add-form textarea:required {
+  border-left-color: #5cb85c;
+}
+.add-form input:invalid, .add-form textarea:invalid {
+  border-left-color: #d9534f;
+}
+
+.alert {
+	white-space: pre;
 }

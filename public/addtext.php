@@ -4,17 +4,103 @@
   <div class="row">
     <div class="col-lg-12">
 
-      <form action="db/addtext.php" method="post">
+      <?php
+
+        if (isset($_POST['submit'])) {
+          require_once('db/dbinit.php'); // connect to database
+
+          $title = trim(mysqli_real_escape_string($con, $_POST['title']));
+          $author = trim(mysqli_real_escape_string($con, $_POST['author']));
+          $source_url = trim(mysqli_real_escape_string($con, $_POST['url']));
+          $text = trim(mysqli_real_escape_string($con, $_POST['text']));
+
+          $target_dir = APP_ROOT . '/public/uploads/';
+          $target_file_name = basename($_FILES['audio']['name']);
+          $target_file_URI = $target_dir . $target_file_name;
+
+
+          $file_extension = pathinfo($target_file_URI,PATHINFO_EXTENSION);
+          $file_size = $_FILES['audio']['size'] / 1024; // size in KBs
+
+          $max_allowed_file_size = ini_get('upload_max_filesize'); // max file size
+          $allowed_extensions = array('mp3', 'ogg');
+
+          // File validation
+          $errormsg = "";
+          if (!$_FILES['audio']['error'] ==  UPLOAD_ERR_NO_FILE) { // if a file was uploaded
+            // Check if file exists
+            if (file_exists($target_file_URI)) {
+              $errormsg .= "File already exists\n";
+            }
+
+            // Check file size
+            if ($_FILES['audio']['error'] == 1) {
+              $errormsg .= "File size should be less than $max_allowed_file_size\n";
+            }
+
+            // Check file extension
+            $allowed_ext = false;
+            for ($i=0; $i < sizeof($allowed_extensions); $i++) {
+              if (strcasecmp($allowed_extensions[$i], $file_extension) == 0) {
+                $allowed_ext = true;
+              }
+            }
+
+            if (!$allowed_ext) {
+              $errormsg .= 'Only the following file types are supported: ' . implode(', ', $allowed_extensions) . "\n";
+            }
+
+            // upload file & save info to db
+            if ($_FILES['audio']['error'] == UPLOAD_ERR_OK && empty($errormsg)) {
+              if (!is_dir($target_dir)) {
+                mkdir($target_dir);
+              }
+              // try to move file to uploads folder. If this fails, show error message
+              if (!move_uploaded_file($_FILES["audio"]["tmp_name"], $target_file_URI)) {
+                $errormsg .= "Sorry, there was an error uploading your file.\n";
+              }
+            }
+          } elseif (!$_FILES['audio']['error'] ==  UPLOAD_ERR_FORM_SIZE) {
+            $errormsg .= 'errrrrrrrrorr. file size';
+          }
+
+          if (empty($errormsg)) {
+            // save text in db
+            $result = mysqli_query($con, "INSERT INTO texts (textTitle, textAuthor, text, textAudioURI, textSourceURI) VALUES ('$title', '$author', '$text', '/uploads/$target_file_name', '$source_url') ") or die(mysqli_error($con));
+
+            header('Location: /');
+          } else {
+            echo '<div class="alert alert-danger">' . $errormsg . '</div>';
+
+          }
+
+        }
+      ?>
+
+      <form action="addtext.php" class="add-form" method="post" enctype="multipart/form-data">
         <div class="form-group">
           <label for="title">Title:</label>
-          <input type="text" id="title" name="title" class="form-control" autofocus></textarea>
+          <input type="text" id="title" name="title" class="form-control" maxlength="200" placeholder="Text title (required)" autofocus required value="<?php if(isset($_POST['title'])){echo $_POST['title'];}?>">
+        </div>
+        <div class="form-group">
+          <label for="author">Author:</label>
+          <input type="text" id="author" name="author" class="form-control" maxlength="100" placeholder="Author full name (optional)" value="<?php if(isset($_POST['author'])){echo $_POST['author'];}?>">
+        </div>
+        <div class="form-group">
+          <label for="url">Source URL:</label>
+          <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (optional)"  value="<?php if(isset($_POST['url'])){echo $_POST['url'];}?>">
         </div>
         <div class="form-group">
           <label for="text">Text:</label>
-          <textarea id="text" name="text" class="form-control" rows="16" cols="80"></textarea>
+          <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="65535" placeholder="Text goes here (required), max. length=65,535 chars" required><?php if(isset($_POST['text'])){echo $_POST['text'];}?></textarea>
         </div>
-        <button type="button" name="cancel" class="btn btn-danger" onclick="window.location='/'">Cancel</button>
-        <button type="submit" name="submit" class="btn btn-success">Save</button>
+        <div class="form-group">
+          <label for="audio">Audio:</label>
+          <input type="file" name="audio"  accept="audio/mpeg">
+          <label for="audio" class="error" id="audio_error"></label>
+        </div>
+        <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='/'">Cancel</button>
+        <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
       </form>
 
     </div>

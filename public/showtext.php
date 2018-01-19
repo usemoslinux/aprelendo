@@ -15,7 +15,6 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-0 col-md-3"></div>
-      <div id="textdiv" class="col-sm-12 col-md-6">
         <?php
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
         $time_start = microtime(true);
@@ -24,27 +23,43 @@
 
         $id = mysqli_real_escape_string($con, $_GET['id']);
 
-        $result = mysqli_query($con, "SELECT text, textTitle FROM texts WHERE textID='$id'") or die(mysqli_error($con));
+        $result = mysqli_query($con, "SELECT text, textTitle, textAudioURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
 
         $row = mysqli_fetch_assoc($result);
 
-        echo '<h1>'.$row['textTitle'].'</h1>'; // display title
+        echo "<div id='textdiv' class='col-sm-12 col-md-6' data-textID='$id'>";
 
-        $text = $row['text']; // display text
+        if (!empty($row)) {
+          echo '<h1>'.$row['textTitle'].'</h1>'; // display title
 
-        echo '<div id="reader-estimated-time">' .
-              estimated_reading_time($text) . ' minutes</div>';
+          $text = $row['text']; // display text
 
-        echo '<hr>';
+          echo '<div id="reader-estimated-time">' .
+                estimated_reading_time($text) . ' minutes</div>'; // show estimated reading time
 
-        $text = colorizeWords($text);
-        $text = addlinks($text);
-        //$text = "";
-        echo addParagraphs($text); // convert /n to HTML <p>
+          $textAudioURI = $row['textAudioURI']; // if there is an audio file show audio player
+          if (!empty($textAudioURI)) {
+            echo '<hr>';
 
-        $time_end = microtime(true);
-        $execution_time = ($time_end - $time_start);
-        echo '<b>Total Execution Time:</b> '.$execution_time.' Secs';
+            echo "<audio controls autoplay id='audioplayer'>
+                    <source src='$textAudioURI' type='audio/mpeg'>
+                      Your browser does not support the audio element.
+                  </audio>";
+          }
+
+          echo '<hr>';
+
+          $text = colorizeWords($text);
+          $text = addlinks($text);
+          //$text = "";
+          echo addParagraphs($text); // convert /n to HTML <p>
+
+          $time_end = microtime(true);
+          $execution_time = ($time_end - $time_start);
+          echo '<b>Total Execution Time:</b> '.$execution_time.' Secs';
+        } else {
+          header('Location: /');
+        }
         ?>
         <p></p>
         <button type="button" id="btnfinished" class="btn btn-lg btn-success btn-block">Finished reading</button>
@@ -80,15 +95,23 @@
 $(document).ready(function() {
 
   selword = null;
+  playingaudio = true;
 
   $(document).on("click", "a", function(){
+
+    if ($('#audioplayer').length) {
+      $('#audioplayer').trigger("pause"); // pause audio
+    }
+
     // show dictionary
     url = 'https://fr.m.wiktionary.org/wiki/' + this.text;
     //url = 'http://www.wordreference.com/fres/' + this.text;
     //url = 'https://glosbe.com/fr/es/' + this.text;
 
     $('#dicFrame').attr('height', $(window).height()-150);
-    $('#dicFrame').attr('src', url);
+    $('#dicFrame').get(0).contentWindow.location.replace(url);
+    // the previous line loads iframe content without adding it to browser history,
+    // as this one does: $('#dicFrame').attr('src', url);
     selword = $(this);
   });
 
@@ -122,6 +145,7 @@ $(document).ready(function() {
         alert("Oops! There was an error adding the word to the database.");
       }
     });
+
   });
 
   $('#btnremove').on('click', function(){
@@ -142,8 +166,17 @@ $(document).ready(function() {
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         alert("Oops! There was an error removing the word from the database.");
       }
-
     });
+
+
+  });
+
+  $('#myModal').on('hidden.bs.modal', function () {
+    // if there is an audioplayer and it is paused, resume playback
+    if ($('#audioplayer').length) {
+      $('#audioplayer').trigger("play");
+    }
+
   });
 
   $('#btnfinished').on("click", function() {
@@ -158,14 +191,15 @@ $(document).ready(function() {
 
     })
 
-    // alert(JSON.stringify(res));
+    //alert(JSON.stringify(oldwords));
 
     $.ajax({
       type: "POST",
-      url: "finishedreading.php",
-      data: { words: oldwords },
+      url: "db/finishedreading.php",
+      data: { words: oldwords, textID: $('#textdiv').attr('data-textID') },
       success: function(data) {
         //alert(data);
+        window.location.replace("/");
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         alert("Oops! There was an error updating the database.");
