@@ -24,7 +24,6 @@ function print_table_header() {
   <colgroup><col width="33">
   <col width="*">
   <col width="90">
-  <col width="90">
   </colgroup>
   <thead>
   <tr>
@@ -52,7 +51,7 @@ function print_table_footer() {
 }
 
 function print_table_content($textID, $textTitle, $textStatus) {
-  echo '<tr><td class="col-checkbox"><label><input type="checkbox" data-idText="' .  $textID . '"></label></td><td class="col-title"><a href ="showtext.php?id=' . $textID . '">' . $textTitle . '</td><td class="col-words"></td><td class="col-status">' . $textStatus . '</td></tr>';
+  echo '<tr><td class="col-checkbox"><label><input type="checkbox" data-idText="' .  $textID . '"></label></td><td class="col-title"><a href ="showtext.php?id=' . $textID . '">' . $textTitle . '</td><td class="col-status">' . $textStatus . '</td></tr>';
 }
 
 // show page

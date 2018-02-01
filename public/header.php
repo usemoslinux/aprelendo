@@ -17,7 +17,7 @@
     <link href="css/styles.css" rel="stylesheet">
   </head>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
   <body>
 
@@ -41,10 +41,11 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">PAGES <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="blog.html">BLOG</a></li>
-                <li><a href="single-post.html">SINGLE POST</a></li>
-                <li><a href="portfolio.html">PORTFOLIO</a></li>
-                <li><a href="single-project.html">SINGLE PROJECT</a></li>
+                <li><a href="/">Texts</a></li>
+                <li><a href="archivedtexts.php">Archived texts</a></li>
+                <li><a href="words.php">Words learning</a></li>
+                <li><a href="stats.php">Statistics</a></li>
+                <li><a href="preferences.php">Preferences</a></li>
               </ul>
             </li>
           </ul>

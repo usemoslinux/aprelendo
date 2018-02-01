@@ -4,9 +4,9 @@ Let's start by saying that LangX is still under heavy development.
 
 I started developing it to help me learn new languages. It is based on the idea that acquiring vocabulary by reading texts that are of interest to us is easier, more appealing and -more importantly- more effective than reviewing stand alone flashcards, as most language learning software seem to do these days.
 
-Other programs, like [Learning with Texts (LWT)] (http://lwt.sourceforge.net/) and [Readlang] (http://readlang.com/), are similar to LangX, but they end up skewing the reading process by converting it into a merely extractive process in which we end up focusing on choosing the words and phrases we don't know in order to create new flashcards. So, the endgame is to create new flashcards and the real learning process comes from reviewing them, not reading. Instead, reading becomes an instrument in that boring and tiresome scheme.
+Other programs, like [Learning with Texts (LWT)](http://lwt.sourceforge.net/) and [Readlang](http://readlang.com/), are similar to LangX, but they end up skewing the reading process by converting it into a merely extractive process in which we end up focusing on choosing the words and phrases we don't know in order to create new flashcards. So, the endgame is to create new flashcards and the real learning process comes from reviewing them, not reading. Instead, reading becomes an instrument in that boring and tiresome scheme.
 
-If you ever used [Anki](https://apps.ankiweb.net/) and other [spaced repetition software] (https://en.wikipedia.org/wiki/Spaced_repetition) you probably know that creating new flashcards can become a very tiresome and time consuming task and, after a while, reviewing them also becomes dull and monotonous. For me, learning new vocabulary is not just a memory exercise. Real learning consists of two phases: understanding and practice. The first one is easy to catch, you can't learn new vocabulary if you don't understand what it means or how to use it. Practice, on the other hand, is a repetitive task which includes making mistakes, correcting them and repeating this operation several times until you don't make any more mistakes. When learning a language, the only way to practice it is by putting it to use. We do that in two ways: speaking and writing.
+If you ever used [Anki](https://apps.ankiweb.net/) and other [spaced repetition software](https://en.wikipedia.org/wiki/Spaced_repetition) you probably know that creating new flashcards can become a very tiresome and time consuming task and, after a while, reviewing them also becomes dull and monotonous. For me, learning new vocabulary is not just a memory exercise. Real learning consists of two phases: understanding and practice. The first one is easy to catch, you can't learn new vocabulary if you don't understand what it means or how to use it. Practice, on the other hand, is a repetitive task which includes making mistakes, correcting them and repeating this operation several times until you don't make mistakes any more. When learning a language, the only way to practice it is by putting it to use. We do that in two ways: speaking and writing.
 
 Still, how can we improve our speaking and writing skills when we don't have a loving mom who calmly tries to teach us how to pronounce each word or a teacher who tells us how to write down new words? These are the ways in which we learn speaking and writing in our native language. However, we usually lack these friendly mentors when we grow up. People tend to be more judgmental and usually don't have enough time to teach us. As we grow up we also tend to be more perfectionist and harsh with our own performance. All this conspires against the creation of an environment conducive to learning. But, there might be a solution to this problem: active reading.
 
@@ -40,11 +40,7 @@ Just add some text along with its audio and start reading. To search for the mea
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
-
-End with an example of getting some data out of the system or using it for a little demo
+...
 
 ## License
 

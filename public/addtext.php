@@ -22,20 +22,23 @@
           $file_extension = pathinfo($target_file_URI,PATHINFO_EXTENSION);
           $file_size = $_FILES['audio']['size'] / 1024; // size in KBs
 
-          $max_allowed_file_size = ini_get('upload_max_filesize'); // max file size
+          $upload_max_filesize = ini_get('upload_max_filesize'); // max file size
           $allowed_extensions = array('mp3', 'ogg');
 
           // File validation
           $errormsg = "";
-          if (!$_FILES['audio']['error'] ==  UPLOAD_ERR_NO_FILE) { // if a file was uploaded
+          if ($_FILES['audio']['error'] !=  UPLOAD_ERR_NO_FILE) { // if a file was uploaded
             // Check if file exists
             if (file_exists($target_file_URI)) {
-              $errormsg .= "File already exists\n";
+              $errormsg .= "File already exists. Change the file name and try again.\n";
             }
 
             // Check file size
             if ($_FILES['audio']['error'] == 1) {
-              $errormsg .= "File size should be less than $max_allowed_file_size\n";
+              $errormsg .= "File size should be less than $upload_max_filesize\n" .
+              "This is a limitation of the hosting server.\n" .
+              "If you have access to the php ini file you can fix this by changing the <code>upload_max_filesize</code> setting.\n" .
+              "If you can't, please ask your host to increase the size limits.\n";
             }
 
             // Check file extension
@@ -60,8 +63,8 @@
                 $errormsg .= "Sorry, there was an error uploading your file.\n";
               }
             }
-          } elseif (!$_FILES['audio']['error'] ==  UPLOAD_ERR_FORM_SIZE) {
-            $errormsg .= 'errrrrrrrrorr. file size';
+          } elseif ($_FILES['audio']['error'] == UPLOAD_ERR_INI_SIZE) {
+            $errormsg .= "File size should be less than $upload_max_filesize.";
           }
 
           if (empty($errormsg)) {
@@ -74,6 +77,14 @@
 
           }
 
+        }
+        //catch file overload error...
+        elseif (empty($_FILES) && empty($_POST) && isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+          $post_max_size = ini_get('post_max_size'); //grab the size limits...
+          echo  "<div class='alert alert-danger'>Please note that posts larger than $post_max_size will result in this error!" .
+                "<br>This is a limitation of the hosting server." .
+                "<br>If you have access to the php ini file you can fix this by changing the <code>post_max_size</code> setting." .
+                "<br>If you can't, please ask your host to increase the size limits.</div>";
         }
       ?>
 

@@ -7,8 +7,8 @@
 
     // check if there is an audio file associated to this text and store its URI
     $result = mysqli_query($con, "SELECT textAudioURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
-    $row = mysqli_fetch_assoc($result);
-    $filename = $row['textAudioURI'];
+      $row = mysqli_fetch_assoc($result);
+      $filename = $row['textAudioURI'];
 
     // delete entry from db
     $deletedfromdb = mysqli_query($con, "DELETE FROM texts WHERE textID='$id'") or die(mysqli_error($con));
@@ -19,5 +19,3 @@
       unlink($filename);
     }
   }
-
-?>

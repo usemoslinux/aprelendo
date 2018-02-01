@@ -1,0 +1,11 @@
+{
+  "extends": "/home/earendil/.atom/packages/linter-stylelint/node_modules/stylelint-config-standard",
+  "rules": {
+    "indentation": 2,
+    "string-quotes": "double",
+    "no-duplicate-selectors": true,
+    "color-hex-length": "long",
+    "selector-list-comma-newline-after": "always-multi-line",
+    "no-descending-specificity"
+  }
+}

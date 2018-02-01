@@ -7,7 +7,7 @@
   <title>LangX</title>
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -27,7 +27,7 @@
 
         $row = mysqli_fetch_assoc($result);
 
-        echo "<div id='textdiv' class='col-sm-12 col-md-6' data-textID='$id'>";
+        echo "<div id='textdiv' class='textcontainer col-sm-12 col-md-6' data-textID='$id'>";
 
         if (!empty($row)) {
           echo '<h1>'.$row['textTitle'].'</h1>'; // display title
@@ -35,16 +35,22 @@
           $text = $row['text']; // display text
 
           echo '<div id="reader-estimated-time">' .
-                estimated_reading_time($text) . ' minutes</div>'; // show estimated reading time
+          estimated_reading_time($text) . ' minutes</div>'; // show estimated reading time
 
           $textAudioURI = $row['textAudioURI']; // if there is an audio file show audio player
           if (!empty($textAudioURI)) {
             echo '<hr>';
 
-            echo "<audio controls autoplay id='audioplayer'>
-                    <source src='$textAudioURI' type='audio/mpeg'>
-                      Your browser does not support the audio element.
+            echo "<audio controls id='audioplayer'>
+                  <source src='$textAudioURI' type='audio/mpeg'>
+                  Your browser does not support the audio element.
                   </audio>";
+            echo '<form>
+                  <div class="form-group flex-pbr-form">
+                  <label for="pbr">Playback rate: <span id="currentpbr">1.0</span></label>
+                  <input id="pbr" type="range" class="flex-pbr" value="1" min="0.5" max="2" step="0.1">
+                  </div>
+                  </form>';
           }
 
           echo '<hr>';
@@ -95,12 +101,29 @@
 $(document).ready(function() {
 
   selword = null;
-  playingaudio = true;
 
-  $(document).on("click", "a", function(){
+  $(window).on('keydown', function(e) {
+    switch (e.keyCode) {
+      case 80: // "p" keyCode
+        $('#audioplayer')[0].play();
+        break;
+      case 83: // "s" keyCode
+        $('#audioplayer')[0].pause();
+        break;
+    }
+  });
 
-    if ($('#audioplayer').length) {
-      $('#audioplayer').trigger("pause"); // pause audio
+  $(document).on('click', 'a', function(){
+
+    var audioplayer = $('#audioplayer');
+
+    if (audioplayer.length) { // if there is an audioplayer
+      if (!audioplayer.prop('paused') && audioplayer.prop('currentTime')) {
+        audioplayer.trigger('pause'); // pause audio
+        playingaudio = true;
+      } else {
+        playingaudio = false;
+      }
     }
 
     // show dictionary
@@ -108,7 +131,6 @@ $(document).ready(function() {
     //url = 'http://www.wordreference.com/fres/' + this.text;
     //url = 'https://glosbe.com/fr/es/' + this.text;
 
-    $('#dicFrame').attr('height', $(window).height()-150);
     $('#dicFrame').get(0).contentWindow.location.replace(url);
     // the previous line loads iframe content without adding it to browser history,
     // as this one does: $('#dicFrame').attr('src', url);
@@ -122,24 +144,11 @@ $(document).ready(function() {
       url: "db/addword.php",
       data: { word: selword.text() },
       success: function(){ // if successful, underline word
-        var filter = $('a').filter(function() { return $(this).text().toLowerCase() === selword.text().toLowerCase() });
+        var filter = $('a').filter(function() { return $(this).text().toLowerCase() === selword.text().toLowerCase(); });
         if (selword.parent().hasClass('word')) {
           filter.parent().replaceWith(selword);
         }
         filter.wrap("<span class='word new'></span>");
-        // var element = selword;
-        // var word = element.text().toLowerCase();
-        // $('a').each(function(){
-        //   var linkword = selword.text().toLowerCase();
-        //   if (word == linkword) {
-        //     // remove old underlining if it already exists
-        //     if (selword.parent().hasClass('word')) {
-        //       selword.parent().replaceWith(selword);
-        //     }
-        //     // add 'new' underlining
-        //     selword.wrap("<span class='word new'></span>");
-        //   }
-        // });
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         alert("Oops! There was an error adding the word to the database.");
@@ -154,8 +163,7 @@ $(document).ready(function() {
       url: "db/removeword.php",
       data: { word: selword.text() },
       success: function(){
-        var filter = $('.word').filter(function() { return $(this).text().toLowerCase() === selword.text().toLowerCase() });
-        //var filter = '.learning:contains(' + selword.text() + ')';
+        var filter = $('.word').filter(function() { return $(this).text().toLowerCase() === selword.text().toLowerCase(); });
 
         if (selword.parent().hasClass('word learning')) {
           filter.removeClass('word learning');
@@ -172,9 +180,9 @@ $(document).ready(function() {
   });
 
   $('#myModal').on('hidden.bs.modal', function () {
-    // if there is an audioplayer and it is paused, resume playback
-    if ($('#audioplayer').length) {
-      $('#audioplayer').trigger("play");
+    var audioplayer = $('#audioplayer');
+    if (playingaudio && audioplayer.length) { // if there is an audioplayer
+        audioplayer.trigger("play");
     }
 
   });
@@ -189,7 +197,7 @@ $(document).ready(function() {
         oldwords.push(word);
       }
 
-    })
+    });
 
     //alert(JSON.stringify(oldwords));
 
@@ -206,6 +214,14 @@ $(document).ready(function() {
       }
     });
   });
+
+  // audio playback rate slider
+  $('#pbr').on('input change', function() {
+    cpbr = parseFloat($(this).val()).toFixed(1);
+    $('#currentpbr').text(cpbr);
+    $('#audioplayer').prop('playbackRate', cpbr);
+  });
+
 
 });
 
