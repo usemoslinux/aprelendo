@@ -11,6 +11,10 @@
 
 - [x] error when uploading big file not shown
 
+- [ ] listtexts.php: texts are listed from old to new. Shouldn't it be the other way around?
+
+- [ ] showtexts.php: sanitize text when opening dictionary & translator URLs
+
 - [ ] implement "archived texts" section
 
 - [ ] add support for ogg audio

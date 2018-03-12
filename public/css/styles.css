@@ -397,11 +397,37 @@ a, a:hover, a:focus {
 }
 
 .learning {
-  border-bottom: 2px solid orange;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-color: orange;
+}
+
+.learning:hover {
+  background-color: orange;
 }
 
 .new {
-  border-bottom: 2px solid red;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-color: red;
+}
+
+.new:hover {
+  background-color: red;
+}
+
+.word {
+  cursor: pointer;
+}
+
+.word:hover {
+  background-color: #eeeeee;
+}
+
+.phrase {
+  cursor: pointer;
+  border-bottom-width: 2px;
+  border-bottom-style: dotted;
 }
 
 .lvl1 {
@@ -490,6 +516,13 @@ audio, video {
   display: flex;
   flex: 1;
   padding: 0 0 15px 0;
+}
+
+.modal-selPhrase {
+  display: block;
+  padding: 3px;
+  margin-top: 12px;
+  width: 100%;
 }
 
 .flex-pbr-form {

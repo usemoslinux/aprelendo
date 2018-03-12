@@ -1,6 +1,6 @@
-.htaccess
-.remote-sync.json
+.*
 php-info.php
 temp/
+public/uploads/
 /private/passwords.php
 todo.md
