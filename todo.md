@@ -24,10 +24,10 @@
 - [x] Fixed CSS, JS & PHP linter warnings
 
 - [ ] Bugs:
-    - [ ] listtexts.php: don't show table header when removing all texts from table
+    - [x] listtexts.php: don't show table header when removing all texts from table
     - [ ] Add word not working after translating whole paragraph
     - [ ] After editing language, current language gets messed up
-    - [ ] It still shows audio player even if no audio to be played
+    - [x] It still shows audio player even if no audio to be played
     - [ ] Are audio files being properly deleted?
     - [ ] SESSION expires if it takes too much time to add text?
 
@@ -40,7 +40,7 @@
   - [ ] Words learning
 
   - [x] Languages
-    
+
     >> todo: when adding new language, not checking if all fields are settings
     >> todo: what happens when no active language is set on preferences table?
 
@@ -90,7 +90,7 @@ Things that need more thinking
 
 ## BETA
 
-- [ ] Add support for more than one language
+- [x] Add support for more than one language
 
 - [ ] Enable login w/facebook or google
 

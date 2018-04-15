@@ -134,11 +134,7 @@ $(document).ready(function() {
 
                 deleteText(id, parentTR);
             });
-            // if there are no remaining texts to show on the table, remove the entire table
-            // TODO: THIS IS NOT WORKING !
-            if ($('#textstable tr').length === 0) {
-                $('#textstable').replaceWith('<p>There are no texts in your private library.</p>');
-            }
+
         }
     });
 
@@ -149,6 +145,11 @@ $(document).ready(function() {
             data: {idText: id},
             success: function() {
                 parentTR.remove();
+                // if there are no remaining texts to show on the table, remove the entire table
+                if ($('#textstable tbody').is(':empty')) {
+                    $('#textstable').replaceWith('<p>There are no texts in your private library.</p>');
+                    $('#actions-menu').remove();
+                }
             },
             error: function (request, status, error) {
                 alert("There was an error when trying to delete the selected texts. Refresh the page and try again.");
