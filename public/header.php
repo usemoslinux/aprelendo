@@ -35,15 +35,15 @@
         </div>
         <div class="navbar-collapse collapse navbar-right">
           <ul class="nav navbar-nav">
-            <li><a href="index.html">HOME</a></li>
+            <li><a href="/">HOME</a></li>
             <li><a href="about.html">ABOUT</a></li>
-            <li class="active"><a href="contact.html">CONTACT</a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">PAGES <b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">SECTIONS<b class="caret"></b></a>
               <ul class="dropdown-menu">
+                <li><a href="languages.php">Languages</a></li>
                 <li><a href="/">Texts</a></li>
                 <li><a href="archivedtexts.php">Archived texts</a></li>
-                <li><a href="words.php">Words learning</a></li>
+                <li><a href="wordlist.php">Word list</a></li>
                 <li><a href="stats.php">Statistics</a></li>
                 <li><a href="preferences.php">Preferences</a></li>
               </ul>

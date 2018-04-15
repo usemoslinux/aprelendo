@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,66 +11,87 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </head>
-<body>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-0 col-md-3"></div>
-            <?php
-            ini_set('max_execution_time', 300); //300 seconds = 5 minutes
-            $time_start = microtime(true);
-            require_once('db/dbinit.php'); // connect to database
-            require_once('functions.php');
+<body id="readerpage"
+<?php
+switch ($_SESSION['mode']) {
+    case 'light':
+    echo "class='lightmode'";
+    break;
+    case 'sepia':
+    echo "class='sepiamode'";
+    break;
+    case 'dark':
+    echo "class='darkmode'";
+    break;
+    default:
+    break;
+}
+echo " style='font-family:{$_SESSION['fontfamily']};font-size:{$_SESSION['fontsize']};text-align:{$_SESSION['alignment']};'";
+?>
+>
 
-            $id = mysqli_real_escape_string($con, $_GET['id']);
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-0 col-md-3"></div>
+        <?php
+        ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+        $time_start = microtime(true);
+        require_once('db/dbinit.php'); // connect to database
+        require_once('functions.php');
 
-            $result = mysqli_query($con, "SELECT text, textTitle, textAudioURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
+        $id = mysqli_real_escape_string($con, $_GET['id']);
 
-            $row = mysqli_fetch_assoc($result);
+        $result = mysqli_query($con, "SELECT text, textTitle, textAudioURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
 
-            echo "<div id='textdiv' class='textcontainer col-sm-12 col-md-6' data-textID='$id'>";
+        $row = mysqli_fetch_assoc($result);
 
-            if (!empty($row)) {
-                echo '<h1>'.$row['textTitle'].'</h1>'; // display title
+        echo "<div id='container' class='col-sm-12 col-md-6' data-textID='$id'>";
 
-                $text = $row['text']; // display text
+        if (!empty($row)) {
+            echo '<h1>'.$row['textTitle'].'</h1>'; // display title
 
-                echo '<div id="reader-estimated-time">' .
-                estimatedReadingTime($text) . ' minutes</div>'; // show estimated reading time
+            $text = $row['text']; // display text
 
-                $textAudioURI = $row['textAudioURI']; // if there is an audio file show audio player
-                if (!empty($textAudioURI)) {
-                    echo '<hr>';
+            echo '<div id="reader-estimated-time">' .
+            estimatedReadingTime($text) . ' minutes</div>'; // show estimated reading time
 
-                    echo "<audio controls id='audioplayer'>
-                    <source src='$textAudioURI' type='audio/mpeg'>
-                    Your browser does not support the audio element.
-                    </audio>";
-                    echo '<form>
-                    <div class="form-group flex-pbr-form">
-                    <label for="pbr">Playback rate: <span id="currentpbr">1.0</span></label>
-                    <input id="pbr" type="range" class="flex-pbr" value="1" min="0.5" max="2" step="0.1">
-                    </div>
-                    </form>';
-                }
-
+            $textAudioURI = $row['textAudioURI']; // if there is an audio file show audio player
+            if (!empty($textAudioURI)) {
                 echo '<hr>';
 
-                $text = colorizeWords($text, $con);
-                $text = addLinks($text);
-                echo addParagraphs($text); // convert /n to HTML <p>
-
-                $time_end = microtime(true);
-                $execution_time = ($time_end - $time_start);
-                echo '<b>Total Execution Time:</b> '.$execution_time.' Secs';
-            } else {
-                header('Location: /');
+                echo "<audio controls id='audioplayer'>
+                <source src='$textAudioURI' type='audio/mpeg'>
+                Your browser does not support the audio element.
+                </audio>";
+                echo '<form>
+                <div class="form-group flex-pbr-form">
+                <label for="pbr">Playback rate: <span id="currentpbr">1.0</span></label>
+                <input id="pbr" type="range" class="flex-pbr" value="1" min="0.5" max="2" step="0.1">
+                </div>
+                </form>';
             }
-            ?>
-            <p></p>
-            <button type="button" id="btnfinished" class="btn btn-lg btn-success btn-block">Finished reading</button>
-            <p></p>
-        </div>
+
+            echo '<hr><div id="text" style="line-height:' . $_SESSION['lineheight'] . ';">';
+
+            $text = colorizeWords($text, $con);
+            $text = addLinks($text);
+            echo addParagraphs($text); // convert /n to HTML <p>
+            echo '</div>';
+
+            $time_end = microtime(true);
+            $execution_time = ($time_end - $time_start);
+            echo '<b>Total Execution Time:</b> '.$execution_time.' Secs';
+        } else {
+            header('Location: /');
+        }
+
+        echo '<p></p>
+        <button type="button" id="btnarchive" class="btn btn-lg btn-success btn-block">Archive text</button>
+        <p></p>
+        </div>';
+        ?>
+
         <div class="col-sm-0 col-md-3"></div>
     </div>
 </div>
@@ -103,7 +125,10 @@
 $(document).ready(function() {
 
     selword = null;
+    dictionaryURI = '';
+    translatorURI = '';
 
+    // set keyboard shortcuts
     $(window).on('keydown', function(e) {
         switch (e.keyCode) {
             case 80: // "p" keyCode
@@ -128,10 +153,24 @@ $(document).ready(function() {
             }
         }
 
+        $.ajax({
+          url: 'db/geturis.php',
+          type: 'GET',
+          async: false,
+          dataType: 'json',
+          //data: {param1: 'value1'}
+        })
+        .done(function(data) {
+          dictionaryURI = data.LgDict1URI;
+          translatorURI = data.LgTranslatorURI;
+          console.log("success");
+        })
+        .fail( function(xhr, textStatus, errorThrown) {
+          alert(xhr.responseText);
+        });
+
         // show dictionary
-        var url = 'https://fr.m.wiktionary.org/wiki/' + $(this).text();
-        //url = 'http://www.wordreference.com/fres/' + this.text;
-        //url = 'https://glosbe.com/fr/es/' + this.text;
+        var url = dictionaryURI.replace('%s', encodeURIComponent($(this).text()));
 
         $('#dicFrame').get(0).contentWindow.location.replace(url);
         // the previous line loads iframe content without adding it to browser history,
@@ -165,7 +204,6 @@ $(document).ready(function() {
 
     });
 
-    // https://jsfiddle.net/kLcczz15/90/
     $('#btnadd').on('click', function() {
         // check if selection is a word or phrase
         var selection = $('#selPhrase option:selected').val();
@@ -175,33 +213,33 @@ $(document).ready(function() {
 
         // add selection to "words" table
         $.ajax({
-          type: 'POST',
-          url: 'db/addword.php',
-          data: { word: selection, isphrase: is_phrase },
-          success: function(){ // if successful, underline word or phrase
-            if (is_phrase) {
-                var firstword = selword.text();
-                var phraseext = selphrase_sel_index + 1;
-                var filterphrase = $('span.word').filter(function() { return $(this).text().toLowerCase() === firstword.toLowerCase(); });
+            type: 'POST',
+            url: 'db/addword.php',
+            data: { word: selection, isphrase: is_phrase },
+            success: function(){ // if successful, underline word or phrase
+                if (is_phrase) {
+                    var firstword = selword.text();
+                    var phraseext = selphrase_sel_index + 1;
+                    var filterphrase = $('span.word').filter(function() { return $(this).text().toLowerCase() === firstword.toLowerCase(); });
 
-                filterphrase.each(function() {
-                    var lastword = $(this).nextAll('span.word').slice(0,phraseext-1).last();
-                    var phrase = $(this).nextUntil(lastword).addBack().next('span.word').addBack();
+                    filterphrase.each(function() {
+                        var lastword = $(this).nextAll('span.word').slice(0,phraseext-1).last();
+                        var phrase = $(this).nextUntil(lastword).addBack().next('span.word').addBack();
 
-                    if(phrase.text().toLowerCase() === selection.toLowerCase()) {
-                        phrase.wrapAll("<span class='word new' data-toggle='modal' data-target='#myModal'></span>");
-                        phrase.contents().unwrap();
-                    }
-                });
-            } else {
-                var filterword = $('span.word').filter(function() { return $(this).text().toLowerCase() === selection.toLowerCase(); });
+                        if(phrase.text().toLowerCase() === selection.toLowerCase()) {
+                            phrase.wrapAll("<span class='word new' data-toggle='modal' data-target='#myModal'></span>");
+                            phrase.contents().unwrap();
+                        }
+                    });
+                } else {
+                    var filterword = $('span.word').filter(function() { return $(this).text().toLowerCase() === selection.toLowerCase(); });
 
-                filterword.html("<span class='word new' data-toggle='modal' data-target='#myModal'>" + selection + "</span>");
+                    filterword.html("<span class='word new' data-toggle='modal' data-target='#myModal'>" + selection + "</span>");
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert("Oops! There was an error adding this word or phrase to the database.");
             }
-          },
-          error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Oops! There was an error adding this word or phrase to the database.");
-          }
         });
 
     });
@@ -216,7 +254,6 @@ $(document).ready(function() {
                     return $(this).text().toLowerCase() === selword.text().toLowerCase();
                 });
 
-                alert(selword.text());
                 $.ajax({
                     url: 'underlinewords.php',
                     type: 'POST',
@@ -245,7 +282,7 @@ $(document).ready(function() {
 
     });
 
-    $('#btnfinished').on('click', function() {
+    $('#btnarchive').on('click', function() {
         // build array with underlined words
         var oldwords = [];
         var word = "";
@@ -259,8 +296,8 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: 'db/finishedreading.php',
-            data: { words: oldwords, textID: $('#textdiv').attr('data-textID') },
+            url: 'db/archivetext.php',
+            data: { words: oldwords, textID: $('#container').attr('data-textID'), archivetext: true },
             success: function(data) {
                 window.location.replace('/');
             },
@@ -282,7 +319,7 @@ $(document).ready(function() {
         var url = '';
 
         if (selindex == $('#selPhrase option').length-1) { // translate whole paragraph
-            url = 'https://translate.google.com/#fr/es/' + selword.parent('p').text() ;
+            url = translatorURI.replace('%s', encodeURIComponent(selword.parent('p').text()));
             var win = window.open(url);
             if (win) {
                 win.focus();
@@ -291,7 +328,7 @@ $(document).ready(function() {
             }
         } else { // else, select phrase & look it up in dictionary
             phrase = $('#selPhrase option').eq(selindex).val();
-            url = 'https://fr.m.wiktionary.org/wiki/' + phrase;
+            url = dictionaryURI.replace('%s', encodeURIComponent(phrase));
             $('#dicFrame').get(0).contentWindow.location.replace(url);
         }
     });

@@ -1,4 +1,7 @@
-<?php require_once('header.php') ?>
+<?php
+  session_start();
+  require_once('header.php')
+  ?>
 
 <div class="container mtb">
   <div class="row">
@@ -9,6 +12,7 @@
         if (isset($_POST['submit'])) {
           require_once('db/dbinit.php'); // connect to database
 
+          $actlangid = $_SESSION['actlangid'];
           $title = trim(mysqli_real_escape_string($con, $_POST['title']));
           $author = trim(mysqli_real_escape_string($con, $_POST['author']));
           $source_url = trim(mysqli_real_escape_string($con, $_POST['url']));
@@ -69,7 +73,9 @@
 
           if (empty($errormsg)) {
             // save text in db
-            $result = mysqli_query($con, "INSERT INTO texts (textTitle, textAuthor, text, textAudioURI, textSourceURI) VALUES ('$title', '$author', '$text', '/uploads/$target_file_name', '$source_url') ") or die(mysqli_error($con));
+            $result = mysqli_query($con, "INSERT INTO texts (textLgId, textTitle, textAuthor, text, textAudioURI, textSourceURI)
+              VALUES ('$actlangid', '$title', '$author', '$text', '/uploads/$target_file_name', '$source_url') ")
+              or die(mysqli_error($con));
 
             header('Location: /');
           } else {
@@ -91,19 +97,27 @@
       <form action="addtext.php" class="add-form" method="post" enctype="multipart/form-data">
         <div class="form-group">
           <label for="title">Title:</label>
-          <input type="text" id="title" name="title" class="form-control" maxlength="200" placeholder="Text title (required)" autofocus required value="<?php if(isset($_POST['title'])){echo $_POST['title'];}?>">
+          <input type="text" id="title" name="title" class="form-control" maxlength="200"
+            placeholder="Text title (required)" autofocus required
+            value="<?php if(isset($_POST['title'])){echo $_POST['title'];}?>">
         </div>
         <div class="form-group">
           <label for="author">Author:</label>
-          <input type="text" id="author" name="author" class="form-control" maxlength="100" placeholder="Author full name (optional)" value="<?php if(isset($_POST['author'])){echo $_POST['author'];}?>">
+          <input type="text" id="author" name="author" class="form-control" maxlength="100"
+            placeholder="Author full name (optional)"
+            value="<?php if(isset($_POST['author'])){echo $_POST['author'];}?>">
         </div>
         <div class="form-group">
           <label for="url">Source URL:</label>
-          <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (optional)"  value="<?php if(isset($_POST['url'])){echo $_POST['url'];}?>">
+          <input type="url" id="url" name="url" class="form-control"
+            placeholder="Source URL (optional)"
+            value="<?php if(isset($_POST['url'])){echo $_POST['url'];}?>">
         </div>
         <div class="form-group">
           <label for="text">Text:</label>
-          <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="65535" placeholder="Text goes here (required), max. length=65,535 chars" required><?php if(isset($_POST['text'])){echo $_POST['text'];}?></textarea>
+          <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="65535"
+            placeholder="Text goes here (required), max. length=65,535 chars" required>
+            <?php if(isset($_POST['text'])){echo $_POST['text'];}?></textarea>
         </div>
         <div class="form-group">
           <label for="audio">Audio:</label>

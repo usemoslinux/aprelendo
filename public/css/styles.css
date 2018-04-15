@@ -36,11 +36,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
-  color: #384452;
-  font-family: "Lato", sans-serif;
-  font-size: 14px;
   font-weight: 400;
-  line-height: 24px;
   margin-bottom: 12px;
   margin-top: 10px;
   padding: 0;
@@ -191,8 +187,8 @@ a:hover, a:focus {
 }
 
 .mtb {
-  margin-bottom: 80px;
-  margin-top: 80px;
+  margin-bottom: 40px;
+  margin-top: 40px;
 }
 
 .mb {
@@ -382,9 +378,29 @@ a:hover, a:focus {
 	LANGX CUSTOMIZATIONS
 ################################################################# */
 
-.textcontainer > p {
-  font-size: 1.4em;
-  line-height: 1.6em;
+@font-face {
+  font-family: "Open Sans";
+  src: url("../fonts/OpenSans-Regular.woff");
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url("../fonts/Lato-Regular.woff");
+}
+
+.lightmode {
+  background-color: white;
+  color: #000000;
+}
+
+.darkmode {
+  background-color: #323847;
+  color: #aaaaaa;
+}
+
+.sepiamode {
+  background-color: #ebe7d9;
+  color: #384452;
 }
 
 .tooltip {
@@ -421,7 +437,7 @@ a, a:hover, a:focus {
 }
 
 .word:hover {
-  background-color: #eeeeee;
+  background-color: #f2f2f2; /* #eeeeee */
 }
 
 .phrase {

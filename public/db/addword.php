@@ -6,6 +6,7 @@ if (isset($_POST['word'])) {
   $status = 2;
   $isphrase = $_POST['isphrase'];
 
-  $result = mysqli_query($con, "REPLACE INTO words (word, wordStatus, isPhrase) VALUES ('$word', $status, $isphrase)") or die(mysqli_error($con));
+  $result = mysqli_query($con, "REPLACE INTO words (word, wordStatus, isPhrase)
+            VALUES ('$word', $status, $isphrase)") or die(mysqli_error($con));
 }
 ?>

@@ -11,35 +11,74 @@
 
 - [x] error when uploading big file not shown
 
-- [ ] listtexts.php: texts are listed from old to new. Shouldn't it be the other way around?
+- [x] listtexts.php: texts are listed from old to new. Shouldn't it be the other way around?
 
 - [ ] showtexts.php: sanitize text when opening dictionary & translator URLs
 
-- [ ] implement "archived texts" section
+- [x] implement "archived texts" section
 
 - [ ] add support for ogg audio
 
 - [ ] listtexts.php: don't show table header when removing all texts from table
 
-- [ ] Add support for phrases and multi-word selection
+- [x] Add support for phrases and multi-word selection
 
 - [x] Fixed CSS, JS & PHP linter warnings
 
+- [ ] Bugs:
+        - Add word not working after translating whole paragraph
+        - After editing language, current language gets messed up
+        - It still shows audio player even if no audio to be played
+        - Are audio files being properly deleted?
+        - SESSION expires if it takes too much time to add text?
+
 - [ ] Implement sandwich menu
 
-  - [ ] Texts
+  - [x] Texts
 
-  - [ ] Archived texts
+  - [x] Archived texts
 
   - [ ] Words learning
 
-  - [ ] Statistics (Add statistics and metrics to show progress)
+  - [x] Languages
+    - Language
+    - Dic URI:
+    - Translator URI:
 
-  - [ ] Preferences (Add configuration options (select dictionary, fonts, etc.))
+    >> todo: when adding new language, not checking if all fields are settings
+    >> todo: what happens when no active language is set on preferences table?
+
+  - [ ] Statistics (Add statistics and metrics to show progress)
+    - Use chart.js or Google Charts (they both have a CDN) and use Jquery
+    https://developers.google.com/chart/interactive/docs/php_example
+
+    - Chart:
+        - Filter: today, last 7 days, last 30 days, last 365 days
+        - Data:
+            - New words added (status = 2)
+            - Words recalled (0 < status < 2 )
+            - Words learnt (status = 0)
+            - Forgotten words (status = 3?)
+            - Words already known? (another table?)
+            - Amount of words per level? (fixed value for each level)
+
+  - [x] Preferences (Add configuration options (select dictionary, fonts, etc.)
+    - Appearance
+        - Font: Helvetica, Open Sans, Times New Roman, Georgia
+        - Size: 5 options?
+        - Line height: 5 options
+        - Alignment: left, right or justify
+        - Mode: light, sepia, dark
+    - Dictionary
+        - URL
+    - Other
+        - Highlight common words
 
 - [ ] Implement pagination
 
 - [ ] Add installation instructions to readme.md
+
+- [ ] preferences.php: Remember last reading position
 
 Things that need more thinking
 
