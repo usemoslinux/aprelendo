@@ -19,18 +19,17 @@
 
 - [ ] add support for ogg audio
 
-- [ ] listtexts.php: don't show table header when removing all texts from table
-
 - [x] Add support for phrases and multi-word selection
 
 - [x] Fixed CSS, JS & PHP linter warnings
 
 - [ ] Bugs:
-        - Add word not working after translating whole paragraph
-        - After editing language, current language gets messed up
-        - It still shows audio player even if no audio to be played
-        - Are audio files being properly deleted?
-        - SESSION expires if it takes too much time to add text?
+    - [ ] listtexts.php: don't show table header when removing all texts from table
+    - [ ] Add word not working after translating whole paragraph
+    - [ ] After editing language, current language gets messed up
+    - [ ] It still shows audio player even if no audio to be played
+    - [ ] Are audio files being properly deleted?
+    - [ ] SESSION expires if it takes too much time to add text?
 
 - [ ] Implement sandwich menu
 
@@ -41,10 +40,7 @@
   - [ ] Words learning
 
   - [x] Languages
-    - Language
-    - Dic URI:
-    - Translator URI:
-
+    
     >> todo: when adding new language, not checking if all fields are settings
     >> todo: what happens when no active language is set on preferences table?
 

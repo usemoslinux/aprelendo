@@ -116,8 +116,8 @@
         <div class="form-group">
           <label for="text">Text:</label>
           <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="65535"
-            placeholder="Text goes here (required), max. length=65,535 chars" required>
-            <?php if(isset($_POST['text'])){echo $_POST['text'];}?></textarea>
+            placeholder="Text goes here (required), max. length=65,535 chars"
+            required><?php if(isset($_POST['text'])){echo $_POST['text'];}?></textarea>
         </div>
         <div class="form-group">
           <label for="audio">Audio:</label>
