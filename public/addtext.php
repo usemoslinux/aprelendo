@@ -73,8 +73,9 @@
 
           if (empty($errormsg)) {
             // save text in db
+            $audio_uri = empty($target_file_name) ? '' : '/uploads/' . $target_file_name;
             $result = mysqli_query($con, "INSERT INTO texts (textLgId, textTitle, textAuthor, text, textAudioURI, textSourceURI)
-              VALUES ('$actlangid', '$title', '$author', '$text', '/uploads/$target_file_name', '$source_url') ")
+              VALUES ('$actlangid', '$title', '$author', '$text', '$audio_uri', '$source_url') ")
               or die(mysqli_error($con));
 
             header('Location: /');
