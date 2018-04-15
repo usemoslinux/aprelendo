@@ -233,8 +233,8 @@ $(document).ready(function() {
                     });
                 } else {
                     var filterword = $('span.word').filter(function() { return $(this).text().toLowerCase() === selection.toLowerCase(); });
-
                     filterword.html("<span class='word new' data-toggle='modal' data-target='#myModal'>" + selection + "</span>");
+                    filterword.contents().unwrap();
                 }
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
