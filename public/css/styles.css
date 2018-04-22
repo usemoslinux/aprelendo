@@ -546,6 +546,7 @@ audio, video {
 }
 
 .flex-pbr {
+  background-color: transparent;
   display: flex;
   flex: 1;
   margin-left: 10px;

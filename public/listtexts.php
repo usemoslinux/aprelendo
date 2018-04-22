@@ -27,7 +27,7 @@ function print_table_header() {
     </colgroup>
     <thead>
     <tr>
-    <th class="col-checkbox"></th>
+    <th class="col-checkbox"><input class="alltxt-checkbox" type="checkbox"></th>
     <th class="col-title">Title</th>
     <th class="col-status">Status</th>
     </tr>
@@ -60,7 +60,7 @@ function print_table_footer() {
 function print_table_content($textID, $textTitle) {
     global $showarchivedtexts;
     $link = $showarchivedtexts ? '' : '<a href ="showtext.php?id=' . $textID . '">';
-    echo '<tr><td class="col-checkbox"><label><input type="checkbox" data-idText="' .
+    echo '<tr><td class="col-checkbox"><label><input class="txt-checkbox" type="checkbox" data-idText="' .
         $textID . '"></label></td><td class="col-title">' . $link .
         $textTitle . '</td><td class="col-status"></td></tr>';
 }
@@ -181,12 +181,20 @@ $(document).ready(function() {
         });
     }
 
-    $('input[type=checkbox]').on('click', function() {
-        if ($('input[type=checkbox]:checked').length === 0) {
-            $('#actions-menu').addClass('disabled');
-        } else {
-            $('#actions-menu').removeClass('disabled');
-        }
+    function toggleActionMenu() {
+      if ($('input[type=checkbox]:checked').length === 0) {
+          $('#actions-menu').addClass('disabled');
+      } else {
+          $('#actions-menu').removeClass('disabled');
+      }
+    }
+
+    $(document).on('change', '.txt-checkbox', toggleActionMenu);
+
+    $(document).on('click', '.alltxt-checkbox', function() {
+      var chkboxes = $('.txt-checkbox');
+      chkboxes.prop('checked', $(this).prop('checked'));
+      toggleActionMenu();
     });
 
 });

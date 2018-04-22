@@ -127,6 +127,7 @@ $(document).ready(function() {
     selword = null;
     dictionaryURI = '';
     translatorURI = '';
+    prevsel = 0; // previous selection index in #selPhrase
 
     // set keyboard shortcuts
     $(window).on('keydown', function(e) {
@@ -202,6 +203,8 @@ $(document).ready(function() {
             text: 'Translate whole paragraph'
         }));
 
+        prevsel = 0;
+
     });
 
     $('#btnadd').on('click', function() {
@@ -260,7 +263,6 @@ $(document).ready(function() {
                     data: {txt: selword.text()}
                 })
                 .done(function(result) {
-                    //alert('success: html result: ' + result + "\nword: " + selword.text());
                     filter.html(result);
                     filter.contents().unwrap();
                 });
@@ -314,9 +316,11 @@ $(document).ready(function() {
         $('#audioplayer').prop('playbackRate', cpbr);
     });
 
+
     $('#selPhrase').on('change', function(e) {
         var selindex = $('#selPhrase').prop('selectedIndex');
         var url = '';
+        //alert('selindex=' + selindex + '; prevsel=' + prevsel);
 
         if (selindex == $('#selPhrase option').length-1) { // translate whole paragraph
             url = translatorURI.replace('%s', encodeURIComponent(selword.parent('p').text()));
@@ -326,10 +330,12 @@ $(document).ready(function() {
             } else {
                 alert("Couldn't open translator window. Please allow popups for this website");
             }
+            $(this).prop('selectedIndex', prevsel);
         } else { // else, select phrase & look it up in dictionary
             phrase = $('#selPhrase option').eq(selindex).val();
             url = dictionaryURI.replace('%s', encodeURIComponent(phrase));
             $('#dicFrame').get(0).contentWindow.location.replace(url);
+            prevsel = selindex;
         }
     });
 
