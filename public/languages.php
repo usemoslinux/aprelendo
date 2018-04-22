@@ -161,11 +161,4 @@
 
 <?php require_once('footer.php') ?>
 
-<script type="text/javascript">
-  $('body').on('click', '#delbtn', function(event) {
-    if (!confirm('Are you sure? Please beware that deleting a language will also delete all associated texts.')) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  });
-</script>
+<script type="text/javascript" src="js/languages.js"></script>
