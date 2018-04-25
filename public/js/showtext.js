@@ -5,7 +5,10 @@ $(document).ready(function() {
     translatorURI = '';
     prevsel = 0; // previous selection index in #selPhrase
 
-    // set keyboard shortcuts
+    /**
+     * Sets keyboard shortcuts for media player
+     * @param {event object} e Used to get keycodes
+     */
     $(window).on('keydown', function(e) {
         switch (e.keyCode) {
             case 80: // "p" keyCode
@@ -17,6 +20,10 @@ $(document).ready(function() {
         }
     });
 
+    /**
+     * Shows dictionary when user clicks a word
+     * All words are enclosed in span.word tags
+     */
     $(document).on('click', 'span.word', function(){
 
         var audioplayer = $('#audioplayer');
@@ -61,8 +68,10 @@ $(document).ready(function() {
             text: selword.text()
         }));
         phraselength = 0;
+
+        // chose max. 5 words. If .?! detected, then stop (it's the end of the sentence).
         selword.nextAll('span').slice(0,20).each(function(i, item){
-            if (phraselength == 5 || $(item).text().search('.') > 0) {
+            if (phraselength == 5 || $(item).text().search(/[.?!]/i) > -1) {
                 return false;
             } else {
                 if ($(item).hasClass('word')) {
@@ -83,6 +92,10 @@ $(document).ready(function() {
 
     });
 
+
+    /**
+     * Adds selected word or phrase to the database and underlines it in the text
+     */
     $('#btnadd').on('click', function() {
         // check if selection is a word or phrase
         var selection = $('#selPhrase option:selected').val();
@@ -123,6 +136,9 @@ $(document).ready(function() {
 
     });
 
+    /**
+     * Remove selected word or phrase from database
+     */
     $('#btnremove').on('click', function(){
         $.ajax({
             type: 'POST',
@@ -151,8 +167,10 @@ $(document).ready(function() {
 
     });
 
+    /**
+     * Resumes playing if audio was paused when clicking on a word
+     */
     $('#myModal').on('hidden.bs.modal', function () {
-        // if user was playing audio, resume playback
         var audioplayer = $('#audioplayer');
         if (playingaudio && audioplayer.length) {
             audioplayer.trigger("play");
@@ -160,6 +178,10 @@ $(document).ready(function() {
 
     });
 
+    /**
+     * Archives text and updates wordStatus of all the words being learnt
+     * This is executed when the user presses the "Finished reading" button
+     */
     $('#btnarchive').on('click', function() {
         // build array with underlined words
         var oldwords = [];
@@ -185,15 +207,20 @@ $(document).ready(function() {
         });
     });
 
-    // audio playback rate slider
+    /**
+     * Changes playback speed when user moves slider
+     */
     $('#pbr').on('input change', function() {
         cpbr = parseFloat($(this).val()).toFixed(1);
         $('#currentpbr').text(cpbr);
         $('#audioplayer').prop('playbackRate', cpbr);
     });
 
-
-    $('#selPhrase').on('change', function(e) {
+    /**
+     * Updates dictionary when user selects a new word/phrase
+     * If user chooses to "translate the whole paragraph", it opens up the translator
+     */
+    $('#selPhrase').on('change', function() {
         var selindex = $('#selPhrase').prop('selectedIndex');
         var url = '';
         //alert('selindex=' + selindex + '; prevsel=' + prevsel);

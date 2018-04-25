@@ -1,4 +1,10 @@
 $(document).ready(function() {
+
+    /**
+     * Saves preferences to the database and shows success/failure message
+     * It is executed when user clicks the submit button
+     * @param  {event object} e Used to prevent reloading of the page
+     */
     $('#prefs-form').submit(function(e) {
         $.ajax({
             url: 'db/savepreferences.php',
