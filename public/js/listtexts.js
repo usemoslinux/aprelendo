@@ -27,10 +27,7 @@ $(document).ready(function() {
           success: function() {
             parentTR.remove();
             // if there are no remaining texts to show on the table, remove the entire table
-            if ($('#textstable tbody').is(':empty')) {
-              $('#textstable').replaceWith('<p>There are no texts in your private library.</p>');
-              $('#actions-menu').remove();
-            }
+            removeTable();
           },
           error: function (request, status, error) {
             alert("There was an error when trying to delete the selected texts. Refresh the page and try again.");
@@ -66,6 +63,7 @@ $(document).ready(function() {
         data: {textID: id, archivetext: archivetxt},
         success: function() {
           parentTR.remove();
+          removeTable();
         },
         error: function (request, status, error) {
           alert("There was an error when trying to archive the selected texts. Refresh the page and try again.");
@@ -94,5 +92,12 @@ $(document).ready(function() {
     chkboxes.prop('checked', $(this).prop('checked'));
     toggleActionMenu();
   });
+
+  function removeTable() {
+    if ($('#textstable tbody').is(':empty')) {
+      $('#textstable').replaceWith('<p>There are no texts in your private library.</p>');
+      $('#actions-menu').remove();
+    }
+  }
 
 });
