@@ -185,6 +185,7 @@ $(document).ready(function() {
     $('#btnarchive').on('click', function() {
         // build array with underlined words
         var oldwords = [];
+        var ids = [];
         var word = "";
         $('.learning').each(function(){
             word = $(this).text().toLowerCase();
@@ -194,10 +195,12 @@ $(document).ready(function() {
 
         });
 
+        ids.push($('#container').attr('data-textID')); // get text ID
+
         $.ajax({
             type: 'POST',
             url: 'db/archivetext.php',
-            data: { words: oldwords, textID: $('#container').attr('data-textID'), archivetext: true },
+            data: { words: oldwords, textIDs: JSON.stringify(ids), archivetext: true },
             success: function(data) {
                 window.location.replace('/');
             },
