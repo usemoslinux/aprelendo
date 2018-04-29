@@ -10,30 +10,31 @@ $(document).ready(function() {
   */
   $("#mDelete").on("click", function() {
     if (confirm("Really delete?")) {
+      var ids = [];
       $("input[class=txt-checkbox]:checked").each(function() {
-        var id = $(this).attr('data-idText');
-        var parentTR = $(this).closest('tr');
+        ids.push($(this).attr('data-idText'));
+        //var parentTR = $(this).closest('tr');
+      });
 
-        /**
-        * Deletes selected texts from the database (based on their ID).
-        * When done, also removes selected rows from HTML table.
-        * @param  {integer} id Id of the selected element in the database
-        * @param  {jQuery object} parentTR Parent TR element of the selected checkbox
-        */
-        $.ajax({
-          url: 'db/removetext.php',
-          type: 'POST',
-          data: {idText: id},
-          success: function() {
-            parentTR.remove();
-            // if there are no remaining texts to show on the table, remove the entire table
-            removeTableIfEmpty();
-          },
-          error: function (request, status, error) {
-            alert("There was an error when trying to delete the selected texts. Refresh the page and try again.");
-          }
-        });
-
+      /**
+      * Deletes selected texts from the database (based on their ID).
+      * When done, also removes selected rows from HTML table.
+      * @param  {integer array} textIDs Ids of the selected elements in the database
+      */
+      $.ajax({
+        url: 'db/removetext.php',
+        type: 'POST',
+        data: {textIDs: JSON.stringify(ids)},
+        success: function() {
+          $("input[class=txt-checkbox]:checked").each(function() {
+            $(this).closest('tr').remove();
+          });
+          // if there are no remaining texts to show on the table, remove the entire table
+          removeTableIfEmpty();
+        },
+        error: function (request, status, error) {
+          alert("There was an error when trying to delete the selected texts. Refresh the page and try again.");
+        }
       });
     }
   });
@@ -44,32 +45,35 @@ $(document).ready(function() {
   */
   $('#mArchive').on('click', function() {
     var archivetxt = $(this).text() === 'Archive text';
+    var ids = [];
     $('input[class=txt-checkbox]:checked').each(function() {
-      var id = $(this).attr('data-idText');
-      var parentTR = $(this).closest('tr');
-
-      /**
-      * Moves selected texts from the "texts" table to the "archivedtexts" table in the database (archive);
-      * or, vice-versa, moves texts from the "archivedtexts" table to the "texts" table (unarchive)
-      * This is done based on text IDs.
-      * When done, also removes selected rows from the HTML table.
-      * @param {integer} id Id of the selected element in the database
-      * @param {jQuery object} parentTR Parent TR element of the selected checkbox
-      * @param {boolean} archivetxt If true, archive text; if false, unarchive text
-      */
-      $.ajax({
-        url: 'db/archivetext.php',
-        type: 'POST',
-        data: {textID: id, archivetext: archivetxt},
-        success: function() {
-          parentTR.remove();
-          removeTableIfEmpty();
-        },
-        error: function (request, status, error) {
-          alert("There was an error when trying to archive the selected texts. Refresh the page and try again.");
-        }
-      });
+      ids.push($(this).attr('data-idText'));
+      //parentTRs.push($(this).closest('tr'));
     });
+
+    /**
+    * Moves selected texts from the "texts" table to the "archivedtexts" table in the database (archive);
+    * or, vice-versa, moves texts from the "archivedtexts" table to the "texts" table (unarchive)
+    * This is done based on text IDs.
+    * When done, also removes selected rows from the HTML table.
+    * @param {integer array} ids Ids of the selected elements in the database
+    * @param {boolean} archivetxt If true, archive text; else, unarchive text
+    */
+    $.ajax({
+      url: 'db/archivetext.php',
+      type: 'POST',
+      data: {textIDs: JSON.stringify(ids), archivetext: archivetxt},
+      success: function() {
+        $('input[class=txt-checkbox]:checked').each(function() {
+          $(this).closest('tr').remove();
+        });
+        removeTableIfEmpty();
+      },
+      error: function (request, status, error) {
+        alert("There was an error when trying to archive the selected texts. Refresh the page and try again.");
+      }
+    });
+
   });
 
   /**
