@@ -10,7 +10,7 @@ $(document).ready(function() {
   */
   $("#mDelete").on("click", function() {
     if (confirm("Really delete?")) {
-      $("input[type=checkbox]:checked").each(function() {
+      $("input[class=txt-checkbox]:checked").each(function() {
         var id = $(this).attr('data-idText');
         var parentTR = $(this).closest('tr');
 
@@ -27,7 +27,7 @@ $(document).ready(function() {
           success: function() {
             parentTR.remove();
             // if there are no remaining texts to show on the table, remove the entire table
-            removeTable();
+            removeTableIfEmpty();
           },
           error: function (request, status, error) {
             alert("There was an error when trying to delete the selected texts. Refresh the page and try again.");
@@ -44,7 +44,7 @@ $(document).ready(function() {
   */
   $('#mArchive').on('click', function() {
     var archivetxt = $(this).text() === 'Archive text';
-    $('input[type=checkbox]:checked').each(function() {
+    $('input[class=txt-checkbox]:checked').each(function() {
       var id = $(this).attr('data-idText');
       var parentTR = $(this).closest('tr');
 
@@ -63,7 +63,7 @@ $(document).ready(function() {
         data: {textID: id, archivetext: archivetxt},
         success: function() {
           parentTR.remove();
-          removeTable();
+          removeTableIfEmpty();
         },
         error: function (request, status, error) {
           alert("There was an error when trying to archive the selected texts. Refresh the page and try again.");
@@ -76,13 +76,15 @@ $(document).ready(function() {
   * Enables/Disables action menu based on the number of selected elements.
   * If there is at least 1 element selected, it enables it. Otherwise, it is disabled.
   */
-  $(document).on('change', '.txt-checkbox', function() {
-    if ($('input[type=checkbox]:checked').length === 0) {
-      $('#actions-menu').addClass('disabled');
-    } else {
-      $('#actions-menu').removeClass('disabled');
+  function toggleActionMenu() {
+      if ($('input[type=checkbox]:checked').length === 0) {
+          $('#actions-menu').addClass('disabled');
+      } else {
+          $('#actions-menu').removeClass('disabled');
+      }
     }
-  });
+
+  $(document).on('change', '.txt-checkbox', toggleActionMenu);
 
   /**
   * Selects/Unselects all texts from the list
@@ -93,7 +95,7 @@ $(document).ready(function() {
     toggleActionMenu();
   });
 
-  function removeTable() {
+  function removeTableIfEmpty() {
     if ($('#textstable tbody').is(':empty')) {
       $('#textstable').replaceWith('<p>There are no texts in your private library.</p>');
       $('#actions-menu').remove();
