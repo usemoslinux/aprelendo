@@ -1,33 +1,39 @@
 <?php
 
-if (isset($_POST['idText'])) {
+if (isset($_POST['textIDs'])) {
   require_once('dbinit.php'); // connect to database
 
-  $id = mysqli_real_escape_string($con, $_POST['idText']);
+  $ids = json_decode($_POST['textIDs']);
+  foreach ($ids as $id) {
+    $id = mysqli_real_escape_string($con, $id);
+  }
+  $textIDs = implode(',', $ids);
 
   // decide wether we are deleting an archived text or not
   $referer = basename($_SERVER['HTTP_REFERER']);
   if ($referer == 'archivedtexts.php') {
-    $selectsql = "SELECT atextAudioURI FROM archivedtexts WHERE atextID='$id'";
-    $deletesql = "DELETE FROM archivedtexts WHERE atextID='$id'";
+    $selectsql = "SELECT atextAudioURI FROM archivedtexts WHERE atextID IN ($textIDs)";
+    $deletesql = "DELETE FROM archivedtexts WHERE atextID IN ($textIDs)";
     $audiouri = 'atextAudioURI';
   } else {
-    $selectsql = "SELECT textAudioURI FROM texts WHERE textID='$id'";
-    $deletesql = "DELETE FROM texts WHERE textID='$id'";
+    $selectsql = "SELECT textAudioURI FROM texts WHERE textID IN ($textIDs)";
+    $deletesql = "DELETE FROM texts WHERE textID IN ($textIDs)";
     $audiouri = 'textAudioURI';
   }
 
-  // check if there is an audio file associated to this text and store its URI
+  // create an array of the audio files to delete
   $result = mysqli_query($con, $selectsql) or die(mysqli_error($con));
-  $row = mysqli_fetch_assoc($result);
-  $filename = $row[$audiouri];
+  $audiouris = mysqli_fetch_all($result);
 
-  // delete entry from db
+  // delete entries from db
   $deletedfromdb = mysqli_query($con, $deletesql) or die(mysqli_error($con));
 
-  // if there is an audio file associated to this text, delete it
-  if ($deletedfromdb && isset($filename)) {
-    $filename = APP_ROOT . '/public' . $filename;
-    unlink($filename);
+  // delete audio files
+  if ($deletedfromdb) {
+    // check if there is an audio file associated to this text and store its URI
+    foreach ($audiouris as $key => $value) {
+        $filename = APP_ROOT . '/public' . $audiouris[$key][0];
+        unlink($filename);
+    }
   }
 }

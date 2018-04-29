@@ -20,15 +20,20 @@
   }
 
   // then, change text status (archive or unarchive text)
-  $textID = mysqli_real_escape_string($con, $_POST['textID']);
+  //$textID = mysqli_real_escape_string($con, $_POST['textID']);
+  $ids = json_decode($_POST['textIDs']);
+  foreach ($ids as $id) {
+    $id = mysqli_real_escape_string($con, $id);
+  }
+  $textIDs = implode(',', $ids);
   //$archivetext = mysqli_real_escape_string($con, $_POST['archivetext']);
   //mysqli_query($con, "UPDATE texts SET textWasRead=$archivetext WHERE textID=$textID") or die(mysqli_error($con));
   if ($_POST['archivetext'] === 'true') { //archive text
-      mysqli_query($con, "INSERT INTO archivedtexts SELECT * FROM texts WHERE textID=$textID") or die(mysqli_error($con));
-      mysqli_query($con, "DELETE FROM texts WHERE textID=$textID") or die(mysqli_error($con));
+      mysqli_query($con, "INSERT INTO archivedtexts SELECT * FROM texts WHERE textID IN ($textIDs)") or die(mysqli_error($con));
+      mysqli_query($con, "DELETE FROM texts WHERE textID IN ($textIDs)") or die(mysqli_error($con));
   } else { // unarchive text
-      mysqli_query($con, "INSERT INTO texts SELECT * FROM archivedtexts WHERE atextID=$textID") or die(mysqli_error($con));
-      mysqli_query($con, "DELETE FROM archivedtexts WHERE atextID=$textID") or die(mysqli_error($con));
+      mysqli_query($con, "INSERT INTO texts SELECT * FROM archivedtexts WHERE atextID IN ($textIDs)") or die(mysqli_error($con));
+      mysqli_query($con, "DELETE FROM archivedtexts WHERE atextID IN ($textIDs)") or die(mysqli_error($con));
   }
 
  ?>
