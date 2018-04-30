@@ -29,11 +29,17 @@
   //$archivetext = mysqli_real_escape_string($con, $_POST['archivetext']);
   //mysqli_query($con, "UPDATE texts SET textWasRead=$archivetext WHERE textID=$textID") or die(mysqli_error($con));
   if ($_POST['archivetext'] === 'true') { //archive text
-      mysqli_query($con, "INSERT INTO archivedtexts SELECT * FROM texts WHERE textID IN ($textIDs)") or die(mysqli_error($con));
-      mysqli_query($con, "DELETE FROM texts WHERE textID IN ($textIDs)") or die(mysqli_error($con));
+      $insertsql = "INSERT INTO archivedtexts (atextLgID, atextTitle, atextAuthor, atext, atextAudioURI, atextSourceURI)
+        SELECT textLgID, textTitle, textAuthor, text, textAudioURI, textSourceURI
+        FROM texts WHERE textID IN ($textIDs)";
+      $deletesql = "DELETE FROM texts WHERE textID IN ($textIDs)";
   } else { // unarchive text
-      mysqli_query($con, "INSERT INTO texts SELECT * FROM archivedtexts WHERE atextID IN ($textIDs)") or die(mysqli_error($con));
-      mysqli_query($con, "DELETE FROM archivedtexts WHERE atextID IN ($textIDs)") or die(mysqli_error($con));
+    $insertsql = "INSERT INTO texts (textLgID, textTitle, textAuthor, text, textAudioURI, textSourceURI)
+      SELECT atextLgID, atextTitle, atextAuthor, atext, atextAudioURI, atextSourceURI
+      FROM archivedtexts WHERE atextID IN ($textIDs)";
+    $deletesql = "DELETE FROM archivedtexts WHERE atextID IN ($textIDs)";
   }
-
+  // execute sql queries to archive/unarchive text(s)
+  mysqli_query($con, $insertsql) or die(mysqli_error($con));
+  mysqli_query($con, $deletesql) or die(mysqli_error($con));
  ?>
