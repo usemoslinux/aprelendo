@@ -10,13 +10,17 @@ $(document).ready(function() {
   * @param {event object} e Used to get keycodes
   */
   $(window).on('keydown', function(e) {
-    switch (e.keyCode) {
-      case 80: // "p" keyCode
-      $('#audioplayer')[0].play();
-      break;
-      case 83: // "s" keyCode
-      $('#audioplayer')[0].pause();
-      break;
+    var $audioplayer = $('#audioplayer');
+    if ($audioplayer.length && e.ctrlKey) {
+      switch (e.keyCode) {
+        case 32: // "spacebar" keyCode
+        if ($audioplayer.prop('paused')) {
+          $audioplayer.trigger('play');
+        } else {
+          $audioplayer.trigger('pause');
+        }
+        break;
+      }
     }
   });
 
@@ -32,9 +36,6 @@ $(document).ready(function() {
     dictionaryURI = data.LgDict1URI;
     translatorURI = data.LgTranslatorURI;
     console.log("success");
-  })
-  .fail( function(xhr, textStatus, errorThrown) {
-    alert(xhr.responseText);
   });
 
 
@@ -138,6 +139,7 @@ $(document).ready(function() {
 
   });
 
+
   /**
   * Remove selected word or phrase from database
   */
@@ -169,6 +171,7 @@ $(document).ready(function() {
 
   });
 
+
   /**
   * Resumes playing if audio was paused when clicking on a word
   */
@@ -177,8 +180,8 @@ $(document).ready(function() {
     if (playingaudio && audioplayer.length) {
       audioplayer.trigger("play");
     }
-
   });
+
 
   /**
   * Archives text and updates wordStatus of all the words being learnt
@@ -212,6 +215,7 @@ $(document).ready(function() {
     });
   });
 
+
   /**
   * Changes playback speed when user moves slider
   */
@@ -220,6 +224,7 @@ $(document).ready(function() {
     $('#currentpbr').text(cpbr);
     $('#audioplayer').prop('playbackRate', cpbr);
   });
+
 
   /**
   * Updates dictionary when user selects a new word/phrase
@@ -244,6 +249,33 @@ $(document).ready(function() {
       url = dictionaryURI.replace('%s', encodeURIComponent(phrase));
       $('#dicFrame').get(0).contentWindow.location.replace(url);
       prevsel = selindex;
+    }
+  });
+
+  $('#btndictation').on('click', function() {
+    //replace all underlined words/phrases with input boxes
+    $('.learning, .new').each(function(index, value) {
+      $elem = $(this);
+      $elem.hide().after('<input type="text" class="dict" ' + 'style="width:' + (($elem.text().length + 1)*10) + 'px" data-text="' + $elem.text() + '">');
+    });
+    $("html, body").animate({ scrollTop: 0 }, "slow"); // go back to the top of the page
+
+    // automatically play audio, from the beginning
+    var $audioplayer = $('#audioplayer');
+    $audioplayer.prop('currentTime', '0');
+    $audioplayer.trigger('play');
+
+    $(':text:first').focus(); // focus first input
+  });
+
+  $('body').on('blur', 'input', function(event) {
+    $curinput = $(this);
+    // when user moves focus out of the input box, check if answer is correct
+    // and show a cue to indicate status
+    if ($curinput.val() == $curinput.attr('data-text')) {
+      $curinput.css('border-color', 'yellowgreen');
+    } else {
+      $curinput.css('border-color', 'tomato');
     }
   });
 });

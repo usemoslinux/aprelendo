@@ -486,6 +486,14 @@ a, a:hover, a:focus {
   padding-right: 0;
 }
 
+.dict {
+  transition: border-color 0.5s;
+  -webkit-transition: border-color 0.5s;
+  -moz-transition: border-color 0.5s;
+  border-width: 0;
+  border-bottom: 2px solid gray;
+}
+
 @media screen and (min-width: 768px) {
   .flex {
     display: flex;
