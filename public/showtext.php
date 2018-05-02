@@ -112,8 +112,8 @@ echo " style='font-family:{$_SESSION['fontfamily']};font-size:{$_SESSION['fontsi
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button id="btnremove" type="button" data-dismiss="modal" class="btn btn-danger">Forget</button>
-        <button id="btnadd" type="button" class="btn btn-primary btn-success pull-right" data-dismiss="modal">Add</button>
+        <button id="btnremove" type="button" data-dismiss="modal" class="btn btn-danger">Delete</button>
+        <button id="btnadd" type="button" class="btn btn-primary btn-success pull-right addbtn" data-dismiss="modal">Add</button>
         <select class="modal-selPhrase" name="selPhrase" id="selPhrase">
           <option value="translateparagraph">Translate whole paragraph</option>
         </select>

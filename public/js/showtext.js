@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  selword = null;
+  $selword = null;
   dictionaryURI = '';
   translatorURI = '';
   prevsel = 0; // previous selection index in #selPhrase
@@ -38,6 +38,22 @@ $(document).ready(function() {
     console.log("success");
   });
 
+  /**
+  * Sets Add & Delete buttons depending on whether selection exists in database
+  */
+  function setAddDeleteButtons() {
+    var $btnremove = $('#btnremove');
+    var $btnadd = $('#btnadd');
+    if ($selword.hasClass('learning') || $selword.hasClass('new')) {
+      if ($btnremove.is(':visible') === false) {
+        $btnremove.show();
+        $btnadd.text('Forgot meaning');
+      }
+    } else {
+      $btnremove.hide();
+      $btnadd.text('Add');
+    }
+  }
 
   /**
   * Shows dictionary when user clicks a word
@@ -56,31 +72,35 @@ $(document).ready(function() {
       }
     }
 
+    $selword = $(this);
+
+    setAddDeleteButtons();
+
     // show dictionary
-    var url = dictionaryURI.replace('%s', encodeURIComponent($(this).text()));
+    var url = dictionaryURI.replace('%s', encodeURIComponent($selword.text()));
 
     $('#dicFrame').get(0).contentWindow.location.replace(url);
     // the previous line loads iframe content without adding it to browser history,
     // as this one does: $('#dicFrame').attr('src', url);
-    selword = $(this);
+
 
     // build phrase select element in modal window
     $('#selPhrase').empty();
     $('#selPhrase').append($('<option>', {
-      value: selword.text(),
-      text: selword.text()
+      value: $selword.text(),
+      text: $selword.text()
     }));
     phraselength = 0;
 
     // chose max. 5 words. If .?! detected, then stop (it's the end of the sentence).
-    selword.nextAll('span').slice(0,20).each(function(i, item){
+    $selword.nextAll('span').slice(0,20).each(function(i, item){
       if (phraselength == 5 || $(item).text().search(/[.?!]/i) > -1) {
         return false;
       } else {
         if ($(item).hasClass('word')) {
           $('#selPhrase').append($('<option>', {
-            value: selword.text() + selword.nextAll('span').slice(0,i+1).text(),
-            text: selword.text() + '...' + $(item).text()
+            value: $selword.text() + $selword.nextAll('span').slice(0,i+1).text(),
+            text: $selword.text() + '...' + $(item).text()
           }));
           phraselength++;
         }
@@ -113,7 +133,7 @@ $(document).ready(function() {
       data: { word: selection, isphrase: is_phrase },
       success: function(){ // if successful, underline word or phrase
         if (is_phrase) {
-          var firstword = selword.text();
+          var firstword = $selword.text();
           var phraseext = selphrase_sel_index + 1;
           var filterphrase = $('span.word').filter(function() { return $(this).text().toLowerCase() === firstword.toLowerCase(); });
 
@@ -147,16 +167,16 @@ $(document).ready(function() {
     $.ajax({
       type: 'POST',
       url: 'db/removeword.php',
-      data: { word: selword.text() },
+      data: { word: $selword.text() },
       success: function(){
         var filter = $('span.word').filter(function() {
-          return $(this).text().toLowerCase() === selword.text().toLowerCase();
+          return $(this).text().toLowerCase() === $selword.text().toLowerCase();
         });
 
         $.ajax({
           url: 'underlinewords.php',
           type: 'POST',
-          data: {txt: selword.text()}
+          data: {txt: $selword.text()}
         })
         .done(function(result) {
           filter.html(result);
@@ -233,10 +253,21 @@ $(document).ready(function() {
   $('#selPhrase').on('change', function() {
     var selindex = $('#selPhrase').prop('selectedIndex');
     var url = '';
-    //alert('selindex=' + selindex + '; prevsel=' + prevsel);
 
+    // set Add & Delete buttons depending on whether selection exists in database
+    if (selindex == 0) {
+      // only for the first word we need to check if it exists in db
+      setAddDeleteButtons();
+    } else {
+      // for the rest, due to the selection method used in Langx, we can be sure
+      // they are not in the database
+      $('#btnremove').hide();
+      $('#btnadd').text('Add');
+    }
+
+    // define behaviour when user clicks on a phrase or "translate whole paragraph"
     if (selindex == $('#selPhrase option').length-1) { // translate whole paragraph
-      url = translatorURI.replace('%s', encodeURIComponent(selword.parent('p').text()));
+      url = translatorURI.replace('%s', encodeURIComponent($selword.parent('p').text()));
       var win = window.open(url);
       if (win) {
         win.focus();
