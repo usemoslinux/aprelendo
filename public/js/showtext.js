@@ -284,19 +284,31 @@ $(document).ready(function() {
   });
 
   $('#btndictation').on('click', function() {
-    //replace all underlined words/phrases with input boxes
-    $('.learning, .new').each(function(index, value) {
-      $elem = $(this);
-      $elem.hide().after('<input type="text" class="dict" ' + 'style="width:' + (($elem.text().length + 1)*10) + 'px" data-text="' + $elem.text() + '">');
-    });
-    $("html, body").animate({ scrollTop: 0 }, "slow"); // go back to the top of the page
+    if ($('.dict-answer').length == 0 ) { // toggle dictation on 
+      //replace all underlined words/phrases with input boxes
+      $('.learning, .new').each(function(index, value) {
+        $elem = $(this);
+        $elem.hide().after('<div class="input-group dict-input-group"><input type="text" class="dict" ' +
+          'style="width:' + (($elem.text().length + 1)*10) + 'px" data-text="' + $elem.text() + '">' +
+          '<span class="input-group-addon dict-answer hidden"></span></div>');
+      });
+      $("html, body").animate({ scrollTop: 0 }, "slow"); // go back to the top of the page
 
-    // automatically play audio, from the beginning
-    var $audioplayer = $('#audioplayer');
-    $audioplayer.prop('currentTime', '0');
-    $audioplayer.trigger('play');
+      // automatically play audio, from the beginning
+      var $audioplayer = $('#audioplayer');
+      $audioplayer.prop('currentTime', '0');
+      $audioplayer.trigger('play');
 
-    $(':text:first').focus(); // focus first input
+      $(':text:first').focus(); // focus first input
+    } else { // toggle dictation off
+      $('.learning, .new').each(function(index, value) {
+        $elem = $(this);
+        $elem.show().nextAll(':lt(1)').remove();
+      }); 
+      $("html, body").animate({ scrollTop: 0 }, "slow");
+      $('#audioplayer').trigger('pause');
+    }
+    
   });
 
   $('body').on('blur', 'input', function(event) {
@@ -305,8 +317,14 @@ $(document).ready(function() {
     // and show a cue to indicate status
     if ($curinput.val() == $curinput.attr('data-text')) {
       $curinput.css('border-color', 'yellowgreen');
+      $curinput.next('span').not('.hidden').addClass('hidden');
+
     } else {
       $curinput.css('border-color', 'tomato');
+      $curinput.next('span')
+        .removeClass('hidden')
+        .addClass('dict-wronganswer')
+        .text($curinput.attr('data-text'));
     }
   });
 });

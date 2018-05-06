@@ -494,6 +494,20 @@ a, a:hover, a:focus {
   border-bottom: 2px solid gray;
 }
 
+.dict-input-group {
+  display: inline-table;
+}
+
+.dict-answer {
+  width: initial;
+}
+
+.dict-wronganswer {
+  background-color: tomato;
+  border-color: tomato;
+  color: white;
+}
+
 .addbtn {
   margin-bottom: 12px;
 }

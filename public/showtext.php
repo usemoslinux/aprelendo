@@ -95,7 +95,7 @@ echo " style='font-family:{$_SESSION['fontfamily']};font-size:{$_SESSION['fontsi
     // if there is audio available & at least 1 learning word in current document
     $learningwords = strpos($text, "<span class='word learning'") || strpos($text, "<span class='new learning'");
     if (!empty($textAudioURI && $learningwords === TRUE)) {
-      echo '<button type="button" id="btndictation" class="btn btn-lg btn-info btn-block">Dictation mode</button>';
+      echo '<button type="button" id="btndictation" class="btn btn-lg btn-info btn-block">Toggle dictation</button>';
     }
 
     echo '<p></p></div>';
