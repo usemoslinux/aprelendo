@@ -3,11 +3,11 @@
   require_once('header.php')
   ?>
 
-<div class="container mtb">
-  <div class="row">
-    <div class="col-lg-12">
+  <div class="container mtb">
+    <div class="row">
+      <div class="col-lg-12">
 
-      <?php
+        <?php
 
         if (isset($_POST['submit'])) {
           require_once('db/dbinit.php'); // connect to database
@@ -95,42 +95,37 @@
         }
       ?>
 
-      <form action="addtext.php" class="add-form" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-          <label for="title">Title:</label>
-          <input type="text" id="title" name="title" class="form-control" maxlength="200"
-            placeholder="Text title (required)" autofocus required
-            value="<?php if(isset($_POST['title'])){echo $_POST['title'];}?>">
-        </div>
-        <div class="form-group">
-          <label for="author">Author:</label>
-          <input type="text" id="author" name="author" class="form-control" maxlength="100"
-            placeholder="Author full name (optional)"
-            value="<?php if(isset($_POST['author'])){echo $_POST['author'];}?>">
-        </div>
-        <div class="form-group">
-          <label for="url">Source URL:</label>
-          <input type="url" id="url" name="url" class="form-control"
-            placeholder="Source URL (optional)"
-            value="<?php if(isset($_POST['url'])){echo $_POST['url'];}?>">
-        </div>
-        <div class="form-group">
-          <label for="text">Text:</label>
-          <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="65535"
-            placeholder="Text goes here (required), max. length=65,535 chars"
-            required><?php if(isset($_POST['text'])){echo $_POST['text'];}?></textarea>
-        </div>
-        <div class="form-group">
-          <label for="audio">Audio:</label>
-          <input type="file" name="audio"  accept="audio/mpeg">
-          <label for="audio" class="error" id="audio_error"></label>
-        </div>
-        <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='/'">Cancel</button>
-        <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
-      </form>
+          <form action="addtext.php" class="add-form" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="title">Title:</label>
+              <input type="text" id="title" name="title" class="form-control" maxlength="200" placeholder="Text title (required)" autofocus
+                required value="<?php if(isset($_POST['title'])){echo $_POST['title'];}?>">
+            </div>
+            <div class="form-group">
+              <label for="author">Author:</label>
+              <input type="text" id="author" name="author" class="form-control" maxlength="100" placeholder="Author full name (optional)"
+                value="<?php if(isset($_POST['author'])){echo $_POST['author'];}?>">
+            </div>
+            <div class="form-group">
+              <label for="url">Source URL:</label>
+              <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (optional)" value="<?php if(isset($_POST['url'])){echo $_POST['url'];}?>">
+            </div>
+            <div class="form-group">
+              <label for="text">Text:</label>
+              <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="65535" placeholder="Text goes here (required), max. length=65,535 chars"
+                required><?php if(isset($_POST['text'])){echo $_POST['text'];}?></textarea>
+            </div>
+            <div class="form-group">
+              <label for="audio">Audio:</label>
+              <input type="file" name="audio" accept="audio/mpeg,audio/ogg">
+              <label for="audio" class="error" id="audio_error"></label>
+            </div>
+            <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='/'">Cancel</button>
+            <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
+          </form>
 
+      </div>
     </div>
   </div>
-</div>
 
-<?php require_once('footer.php') ?>
+  <?php require_once('footer.php') ?>

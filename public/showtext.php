@@ -64,9 +64,15 @@ echo " style='font-family:{$_SESSION['fontfamily']};font-size:{$_SESSION['fontsi
       if (!empty($textAudioURI)) {
         echo '<hr>';
 
-        echo "<audio controls id='audioplayer'>
-        <source src='$textAudioURI' type='audio/mpeg'>
-        Your browser does not support the audio element.
+        echo "<audio controls id='audioplayer'>";
+
+        if (strcasecmp(pathinfo($textAudioURI, PATHINFO_EXTENSION), 'mp3') == 0) {
+          echo "<source src='$textAudioURI' type='audio/mpeg'>";
+        } else {
+          echo "<source src='$textAudioURI' type='audio/ogg'>";
+        }
+
+        echo "Your browser does not support the audio element.
         </audio>";
         echo '<form>
         <div class="form-group flex-pbr-form">
