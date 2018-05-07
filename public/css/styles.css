@@ -403,6 +403,22 @@ a:hover, a:focus {
   color: #384452;
 }
 
+.source {
+  border-bottom: 1px solid;
+  color: #0095dd;
+  font-size: 0.9em;
+}
+
+.author {
+  font-size: 0.9em;
+  font-style: italic;
+  margin: 0 0 10px 0;
+}
+
+#reader-estimated-time.meta-data {
+  font-size: 0.65em;
+}
+
 .tooltip {
   font-size: 100%;
 }

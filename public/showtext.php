@@ -46,21 +46,32 @@ echo " style='font-family:{$_SESSION['fontfamily']};font-size:{$_SESSION['fontsi
 
     $id = mysqli_real_escape_string($con, $_GET['id']);
 
-    $result = mysqli_query($con, "SELECT text, textTitle, textAudioURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
+    $result = mysqli_query($con, "SELECT text, textTitle, textAuthor, textSourceURI, textAudioURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
 
     $row = mysqli_fetch_assoc($result);
 
     echo "<div id='container' class='col-sm-12 col-md-6' data-textID='$id'>";
 
     if (!empty($row)) {
+
+      $sourceuri = $row['textSourceURI']; // display source, if available
+      if (!empty($sourceuri)) {
+        echo '<a class="source" href="' . $sourceuri . '">' . getHost($sourceuri) . '</a>'; 
+      }
+      
       echo '<h1>'.$row['textTitle'].'</h1>'; // display title
 
+      $author = $row['textAuthor']; // display author, if available
+      if (!empty($author)) {
+        echo '<div class="author">' . $author . '</div>';
+      }
+      
       $text = $row['text']; // display text
 
-      echo '<div id="reader-estimated-time">' .
+      echo '<div id="reader-estimated-time" class="meta-data">' .
       estimatedReadingTime($text) . ' minutes</div>'; // show estimated reading time
 
-      $textAudioURI = $row['textAudioURI']; // if there is an audio file show audio player
+      $textAudioURI = $row['textAudioURI']; // if there an associated audio file, show audio player
       if (!empty($textAudioURI)) {
         echo '<hr>';
 

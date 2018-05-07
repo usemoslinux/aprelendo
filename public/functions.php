@@ -48,7 +48,7 @@ function estimatedReadingTime($text)
   return $reading_time;
 }
 
-function addInputElemsForDictation ($text, $con)
-{
-
-}
+function getHost($url) { 
+  $parseUrl = parse_url(trim($url)); 
+  return trim($parseUrl['host'] ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2))); 
+} 
