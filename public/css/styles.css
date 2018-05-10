@@ -378,6 +378,8 @@ a:hover, a:focus {
 	LANGX CUSTOMIZATIONS
 ################################################################# */
 
+/* FONTS */
+
 @font-face {
   font-family: "Open Sans";
   src: url("../fonts/OpenSans-Regular.woff");
@@ -387,6 +389,8 @@ a:hover, a:focus {
   font-family: "Lato";
   src: url("../fonts/Lato-Regular.woff");
 }
+
+/* DISPLAY MODES */
 
 .lightmode {
   background-color: white;
@@ -403,6 +407,13 @@ a:hover, a:focus {
   color: #384452;
 }
 
+/* SHOW TEXT PAGE */
+
+.searchbox {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
 .source {
   border-bottom: 1px solid;
   color: #0095dd;
@@ -413,10 +424,6 @@ a:hover, a:focus {
   font-size: 0.9em;
   font-style: italic;
   margin: 0 0 10px 0;
-}
-
-#reader-estimated-time.meta-data {
-  font-size: 0.65em;
 }
 
 .tooltip {
@@ -453,7 +460,7 @@ a, a:hover, a:focus {
 }
 
 .word:hover {
-  background-color: #f2f2f2; /* #eeeeee */
+  background-color: #f2f2f2;
 }
 
 .phrase {
@@ -482,25 +489,19 @@ a, a:hover, a:focus {
   border-bottom: 2px solid #ddffdd;
 }
 
-.forget {
-  margin-right: 10px;
-  margin-top: 2px;
+.estimated-reading-time {
+  margin: 0 0 15px 0;
 }
 
-.big-close {
-  font-size: 35px;
-  margin-top: 2px !important;
+#reader-estimated-time.meta-data {
+  font-size: 0.65em;
 }
 
-.searchbox {
-  margin-bottom: 10px;
-  margin-top: 10px;
+audio, video {
+  width: 100%;
 }
 
-.nopadding {
-  padding-left: 0;
-  padding-right: 0;
-}
+/* DICTATION */
 
 .dict {
   transition: border-color 0.5s;
@@ -524,38 +525,7 @@ a, a:hover, a:focus {
   color: white;
 }
 
-.addbtn {
-  margin-bottom: 12px;
-}
-
-@media screen and (min-width: 768px) {
-  .flex {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .flex > .col-md-3 {
-    flex: 1;
-    max-width: 247px;
-  }
-
-  .flex > .col-md-9 {
-    flex: 1;
-    width: auto;
-  }
-
-  .modal-dialog {
-    margin: 15px auto 0 auto;
-  }
-}
-
-.estimated-reading-time {
-  margin: 0 0 15px 0;
-}
-
-audio, video {
-  width: 100%;
-}
+/* MODAL DIALOG (TO ADD NEW WORDS) */
 
 .modal-dialog {
   display: flex;
@@ -594,9 +564,52 @@ audio, video {
   margin-left: 10px;
 }
 
-/* 	#######################################################
-		ADD FORM
-		####################################################### */
+.addbtn {
+  margin-bottom: 12px;
+}
+
+.forget {
+  margin-right: 10px;
+  margin-top: 2px;
+}
+
+@media screen and (min-width: 768px) {
+  .flex {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .flex > .col-md-3 {
+    flex: 1;
+    max-width: 247px;
+  }
+
+  .flex > .col-md-9 {
+    flex: 1;
+    width: auto;
+  }
+
+  .modal-dialog {
+    margin: 15px auto 0 auto;
+  }
+}
+
+/* TABLE ADJUSTMENTS (USED TO LIST TEXTS/WORDS) */
+
+th, td {
+  vertical-align: middle !important;
+}
+
+td > label {
+  margin-bottom: inherit;
+}
+
+.nopadding {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ADD TEXT FORM */
 
 .add-form input, .add-form textarea {
   border-left: 3px solid;

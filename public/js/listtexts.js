@@ -101,7 +101,11 @@ $(document).ready(function() {
 
   function removeTableIfEmpty() {
     if ($('#textstable tbody').is(':empty')) {
-      $('#textstable').replaceWith('<p>There are no texts in your private library.</p>');
+      if ($('#search').val() == '') {
+        $('#textstable').replaceWith('<p>There are no texts in your private library.</p>');
+      } else {
+        $('#textstable').replaceWith('<p>There are no texts in your private library that meet that search criteria.</p>');
+      }
       $('#actions-menu').remove();
     }
   }

@@ -46,7 +46,8 @@ TABS
               <div class="col-xs-12 col-md-9">
                 <form class="" action="" method="post">
                   <div class="input-group searchbox">
-                    <input type="text" id="search" name="searchtext" class="form-control" placeholder="Search...">
+                    <input type="text" id="search" name="searchtext" class="form-control" placeholder="Search..."
+                      value= "<?php echo isset($_POST['submit']) ? $_POST['searchtext'] : '' ?>" >
                     <div class="input-group-btn">
                       <button type="submit" name="submit" class="btn btn-default">
                         <i class="glyphicon glyphicon-search"></i>

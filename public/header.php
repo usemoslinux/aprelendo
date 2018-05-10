@@ -44,7 +44,7 @@
                 <li><a href="languages.php">Languages</a></li>
                 <li><a href="/">Texts</a></li>
                 <li><a href="archivedtexts.php">Archived texts</a></li>
-                <li><a href="wordlist.php">Word list</a></li>
+                <li><a href="words.php">Word list</a></li>
                 <li><a href="stats.php">Statistics</a></li>
                 <li><a href="preferences.php">Preferences</a></li>
               </ul>
