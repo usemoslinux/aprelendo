@@ -287,9 +287,10 @@ $(document).ready(function() {
     if ($('.dict-answer').length == 0 ) { // toggle dictation on 
       //replace all underlined words/phrases with input boxes
       $('.learning, .new').each(function(index, value) {
-        $elem = $(this);
+        var $elem = $(this);
+        var length = $elem.text().length;
         $elem.hide().after('<div class="input-group dict-input-group"><input type="text" class="dict" ' +
-          'style="width:' + (($elem.text().length + 1)*10) + 'px" data-text="' + $elem.text() + '">' +
+          'style="width:' + ((length + 1)*10) + 'px" maxlength="' + length + '" data-text="' + $elem.text() + '">' +
           '<span class="input-group-addon dict-answer hidden"></span></div>');
       });
       $("html, body").animate({ scrollTop: 0 }, "slow"); // go back to the top of the page
@@ -308,17 +309,15 @@ $(document).ready(function() {
       $("html, body").animate({ scrollTop: 0 }, "slow");
       $('#audioplayer').trigger('pause');
     }
-    
   });
 
   $('body').on('blur', 'input', function(event) {
     $curinput = $(this);
     // when user moves focus out of the input box, check if answer is correct
     // and show a cue to indicate status
-    if ($curinput.val() == $curinput.attr('data-text')) {
+    if ($curinput.val().toLowerCase() == $curinput.attr('data-text').toLowerCase()) {
       $curinput.css('border-color', 'yellowgreen');
       $curinput.next('span').not('.hidden').addClass('hidden');
-
     } else {
       $curinput.css('border-color', 'tomato');
       $curinput.next('span')

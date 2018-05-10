@@ -4,3 +4,4 @@ temp/
 public/uploads/
 /private/passwords.php
 todo.md
+.vscode/
