@@ -11,4 +11,8 @@ foreach ($articles->channel->item as $article) {
   echo strip_tags($article->description, '<p>') ;
   echo '</article>';
 }
+
+// structure: https://jsfiddle.net/ann7tctp/
 ?>
+
+

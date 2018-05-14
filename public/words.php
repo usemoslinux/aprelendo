@@ -5,9 +5,17 @@
 
   <div class="container mtb">
     <div class="row">
-      <div class="col-lg-12">
+      <div class="col-xs-12">
+      <ol class="breadcrumb">
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a class="active">Word list</a>
+          </li>
+        </ol>
         <div class="row flex">
-          <div class="col-lg-12">
+          <div class="col-xs-12">
             <form class="" action="" method="post">
               <div class="input-group searchbox">
                 <input type="text" id="search" name="searchtext" class="form-control" placeholder = "Search..."

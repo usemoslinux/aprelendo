@@ -4,54 +4,78 @@
   ?>
 
 
-<div class="container mtb">
-  <div class="row">
-    <div class="col-lg-12">
-
-      <!-- first, check if we need to save information filled out in form -->
-      <?php
+  <div class="container mtb">
+    <div class="row">
+      <div class="col-xs-12">
+        <ol class="breadcrumb">
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a class="active">RSS feeds</a>
+          </li>
+        </ol>
+        <!-- first, check if we need to save information filled out in form -->
+        <?php
       if (isset($_POST['submit'])) {
           require_once('db/dbinit.php'); // connect to database
 
           $lgName = mysqli_real_escape_string($con, $_POST['language']);
           $lgDictionaryURI = mysqli_real_escape_string($con, $_POST['dictionaryURI']);
           $lgTranslatorURI = mysqli_real_escape_string($con, $_POST['translatorURI']);
+          $lgrssfeed1URI = mysqli_real_escape_string($con, $_POST['rssfeedURI1']);
+          $lgrssfeed2URI = mysqli_real_escape_string($con, $_POST['rssfeedURI2']);
+          $lgrssfeed3URI = mysqli_real_escape_string($con, $_POST['rssfeedURI3']);
 
           if (isset($_POST['id'])) {
             $lgID = mysqli_real_escape_string($con, $_POST['id']);
             mysqli_query($con, "UPDATE languages SET LgName='$lgName', LgDict1URI='$lgDictionaryURI',
-            LgTranslatorURI='$lgTranslatorURI' WHERE LgID='$lgID'")
+            LgTranslatorURI='$lgTranslatorURI', LgRSSFeed1URI='$lgrssfeed1URI', LgRSSFeed2URI='$lgrssfeed2URI', 
+            LgRSSFeed3URI='$lgrssfeed3URI' WHERE LgID='$lgID'")
             or die(mysqli_error($con));
           } else {
             mysqli_query($con, "INSERT INTO languages (LgName, LgDict1URI, LgTranslatorURI)
-              VALUES ('$lgName', '$lgDictionaryURI', '$lgTranslatorURI')") or die(mysqli_error($con));
+              VALUES ('$lgName', '$lgDictionaryURI', '$lgTranslatorURI',
+              , '$lgTranslatorURI', '$lgTranslatorURI', '$lgTranslatorURI')") or die(mysqli_error($con));
           }
       }
       ?>
 
-      <!-- option 1: create new language ('new' parameter was passed) -->
-      <?php if (isset($_GET['new'])) {
+          <!-- option 1: create new language ('new' parameter was passed) -->
+          <?php if (isset($_GET['new'])) {
           ?>
 
-        <form class="" action="languages.php" method="post">
-          <div class="form-group">
-            <label for="language">Language:</label>
-            <input type="text" name="language" class="form-control" value="">
-          </div>
-          <div class="form-group">
-            <label for="dictionaryURI">Dictionary URI:</label>
-            <input type="url" name="dictionaryURI" class="form-control" value="">
-          </div>
-          <div class="form-group">
-            <label for="translatorURI">Translator URI:</label>
-            <input type="url" name="translatorURI" class="form-control" value="">
-          </div>
-          <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='languages.php'">Cancel</button>
-          <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
-        </form>
+          <form class="" action="languages.php" method="post">
+            <div class="form-group">
+              <label for="language">Language:</label>
+              <input type="text" name="language" class="form-control" value="">
+            </div>
+            <div class="form-group">
+              <label for="dictionaryURI">Dictionary URI:</label>
+              <input type="url" name="dictionaryURI" class="form-control" value="">
+            </div>
+            <div class="form-group">
+              <label for="translatorURI">Translator URI:</label>
+              <input type="url" name="translatorURI" class="form-control" value="">
+            </div>
+            <div class="form-group">
+              <label for="rssfeedURI1">RSS feed URI 1:</label>
+              <input type="url" name="rssfeedURI1" class="form-control" value="">
+            </div>
+            <div class="form-group">
+              <label for="rssfeedURI2">RSS feed URI 2:</label>
+              <input type="url" name="rssfeedURI2" class="form-control" value="">
+            </div>
+            <div class="form-group">
+              <label for="rssfeedURI3">RSS feed URI 3:</label>
+              <input type="url" name="rssfeedURI3" class="form-control" value="">
+            </div>
+            <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='languages.php'">Cancel</button>
+            <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
+          </form>
 
-        <!-- option 2: change existing language settings ('chg' parameter was passed) -->
-        <?php
+          <!-- option 2: change existing language settings ('chg' parameter was passed) -->
+          <?php
 
       } elseif (isset($_GET['chg'])) {
           require_once('db/dbinit.php'); // connect to database
@@ -61,28 +85,44 @@
 
           $lgname = $row['LgName'];
           $lgdictionaryURI = $row['LgDict1URI'];
-          $lgtranslatorURI= $row['LgTranslatorURI']; ?>
+          $lgtranslatorURI = $row['LgTranslatorURI'];
+          $lgrssfeed1URI = $row['LgRSSFeed1URI'];
+          $lgrssfeed2URI = $row['LgRSSFeed2URI'];
+          $lgrssfeed3URI = $row['LgRSSFeed3URI'];
+           ?>
 
-        <form class="" action="languages.php" method="post">
-          <input type="hidden" name="id" value="<?php echo $id; ?>">
-          <div class="form-group">
-            <label for="language">Language:</label>
-            <input type="text" name="language" class="form-control" value="<?php echo $lgname; ?>">
-          </div>
-          <div class="form-group">
-            <label for="dictionaryURI">Dictionary URI:</label>
-            <input type="url" name="dictionaryURI" class="form-control" value="<?php echo $lgdictionaryURI; ?>">
-          </div>
-          <div class="form-group">
-            <label for="translatorURI">Translator URI:</label>
-            <input type="url" name="translatorURI" class="form-control" value="<?php echo $lgtranslatorURI; ?>">
-          </div>
-          <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='languages.php'">Cancel</button>
-          <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
-        </form>
+            <form class="" action="languages.php" method="post">
+              <input type="hidden" name="id" value="<?php echo $id; ?>">
+              <div class="form-group">
+                <label for="language">Language:</label>
+                <input type="text" name="language" class="form-control" value="<?php echo $lgname; ?>">
+              </div>
+              <div class="form-group">
+                <label for="dictionaryURI">Dictionary URI:</label>
+                <input type="url" name="dictionaryURI" class="form-control" value="<?php echo $lgdictionaryURI; ?>">
+              </div>
+              <div class="form-group">
+                <label for="translatorURI">Translator URI:</label>
+                <input type="url" name="translatorURI" class="form-control" value="<?php echo $lgtranslatorURI; ?>">
+              </div>
+              <div class="form-group">
+                <label for="rssfeedURI1">RSS feed URI 1:</label>
+                <input type="url" name="rssfeedURI1" class="form-control" value="<?php echo $lgrssfeed1URI; ?>">
+              </div>
+              <div class="form-group">
+                <label for="rssfeedURI2">RSS feed URI 2:</label>
+                <input type="url" name="rssfeedURI2" class="form-control" value="<?php echo $lgrssfeed2URI; ?>">
+              </div>
+              <div class="form-group">
+                <label for="rssfeedURI3">RSS feed URI 3:</label>
+                <input type="url" name="rssfeedURI3" class="form-control" value="<?php echo $lgrssfeed3URI; ?>">
+              </div>
+              <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='languages.php'">Cancel</button>
+              <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
+            </form>
 
-        <!-- option 3: delete existing language ('del' parameter was passed) -->
-        <?php
+            <!-- option 3: delete existing language ('del' parameter was passed) -->
+            <?php
 
       } elseif (isset($_GET['del'])) {
           require_once('db/dbinit.php'); // connect to database
@@ -90,8 +130,8 @@
           $result = mysqli_query($con, "DELETE FROM languages WHERE LgID='$id'") or die(mysqli_error($con));
           header('Location: languages.php'); ?>
 
-        <!-- option 4: show list of available languages or set active language -->
-        <?php
+              <!-- option 4: show list of available languages or set active language -->
+              <?php
 
       } else {
           require_once('db/dbinit.php'); // connect to database
@@ -105,25 +145,28 @@
 
          ?>
 
-        <div class="row">
-          <div class="col-lg-12">
-            <p><a href="languages.php?new=1"><span class='glyphicon glyphicon-plus-sign'></span> Add New Language...</a></p>
-            <table id="textstable" class="table table-bordered">
-              <colgroup>
-                <col width="*">
-                <col width="10">
-                <col width="10">
-              </colgroup>
-              <thead>
-                <tr>
-                  <th class="col-lgname">Language</th>
-                  <th class="col-lgname">Activate</th>
-                  <th class="col-lgname">Delete</th>
-                </tr>
-              </thead>
-              <tbody>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <p>
+                      <a href="languages.php?new=1">
+                        <span class='glyphicon glyphicon-plus-sign'></span> Add New Language...</a>
+                    </p>
+                    <table id="textstable" class="table table-bordered">
+                      <colgroup>
+                        <col width="*">
+                        <col width="10">
+                        <col width="10">
+                      </colgroup>
+                      <thead>
+                        <tr>
+                          <th class="col-lgname">Language</th>
+                          <th class="col-lgname">Activate</th>
+                          <th class="col-lgname">Delete</th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                <?php
+                        <?php
                 // then, show list of available languages
                 $result = mysqli_query($con, "SELECT LgID, LgName FROM languages") or die(mysqli_error($con));
 
@@ -145,20 +188,20 @@
                     }
                 } ?>
 
-              </tbody>
-            </table>
+                      </tbody>
+                    </table>
 
-          </div>
-        </div>
+                  </div>
+                </div>
 
-        <?php
+                <?php
 
       } ?>
 
+      </div>
     </div>
   </div>
-</div>
 
-<?php require_once('footer.php') ?>
+  <?php require_once('footer.php') ?>
 
-<script type="text/javascript" src="js/languages.js"></script>
+  <script type="text/javascript" src="js/languages.js"></script>

@@ -8,8 +8,16 @@
       <div class="col-lg-12">
 
         <?php
-
-        if (isset($_POST['submit'])) {
+        if (isset($_GET['id'])) {
+          $id = $_GET['id'];
+          $result = mysqli_query($con, "SELECT textTitle, textAuthor, text, textSourceURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
+          $row = mysqli_fetch_assoc($result);
+          $art_title = $row['textTitle'];
+          $art_author = $row['textAuthor'];
+          $art_url = $row['textSourceURI'];
+          $art_content = $row['text'];
+        } 
+        elseif (isset($_POST['submit'])) {
           require_once('db/dbinit.php'); // connect to database
 
           $actlangid = $_SESSION['actlangid'];
@@ -74,9 +82,16 @@
           if (empty($errormsg)) {
             // save text in db
             $audio_uri = empty($target_file_name) ? '' : '/uploads/' . $target_file_name;
-            $result = mysqli_query($con, "INSERT INTO texts (textLgId, textTitle, textAuthor, text, textAudioURI, textSourceURI)
-              VALUES ('$actlangid', '$title', '$author', '$text', '$audio_uri', '$source_url') ")
-              or die(mysqli_error($con));
+            if (isset($_POST['id'])) {
+              $id = $_POST['id'];
+              $sql = "UPDATE texts SET textLgId='$actlangid', textTitle='$title',
+              textAuthor='$author', text='$text', textAudioURI='$audio_uri', 
+              textSourceURI='$source_url' WHERE textID='$id'";
+            } else {
+              $sql = "INSERT INTO texts (textLgId, textTitle, textAuthor, text, textAudioURI, textSourceURI)
+              VALUES ('$actlangid', '$title', '$author', '$text', '$audio_uri', '$source_url') ";
+            }
+            $result = mysqli_query($con, $sql) or die(mysqli_error($con));
 
             header('Location: /');
           } else {
@@ -96,24 +111,25 @@
       ?>
 
           <form action="addtext.php" class="add-form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<?php if(isset($id)){echo $id;}?>" />
             <div class="form-group">
               <label for="title">Title:</label>
               <input type="text" id="title" name="title" class="form-control" maxlength="200" placeholder="Text title (required)" autofocus
-                required value="<?php if(isset($_POST['title'])){echo $_POST['title'];}?>">
+                required value="<?php if(isset($art_title)){echo $art_title;}?>">
             </div>
             <div class="form-group">
               <label for="author">Author:</label>
               <input type="text" id="author" name="author" class="form-control" maxlength="100" placeholder="Author full name (optional)"
-                value="<?php if(isset($_POST['author'])){echo $_POST['author'];}?>">
+                value="<?php if(isset($art_author)){echo $art_author;}?>">
             </div>
             <div class="form-group">
               <label for="url">Source URL:</label>
-              <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (optional)" value="<?php if(isset($_POST['url'])){echo $_POST['url'];}?>">
+              <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (optional)" value="<?php if(isset($art_url)){echo $art_url;}?>">
             </div>
             <div class="form-group">
               <label for="text">Text:</label>
               <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="65535" placeholder="Text goes here (required), max. length=65,535 chars"
-                required><?php if(isset($_POST['text'])){echo $_POST['text'];}?></textarea>
+                required><?php if(isset($art_content)){echo $art_content;}?></textarea>
             </div>
             <div class="form-group">
               <label for="audio">Audio:</label>
