@@ -10,7 +10,7 @@ function print_table_header() {
     </colgroup>
     <thead>
     <tr>
-    <th class="col-checkbox"><input class="alltxt-checkbox" type="checkbox"></th>
+    <th class="col-checkbox"><input id="chkbox-selall" type="checkbox"></th>
     <th class="col-title">Word/Phrase</th>
     <th class="col-status">Status</th>
     </tr>
@@ -34,7 +34,7 @@ function print_table_footer() {
 }
 
 function print_table_content($wordID, $word, $wordStatus) {
-    echo '<tr><td class="col-checkbox"><label><input class="txt-checkbox" type="checkbox" data-idWord="' .
+    echo '<tr><td class="col-checkbox"><label><input class="chkbox-selrow" type="checkbox" data-idWord="' .
         $wordID . '"></label></td><td class="col-title">' . 
         $word . '</td><td class="col-status">' .
         $wordStatus . '</td></tr>';

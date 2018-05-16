@@ -1,5 +1,5 @@
-$(document).ready(function() {
-  $(".list-group-item").on("click", function() {
+$(document).ready(function () {
+  $(".list-group-item").on("click", function () {
     $(".glyphicon", this)
       .toggleClass("glyphicon-chevron-right")
       .toggleClass("glyphicon-chevron-down");
@@ -12,23 +12,23 @@ $(document).ready(function() {
     var art_pubdate = $entry_info.attr("data-pubdate");
     var art_content = "";
 
-    $entry_text.children("p").each(function() {
+    $entry_text.children("p").each(function () {
       art_content += $(this).text() + "\n";
     });
     art_content = $.trim(art_content);
 
     $.ajax({
-      type: "POST",
-      url: "db/addtext.php",
-      dataType: "JSON",
-      data: {
-        title: art_title,
-        author: art_author,
-        link: art_link,
-        pubdate: art_pubdate,
-        content: art_content
-      }
-    }).done(function(data) {
+        type: "POST",
+        url: "db/addtext.php",
+        dataType: "JSON",
+        data: {
+          title: art_title,
+          author: art_author,
+          link: art_link,
+          pubdate: art_pubdate,
+          content: art_content
+        }
+      }).done(function (data) {
         switch (readlater) {
           case "readlater":
             $entry_text
@@ -51,7 +51,7 @@ $(document).ready(function() {
             break;
         }
       })
-      .fail(function() {
+      .fail(function () {
         $entry_text
           .find("span.message")
           .addClass("text-failure")
@@ -61,40 +61,40 @@ $(document).ready(function() {
       });
   }
 
-  $(".btn-readlater").on("click", function(e) {
+  $(".btn-readlater").on("click", function (e) {
     e.preventDefault();
     e.stopPropagation();
     addTextToLibrary(
       $(this)
-        .closest(".entry-text")
-        .parent()
-        .prev(".entry-info"),
+      .closest(".entry-text")
+      .parent()
+      .prev(".entry-info"),
       $(this).closest(".entry-text"),
       "readlater"
     );
   });
 
-  $(".btn-readnow").on("click", function(e) {
+  $(".btn-readnow").on("click", function (e) {
     e.preventDefault();
     e.stopPropagation();
     addTextToLibrary(
       $(this)
-        .closest(".entry-text")
-        .parent()
-        .prev(".entry-info"),
+      .closest(".entry-text")
+      .parent()
+      .prev(".entry-info"),
       $(this).closest(".entry-text"),
       "readnow"
     );
   });
 
-  $(".btn-addsound").on("click", function(e) {
+  $(".btn-addsound").on("click", function (e) {
     e.preventDefault();
     e.stopPropagation();
     addTextToLibrary(
       $(this)
-        .closest(".entry-text")
-        .parent()
-        .prev(".entry-info"),
+      .closest(".entry-text")
+      .parent()
+      .prev(".entry-info"),
       $(this).closest(".entry-text"),
       "addaudio"
     );

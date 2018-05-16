@@ -5,3 +5,5 @@ public/uploads/
 /private/passwords.php
 todo.md
 .vscode/
+jsconfig.json
+.stylelintrc

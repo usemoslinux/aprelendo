@@ -1,32 +1,35 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
   $('#search').focus();
+  $('input:checkbox').prop('checked', false);
 
   // action menu implementation
 
   /**
-  * Deletes selected texts from the database
-  * Trigger: when user selects "Delete" in the action menu
-  */
-  $("#mDelete").on("click", function() {
+   * Deletes selected texts from the database
+   * Trigger: when user selects "Delete" in the action menu
+   */
+  $("#mDelete").on("click", function () {
     if (confirm("Really delete?")) {
       var ids = [];
-      $("input[class=txt-checkbox]:checked").each(function() {
+      $("input[class=chkbox-selrow]:checked").each(function () {
         ids.push($(this).attr('data-idText'));
         //var parentTR = $(this).closest('tr');
       });
 
       /**
-      * Deletes selected texts from the database (based on their ID).
-      * When done, also removes selected rows from HTML table.
-      * @param  {integer array} textIDs Ids of the selected elements in the database
-      */
+       * Deletes selected texts from the database (based on their ID).
+       * When done, also removes selected rows from HTML table.
+       * @param  {integer array} textIDs Ids of the selected elements in the database
+       */
       $.ajax({
         url: 'db/removetext.php',
         type: 'POST',
-        data: {textIDs: JSON.stringify(ids)},
-        success: function() {
-          $("input[class=txt-checkbox]:checked").each(function() {
+        data: {
+          textIDs: JSON.stringify(ids)
+        },
+        success: function () {
+          $("input[class=chkbox-selrow]:checked").each(function () {
             $(this).closest('tr').remove();
           });
           // if there are no remaining texts to show on the table, remove the entire table
@@ -40,31 +43,34 @@ $(document).ready(function() {
   });
 
   /**
-  * Archives selected texts
-  * Trigger: when user selects "Archive" in the action menu
-  */
-  $('#mArchive').on('click', function() {
+   * Archives selected texts
+   * Trigger: when user selects "Archive" in the action menu
+   */
+  $('#mArchive').on('click', function () {
     var archivetxt = $(this).text() === 'Archive text';
     var ids = [];
-    $('input[class=txt-checkbox]:checked').each(function() {
+    $('input[class=chkbox-selrow]:checked').each(function () {
       ids.push($(this).attr('data-idText'));
       //parentTRs.push($(this).closest('tr'));
     });
 
     /**
-    * Moves selected texts from the "texts" table to the "archivedtexts" table in the database (archive);
-    * or, vice-versa, moves texts from the "archivedtexts" table to the "texts" table (unarchive)
-    * This is done based on text IDs.
-    * When done, also removes selected rows from the HTML table.
-    * @param {integer array} ids Ids of the selected elements in the database
-    * @param {boolean} archivetxt If true, archive text; else, unarchive text
-    */
+     * Moves selected texts from the "texts" table to the "archivedtexts" table in the database (archive);
+     * or, vice-versa, moves texts from the "archivedtexts" table to the "texts" table (unarchive)
+     * This is done based on text IDs.
+     * When done, also removes selected rows from the HTML table.
+     * @param {integer array} ids Ids of the selected elements in the database
+     * @param {boolean} archivetxt If true, archive text; else, unarchive text
+     */
     $.ajax({
       url: 'db/archivetext.php',
       type: 'POST',
-      data: {textIDs: JSON.stringify(ids), archivetext: archivetxt},
-      success: function() {
-        $('input[class=txt-checkbox]:checked').each(function() {
+      data: {
+        textIDs: JSON.stringify(ids),
+        archivetext: archivetxt
+      },
+      success: function () {
+        $('input[class=chkbox-selrow]:checked').each(function () {
           $(this).closest('tr').remove();
         });
         removeTableIfEmpty();
@@ -77,24 +83,24 @@ $(document).ready(function() {
   });
 
   /**
-  * Enables/Disables action menu based on the number of selected elements.
-  * If there is at least 1 element selected, it enables it. Otherwise, it is disabled.
-  */
+   * Enables/Disables action menu based on the number of selected elements.
+   * If there is at least 1 element selected, it enables it. Otherwise, it is disabled.
+   */
   function toggleActionMenu() {
-      if ($('input[type=checkbox]:checked').length === 0) {
-          $('#actions-menu').addClass('disabled');
-      } else {
-          $('#actions-menu').removeClass('disabled');
-      }
+    if ($('input[type=checkbox]:checked').length === 0) {
+      $('#actions-menu').addClass('disabled');
+    } else {
+      $('#actions-menu').removeClass('disabled');
     }
+  }
 
-  $(document).on('change', '.txt-checkbox', toggleActionMenu);
+  $(document).on('change', '.chkbox-selrow', toggleActionMenu);
 
   /**
-  * Selects/Unselects all texts from the list
-  */
-  $(document).on('click', '.alltxt-checkbox', function() {
-    var chkboxes = $('.txt-checkbox');
+   * Selects/Unselects all texts from the list
+   */
+  $(document).on('click', '#chkbox-selall', function () {
+    var chkboxes = $('.chkbox-selrow');
     chkboxes.prop('checked', $(this).prop('checked'));
     toggleActionMenu();
   });
