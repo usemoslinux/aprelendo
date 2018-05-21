@@ -48,7 +48,7 @@ $actlangid = $_SESSION['actlangid'];
 if (isset($_POST['submit'])) { // if the page is loaded because user searched for something, show search results
     $searchtext = mysqli_real_escape_string($con, $_POST['searchtext']);
     // decide whether to show active or archived texts
-    $result = mysqli_query($con, "SELECT wordID, word, wordStatus FROM words WHERE word LIKE '%$searchtext%' AND textLgId='$actlangid' ORDER BY wordID DESC") or die(mysqli_error($con));
+    $result = mysqli_query($con, "SELECT wordID, word, wordStatus FROM words WHERE word LIKE '%$searchtext%' AND wordLgId='$actlangid' ORDER BY wordID DESC") or die(mysqli_error($con));
 
     if (mysqli_num_rows($result) > 0) { // if there are any results, show them
         print_table_header();
@@ -62,7 +62,7 @@ if (isset($_POST['submit'])) { // if the page is loaded because user searched fo
     }
 } else { // if page is loaded at startup, show start page
     // decide whether to show active or archived texts
-    $result = mysqli_query($con, "SELECT wordID, word, wordStatus FROM words WHERE textLgId='$actlangid' ORDER BY wordID DESC") or die(mysqli_error($con));
+    $result = mysqli_query($con, "SELECT wordID, word, wordStatus FROM words WHERE wordLgId='$actlangid' ORDER BY wordID DESC") or die(mysqli_error($con));
 
     if (mysqli_num_rows($result) > 0) {
         print_table_header();

@@ -82,7 +82,7 @@
           if (empty($errormsg)) {
             // save text in db
             $audio_uri = empty($target_file_name) ? '' : '/uploads/' . $target_file_name;
-            if (isset($_POST['id'])) {
+            if (!empty($_POST['id'])) {
               $id = $_POST['id'];
               $sql = "UPDATE texts SET textLgId='$actlangid', textTitle='$title',
               textAuthor='$author', text='$text', textAudioURI='$audio_uri', 

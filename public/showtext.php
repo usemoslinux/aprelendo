@@ -93,8 +93,14 @@ echo " style='font-family:{$_SESSION['fontfamily']};font-size:{$_SESSION['fontsi
         </form>';
       }
 
-      echo '<hr><div id="text" style="line-height:' . $_SESSION['lineheight'] . ';">';
+      echo '<hr>';
 
+      $assistedlearning = $_SESSION['assistedlearning'];
+      if ($assistedlearning) {
+        echo '<div id="alert-msg-phase" class="alert alert-info alert-dismissible show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 1:</strong> Reading & listening.</div>';   
+      }
+      
+      echo '<div id="text" style="line-height:' . $_SESSION['lineheight'] . ';">';
       $text = colorizeWords($text, $con);
       $text = addLinks($text);
       echo addParagraphs($text); // convert /n to HTML <p>
@@ -107,12 +113,19 @@ echo " style='font-family:{$_SESSION['fontfamily']};font-size:{$_SESSION['fontsi
       header('Location: /');
     }
 
-    echo '<p></p><button type="button" id="btnarchive" class="btn btn-lg btn-success btn-block">Archive text</button>';
+    echo '<p></p>';
 
-    // if there is audio available & at least 1 learning word in current document
-    $learningwords = strpos($text, "<span class='word learning'") || strpos($text, "<span class='new learning'");
-    if (!empty($textAudioURI && $learningwords === TRUE)) {
-      echo '<button type="button" id="btndictation" class="btn btn-lg btn-info btn-block">Toggle dictation</button>';
+    if ($assistedlearning) {
+      echo '<button type="button" id="btn_next_phase" class="btn btn-lg btn-primary btn-block">Go to phase 2
+      <div class="small">Look up words/phrases</div></button>';
+    } else {
+      echo '<button type="button" id="btn_save" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
+
+      // if there is audio available & at least 1 learning word in current document
+      $learningwords = strpos($text, "<span class='word learning'") || strpos($text, "<span class='new learning'");
+      if (!empty($textAudioURI && $learningwords === TRUE)) {
+        echo '<button type="button" id="btndictation" class="btn btn-lg btn-info btn-block">Toggle dictation on/off</button>';
+      }
     }
 
     echo '<p></p></div>';

@@ -55,11 +55,18 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="mode">Mode:</label>
+            <label for="mode">Display mode:</label>
             <select name="mode" id="mode">
               <option value="light" <?php echo $_SESSION[ 'mode']=='light' ? 'selected' : ''; ?>>Light</option>
               <option value="sepia" <?php echo $_SESSION[ 'mode']=='sepia' ? 'selected' : ''; ?>>Sepia</option>
               <option value="dark" <?php echo $_SESSION[ 'mode']=='dark' ? 'selected' : ''; ?>>Dark</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="assistedlearning">Learning mode:</label>
+            <select name="assistedlearning" id="assistedlearning">
+              <option value="1" <?php echo $_SESSION['assistedlearning']==true ? 'selected' : ''; ?>>Assisted</option>
+              <option value="0" <?php echo $_SESSION['assistedlearning']==false ? 'selected' : ''; ?>>Free</option>
             </select>
           </div>
           <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='/'">Cancel</button>

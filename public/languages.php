@@ -34,9 +34,9 @@
             LgRSSFeed3URI='$lgrssfeed3URI' WHERE LgID='$lgID'")
             or die(mysqli_error($con));
           } else {
-            mysqli_query($con, "INSERT INTO languages (LgName, LgDict1URI, LgTranslatorURI)
-              VALUES ('$lgName', '$lgDictionaryURI', '$lgTranslatorURI',
-              , '$lgTranslatorURI', '$lgTranslatorURI', '$lgTranslatorURI')") or die(mysqli_error($con));
+            mysqli_query($con, "INSERT INTO languages (LgName, LgDict1URI, LgTranslatorURI, LgRSSFeed1URI, 
+              LgRSSFeed2URI, LgRSSFeed3URI) VALUES ('$lgName', '$lgDictionaryURI', '$lgTranslatorURI',
+              '$lgrssfeed1URI', '$lgrssfeed2URI', '$lgrssfeed3URI')") or die(mysqli_error($con));
           }
       }
       ?>

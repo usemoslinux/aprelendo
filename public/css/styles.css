@@ -11,7 +11,6 @@
 
 @import url(http://fonts.googleapis.com/css?family=Raleway:400,700,900);
 @import url(http://fonts.googleapis.com/css?family=Lato:400,900);
-
 /*	################################################################
 	1. GENERAL STRUCTURES
 ################################################################# */
@@ -30,7 +29,12 @@ body {
   margin: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: "Raleway", sans-serif;
   font-weight: 700;
 }
@@ -58,7 +62,8 @@ a {
   -webkit-transition: background-color 0.4s linear, color 0.4s linear;
 }
 
-a:hover, a:focus {
+a:hover,
+a:focus {
   color: #01b2fe;
   text-decoration: none;
 }
@@ -101,8 +106,8 @@ a:hover, a:focus {
 }
 
 @media (max-width: 768px) {
-  .navbar > .container .navbar-brand,
-  .navbar > .container-fluid .navbar-brand {
+  .navbar>.container .navbar-brand,
+  .navbar>.container-fluid .navbar-brand {
     margin-left: 15px !important;
   }
 }
@@ -111,30 +116,30 @@ a:hover, a:focus {
   color: white;
 }
 
-.dropdown-menu > li > a {
+.dropdown-menu>li>a {
   color: white;
   font-size: 12px;
   font-weight: 700;
 }
 
-.navbar-default .navbar-nav > li > a {
+.navbar-default .navbar-nav>li>a {
   color: white;
   font-size: 12px;
   font-weight: 700;
 }
 
-.navbar-default .navbar-nav > .active > a {
+.navbar-default .navbar-nav>.active>a {
   background-color: transparent;
   color: #00b3fe;
 }
 
-.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav>li>a:hover,
 .navbar-brand:hover {
   color: #00b3fe !important;
 }
 
-.navbar-default .navbar-nav > .active > a:focus,
-.navbar-default .navbar-nav > .active > a:hover {
+.navbar-default .navbar-nav>.active>a:focus,
+.navbar-default .navbar-nav>.active>a:hover {
   background-color: transparent;
   color: #00b3fe;
 }
@@ -155,7 +160,11 @@ a:hover, a:focus {
   margin: 4px;
 }
 
-.btn-theme:hover, .btn-theme:focus, .btn-theme:active, .btn-theme.active, .open .dropdown-toggle.btn-theme {
+.btn-theme:hover,
+.btn-theme:focus,
+.btn-theme:active,
+.btn-theme.active,
+.open .dropdown-toggle.btn-theme {
   background-color: #00b3fe;
   border-color: #00b3fe;
   color: #ffffff;
@@ -180,7 +189,9 @@ a:hover, a:focus {
   transition: background-color 300ms ease-out;
 }
 
-.dmbutton:hover, .dmbutton:active, .dmbutton:focus {
+.dmbutton:hover,
+.dmbutton:active,
+.dmbutton:focus {
   background-color: #222222;
   border-color: #ffffff;
   color: #ffffff;
@@ -220,7 +231,8 @@ a:hover, a:focus {
   text-align: center;
 }
 
-.headerwrap h3, h5 {
+.headerwrap h3,
+h5 {
   color: white;
   font-weight: 400;
 }
@@ -390,6 +402,15 @@ a:hover, a:focus {
   src: url("../fonts/Lato-Regular.woff");
 }
 
+/* GENERAL ADJUSTMENTS */
+
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:focus,
+.navbar-default .navbar-nav>.open>a:hover {
+  color: #00b3fe;
+  background-color: inherit;
+}
+
 /* DISPLAY MODES */
 
 .lightmode {
@@ -414,6 +435,17 @@ a:hover, a:focus {
   margin-top: 10px;
 }
 
+.form-flex-row {
+  display: inline-flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.btn-add-text {
+  display: inline-flex;
+  margin-left: 10px;
+}
+
 .just-padding {
   padding: 15px;
 }
@@ -432,15 +464,15 @@ a:hover, a:focus {
   border-width: 1px 0 0 0;
 }
 
-.list-group.list-group-root > .list-group-item:first-child {
+.list-group.list-group-root>.list-group-item:first-child {
   border-top-width: 0;
 }
 
-.list-group.list-group-root > .list-group > .list-group-item {
+.list-group.list-group-root>.list-group>.list-group-item {
   padding-left: 30px;
 }
 
-.list-group.list-group-root > .list-group > .list-group > .list-group-item {
+.list-group.list-group-root>.list-group>.list-group>.list-group-item {
   padding-left: 45px;
 }
 
@@ -466,7 +498,9 @@ a:hover, a:focus {
   font-size: 100%;
 }
 
-a, a:hover, a:focus {
+a,
+a:hover,
+a:focus {
   color: inherit;
   text-decoration: none;
 }
@@ -533,8 +567,23 @@ a, a:hover, a:focus {
   font-size: 0.65em;
 }
 
-audio, video {
+audio,
+video {
   width: 100%;
+}
+
+#btn_next_phase, #btn_save {
+  white-space: normal;
+}
+
+@media only screen and (max-width: 480px) {
+  #btn_next_phase, #btn_save {
+    height: 120px;
+  }
+}
+
+#alert-msg-phase {
+  white-space: normal;
 }
 
 /* DICTATION */
@@ -559,6 +608,10 @@ audio, video {
   background-color: tomato;
   border-color: tomato;
   color: white;
+}
+
+input {
+  background-color: inherit;
 }
 
 /* MODAL DIALOG (TO ADD NEW WORDS) */
@@ -614,17 +667,14 @@ audio, video {
     display: flex;
     flex-wrap: wrap;
   }
-
-  .flex > .col-md-3 {
+  .flex>.col-md-3 {
     flex: 1;
     max-width: 247px;
   }
-
-  .flex > .col-md-9 {
+  .flex>.col-md-9 {
     flex: 1;
     width: auto;
   }
-
   .modal-dialog {
     margin: 15px auto 0 auto;
   }
@@ -632,11 +682,12 @@ audio, video {
 
 /* TABLE ADJUSTMENTS (USED TO LIST TEXTS/WORDS) */
 
-th, td {
+th,
+td {
   vertical-align: middle !important;
 }
 
-td > label {
+td>label {
   margin-bottom: inherit;
 }
 
@@ -647,7 +698,8 @@ td > label {
 
 /* ADD TEXT FORM */
 
-.add-form input, .add-form textarea {
+.add-form input,
+.add-form textarea {
   border-left: 3px solid;
   border-radius: 5px;
   transition: border-color 0.5s ease-out;
@@ -657,11 +709,13 @@ td > label {
   border-left-color: #999999;
 }
 
-.add-form input:required, .add-form textarea:required {
+.add-form input:required,
+.add-form textarea:required {
   border-left-color: #5cb85c;
 }
 
-.add-form input:invalid, .add-form textarea:invalid {
+.add-form input:invalid,
+.add-form textarea:invalid {
   border-left-color: #d9534f;
 }
 

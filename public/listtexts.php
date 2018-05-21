@@ -6,13 +6,11 @@ function print_table_header() {
     <table id="textstable" class="table table-bordered">
     <colgroup><col width="33">
     <col width="*">
-    <col width="90">
     </colgroup>
     <thead>
     <tr>
     <th class="col-checkbox"><input id="chkbox-selall" type="checkbox"></th>
     <th class="col-title">Title</th>
-    <th class="col-status">Status</th>
     </tr>
     </thead>
     <tbody>';
@@ -45,7 +43,7 @@ function print_table_content($textID, $textTitle) {
     $link = $showarchivedtexts ? '' : '<a href ="showtext.php?id=' . $textID . '">';
     echo '<tr><td class="col-checkbox"><label><input class="chkbox-selrow" type="checkbox" data-idText="' .
         $textID . '"></label></td><td class="col-title">' . $link .
-        $textTitle . '</td><td class="col-status"></td></tr>';
+        $textTitle . '</td></tr>';
 }
 
 // show page
