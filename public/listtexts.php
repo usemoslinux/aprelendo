@@ -26,12 +26,12 @@ function print_table_footer() {
 
     global $showarchivedtexts;
     if($showarchivedtexts) {
-        echo '<li id="mArchive" role="presentation"><a href="#" role="menuitem">Unarchive text</a></li>';
+        echo '<li id="mArchive" role="presentation"><a href="#" role="menuitem">Unarchive</a></li>';
     } else {
-        echo '<li id="mArchive" role="presentation"><a href="#" role="menuitem">Archive text</a></li>';
+        echo '<li id="mArchive" role="presentation"><a href="#" role="menuitem">Archive</a></li>';
     }
 
-    echo '<li id="mDelete" role="presentation"><a href="#" role="menuitem">Delete text</a></li>
+    echo '<li id="mDelete" role="presentation"><a href="#" role="menuitem">Delete</a></li>
     </ul>
     </div>
     </div>

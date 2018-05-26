@@ -59,10 +59,7 @@ TABS
                     <a href="addtext.php">Add plain text</a>
                   </li>
                   <li>
-                    <a href="rss.php">Add RSS text</a>
-                  </li>
-                  <li>
-                    <a href="#">Upload TXT/EPUB</a>
+                    <a href="addrss.php">Add RSS text</a>
                   </li>
                 </ul>
               </div>

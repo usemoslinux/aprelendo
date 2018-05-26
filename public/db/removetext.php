@@ -33,7 +33,7 @@ if (isset($_POST['textIDs'])) {
     // check if there is an audio file associated to this text and store its URI
     foreach ($audiouris as $key => $value) {
         $filename = APP_ROOT . '/public' . $audiouris[$key][0];
-        if (file_exists($filename)) {
+        if (is_file($filename) && file_exists($filename)) {
           unlink($filename);
         }
     }

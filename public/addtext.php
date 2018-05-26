@@ -17,131 +17,50 @@
           $art_url = $row['textSourceURI'];
           $art_content = $row['text'];
         } 
-        elseif (isset($_POST['submit'])) {
-          require_once('db/dbinit.php'); // connect to database
-
-          $actlangid = $_SESSION['actlangid'];
-          $title = trim(mysqli_real_escape_string($con, $_POST['title']));
-          $author = trim(mysqli_real_escape_string($con, $_POST['author']));
-          $source_url = trim(mysqli_real_escape_string($con, $_POST['url']));
-          $text = trim(mysqli_real_escape_string($con, $_POST['text']));
-
-          $target_dir = APP_ROOT . '/public/uploads/';
-          $target_file_name = basename($_FILES['audio']['name']);
-          $target_file_URI = $target_dir . $target_file_name;
-
-
-          $file_extension = pathinfo($target_file_URI,PATHINFO_EXTENSION);
-          $file_size = $_FILES['audio']['size'] / 1024; // size in KBs
-
-          $upload_max_filesize = ini_get('upload_max_filesize'); // max file size
-          $allowed_extensions = array('mp3', 'ogg');
-
-          // File validation
-          $errormsg = "";
-          if ($_FILES['audio']['error'] !=  UPLOAD_ERR_NO_FILE) { // if a file was uploaded
-            // Check if file exists
-            if (file_exists($target_file_URI)) {
-              $errormsg .= "File already exists. Change the file name and try again.\n";
-            }
-
-            // Check file size
-            if ($_FILES['audio']['error'] == 1) {
-              $errormsg .= "File size should be less than $upload_max_filesize\n" .
-              "This is a limitation of the hosting server.\n" .
-              "If you have access to the php ini file you can fix this by changing the <code>upload_max_filesize</code> setting.\n" .
-              "If you can't, please ask your host to increase the size limits.\n";
-            }
-
-            // Check file extension
-            $allowed_ext = false;
-            for ($i=0; $i < sizeof($allowed_extensions); $i++) {
-              if (strcasecmp($allowed_extensions[$i], $file_extension) == 0) {
-                $allowed_ext = true;
-              }
-            }
-
-            if (!$allowed_ext) {
-              $errormsg .= 'Only the following file types are supported: ' . implode(', ', $allowed_extensions) . "\n";
-            }
-
-            // upload file & save info to db
-            if ($_FILES['audio']['error'] == UPLOAD_ERR_OK && empty($errormsg)) {
-              if (!is_dir($target_dir)) {
-                mkdir($target_dir);
-              }
-              // try to move file to uploads folder. If this fails, show error message
-              if (!move_uploaded_file($_FILES["audio"]["tmp_name"], $target_file_URI)) {
-                $errormsg .= "Sorry, there was an error uploading your file.\n";
-              }
-            }
-          } elseif ($_FILES['audio']['error'] == UPLOAD_ERR_INI_SIZE) {
-            $errormsg .= "File size should be less than $upload_max_filesize.";
-          }
-
-          if (empty($errormsg)) {
-            // save text in db
-            $audio_uri = empty($target_file_name) ? '' : '/uploads/' . $target_file_name;
-            if (!empty($_POST['id'])) {
-              $id = $_POST['id'];
-              $sql = "UPDATE texts SET textLgId='$actlangid', textTitle='$title',
-              textAuthor='$author', text='$text', textAudioURI='$audio_uri', 
-              textSourceURI='$source_url' WHERE textID='$id'";
-            } else {
-              $sql = "INSERT INTO texts (textLgId, textTitle, textAuthor, text, textAudioURI, textSourceURI)
-              VALUES ('$actlangid', '$title', '$author', '$text', '$audio_uri', '$source_url') ";
-            }
-            $result = mysqli_query($con, $sql) or die(mysqli_error($con));
-
-            header('Location: /');
-          } else {
-            echo '<div class="alert alert-danger">' . $errormsg . '</div>';
-
-          }
-
-        }
-        //catch file overload error...
-        elseif (empty($_FILES) && empty($_POST) && isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
-          $post_max_size = ini_get('post_max_size'); //grab the size limits...
-          echo  "<div class='alert alert-danger'>Please note that posts larger than $post_max_size will result in this error!" .
-                "<br>This is a limitation of the hosting server." .
-                "<br>If you have access to the php ini file you can fix this by changing the <code>post_max_size</code> setting." .
-                "<br>If you can't, please ask your host to increase the size limits.</div>";
-        }
+        
       ?>
-
-          <form action="addtext.php" class="add-form" method="post" enctype="multipart/form-data">
+        <div id="alert_error_msg" class="hidden"></div>
+          <form id="form_addtext" action="" class="add-form" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php if(isset($id)){echo $id;}?>" />
-            <div class="form-group">
+            <input type="hidden" name="mode" value="simple" />
+            <div class="form-row">
+            <div class="form-group col-md-6">
               <label for="title">Title:</label>
               <input type="text" id="title" name="title" class="form-control" maxlength="200" placeholder="Text title (required)" autofocus
                 required value="<?php if(isset($art_title)){echo $art_title;}?>">
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-6">
               <label for="author">Author:</label>
               <input type="text" id="author" name="author" class="form-control" maxlength="100" placeholder="Author full name (optional)"
                 value="<?php if(isset($art_author)){echo $art_author;}?>">
             </div>
-            <div class="form-group">
+            </div>
+            <div class="form-row">
+            <div class="form-group col-md-9">
               <label for="url">Source URL:</label>
               <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (optional)" value="<?php if(isset($art_url)){echo $art_url;}?>">
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-3">
+              <label for="audio">Audio:</label>
+              <input id="audio_uri" type="file" name="audio" accept="audio/mpeg,audio/ogg">
+            </div>
+            </div>
+            <div class="form-group col-xs-12">
               <label for="text">Text:</label>
               <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="65535" placeholder="Text goes here (required), max. length=65,535 chars"
                 required><?php if(isset($art_content)){echo $art_content;}?></textarea>
+                <input id="upload_text" type="file" name="upload_text" accept=".txt, .epub">              
             </div>
-            <div class="form-group">
-              <label for="audio">Audio:</label>
-              <input type="file" name="audio" accept="audio/mpeg,audio/ogg">
-              <label for="audio" class="error" id="audio_error"></label>
+            <div class="form-group col-xs-12">
+            <button type="button" id="btn_cancel" name="cancel" class="btn btn-default" onclick="window.location='/'">Cancel</button>
+            <button type="submit" id="btn_add_text" name="submit" class="btn btn-success">Save</button>
             </div>
-            <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='/'">Cancel</button>
-            <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
           </form>
 
       </div>
     </div>
   </div>
+
+  <script type="text/javascript" src="js/addtext.js"></script>
 
   <?php require_once('footer.php') ?>

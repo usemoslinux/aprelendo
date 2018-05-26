@@ -42,7 +42,7 @@
               <ul class="dropdown-menu">
                 <li><a href="languages.php">Languages</a></li>
                 <li><a href="/">My texts</a></li>
-                <li><a href="rss.php">RSS feeds</a></li>
+                <li><a href="addrss.php">RSS feeds</a></li>
                 <li><a href="archivedtexts.php">Archived texts</a></li>
                 <li><a href="words.php">Word list</a></li>
                 <li><a href="stats.php">Statistics</a></li>

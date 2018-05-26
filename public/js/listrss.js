@@ -24,9 +24,10 @@ $(document).ready(function () {
         data: {
           title: art_title,
           author: art_author,
-          link: art_link,
+          url: art_link,
           pubdate: art_pubdate,
-          content: art_content
+          text: art_content,
+          mode: 'rss'
         }
       }).done(function (data) {
         switch (readlater) {

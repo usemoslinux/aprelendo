@@ -719,6 +719,17 @@ td>label {
   border-left-color: #d9534f;
 }
 
-.alert {
-  white-space: pre;
+#upload_text {
+	margin-top: 10px;
+}
+
+#form_addtext #text {
+	height: 200px;
+}
+
+@media screen and (max-width: 991px) {
+  #form_addtext .form-group {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
