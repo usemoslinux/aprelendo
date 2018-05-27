@@ -54,4 +54,39 @@ $(document).ready(function() {
     reader.readAsText(file);
   });
 
+  $('#btn_fetch').on('click', function () {
+    var url = $('#url').val();
+
+    if (url != '') {
+      $('#btn_fetch_img').removeClass().addClass('fa fa-refresh fa-spin');
+      $.ajax({
+        type: "GET",
+        url: 'fetchurl.php',
+        data: { url: url },
+        dataType: "html"
+      })
+      .done(function(data) {
+        var doc = document.implementation.createHTMLDocument("New Document");
+        doc.body.parentElement.innerHTML = data;
+        var article = new Readability(doc).parse();  
+        $('#title').val(article.title);
+        $('#author').val(article.byline);
+        var txt = '';
+        var $tempDom = $('<output>').append($.parseHTML(article.content));
+        $('p', $tempDom).each(function() {
+          txt += $(this).text() + '\n\n';
+        });
+  
+        $('#text').val($.trim(txt));
+      })
+      .fail(function(xhr, ajaxOptions, thrownError) {
+        alert('Oops! There was an error trying to fetch this text.');
+      })
+      .always(function() {
+        $('#btn_fetch_img').removeClass().addClass('fa fa-arrow-down');
+      });  
+    }
+    
+  });
+
 });
