@@ -1,22 +1,23 @@
 <?php
-session_start();
+require_once('db/dbinit.php');
 
-require_once 'db/dbinit.php';
+if (!isset($_COOKIE['fontfamily'])) {
+  $userid = '1';
 
-$userid = '1';
-
-// save preferences values in $_SESSION
-
-$result = mysqli_query($con, "SELECT * FROM preferences WHERE prefUserId = '$userid'");
-$row = mysqli_fetch_assoc($result);
-
-$_SESSION['fontfamily'] = isset($row['prefFontFamily']) ? $row['prefFontFamily'] : "Helvetica";
-$_SESSION['fontsize'] = isset($row['prefFontSize']) ? $row['prefFontSize'] : '12px';
-$_SESSION['lineheight'] = isset($row['prefLineHeight']) ? $row['prefLineHeight'] : '1';
-$_SESSION['alignment'] = isset($row['prefAlignment']) ? $row['prefAlignment'] : 'left';
-$_SESSION['mode'] = isset($row['prefMode']) ? $row['prefMode'] : 'light';
-$_SESSION['actlangid'] = isset($row['prefActLangId']) ? $row['prefActLangId'] : 0;
-$_SESSION['assistedlearning'] = isset($row['prefAssistedLearning']) ? $row['prefAssistedLearning'] : true;
+  // save preferences values in $_COOKIE
+  
+  $result = mysqli_query($con, "SELECT * FROM preferences WHERE prefUserId = '$userid'");
+  $row = mysqli_fetch_assoc($result);
+  $actlangid = isset($row['prefActLangId']) ? $row['prefActLangId'] : 0;
+  
+  setcookie('fontfamily', isset($row['prefFontFamily']) ? $row['prefFontFamily'] : 'Helvetica');
+  setcookie('fontsize', isset($row['prefFontSize']) ? $row['prefFontSize'] : '12px');
+  setcookie('lineheight', isset($row['prefLineHeight']) ? $row['prefLineHeight'] : '1');
+  setcookie('alignment', isset($row['prefAlignment']) ? $row['prefAlignment'] : 'left');
+  setcookie('mode', isset($row['prefMode']) ? $row['prefMode'] : 'light');
+  setcookie('actlangid', $actlangid);
+  setcookie('assistedlearning', isset($row['prefAssistedLearning']) ? $row['prefAssistedLearning'] : true);  
+}
 
 require_once('header.php');
 ?>

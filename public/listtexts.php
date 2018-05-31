@@ -49,7 +49,7 @@ function print_table_content($textID, $textTitle) {
 // show page
 
 require_once('db/dbinit.php'); // connect to database
-$actlangid = $_SESSION['actlangid'];
+$actlangid = isset($actlangid) ? $actlangid : $_COOKIE['actlangid'];
 
 if (isset($_POST['submit'])) { // if the page is loaded because user searched for something, show search results
     $searchtext = mysqli_real_escape_string($con, $_POST['searchtext']);

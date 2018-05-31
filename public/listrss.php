@@ -3,7 +3,7 @@
       <?php 
       require_once('db/dbinit.php'); // connect to database
       require_once('functions.php');
-      $lgid = $_SESSION['actlangid'];
+      $lgid = $_COOKIE['actlangid'];
 
       $result = mysqli_query($con, "SELECT LgRSSFeed1URI, LgRSSFeed2URI, LgRSSFeed3URI FROM languages WHERE LgID='$lgid'") or die(mysqli_error($con));
 

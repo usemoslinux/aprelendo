@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once 'header.php'
 ?>
 
@@ -16,6 +15,11 @@ require_once 'header.php'
               $art_author = $row['textAuthor'];
               $art_url = $row['textSourceURI'];
               $art_content = $row['text'];
+          } elseif (isset($_POST['art_title'])) {
+              $art_title = $_POST['art_title'];
+              $art_author = $_POST['art_author'];
+              $art_url = $_POST['art_url'];
+              $art_content = $_POST['art_content'];
           }
         ?>
           <div id="alert_error_msg" class="hidden"></div>

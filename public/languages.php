@@ -1,5 +1,4 @@
 <?php
-  session_start();
   require_once('header.php')
   ?>
 
@@ -138,9 +137,9 @@
           if (isset($_GET['act'])) { // set active language if $_GET['act']
               $actlangid = $_GET['act'];
               mysqli_query($con, "UPDATE preferences SET prefActLangId = '$actlangid'") or die(mysqli_error($con));
-              $_SESSION['actlangid'] = $actlangid;
+              setcookie('actlangid', $actlangid);
           } else { // else, check in db for active language
-              $actlangid = $_SESSION['actlangid'];
+              $actlangid = $_COOKIE['actlangid'];
           }
 
          ?>

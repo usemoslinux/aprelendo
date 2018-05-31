@@ -343,7 +343,7 @@ $(document).ready(function () {
    */
   $("#myModal").on("hidden.bs.modal", function () {
     var audioplayer = $("#audioplayer");
-    if (playingaudio && audioplayer.length) {
+    if (typeof(playingaudio) != 'undefined' && playingaudio && audioplayer.length) {
       audioplayer.trigger("play");
     }
   });
@@ -460,7 +460,7 @@ $(document).ready(function () {
     toggleDictation();
   });
 
-  $("body").on("blur", "input", function (event) {
+  $("body").on("blur", ":text", function (event) {
     $curinput = $(this);
     // when user moves focus out of the input box, check if answer is correct
     // and show a cue to indicate status

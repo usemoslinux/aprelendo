@@ -1,9 +1,8 @@
 <?php 
-  session_start();
   require_once('dbinit.php'); // connect to database
   if ($_POST['mode'] == 'rss') { // add rss entry
     if (isset($_POST['title']) && isset($_POST['text'])) {
-      $actlangid = $_SESSION['actlangid'];
+      $actlangid = $_COOKIE['actlangid'];
       $title = mysqli_real_escape_string($con, $_POST['title']);
       $author = mysqli_real_escape_string($con, $_POST['author']);
       $link = mysqli_real_escape_string($con, $_POST['url']);
@@ -18,7 +17,7 @@
     }
   } else if ($_POST['mode'] == 'simple') { // add simple text
     if (isset($_POST['title']) && isset($_POST['text'])) {
-      $actlangid = $_SESSION['actlangid'];
+      $actlangid = $_COOKIE['actlangid'];
       $title = mysqli_real_escape_string($con, $_POST['title']);
       $author = mysqli_real_escape_string($con, $_POST['author']);
       $source_url = mysqli_real_escape_string($con, $_POST['url']);

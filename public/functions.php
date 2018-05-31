@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Replaces line-breaks (\n) with <P></P> tags
+ * Returns the modified $text, which includes the new HTML code
+ *
+ * @param string $text
+ * @return string
+ */
 function addParagraphs($text) // Add paragraph elements to text
 {
   $text = preg_replace('/\n/', '</p><p>', $text);
@@ -8,6 +15,13 @@ function addParagraphs($text) // Add paragraph elements to text
   return $text;
 }
 
+/**
+ * Makes all words clickable by wrapping them in SPAN tags
+ * Returns the modified $text, which includes the new HTML code
+ * 
+ * @param string $text
+ * @return string
+ */
 function addLinks($text)
 {
   $find = array('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|([-\w’]+)/iu', '/(?:<span[^>]*>.*?<\/span>(*SKIP)(*F))|[^\w<]+/u');
@@ -16,6 +30,14 @@ function addLinks($text)
   return preg_replace($find, $replace, $text);
 }
 
+/**
+ * Underlines words with different colors depending on their status
+ * Returns the modified $text, which includes the new HTML code
+ *
+ * @param string $text
+ * @param mysqli $con
+ * @return string
+ */
 function colorizeWords($text, $con)
 {
   // colorize phrases
@@ -37,6 +59,13 @@ function colorizeWords($text, $con)
   return $text;
 }
 
+/**
+ * Calculates how much time it would take to read $text to a native speaker
+ * Returns that estimation
+ *
+ * @param string $text
+ * @return integer
+ */
 function estimatedReadingTime($text)
 {
   $word_count = str_word_count($text);
@@ -48,16 +77,25 @@ function estimatedReadingTime($text)
   return $reading_time;
 }
 
+/**
+ * Get host of URL passed as parameter 
+ * Used in showtext.php to show a short version of the text's source URL
+ *
+ * @param string $url
+ * @return string
+ */
 function getHost($url) { 
   $parseUrl = parse_url(trim($url)); 
   return trim($parseUrl['host'] ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2))); 
 } 
+
 /**
  * Get RSS feed elements and show them in a list group fashion for easier access
- *
+ * Returns the result as HTML code
+ * 
  * @param string $url Url of the feed to parse & show
  * @param integer $groupindex List group item index
- * @return void
+ * @return string
  */
 function getRSSFeedElements($url, $groupindex) {
   $feed = file_get_contents($url);

@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +17,7 @@
 
 <body id="readerpage"
 <?php
-switch ($_SESSION['mode']) {
+switch ($_COOKIE['mode']) {
   case 'light':
   echo "class='lightmode'";
   break;
@@ -31,7 +30,7 @@ switch ($_SESSION['mode']) {
   default:
   break;
 }
-echo " style='font-family:{$_SESSION['fontfamily']};font-size:{$_SESSION['fontsize']};text-align:{$_SESSION['alignment']};'";
+echo " style='font-family:{$_COOKIE['fontfamily']};font-size:{$_COOKIE['fontsize']};text-align:{$_COOKIE['alignment']};'";
 ?>
 >
 
@@ -95,12 +94,12 @@ echo " style='font-family:{$_SESSION['fontfamily']};font-size:{$_SESSION['fontsi
 
       echo '<hr>';
 
-      $assistedlearning = $_SESSION['assistedlearning'];
+      $assistedlearning = $_COOKIE['assistedlearning'];
       if ($assistedlearning) {
         echo '<div id="alert-msg-phase" class="alert alert-info alert-dismissible show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 1:</strong> Reading & listening.</div>';   
       }
       
-      echo '<div id="text" style="line-height:' . $_SESSION['lineheight'] . ';">';
+      echo '<div id="text" style="line-height:' . $_COOKIE['lineheight'] . ';">';
       $text = colorizeWords($text, $con);
       $text = addLinks($text);
       echo addParagraphs($text); // convert /n to HTML <p>
