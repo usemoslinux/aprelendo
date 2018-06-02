@@ -9,7 +9,11 @@ if (isset($_POST['word'])) {
   $isphrase = $_POST['isphrase'];
   $lgid = $_COOKIE['actlangid'];
 
-  $result = mysqli_query($con, "REPLACE INTO words (wordLgId, word, wordStatus, isPhrase)
-            VALUES ($lgid, '$word', $status, $isphrase)") or die(mysqli_error($con));
+  $result = mysqli_query($con, "INSERT words (wordLgId, word, wordStatus, isPhrase, wordCreated)
+             VALUES ($lgid, '$word', $status, $isphrase, now()) ON DUPLICATE KEY UPDATE
+             wordLgId=$lgid, word='$word', wordStatus=$status, isPhrase=$isphrase, wordModified=now()") 
+             or die(mysqli_error($con));
+  // $result = mysqli_query($con, "REPLACE INTO words (wordLgId, word, wordStatus, isPhrase, wordCreated)
+  //           VALUES ($lgid, '$word', $status, $isphrase, now())") or die(mysqli_error($con));
 }
 ?>

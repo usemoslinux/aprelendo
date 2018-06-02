@@ -41,7 +41,7 @@ function addLinks($text)
 function colorizeWords($text, $con)
 {
   // colorize phrases
-  $result = mysqli_query($con, 'SELECT word, wordStatus FROM words WHERE isPhrase=TRUE') or die(mysqli_error($con));
+  $result = mysqli_query($con, 'SELECT word FROM words WHERE wordStatus>0 AND isPhrase=TRUE') or die(mysqli_error($con));
   while ($row = mysqli_fetch_assoc($result)) {
     $phrase = $row['word'];
     $text = preg_replace("/\b".$phrase."\b/ui",
@@ -49,7 +49,7 @@ function colorizeWords($text, $con)
   }
 
   // colorize words
-  $result = mysqli_query($con, 'SELECT word, wordStatus FROM words WHERE isPhrase=FALSE') or die(mysqli_error($con));
+  $result = mysqli_query($con, 'SELECT word FROM words WHERE wordStatus>0 AND isPhrase=FALSE') or die(mysqli_error($con));
   while ($row = mysqli_fetch_assoc($result)) {
     $word = $row['word'];
     $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b".$word."\b/iu",
