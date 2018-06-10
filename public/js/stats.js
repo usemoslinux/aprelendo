@@ -32,22 +32,22 @@ var myChart = new Chart(ctx, {
     datasets: [{
         label: "New",
         data: created,
-        backgroundColor: "rgba(33,150,243,0.4)" // blue
+        backgroundColor: "#1e90ff"//"rgba(33,150,243,0.4)" // blue
       },
       {
         label: "Reviewed",
         data: reviewed,
-        backgroundColor: "rgba(255,235,59,0.4)" // yellow
+        backgroundColor: "#ffa500"//"rgba(255,235,59,0.4)" // yellow
       },
       {
         label: "Learned",
         data: learned,
-        backgroundColor: "rgba(76,175,80,0.4)" // green
+        backgroundColor: "#3cb371"//"rgba(76,175,80,0.4)" // green
       },
       {
         label: "Forgotten",
         data: forgotten,
-        backgroundColor: "rgba(244,67,54,0.4)" // red
+        backgroundColor: "#ff6347"//"rgba(244,67,54,0.4)" // red
       }
     ]
   },

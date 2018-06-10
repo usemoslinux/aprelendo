@@ -22,24 +22,21 @@ $(document).ready(function () {
        * @param  {integer array} textIDs Ids of the selected elements in the database
        */
       $.ajax({
-        url: 'db/removeword.php',
-        type: 'POST',
-        data: {
-          wordIDs: JSON.stringify(ids)
-        },
-        success: function () {
-          $("input[class=chkbox-selrow]:checked").each(function () {
-            $(this).closest('tr').remove();
-          });
-          // if there are no remaining words to show on the table, remove the entire table
-          removeTableIfEmpty();
-        },
-        error: function (request, status, error) {
+          url: 'db/removeword.php',
+          type: 'POST',
+          data: {
+            wordIDs: JSON.stringify(ids)
+          }
+        })
+        .done(function () {
+          window.location.replace('words.php?page=' + getCurrentPage().page);
+        })
+        .fail(function (request, status, error) {
           alert("There was an error when trying to delete the selected words. Refresh the page and try again.");
-        }
-      });
-    }
-  });
+        });
+      // end ajax
+    } // end if
+  }); // end mDelete.on.Click
 
   /**
    * Enables/Disables action menu based on the number of selected elements.
@@ -51,7 +48,26 @@ $(document).ready(function () {
     } else {
       $('#actions-menu').removeClass('disabled');
     }
-  }
+  } // end toggleActionMenu
+
+  /**
+   * Returns current page
+   */
+  function getCurrentPage() {
+    var parts = window.location.search.substr(1).split("&");
+    if (parts == '') {
+      result = {
+        page: 1
+      };
+    } else {
+      var result = {};
+      for (var i = 0; i < parts.length; i++) {
+        var temp = parts[i].split("=");
+        result[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
+      }
+    }
+    return result;
+  } // end getCurrentPage
 
   $(document).on('change', '.chkbox-selrow', toggleActionMenu);
 
@@ -63,16 +79,5 @@ $(document).ready(function () {
     chkboxes.prop('checked', $(this).prop('checked'));
     toggleActionMenu();
   });
-
-  function removeTableIfEmpty() {
-    if ($('#wordstable tbody').is(':empty')) {
-      if ($('#search').val() == '') {
-        $('#wordstable').replaceWith('<p>There are no words in your private library.</p>');
-      } else {
-        $('#wordstable').replaceWith('<p>There are no words in your private library that meet that search criteria.</p>');
-      }
-      $('#actions-menu').remove();
-    }
-  }
 
 });

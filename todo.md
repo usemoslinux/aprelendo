@@ -1,5 +1,13 @@
 ## ALPHA 1
 
+- Chequear si las estadisticas funcionan bien
+  - Si las palabras que ya aprendi (que no aparecen subrayadas) y que yo vuelvo a agregar aparecen como "forgotten"
+
+  Usar phpmyadmin->sql: SELECT COUNT(word) FROM words WHERE wordStatus=2 AND wordModified>wordCreated AND wordModified < CURDATE() - INTERVAL 0-1 DAY AND wordModified > CURDATE() - INTERVAL 0 DAY
+
+  Esto es diferente de una palabra que estoy aprendiendo, a la cual ley doy clic al boton "forgot meaning".
+  Deberian figurar ambas bajo el concepto "forgotten".
+
 - [ ] showtexts.php: sanitize text when opening dictionary & translator URLs
 
   - [ ] Statistics (Add statistics and metrics to show progress)

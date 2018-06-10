@@ -49,15 +49,42 @@ function print_table_content($textID, $textTitle) {
 // show page
 
 require_once('db/dbinit.php'); // connect to database
+require_once('pagination.php'); // pagination class
 $actlangid = isset($actlangid) ? $actlangid : $_COOKIE['actlangid'];
 
-if (isset($_POST['submit'])) { // if the page is loaded because user searched for something, show search results
-    $searchtext = mysqli_real_escape_string($con, $_POST['searchtext']);
+$page = 1;
+$limit = 10; // number of rows per page
+$adjacents = 2; // adjacent page numbers
+
+if (isset($_POST['submit']) || isset($_GET['search'])) { // if the page is loaded because user searched for something, show search results
+    // pagination
+    if (isset($_POST['searchtext'])) {
+      $search_text = $_POST['searchtext'];
+    } else {
+      $search_text = isset($_GET['search']) && $_GET['search'] != '' ? $_GET['search'] : '';
+      $page = isset($_GET['page']) && $_GET['page'] != '' ? $_GET['page'] : 1;
+    }
+    
+    $search_text_escaped = mysqli_real_escape_string($con, $search_text);
+    
+    if ($showarchivedtexts) {
+      $result = mysqli_query($con, "SELECT COUNT(atextID) FROM archivedtexts WHERE atextTitle LIKE '%$search_text_escaped%' AND atextLgId='$actlangid'");
+    } else {
+      $result = mysqli_query($con, "SELECT COUNT(textID) FROM texts WHERE textTitle LIKE '%$search_text_escaped%' AND textLgId='$actlangid'");
+    }
+    
+    $row = mysqli_fetch_array($result);
+    $total_rows = $row[0]; // total number of rows to show
+    
+    $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
+    $offset = $pagination->offset;
+
+    // show search result
     // decide whether to show active or archived texts
     if ($showarchivedtexts) {
-        $result = mysqli_query($con, "SELECT atextID, atextTitle FROM archivedtexts WHERE atextTitle LIKE '%$searchtext%' AND atextLgId='$actlangid' ORDER BY atextID DESC") or die(mysqli_error($con));
+        $result = mysqli_query($con, "SELECT atextID, atextTitle FROM archivedtexts WHERE atextTitle LIKE '%$search_text_escaped%' AND atextLgId='$actlangid' ORDER BY atextID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
     } else {
-        $result = mysqli_query($con, "SELECT textID, textTitle FROM texts WHERE textTitle LIKE '%$searchtext%' AND textLgId='$actlangid' ORDER BY textID DESC") or die(mysqli_error($con));
+        $result = mysqli_query($con, "SELECT textID, textTitle FROM texts WHERE textTitle LIKE '%$search_text_escaped%' AND textLgId='$actlangid' ORDER BY textID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
     }
 
     if (mysqli_num_rows($result) > 0) { // if there are any results, show them
@@ -71,17 +98,33 @@ if (isset($_POST['submit'])) { // if the page is loaded because user searched fo
             }
         }
         print_table_footer();
-    } else { // if there are not, show a message
+        $page_name = $showarchivedtexts ? 'archivedtexts.php' : 'index.php';
+        echo $pagination->print($page_name, $search_text); // print pagination
+    } else { // if there are no texts to show, print a message
         echo '<p>No texts found with that criteria. Try again.</p>';
     }
 } else { // if page is loaded at startup, show start page
+    // pagination
+    $page = isset($_GET['page']) && $_GET['page'] != '' ? $_GET['page'] : 1;
+    
+    if ($showarchivedtexts) {
+        $result = mysqli_query($con, "SELECT COUNT(atextID) FROM archivedtexts WHERE atextLgId='$actlangid'") or die(mysqli_error($con));
+    } else {
+        $result = mysqli_query($con, "SELECT COUNT(textID) FROM texts WHERE textLgId='$actlangid'") or die(mysqli_error($con));
+    }
+    $row = mysqli_fetch_array($result);
+    $total_rows = $row[0]; // total number of rows to show
+    
+    $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
+    $offset = $pagination->offset;
+
+    // show word list
     // decide whether to show active or archived texts
     if ($showarchivedtexts) {
-        $result = mysqli_query($con, "SELECT atextID, atextTitle FROM archivedtexts WHERE atextLgId='$actlangid' ORDER BY atextID DESC") or die(mysqli_error($con));
+        $result = mysqli_query($con, "SELECT atextID, atextTitle FROM archivedtexts WHERE atextLgId='$actlangid' ORDER BY atextID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
     } else {
-        $result = mysqli_query($con, "SELECT textID, textTitle FROM texts WHERE textLgId='$actlangid' ORDER BY textID DESC") or die(mysqli_error($con));
+        $result = mysqli_query($con, "SELECT textID, textTitle FROM texts WHERE textLgId='$actlangid' ORDER BY textID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
     }
-
 
     if (mysqli_num_rows($result) > 0) {
         print_table_header();
@@ -93,7 +136,9 @@ if (isset($_POST['submit'])) { // if the page is loaded because user searched fo
             }
         }
         print_table_footer();
-    } else {
+        $page_name = $showarchivedtexts ? 'archivedtexts.php' : 'index.php';
+        echo $pagination->print($page_name, ''); // print pagination
+    } else { // if there are no texts to show, print a message
         echo '<p>There are no texts in your private library.</p>';
     }
 

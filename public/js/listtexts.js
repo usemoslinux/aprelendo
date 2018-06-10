@@ -23,22 +23,19 @@ $(document).ready(function () {
        * @param  {integer array} textIDs Ids of the selected elements in the database
        */
       $.ajax({
-        url: 'db/removetext.php',
-        type: 'POST',
-        data: {
-          textIDs: JSON.stringify(ids)
-        },
-        success: function () {
-          $("input[class=chkbox-selrow]:checked").each(function () {
-            $(this).closest('tr').remove();
-          });
-          // if there are no remaining texts to show on the table, remove the entire table
-          removeTableIfEmpty();
-        },
-        error: function (request, status, error) {
+          url: 'db/removetext.php',
+          type: 'POST',
+          data: {
+            textIDs: JSON.stringify(ids)
+          }
+        })
+        .done(function () {
+          var url = window.location.pathname.indexOf('archivedtexts.php') >= 0 ? 'archivedtexts.php?page=' : 'index.php?page=';
+          window.location.replace(url + getCurrentPage().page);
+        })
+        .fail(function () {
           alert("There was an error when trying to delete the selected texts. Refresh the page and try again.");
-        }
-      });
+        });
     }
   });
 
@@ -47,7 +44,7 @@ $(document).ready(function () {
    * Trigger: when user selects "Archive" in the action menu
    */
   $('#mArchive').on('click', function () {
-    var archivetxt = $(this).text() === 'Archive text';
+    var archivetxt = $(this).text() === 'Archive';
     var ids = [];
     $('input[class=chkbox-selrow]:checked').each(function () {
       ids.push($(this).attr('data-idText'));
@@ -58,29 +55,25 @@ $(document).ready(function () {
      * Moves selected texts from the "texts" table to the "archivedtexts" table in the database (archive);
      * or, vice-versa, moves texts from the "archivedtexts" table to the "texts" table (unarchive)
      * This is done based on text IDs.
-     * When done, also removes selected rows from the HTML table.
      * @param {integer array} ids Ids of the selected elements in the database
      * @param {boolean} archivetxt If true, archive text; else, unarchive text
      */
     $.ajax({
-      url: 'db/archivetext.php',
-      type: 'POST',
-      data: {
-        textIDs: JSON.stringify(ids),
-        archivetext: archivetxt
-      },
-      success: function () {
-        $('input[class=chkbox-selrow]:checked').each(function () {
-          $(this).closest('tr').remove();
-        });
-        removeTableIfEmpty();
-      },
-      error: function (request, status, error) {
+        url: 'db/archivetext.php',
+        type: 'POST',
+        data: {
+          textIDs: JSON.stringify(ids),
+          archivetext: archivetxt
+        }
+      })
+      .done(function () {
+        var url = archivetxt ? 'index.php?page=' : 'archivedtexts.php?page=';
+        window.location.replace(url + getCurrentPage().page);
+      })
+      .fail(function () {
         alert("There was an error when trying to archive the selected texts. Refresh the page and try again.");
-      }
-    });
-
-  });
+      }); // end ajax
+  }); // end mArchive.on.click
 
   /**
    * Enables/Disables action menu based on the number of selected elements.
@@ -105,15 +98,23 @@ $(document).ready(function () {
     toggleActionMenu();
   });
 
-  function removeTableIfEmpty() {
-    if ($('#textstable tbody').is(':empty')) {
-      if ($('#search').val() == '') {
-        $('#textstable').replaceWith('<p>There are no texts in your private library.</p>');
-      } else {
-        $('#textstable').replaceWith('<p>There are no texts in your private library that meet that search criteria.</p>');
+  /**
+   * Returns current page
+   */
+  function getCurrentPage() {
+    var parts = window.location.search.substr(1).split("&");
+    if (parts == '') {
+      result = {
+        page: 1
+      };
+    } else {
+      var result = {};
+      for (var i = 0; i < parts.length; i++) {
+        var temp = parts[i].split("=");
+        result[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
       }
-      $('#actions-menu').remove();
     }
-  }
+    return result;
+  } // end getCurrentPage
 
 });

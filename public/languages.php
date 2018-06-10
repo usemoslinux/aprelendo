@@ -11,7 +11,7 @@
             <a href="/">Home</a>
           </li>
           <li>
-            <a class="active">RSS feeds</a>
+            <a class="active">Languages</a>
           </li>
         </ol>
         <!-- first, check if we need to save information filled out in form -->

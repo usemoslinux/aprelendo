@@ -11,7 +11,7 @@ if (isset($_POST['textIDs'])) {
 
   // decide wether we are deleting an archived text or not
   $referer = basename($_SERVER['HTTP_REFERER']);
-  if ($referer == 'archivedtexts.php') {
+  if (strpos($referer, 'archivedtexts.php') !== false) {
     $selectsql = "SELECT atextAudioURI FROM archivedtexts WHERE atextID IN ($textIDs)";
     $deletesql = "DELETE FROM archivedtexts WHERE atextID IN ($textIDs)";
     $audiouri = 'atextAudioURI';
