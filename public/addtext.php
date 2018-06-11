@@ -7,7 +7,7 @@ require_once 'header.php'
       <div class="col-lg-12">
 
         <?php
-          if (isset($_GET['id'])) {
+          if (isset($_GET['id'])) { // modify text
               $id = $_GET['id'];
               $result = mysqli_query($con, "SELECT textTitle, textAuthor, text, textSourceURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
               $row = mysqli_fetch_assoc($result);
@@ -15,11 +15,14 @@ require_once 'header.php'
               $art_author = $row['textAuthor'];
               $art_url = $row['textSourceURI'];
               $art_content = $row['text'];
-          } elseif (isset($_POST['art_title'])) {
+          } elseif (isset($_POST['art_title'])) { // rss
               $art_title = $_POST['art_title'];
               $art_author = $_POST['art_author'];
               $art_url = $_POST['art_url'];
               $art_content = $_POST['art_content'];
+          } elseif (isset($_GET['url'])) { // external call (bookmarklet, addon)
+              $art_url = $_GET['url'];
+              $external_call = true;
           }
         ?>
           <div id="alert_error_msg" class="hidden"></div>
@@ -60,6 +63,7 @@ require_once 'header.php'
               <input id="upload_text" type="file" name="upload_text" accept=".txt, .epub">
             </div>
             <div class="form-group col-xs-12">
+              <?php if (isset($external_call)) { echo '<input id="external_call" type="hidden">'; } ?>
               <button type="button" id="btn_cancel" name="cancel" class="btn btn-default" onclick="window.location='/'">Cancel</button>
               <button type="submit" id="btn_add_text" name="submit" class="btn btn-success">Save</button>
             </div>

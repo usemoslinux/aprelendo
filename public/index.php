@@ -1,7 +1,7 @@
 <?php
 require_once('db/dbinit.php');
 
-if (!isset($_COOKIE['fontfamily'])) {
+if (!isset($_COOKIE['actlangid'])) { // todo use if user is set instead of fontfamily
   $userid = '1';
 
   // save preferences values in $_COOKIE

@@ -36,8 +36,6 @@
     - Other
         - Highlight common words
 
-- [ ] Implement pagination
-
 - [ ] Add installation instructions to readme.md
 
 - [ ] preferences.php: Remember last reading position
@@ -52,8 +50,30 @@ Things that need more thinking
 
 - [ ] Enable login w/facebook or google
 
-- [ ] Add support for ebook uploading
+- [ ] Add support for ebook/large texts uploading
+
+- [ ] Create landing page
+
+- [ ] More professional design of main pages
 
 - [ ] Enable multi-language site
 
-- [ ] Develop an API and a Firefox addon
+- [ ] Develop Firefox/Google Chrome addon
+
+# PRICING
+
+- [ ] Exclusive for premium
+
+  - [ ] Access to community shared texts (this might hinder viralization)
+  - [ ] Practice using cards
+  - [ ] Upload more than 2 texts per day
+  - [ ] Upload bigger audio files
+  - [ ] 
+
+
+  
+
+
+
+
+

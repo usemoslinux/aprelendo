@@ -24,6 +24,7 @@
         <p>
         <a href="privacy.php">Privacy Policy</a><br>
         <a href="attributions.php">Attributions</a><br>
+        <a href="javascript:void(location.href='http://localhost/addtext.php?url='+encodeURIComponent(location.href));">Bookmarklet</a><br>
           <br>
         </p>
       </div>

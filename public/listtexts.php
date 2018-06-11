@@ -50,6 +50,15 @@ function print_table_content($textID, $textTitle) {
 
 require_once('db/dbinit.php'); // connect to database
 require_once('pagination.php'); // pagination class
+// if (isset($_COOKIE['actlangid'])) {
+//   $actlangid = $_COOKIE['actlangid'];
+// } else {
+//   $user = 1; // TODO: add user support
+//   $result = mysqli_query($con, "SELECT prefActLangId FROM preferences WHERE prefUserId = '$user'") or die(mysqli_error($con));
+//   $row = mysqli_fetch_array($result);
+//   $actlangid = $row[0];
+// }
+
 $actlangid = isset($actlangid) ? $actlangid : $_COOKIE['actlangid'];
 
 $page = 1;
