@@ -398,7 +398,7 @@ h5 {
   background-color: inherit;
 }
 
-ul {
+ul, ol {
   padding: inherit;
 }
 
@@ -732,7 +732,7 @@ td>label {
   }
 }
 
-/* WORDS */
+/* STATISTICS */
 
 i.status_new {
   color: DodgerBlue;
@@ -744,4 +744,15 @@ i.status_learning {
 
 i.status_learned {
   color: MediumSeaGreen;
+}
+
+/* OTHER PAGES */
+
+#more_content a {
+  color: #01b2fe;
+}
+
+#more_content a:hover,
+#more_content a:focus {
+  text-decoration: underline;
 }
