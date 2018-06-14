@@ -38,22 +38,53 @@ function addLinks($text)
  * @param mysqli $con
  * @return string
  */
-function colorizeWords($text, $con)
+function colorizeWords($text, $con, $freq_list)
 {
-  // colorize phrases
-  $result = mysqli_query($con, 'SELECT word FROM words WHERE wordStatus>0 AND isPhrase=TRUE') or die(mysqli_error($con));
-  while ($row = mysqli_fetch_assoc($result)) {
-    $phrase = $row['word'];
-    $text = preg_replace("/\b".$phrase."\b/ui",
-    "<span class='word learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
-  }
+  // 1. colorize phrases & words that are being reviewed
 
-  // colorize words
-  $result = mysqli_query($con, 'SELECT word FROM words WHERE wordStatus>0 AND isPhrase=FALSE') or die(mysqli_error($con));
+  // colorize phrases & words
+  $result = mysqli_query($con, 'SELECT word FROM words WHERE wordStatus>0') or die(mysqli_error($con));
   while ($row = mysqli_fetch_assoc($result)) {
     $word = $row['word'];
-    $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b".$word."\b/iu",
-    "<span class='word learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
+    $text = preg_replace("/\b".$word."\b/ui",
+    "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
+  }
+
+  // // colorize words
+  // $result = mysqli_query($con, 'SELECT word FROM words WHERE wordStatus>0 AND isPhrase=FALSE') or die(mysqli_error($con));
+  // while ($row = mysqli_fetch_assoc($result)) {
+  //   $word = $row['word'];
+  //   $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b".$word."\b/iu",
+  //   "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
+  // }
+
+  // 2. colorize phrases & words that are were already learned
+
+  // colorize phrases
+  $result = mysqli_query($con, 'SELECT word FROM words WHERE wordStatus=0') or die(mysqli_error($con));
+  while ($row = mysqli_fetch_assoc($result)) {
+    $phrase = $row['word'];
+    $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b".$phrase."\b/iu",
+    "<span class='word learned' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
+  }
+
+  // // colorize words
+  // $result = mysqli_query($con, 'SELECT word FROM words WHERE wordStatus=0 AND isPhrase=FALSE') or die(mysqli_error($con));
+  // while ($row = mysqli_fetch_assoc($result)) {
+  //   $word = $row['word'];
+  //   $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b".$word."\b/iu",
+  //   "<span class='word learned' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
+  // }
+
+  // 3. colorize frequency list words
+
+  if ($freq_list) {
+    $result = mysqli_query($con, 'SELECT freqWord FROM frequencylist_fr LIMIT 5000') or die(mysqli_error($con));
+    while ($row = mysqli_fetch_assoc($result)) {
+      $word = $row['freqWord'];
+      $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b".$word."\b/iu",
+      "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
+    }
   }
 
   return $text;

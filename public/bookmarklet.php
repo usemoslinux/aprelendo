@@ -34,7 +34,7 @@
             <li>Show the Bookmarks Toolbar:
               <p>In Firefox: Go to <kbd>View</kbd> > <kbd>Toolbars</kbd> > <kbd>Bookmarks toolbar</kbd></p>
               <p>In Google Chrome: Go to <kbd>View</kbd> > <kbd>Show bookmarks bar</kbd></p></li>
-            <li>Drag the following link (<a href="javascript:void(location.href='http://localhost/addtext.php?url='+encodeURIComponent(location.href));">LangX</a> bookmarklet) to your Bookmarks Toolbar. It should now appear on the toolbar. </li>
+            <li>Drag the following link (<a href="javascript:void(location.href='https://localhost/addtext.php?url='+encodeURIComponent(location.href));">LangX</a> bookmarklet) to your Bookmarks Toolbar. It should now appear on the toolbar. </li>
           </ol>
           <br>
           <h4>How to use LangX's bookmarklet once installed</h4>

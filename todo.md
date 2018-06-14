@@ -1,5 +1,8 @@
 ## ALPHA 1
 
+- Video support
+ - https://video.google.com/timedtext?lang=en&v=VIDEOID
+
 - Chequear si las estadisticas funcionan bien
   - Si las palabras que ya aprendi (que no aparecen subrayadas) y que yo vuelvo a agregar aparecen como "forgotten"
 
@@ -7,6 +10,9 @@
 
   Esto es diferente de una palabra que estoy aprendiendo, a la cual ley doy clic al boton "forgot meaning".
   Deberian figurar ambas bajo el concepto "forgotten".
+
+
+- que pasa cuando recien empiezo a usar el programa y $_COOKIE['actlangid'] todavia no tiene ningun valor? Ver lugares donde uso esta variable.
 
 - [ ] showtexts.php: sanitize text when opening dictionary & translator URLs
 
@@ -70,8 +76,13 @@ Things that need more thinking
   - [ ] Upload bigger audio files
   - [ ] 
 
+# OBJECTIVE FOR BETA
 
-  
+- [ ] Allow teachers/bloggers to upload their material. This will increase content quality & it will be a way to monetize?
+
+- [ ] En la medida en que es para aprender hace falta la inmersion, el sistema tiene que permitir esto:
+  - Agregar funcionalidad tipo skype: chat + video con amigos
+
 
 
 

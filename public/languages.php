@@ -25,17 +25,18 @@
           $lgrssfeed1URI = mysqli_real_escape_string($con, $_POST['rssfeedURI1']);
           $lgrssfeed2URI = mysqli_real_escape_string($con, $_POST['rssfeedURI2']);
           $lgrssfeed3URI = mysqli_real_escape_string($con, $_POST['rssfeedURI3']);
+          $lgshowfreqlist = mysqli_real_escape_string($con, $_POST['freq-list']);
 
           if (isset($_POST['id'])) {
             $lgID = mysqli_real_escape_string($con, $_POST['id']);
             mysqli_query($con, "UPDATE languages SET LgName='$lgName', LgDict1URI='$lgDictionaryURI',
             LgTranslatorURI='$lgTranslatorURI', LgRSSFeed1URI='$lgrssfeed1URI', LgRSSFeed2URI='$lgrssfeed2URI', 
-            LgRSSFeed3URI='$lgrssfeed3URI' WHERE LgID='$lgID'")
+            LgRSSFeed3URI='$lgrssfeed3URI', LgShowFreqList=$lgshowfreqlist WHERE LgID='$lgID'")
             or die(mysqli_error($con));
           } else {
             mysqli_query($con, "INSERT INTO languages (LgName, LgDict1URI, LgTranslatorURI, LgRSSFeed1URI, 
-              LgRSSFeed2URI, LgRSSFeed3URI) VALUES ('$lgName', '$lgDictionaryURI', '$lgTranslatorURI',
-              '$lgrssfeed1URI', '$lgrssfeed2URI', '$lgrssfeed3URI')") or die(mysqli_error($con));
+              LgRSSFeed2URI, LgRSSFeed3URI, LgShowFreqList) VALUES ('$lgName', '$lgDictionaryURI', '$lgTranslatorURI',
+              '$lgrssfeed1URI', '$lgrssfeed2URI', '$lgrssfeed3URI', '$lgshowfreqlist')") or die(mysqli_error($con));
           }
       }
       ?>
@@ -69,6 +70,13 @@
               <label for="rssfeedURI3">RSS feed URI 3:</label>
               <input type="url" name="rssfeedURI3" class="form-control" value="">
             </div>
+            <div class="form-group">
+              <label for="freq-list">Underline most used words (frequency lists):</label>
+              <select name="freq-list" id="freq-list">
+                <option value="1" <?php echo $_COOKIE[ 'showfreqlist']==true ? 'selected' : ''; ?>>Yes</option>
+                <option value="0" <?php echo $_COOKIE[ 'showfreqlist']==false ? 'selected' : ''; ?>>No</option>
+              </select>
+            </div>
             <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='languages.php'">Cancel</button>
             <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
           </form>
@@ -88,6 +96,7 @@
           $lgrssfeed1URI = $row['LgRSSFeed1URI'];
           $lgrssfeed2URI = $row['LgRSSFeed2URI'];
           $lgrssfeed3URI = $row['LgRSSFeed3URI'];
+          $freqlist = $row['LgShowFreqList'];
            ?>
 
             <form class="" action="languages.php" method="post">
@@ -116,6 +125,13 @@
                 <label for="rssfeedURI3">RSS feed URI 3:</label>
                 <input type="url" name="rssfeedURI3" class="form-control" value="<?php echo $lgrssfeed3URI; ?>">
               </div>
+              <div class="form-group">
+                <label for="freq-list">Underline most used words (frequency lists):</label>
+                <select name="freq-list" id="freq-list">
+                  <option value="1" <?php echo $freqlist==true ? 'selected' : ''; ?>>Yes</option>
+                  <option value="0" <?php echo $freqlist==false ? 'selected' : ''; ?>>No</option>
+                </select>
+              </div>
               <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='languages.php'">Cancel</button>
               <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
             </form>
@@ -138,6 +154,10 @@
               $actlangid = $_GET['act'];
               mysqli_query($con, "UPDATE preferences SET prefActLangId = '$actlangid'") or die(mysqli_error($con));
               setcookie('actlangid', $actlangid);
+              
+              $result = mysqli_query($con, "SELECT LgShowFreqList FROM languages WHERE LgID='$actlangid'") or die(mysqli_error($con));
+              $row = mysqli_fetch_assoc($result);
+              setcookie('showfreqlist', $row['LgShowFreqList']);
           } else { // else, check in db for active language
               $actlangid = $_COOKIE['actlangid'];
           }

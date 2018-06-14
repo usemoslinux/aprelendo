@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel='shortcut icon' type='image/x-icon' href='/images/favicon.ico' />
   <title>LangX</title>
 
   <!-- Bootstrap core CSS -->
@@ -100,7 +101,11 @@ echo " style='font-family:{$_COOKIE['fontfamily']};font-size:{$_COOKIE['fontsize
       }
       
       echo '<div id="text" style="line-height:' . $_COOKIE['lineheight'] . ';">';
-      $text = colorizeWords($text, $con);
+      
+      $actlangid = $_COOKIE['actlangid'];
+      $show_freq_list = isset($_COOKIE['showfreqlist']) ? $_COOKIE['showfreqlist'] : false;
+
+      $text = colorizeWords($text, $con, $show_freq_list);
       $text = addLinks($text);
       echo addParagraphs($text); // convert /n to HTML <p>
       echo '</div>';

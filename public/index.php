@@ -50,17 +50,17 @@ TABS
               </div>
               <!-- Split button -->
               <div class="btn-group btn-add-text searchbox">
-                <a class="btn btn-success" href="addtext.php"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add text</a>
+                <a class="btn btn-success" href="addtext.php"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span class="caret"></span>
                   <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                   <li>
-                    <a href="addtext.php">Add plain text</a>
+                    <a href="addtext.php">Plain text</a>
                   </li>
                   <li>
-                    <a href="addrss.php">Add RSS text</a>
+                    <a href="addrss.php">RSS text</a>
                   </li>
                 </ul>
               </div>

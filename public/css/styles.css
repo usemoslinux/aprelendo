@@ -510,26 +510,6 @@ a:focus {
   text-decoration: none;
 }
 
-.learning {
-  border-bottom-width: 2px;
-  border-bottom-style: solid;
-  border-color: orange;
-}
-
-.learning:hover {
-  background-color: orange;
-}
-
-.new {
-  border-bottom-width: 2px;
-  border-bottom-style: solid;
-  border-color: DodgerBlue;
-}
-
-.new:hover {
-  background-color: DodgerBlue;
-}
-
 .word {
   cursor: pointer;
 }
@@ -538,10 +518,55 @@ a:focus {
   background-color: #f2f2f2;
 }
 
+.reviewing {
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+}
+
+.new {
+  border-color: DodgerBlue;
+}
+
+.new:hover {
+  background-color: DodgerBlue;
+}
+
+.learning {
+  border-color: orange;
+}
+
+.learning:hover {
+  background-color: orange;
+}
+
+.learned {
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-color: yellowgreen;
+}
+
+.learned:hover {
+  background-color: yellowgreen;
+}
+
+.forgotten {
+  border-color: red;
+}
+
+.forgotten:hover {
+  background-color: red;
+}
+/* 
 .phrase {
   cursor: pointer;
   border-bottom-width: 2px;
   border-bottom-style: dotted;
+} */
+
+.frequency-list {
+  border-bottom-width: 1px;
+  border-bottom-style: dotted;
+  border-color: DodgerBlue;
 }
 
 .estimated-reading-time {
@@ -732,7 +757,7 @@ td>label {
   }
 }
 
-/* STATISTICS */
+/* WORDS */
 
 i.status_new {
   color: DodgerBlue;

@@ -115,6 +115,6 @@ $(document).ready(function() {
     } // end if  
   }
 
-  $('#btn_fetch').on('click', fetch_url());
+  $('#btn_fetch').on('click', fetch_url);
 
 });

@@ -41,7 +41,7 @@ $(document).ready(function () {
   function setAddDeleteButtons() {
     var $btnremove = $("#btnremove");
     var $btnadd = $("#btnadd");
-    if ($selword.hasClass("learning") || $selword.hasClass("new")) {
+    if ($selword.is(".learning, .new, .forgotten, .learned")) {
       if ($btnremove.is(":visible") === false) {
         $btnremove.show();
         $btnadd.text("Forgot meaning");
@@ -175,9 +175,16 @@ $(document).ready(function () {
               .addBack();
 
             if (phrase.text().toLowerCase() === selection.toLowerCase()) {
-              phrase.wrapAll(
-                "<span class='word new' data-toggle='modal' data-target='#myModal'></span>"
-              );
+              if ($(this).is('.new, .learning, .learned, .forgotten')) {
+                phrase.wrapAll(
+                  "<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></span>"
+                );  
+              } else {
+                phrase.wrapAll(
+                  "<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>"
+                );
+              }
+              
               phrase.contents().unwrap();
             }
           });
@@ -189,11 +196,20 @@ $(document).ready(function () {
               .toLowerCase() === selection.toLowerCase()
             );
           });
-          filterword.html(
-            "<span class='word new' data-toggle='modal' data-target='#myModal'>" +
-            selection +
-            "</span>"
-          );
+
+          filterword.each(function() {
+            var $word = $(this);
+            if ($word.is('.new, .learning, .learned, .forgotten')) {
+              $word.html("<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'>" +
+              selection +
+              "</span>");
+            } else {
+              $word.html("<span class='word reviewing new' data-toggle='modal' data-target='#myModal'>" +
+              selection +
+              "</span>");
+            }
+          });
+
           filterword.contents().unwrap();
         }
         
@@ -243,7 +259,7 @@ $(document).ready(function () {
           filter.contents().unwrap();
           // if user is in phase 2 (underlining words) and deleted the only word that was underlined
           // don't allow phase 3 (dictation) & go directly to last phase (save changes)
-          if (phase==2 && $('audio').length > 0 && $('.learning, .new').length == 0) {
+          if (phase==2 && $('audio').length > 0 && $('.learning, .new, .forgotten').length == 0) {
             $('#btn_next_phase').html('Finished<div class="small">Save changes</div>');
             phase++;
           }
@@ -267,7 +283,7 @@ $(document).ready(function () {
           "slow"
         );
         $('#alert-msg-phase').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 2:</strong> Look up words/phrases.');
-        if ($(".learning, .new").length > 0 && $("audio").length > 0) {
+        if ($(".learning, .new, .forgotten").length > 0 && $("audio").length > 0) {
           $(this).html(
             'Go to phase 3<div class="small">Dictation</div>'
           );
@@ -299,9 +315,7 @@ $(document).ready(function () {
    * Finished studying this text. Archives text & saves new status of words/phrases 
    * Executes when the user presses the big green button at the end
    */
-  $('#btn_save').on('click', function () {
-    archiveTextAndSaveWords();
-  });
+  $('#btn_save').on('click', archiveTextAndSaveWords);
 
   /**
    * Archives text and updates status of all underlined words & phrases
@@ -363,10 +377,11 @@ $(document).ready(function () {
    */
   $("#selPhrase").on("change", function () {
     var selindex = $("#selPhrase").prop("selectedIndex");
+    var trans_whole_p_index = $("#selPhrase option").length - 1;
     var url = "";
 
     // set Add & Delete buttons depending on whether selection exists in database
-    if (selindex == 0) {
+    if (selindex == 0 || selindex == trans_whole_p_index) {
       // only for the first word we need to check if it exists in db
       setAddDeleteButtons();
     } else {
@@ -377,7 +392,7 @@ $(document).ready(function () {
     }
 
     // define behaviour when user clicks on a phrase or "translate whole paragraph"
-    if (selindex == $("#selPhrase option").length - 1) {
+    if (selindex == trans_whole_p_index) {
       // translate whole paragraph
       url = translatorURI.replace(
         "%s",
@@ -409,7 +424,7 @@ $(document).ready(function () {
     if ($(".dict-answer").length == 0) {
       // toggle dictation on
       //replace all underlined words/phrases with input boxes
-      $(".learning, .new").each(function (index, value) {
+      $(".learning, .new, .forgotten").each(function (index, value) {
         var $elem = $(this);
         var length = $elem.text().length;
         $elem
@@ -440,7 +455,7 @@ $(document).ready(function () {
       $(":text:first").focus(); // focus first input
     } else {
       // toggle dictation off
-      $(".learning, .new").each(function (index, value) {
+      $(".learning, .new, .forgotten").each(function (index, value) {
         $elem = $(this);
         $elem
           .show()
