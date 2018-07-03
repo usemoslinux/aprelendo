@@ -1,226 +1,46 @@
 <?php
-  require_once('header.php')
-  ?>
+require_once('header.php');
+require_once('classes/languages.php');
 
+$user_id = $user->id;
+
+if (isset($_POST['submit'])) {                  // check if we need to save new language data
+    $lang = new Language($con, $_POST['id'], $user_id);
+    $lang->edit($_POST);
+}
+?>
 
   <div class="container mtb">
     <div class="row">
       <div class="col-xs-12">
         <ol class="breadcrumb">
           <li>
-            <a href="/">Home</a>
+            <a href="texts.php">Home</a>
           </li>
           <li>
             <a class="active">Languages</a>
           </li>
         </ol>
-        <!-- first, check if we need to save information filled out in form -->
-        <?php
-      if (isset($_POST['submit'])) {
-          require_once('db/dbinit.php'); // connect to database
 
-          $lgName = mysqli_real_escape_string($con, $_POST['language']);
-          $lgDictionaryURI = mysqli_real_escape_string($con, $_POST['dictionaryURI']);
-          $lgTranslatorURI = mysqli_real_escape_string($con, $_POST['translatorURI']);
-          $lgrssfeed1URI = mysqli_real_escape_string($con, $_POST['rssfeedURI1']);
-          $lgrssfeed2URI = mysqli_real_escape_string($con, $_POST['rssfeedURI2']);
-          $lgrssfeed3URI = mysqli_real_escape_string($con, $_POST['rssfeedURI3']);
-          $lgshowfreqlist = mysqli_real_escape_string($con, $_POST['freq-list']);
+        <?php 
+        
+        if (isset($_GET['chg'])) {              // chg paramter = show edit language page
+            $lang = new Language($con, $_GET['chg'], $user_id);
 
-          if (isset($_POST['id'])) {
-            $lgID = mysqli_real_escape_string($con, $_POST['id']);
-            mysqli_query($con, "UPDATE languages SET LgName='$lgName', LgDict1URI='$lgDictionaryURI',
-            LgTranslatorURI='$lgTranslatorURI', LgRSSFeed1URI='$lgrssfeed1URI', LgRSSFeed2URI='$lgrssfeed2URI', 
-            LgRSSFeed3URI='$lgrssfeed3URI', LgShowFreqList=$lgshowfreqlist WHERE LgID='$lgID'")
-            or die(mysqli_error($con));
-          } else {
-            mysqli_query($con, "INSERT INTO languages (LgName, LgDict1URI, LgTranslatorURI, LgRSSFeed1URI, 
-              LgRSSFeed2URI, LgRSSFeed3URI, LgShowFreqList) VALUES ('$lgName', '$lgDictionaryURI', '$lgTranslatorURI',
-              '$lgrssfeed1URI', '$lgrssfeed2URI', '$lgrssfeed3URI', '$lgshowfreqlist')") or die(mysqli_error($con));
-          }
-      }
-      ?>
+            include('editlanguage.php');
+          } elseif (isset($_GET['act'])) {      // act parameter = set active language
+            $lang = new Language($con, $_GET['chg'], $user_id);
+            
+            $user->setActiveLang($_GET['act']);
 
-          <!-- option 1: create new language ('new' parameter was passed) -->
-          <?php if (isset($_GET['new'])) {
-          ?>
-
-          <form class="" action="languages.php" method="post">
-            <div class="form-group">
-              <label for="language">Language:</label>
-              <input type="text" name="language" class="form-control" value="">
-            </div>
-            <div class="form-group">
-              <label for="dictionaryURI">Dictionary URI:</label>
-              <input type="url" name="dictionaryURI" class="form-control" value="">
-            </div>
-            <div class="form-group">
-              <label for="translatorURI">Translator URI:</label>
-              <input type="url" name="translatorURI" class="form-control" value="">
-            </div>
-            <div class="form-group">
-              <label for="rssfeedURI1">RSS feed URI 1:</label>
-              <input type="url" name="rssfeedURI1" class="form-control" value="">
-            </div>
-            <div class="form-group">
-              <label for="rssfeedURI2">RSS feed URI 2:</label>
-              <input type="url" name="rssfeedURI2" class="form-control" value="">
-            </div>
-            <div class="form-group">
-              <label for="rssfeedURI3">RSS feed URI 3:</label>
-              <input type="url" name="rssfeedURI3" class="form-control" value="">
-            </div>
-            <div class="form-group">
-              <label for="freq-list">Underline most used words (frequency lists):</label>
-              <select name="freq-list" id="freq-list">
-                <option value="1" <?php echo $_COOKIE[ 'showfreqlist']==true ? 'selected' : ''; ?>>Yes</option>
-                <option value="0" <?php echo $_COOKIE[ 'showfreqlist']==false ? 'selected' : ''; ?>>No</option>
-              </select>
-            </div>
-            <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='languages.php'">Cancel</button>
-            <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
-          </form>
-
-          <!-- option 2: change existing language settings ('chg' parameter was passed) -->
-          <?php
-
-      } elseif (isset($_GET['chg'])) {
-          require_once('db/dbinit.php'); // connect to database
-          $id = mysqli_real_escape_string($con, $_GET['chg']);
-          $result = mysqli_query($con, "SELECT * FROM languages WHERE LgID='$id'") or die(mysqli_error($con));
-          $row = mysqli_fetch_assoc($result);
-
-          $lgname = $row['LgName'];
-          $lgdictionaryURI = $row['LgDict1URI'];
-          $lgtranslatorURI = $row['LgTranslatorURI'];
-          $lgrssfeed1URI = $row['LgRSSFeed1URI'];
-          $lgrssfeed2URI = $row['LgRSSFeed2URI'];
-          $lgrssfeed3URI = $row['LgRSSFeed3URI'];
-          $freqlist = $row['LgShowFreqList'];
-           ?>
-
-            <form class="" action="languages.php" method="post">
-              <input type="hidden" name="id" value="<?php echo $id; ?>">
-              <div class="form-group">
-                <label for="language">Language:</label>
-                <input type="text" name="language" class="form-control" value="<?php echo $lgname; ?>">
-              </div>
-              <div class="form-group">
-                <label for="dictionaryURI">Dictionary URI:</label>
-                <input type="url" name="dictionaryURI" class="form-control" value="<?php echo $lgdictionaryURI; ?>">
-              </div>
-              <div class="form-group">
-                <label for="translatorURI">Translator URI:</label>
-                <input type="url" name="translatorURI" class="form-control" value="<?php echo $lgtranslatorURI; ?>">
-              </div>
-              <div class="form-group">
-                <label for="rssfeedURI1">RSS feed URI 1:</label>
-                <input type="url" name="rssfeedURI1" class="form-control" value="<?php echo $lgrssfeed1URI; ?>">
-              </div>
-              <div class="form-group">
-                <label for="rssfeedURI2">RSS feed URI 2:</label>
-                <input type="url" name="rssfeedURI2" class="form-control" value="<?php echo $lgrssfeed2URI; ?>">
-              </div>
-              <div class="form-group">
-                <label for="rssfeedURI3">RSS feed URI 3:</label>
-                <input type="url" name="rssfeedURI3" class="form-control" value="<?php echo $lgrssfeed3URI; ?>">
-              </div>
-              <div class="form-group">
-                <label for="freq-list">Underline most used words (frequency lists):</label>
-                <select name="freq-list" id="freq-list">
-                  <option value="1" <?php echo $freqlist==true ? 'selected' : ''; ?>>Yes</option>
-                  <option value="0" <?php echo $freqlist==false ? 'selected' : ''; ?>>No</option>
-                </select>
-              </div>
-              <button type="button" id="cancelbtn" name="cancel" class="btn btn-danger" onclick="window.location='languages.php'">Cancel</button>
-              <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
-            </form>
-
-            <!-- option 3: delete existing language ('del' parameter was passed) -->
-            <?php
-
-      } elseif (isset($_GET['del'])) {
-          require_once('db/dbinit.php'); // connect to database
-          $id = mysqli_real_escape_string($con, $_GET['del']);
-          $result = mysqli_query($con, "DELETE FROM languages WHERE LgID='$id'") or die(mysqli_error($con));
-          header('Location: languages.php'); ?>
-
-              <!-- option 4: show list of available languages or set active language -->
-              <?php
-
-      } else {
-          require_once('db/dbinit.php'); // connect to database
-          if (isset($_GET['act'])) { // set active language if $_GET['act']
-              $actlangid = $_GET['act'];
-              mysqli_query($con, "UPDATE preferences SET prefActLangId = '$actlangid'") or die(mysqli_error($con));
-              setcookie('actlangid', $actlangid);
-              
-              $result = mysqli_query($con, "SELECT LgShowFreqList FROM languages WHERE LgID='$actlangid'") or die(mysqli_error($con));
-              $row = mysqli_fetch_assoc($result);
-              setcookie('showfreqlist', $row['LgShowFreqList']);
-          } else { // else, check in db for active language
-              $actlangid = $_COOKIE['actlangid'];
-          }
-
-         ?>
-
-                <div class="row">
-                  <div class="col-xs-12">
-                    <p>
-                      <a href="languages.php?new=1">
-                        <span class='glyphicon glyphicon-plus-sign'></span> Add New Language...</a>
-                    </p>
-                    <table id="textstable" class="table table-bordered">
-                      <colgroup>
-                        <col width="*">
-                        <col width="10">
-                        <col width="10">
-                      </colgroup>
-                      <thead>
-                        <tr>
-                          <th class="col-lgname">Language</th>
-                          <th class="col-lgname">Activate</th>
-                          <th class="col-lgname">Delete</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                        <?php
-                // then, show list of available languages
-                $result = mysqli_query($con, "SELECT LgID, LgName FROM languages") or die(mysqli_error($con));
-
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $id = $row['LgID'];
-                    $lgname = $row['LgName'];
-
-                    echo "<tr><td><a href='languages.php?chg=$id'>$lgname</a></td>";
-
-                    if ($actlangid == $id) {
-                        echo "<td class='text-center'>
-                    <span class='glyphicon glyphicon-arrow-left' title='Active language'></span></td>
-                    <td></td></tr>";
-                    } else {
-                        echo "<td class='text-center'><a href='languages.php?act=$id'>
-                    <span if='actbtn' class='glyphicon glyphicon-ok-sign' title='Set as active language'></span></a></td>
-                    <td class='text-center'><a href='languages.php?del=$id'>
-                    <span id='delbtn' class='glyphicon glyphicon-remove-sign' title='Delete'></span></a></td></tr>";
-                    }
-                } ?>
-
-                      </tbody>
-                    </table>
-
-                  </div>
-                </div>
-
-                <?php
-
-      } ?>
+            include('listlanguages.php');
+        } else {                                // just show list of languages
+            include('listlanguages.php');
+        }
+        ?>
 
       </div>
     </div>
   </div>
 
   <?php require_once('footer.php') ?>
-
-  <script type="text/javascript" src="js/languages.js"></script>

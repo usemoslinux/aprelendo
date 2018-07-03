@@ -7,13 +7,13 @@
       <div class="col-lg-12">
       <ol class="breadcrumb">
           <li>
-            <a href="/">Home</a>
+            <a href="texts.php">Home</a>
           </li>
           <li>
             <a class="active">Archived texts</a>
           </li>
         </ol>
-        <div class="row flex">
+        <div class="row">
           <div class="col-lg-12">
             <form class="" action="" method="post">
               <div class="input-group searchbox">

@@ -1,3 +1,6 @@
+<?php
+  require_once('db/checklogin.php'); // check if logged in and set $user
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,7 +16,7 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <!-- Font awesome icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <!-- Custom styles for this template -->
     <link href="css/styles.css" rel="stylesheet">
 
@@ -23,7 +26,6 @@
   </head>
 
   <body>
-
     <!-- Fixed navbar -->
     <div class="navbar navbar-default" role="navigation">
       <div class="container">
@@ -34,7 +36,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.php">LangX</a>
+          <a class="navbar-brand" href="/">LangX</a>
         </div>
         <div class="navbar-collapse collapse navbar-right">
           <ul class="nav navbar-nav">
@@ -43,17 +45,22 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">SECTIONS<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="languages.php">Languages</a></li>
-                <li><a href="/">My texts</a></li>
+                <li><a href="texts.php">My texts</a></li>
                 <li><a href="addrss.php">RSS feeds</a></li>
                 <li><a href="archivedtexts.php">Archived texts</a></li>
                 <li><a href="words.php">Word list</a></li>
                 <li><a href="stats.php">Statistics</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fas fa-user-circle"></i> <?php echo strtoupper($user->name); ?><b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="userprofile.php">My profile</a></li>
                 <li><a href="preferences.php">Preferences</a></li>
+                <li><a href="logout.php">Logout</a></li>
               </ul>
             </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
-
-    <?php require_once('db/dbinit.php'); ?>

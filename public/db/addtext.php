@@ -1,15 +1,19 @@
 <?php 
   require_once('dbinit.php'); // connect to database
+  require_once('checklogin.php'); // check if user is logged in and set $user_id & $learning_lang_id
+
+  $user_id = $user->id;
+  $learning_lang_id = $user->learning_lang_id;
+    
   if ($_POST['mode'] == 'rss') { // add rss entry
     if (isset($_POST['title']) && isset($_POST['text'])) {
-      $actlangid = $_COOKIE['actlangid'];
       $title = mysqli_real_escape_string($con, $_POST['title']);
       $author = mysqli_real_escape_string($con, $_POST['author']);
       $link = mysqli_real_escape_string($con, $_POST['url']);
       $text = mysqli_real_escape_string($con, $_POST['text']);
   
-      $result = mysqli_query($con, "INSERT INTO texts (textLgID, textTitle, textAuthor, text, textSourceURI)
-                VALUES ('$actlangid', '$title', '$author', '$text', '$url')") or die(mysqli_error($con));
+      $result = mysqli_query($con, "INSERT INTO texts (textUserId, textLgID, textTitle, textAuthor, text, textSourceURI)
+                VALUES ('$user_id', '$learning_lang_id', '$title', '$author', '$text', '$url')") or die(mysqli_error($con));
   
       // if successful, return insert_id in json format
       $arr = array('insert_id' => mysqli_insert_id($con));
@@ -17,7 +21,6 @@
     }
   } else if ($_POST['mode'] == 'simple') { // add simple text
     if (isset($_POST['title']) && isset($_POST['text'])) {
-      $actlangid = $_COOKIE['actlangid'];
       $title = mysqli_real_escape_string($con, $_POST['title']);
       $author = mysqli_real_escape_string($con, $_POST['author']);
       $source_url = mysqli_real_escape_string($con, $_POST['url']);
@@ -25,13 +28,14 @@
     
       // Audio file validation
       if (isset($_FILES['audio']) && $_FILES['audio']['error'] !== UPLOAD_ERR_NO_FILE) {
-        $target_dir = APP_ROOT . '/public/uploads/';
-        $target_file_name = basename($_FILES['audio']['name']);
+        $target_dir = PRIVATE_PATH . 'uploads/'; //PUBLIC_PATH . 'uploads/'; //APP_ROOT . '/public/uploads/';
+        $file_name = basename($_FILES['audio']['name']);
+        $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
+
+        $target_file_name = uniqid() . '.' . $file_extension; // create unique filename for audio file
         $target_file_URI = $target_dir . $target_file_name;
-  
-        $file_extension = pathinfo($target_file_URI,PATHINFO_EXTENSION);
+        
         $file_size = $_FILES['audio']['size'] / 1024; // size in KBs
-  
         $upload_max_filesize = ini_get('upload_max_filesize'); // max file size
         $allowed_extensions = array('mp3', 'ogg');
   
@@ -39,7 +43,7 @@
         
         // Check if file exists
         if (file_exists($target_file_URI)) {
-          $errormsg .= "File already exists. Change the file name and try again.\n";
+          $errormsg .= "File already exists. Please try again later.\n";
         }
   
         // Check file size
@@ -78,22 +82,19 @@
   
       if (empty($errormsg)) {
         // save text in db
-        $audio_uri = empty($target_file_name) ? '' : '/uploads/' . $target_file_name;
+        //$target_file_name = empty($target_file_name) ? '' : $target_file_name;
         if (!empty($_POST['id'])) {
           $id = $_POST['id'];
-          $sql = "UPDATE texts SET textLgId='$actlangid', textTitle='$title',
-          textAuthor='$author', text='$text', textAudioURI='$audio_uri', 
+          $sql = "UPDATE texts SET textUserId='$user_id', textLgId='$learning_lang_id', textTitle='$title',
+          textAuthor='$author', text='$text', textAudioURI='$target_file_name', 
           textSourceURI='$source_url' WHERE textID='$id'";
         } else {
-          $sql = "INSERT INTO texts (textLgId, textTitle, textAuthor, text, textAudioURI, textSourceURI)
-          VALUES ('$actlangid', '$title', '$author', '$text', '$audio_uri', '$source_url') ";
+          $sql = "INSERT INTO texts (textUserId, textLgId, textTitle, textAuthor, text, textAudioURI, textSourceURI)
+          VALUES ('$user_id', '$learning_lang_id', '$title', '$author', '$text', '$target_file_name', '$source_url') ";
         }
         $result = mysqli_query($con, $sql) or die(mysqli_error($con));
-        //$error = mysqli_error($con);
         $arr = array('success_msg' => 'success');
         echo json_encode($arr);
-        //$error = mysqli_error($con);
-        //header('Location: /');
       } else {
         $arr = array('error_msg' => $errormsg);
         echo json_encode($arr);

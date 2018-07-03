@@ -30,7 +30,7 @@ $(document).ready(function () {
           }
         })
         .done(function () {
-          var url = window.location.pathname.indexOf('archivedtexts.php') >= 0 ? 'archivedtexts.php?page=' : 'index.php?page=';
+          var url = window.location.pathname.indexOf('archivedtexts.php') >= 0 ? 'archivedtexts.php?page=' : 'texts.php?page=';
           window.location.replace(url + getCurrentPage().page);
         })
         .fail(function () {
@@ -67,7 +67,7 @@ $(document).ready(function () {
         }
       })
       .done(function () {
-        var url = archivetxt ? 'index.php?page=' : 'archivedtexts.php?page=';
+        var url = archivetxt ? 'texts.php?page=' : 'archivedtexts.php?page=';
         window.location.replace(url + getCurrentPage().page);
       })
       .fail(function () {

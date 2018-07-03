@@ -50,11 +50,12 @@ function print_table_content($wordID, $word, $wordStatus) {
 
 require_once('db/dbinit.php'); // connect to database
 require_once('pagination.php'); // pagination class
-$actlangid = $_COOKIE['actlangid'];
 
 $page = 1;
 $limit = 10; // number of rows per page
 $adjacents = 2; // adjacent page numbers
+$user_id = $user->id;
+$learning_lang_id = $user->learning_lang_id;
 
 if (isset($_POST['submit']) || isset($_GET['search'])) { // if the page is loaded because user searched for something, show search results
     // pagination
@@ -67,7 +68,7 @@ if (isset($_POST['submit']) || isset($_GET['search'])) { // if the page is loade
     
     $search_text_escaped = mysqli_real_escape_string($con, $search_text);
     
-    $result = mysqli_query($con, "SELECT COUNT(word) FROM words WHERE word LIKE '%$search_text_escaped%' AND wordLgId='$actlangid'");
+    $result = mysqli_query($con, "SELECT COUNT(word) FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND word LIKE '%$search_text_escaped%'");
     $row = mysqli_fetch_array($result);
     $total_rows = $row[0]; // total number of rows to show
     
@@ -75,7 +76,7 @@ if (isset($_POST['submit']) || isset($_GET['search'])) { // if the page is loade
     $offset = $pagination->offset;
 
     // show search result
-    $result = mysqli_query($con, "SELECT wordID, word, wordStatus FROM words WHERE word LIKE '%$search_text_escaped%' AND wordLgId='$actlangid' ORDER BY wordID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
+    $result = mysqli_query($con, "SELECT wordID, word, wordStatus FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND word LIKE '%$search_text_escaped%' ORDER BY wordID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
 
     if (mysqli_num_rows($result) > 0) { // if there are any results, show them
         print_table_header();
@@ -92,7 +93,7 @@ if (isset($_POST['submit']) || isset($_GET['search'])) { // if the page is loade
 } else { // if page is loaded at startup, just show word list
     // pagination
     $page = isset($_GET['page']) && $_GET['page'] != '' ? $_GET['page'] : 1;
-    $result = mysqli_query($con, "SELECT COUNT(word) FROM words WHERE wordLgId='$actlangid'");
+    $result = mysqli_query($con, "SELECT COUNT(word) FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id'");
     $row = mysqli_fetch_array($result);
     $total_rows = $row[0]; // total number of rows to show
     
@@ -100,7 +101,7 @@ if (isset($_POST['submit']) || isset($_GET['search'])) { // if the page is loade
     $offset = $pagination->offset;
   
     // show word list
-    $result = mysqli_query($con, "SELECT wordID, word, wordStatus FROM words WHERE wordLgId='$actlangid' ORDER BY wordID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
+    $result = mysqli_query($con, "SELECT wordID, word, wordStatus FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' ORDER BY wordID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
 
     if (mysqli_num_rows($result) > 0) {
         print_table_header();

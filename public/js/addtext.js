@@ -25,7 +25,7 @@ $(document).ready(function() {
       })
       .done(function (data) {
         if(data.success_msg != null) {
-          window.location.replace('index.php');
+          window.location.replace('texts.php');
         } else {
           showError(data.error_msg);
         }
@@ -88,7 +88,7 @@ $(document).ready(function() {
       $('#btn_fetch_img').removeClass().addClass('fa fa-refresh fa-spin');
       $.ajax({
         type: "GET",
-        url: 'fetchurl.php',
+        url: 'db/fetchurl.php',
         data: { url: url },
         dataType: "html"
       })

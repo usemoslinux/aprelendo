@@ -5,7 +5,7 @@
     <div class="col-xs-12">
       <ol class="breadcrumb">
         <li>
-          <a href="/">Home</a>
+          <a href="texts.php">Home</a>
         </li>
         <li>
           <a class="active">Attributions</a>
@@ -24,8 +24,9 @@
           <p>Other attributions:</p>
           <ul>
             <li><a href="http://fontawesome.io/">Font Awesome</a>, by Dave Gandy</li>
+            <li>Flag icons designed by <a href="https://www.flaticon.com/authors/freepik">Freepik</a></li>
             <li>logo, by ...</li>
-            <li>...theme, by ...</li>
+            <li>Theme based on <a href="https://blacktie.co/demo/solid/index.html">Solid</a>, by <a href="https://blacktie.co/">Blacktie</a>.</li>
           </ul>
         </div>
       </div>

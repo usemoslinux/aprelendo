@@ -19,6 +19,10 @@
   padding: 0;
 }
 
+html {
+  background: #384452;
+}
+
 body {
   background: #ffffff;
   color: #384452;
@@ -54,11 +58,11 @@ a {
   margin: 0;
   padding: 0;
   text-decoration: none;
-  transition: background-color 0.4s linear, color 0.4s linear;
-  -moz-transition: background-color 0.4s linear, color 0.4s linear;
-  -ms-transition: background-color 0.4s linear, color 0.4s linear;
-  -o-transition: background-color 0.4s linear, color 0.4s linear;
-  -webkit-transition: background-color 0.4s linear, color 0.4s linear;
+  transition: background-color .4s linear, color .4s linear;
+  -moz-transition: background-color .4s linear, color .4s linear;
+  -ms-transition: background-color .4s linear, color .4s linear;
+  -o-transition: background-color .4s linear, color .4s linear;
+  -webkit-transition: background-color .4s linear, color .4s linear;
 }
 
 a:hover,
@@ -121,6 +125,10 @@ a:focus {
   font-weight: 700;
 }
 
+.dropdown, .dropup {
+	display: contents;
+}
+
 .navbar-default .navbar-nav>li>a {
   color: white;
   font-size: 12px;
@@ -141,6 +149,22 @@ a:focus {
 .navbar-default .navbar-nav>.active>a:hover {
   background-color: transparent;
   color: #00b3fe;
+}
+
+.navbar-default .navbar-nav > li > a:focus, 
+.navbar-default .navbar-nav > li > a:hover {
+	color: white;
+}
+
+@media screen and (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus, 
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+    color: #00b3fe;
+  }
+  
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: white;
+  }
 }
 
 .navbar-default {
@@ -179,7 +203,7 @@ a:focus {
   display: inline-block;
   font-size: 1.55rem;
   font-weight: normal !important;
-  letter-spacing: 0.85px;
+  letter-spacing: .85px;
   line-height: normal;
   margin: 0 0 1.25rem;
   padding: 1.025rem 2.25rem 1.0875rem 2.25rem;
@@ -223,11 +247,23 @@ a:focus {
 ################################################################# */
 
 .headerwrap {
-  background-color: #00b3fe;
-  min-height: 550px;
-  padding-bottom: 0;
-  padding-top: 100px;
+  background-position: center;
+  background-size: cover;
+  padding-bottom: 70px;
+  padding-top: 50px;
   text-align: center;
+}
+
+.nice-wallpaper-1 {
+  background-image: url('/images/backgrounds/headerwrap-1.jpg');
+}
+
+.nice-wallpaper-2 {
+  background-image: url('/images/backgrounds/headerwrap-2.jpg');
+}
+
+.inverted-colors {
+  filter: invert(100%);
 }
 
 .headerwrap h3,
@@ -248,8 +284,8 @@ h5 {
 /* Services Wrap */
 
 .service {
-  margin-top: 100px;
-  margin-bottom: 80px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .service i {
@@ -308,7 +344,7 @@ h5 {
 
 .tpl6 .bg {
   background-color: #00b3fe;
-  background-color: rgba(0, 179, 254, 0.9);
+  background-color: rgba(0, 179, 254, .9);
   height: 100%;
   text-align: center;
   width: 100%;
@@ -485,16 +521,20 @@ ul, ol {
   margin-right: 5px;
 }
 
+#dropdown-menu-sort {
+  margin-right: 15px;
+}
+
 /* SHOW TEXT PAGE */
 
 .source {
   border-bottom: 1px solid;
   color: #0095dd;
-  font-size: 0.9em;
+  font-size: .9em;
 }
 
 .author {
-  font-size: 0.9em;
+  font-size: .9em;
   font-style: italic;
   margin: 0 0 10px 0;
 }
@@ -574,7 +614,7 @@ a:focus {
 }
 
 #reader-estimated-time.meta-data {
-  font-size: 0.65em;
+  font-size: .65em;
 }
 
 audio,
@@ -601,9 +641,9 @@ video {
 /* DICTATION */
 
 .dict {
-  transition: border-color 0.5s;
-  -webkit-transition: border-color 0.5s;
-  -moz-transition: border-color 0.5s;
+  transition: border-color .5s;
+  -webkit-transition: border-color .5s;
+  -moz-transition: border-color .5s;
   border-width: 0;
   border-bottom: 2px solid gray;
 }
@@ -714,7 +754,7 @@ td>label {
 .add-form textarea {
   border-left: 3px solid;
   border-radius: 5px;
-  transition: border-color 0.5s ease-out;
+  transition: border-color .5s ease-out;
 }
 
 .add-form input:optional {
@@ -731,6 +771,10 @@ td>label {
   border-left-color: #d9534f;
 }
 
+.form-group {
+	padding-left: 0;
+}
+
 #upload_text {
   margin-top: 10px;
 }
@@ -745,7 +789,6 @@ td>label {
 
 @media screen and (max-width: 991px) {
   #form_addtext .form-group {
-    padding-left: 0;
     padding-right: 0;
   }
 }
@@ -769,6 +812,49 @@ i.status_learning {
 
 i.status_learned {
   color: MediumSeaGreen;
+}
+
+/* SELECT LANGUAGE */
+
+h1.main-header {
+  text-align: center;
+
+}
+
+span.flag-icon {
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+}
+
+img.flag-icon {
+  border-radius: 50%;
+  display: block;
+  height: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60px;
+}
+
+img.flag-icon:hover {
+  box-shadow: 0 0 0 3px white;
+}
+
+span.flag-icon > p {
+  font-weight: bold;
+}
+
+div.flag-col {
+  background: rgba(37,43,47,.25);
+  color: white;
+}
+
+/* CREATE ACCOUNT */
+
+.nice-wallpaper-3 {
+  background: #ffffff url('/images/nice-wallpaper-1.jpg') repeat-x left top;
+  margin: 0;
+  width: 100%;
 }
 
 /* OTHER PAGES */

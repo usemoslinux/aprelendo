@@ -5,7 +5,7 @@
     <div class="col-xs-12">
       <ol class="breadcrumb">
         <li>
-          <a href="/">Home</a>
+          <a href="texts.php">Home</a>
         </li>
         <li>
           <a class="active">Bookmarklet</a>

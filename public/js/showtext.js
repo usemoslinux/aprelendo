@@ -249,7 +249,7 @@ $(document).ready(function () {
         });
 
         $.ajax({
-          url: "underlinewords.php",
+          url: "db/underlinewords.php",
           type: "POST",
           data: {
             txt: $selword.text()
@@ -345,7 +345,7 @@ $(document).ready(function () {
         archivetext: true
       }
     }).done(function (data) {
-        window.location.replace("/");
+        window.location.replace("texts.php");
       })
       .fail(function (XMLHttpRequest, textStatus, errorThrown) {
         alert("Oops! There was an error updating the database.");

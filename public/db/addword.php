@@ -2,18 +2,18 @@
 
 if (isset($_POST['word'])) {
   require_once('dbinit.php'); // connect to database
+  require_once('checklogin.php'); // check if user is logged in and set $user_id & $learning_lang_id
 
+  $user_id = $user->id;
+  $learning_lang_id = $user->learning_lang_id;
+  
   $word = mysqli_real_escape_string($con, $_POST['word']);
   $status = 2;
-  //$isphrase = filter_var($_POST['isphrase'], FILTER_VALIDATE_BOOLEAN);
   $isphrase = $_POST['isphrase'];
-  $lgid = $_COOKIE['actlangid'];
 
-  $result = mysqli_query($con, "INSERT words (wordLgId, word, wordStatus, isPhrase, wordCreated)
-             VALUES ($lgid, '$word', $status, $isphrase, now()) ON DUPLICATE KEY UPDATE
-             wordLgId=$lgid, word='$word', wordStatus=$status, isPhrase=$isphrase, wordModified=now()") 
+  $result = mysqli_query($con, "INSERT INTO words (wordUserId, wordLgId, word, wordStatus, isPhrase)
+             VALUES ('$user_id', '$learning_lang_id', '$word', $status, $isphrase) ON DUPLICATE KEY UPDATE
+             wordUserId='$user_id', wordLgId=$learning_lang_id, word='$word', wordStatus=$status, isPhrase=$isphrase, wordModified=now()")
              or die(mysqli_error($con));
-  // $result = mysqli_query($con, "REPLACE INTO words (wordLgId, word, wordStatus, isPhrase, wordCreated)
-  //           VALUES ($lgid, '$word', $status, $isphrase, now())") or die(mysqli_error($con));
 }
 ?>

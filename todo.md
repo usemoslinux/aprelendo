@@ -1,5 +1,15 @@
 ## ALPHA 1
 
+- register.php: linea 27: el id del lenguaje por defecto lo puse a mano 14=ingles!
+
+- get user location for "my profile":
+  - https://nominatim.openstreetmap.org/reverse.php?format=json&lat=50.842750099999996&lon=4.3515499&zoom=18
+
+-replace audio player with jplayer?
+  - http://jplayer.org/
+  - https://plyr.io/
+  - http://www.mediaelementjs.com/
+
 - Video support
  - https://video.google.com/timedtext?lang=en&v=VIDEOID
 
