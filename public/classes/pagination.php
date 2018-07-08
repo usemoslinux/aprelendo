@@ -11,7 +11,7 @@ class Pagination
   private $start; // beginning of range
   private $end; // end of range
 
-  public function __construct($page, $limit, $total_rows, $adjacents) {
+  public function __construct($page = 1, $limit = 10, $total_rows, $adjacents = 2) {
     $this->limit = $limit;
     $this->adjacents = $adjacents;
     $this->total_rows = $total_rows;
@@ -42,27 +42,37 @@ class Pagination
     }
   }
 
-  public function print($url, $search_text) {
+  public function print($url, $search_text, $filter = NULL, $show_archived = NULL) {
     $search_text = urlencode($search_text);
+    if (!is_null($show_archived)) {
+        $show_archived = $show_archived ? 1 : 0;
+    }
+    
+    // build query string
+    $s = !empty($search_text) ? "s=$search_text&" : '';
+    $f = !is_null($filter) ? "f=$filter&" : '';
+    $sa = !is_null($show_archived) ? "sa=$show_archived" : '';
+    $query = "?$s$f$sa&";
+
     if($this->total_pages > 1) { 
       $result = "<nav aria-label='Page navigation'>
       <div class='text-center'>
       <ul class='pagination pagination-sm justify-content-center'>
         <!-- Link of the first page -->
         <li class='page-item " . ($this->page <= 1 ? ' disabled ' : ' ') . "'>
-          <a class='page-link' href='$url" . ($search_text != '' ? "?search=$search_text&" : '?') . "page=1'>
+          <a class='page-link' href='$url" . $query . "p=1'>
             <<</a>
         </li>
         <!-- Link of the previous page -->
         <li class='page-item " . ($this->page <= 1 ? ' disabled ' : ' ') . "'>
-          <a class='page-link' href='$url" . ($search_text != '' ? "?search=$search_text&" : '?') . "page=" . ($this->page>1 ? $this->page-1 : 1) . "'>
+          <a class='page-link' href='$url" . $query . "p=" . ($this->page>1 ? $this->page-1 : 1) . "'>
             <</a>
         </li>
         <!-- Links of the pages with page number -->";
 
         for($i=$this->start; $i<=$this->end; $i++) {
           $result .= "<li class='page-item " . ($i == $this->page ? ' active ' : ' ') . "'>
-          <a class='page-link' href='$url" . ($search_text != '' ? "?search=$search_text&" : '?') . "page=$i'>
+          <a class='page-link' href='$url" . $query . "p=$i'>
             $i
           </a>
         </li>";
@@ -70,11 +80,11 @@ class Pagination
         
         $result .= "<!-- Link of the next page -->
         <li class='page-item " . ($this->page >= $this->total_pages ? ' disabled ' : ' ') . "'>
-          <a class='page-link' href='$url" . ($search_text != '' ? "?search=$search_text&" : '?') . "page=" . ($this->page < $this->total_pages ? $this->page+1 : $this->total_pages) . "'>></a>
+          <a class='page-link' href='$url" . $query . "p=" . ($this->page < $this->total_pages ? $this->page+1 : $this->total_pages) . "'>></a>
         </li>
         <!-- Link of the last page -->
         <li class='page-item " . ($this->page >= $this->total_pages ? ' disabled ' : ' ') . "'>
-          <a class='page-link' href='$url" . ($search_text != '' ? "?search=$search_text&" : '?') . "page=$this->total_pages'>>>
+          <a class='page-link' href='$url" . $query . "p=$this->total_pages'>>>
           </a>
         </li>
       </ul>

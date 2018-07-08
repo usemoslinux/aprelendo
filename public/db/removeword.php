@@ -1,20 +1,27 @@
 <?php
-  require_once('dbinit.php'); // connect to database
+require_once('dbinit.php'); // connect to database
+require_once(PUBLIC_PATH . '/classes/words.php'); // loads Words class
+require_once(PUBLIC_PATH . '/db/checklogin.php'); // loads User class & checks if user is logged in
 
-  if (isset($_POST['word'])) { // deletes word by 'name'; used by showtext.php
-    $word = mysqli_real_escape_string($con, $_POST['word']);
+$user_id = $user->id;
+$learning_lang_id = $user->learning_lang_id;
 
-    $result = mysqli_query($con, "DELETE FROM words WHERE word='$word'") or die(mysqli_error($con));
-  } elseif (isset($_POST['wordIDs'])) { // deletes word by id; used by listwords.php
-    $ids = json_decode($_POST['wordIDs']);
-    foreach ($ids as $id) {
-      $id = mysqli_real_escape_string($con, $id);
+try{
+    if (isset($_POST['word'])) { // deletes word by 'name'; used by showtext.php
+        $words_table = new Words($con, $user_id, $learning_lang_id);
+        $result = $words_table->deleteByName($_POST['word']);
+    } elseif (isset($_POST['wordIDs'])) { // deletes word by id; used by listwords.php
+        $words_table = new Words($con, $user_id, $learning_lang_id);
+        $result = $words_table->deleteByIds($_POST['wordIDs']);
     }
-    $wordIDs = implode(',', $ids);
 
-    $deletesql = "DELETE FROM words WHERE wordID IN ($wordIDs)";
-
-    $result = mysqli_query($con, $deletesql) or die(mysqli_error($con));
-  }
+    if (!$result) {
+        throw new Exception ('There was an unexpected error trying to remove this word');
+    }
+} catch (Exception $e) {
+    $error = array('error_msg' => $e->getMessage());
+    header('Content-Type: application/json');
+    echo json_encode($error);
+}
 
 ?>

@@ -1,10 +1,10 @@
 <?php
 
 // show list of available languages
-$result = mysqli_query($con, "SELECT LgID, LgName FROM languages WHERE LgUserId='$user_id'");
+$result = $con->query("SELECT LgID, LgName FROM languages WHERE LgUserId='$user_id'");
 
 if ($result) {
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = $result->fetch_assoc()) {
         $lg_id = $row['LgID'];  
         $lg_iso_code = $row['LgName'];
         $lgname = ucfirst($user->getLanguageName($lg_iso_code));

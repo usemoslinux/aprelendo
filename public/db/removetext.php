@@ -1,42 +1,33 @@
 <?php
-  require_once('dbinit.php'); // connect to database
 
-if (isset($_POST['textIDs'])) {
-  require_once('dbinit.php'); // connect to database
+try {
+    if (isset($_POST['textIDs'])) {
+        require_once('dbinit.php'); // connect to database
+        require_once(PUBLIC_PATH . '/classes/texts.php'); // loads Texts class
+        require_once(PUBLIC_PATH . '/classes/archivedtexts.php'); // loads ArchivedTexts class
+        require_once(PUBLIC_PATH . '/db/checklogin.php'); // loads User class & checks if user is logged in
+      
+        $user_id = $user->id;
+        $learning_lang_id = $user->learning_lang_id;
+    
+        // decide wether we are deleting an archived text or not
+        $referer = basename($_SERVER['HTTP_REFERER']);
+        if (strpos($referer, 'sa=1') !== false) {
+            $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id);
+        } else {
+            $texts_table = new Texts($con, $user_id, $learning_lang_id);
+        }
+    
+        $result = $texts_table->deleteByIds($_POST['textIDs']);
 
-  $ids = json_decode($_POST['textIDs']);
-  foreach ($ids as $id) {
-    $id = mysqli_real_escape_string($con, $id);
-  }
-  $textIDs = implode(',', $ids);
-
-  // decide wether we are deleting an archived text or not
-  $referer = basename($_SERVER['HTTP_REFERER']);
-  if (strpos($referer, 'archivedtexts.php') !== false) {
-    $selectsql = "SELECT atextAudioURI FROM archivedtexts WHERE atextID IN ($textIDs)";
-    $deletesql = "DELETE FROM archivedtexts WHERE atextID IN ($textIDs)";
-    $audiouri = 'atextAudioURI';
-  } else {
-    $selectsql = "SELECT textAudioURI FROM texts WHERE textID IN ($textIDs)";
-    $deletesql = "DELETE FROM texts WHERE textID IN ($textIDs)";
-    $audiouri = 'textAudioURI';
-  }
-
-  // create an array of the audio files to delete
-  $result = mysqli_query($con, $selectsql) or die(mysqli_error($con));
-  $audiouris = mysqli_fetch_all($result);
-
-  // delete entries from db
-  $deletedfromdb = mysqli_query($con, $deletesql) or die(mysqli_error($con));
-
-  // delete audio files
-  if ($deletedfromdb) {
-    // check if there is an audio file associated to this text and store its URI
-    foreach ($audiouris as $key => $value) {
-        $filename = PRIVATE_PATH . 'uploads/' . $audiouris[$key][0];
-        if (is_file($filename) && file_exists($filename)) {
-          unlink($filename);
+        if (!$result) {
+            throw new Exception ('There was an unexpected error trying to remove this text');
         }
     }
-  }
+} catch (Exception $e) {
+    $error = array('error_msg' => $e->getMessage());
+    header('Content-Type: application/json');
+    echo json_encode($error);
 }
+
+?>

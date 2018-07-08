@@ -1,10 +1,12 @@
 <?php 
+// require_once('connect.php');
 
-class Language 
+class Language //extends DBEntity
 {
     public $con;
     public $id;
     public $user_id;
+    
     public $name;
     public $dictionary_uri;
     public $translator_uri;
@@ -22,20 +24,20 @@ class Language
      * @param integer $user_id
      */
     public function __construct ($con, $id, $user_id) {
-        $result = mysqli_query($con, "SELECT * FROM languages WHERE LgID='$id'");
+        $result = $con->query("SELECT * FROM languages WHERE LgID='$id'");
         if ($result) {
-            $row = mysqli_fetch_assoc($result);
+            $row = $result->fetch_assoc();
             
             $this->con = $con;
-            $this->id = mysqli_real_escape_string($con, $id);
-            $this->user_id = mysqli_real_escape_string($con, $user_id);
-            $this->name = mysqli_real_escape_string($con, $row['LgName']);
-            $this->dictionary_uri = mysqli_real_escape_string($con, $row['LgDict1URI']);
-            $this->translator_uri = mysqli_real_escape_string($con, $row['LgTranslatorURI']);
-            $this->rss_feed_1_uri = mysqli_real_escape_string($con, $row['LgRSSFeed1URI']);
-            $this->rss_feed_2_uri = mysqli_real_escape_string($con, $row['LgRSSFeed2URI']);
-            $this->rss_feed_3_uri = mysqli_real_escape_string($con, $row['LgRSSFeed3URI']);
-            $this->show_freq_list = mysqli_real_escape_string($con, $row['LgShowFreqList']);
+            $this->id = $con->real_escape_string($id);
+            $this->user_id = $con->real_escape_string($user_id);
+            $this->name = $con->real_escape_string($row['LgName']);
+            $this->dictionary_uri = $con->real_escape_string($row['LgDict1URI']);
+            $this->translator_uri = $con->real_escape_string($row['LgTranslatorURI']);
+            $this->rss_feed_1_uri = $con->real_escape_string($row['LgRSSFeed1URI']);
+            $this->rss_feed_2_uri = $con->real_escape_string($row['LgRSSFeed2URI']);
+            $this->rss_feed_3_uri = $con->real_escape_string($row['LgRSSFeed3URI']);
+            $this->show_freq_list = $con->real_escape_string($row['LgShowFreqList']);
         }
     }
 
@@ -56,11 +58,17 @@ class Language
         $rss_feed_3_uri = $array['rssfeedURI3'];
         $show_freq_list = $array['freq-list'];
         
-        $result = mysqli_query($this->con, "UPDATE languages SET LgName='$name', LgDict1URI='$dictionary_uri',
+        $result = $this->con->query("UPDATE languages SET LgName='$name', LgDict1URI='$dictionary_uri',
         LgTranslatorURI='$translator_uri', LgRSSFeed1URI='$rss_feed_1_uri', LgRSSFeed2URI='$rss_feed_2_uri', 
         LgRSSFeed3URI='$rss_feed_3_uri', LgShowFreqList=$show_freq_list WHERE LgUserId='$user_id' AND LgID='$id'");
 
         return $result;
+    }
+
+    public function getById($id) {
+        $result = $this->con->query("SELECT * FROM languages WHERE LgUserId='$this->user_id' AND LgID = '$id'");
+               
+        return $result ? $result->fetch_all() : false;
     }
 }
 

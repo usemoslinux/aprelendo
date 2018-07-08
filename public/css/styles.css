@@ -476,6 +476,10 @@ ul, ol {
   margin-top: 10px;
 }
 
+a[role="menuitem"] {
+    cursor: pointer;
+}
+
 .form-flex-row {
   display: inline-flex;
   flex-direction: row;
@@ -794,7 +798,7 @@ td>label {
 }
 
 @media screen and (min-width: 992px) {
-  #alert_error_msg {
+  #alert-error-msg {
     margin-left: 15px;
     margin-right: 15px;
   }

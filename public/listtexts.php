@@ -1,155 +1,85 @@
 <?php
-// functions to print table header, contents & footer
-function print_table_header() {
-    echo '<div class="row">
-    <div class="col-lg-12">
-    <table id="textstable" class="table table-bordered">
-    <colgroup><col width="33">
-    <col width="*">
-    </colgroup>
-    <thead>
-    <tr>
-    <th class="col-checkbox"><input id="chkbox-selall" type="checkbox"></th>
-    <th class="col-title">Title</th>
-    </tr>
-    </thead>
-    <tbody>';
-}
+require_once(PUBLIC_PATH . '/classes/texts.php'); // loads Texts class
+require_once(PUBLIC_PATH . '/classes/archivedtexts.php'); // loads ArchivedTexts class
+require_once(PUBLIC_PATH . '/classes/table.php'); // table class
+require_once(PUBLIC_PATH . '/classes/pagination.php'); // pagination class
+require_once(PUBLIC_PATH . '/db/checklogin.php'); // loads User class & checks if user is logged in
 
-function print_table_footer() {
-    echo '</tbody>
-    </table>
-
-    <div class="dropdown">
-    <button class="btn btn-default dropdown-toggle disabled" type="button" id="actions-menu" data-toggle="dropdown">Actions <span class="caret"></span></button>
-    <ul class="dropdown-menu" aria-labelledby="actions-menu" role="menu">';
-
-    global $showarchivedtexts;
-    if($showarchivedtexts) {
-        echo '<li id="mArchive" role="presentation"><a href="#" role="menuitem">Unarchive</a></li>';
-    } else {
-        echo '<li id="mArchive" role="presentation"><a href="#" role="menuitem">Archive</a></li>';
-    }
-
-    echo '<li id="mDelete" role="presentation"><a href="#" role="menuitem">Delete</a></li>
-    </ul>
-    </div>
-    <div class="dropdown">
-      <button class="btn btn-default dropdown-toggle pull-right" type="button" id="sort-menu" data-toggle="dropdown">Sort by <span class="caret"></span></button>
-      <ul id="dropdown-menu-sort" class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-menu" role="menu">
-        <li id="mSortByNew" role="presentation"><a href="#" role="menuitem">New</a></li>
-        <li id="mSortByHot" role="presentation"><a href="#" role="menuitem">Hot</a></li>
-      </ul>
-    </div>
-    </div>
-    </div>';
-}
-
-function print_table_content($textID, $textTitle) {
-    global $showarchivedtexts;
-    $link = $showarchivedtexts ? '' : '<a href ="showtext.php?id=' . $textID . '">';
-    echo '<tr><td class="col-checkbox"><label><input class="chkbox-selrow" type="checkbox" data-idText="' .
-        $textID . '"></label></td><td class="col-title">' . $link .
-        $textTitle . '</td></tr>';
-}
-
-// show page
-
-require_once('db/dbinit.php'); // connect to database
-require_once('pagination.php'); // pagination class
-
-$page = 1;
-$limit = 10; // number of rows per page
-$adjacents = 2; // adjacent page numbers
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;
 
-if (isset($_POST['submit']) || isset($_GET['search'])) { // if the page is loaded because user searched for something, show search results
-    // pagination
-    if (isset($_POST['searchtext'])) {
-      $search_text = $_POST['searchtext'];
-    } else {
-      $search_text = isset($_GET['search']) && $_GET['search'] != '' ? $_GET['search'] : '';
-      $page = isset($_GET['page']) && $_GET['page'] != '' ? $_GET['page'] : 1;
+// set variables used for pagination
+$page = 1;
+$limit = 10; // number of rows per page
+$adjacents = 2; // adjacent page numbers
+
+// set variables used for creating the table
+$headings = array('Title');
+$col_widths = array('33', '*');
+$url = $show_archived ? '' : 'showtext.php';
+$action_menu = $show_archived ? array('mArchive' => 'Unarchive', 'mDelete' => 'Delete') : array('mArchive' => 'Archive', 'mDelete' => 'Delete');
+$sort_menu = array( 'mSortByNew' => 'New', 'mSortByHot' => 'Hot');
+
+if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searched for something, show search results
+    // initialize pagination variables
+    if (isset($_GET['p'])) {
+        $page = !empty($_GET['p']) ? $_GET['p'] : 1;
     }
     
-    $search_text_escaped = mysqli_real_escape_string($con, $search_text);
+    $search_text_escaped = $con->real_escape_string($search_text);
     
-    if ($showarchivedtexts) {
-      $result = mysqli_query($con, "SELECT COUNT(atextID) FROM archivedtexts WHERE atextUserId='$user_id' AND atextLgId='$learning_lang_id' AND atextTitle LIKE '%$search_text_escaped%'");
+    // calculate page count for pagination
+    if ($show_archived) {
+        $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id);
     } else {
-      $result = mysqli_query($con, "SELECT COUNT(textID) FROM texts WHERE textUserId='$user_id' AND textLgId='$learning_lang_id' AND textTitle LIKE '%$search_text_escaped%'");
+        $texts_table = new Texts($con, $user_id, $learning_lang_id);
     }
     
-    $row = mysqli_fetch_array($result);
-    $total_rows = $row[0]; // total number of rows to show
-    
+    $total_rows = $texts_table->countRowsFromSearch($filter_sql, $search_text_escaped);
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->offset;
+    
+    // get search result
+    $rows = $texts_table->getSearch($filter_sql, $search_text_escaped, $offset, $limit);
+    
+    // print table
+    if (sizeof($rows) > 0) { // if there are any results, show them
+        $table = New TextTable($headings, $col_widths, $rows, $url, $action_menu, $sort_menu);
+        echo $table->print();
 
-    // show search result
-    // decide whether to show active or archived texts
-    if ($showarchivedtexts) {
-        $result = mysqli_query($con, "SELECT atextID, atextTitle FROM archivedtexts WHERE atextUserId='$user_id' AND atextLgId='$learning_lang_id' AND atextTitle LIKE '%$search_text_escaped%' ORDER BY atextID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
-    } else {
-        $result = mysqli_query($con, "SELECT textID, textTitle FROM texts WHERE textUserId='$user_id' AND textLgId='$learning_lang_id' AND textTitle LIKE '%$search_text_escaped%' ORDER BY textID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
-    }
-
-    if (mysqli_num_rows($result) > 0) { // if there are any results, show them
-        print_table_header();
-
-        while ($row = mysqli_fetch_array($result)) {
-            if ($showarchivedtexts) {
-                print_table_content($row['atextID'], $row['atextTitle'], '');
-            } else {
-                print_table_content($row['textID'], $row['textTitle'], '');
-            }
-        }
-        print_table_footer();
-        $page_name = $showarchivedtexts ? 'archivedtexts.php' : 'texts.php';
-        echo $pagination->print($page_name, $search_text); // print pagination
+        echo $pagination->print('texts.php', $search_text, $filter, $show_archived); // print pagination
     } else { // if there are no texts to show, print a message
         echo '<p>No texts found with that criteria. Try again.</p>';
     }
 } else { // if page is loaded at startup, show start page
-    // pagination
-    $page = isset($_GET['page']) && $_GET['page'] != '' ? $_GET['page'] : 1;
+    // initialize pagination variables
+    $page = isset($_GET['p']) && $_GET['p'] != '' ? $_GET['p'] : 1;
     
-    if ($showarchivedtexts) {
-        $result = mysqli_query($con, "SELECT COUNT(atextID) FROM archivedtexts WHERE atextUserId='$user_id' AND atextLgId='$learning_lang_id'") or die(mysqli_error($con));
+    if ($show_archived) {
+        $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id);
+        // $result = $con->query("SELECT COUNT(atextID) FROM archivedtexts WHERE atextUserId='$user_id' AND atextLgId='$learning_lang_id'") or die(mysqli_error($con));
     } else {
-        $result = mysqli_query($con, "SELECT COUNT(textID) FROM texts WHERE textUserId='$user_id' AND textLgId='$learning_lang_id'") or die(mysqli_error($con));
+        $texts_table = new Texts($con, $user_id, $learning_lang_id);
+        // $result = $con->query("SELECT COUNT(textID) FROM texts WHERE textUserId='$user_id' AND textLgId='$learning_lang_id'") or die(mysqli_error($con));
     }
-    $row = mysqli_fetch_array($result);
-    $total_rows = $row[0]; // total number of rows to show
-    
+
+    $total_rows = $texts_table->countAllRows();
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->offset;
+    
+    // get text list
+    $rows = $texts_table->getAll($offset, $limit);
+    
+    // print table
+    if (sizeof($rows) > 0) {
+        $table = New TextTable($headings, $col_widths, $rows, $url, $action_menu, $sort_menu);
+        echo $table->print();
 
-    // show word list
-    // decide whether to show active or archived texts
-    if ($showarchivedtexts) {
-        $result = mysqli_query($con, "SELECT atextID, atextTitle FROM archivedtexts WHERE atextUserId='$user_id' AND atextLgId='$learning_lang_id' ORDER BY atextID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
-    } else {
-        $result = mysqli_query($con, "SELECT textID, textTitle FROM texts WHERE textUserId='$user_id' AND textLgId='$learning_lang_id' ORDER BY textID DESC LIMIT $offset, $limit") or die(mysqli_error($con));
-    }
-
-    if (mysqli_num_rows($result) > 0) {
-        print_table_header();
-        while ($row = mysqli_fetch_array($result)) {
-            if ($showarchivedtexts) {
-                print_table_content($row['atextID'], $row['atextTitle'], '');
-            } else {
-                print_table_content($row['textID'], $row['textTitle'], '');
-            }
-        }
-        print_table_footer();
-        $page_name = $showarchivedtexts ? 'archivedtexts.php' : 'texts.php';
-        echo $pagination->print($page_name, ''); // print pagination
+        echo $pagination->print('texts.php', '', $filter, $show_archived); // print pagination
     } else { // if there are no texts to show, print a message
         echo '<p>There are no texts in your private library.</p>';
     }
-
+    
 }
 ?>
 

@@ -1,5 +1,5 @@
 <?php
-require_once 'header.php'
+require_once('header.php');
 ?>
 
   <div class="container mtb">
@@ -9,8 +9,8 @@ require_once 'header.php'
         <?php
           if (isset($_GET['id'])) { // modify text
               $id = $_GET['id'];
-              $result = mysqli_query($con, "SELECT textTitle, textAuthor, text, textSourceURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
-              $row = mysqli_fetch_assoc($result);
+              $result = $con->query("SELECT textTitle, textAuthor, text, textSourceURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
+              $row = $result->fetch_assoc();
               $art_title = $row['textTitle'];
               $art_author = $row['textAuthor'];
               $art_url = $row['textSourceURI'];
@@ -25,11 +25,21 @@ require_once 'header.php'
               $external_call = true;
           }
         ?>
-          <div id="alert_error_msg" class="hidden"></div>
+          <div id="alert-error-msg" class="hidden"></div>
           <form id="form_addtext" action="" class="add-form" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
             <input type="hidden" name="mode" value="simple" />
             <div class="form-row">
+            <div class="form-group col-xs-12">
+              <label for="type">Type:</label>
+              <select name="type" id="type" class="form-control">
+                  <option value="0">Article</option>
+                  <option value="1">Conversation</option>
+                  <option value="2">Letter</option>
+                  <option value="3">Song</option>
+                  <option value="4">Other</option>
+              </select>
+            </div>
               <div class="form-group col-md-6">
                 <label for="title">Title:</label>
                 <input type="text" id="title" name="title" class="form-control" maxlength="200" placeholder="Text title (required)" autofocus

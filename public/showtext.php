@@ -19,8 +19,8 @@
 <body id="readerpage"
 <?php
     require_once('db/dbinit.php');  // connect to database
-    require_once('db/checklogin.php'); // check if user is logged in and set $user object
-    require_once('classes/reader.php'); // load Reader class
+    require_once(PUBLIC_PATH . '/db/checklogin.php'); // check if user is logged in and set $user object
+    require_once(PUBLIC_PATH . '/classes/reader.php'); // load Reader class
 
     $reader = new Reader($con, $_GET['id'], $user->id, $user->learning_lang_id);
 

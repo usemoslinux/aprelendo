@@ -1,6 +1,6 @@
 <?php
   require_once('db/dbinit.php'); // connect to database
-  require_once('classes/users.php');
+  require_once(PUBLIC_PATH . '/classes/users.php');
 
   $user = new User($con);
   
@@ -20,7 +20,7 @@
           <h1 class="text-center">Sign in</h1>
         </header>
         <br/>
-        <div id="alert_error_msg" class="hidden"></div>
+        <div id="error-msg" class="hidden"></div>
         <form action="" id="form_login">
           <div class="form-group">
             <label for="username">Username:</label>

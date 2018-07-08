@@ -26,9 +26,8 @@ $(document).ready(function () {
 
   // ajax call to get dictionary & translator URIs
   $.ajax({
-    url: "db/geturis.php",
+    url: "db/getdicuris.php",
     type: "GET",
-    //async: false,
     dataType: "json"
   }).done(function (data) {
     dictionaryURI = data.LgDict1URI;

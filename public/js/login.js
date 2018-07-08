@@ -27,7 +27,7 @@ $(document).ready(function () {
    * @param {string} error_msg 
    */
   function showError(error_msg) {
-    $('#alert_error_msg').text(error_msg)
+    $('#error-msg').text(error_msg)
       .removeClass('hidden')
       .addClass('alert alert-danger');
     $(window).scrollTop(0);

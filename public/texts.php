@@ -1,66 +1,109 @@
-<?php require_once('header.php'); ?>
+<?php 
 
-  <!-- *****************************************************************************************************************
-TABS
-***************************************************************************************************************** -->
+require_once('header.php'); 
 
-  <div class="container mtb">
+$search_text = '';
+$filter = -1;
+$filter_sql = '';
+$show_archived = false;
+
+if (!empty($_GET)) {
+    $search_text = isset($_GET['s']) ? $_GET['s'] : '';
+    $filter = isset($_GET['f']) ? $_GET['f'] : -1;  
+    $show_archived = isset($_GET['sa']) ? $_GET['sa'] == '1' : '0';
+}
+
+// set filter sql
+if (!empty($filter)) {
+    if ($filter == 10) {
+        $show_archived = true;
+    } elseif ($filter > -1) {
+        $filter_sql = $show_archived ? "AND atextType=$filter" : "AND textType=$filter";
+        $filter_sql = $con->real_escape_string($filter_sql);
+    }
+}
+
+?>
+
+<div class="container mtb">
     <div class="row">
-      <div class="col-xs-12">
-        <ol class="breadcrumb">
-          <li>
-            <a href="texts.php">Home</a>
-          </li>
-          <li>
-            <a class="active">My texts</a>
-          </li>
-        </ol>
-        <div class="row flex">
-          <div class="col-xs-12">
-            <form class="form-flex-row" action="" method="post">
-              <div class="input-group searchbox">
-              <div class="input-group-btn">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                  <li class="active"><a href="#">All</a></li>
-                  <li><a href="#">Articles</a></li>
-                  <li><a href="#">Conversations</a></li>
-                  <li><a href="#">Letters</a></li>
-                  <li><a href="#">Songs</a></li>
-                  <li><a href="#">Others</a></li>
-                  <li role="separator" class="divider"></li>
-                  <li><a href="#">Archived</a></li>
-                </ul>
-              </div><!-- /btn-group -->
-                <input type="text" id="search" name="searchtext" class="form-control" placeholder="Search..." value="<?php echo isset($_POST['submit']) ? $_POST['searchtext'] : '' ?>">
-                <div class="input-group-btn">
-                  <button type="submit" name="submit" class="btn btn-default">
-                    <i class="glyphicon glyphicon-search"></i>
-                  </button>
+        <div class="col-xs-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="texts.php">Home</a>
+                </li>
+                <li>
+                    <a class="active">My texts</a>
+                </li>
+            </ol>
+            <div class="row flex">
+                <div class="col-xs-12">
+                    <form class="form-flex-row" action="" method="get">
+                        <input id="f" name="f" value="<?php echo $filter; ?>" type="hidden">
+                        <input id="sa" name="sa" value="<?php echo $show_archived ? '1' : '0'; ?>" type="hidden">
+                        <div class="input-group searchbox">
+                            <div class="input-group-btn">
+                                <button type="button" id="btn-filter" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">Filter
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li onclick="$('#f').val(-1);" <?php echo $filter==-1 ? ' class="active" ' : ''; ?> >
+                                        <a role="menuitem">All</a>
+                                    </li>
+                                    <li onclick="$('#f').val(0);" <?php echo $filter==0 ? ' class="active" ' : ''; ?> >
+                                        <a role="menuitem">Articles</a>
+                                    </li>
+                                    <li onclick="$('#f').val(1);" <?php echo $filter==1 ? ' class="active" ' : ''; ?> >
+                                        <a role="menuitem">Conversations</a>
+                                    </li>
+                                    <li onclick="$('#f').val(2);" <?php echo $filter==2 ? ' class="active" ' : ''; ?> >
+                                        <a role="menuitem">Letters</a>
+                                    </li>
+                                    <li onclick="$('#f').val(3);" <?php echo $filter==3 ? ' class="active" ' : ''; ?> >
+                                        <a role="menuitem">Songs</a>
+                                    </li>
+                                    <li onclick="$('#f').val(4);" <?php echo $filter==4 ? ' class="active" ' : ''; ?> >
+                                        <a role="menuitem">Others</a>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li id="show_archived" onclick="var show_archived = $('#sa'); show_archived.val(1 - show_archived.val());" <?php echo $show_archived==true
+                                        ? 'class="active"' : ''; ?> >
+                                        <a href="#">Archived</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- /btn-group -->
+                            <input type="text" id="s" name="s" class="form-control" placeholder="Search..." value="<?php echo isset($search_text) ? $search_text : '' ?>">
+                            <div class="input-group-btn">
+                                <button id="btn-search" type="submit" name="submit" class="btn btn-default">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Split button -->
+                        <div class="btn-group btn-add-text searchbox">
+                            <a class="btn btn-success" href="addtext.php">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a href="addtext.php">Plain text</a>
+                                </li>
+                                <li>
+                                    <a href="addrss.php">RSS text</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
                 </div>
-              </div>
-              <!-- Split button -->
-              <div class="btn-group btn-add-text searchbox">
-                <a class="btn btn-success" href="addtext.php"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>
-                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="caret"></span>
-                  <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <li>
-                    <a href="addtext.php">Plain text</a>
-                  </li>
-                  <li>
-                    <a href="addrss.php">RSS text</a>
-                  </li>
-                </ul>
-              </div>
-            </form>
-          </div>
+            </div>
+            <?php require_once('listtexts.php') ?>
         </div>
-        <?php $showarchivedtexts = false; require_once('listtexts.php') ?>
-      </div>
     </div>
-  </div>
+</div>
 
-  <?php require_once('footer.php') ?>
+<?php require_once('footer.php') ?>

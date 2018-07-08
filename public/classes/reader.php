@@ -19,11 +19,11 @@ class Text
      */
     public function __construct($con, $id) {
         $this->con = $con;
-        $id = mysqli_escape_string($con, $id);
-        $result = mysqli_query($con, "SELECT text, textTitle, textAuthor, textSourceURI, textAudioURI FROM texts WHERE textID='$id'");
+        $id = $con->escape_string($id);
+        $result = $con->query("SELECT text, textTitle, textAuthor, textSourceURI, textAudioURI FROM texts WHERE textID='$id'");
         
         if ($result) {
-            $row = mysqli_fetch_assoc($result);
+            $row = $result->fetch_assoc();
 
             $this->id = $id;
             $this->title = $row['textTitle'];
@@ -107,12 +107,12 @@ class Reader extends Text
      */
     private function createMiniReader($con, $user_id, $learning_lang_id) {
         $this->con = $con;
-        $this->user_id = $user_id = mysqli_escape_string($con, $user_id);
-        $this->learning_lang_id =  mysqli_escape_string($con, $learning_lang_id);
+        $this->user_id = $user_id = $con->escape_string($user_id);
+        $this->learning_lang_id =  $con->escape_string($learning_lang_id);
         
 
-        if ($result = mysqli_query($con, "SELECT * FROM preferences WHERE prefUserId = '$user_id'")) {
-            $row = mysqli_fetch_assoc($result);
+        if ($result = $con->query("SELECT * FROM preferences WHERE prefUserId = '$user_id'")) {
+            $row = $result->fetch_assoc();
             
             $this->font_family = isset($row['prefFontFamily']) ? $row['prefFontFamily'] : 'Helvetica';
             $this->font_size = isset($row['prefFontSize']) ? $row['prefFontSize'] : '12px';
@@ -121,8 +121,8 @@ class Reader extends Text
             $this->display_mode = isset($row['prefMode']) ? $row['prefMode'] : 'light';
             $this->assisted_learning = isset($row['prefAssistedLearning']) ? $row['prefAssistedLearning'] : true;  
             
-            if ($result = mysqli_query($con, "SELECT LgShowFreqList FROM languages WHERE LgId='$learning_lang_id'")) {
-                $row = mysqli_fetch_assoc($result);
+            if ($result = $con->query("SELECT LgShowFreqList FROM languages WHERE LgId='$learning_lang_id'")) {
+                $row = $result->fetch_assoc();
                 $this->show_freq_list = $row['LgShowFreqList'];
             }
         }
@@ -172,20 +172,20 @@ class Reader extends Text
         $learning_lang_id = $this->learning_lang_id;
         
         // 1. colorize phrases & words that are being reviewed
-        $result = mysqli_query($this->con, "SELECT word FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND wordStatus>0");
+        $result = $this->con->query("SELECT word FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND wordStatus>0");
         
         if ($result) {
-            while ($row = mysqli_fetch_assoc($result)) {
+            while ($row = $result->fetch_assoc()) {
                 $word = $row['word'];
                 $text = preg_replace("/\b".$word."\b/ui",
                 "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
             }
             
             // 2. colorize phrases & words that are were already learned
-            $result = mysqli_query($this->con, "SELECT word FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND wordStatus=0");
+            $result = $this->con->query("SELECT word FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND wordStatus=0");
             
             if ($result) {
-                while ($row = mysqli_fetch_assoc($result)) {
+                while ($row = $result->fetch_assoc()) {
                     $phrase = $row['word'];
                     $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                     "<span class='word learned' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
@@ -193,10 +193,10 @@ class Reader extends Text
                 
                 // 3. colorize frequency list words
                 if ($this->show_freq_list) {
-                    $result = mysqli_query($this->con, 'SELECT freqWord FROM frequencylist_fr LIMIT 5000');
+                    $result = $this->con->query('SELECT freqWord FROM frequencylist_fr LIMIT 5000');
                     
                     if ($result) {
-                        while ($row = mysqli_fetch_assoc($result)) {
+                        while ($row = $result->fetch_assoc()) {
                             $word = $row['freqWord'];
                             $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
                             "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");

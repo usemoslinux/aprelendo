@@ -1,6 +1,6 @@
 <?php
     require_once('header.php');
-    require_once('classes/reader.php'); // load Reader class
+    require_once(PUBLIC_PATH . '/classes/reader.php'); // load Reader class
 
     $reader = new Reader($con, $user->id, $user->learning_lang_id);
 ?>

@@ -1,19 +1,29 @@
 <?php
 
 if (isset($_POST['word'])) {
-  require_once('dbinit.php'); // connect to database
-  require_once('checklogin.php'); // check if user is logged in and set $user_id & $learning_lang_id
+    require_once('dbinit.php'); // connect to database
+    require_once(PUBLIC_PATH . '/classes/words.php'); // loads Words class
+    require_once(PUBLIC_PATH . '/db/checklogin.php'); // loads User class & checks if user is logged in
+    
+    $user_id = $user->id;
+    $learning_lang_id = $user->learning_lang_id;
+    
+    $word = $con->real_escape_string($_POST['word']);
+    $status = 2;
+    $isphrase = $con->real_escape_string($_POST['isphrase']);
+    
+    try {
+        $words_table = new Words($con, $user_id, $learning_lang_id);
+        $result = $words_table->add($word, $status, $isphrase);
 
-  $user_id = $user->id;
-  $learning_lang_id = $user->learning_lang_id;
-  
-  $word = mysqli_real_escape_string($con, $_POST['word']);
-  $status = 2;
-  $isphrase = $_POST['isphrase'];
-
-  $result = mysqli_query($con, "INSERT INTO words (wordUserId, wordLgId, word, wordStatus, isPhrase)
-             VALUES ('$user_id', '$learning_lang_id', '$word', $status, $isphrase) ON DUPLICATE KEY UPDATE
-             wordUserId='$user_id', wordLgId=$learning_lang_id, word='$word', wordStatus=$status, isPhrase=$isphrase, wordModified=now()")
-             or die(mysqli_error($con));
+        if (!$result) {
+            throw new Exception ('Oops! There was an unexpected error trying to add this word.');
+        }
+    } catch (Exception $e) {
+        $error = array('error_msg' => $e->getMessage());
+        header('Content-Type: application/json');
+        echo json_encode($error);
+    }
+    
 }
 ?>

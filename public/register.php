@@ -23,7 +23,7 @@
             <?php echo $to_lang; ?>.</div>
         </header>
         <br/>
-        <div id="alert_error_msg" class="hidden"></div>
+        <div id="error-msg" class="hidden"></div>
         <form action="" id="form_register">
           <div>
             <div class="form-group col-xs-6">

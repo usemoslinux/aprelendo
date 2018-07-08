@@ -29,7 +29,7 @@ $(document).ready(function () {
           }
         })
         .done(function () {
-          window.location.replace('words.php?page=' + getCurrentPage().page);
+          window.location.replace('words.php?p=' + getCurrentPage().page);
         })
         .fail(function (request, status, error) {
           alert("There was an error when trying to delete the selected words. Refresh the page and try again.");

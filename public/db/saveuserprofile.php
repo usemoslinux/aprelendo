@@ -1,6 +1,6 @@
 <?php
 require_once('dbinit.php'); // connect to database
-require_once('checklogin.php'); // check if user is logged in and set $user_id & $learning_lang_id
+require_once(PUBLIC_PATH . '/db/checklogin.php'); // loads User class & checks if user is logged in
 
 $user_id = $user->id;
 
