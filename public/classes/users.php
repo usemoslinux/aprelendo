@@ -261,7 +261,7 @@ class User
     }
     
     /**
-     * Converts 639-1 iso codes to full language names (ie. 'en' => 'English')
+     * Gives index of 639-1 iso codes in $this->lg_iso_codes array
      *
      * @param string $lang_name
      * @return string

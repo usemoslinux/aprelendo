@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html id="html-video" lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -24,11 +24,17 @@
 require_once('db/dbinit.php');  // connect to database
 require_once(PUBLIC_PATH . '/db/checklogin.php'); // check if user is logged in and set $user object
 require_once(PUBLIC_PATH . '/classes/reader.php'); // load Reader class
+require_once(PUBLIC_PATH . '/classes/videos.php'); // load Reader class
 
 try {
-    if (isset($_GET['id']) && !empty($_GET['id'])) {
+    $id_is_set = isset($_GET['id']) && !empty($_GET['id']);
+    if ($id_is_set) {
         $reader = new Reader($con, $_GET['id'], $user->id, $user->learning_lang_id);
         
+        $video = new Videos($con, $user->id, $user->learning_lang_id);
+        $video_row = $video->getById($_GET['id']);
+        $yt_id = $video->extractYTId($video_row['textSourceURI']);
+
         switch ($reader->display_mode) {
             case 'light':
             echo "class='lightmode'";
@@ -55,13 +61,14 @@ try {
 }
 ?>
 >
+
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12 col-md-6 col-md-offset-3">
                 <?php
-                    echo $reader->showText();
+                    if (isset($reader)) {
+                        echo $reader->showVideo($yt_id);
+                    }
                 ?>
-                </div>
             </div>
         </div>
 
@@ -84,8 +91,9 @@ try {
             </div>
         </div>
 
-        <script type="text/javascript" src="js/showtext.js"></script>
+        <script type="text/javascript" src="js/showvideo.js"></script>
 
 </body>
 
+<script src="js/ytvideo.js"></script>
 </html>

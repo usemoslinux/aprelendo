@@ -26,7 +26,7 @@ require_once('header.php');
           }
         ?>
           <div id="alert-error-msg" class="hidden"></div>
-          <form id="form_addtext" action="" class="add-form" method="post" enctype="multipart/form-data">
+          <form id="form-addtext" action="" class="add-form" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
             <input type="hidden" name="mode" value="simple" />
             <div class="form-row">
@@ -57,7 +57,7 @@ require_once('header.php');
                   <label for="url">Source URL:</label>
                   <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (optional)" value="<?php if (isset($art_url)) {echo $art_url;}?>">
                   <div class="input-group-btn">
-                    <button id="btn_fetch" class="btn btn-default" type="button"><i id="btn_fetch_img" class="fa fa-arrow-down"></i> Fetch</button>
+                    <button id="btn-fetch" class="btn btn-default" type="button"><i id="btn-fetch_img" class="fas fa-arrow-down"></i> Fetch</button>
                   </div>
                 </div>
               </div>
@@ -68,7 +68,7 @@ require_once('header.php');
             </div>
             <div class="form-group col-xs-12">
               <label for="text">Text:</label>
-              <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="65535" placeholder="Text goes here (required), max. length=65,535 chars"
+              <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="20000" placeholder="Text goes here (required), max. length = 20,000 chars"
                 required><?php if (isset($art_content)) {echo $art_content;}?></textarea>
               <input id="upload_text" type="file" name="upload_text" accept=".txt, .epub">
             </div>

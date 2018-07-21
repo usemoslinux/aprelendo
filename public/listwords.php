@@ -22,6 +22,7 @@ $sort_menu = array( 'mSortNewFirst' => 'New first',
                     'mSortOldFirst' => 'Old first', 
                     'mSortLearnedFirst' => 'Learned first', 
                     'mSortForgottenFirst' => 'Forgotten first');
+$sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
 
 if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searched for something, show search results
     // initialize pagination variables
@@ -38,18 +39,18 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     $offset = $pagination->offset;
 
     // get search result
-    $rows = $words_table->getSearch($search_text_escaped, $offset, $limit);
+    $rows = $words_table->getSearch($search_text_escaped, $offset, $limit, $sort_by);
 
     // print table
     if (sizeof($rows) > 0) { // if there are any results, show them
         $table = New WordTable($headings, $col_widths, $rows, $url, $action_menu, $sort_menu);
-        echo $table->print();
+        echo $table->print($sort_by);
     } else { // if there are not, show a message
         echo '<p>No words found with that criteria. Try again.</p>';
     }
 
     // print pagination
-    echo $pagination->print('words.php', $search_text);
+    echo $pagination->print('words.php', $search_text, $sort_by);
 } else { // if page is loaded at startup, just show word list
     // initialize pagination variables
     $page = isset($_GET['page']) && $_GET['page'] != '' ? $_GET['page'] : 1;
@@ -59,18 +60,18 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     $offset = $pagination->offset;
   
     // get word list
-    $rows = $words_table->getAll($offset, $limit);
+    $rows = $words_table->getAll($offset, $limit, $sort_by);
 
     // print table
     if (sizeof($rows) > 0) {
         $table = New WordTable($headings, $col_widths, $rows, $url, $action_menu, $sort_menu);
-        echo $table->print();
+        echo $table->print($sort_by);
     } else {
         echo '<p>There are no words in your private library.</p>';
     }
 
     // print pagination
-    echo $pagination->print('words.php', '');
+    echo $pagination->print('words.php', '', $sort_by);
 }
 
 

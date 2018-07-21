@@ -80,4 +80,12 @@ $(document).ready(function () {
     toggleActionMenu();
   });
 
+  /**
+     * Selects sorting
+     */
+    $('#dropdown-menu-sort').on('click', function(e) {
+        var params = 's=' + $('#s').val() + '&o=' + $('#o').val();
+        window.location.replace('words.php?' + params);        
+    });
+
 });

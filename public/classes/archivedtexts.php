@@ -4,8 +4,8 @@ require_once('connect.php');
 
 class ArchivedTexts extends Texts
 {
-    public function __construct($con, $user_id, $learning_lang_id) {
-        parent::__construct($con, $user_id, $learning_lang_id);
+    public function __construct($con, $user_id, $learning_lang_id, $order_by) {
+        parent::__construct($con, $user_id, $learning_lang_id, $order_by);
         $this->table = 'archivedtexts';
         $this->cols = array(
             'id' => 'atextId',

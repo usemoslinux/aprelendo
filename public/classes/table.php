@@ -1,6 +1,6 @@
 <?php 
 
-class Table 
+abstract class Table 
 {
     protected $show_archived;
     protected $headings;
@@ -21,10 +21,10 @@ class Table
         $this->sort_menu = $sort_menu;
     }
 
-    public function print() {
+    public function print($sort_by) {
         $html = $this->print_header();
         $html .= $this->print_content();
-        $html .= $this->print_footer();
+        $html .= $this->print_footer($sort_by);
         return $html;
     }
 
@@ -51,7 +51,7 @@ class Table
         return $html;
     }
 
-    protected function print_footer() {
+    protected function print_footer($sort_by) {
         $html = '</tbody></table><div class="row"><div class="col-xs-12"><div class="dropdown">
         <button class="btn btn-default dropdown-toggle disabled" type="button" id="actions-menu" data-toggle="dropdown">Actions <span class="caret"></span></button>
         <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="actions-menu" role="menu">';
@@ -64,26 +64,53 @@ class Table
         <button class="btn btn-default dropdown-toggle pull-right" type="button" id="sort-menu" data-toggle="dropdown">Sort by <span class="caret"></span></button>
         <ul id="dropdown-menu-sort" class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-menu" role="menu">';
 
-        foreach ($this->sort_menu as $menu_id => $menu_text) { 
-            $html .= "<li id='$menu_id'><a role='menuitem'>$menu_text</a></li>";
+        $sort_index = 0;
+        foreach ($this->sort_menu as $menu_id => $menu_text) {
+            $is_active = $sort_by == $sort_index ? ' class="active" ' : ''; 
+            $html .= "<li id='$menu_id' onclick=\"$('#o').val($sort_index);\" $is_active><a role='menuitem'>$menu_text</a></li>";
+            $sort_index++;
         }
 
         $html .= '</ul></div></div></div></div></div>';
 
         return $html;
     }
+
+    abstract protected function print_content();
 }
 
 class TextTable extends Table {
     protected function print_content() {
         $html = '';
+        $type_array = array('Articles', 'Conversations', 'Letters', 'Songs', 'Videos', 'Others');
         for ($i=0; $i < sizeof($this->rows); $i++) { 
             $text_id = $this->rows[$i][0];
             $text_title = $this->rows[$i][1];
-            $link = empty($this->url) ? '' : "<a href ='{$this->url}?id=" . $text_id . "'>";
+            $text_author = isset($this->rows[$i][2]) && !empty($this->rows[$i][2]) ? " - Author: {$this->rows[$i][2]}" : '';
+            $text_type = isset($this->rows[$i][3]) && !empty($this->rows[$i][3]) ? "Type: {$type_array[$this->rows[$i][3]-1]}" : '';
+            $link = '';
+            
+            if ($this->rows[$i][3] && !empty($this->rows[$i][3])) {
+                $text_type = "Type: {$type_array[$this->rows[$i][3]-1]}";
+                if (isset($this->url) && !empty($this->url)) {
+                    switch (true) {
+                        case ($this->rows[$i][3] == 5):
+                            $replace = str_replace('showtext.php', 'showvideo.php', $this->url);
+                            $link = empty($replace) ? '' : "<a href ='{$replace}?id=$text_id'>";
+                            break;
+                        default:
+                            $link = empty($this->url) ? '' : "<a href ='{$this->url}?id=$text_id'>";
+                            break;
+                    }
+                }
+            } else {
+                $text_type = '';
+
+            }
+            
             $html .= '<tr><td class="col-checkbox"><label><input class="chkbox-selrow" type="checkbox" data-idText="' .
             $text_id . '"></label></td><td class="col-title">' . $link .
-            $text_title . '</a></td></tr>';
+            $text_title . '</a><br/><small>' . $text_type . $text_author . '</small></td></tr>';
         }
         return $html;
     }

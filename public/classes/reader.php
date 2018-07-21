@@ -193,13 +193,19 @@ class Reader extends Text
                 
                 // 3. colorize frequency list words
                 if ($this->show_freq_list) {
-                    $result = $this->con->query('SELECT freqWord FROM frequencylist_fr LIMIT 5000');
+                    $result = $this->con->query("SELECT LgName FROM languages WHERE LgId='$this->learning_lang_id'");
                     
                     if ($result) {
-                        while ($row = $result->fetch_assoc()) {
-                            $word = $row['freqWord'];
-                            $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
-                            "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
+                        $row = $result->fetch_assoc();
+                        $freq_table_name = $this->con->escape_string($row['LgName']);
+                        $result = $this->con->query('SELECT freqWord FROM frequencylist_' . $freq_table_name . ' LIMIT 5000');
+                        
+                        if ($result) {
+                            while ($row = $result->fetch_assoc()) {
+                                $word = $row['freqWord'];
+                                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
+                                "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
+                            }
                         }
                     }
                 }
@@ -217,7 +223,7 @@ class Reader extends Text
     public function showText() {
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
         $time_start = microtime(true);
-        $html = "<div id='container' class='col-sm-12 col-md-6' data-textID='" . $this->id . "'>";
+        $html = "<div id='container' data-textID='" . $this->id . "'>";
         
         // display source, if available
         if (!empty($this->source_uri)) {
@@ -297,7 +303,51 @@ class Reader extends Text
         $html .= '<p></p></div>';
         return $html;
     }
-    
+
+
+    /**
+     * Constructs HTML code to show text in reader
+     *
+     * @return string
+     */
+    public function showVideo($yt_id) {
+        ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+        $time_start = microtime(true);
+
+        $yt_id = $yt_id ? $yt_id : '';
+
+        $html = '<div id="show-video-container" class="col-xs-12 col-sm-6">' .
+            '<div class="video-wrapper">' .
+                '<div data-ytid="' . $yt_id . '" id="player"></div>' .
+            '</div>' .
+            '</div>' .
+            '<div id="show-transcript-container" class="col-xs-12 col-sm-6">';
+
+        $html .= "<div id='container' data-textID='" . $this->id . "'>";
+        
+        $xml = new SimpleXMLElement($this->text);
+
+        for ($i=0; $i < sizeof($xml)-1; $i++) { 
+            $start = $xml->text[$i]['start'];
+            $dur = $xml->text[$i]['dur'];
+
+            $text = $this->colorizeWords(html_entity_decode($xml->text[$i], ENT_QUOTES | ENT_XML1, 'UTF-8'));
+            $text = $this->addLinks($text);
+
+            $html .= "<div class='text-center' data-start='$start' data-dur='$dur' >". $text .'</div>';
+        }
+        
+        $html .= '</div><p></p>';
+        
+        $html .= '<button type="button" id="btn_save" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
+        
+        $time_end = microtime(true);
+        $execution_time = ($time_end - $time_start);
+        $html .= '<b>Total Execution Time:</b> ' . $execution_time . ' Secs';
+
+        return $html.'</div>';
+    }
+
     
     /**
      * Get host of URL passed as parameter 

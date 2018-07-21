@@ -37,10 +37,11 @@ class RSSFeed
                         $itemindex = 1;
                         foreach ($entry as $article) {
                             $artdate = $isatom ? $article->updated : $article->pubDate; // ATOM: feed>entry>updated; RSS: rss>channel>item>pubDate
-                            $this->articles[$itemindex]['artdate'] = $artdate = date("d/m/Y - H:i", strtotime($artdate));
-                            $this->articles[$itemindex]['artauthor'] = $artauthor = $article->author; // ATOM: feed>entry>author; RSS: rss>channel>item>author
-                            $this->articles[$itemindex]['artsrc'] = $artsrc = $isatom ? $article->link->attributes()->href : $article->link;  // ATOM: feed>entry>link>href attr; RSS: rss>channel>item>link
-                            $this->articles[$itemindex]['content'] = $content = $isatom ? $article->content : $article->description; // ATOM: feed>entry>content; rss>channel>item>description
+                            $this->articles[$itemindex]['title'] = $article->title;
+                            $this->articles[$itemindex]['date'] = date("d/m/Y - H:i", strtotime($artdate));
+                            $this->articles[$itemindex]['author'] = $article->author; // ATOM: feed>entry>author; RSS: rss>channel>item>author
+                            $this->articles[$itemindex]['src'] = $isatom ? $article->link->attributes()->href : $article->link;  // ATOM: feed>entry>link>href attr; RSS: rss>channel>item>link
+                            $this->articles[$itemindex]['content'] = $isatom ? $article->content : $article->description; // ATOM: feed>entry>content; rss>channel>item>description
                             $itemindex++;
                         }
                     }

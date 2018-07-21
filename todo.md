@@ -1,9 +1,17 @@
 ## ALPHA 1
 
-- register.php: linea 27: el id del lenguaje por defecto lo puse a mano 14=ingles!
+- active reading
+  - https://www.fluentinmandarin.com/content/making-your-foreign-language-study-effective-active-not-passive/
 
 - get user location for "my profile":
   - https://nominatim.openstreetmap.org/reverse.php?format=json&lat=50.842750099999996&lon=4.3515499&zoom=18
+
+- export to csv
+  - https://stackoverflow.com/questions/125113/php-code-to-convert-a-mysql-query-to-csv (2da respuesta)
+  - https://stackoverflow.com/questions/16251625/how-to-create-and-download-a-csv-file-from-php-script
+
+- lazy loading colorizewords
+    - Jquery plugin: http://morr.github.io/appear.html
 
 -replace audio player with jplayer?
   - http://jplayer.org/
@@ -12,6 +20,8 @@
 
 - Video support
  - https://video.google.com/timedtext?lang=en&v=VIDEOID
+ - youtube api AIzaSyCrLewIG56vdL5TN4ls4S4E64aRogUaiz0
+ - https://www.googleapis.com/youtube/v3/videos?id=8zhYDFjniTo&key=AIzaSyCrLewIG56vdL5TN4ls4S4E64aRogUaiz0&part=snippet
 
 - Chequear si las estadisticas funcionan bien
   - Si las palabras que ya aprendi (que no aparecen subrayadas) y que yo vuelvo a agregar aparecen como "forgotten"
@@ -39,18 +49,6 @@
             - Forgotten words (status = 3?)
             - Words already known? (another table?)
             - Amount of words per level? (fixed value for each level)
-
-  - [x] Preferences (Add configuration options (select dictionary, fonts, etc.)
-    - Appearance
-        - Font: Helvetica, Open Sans, Times New Roman, Georgia
-        - Size: 5 options?
-        - Line height: 5 options
-        - Alignment: left, right or justify
-        - Mode: light, sepia, dark
-    - Dictionary
-        - URL
-    - Other
-        - Highlight common words
 
 - [ ] Add installation instructions to readme.md
 
@@ -85,6 +83,9 @@ Things that need more thinking
   - [ ] Upload more than 2 texts per day
   - [ ] Upload bigger audio files
   - [ ] 
+
+- hosting: gnutransfer => precio basico: 10 USD x mes
+- perfomance: 20000 characters (FR) => 2,68 secs (777 entries in words table + freqlist on) (indexeddb freqlist table?)
 
 # OBJECTIVE FOR BETA
 

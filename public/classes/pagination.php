@@ -42,7 +42,7 @@ class Pagination
     }
   }
 
-  public function print($url, $search_text, $filter = NULL, $show_archived = NULL) {
+  public function print($url, $search_text, $sort_by, $filter = NULL, $show_archived = NULL) {
     $search_text = urlencode($search_text);
     if (!is_null($show_archived)) {
         $show_archived = $show_archived ? 1 : 0;
@@ -50,9 +50,10 @@ class Pagination
     
     // build query string
     $s = !empty($search_text) ? "s=$search_text&" : '';
+    $o = !empty($sort_by) ? "o=$sort_by&" : '';
     $f = !is_null($filter) ? "f=$filter&" : '';
-    $sa = !is_null($show_archived) ? "sa=$show_archived" : '';
-    $query = "?$s$f$sa&";
+    $sa = !is_null($show_archived) ? "sa=$show_archived&" : '';
+    $query = "?$s$o$f$sa";
 
     if($this->total_pages > 1) { 
       $result = "<nav aria-label='Page navigation'>

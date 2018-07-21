@@ -10,37 +10,37 @@ if (isset($_POST['submit'])) {                  // check if we need to save new 
 }
 ?>
 
-  <div class="container mtb">
-    <div class="row">
-      <div class="col-xs-12">
-        <ol class="breadcrumb">
-          <li>
-            <a href="texts.php">Home</a>
-          </li>
-          <li>
-            <a class="active">Languages</a>
-          </li>
-        </ol>
+    <div class="container mtb">
+        <div class="row">
+            <div class="col-xs-12">
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="texts.php">Home</a>
+                    </li>
+                    <li>
+                        <a class="active">Languages</a>
+                    </li>
+                </ol>
 
-        <?php 
-        
-        if (isset($_GET['chg'])) {              // chg paramter = show edit language page
-            $lang = new Language($con, $_GET['chg'], $user_id);
+                <?php 
 
-            include('editlanguage.php');
-          } elseif (isset($_GET['act'])) {      // act parameter = set active language
-            $lang = new Language($con, $_GET['chg'], $user_id);
-            
-            $user->setActiveLang($_GET['act']);
+                if (isset($_GET['chg'])) {              // chg paramter = show edit language page
+                    $lang = new Language($con, $_GET['chg'], $user_id);
+                    
+                    include('editlanguage.php');
+                } elseif(isset($_GET['act'])) {      // act parameter = set active language
+                    $lang = new Language($con, $_GET['act'], $user_id);
+                    
+                    $user->setActiveLang($_GET['act']);
+                    
+                    include('listlanguages.php');
+                } else {                                // just show list of languages
+                    include('listlanguages.php');
+                }
+                ?>
 
-            include('listlanguages.php');
-        } else {                                // just show list of languages
-            include('listlanguages.php');
-        }
-        ?>
-
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <?php require_once('footer.php') ?>
+    <?php require_once('footer.php') ?>

@@ -41,7 +41,6 @@ class DBEntity {
         return $this->con->real_escape_string($result);
     }
 
-
 }
 
 ?>

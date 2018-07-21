@@ -67,17 +67,46 @@ class Words extends DBEntity {
         }
     }
 
-    public function getSearch($search_text, $offset, $limit) {
-        $result = $this->con->query("SELECT wordID, word, wordStatus FROM words WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' AND word LIKE '%$search_text%' ORDER BY wordID DESC LIMIT $offset, $limit");
+    public function getSearch($search_text, $offset, $limit, $sort_by) {
+        $sort_sql = $this->GetSortSQL($sort_by);
+        $result = $this->con->query("SELECT wordID, word, wordStatus 
+            FROM words 
+            WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' AND word LIKE '%$search_text%' 
+            ORDER BY $sort_sql LIMIT $offset, $limit");
 
         return $result ? $result->fetch_all() : false;
     }
 
-    public function getAll($offset, $limit) {
-        $result = $this->con->query("SELECT wordID, word, wordStatus FROM words WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' ORDER BY wordID DESC LIMIT $offset, $limit");
+    public function getAll($offset, $limit, $sort_by) {
+        $sort_sql = $this->GetSortSQL($sort_by);
+        $result = $this->con->query("SELECT wordID, word, wordStatus 
+            FROM words 
+            WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' 
+            ORDER BY $sort_sql LIMIT $offset, $limit");
 
         return $result ? $result->fetch_all() : false;
     }   
+
+    private function GetSortSQL($sort_by) {
+        switch ($sort_by) {
+            case '0': // new first
+                return 'wordID DESC';
+                break;
+            case '1': // old first
+                return 'wordID';
+                break;
+            case '2': // learned first
+                return 'wordStatus';
+                break;
+            case '3': // learning first
+                return 'wordStatus DESC';
+                break;
+            default:
+                return '';
+                break;
+        }
+        
+    }
 }
 
 ?>

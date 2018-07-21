@@ -15,7 +15,6 @@ $(document).ready(function () {
   }
 
   function addTextToLibrary($entry_info, $entry_text, add_mode) {
-
     var art_title = $.trim($entry_info.text());
     var art_author = $entry_info.attr("data-author");
     var art_url = $entry_info.attr("data-src");

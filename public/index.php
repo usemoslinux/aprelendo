@@ -6,7 +6,7 @@ $user = new User($con);
 
 // if user is already logged in, go to "My Texts" section
 if ($user->isLoggedIn()) {
-    header('Location:/texts.php');
+    header('Location:texts.php');
 }
 ?>
 

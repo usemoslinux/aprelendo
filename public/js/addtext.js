@@ -7,23 +7,23 @@ $(document).ready(function() {
     
     /**
     * Adds text to database
-    * This is triggered when user presses the "Add text" button & submits the form
+    * This is triggered when user presses the "Save" button & submits the form
     */
-    $('#form_addtext').on('submit', function (e) {
+    $('#form-addtext').on('submit', function (e) {
         e.preventDefault();
         
-        var form_data = new FormData(document.getElementById("form_addtext"));
+        var form_data = new FormData(document.getElementById("form-addtext"));
         
         $.ajax({
             type: "POST",
             url: "db/addtext.php",
             data: form_data,
-            // dataType: 'json',
+            dataType: 'json',
             contentType: false,
             processData: false
         })
         .done(function (data) {
-            if(data.error_msg != null) {
+            if(typeof data != 'undefined') {
                 showError(data.error_msg);
             } else {
                 window.location.replace('texts.php');
@@ -32,7 +32,7 @@ $(document).ready(function() {
         .fail(function (xhr, ajaxOptions, thrownError) {
             showError('Oops! There was an unexpected error when uploading this text.');
         }); // end of ajax
-    }); // end of #form_addtext.on.submit
+    }); // end of #form-addtext.on.submit
     
     
     /**
@@ -84,7 +84,7 @@ $(document).ready(function() {
         var url = $('#url').val();
         
         if (url != '') {
-            $('#btn_fetch_img').removeClass().addClass('fa fa-refresh fa-spin');
+            $('#btn-fetch-img').removeClass().addClass('fas fa-sync fa-spin');
             $.ajax({
                 type: "GET",
                 url: 'db/fetchurl.php',
@@ -109,11 +109,11 @@ $(document).ready(function() {
                 alert('Oops! There was an error trying to fetch this text.');
             })
             .always(function() {
-                $('#btn_fetch_img').removeClass().addClass('fa fa-arrow-down');
+                $('#btn-fetch-img').removeClass().addClass('fas fa-arrow-down');
             }); // end ajax  
         } // end if  
     }
     
-    $('#btn_fetch').on('click', fetch_url);
+    $('#btn-fetch').on('click', fetch_url);
     
 });

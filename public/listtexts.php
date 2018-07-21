@@ -18,7 +18,8 @@ $headings = array('Title');
 $col_widths = array('33', '*');
 $url = $show_archived ? '' : 'showtext.php';
 $action_menu = $show_archived ? array('mArchive' => 'Unarchive', 'mDelete' => 'Delete') : array('mArchive' => 'Archive', 'mDelete' => 'Delete');
-$sort_menu = array( 'mSortByNew' => 'New', 'mSortByHot' => 'Hot');
+$sort_menu = array( 'mSortByNew' => 'New first', 'mSortByOld' => 'Old first');
+$sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
 
 if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searched for something, show search results
     // initialize pagination variables
@@ -40,14 +41,14 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     $offset = $pagination->offset;
     
     // get search result
-    $rows = $texts_table->getSearch($filter_sql, $search_text_escaped, $offset, $limit);
+    $rows = $texts_table->getSearch($filter_sql, $search_text_escaped, $offset, $limit, $sort_by);
     
     // print table
     if (sizeof($rows) > 0) { // if there are any results, show them
         $table = New TextTable($headings, $col_widths, $rows, $url, $action_menu, $sort_menu);
-        echo $table->print();
+        echo $table->print($sort_by);
 
-        echo $pagination->print('texts.php', $search_text, $filter, $show_archived); // print pagination
+        echo $pagination->print('texts.php', $search_text, $sort_by, $filter, $show_archived); // print pagination
     } else { // if there are no texts to show, print a message
         echo '<p>No texts found with that criteria. Try again.</p>';
     }
@@ -57,10 +58,8 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     
     if ($show_archived) {
         $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id);
-        // $result = $con->query("SELECT COUNT(atextID) FROM archivedtexts WHERE atextUserId='$user_id' AND atextLgId='$learning_lang_id'") or die(mysqli_error($con));
     } else {
         $texts_table = new Texts($con, $user_id, $learning_lang_id);
-        // $result = $con->query("SELECT COUNT(textID) FROM texts WHERE textUserId='$user_id' AND textLgId='$learning_lang_id'") or die(mysqli_error($con));
     }
 
     $total_rows = $texts_table->countAllRows();
@@ -68,14 +67,14 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     $offset = $pagination->offset;
     
     // get text list
-    $rows = $texts_table->getAll($offset, $limit);
+    $rows = $texts_table->getAll($offset, $limit, $sort_by);
     
     // print table
     if (sizeof($rows) > 0) {
         $table = New TextTable($headings, $col_widths, $rows, $url, $action_menu, $sort_menu);
-        echo $table->print();
+        echo $table->print($sort_by);
 
-        echo $pagination->print('texts.php', '', $filter, $show_archived); // print pagination
+        echo $pagination->print('texts.php', '', $sort_by, $filter, $show_archived); // print pagination
     } else { // if there are no texts to show, print a message
         echo '<p>There are no texts in your private library.</p>';
     }

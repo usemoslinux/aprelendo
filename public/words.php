@@ -1,5 +1,13 @@
 <?php
-	require_once('header.php')
+    require_once('header.php');
+    
+    $search_text = '';
+    $sort_by = 0;
+
+    if (!empty($_GET)) {
+        $search_text = isset($_GET['s']) ? $_GET['s'] : '';
+        $sort_by = isset($_GET['o']) ? $_GET['o'] : 0;  
+    }
 	?>
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/solid.css" integrity="sha384-Rw5qeepMFvJVEZdSo1nDQD5B6wX0m7c5Z/pLNvjkB14W6Yki1hKbSEQaX9ffUbWe"
@@ -22,7 +30,8 @@
                 <div class="col-xs-12">
                     <form class="" action="" method="get">
                         <div class="input-group searchbox">
-                            <input type="text" id="s" name="s" class="form-control" placeholder="Search..." value="<?php echo isset($_GET['s']) ? $_GET['s'] : '' ?>">
+                            <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
+                            <input type="text" id="s" name="s" class="form-control" placeholder="Search..." value="<?php echo $search_text ?>">
                             <div class="input-group-btn">
                                 <button type="submit" name="submit" class="btn btn-default">
                                     <i class="glyphicon glyphicon-search"></i>

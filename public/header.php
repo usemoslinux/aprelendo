@@ -41,7 +41,7 @@ require_once('db/checklogin.php'); // check if logged in and set $user
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/">LangX</a>
+                    <a class="navbar-brand" href="index.php">LangX</a>
                 </div>
                 <div class="navbar-collapse collapse navbar-right">
                     <ul class="nav navbar-nav">
@@ -58,9 +58,6 @@ require_once('db/checklogin.php'); // check if logged in and set $user
                                 </li>
                                 <li>
                                     <a href="texts.php">My texts</a>
-                                </li>
-                                <li>
-                                    <a href="addrss.php">RSS feeds</a>
                                 </li>
                                 <li>
                                     <a href="words.php">Word list</a>

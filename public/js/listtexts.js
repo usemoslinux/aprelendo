@@ -44,7 +44,6 @@ $(document).ready(function () {
         var ids = [];
         $('input[class=chkbox-selrow]:checked').each(function () {
             ids.push($(this).attr('data-idText'));
-            //parentTRs.push($(this).closest('tr'));
         });
         
         /**
@@ -111,6 +110,14 @@ $(document).ready(function () {
                 }
             });
         }    
+    });
+
+    /**
+     * Selects sorting
+     */
+    $('#dropdown-menu-sort').on('click', function(e) {
+        var params = 'f=' + $('#f').val() + '&s=' + $('#s').val() + '&sa=' + $('#sa').val() + '&o=' + $('#o').val();
+        window.location.replace('texts.php?' + params);        
     });
     
 });

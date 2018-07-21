@@ -5,11 +5,13 @@ require_once('connect.php');
 class Texts extends DBEntity {
     protected $learning_lang_id;
     protected $cols;
+    protected $order_col;
 
     public function __construct($con, $user_id, $learning_lang_id) {
         parent::__construct($con, $user_id);
         
         $this->learning_lang_id = $learning_lang_id;
+        
         $this->table = 'texts';
         $this->cols = array(
             'id' => 'textId',
@@ -48,6 +50,7 @@ class Texts extends DBEntity {
         $deletesql = "DELETE FROM $this->table WHERE {$this->cols['id']} IN ($textIDs)";
 
         $result = $this->con->query($selectsql);
+        $error = $this->con->error;
 
         if ($result) {
             $audiouris = $result->fetch_all();
@@ -66,6 +69,7 @@ class Texts extends DBEntity {
                 }
             }
         }
+        return $result;
     }
 
     // ids must be in json format
@@ -111,20 +115,49 @@ class Texts extends DBEntity {
         }
     }
 
-    public function getSearch($filter_sql, $search_text, $offset, $limit) {
-        $result = $this->con->query("SELECT {$this->cols['id']}, {$this->cols['title']} FROM $this->table 
+    public function getSearch($filter_sql, $search_text, $offset, $limit, $sort_by) {
+        $sort_sql = $this->GetSortSQL($sort_by);
+        $result = $this->con->query("SELECT {$this->cols['id']}, {$this->cols['title']}, {$this->cols['author']}, {$this->cols['type']} 
+            FROM $this->table 
             WHERE {$this->cols['userid']}='$this->user_id' AND {$this->cols['lgid']}='$this->learning_lang_id' $filter_sql 
-            AND {$this->cols['title']} LIKE '%$search_text%' ORDER BY {$this->cols['id']} DESC LIMIT $offset, $limit");
+            AND {$this->cols['title']} LIKE '%$search_text%' ORDER BY $sort_sql LIMIT $offset, $limit");
 
         return $result ? $result->fetch_all() : false;
     }
 
-    public function getAll($offset, $limit) {
-        $result = $this->con->query("SELECT {$this->cols['id']}, {$this->cols['title']} FROM $this->table 
+    public function getAll($offset, $limit, $sort_by) {
+        $sort_sql = $this->GetSortSQL($sort_by);
+        $result = $this->con->query("SELECT {$this->cols['id']}, {$this->cols['title']}, {$this->cols['author']}, {$this->cols['type']} 
+            FROM $this->table 
             WHERE {$this->cols['userid']}='$this->user_id' AND {$this->cols['lgid']}='$this->learning_lang_id' 
-            ORDER BY {$this->cols['id']} DESC LIMIT $offset, $limit");
+            ORDER BY $sort_sql LIMIT $offset, $limit");
         
         return $result ? $result->fetch_all() : false;
+    }
+
+    public function getAllById($id, $sort_by) {
+        $sort_sql = $this->GetSortSQL($sort_by);
+        $result = $this->con->query("SELECT * 
+            FROM $this->table 
+            WHERE {$this->cols['id']}='$id'
+            ORDER BY $sort_sql");
+        
+        return $result ? $result->fetch_all() : false;
+    }
+
+    private function GetSortSQL($sort_by) {
+        switch ($sort_by) {
+            case '0': // new first
+                return $this->cols['id'] . ' DESC';
+                break;
+            case '1': // old first
+                return $this->cols['id'];
+                break;
+            default:
+                return '';
+                break;
+        }
+        
     }
 }
 
