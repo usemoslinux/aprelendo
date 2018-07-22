@@ -21,7 +21,7 @@ class Videos extends DBEntity {
         $transcript_xml = file_get_contents("https://video.google.com/timedtext?lang=$learning_lang&v=$youtube_id");
         $transcript_xml = array ('text' => $transcript_xml);
         
-        $file = file_get_contents("https://www.googleapis.com/youtube/v3/videos?id=$youtube_id&key=AIzaSyCrLewIG56vdL5TN4ls4S4E64aRogUaiz0&part=snippet");
+        $file = file_get_contents("https://www.googleapis.com/youtube/v3/videos?id=$youtube_id&key=" . YOUTUBE_API_KEY . "&part=snippet");
         $file = json_decode($file, true);
         $title = array('title' => $file['items'][0]['snippet']['title']);
         $author = array('author' => $file['items'][0]['snippet']['channelTitle']);

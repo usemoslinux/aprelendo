@@ -22,7 +22,9 @@ class Texts extends DBEntity {
             'text' => 'text', 
             'sourceURI' => 'textSourceURI', 
             'audioURI' => 'textAudioURI', 
-            'type' => 'textType');
+            'type' => 'textType', 
+            'isshared' => 'textIsShared', 
+            'likes' => 'textLikes');
     }
 
     public function add($title, $author, $text, $source_url, $audio_url, $type) {
@@ -76,8 +78,8 @@ class Texts extends DBEntity {
     public function archiveByIds($ids) {
         $textIDs = $this->convertJSONtoCSV($ids);
 
-        $insertsql = "INSERT INTO archivedtexts (atextUserId, atextLgID, atextTitle, atextAuthor, atext, atextAudioURI, atextSourceURI, aTextType)
-            SELECT textUserId, textLgID, textTitle, textAuthor, text, textAudioURI, textSourceURI, TextType
+        $insertsql = "INSERT INTO archivedtexts (atextUserId, atextLgID, atextTitle, atextAuthor, atext, atextAudioURI, atextSourceURI, atextType, atextIsShared, atextLikes)
+            SELECT textUserId, textLgID, textTitle, textAuthor, text, textAudioURI, textSourceURI, textType, textIsShared, textLikes
             FROM texts WHERE textID IN ($textIDs)";
         $deletesql = "DELETE FROM texts WHERE textID IN ($textIDs)";
         

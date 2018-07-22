@@ -26,7 +26,8 @@ $(document).ready(function () {
                 }
             })
             .done(function () {
-                var params = window.location.search.substr(1).split("?");
+                var params = 'f=' + $('#f').val() + '&s=' + $('#s').val() + '&sa=' + $('#sa').val() + '&o=' + $('#o').val();
+                // var params = window.location.search.substr(1).split("?");
                 window.location.replace('texts.php?' + params);
             })
             .fail(function () {
@@ -62,7 +63,8 @@ $(document).ready(function () {
             }
         })
         .done(function () {
-            var params = window.location.search.substr(1).split("?");
+            var params = 'f=' + $('#f').val() + '&s=' + $('#s').val() + '&sa=' + $('#sa').val() + '&o=' + $('#o').val();
+            // var params = window.location.search.substr(1).split("?");
 
             window.location.replace('texts.php?' + params);
         })

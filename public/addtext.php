@@ -33,11 +33,11 @@ require_once('header.php');
             <div class="form-group col-xs-12">
               <label for="type">Type:</label>
               <select name="type" id="type" class="form-control">
-                  <option value="0">Article</option>
-                  <option value="1">Conversation</option>
-                  <option value="2">Letter</option>
-                  <option value="3">Song</option>
-                  <option value="4">Other</option>
+                  <option value="1">Article</option>
+                  <option value="2">Conversation</option>
+                  <option value="3">Letter</option>
+                  <option value="4">Song</option>
+                  <option value="6">Other</option>
               </select>
             </div>
               <div class="form-group col-md-6">

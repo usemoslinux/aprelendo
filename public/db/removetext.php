@@ -13,9 +13,9 @@ try {
         // decide wether we are deleting an archived text or not
         $referer = basename($_SERVER['HTTP_REFERER']);
         if (strpos($referer, 'sa=1') !== false) {
-            $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id, Texts::ORDER_BY_NEW);
+            $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id);
         } else {
-            $texts_table = new Texts($con, $user_id, $learning_lang_id, Texts::ORDER_BY_NEW);
+            $texts_table = new Texts($con, $user_id, $learning_lang_id);
         }
     
         $result = $texts_table->deleteByIds($_POST['textIDs']);
