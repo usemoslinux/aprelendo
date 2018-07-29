@@ -1,5 +1,14 @@
 ## ALPHA 1
 
+- esta borrando bien los archivos de audio? hay muchos acumulados...
+
+- fixes #68, fixes #69, fixes #66, fixes #60
+
+- calculate level for texts
+ - https://www.universeofmemory.com/how-many-words-you-should-know/
+ - http://www.php.net/manual/en/function.array-intersect.php
+ - http://php.net/preg_match_all
+
 - active reading
   - https://www.fluentinmandarin.com/content/making-your-foreign-language-study-effective-active-not-passive/
 
@@ -12,16 +21,6 @@
 
 - lazy loading colorizewords
     - Jquery plugin: http://morr.github.io/appear.html
-
--replace audio player with jplayer?
-  - http://jplayer.org/
-  - https://plyr.io/
-  - http://www.mediaelementjs.com/
-
-- Video support
- - https://video.google.com/timedtext?lang=en&v=VIDEOID
- - youtube api AIzaSyCrLewIG56vdL5TN4ls4S4E64aRogUaiz0
- - https://www.googleapis.com/youtube/v3/videos?id=8zhYDFjniTo&key=AIzaSyCrLewIG56vdL5TN4ls4S4E64aRogUaiz0&part=snippet
 
 - Chequear si las estadisticas funcionan bien
   - Si las palabras que ya aprendi (que no aparecen subrayadas) y que yo vuelvo a agregar aparecen como "forgotten"
@@ -53,6 +52,23 @@
 - [ ] Add installation instructions to readme.md
 
 - [ ] preferences.php: Remember last reading position
+
+- firefoxx & chrome addon
+  - ya lo cree. esta en la carpeta /private/langx-addon
+  - 
+
+- replace audio player with jplayer?
+  - http://jplayer.org/ >> medio viejo
+  - https://plyr.io/ >> tiene playback speed pero no me gusta el menu de seleccion, demasiado armatoste
+  - http://www.mediaelementjs.com/ >> no veo que tenga playback speed controls
+  - vertical slider
+    - https://codepen.io/ATC-test/pen/myPNqW
+    
+- Video support
+ - https://video.google.com/timedtext?lang=en&v=VIDEOID
+ - youtube api AIzaSyCrLewIG56vdL5TN4ls4S4E64aRogUaiz0
+ - https://www.googleapis.com/youtube/v3/videos?id=8zhYDFjniTo&key=AIzaSyCrLewIG56vdL5TN4ls4S4E64aRogUaiz0&part=snippet
+
 
 Things that need more thinking
 

@@ -36,7 +36,7 @@ HEADERWRAP
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=english">
                                 <span class="flag-icon">
-                                    <img src="/images/flags/english.svg" alt="English" class="flag-icon">
+                                    <img src="images/flags/english.svg" alt="English" class="flag-icon">
                                     <p>English</p>
                                 </span>
                             </a>
@@ -44,7 +44,7 @@ HEADERWRAP
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=spanish">
                                 <span class="flag-icon">
-                                    <img src="/images/flags/spanish.svg" alt="Spanish" class="flag-icon">
+                                    <img src="images/flags/spanish.svg" alt="Spanish" class="flag-icon">
                                     <p>Spanish</p>
                                 </span>
                             </a>
@@ -52,7 +52,7 @@ HEADERWRAP
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=portuguese">
                                 <span class="flag-icon">
-                                    <img src="/images/flags/portuguese.svg" alt="Portuguese" class="flag-icon">
+                                    <img src="images/flags/portuguese.svg" alt="Portuguese" class="flag-icon">
                                     <p>Portuguese</p>
                                 </span>
                             </a>
@@ -60,7 +60,7 @@ HEADERWRAP
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=french">
                                 <span class="flag-icon">
-                                    <img src="/images/flags/french.svg" alt="French" class="flag-icon">
+                                    <img src="images/flags/french.svg" alt="French" class="flag-icon">
                                     <p>French</p>
                                 </span>
                             </a>
@@ -68,7 +68,7 @@ HEADERWRAP
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=italian">
                                 <span class="flag-icon">
-                                    <img src="/images/flags/italian.svg" alt="Italian" class="flag-icon">
+                                    <img src="images/flags/italian.svg" alt="Italian" class="flag-icon">
                                     <p>Italian</p>
                                 </span>
                             </a>
@@ -76,7 +76,7 @@ HEADERWRAP
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=german">
                                 <span class="flag-icon">
-                                    <img src="/images/flags/german.svg" alt="German" class="flag-icon">
+                                    <img src="images/flags/german.svg" alt="German" class="flag-icon">
                                     <p>German</p>
                                 </span>
                             </a>

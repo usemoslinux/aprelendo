@@ -8,6 +8,8 @@
         $search_text = isset($_GET['s']) ? $_GET['s'] : '';
         $sort_by = isset($_GET['o']) ? $_GET['o'] : 0;  
     }
+
+    $query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '';
 	?>
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/solid.css" integrity="sha384-Rw5qeepMFvJVEZdSo1nDQD5B6wX0m7c5Z/pLNvjkB14W6Yki1hKbSEQaX9ffUbWe"
@@ -28,15 +30,31 @@
             </ol>
             <div class="row flex">
                 <div class="col-xs-12">
-                    <form class="" action="" method="get">
+                    <form class="form-flex-row" action="" method="get">
                         <div class="input-group searchbox">
                             <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
                             <input type="text" id="s" name="s" class="form-control" placeholder="Search..." value="<?php echo $search_text ?>">
                             <div class="input-group-btn">
                                 <button type="submit" name="submit" class="btn btn-default">
-                                    <i class="glyphicon glyphicon-search"></i>
+                                <i class="fas fa-search"></i>
                                 </button>
                             </div>
+                        </div>
+                         <!-- Split button -->
+                         <div class="btn-group btn-export-words searchbox">
+                            <a class="btn btn-success" href="db/exportwords.php"><i class="fas fa-file-export"></i> Export to CSV</a>
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a href=" db/exportwords.php">Export all</a>
+                                </li>
+                                <li>
+                                    <a href="db/exportwords.php<?php echo !empty($query_str) ? $query_str : '' ?>">Export search results</a>
+                                </li>
+                            </ul>
                         </div>
                     </form>
                 </div>

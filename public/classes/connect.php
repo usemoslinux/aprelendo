@@ -41,6 +41,14 @@ class DBEntity {
         return $this->con->real_escape_string($result);
     }
 
+    protected function buildAndOrStatement($array, $and_or) {
+        $result = '';
+        foreach ($array as $element) {
+            $result .= !empty($element) ? " $and_or $element" : '';
+        }
+        return $result;
+    }
+
 }
 
 ?>

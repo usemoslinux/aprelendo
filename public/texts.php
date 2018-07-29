@@ -83,14 +83,14 @@ if (!empty($filter)) {
                             <input type="text" id="s" name="s" class="form-control" placeholder="Search..." value="<?php echo isset($search_text) ? $search_text : '' ?>">
                             <div class="input-group-btn">
                                 <button id="btn-search" type="submit" name="submit" class="btn btn-default">
-                                    <i class="glyphicon glyphicon-search"></i>
+                                <i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </div>
                         <!-- Split button -->
                         <div class="btn-group btn-add-text searchbox">
                             <a class="btn btn-success" href="addtext.php">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>
+                                <i class="fas fa-plus"></i> Add</a>
                             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>

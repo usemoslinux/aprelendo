@@ -15,7 +15,7 @@
                 'German' => 'Willkommen!');
             $to_lang = isset($_GET['tolang']) ? ucfirst($_GET['tolang']) : 'English';
             $native_lang = isset($_GET['srclang']) ? ucfirst($_GET['srclang']) : 'English';
-            echo '<img src="/images/flags/' . strtolower($to_lang) . '.svg" alt="' . $to_lang . '" class="flag-icon">';
+            echo '<img src="images/flags/' . strtolower($to_lang) . '.svg" alt="' . $to_lang . '" class="flag-icon">';
             echo $title_array["$to_lang"];
             ?>
           </h1>

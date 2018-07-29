@@ -114,7 +114,7 @@ class User
             // then, save new token in auth_tokens table
             $token = $this->token = $this->generateToken();
             $user_id = $this->user_id = $row['userId'];
-            $time_stamp = time() + 3600; // 1 hour
+            $time_stamp = time() + 31536000; // 1 year
             $expires = $this->token_expire_date = date('Y-m-d H:i:s', $time_stamp);
             
             $result = $this->con->query("INSERT INTO auth_tokens (token, userid, expires) VALUES ('$token', $user_id, '$expires')");

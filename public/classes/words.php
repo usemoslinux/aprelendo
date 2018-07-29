@@ -68,7 +68,7 @@ class Words extends DBEntity {
     }
 
     public function getSearch($search_text, $offset, $limit, $sort_by) {
-        $sort_sql = $this->GetSortSQL($sort_by);
+        $sort_sql = $this->getSortSQL($sort_by);
         $result = $this->con->query("SELECT wordID, word, wordStatus 
             FROM words 
             WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' AND word LIKE '%$search_text%' 
@@ -78,7 +78,7 @@ class Words extends DBEntity {
     }
 
     public function getAll($offset, $limit, $sort_by) {
-        $sort_sql = $this->GetSortSQL($sort_by);
+        $sort_sql = $this->getSortSQL($sort_by);
         $result = $this->con->query("SELECT wordID, word, wordStatus 
             FROM words 
             WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' 
@@ -87,7 +87,7 @@ class Words extends DBEntity {
         return $result ? $result->fetch_all() : false;
     }   
 
-    private function GetSortSQL($sort_by) {
+    private function getSortSQL($sort_by) {
         switch ($sort_by) {
             case '0': // new first
                 return 'wordID DESC';
@@ -105,7 +105,40 @@ class Words extends DBEntity {
                 return '';
                 break;
         }
-        
+    }
+
+    public function createCSVFile($search_text, $order_by) {
+        $search_text = $this->con->real_escape_string($search_text);
+        $sort_sql = $this->getSortSQL($order_by);
+        $filter = !empty($search_text) ? "AND word LIKE '%$search_text%' " : '';
+        $filter .= $order_by != '' ? "ORDER BY $sort_sql" : '';
+
+        $result = $this->con->query("SELECT word 
+            FROM words
+            WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' $filter");
+        if ($result) {
+            $num_fields = $this->con->field_count;
+            $headers = array();
+
+            for ($i = 0; $i < $num_fields; $i++) {
+                $h = $result->fetch_field_direct($i);
+                $headers[] = $h->name;
+            }
+
+            $fp = fopen('php://output', 'w');
+            if ($fp) {
+                header('Content-Type: text/csv');
+                header('Content-Disposition: attachment; filename="export.csv"');
+                header('Pragma: no-cache');
+                header('Expires: 0');
+                fputcsv($fp, $headers);
+                while ($row = $result->fetch_array(MYSQLI_NUM)) {
+                    fputcsv($fp, array_values($row));
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }
 

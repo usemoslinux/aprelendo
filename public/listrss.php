@@ -38,7 +38,7 @@ try {
 function printRSSFeed($feed, $groupindex) {
     if(isset($feed->title)) {
         $result = "<a href='#item-$groupindex' class='list-group-item' data-toggle='collapse'>
-        <i class='glyphicon glyphicon-chevron-right'></i>$feed->title</a>" .
+        <i class='fas fa-chevron-right'></i>$feed->title</a>" .
         "<div class='list-group collapse' id='item-$groupindex'>";
         
         if (isset($feed->articles)) {
@@ -54,7 +54,7 @@ function printRSSFeed($feed, $groupindex) {
                 " data-pubdate='$art_date'" .
                 " data-author='$art_author'" .
                 " data-src='$art_src' >" .
-                "<i class='glyphicon glyphicon-chevron-right'></i>$art_title</a>";
+                "<i class='fas fa-chevron-right'></i></i>$art_title</a>";
                 
                 $result .= "<div class='list-group collapse' id='item-$groupindex-$itemindex'>
                 <div class='list-group-item entry-text'>" . strip_tags($art_content, '<p>') .

@@ -11,7 +11,7 @@ if ($result) {
         
         $is_active = $lg_id == $user->learning_lang_id ? 'active' : '';
         echo "<a href='#item-$lg_iso_code' class='list-group-item entry-info $is_active' data-toggle='collapse'>" .
-              "<i class='glyphicon glyphicon-chevron-right'></i>$lgname</a>";
+              "<i class='fas fa-chevron-right'></i>$lgname</a>";
     
         echo "<div class='list-group collapse' id='item-$lg_iso_code'>
               <div class='list-group-item entry-text'>";

@@ -18,7 +18,9 @@ class ArchivedTexts extends Texts
             'audioURI' => 'atextAudioURI', 
             'type' => 'atextType', 
             'isshared' => 'atextIsShared', 
-            'likes' => 'atextLikes');
+            'likes' => 'atextLikes',
+            'nrofwords' => 'atextNrOfWords',
+            'level' => 'atextLevel');
     }
 
     // ids must be in json format

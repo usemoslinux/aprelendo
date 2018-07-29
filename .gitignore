@@ -1,7 +1,9 @@
 .*
 php-info.php
 temp/
+public/tests/
 private/uploads/
+private/langx-addon/
 /private/passwords.php
 todo.md
 .vscode/

@@ -176,8 +176,8 @@ class Reader extends Text
         
         if ($result) {
             while ($row = $result->fetch_assoc()) {
-                $word = $row['word'];
-                $text = preg_replace("/\b".$word."\b/ui",
+                $phrase = $row['word'];
+                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                 "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
             }
             
@@ -246,7 +246,7 @@ class Reader extends Text
         if (!empty($this->audio_uri)) {
             $html .= '<hr>';
             
-            $html .= "<audio controls id='audioplayer'>";
+            $html .= "<audio controls class='mejs__player' id='audioplayer'>";
             
             $textAudioURI = 'getaudio.php?file=' . $this->audio_uri;
             if (strcasecmp(pathinfo($textAudioURI, PATHINFO_EXTENSION), 'mp3') == 0) {
@@ -258,7 +258,7 @@ class Reader extends Text
             $html .= 'Your browser does not support the audio element.</audio>
             <form>
             <div class="form-group flex-pbr-form">
-            <label for="pbr">Playback rate: <span id="currentpbr">1.0</span></label>
+            <label id="label-speed" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
             <input id="pbr" type="range" class="flex-pbr" value="1" min="0.5" max="2" step="0.1">
             </div>
             </form>';
@@ -324,7 +324,7 @@ class Reader extends Text
             '<div id="show-transcript-container" class="col-xs-12 col-sm-6">';
 
         $html .= "<div id='container' data-textID='" . $this->id . "'>";
-        
+        $html .= '<div id="message-window"></div>';
         $xml = new SimpleXMLElement($this->text);
 
         for ($i=0; $i < sizeof($xml)-1; $i++) { 

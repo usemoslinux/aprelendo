@@ -82,19 +82,28 @@ abstract class Table
 class TextTable extends Table {
     protected function print_content() {
         $html = '';
-        $type_array = array('Articles', 'Conversations', 'Letters', 'Songs', 'Videos', 'Others');
+        // $type_array = array('Articles', 'Conversations', 'Letters', 'Songs', 'Videos', 'Others');
+        $type_array = array('<i title="Article" class="far fa-newspaper"></i>', 
+            '<i title="Conversation" class="far fa-comments"></i>', 
+            '<i title="Letter" class="far fa-envelope-open"></i>', 
+            '<i title="Song" class="fas fa-music"></i>', 
+            '<i title="Video" class="fas fa-video"></i>', 
+            '<i title="Other" class="far fa-file-alt"></i>');
+        $level_array = array('Beginner', 'Intermediate', 'Proficient');
         for ($i=0; $i < sizeof($this->rows); $i++) { 
             $text_id = $this->rows[$i][0];
             $text_title = $this->rows[$i][1];
-            $text_author = isset($this->rows[$i][2]) && !empty($this->rows[$i][2]) ? " - Author: {$this->rows[$i][2]}" : '';
-            $text_type = isset($this->rows[$i][3]) && !empty($this->rows[$i][3]) ? "Type: {$type_array[$this->rows[$i][3]-1]}" : '';
+            $text_type = isset($this->rows[$i][4]) && !empty($this->rows[$i][4]) ? "Type: {$type_array[$this->rows[$i][4]-1]}" : '';
+            $text_author = isset($this->rows[$i][2]) && !empty($this->rows[$i][2]) ? " - Author: {$this->rows[$i][2]}" : ' - Author: unkown';
+            $nr_of_words = isset($this->rows[$i][7]) && !empty($this->rows[$i][7]) ? " - {$this->rows[$i][7]} words" : '';
+            $text_level = isset($this->rows[$i][8]) && !empty($this->rows[$i][8]) ? " - Level: {$level_array[$this->rows[$i][8]-1]}" : '';
+            $has_audio = isset($this->rows[$i][3]) && !empty($this->rows[$i][3]) ? ' - <i title="Has audio" class="fas fa-headphones"></i>' : '';
             $link = '';
             
-            if ($this->rows[$i][3] && !empty($this->rows[$i][3])) {
-                $text_type = "Type: {$type_array[$this->rows[$i][3]-1]}";
+            if ($this->rows[$i][4] && !empty($this->rows[$i][4])) {
                 if (isset($this->url) && !empty($this->url)) {
                     switch (true) {
-                        case ($this->rows[$i][3] == 5):
+                        case ($this->rows[$i][4] == 5):
                             $replace = str_replace('showtext.php', 'showvideo.php', $this->url);
                             $link = empty($replace) ? '' : "<a href ='{$replace}?id=$text_id'>";
                             break;
@@ -105,12 +114,11 @@ class TextTable extends Table {
                 }
             } else {
                 $text_type = '';
-
             }
             
             $html .= '<tr><td class="col-checkbox"><label><input class="chkbox-selrow" type="checkbox" data-idText="' .
             $text_id . '"></label></td><td class="col-title">' . $link .
-            $text_title . '</a><br/><small>' . $text_type . $text_author . '</small></td></tr>';
+            $text_title . '</a><br/><small>' . $text_type . $text_author . $nr_of_words . $text_level . $has_audio . '</small></td></tr>';
         }
         return $html;
     }
