@@ -8,6 +8,15 @@ class Texts extends DBEntity {
     protected $order_col;
     protected $nr_of_words;
 
+    /**
+     * Constructor
+     * 
+     * Sets 3 basic variables used to identify any text: $con, $user_id & learning_lang_id
+     *
+     * @param mysqli_connect $con
+     * @param integer $user_id
+     * @param integer $learning_lang_id
+     */
     public function __construct($con, $user_id, $learning_lang_id) {
         parent::__construct($con, $user_id);
         
@@ -30,12 +39,21 @@ class Texts extends DBEntity {
             'level' => 'textLevel');
     }
 
+    /**
+     * Adds a new text to the database
+     *
+     * @param string $title
+     * @param string $author
+     * @param string $text
+     * @param string $source_url
+     * @param string $audio_url
+     * @param integer $type
+     * @return boolean
+     */
     public function add($title, $author, $text, $source_url, $audio_url, $type) {
         $level = $this->calcTextLevel($text);
         $nr_of_words = $this->nr_of_words;
 
-        // $level = 'A1';
-        
         $result = $this->con->query("INSERT INTO $this->table ({$this->cols['userid']}, {$this->cols['lgid']}, 
                 {$this->cols['title']}, {$this->cols['author']}, {$this->cols['text']}, {$this->cols['sourceURI']}, 
                 {$this->cols['audioURI']}, {$this->cols['type']}, {$this->cols['nrofwords']}, {$this->cols['level']})
@@ -45,6 +63,18 @@ class Texts extends DBEntity {
         return $result;
     }
 
+    /**
+     * Updates existing text in database
+     *
+     * @param integer $id
+     * @param string $title
+     * @param string $author
+     * @param string $text
+     * @param string $source_url
+     * @param string $audio_url
+     * @param integer $type
+     * @return boolean
+     */
     public function update($id, $title, $author, $text, $source_url, $audio_url, $type) {
         $result = $this->con->query("UPDATE $this->table SET {$this->cols['userid']}='$this->user_id', {$this->cols['lgid']}='$this->learning_lang_id', 
                 {$this->cols['title']}='$title', {$this->cols['author']}='$author', text='$text', {$this->cols['audioURI']}='$audio_url', 
@@ -53,7 +83,12 @@ class Texts extends DBEntity {
         return $result;
     }
 
-    // $ids must be in json format
+    /**
+     * Deletes texts in database using ids as a parameter to select them
+     *
+     * @param string $ids JSON that identifies the texts to be deleted
+     * @return boolean
+     */
     public function deleteByIds($ids) {
         $textIDs = $this->convertJSONtoCSV($ids);
 
@@ -61,7 +96,6 @@ class Texts extends DBEntity {
         $deletesql = "DELETE FROM $this->table WHERE {$this->cols['id']} IN ($textIDs)";
 
         $result = $this->con->query($selectsql);
-        $error = $this->con->error;
 
         if ($result) {
             $audiouris = $result->fetch_all();
@@ -86,7 +120,12 @@ class Texts extends DBEntity {
         return $result;
     }
 
-    // ids must be in json format
+    /**
+     * Archives texts in database using ids as a parameter to select them
+     *
+     * @param string $ids JSON that identifies the texts to be archived
+     * @return boolean
+     */
     public function archiveByIds($ids) {
         $textIDs = $this->convertJSONtoCSV($ids);
 
@@ -102,6 +141,15 @@ class Texts extends DBEntity {
         return $result;
     }
 
+    /**
+     * Counts the number of rows (i.e. texts) for a specific search
+     * 
+     * Used for pagination
+     *
+     * @param string $filter_sql A string with the SQL statement to be used as a filter for the search
+     * @param string $search_text
+     * @return integer|boolean
+     */
     public function countRowsFromSearch($filter_sql, $search_text) {
         $result = $this->con->query("SELECT COUNT({$this->cols['id']}) FROM $this->table 
             WHERE {$this->cols['userid']}='$this->user_id' 
@@ -116,6 +164,12 @@ class Texts extends DBEntity {
         }
     }
 
+    /**
+     * Counts the number of rows (i.e. texts) for the current user & language combination
+     * It differs from countRowsFromSearch in that this function does not apply any additional filter
+     *
+     * @return integer|boolean
+     */
     public function countAllRows() {
         $result = $this->con->query("SELECT COUNT({$this->cols['id']}) FROM $this->table 
             WHERE {$this->cols['userid']}='$this->user_id' AND {$this->cols['lgid']}='$this->learning_lang_id'");
@@ -129,6 +183,18 @@ class Texts extends DBEntity {
         }
     }
 
+    /**
+     * Gets texts by using a search pattern ($search_text) and a filter ($filter_sql).
+     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
+     * Values are returned using a sort pattern ($sort_by)
+     *
+     * @param string $filter_sql SQL statement specifying the filter to be used
+     * @param string $search_text
+     * @param integer $offset
+     * @param integer $limit
+     * @param integer $sort_by Is converted to a string using getSortSQL()
+     * @return array
+     */
     public function getSearch($filter_sql, $search_text, $offset, $limit, $sort_by) {
         $sort_sql = $this->getSortSQL($sort_by);
         $result = $this->con->query("SELECT {$this->cols['id']}, {$this->cols['title']}, {$this->cols['author']}, 
@@ -141,6 +207,16 @@ class Texts extends DBEntity {
         return $result ? $result->fetch_all() : false;
     }
 
+    /**
+     * Gets all the texts for the current user & language combination
+     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
+     * Values are returned using a sort pattern ($sort_by)
+     *
+     * @param integer $offset
+     * @param integer $limit
+     * @param integer $sort_by Is converted to a string using getSortSQL()
+     * @return array
+     */
     public function getAll($offset, $limit, $sort_by) {
         $sort_sql = $this->getSortSQL($sort_by);
         $result = $this->con->query("SELECT {$this->cols['id']}, {$this->cols['title']}, {$this->cols['author']}, 
@@ -152,17 +228,14 @@ class Texts extends DBEntity {
         
         return $result ? $result->fetch_all() : false;
     }
-
-    public function getAllById($id, $sort_by) {
-        $sort_sql = $this->getSortSQL($sort_by);
-        $result = $this->con->query("SELECT * 
-            FROM $this->table 
-            WHERE {$this->cols['id']}='$id'
-            ORDER BY $sort_sql");
-        
-        return $result ? $result->fetch_all() : false;
-    }
-    
+  
+    /**
+     * Converts sorting patterns selected by user (expressed as an integer value in the sort menu) 
+     * to valid SQL strings
+     *
+     * @param integer $sort_by
+     * @return string
+     */
     private function getSortSQL($sort_by) {
         switch ($sort_by) {
             case '0': // new first
@@ -177,6 +250,25 @@ class Texts extends DBEntity {
         }
     }
 
+    /**
+     * Calculates difficulty level of a given $text (possible subject to improvements)
+     * 
+     * The algorithm is simple: 
+     * 
+     * 1. determine how many words in $texts are NOT present in the 5000 most frequently 
+     * used words table of the current language.
+     * 
+     * 2. Divide that by the total amount of words in $text ($unknown_words / $total_words)
+     * 
+     * 3. This will give us a difficulty index of sorts that will allow us to classify texts by their difficulty level:
+     * 
+     * Advanced:             index > 0.25  (>25% of words in $text where not in the 5000 most frequently used table)
+     * Intermediate: 0.15 >= index >= 0.25 (between 15% and 25% of words in $text where not in the 5000 most freq. used table)
+     * Beginner:             index < 0.15  (<15% of words in $text where not in the 5000 most frequently used table)
+     * 
+     * @param string $text
+     * @return integer|boolean
+     */
     private function calcTextLevel($text) {
         // get learning language ISO name
         $result = $this->con->query("SELECT LgName 
@@ -209,15 +301,14 @@ class Texts extends DBEntity {
 
                 $index = $unknown_words / $total_words;
 
-                // if index > 25% => level = proficient; if 25% >= index >=15% => level = intermediate; if index < 15% => level = beginner
                 switch (true) {
-                    case ($index < 0.15):
+                    case ($index < 0.15): // beginner
                         return 1;
                         break;
-                    case ($index >= 0.15 && $index <= 0.25):
+                    case ($index >= 0.15 && $index <= 0.25): // intermediate
                         return 2;
                         break;
-                    case ($index > 0.25):
+                    case ($index > 0.25): // advanced
                         return 3;
                         break;
                     default:

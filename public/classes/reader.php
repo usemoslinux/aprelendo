@@ -14,7 +14,7 @@ class Text
      * Constructor
      * Initializes class variables (id, title, author, etc.)
      *
-     * @param mysqli $con
+     * @param mysqli_connect $con
      * @param integer $id
      */
     public function __construct($con, $id) {
@@ -85,7 +85,7 @@ class Reader extends Text
      * Constructor
      * Used for full reader (whole text document). Used by showtext.php
      *
-     * @param mysqli $con
+     * @param mysqli_connect $con
      * @param integer $text_id
      * @param integer $user_id
      * @param integer $learning_lang_id
@@ -100,7 +100,7 @@ class Reader extends Text
      * Constructor
      * Used for mini reader (word/phrase). Used by underlinewords.php
      *
-     * @param mysqli $con
+     * @param mysqli_connect $con
      * @param integer $user_id
      * @param integer $learning_lang_id
      * @return void
@@ -163,7 +163,7 @@ class Reader extends Text
     * Returns the modified $text, which includes the new HTML code
     *
     * @param string $text
-    * @param mysqli $con
+    * @param mysqli_connect $con
     * @return string
     */
     public function colorizeWords($text)

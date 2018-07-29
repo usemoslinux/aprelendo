@@ -21,6 +21,11 @@ class User
         'it' => 'italian',
         'de' => 'german');
     
+    /**
+     * Constructor
+     * 
+     * @param mysqli_connect $con
+     */
     public function __construct ($con) {
         $this->con = $con;
     } // end construct
@@ -33,7 +38,7 @@ class User
      * @param string $password
      * @param string $native_lang
      * @param string $learning_lang
-     * @return bool
+     * @return boolean
      */
     public function register($username, $email, $password, $native_lang = 'en', $learning_lang) {
         $username = $this->name = $this->con->escape_string($username);
@@ -94,7 +99,7 @@ class User
      *
      * @param string $username
      * @param string $password
-     * @return bool
+     * @return boolean
      */
     public function createRememberMeCookie($username, $password) {
         $username = $this->con->escape_string($username);
@@ -186,7 +191,7 @@ class User
      * @param string $new_password
      * @param string $new_native_lang
      * @param string $new_learning_lang
-     * @return bool
+     * @return boolean
      */
     public function updateUserProfile($new_username, $new_email, $password, $new_password, $new_native_lang, $new_learning_lang) {
         // check if $password is correct, without it user would not have the right priviliges to update his profile
@@ -279,7 +284,7 @@ class User
      * Update active language in db
      *
      * @param integer $lang_id
-     * @return bool
+     * @return boolean
      */
     public function setActiveLang($lang_id) {
         $result = $this->con->query("SELECT LgName FROM languages WHERE LgId = '$lang_id'");
@@ -314,7 +319,7 @@ class User
      * Check if $password = user password
      *
      * @param string $password
-     * @return bool
+     * @return boolean
      */
     private function checkPassword($password) {
         $user_id = $this->id;

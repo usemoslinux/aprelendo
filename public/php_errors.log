@@ -1,0 +1,26 @@
+[29-Jul-2018 23:07:12 Europe/Berlin] PHP Notice:  Undefined index: message in /var/www/langx/public/error.php on line 12
+[29-Jul-2018 23:07:12 Europe/Berlin] PHP Stack trace:
+[29-Jul-2018 23:07:12 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/error.php:0
+[29-Jul-2018 23:10:52 Europe/Berlin] PHP Notice:  Undefined index: message in /var/www/langx/public/error.php on line 11
+[29-Jul-2018 23:10:52 Europe/Berlin] PHP Stack trace:
+[29-Jul-2018 23:10:52 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/error.php:0
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1044): Access denied for user 'earendil'@'%' to database 'asd' in /var/www/langx/public/classes/connect.php on line 27
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP Stack trace:
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/texts.php:0
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP   2. require_once() /var/www/langx/public/texts.php:3
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP   3. require_once() /var/www/langx/public/header.php:2
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP   4. Connect->connect() /var/www/langx/public/db/dbinit.php:14
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP   5. mysqli->__construct() /var/www/langx/public/classes/connect.php:27
+[29-Jul-2018 23:14:15 Europe/Berlin] MySQL Error: Access denied for user 'earendil'@'%' to database 'asd'
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP Notice:  Undefined variable: con in /var/www/langx/public/db/checklogin.php on line 5
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP Stack trace:
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/texts.php:0
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP   2. require_once() /var/www/langx/public/texts.php:3
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP   3. require_once() /var/www/langx/public/header.php:3
+[29-Jul-2018 23:14:15 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /var/www/langx/public/classes/users.php:161
+Stack trace:
+#0 /var/www/langx/public/db/checklogin.php(7): User->isLoggedIn()
+#1 /var/www/langx/public/header.php(3): require_once('/var/www/langx/...')
+#2 /var/www/langx/public/texts.php(3): require_once('/var/www/langx/...')
+#3 {main}
+  thrown in /var/www/langx/public/classes/users.php on line 161

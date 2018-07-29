@@ -11,6 +11,14 @@ class Pagination
   private $start; // beginning of range
   private $end; // end of range
 
+  /**
+   * Constructor
+   *
+   * @param integer $page Current page number
+   * @param integer $limit How many rows to show
+   * @param integer $total_rows Total amount of rows
+   * @param integer $adjacents How many adjacent pages to show in pagination
+   */
   public function __construct($page = 1, $limit = 10, $total_rows, $adjacents = 2) {
     $this->limit = $limit;
     $this->adjacents = $adjacents;
@@ -42,6 +50,16 @@ class Pagination
     }
   }
 
+  /**
+   * Prints pagination selector
+   *
+   * @param string $url
+   * @param string $search_text
+   * @param integer $sort_by
+   * @param integer $filter
+   * @param integer $show_archived
+   * @return string HTML of pagination
+   */
   public function print($url, $search_text, $sort_by, $filter = NULL, $show_archived = NULL) {
     $search_text = urlencode($search_text);
     if (!is_null($show_archived)) {

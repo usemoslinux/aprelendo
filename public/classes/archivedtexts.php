@@ -4,6 +4,13 @@ require_once('connect.php');
 
 class ArchivedTexts extends Texts
 {
+    /**
+     * Constructor
+     *
+     * @param mysqli_connect $con
+     * @param integer $user_id
+     * @param integer $learning_lang_id
+     */
     public function __construct($con, $user_id, $learning_lang_id) {
         parent::__construct($con, $user_id, $learning_lang_id);
         $this->table = 'archivedtexts';
@@ -23,7 +30,12 @@ class ArchivedTexts extends Texts
             'level' => 'atextLevel');
     }
 
-    // ids must be in json format
+    /**
+     * Unarchives text by using their $ids
+     *
+     * @param string $ids JSON with text ids to unarchive
+     * @return boolean
+     */
     public function unarchiveByIds($ids) {
         $textIDs = $this->convertJSONtoCSV($ids);
 

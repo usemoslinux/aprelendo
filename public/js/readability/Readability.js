@@ -222,7 +222,7 @@ Readability.prototype = {
    *
    * @param  NodeList nodeList The NodeList.
    * @param  Function fn       The iterate function.
-   * @return Boolean
+   * @return boolean
    */
   _someNode: function(nodeList, fn) {
     return Array.prototype.some.call(nodeList, fn, this);
@@ -237,7 +237,7 @@ Readability.prototype = {
    *
    * @param  NodeList nodeList The NodeList.
    * @param  Function fn       The iterate function.
-   * @return Boolean
+   * @return boolean
    */
   _everyNode: function(nodeList, fn) {
     return Array.prototype.every.call(nodeList, fn, this);
@@ -1157,7 +1157,7 @@ Readability.prototype = {
    * is less than 100 chars.
    *
    * @param possibleByline {string} - a string to check whether its a byline.
-   * @return Boolean - whether the input string is a byline.
+   * @return boolean - whether the input string is a byline.
    */
   _isValidByline: function(byline) {
     if (typeof byline == 'string' || byline instanceof String) {
@@ -1456,7 +1456,7 @@ Readability.prototype = {
    * @param  String      tagName
    * @param  Number      maxDepth
    * @param  Function    filterFn a filter to invoke to determine whether this node 'counts'
-   * @return Boolean
+   * @return boolean
    */
   _hasAncestorTag: function(node, tagName, maxDepth, filterFn) {
     maxDepth = maxDepth || 3;

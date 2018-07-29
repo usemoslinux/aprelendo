@@ -5,12 +5,29 @@ require_once('connect.php');
 class Words extends DBEntity {
     private $learning_lang_id;
 
+    /**
+     * Constructor
+     * 
+     * Sets 3 basic variables used to identify any text: $con, $user_id & learning_lang_id
+     *
+     * @param mysqli_connect $con
+     * @param integer $user_id
+     * @param integer $learning_lang_id
+     */
     public function __construct($con, $user_id, $learning_lang_id) {
         parent::__construct($con, $user_id);
         $this->learning_lang_id = $learning_lang_id;
         $this->table = 'words';
     }
 
+    /**
+     * Adds a new wod to the database
+     *
+     * @param string $word
+     * @param integer $status
+     * @param integer $isphrase It's an integer but it acts like a boolean (only uses 0 & 1)
+     * @return boolean
+     */
     public function add($word, $status, $isphrase) {
         $result = $this->con->query("INSERT INTO words (wordUserId, wordLgId, word, wordStatus, isPhrase)
             VALUES ('$this->user_id', '$this->learning_lang_id', '$word', $status, $isphrase) ON DUPLICATE KEY UPDATE
@@ -19,6 +36,12 @@ class Words extends DBEntity {
         return $result;
     }
 
+    /**
+     * Updates status of existing words in database
+     * 
+     * @param string $words JSON string containing all the words to update
+     * @return boolean
+     */
     public function updateByName($words) {
         $csvwords = $this->convertJSONtoCSV($words);
         
@@ -28,6 +51,12 @@ class Words extends DBEntity {
         return $result;
     }
 
+    /**
+     * Deletes 1 word in database using word (not the id, the actual word) as a parameter to select it
+     *
+     * @param string $word
+     * @return boolean
+     */
     public function deleteByName($word) {
         $word = $this->con->real_escape_string($word);
         $result = $this->con->query("DELETE FROM words WHERE word='$word'");
@@ -35,7 +64,12 @@ class Words extends DBEntity {
         return $result;
     }
 
-    // ids must be in json format
+    /**
+     * Deletes words in database using ids as a parameter to select them
+     *
+     * @param string $ids JSON that identifies the texts to be deleted
+     * @return boolean
+     */
     public function deleteByIds($ids) {
         $wordIDs = $this->convertJSONtoCSV($ids);
         $result = $this->con->query("DELETE FROM words WHERE wordID IN ($wordIDs)");
@@ -43,6 +77,12 @@ class Words extends DBEntity {
         return $result;
     }
 
+    /**
+     * Counts the number of rows (i.e. words) for a specific search
+     *
+     * @param string $search_text
+     * @return integer|boolean
+     */
     public function countRowsFromSearch($search_text) {
         $result = $this->con->query("SELECT COUNT(word) FROM words WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' AND word LIKE '%$search_text%'");
         
@@ -55,6 +95,12 @@ class Words extends DBEntity {
         }
     }
 
+    /**
+     * Counts the number of rows (i.e. words) for the current user & language combination
+     * It differs from countRowsFromSearch in that this function does not apply any additional filter
+     *
+     * @return integer|boolean
+     */
     public function countAllRows() {
         $result = $this->con->query("SELECT COUNT(word) FROM words WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id'");
         
@@ -67,6 +113,17 @@ class Words extends DBEntity {
         }
     }
 
+    /**
+     * Gets words by using a search pattern ($search_text).
+     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
+     * Values are returned using a sort pattern ($sort_by)
+     *
+     * @param string $search_text
+     * @param integer $offset
+     * @param integer $limit
+     * @param integer $sort_by Is converted to a string using getSortSQL()
+     * @return array
+     */
     public function getSearch($search_text, $offset, $limit, $sort_by) {
         $sort_sql = $this->getSortSQL($sort_by);
         $result = $this->con->query("SELECT wordID, word, wordStatus 
@@ -77,6 +134,16 @@ class Words extends DBEntity {
         return $result ? $result->fetch_all() : false;
     }
 
+    /**
+     * Gets all the words for the current user & language combination
+     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
+     * Values are returned using a sort pattern ($sort_by)
+     *
+     * @param integer $offset
+     * @param integer $limit
+     * @param integer $sort_by Is converted to a string using getSortSQL()
+     * @return array
+     */
     public function getAll($offset, $limit, $sort_by) {
         $sort_sql = $this->getSortSQL($sort_by);
         $result = $this->con->query("SELECT wordID, word, wordStatus 
@@ -87,6 +154,13 @@ class Words extends DBEntity {
         return $result ? $result->fetch_all() : false;
     }   
 
+    /**
+     * Converts sorting patterns selected by user (expressed as an integer value in the sort menu) 
+     * to valid SQL strings
+     *
+     * @param integer $sort_by
+     * @return string
+     */
     private function getSortSQL($sort_by) {
         switch ($sort_by) {
             case '0': // new first
@@ -107,6 +181,17 @@ class Words extends DBEntity {
         }
     }
 
+    /**
+     * Exports words to a CSV file
+     * 
+     * It exports either the whole set of words corresponding to a user & language combination,
+     * or the specific subset that results from applying additional filters (e.g. $search_text).
+     * Results are ordered using $order_by.
+     *
+     * @param string $search_text
+     * @param integer $order_by Is converted to a string using getSortSQL()
+     * @return boolean
+     */
     public function createCSVFile($search_text, $order_by) {
         $search_text = $this->con->real_escape_string($search_text);
         $sort_sql = $this->getSortSQL($order_by);

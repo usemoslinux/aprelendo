@@ -272,6 +272,10 @@ SITE WRAPS
     background-image: url('../images/backgrounds/headerwrap-2.jpg');
 }
 
+.nice-wallpaper-4 {
+    background-image: url('../images/backgrounds/headerwrap-3.jpg');
+}
+
 .inverted-colors {
     filter: invert(100%);
 }

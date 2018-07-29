@@ -7,6 +7,11 @@ class RSSFeed
     public $xmlfeed;
     public $articles = array();
 
+    /**
+     * Constructor
+     *
+     * @param string $url
+     */
     public function __construct($url) {
         if (!empty($url)) {
             $this->url = $url;
@@ -60,6 +65,17 @@ class RSSFeeds
     public $feed2;
     public $feed3;
 
+    /**
+     * Constructor
+     * 
+     * Sets 3 basic variables used to identify feeds: $con, $user_id & learning_lang_id
+     * 
+     * Gets up to 3 rss feeds for that user & language combination
+     *
+     * @param mysqli_connect $con
+     * @param integer $user_id
+     * @param integer $learning_lang_id
+     */
     public function __construct($con, $user_id, $learning_lang_id) {
         $result = $con->query("SELECT LgRSSFeed1URI, LgRSSFeed2URI, LgRSSFeed3URI FROM languages WHERE LgUserId='$user_id' AND LgID='$learning_lang_id'");
 

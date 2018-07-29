@@ -11,6 +11,16 @@ abstract class Table
     protected $sort_menu;
     protected $url;
 
+    /**
+     * Constructor
+     *
+     * @param string $headings
+     * @param string $col_widths
+     * @param array $rows
+     * @param string $url
+     * @param string $action_menu HTML to create action menu
+     * @param string $sort_menu HTML to create sort menu
+     */
     public function __construct($headings, $col_widths, $rows, $url, $action_menu, $sort_menu) {
         $this->headings = $headings;
         $this->col_count = sizeof($headings);
@@ -21,6 +31,12 @@ abstract class Table
         $this->sort_menu = $sort_menu;
     }
 
+    /**
+     * Prints table
+     *
+     * @param integer $sort_by
+     * @return void
+     */
     public function print($sort_by) {
         $html = $this->print_header();
         $html .= $this->print_content();
@@ -28,7 +44,11 @@ abstract class Table
         return $html;
     }
 
-    // functions to print table header, contents & footer
+    /**
+     * Prints table header
+     *
+     * @return string HTML for table header
+     */
     protected function print_header() {
         $html = '<div class="row">
             <div class="col-xs-12">
@@ -51,6 +71,12 @@ abstract class Table
         return $html;
     }
 
+    /**
+     * Prints table footer
+     *
+     * @param integer $sort_by
+     * @return string HTML for table footer
+     */
     protected function print_footer($sort_by) {
         $html = '</tbody></table><div class="row"><div class="col-xs-12"><div class="dropdown">
         <button class="btn btn-default dropdown-toggle disabled" type="button" id="actions-menu" data-toggle="dropdown">Actions <span class="caret"></span></button>
@@ -80,16 +106,20 @@ abstract class Table
 }
 
 class TextTable extends Table {
+    /**
+     * Prints table content (only for Texts table)
+     *
+     * @return string HTML for table content
+     */
     protected function print_content() {
         $html = '';
-        // $type_array = array('Articles', 'Conversations', 'Letters', 'Songs', 'Videos', 'Others');
         $type_array = array('<i title="Article" class="far fa-newspaper"></i>', 
             '<i title="Conversation" class="far fa-comments"></i>', 
             '<i title="Letter" class="far fa-envelope-open"></i>', 
             '<i title="Song" class="fas fa-music"></i>', 
             '<i title="Video" class="fas fa-video"></i>', 
             '<i title="Other" class="far fa-file-alt"></i>');
-        $level_array = array('Beginner', 'Intermediate', 'Proficient');
+        $level_array = array('Beginner', 'Intermediate', 'Advanced');
         for ($i=0; $i < sizeof($this->rows); $i++) { 
             $text_id = $this->rows[$i][0];
             $text_title = $this->rows[$i][1];
@@ -125,6 +155,11 @@ class TextTable extends Table {
 }
 
 class WordTable extends Table {
+    /**
+     * Prints table content (only for Words table)
+     *
+     * @return string HTML for table content
+     */
     protected function print_content() {
         $html = '';
             

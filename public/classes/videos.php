@@ -10,6 +10,15 @@ class Videos extends DBEntity {
     protected $source_url;
     protected $transcript_xml;
 
+    /**
+     * Constructor
+     * 
+     * Sets 3 basic variables used to identify videos: $con, $user_id & learning_lang_id
+     *
+     * @param mysqli_connect $con
+     * @param integer $user_id
+     * @param integer $learning_lang_id
+     */
     public function __construct($con, $user_id, $learning_lang_id) {
         parent::__construct($con, $user_id);
         
@@ -17,6 +26,14 @@ class Videos extends DBEntity {
         $this->table = 'texts';
     }
 
+    /**
+     * Fetches video from youtube
+     *
+     * @param string $learning_lang ISO representation of the video's language
+     * @param string $youtube_id YouTube video ID
+     * @return string JSON string representation of video's $title, $author and subtitles ($transcript_xml)
+     *  
+     */
     public function fetchVideo($learning_lang, $youtube_id) {
         $transcript_xml = file_get_contents("https://video.google.com/timedtext?lang=$learning_lang&v=$youtube_id");
         $transcript_xml = array ('text' => $transcript_xml);
@@ -31,6 +48,12 @@ class Videos extends DBEntity {
         return json_encode($merged);
     }
 
+    /**
+     * Extract YouTube Id from a given URL
+     *
+     * @param string $url
+     * @return string|boolean string representation of YT Id or false if $url has wrong format
+     */
     public function extractYTId($url) {
         $is_yt_uri = strpos($url, 'https://www.youtube.com/watch?v=');
         $is_yt_uri = $is_yt_uri === 0 ? 0 : strpos($url, 'https://youtu.be/');

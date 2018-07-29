@@ -19,7 +19,7 @@ class Language //extends DBEntity
      * Constructor
      * Initializes class variables (id, name, etc.)
      *
-     * @param mysqli $con
+     * @param mysqli_connect $con
      * @param integer $id
      * @param integer $user_id
      */
@@ -45,7 +45,7 @@ class Language //extends DBEntity
      * Updates language settings in db
      *
      * @param array $array
-     * @return bool
+     * @return boolean
      */
     public function edit($array) {
         $id = $this->id;
@@ -65,6 +65,12 @@ class Language //extends DBEntity
         return $result;
     }
 
+    /**
+     * Gets language by Id
+     *
+     * @param integer $id
+     * @return array
+     */
     public function getById($id) {
         $result = $this->con->query("SELECT * FROM languages WHERE LgUserId='$this->user_id' AND LgID = '$id'");
                

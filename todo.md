@@ -2,8 +2,6 @@
 
 - esta borrando bien los archivos de audio? hay muchos acumulados...
 
-- fixes #68, fixes #69, fixes #66, fixes #60
-
 - calculate level for texts
  - https://www.universeofmemory.com/how-many-words-you-should-know/
  - http://www.php.net/manual/en/function.array-intersect.php
@@ -11,13 +9,6 @@
 
 - active reading
   - https://www.fluentinmandarin.com/content/making-your-foreign-language-study-effective-active-not-passive/
-
-- get user location for "my profile":
-  - https://nominatim.openstreetmap.org/reverse.php?format=json&lat=50.842750099999996&lon=4.3515499&zoom=18
-
-- export to csv
-  - https://stackoverflow.com/questions/125113/php-code-to-convert-a-mysql-query-to-csv (2da respuesta)
-  - https://stackoverflow.com/questions/16251625/how-to-create-and-download-a-csv-file-from-php-script
 
 - lazy loading colorizewords
     - Jquery plugin: http://morr.github.io/appear.html
@@ -30,6 +21,7 @@
   Esto es diferente de una palabra que estoy aprendiendo, a la cual ley doy clic al boton "forgot meaning".
   Deberian figurar ambas bajo el concepto "forgotten".
 
+- what happens when ->connect() fails ? should redirect to some special page?
 
 - que pasa cuando recien empiezo a usar el programa y $_COOKIE['actlangid'] todavia no tiene ningun valor? Ver lugares donde uso esta variable.
 
