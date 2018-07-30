@@ -4,8 +4,9 @@ temp/
 public/tests/
 private/uploads/
 private/langx-addon/
-/private/passwords.php
+private/passwords.php
 todo.md
 .vscode/
 jsconfig.json
 .stylelintrc
+public/error.log

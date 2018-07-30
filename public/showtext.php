@@ -77,7 +77,7 @@ try {
                         <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
                         <button id="btnadd" type="button" class="btn btn-primary btn-success pull-right addbtn" data-dismiss="modal">Add</button>
                         <select class="modal-selPhrase" name="selPhrase" id="selPhrase">
-                            <option value="translateparagraph">Translate whole paragraph</option>
+                            <option value="translate_sentence">Translate sentence</option>
                         </select>
                     </div>
                     <div class="modal-body" id="definitions">

@@ -154,8 +154,8 @@ $(document).ready(function () {
         });
         $("#selPhrase").append(
             $("<option>", {
-                value: "translateparagraph",
-                text: "Translate whole paragraph"
+                value: "translate_sentence",
+                text: "Translate sentence"
             })
         );
         
@@ -405,12 +405,12 @@ $("#pbr").on("input change", function () {
 
 /**
 * Updates dictionary in modal window when user selects a new word/phrase
-* If user chooses to "translate the whole paragraph", the translator pops up
+* If user chooses to "translate sentence", the translator pops up
 */
 $("#selPhrase").on("change", function () {
     var selindex = $("#selPhrase").prop("selectedIndex");
     var trans_whole_p_index = $("#selPhrase option").length - 1;
-    var url = "";
+    var url = '';
     
     // set Add & Delete buttons depending on whether selection exists in database
     if (selindex == 0 || selindex == trans_whole_p_index) {
@@ -423,19 +423,23 @@ $("#selPhrase").on("change", function () {
         $("#btnadd").text("Add");
     }
     
-    // define behaviour when user clicks on a phrase or "translate whole paragraph"
+    // define behaviour when user clicks on a phrase or "translate sentence"
     if (selindex == trans_whole_p_index) {
-        // translate whole paragraph
+        // translate sentence
+        var $start_obj = $selword.prevUntil(':contains(".")').last();
+        var $end_obj = $selword.nextUntil(':contains(".")').last().next();
+        var $sentence = $start_obj.nextUntil($end_obj).addBack().next().addBack();
+
         url = translatorURI.replace(
             "%s",
-            encodeURIComponent($selword.parent("p").text())
+            encodeURIComponent($sentence.text())
         );
         var win = window.open(url);
         if (win) {
             win.focus();
         } else {
             alert(
-                "Couldn't open translator window. Please allow popups for this website"
+                "Unable to open translator. Disable pop-up blocking for this website and try again."
             );
         }
         $(this).prop("selectedIndex", prevsel);
