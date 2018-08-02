@@ -27,8 +27,6 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         $page = !empty($_GET['p']) ? $_GET['p'] : 1;
     }
     
-    $search_text_escaped = $con->real_escape_string($search_text);
-    
     // calculate page count for pagination
     if ($show_archived) {
         $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id);
@@ -36,12 +34,12 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         $texts_table = new Texts($con, $user_id, $learning_lang_id);
     }
     
-    $total_rows = $texts_table->countRowsFromSearch($filter_sql, $search_text_escaped);
+    $total_rows = $texts_table->countRowsFromSearch($filter_sql, $search_text);
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->offset;
     
     // get search result
-    $rows = $texts_table->getSearch($filter_sql, $search_text_escaped, $offset, $limit, $sort_by);
+    $rows = $texts_table->getSearch($filter_sql, $search_text, $offset, $limit, $sort_by);
     
     // print table
     if (sizeof($rows) > 0) { // if there are any results, show them

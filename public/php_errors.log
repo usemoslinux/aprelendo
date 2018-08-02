@@ -1,0 +1,65 @@
+[01-Aug-2018 10:42:46 Europe/Berlin] PHP Notice:  Undefined variable: yt_url in /var/www/langx/public/classes/videos.php on line 65
+[01-Aug-2018 10:42:46 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 10:42:46 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 10:42:46 Europe/Berlin] PHP   2. Videos->extractYTId($url = *uninitialized*) /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 10:43:12 Europe/Berlin] PHP Warning:  sizeof(): Parameter must be an array or an object that implements Countable in /var/www/langx/public/classes/videos.php on line 67
+[01-Aug-2018 10:43:12 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 10:43:12 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 10:43:12 Europe/Berlin] PHP   2. Videos->extractYTId($url = *uninitialized*) /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 10:43:12 Europe/Berlin] PHP   3. sizeof(*uninitialized*) /var/www/langx/public/classes/videos.php:67
+[01-Aug-2018 12:05:15 Europe/Berlin] PHP Warning:  explode() expects parameter 2 to be string, array given in /var/www/langx/public/classes/videos.php on line 67
+[01-Aug-2018 12:05:15 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:05:15 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:05:15 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:05:15 Europe/Berlin] PHP   3. explode() /var/www/langx/public/classes/videos.php:67
+[01-Aug-2018 12:05:15 Europe/Berlin] PHP Warning:  Invalid argument supplied for foreach() in /var/www/langx/public/classes/videos.php on line 73
+[01-Aug-2018 12:05:15 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:05:15 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:05:15 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:05:22 Europe/Berlin] PHP Warning:  explode() expects parameter 2 to be string, array given in /var/www/langx/public/classes/videos.php on line 67
+[01-Aug-2018 12:05:22 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:05:22 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:05:22 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:05:22 Europe/Berlin] PHP   3. explode() /var/www/langx/public/classes/videos.php:67
+[01-Aug-2018 12:05:22 Europe/Berlin] PHP Warning:  Invalid argument supplied for foreach() in /var/www/langx/public/classes/videos.php on line 73
+[01-Aug-2018 12:05:22 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:05:22 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:05:22 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:05:38 Europe/Berlin] PHP Warning:  explode() expects parameter 2 to be string, array given in /var/www/langx/public/classes/videos.php on line 67
+[01-Aug-2018 12:05:38 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:05:38 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:05:38 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:05:38 Europe/Berlin] PHP   3. explode() /var/www/langx/public/classes/videos.php:67
+[01-Aug-2018 12:05:38 Europe/Berlin] PHP Warning:  Invalid argument supplied for foreach() in /var/www/langx/public/classes/videos.php on line 73
+[01-Aug-2018 12:05:38 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:05:38 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:05:38 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:05:53 Europe/Berlin] PHP Warning:  explode() expects parameter 2 to be string, array given in /var/www/langx/public/classes/videos.php on line 67
+[01-Aug-2018 12:05:53 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:05:53 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:05:53 Europe/Berlin] PHP   2. Videos->extractYTId($url = *uninitialized*) /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:05:53 Europe/Berlin] PHP   3. explode(*uninitialized*, *uninitialized*) /var/www/langx/public/classes/videos.php:67
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Notice:  Undefined variable: url_param in /var/www/langx/public/classes/videos.php on line 74
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Notice:  Undefined variable: url_param in /var/www/langx/public/classes/videos.php on line 74
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Notice:  Undefined variable: url_param in /var/www/langx/public/classes/videos.php on line 74
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Notice:  Undefined variable: url_param in /var/www/langx/public/classes/videos.php on line 74
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Notice:  Undefined variable: url_param in /var/www/langx/public/classes/videos.php on line 74
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Notice:  Undefined variable: url_param in /var/www/langx/public/classes/videos.php on line 74
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP Stack trace:
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/showvideo.php:0
+[01-Aug-2018 12:06:13 Europe/Berlin] PHP   2. Videos->extractYTId() /var/www/langx/public/showvideo.php:36

@@ -27,35 +27,40 @@
     // 4. The API will call this function when the video player is ready.
     function onPlayerReady(event) {
         event.target.playVideo();
-        
-    
     }
     
     // 5. The API calls this function when the player's state changes.
     //    The function indicates that when playing a video (state=1),
     //    the player should play for six seconds and then stop.
     function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING) {
-            var timer;     
-            var $obj = $('div.text-center','#container');
-            var video_time = 0;
-               
-            function updateTime(time_interval) {
-                timer = setInterval(function(){
-                    video_time = player.getCurrentTime();
-                    $next_obj = $obj.filter(function() {
-                        return $(this).attr("data-start") < video_time;
-                      }).last();
-                    $obj.removeClass('video-reading-line');
-                    if ($next_obj.length > 0) {
-                        $next_obj.addClass('video-reading-line');
-                    }
-                }, time_interval);
-            }
+        switch (event.data) {
+            case YT.PlayerState.PLAYING:
+                video_paused = false;
+                var timer;     
+                var $obj = $('div.text-center','#container');
+                var video_time = 0;
+                
+                function updateTime(time_interval) {
+                    timer = setInterval(function(){
+                        video_time = player.getCurrentTime();
+                        $next_obj = $obj.filter(function() {
+                            return $(this).attr("data-start") < video_time;
+                        }).last();
+                        $obj.removeClass('video-reading-line');
+                        if ($next_obj.length > 0) {
+                            $next_obj.addClass('video-reading-line');
+                        }
+                    }, time_interval);
+                }
 
-            updateTime(0); 
-        } else if (event.data == YT.PlayerState.PAUSED) {
-            clearInterval(timer);
+                updateTime(0);     
+                break;
+            case YT.PlayerState.PAUSED:
+                clearInterval(timer);
+                video_paused = true;
+                
+            default:
+                break;
         }
     }
     

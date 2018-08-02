@@ -31,15 +31,14 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     }
     
     $search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';
-    $search_text_escaped = $con->real_escape_string($search_text);
     
     $words_table = new Words($con, $user_id, $learning_lang_id);
-    $total_rows = $words_table->countRowsFromSearch($search_text_escaped);
+    $total_rows = $words_table->countRowsFromSearch($search_text);
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->offset;
 
     // get search result
-    $rows = $words_table->getSearch($search_text_escaped, $offset, $limit, $sort_by);
+    $rows = $words_table->getSearch($search_text, $offset, $limit, $sort_by);
 
     // print table
     if (sizeof($rows) > 0) { // if there are any results, show them

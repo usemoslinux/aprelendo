@@ -21,7 +21,6 @@ if (!empty($filter)) {
         $show_archived = true;
     } elseif ($filter > -1) {
         $filter_sql = $show_archived ? "AND atextType=$filter" : "AND textType=$filter";
-        $filter_sql = $con->real_escape_string($filter_sql);
     }
 }
 

@@ -29,6 +29,11 @@ class Words extends DBEntity {
      * @return boolean
      */
     public function add($word, $status, $isphrase) {
+        // escape parameters
+        $word = $this->con->real_escape_string($word);
+        $status = $this->con->real_escape_string($status);
+        $isphrase = $this->con->real_escape_string($isphrase);
+        
         $result = $this->con->query("INSERT INTO words (wordUserId, wordLgId, word, wordStatus, isPhrase)
             VALUES ('$this->user_id', '$this->learning_lang_id', '$word', $status, $isphrase) ON DUPLICATE KEY UPDATE
             wordUserId='$this->user_id', wordLgId=$this->learning_lang_id, word='$word', wordStatus=$status, isPhrase=$isphrase, wordModified=now()");
@@ -58,7 +63,9 @@ class Words extends DBEntity {
      * @return boolean
      */
     public function deleteByName($word) {
+        // escape parameters
         $word = $this->con->real_escape_string($word);
+        
         $result = $this->con->query("DELETE FROM words WHERE word='$word'");
 
         return $result;
@@ -84,6 +91,9 @@ class Words extends DBEntity {
      * @return integer|boolean
      */
     public function countRowsFromSearch($search_text) {
+        // escape parameters
+        $search_text = $this->con->real_escape_string($search_text);
+
         $result = $this->con->query("SELECT COUNT(word) FROM words WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' AND word LIKE '%$search_text%'");
         
         if ($result) {
@@ -125,7 +135,12 @@ class Words extends DBEntity {
      * @return array
      */
     public function getSearch($search_text, $offset, $limit, $sort_by) {
-        $sort_sql = $this->getSortSQL($sort_by);
+        // escape parameters
+        $search_text = $this->con->real_escape_string($search_text);
+        $offset = $this->con->real_escape_string($offset);
+        $limit = $this->con->real_escape_string($limit);
+        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+
         $result = $this->con->query("SELECT wordID, word, wordStatus 
             FROM words 
             WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' AND word LIKE '%$search_text%' 
@@ -145,7 +160,11 @@ class Words extends DBEntity {
      * @return array
      */
     public function getAll($offset, $limit, $sort_by) {
-        $sort_sql = $this->getSortSQL($sort_by);
+        // escape parameters
+        $offset = $this->con->real_escape_string($offset);
+        $limit = $this->con->real_escape_string($limit);
+        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+        
         $result = $this->con->query("SELECT wordID, word, wordStatus 
             FROM words 
             WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' 
@@ -193,8 +212,10 @@ class Words extends DBEntity {
      * @return boolean
      */
     public function createCSVFile($search_text, $order_by) {
+        //escape parameters
         $search_text = $this->con->real_escape_string($search_text);
         $sort_sql = $this->getSortSQL($order_by);
+        
         $filter = !empty($search_text) ? "AND word LIKE '%$search_text%' " : '';
         $filter .= $order_by != '' ? "ORDER BY $sort_sql" : '';
 

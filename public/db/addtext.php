@@ -9,10 +9,10 @@ $learning_lang_id = $user->learning_lang_id;
 try {
     if ($_POST['mode'] == 'rss') { // add rss entry
         if (isset($_POST['title']) && isset($_POST['text'])) {
-            $title = $con->real_escape_string($_POST['title']);
-            $author = $con->real_escape_string($_POST['author']);
-            $source_url = $con->real_escape_string($_POST['url']);
-            $text = $con->real_escape_string($_POST['text']);
+            $title = $_POST['title'];
+            $author = $_POST['author'];
+            $source_url = $_POST['url'];
+            $text = $_POST['text'];
             
             $texts_table = new Texts($con, $user_id, $learning_lang_id);
             
@@ -24,13 +24,43 @@ try {
         }
     } else if ($_POST['mode'] == 'simple' || $_POST['mode'] == 'video') { // add simple text
         if (isset($_POST['title']) && isset($_POST['text'])) {
-            $title = $con->real_escape_string($_POST['title']);
-            $author = $con->real_escape_string($_POST['author']);
-            $source_url = $con->real_escape_string($_POST['url']);
-            $text = $con->real_escape_string($_POST['text']);
-            $type = $con->real_escape_string($_POST['type']);
+            $title = $_POST['title'];
+            $author = $_POST['author'];
+            $source_url = $_POST['url'];
+            $text = $_POST['text'];
+            $type = $_POST['type'];
             $target_file_name = '';
-            
+            $texts_table = new Texts($con, $user_id, $learning_lang_id);
+            $errors = [];
+
+            // check if required fields are set
+            if (!isset($title) || empty($title)) {
+                $errors[] = "<li>Title is a required field. Please enter one and try again.</li>";
+            }
+
+            // if (!isset($author) || empty($author)) {
+            //     $errors[] = "<li>Author is a required field. Please enter one and try again.</li>";
+            // }
+
+            if (!isset($text) || empty($text)) {
+                $errors[] = "<li>Text is a required field. Please enter one and try again. <br>In case you
+                    are uploading a video, enter a valid YouTube URL and fetch the correct transcript. 
+                    Only videos with subtitles in your target language are supported.</li>";
+            }
+
+            // check if text is longer than the max. number of chars allowed
+            $xml_text = $texts_table->extractTextFromXML($text);
+
+            if ($xml_text != false) {
+                if (strlen($xml_text) > 20000) {
+                    $errors[] = "<li>Maximum supported text length is 20.000 characters.</li>";
+                }    
+            } else {
+                if (strlen($text) > 20000) {
+                    $errors[] = "<li>Maximum supported text length is 20.000 characters.</li>";
+                }
+            }
+
             // Audio file validation
             if (isset($_FILES['audio']) && $_FILES['audio']['error'] !== UPLOAD_ERR_NO_FILE) {
                 $target_dir = PRIVATE_PATH . 'uploads/'; //PUBLIC_PATH . 'uploads/'; //APP_ROOT . '/public/uploads/';
@@ -43,20 +73,18 @@ try {
                 $file_size = $_FILES['audio']['size'] / 1024; // size in KBs
                 $upload_max_filesize = ini_get('upload_max_filesize'); // max file size
                 $allowed_extensions = array('mp3', 'ogg');
-                
-                $errormsg = "";
-                
+                                
                 // Check if file exists
                 if (file_exists($target_file_URI)) {
-                    $errormsg .= "File already exists. Please try again later.\n";
+                    $errors[] = "<li>File already exists. Please try again later.</li>";
                 }
                 
                 // Check file size
                 if ($_FILES['audio']['error'] == UPLOAD_ERR_INI_SIZE) {
-                    $errormsg .= "File size should be less than $upload_max_filesize\n" .
-                    "This is a limitation of the hosting server.\n" .
-                    "If you have access to the php ini file you can fix this by changing the <code>upload_max_filesize</code> setting.\n" .
-                    "If you can't, please ask your host to increase the size limits.\n";
+                    $errors[] = "<li>File size should be less than $upload_max_filesize<br>" .
+                    "This is a limitation of the hosting server.<br>" .
+                    "If you have access to the php ini file you can fix this by changing the <code>upload_max_filesize</code> setting.<br>" .
+                    "If you can't, please ask your host to increase the size limits.</li>";
                 }
                 
                 // Check file extension
@@ -68,27 +96,27 @@ try {
                 }
                 
                 if (!$allowed_ext) {
-                    $errormsg .= 'Only the following file types are supported: ' . implode(', ', $allowed_extensions) . "\n";
+                    $errors[] = '<li>Only the following file types are supported: ' . implode(', ', $allowed_extensions) . "</li>";
                 }
                 
                 // upload file & save info to db
-                if ($_FILES['audio']['error'] == UPLOAD_ERR_OK && empty($errormsg)) {
+                if ($_FILES['audio']['error'] == UPLOAD_ERR_OK && empty($errors)) {
                     if (!is_dir($target_dir)) {
                         mkdir($target_dir);
                     }
                     // try to move file to uploads folder. If this fails, show error message
                     if (!move_uploaded_file($_FILES['audio']['tmp_name'], $target_file_URI)) {
-                        $errormsg .= "Sorry, there was an error uploading your file.\n";
+                        $errors[] = "<li>Sorry, there was an error uploading your file.</li>";
                     }
                 }
             } elseif (isset($_FILES['audio']) && $_FILES['audio']['error'] == UPLOAD_ERR_INI_SIZE) {
-                $errormsg .= "File size should be less than $upload_max_filesize.";
+                $errors[] = "<li>File size should be less than $upload_max_filesize.</li>";
             }
             
-            if (empty($errormsg)) {
+            if (empty($errors)) {
                 // save text in db
-                $texts_table = new Texts($con, $user_id, $learning_lang_id);
-                
+
+
                 if (!empty($_POST['id'])) {
                     $id = $_POST['id'];
                     $result = $texts_table->update($id, $title, $author, $text, $source_url, $target_file_name, $type);
@@ -103,7 +131,8 @@ try {
                     throw new Exception ('Oops! There was an unexpected error when uploading this text.');
                 }
             } else {
-                throw new Exception ($errormsg);
+                $error_str = '<ul>' . implode("<br>", $errors) . '</ul>';
+                throw new Exception ($error_str);
             }
             
             // //catch file overload error...

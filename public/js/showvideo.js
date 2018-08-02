@@ -3,6 +3,8 @@ $(document).ready(function () {
     dictionaryURI = "";
     translatorURI = "";
     prevsel = 0; // previous selection index in #selPhrase
+    resume_video = true;
+    video_paused = false;
     
     // ajax call to get dictionary & translator URIs
     $.ajax({
@@ -20,12 +22,15 @@ $(document).ready(function () {
     function setAddDeleteButtons() {
         var $btnremove = $("#btnremove");
         var $btnadd = $("#btnadd");
+        var $btncancel = $("#btncancel");
         if ($selword.is(".learning, .new, .forgotten, .learned")) {
             if ($btnremove.is(":visible") === false) {
+                $btncancel.hide();
                 $btnremove.show();
                 $btnadd.text("Forgot meaning");
             }
         } else {
+            $btncancel.show();
             $btnremove.hide();
             $btnadd.text("Add");
         }
@@ -36,16 +41,12 @@ $(document).ready(function () {
     * All words are enclosed in span.word tags
     */
     $(document).on("click", "span.word", function () {
-        var audioplayer = $("#audioplayer");
-        
-        if (audioplayer.length) {
-            // if there is audio playing
-            if (!audioplayer.prop("paused") && audioplayer.prop("currentTime")) {
-                audioplayer.trigger("pause"); // pause audio
-                playingaudio = true;
-            } else {
-                playingaudio = false;
-            }
+        // if there is video playing
+        if (!video_paused) {
+            player.pauseVideo();
+            resume_video = true;
+        } else {
+            resume_video = false;
         }
         
         $selword = $(this);
@@ -281,15 +282,9 @@ function archiveTextAndSaveWords() {
 * Resumes video when modal window is closed
 */
 $("#myModal").on("hidden.bs.modal", function () {
-    player.playVideo();
-});
-
-/**
- * Pauses video when clicking on a word
- */
-$('span').click(function (e) { 
-    e.preventDefault();
-    player.pauseVideo();
+    if (resume_video) {
+        player.playVideo();
+    }
 });
 
 /**

@@ -57,20 +57,21 @@ require_once('header.php');
                   <label for="url">Source URL:</label>
                   <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (optional)" value="<?php if (isset($art_url)) {echo $art_url;}?>">
                   <div class="input-group-btn">
-                    <button id="btn-fetch" class="btn btn-default" type="button"><i id="btn-fetch_img" class="fas fa-arrow-down"></i> Fetch</button>
+                    <button id="btn-fetch" class="btn btn-default" type="button"><i id="btn-fetch-img" class="fas fa-arrow-down"></i> Fetch</button>
                   </div>
                 </div>
               </div>
               <div class="form-group col-md-3">
                 <label for="audio">Audio:</label>
-                <input id="audio_uri" type="file" name="audio" accept="audio/mpeg,audio/ogg">
+                <input id="audio-uri" type="file" name="audio" accept="audio/mpeg,audio/ogg">
               </div>
             </div>
             <div class="form-group col-xs-12">
               <label for="text">Text:</label>
               <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="20000" placeholder="Text goes here (required), max. length = 20,000 chars"
                 required><?php if (isset($art_content)) {echo $art_content;}?></textarea>
-              <input id="upload_text" type="file" name="upload_text" accept=".txt, .epub">
+                <label for="upload-text" id="upload-txtfile-label">Upload txt file:</label>
+                <input id="upload-text" type="file" name="upload-text" accept=".txt">
             </div>
             <div class="form-group col-xs-12">
               <?php if (isset($external_call)) { echo '<input id="external_call" type="hidden">'; } ?>

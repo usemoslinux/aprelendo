@@ -1,6 +1,13 @@
 ## ALPHA 1
 
+- que pasa si subo un archivo con una URL ya existente? Ojo, y si lo sube otro usuario?
+
 - esta borrando bien los archivos de audio? hay muchos acumulados...
+
+- video levels
+  - impossibility to select phrases that continue in another DIV
+  - autoplay is always on. Add possibility to disable it?
+  - add possibility to determine difficulty level of videos?
 
 - calculate level for texts
  - https://www.universeofmemory.com/how-many-words-you-should-know/

@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    
+    emptyForm(false);
+
     // Check for an external api call. If detected, try to fetch text using Mozilla's readability parser
     if ($('#external_call').length) {
         fetch_url();
@@ -40,7 +41,7 @@ $(document).ready(function() {
     * @param {string} error_msg 
     */
     function showError(error_msg) {
-        $('#alert-error-msg').text(error_msg)
+        $('#alert-error-msg').html(error_msg)
         .removeClass('hidden')
         .addClass('alert alert-danger');
         $(window).scrollTop(0);
@@ -50,37 +51,39 @@ $(document).ready(function() {
     * Checks if the audio file being uploaded is bigger than the allowed limit
     * This is triggered when the user clicks the "upload" audio file button
     */
-    $('#audio_uri').on('change', function() {
+    $('#audio-uri').on('change', function() {
         var $input_audio = $(this);
         if ($input_audio[0].files[0].size > 10485760) {
             showError('This file is bigger than the allowed limit (10 MB). Please try again.');
             $input_audio.val('');
         }
-    }); // end of #audio_uri.on.change
+    }); // end of #audio-uri.on.change
     
     /**
     * Checks if the text file being uploaded is bigger than the allowed limit
     * This is triggered when the user clicks the "upload" text button
     */
-    $('#upload_text').on('change', function () {
+    $('#upload-text').on('change', function () {
         var file = $(this)[0].files[0];
         var reader = new FileReader();
         reader.onload = (function(e) {
             var text = e.target.result;
-            if (text.length > 65535) {
-                showError('This file has more than 65535 characters. Please try again with a shorter one.')
+            if (text.length > 20000) {
+                showError('This file has more than 20000 characters. Please try again with a shorter one.')
             } else {
                 $('#text').val($.trim(text));  
             }
         })
         reader.readAsText(file);
-    }); // end of #upload_text.on.change
+    }); // end of #upload-text.on.change
     
     /**
     * Fetches text from url using Mozilla's redability parser
     * This is triggered when user clicks the Fetch button or, externally, by bookmarklet/addons calls
     */
     function fetch_url() {
+        emptyForm(true);
+
         var url = $('#url').val();
         
         if (url != '') {
@@ -117,3 +120,17 @@ $(document).ready(function() {
     $('#btn-fetch').on('click', fetch_url);
     
 });
+
+function emptyForm(exceptSourceURI) {
+    $('#alert-error-msg').addClass('hidden');
+    $('#type').prop('selectedIndex', 0);
+    $('#title').empty();
+    $('#author').empty();
+    $('#title').empty();
+    $('#text').empty();
+    $('#upload-text').val('');
+    $('#audio-uri').val('');
+    if (!exceptSourceURI) {
+        $('#url').empty();
+    }
+}

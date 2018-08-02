@@ -57,6 +57,9 @@ require_once('db/checklogin.php'); // check if logged in and set $user
                                     <a href="texts.php">My texts</a>
                                 </li>
                                 <li>
+                                    <a href="sharedtexts.php">Shared texts</a>
+                                </li>
+                                <li>
                                     <a href="words.php">Word list</a>
                                 </li>
                                 <li>

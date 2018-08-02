@@ -252,6 +252,10 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     margin-bottom: 25px;
 }
 
+.alert {
+    padding: 10px;
+}
+
 /*	################################################################
 SITE WRAPS
 ################################################################# */
@@ -280,11 +284,11 @@ SITE WRAPS
     filter: invert(100%);
 }
 
-.headerwrap h3,
+/* .headerwrap h3,
 h5 {
     color: white;
     font-weight: 400;
-}
+} */
 
 .headerwrap h1 {
     color: white;
@@ -792,8 +796,12 @@ input {
     margin-left: 10px;
 }
 
-.addbtn {
+.add-btn {
     margin-bottom: 12px;
+}
+
+.cancel-btn {
+    margin-right: 5px;
 }
 
 .forget {
@@ -862,7 +870,7 @@ td>label {
 	padding-left: 0;
 }
 
-#upload_text {
+#upload-text {
     margin-top: 10px;
 }
 
@@ -874,6 +882,12 @@ td>label {
     top: 12.5px;
 }
 
+#upload-txtfile-label {
+    float: left;
+    margin-top: 11px;
+    margin-right: 10px;
+}
+
 @media screen and (max-width: 991px) {
     #form-addtext .form-group,
     #form-addvideo .form-group {
@@ -883,7 +897,7 @@ td>label {
 
 @media screen and (min-width: 992px) {
     #alert-error-msg {
-        margin-left: 15px;
+        /* margin-left: 15px; */
         margin-right: 15px;
     }
 }

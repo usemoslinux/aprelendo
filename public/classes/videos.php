@@ -55,17 +55,27 @@ class Videos extends DBEntity {
      * @return string|boolean string representation of YT Id or false if $url has wrong format
      */
     public function extractYTId($url) {
-        $is_yt_uri = strpos($url, 'https://www.youtube.com/watch?v=');
-        $is_yt_uri = $is_yt_uri === 0 ? 0 : strpos($url, 'https://youtu.be/');
-
-        if ($is_yt_uri === 0) {
-            return substr($url, 32, 11);
+        // check if user copied the url by right-clicking the video (Google's recommended method)
+        if (strpos($url, 'https://youtu.be/') === 0) {
+            return substr($url, 17);
         } else {
-            $is_yt_uri =  url.lastIndexOf("https://youtu.be/");
-            if ($is_yt_uri === 0) {
-                return url.substring(17, 28);
-            } else {
-                return false;
+            // check if user copied the url directly from the url bar (alternative method)
+            $yt_urls = array('https://www.youtube.com/watch',
+                'https://m.youtube.com/watch');
+
+            $url_split = explode('?', $url);
+            $url_params =  explode('&', $url_split[1]);
+            
+            // check if it's a valid youtube URL
+            foreach ($yt_urls as $yt_url) {
+                if (strpos($url_split[0], $yt_url) === 0) {
+                    // extract youtube video id
+                    foreach ($url_params as $url_param) {
+                        if(strpos($url_param, 'v=') === 0) {
+                            return substr($url_param, 2);
+                        }
+                    }
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 $(document).ready(function() {
     
     emptyAll(); // empty all inputs & video iframe at start
+    $('#url').focus();
     
     /**
     * Adds video to database
@@ -35,18 +36,12 @@ $(document).ready(function() {
      */
     $('#btn-fetch').on('click', function () {
         var url = $('#url').val();
-        var is_yt_uri = url.lastIndexOf("https://www.youtube.com/watch?v=");
-        var video_id = url.substring(32, 43);
 
-        if (is_yt_uri !== 0) {
-            is_yt_uri =  url.lastIndexOf("https://youtu.be/");
-            video_id = url.substring(17, 28);
-        }
+        video_id = extractYTId(url); //get youtube video id
 
-        emptyAll();
+        emptyAll(); // empty all input boxes
 
-        if (is_yt_uri === 0) {
-            
+        if (video_id != '') {
             var embed_url = 'https://www.youtube.com/embed/' + video_id; 
 
             $('#error-msg').addClass('hidden');
@@ -118,5 +113,30 @@ $(document).ready(function() {
         return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
     } // end of toSentenceCase
     
+    function extractYTId(url) {
+        // check if user copied the url by right-clicking the video (Google's recommended method)
+        if (url.lastIndexOf('https://youtu.be/') === 0) {
+            return url.substr(17);
+        } else {
+            // check if user copied the url directly from the url bar (alternative method)
+            var yt_urls = new Array('https://www.youtube.com/watch',
+            'https://m.youtube.com/watch');
+
+            var url_split = url.split('?')
+            var url_params = url_split[1].split('&');
+            
+            // check if it's a valid youtube URL
+            for (let i = 0; i < yt_urls.length; i++) {
+                if (url_split[0].lastIndexOf(yt_urls[i]) === 0) {
+                    // extract youtube video id
+                    for (let i = 0; i < url_params.length; i++) {
+                        if(url_params[i].lastIndexOf('v=') === 0) {
+                            return url_params[i].substring(2);
+                        }
+                    }
+                }
+            }    
+        }
+    }
 
 });

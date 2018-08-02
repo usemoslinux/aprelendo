@@ -8,9 +8,9 @@ if (isset($_POST['word'])) {
     $user_id = $user->id;
     $learning_lang_id = $user->learning_lang_id;
     
-    $word = $con->real_escape_string($_POST['word']);
+    $word = $_POST['word'];
     $status = 2;
-    $isphrase = $con->real_escape_string($_POST['isphrase']);
+    $isphrase = $_POST['isphrase'];
     
     try {
         $words_table = new Words($con, $user_id, $learning_lang_id);

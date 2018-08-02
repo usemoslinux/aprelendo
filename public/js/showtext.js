@@ -5,6 +5,7 @@ $(document).ready(function () {
     translatorURI = "";
     prevsel = 0; // previous selection index in #selPhrase
     phase = 1; // first phase of the learning cycle
+    playingaudio = false;
     
     /**
     * Sets keyboard shortcuts for media player
@@ -35,9 +36,11 @@ $(document).ready(function () {
         } 
     });
 
+    /**
+     * Pauses audio for some secs when user is typing answer in dictation mode
+     * @param {Date} lastkeypress 
+     */
     function toggleAudio(lastkeypress) {
-        //clearTimeout(time_handler);
-        
         var currentTime = new Date().getTime();
         var $audioplayer = $("#audioplayer");
 
@@ -70,15 +73,15 @@ $(document).ready(function () {
     function setAddDeleteButtons() {
         var $btnremove = $("#btnremove");
         var $btnadd = $("#btnadd");
-        var $btncancel = $("#btncancel");
+        // var $btncancel = $("#btncancel");
         if ($selword.is(".learning, .new, .forgotten, .learned")) {
             if ($btnremove.is(":visible") === false) {
-                $btncancel.show();
+                // $btncancel.hide();
                 $btnremove.show();
                 $btnadd.text("Forgot meaning");
             }
         } else {
-            $btncancel.show();
+            // $btncancel.show();
             $btnremove.hide();
             $btnadd.text("Add");
         }
@@ -389,7 +392,7 @@ function archiveTextAndSaveWords() {
 */
 $("#myModal").on("hidden.bs.modal", function () {
     var audioplayer = $("#audioplayer");
-    if (typeof(playingaudio) != 'undefined' && playingaudio && audioplayer.length) {
+    if (playingaudio && audioplayer.length) {
         audioplayer.trigger("play");
     }
 });

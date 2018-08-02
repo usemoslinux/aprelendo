@@ -68,14 +68,14 @@ try {
         </div>
 
         <!-- Modal window -->
-        <div id="myModal" class="modal fade" role="dialog">
+        <div id="myModal" class="modal fade" data-keyboard="true" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <button id="btnremove" type="button" data-dismiss="modal" class="btn btn-danger">Delete</button>
-                        <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
-                        <button id="btnadd" type="button" class="btn btn-primary btn-success pull-right addbtn" data-dismiss="modal">Add</button>
+                        <button id="btnadd" type="button" class="btn btn-primary btn-success pull-right add-btn" data-dismiss="modal">Add</button>
+                        <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-default pull-right cancel-btn">Cancel</button>
                         <select class="modal-selPhrase" name="selPhrase" id="selPhrase">
                             <option value="translate_sentence">Translate sentence</option>
                         </select>

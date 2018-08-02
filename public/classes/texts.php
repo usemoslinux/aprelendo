@@ -51,6 +51,13 @@ class Texts extends DBEntity {
      * @return boolean
      */
     public function add($title, $author, $text, $source_url, $audio_url, $type) {
+        // escape parameters
+        $title = $this->con->real_escape_string($title);
+        $author = $this->con->real_escape_string($author);
+        $source_url = $this->con->real_escape_string($source_url);
+        $text = $this->con->real_escape_string($text); // escape $text
+        $audio_url = $this->con->real_escape_string($audio_url);
+        $type = $this->con->real_escape_string($type);
         $level = $this->calcTextLevel($text);
         $nr_of_words = $this->nr_of_words;
 
@@ -76,6 +83,14 @@ class Texts extends DBEntity {
      * @return boolean
      */
     public function update($id, $title, $author, $text, $source_url, $audio_url, $type) {
+        // escape parameters
+        $title = $this->con->real_escape_string($title);
+        $author = $this->con->real_escape_string($author);
+        $text = $this->con->real_escape_string($text);
+        $source_url = $this->con->real_escape_string($source_url);
+        $audio_url = $this->con->real_escape_string($audio_url);
+        $type = $this->con->real_escape_string($type);
+
         $result = $this->con->query("UPDATE $this->table SET {$this->cols['userid']}='$this->user_id', {$this->cols['lgid']}='$this->learning_lang_id', 
                 {$this->cols['title']}='$title', {$this->cols['author']}='$author', text='$text', {$this->cols['audioURI']}='$audio_url', 
                 {$this->cols['sourceURI']}='$source_url', {$this->cols['type']}='$type' WHERE {$this->cols['id']}='$id'");
@@ -151,6 +166,10 @@ class Texts extends DBEntity {
      * @return integer|boolean
      */
     public function countRowsFromSearch($filter_sql, $search_text) {
+        // escape parameters
+        $filter_sql = $this->con->real_escape_string($filter_sql);
+        $search_text = $this->con->real_escape_string($search_text);
+
         $result = $this->con->query("SELECT COUNT({$this->cols['id']}) FROM $this->table 
             WHERE {$this->cols['userid']}='$this->user_id' 
             AND {$this->cols['lgid']}='$this->learning_lang_id' $filter_sql AND {$this->cols['title']} LIKE '%$search_text%'");
@@ -196,7 +215,13 @@ class Texts extends DBEntity {
      * @return array
      */
     public function getSearch($filter_sql, $search_text, $offset, $limit, $sort_by) {
-        $sort_sql = $this->getSortSQL($sort_by);
+        // escape parameters
+        $filter_sql = $this->con->real_escape_string($filter_sql);
+        $search_text = $this->con->real_escape_string($search_text);
+        $offset = $this->con->real_escape_string($offset);
+        $limit = $this->con->real_escape_string($limit);
+        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+
         $result = $this->con->query("SELECT {$this->cols['id']}, {$this->cols['title']}, {$this->cols['author']}, 
             {$this->cols['audioURI']}, {$this->cols['type']}, {$this->cols['isshared']}, {$this->cols['likes']},
             {$this->cols['nrofwords']}, {$this->cols['level']} 
@@ -218,7 +243,11 @@ class Texts extends DBEntity {
      * @return array
      */
     public function getAll($offset, $limit, $sort_by) {
-        $sort_sql = $this->getSortSQL($sort_by);
+        // escape parameters
+        $offset = $this->con->real_escape_string($offset);
+        $limit = $this->con->real_escape_string($limit);
+        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+
         $result = $this->con->query("SELECT {$this->cols['id']}, {$this->cols['title']}, {$this->cols['author']}, 
             {$this->cols['audioURI']}, {$this->cols['type']}, {$this->cols['isshared']}, {$this->cols['likes']},
             {$this->cols['nrofwords']}, {$this->cols['level']} 
@@ -227,6 +256,26 @@ class Texts extends DBEntity {
             ORDER BY $sort_sql LIMIT $offset, $limit");
         
         return $result ? $result->fetch_all() : false;
+    }
+
+    /**
+     * Determines if $text is valid XML code & extracts text from it
+     *
+     * @param string $xml 
+     * @return string|boolean
+     */
+    public function extractTextFromXML($xml) {
+         // check if $text is valid XML (video transcript) or simple text
+         libxml_use_internal_errors(true); // used to avoid raising Exceptions in case of error
+         $xml = simplexml_load_string(html_entity_decode(stripslashes($xml)));
+ 
+         if ($xml) {
+             $temp_array = (array)$xml->text;
+             $temp_array = array_splice($temp_array, 2, -1);
+             return implode(" ", $temp_array); 
+         } else {
+             return false;
+         }
     }
   
     /**
@@ -270,6 +319,13 @@ class Texts extends DBEntity {
      * @return integer|boolean
      */
     private function calcTextLevel($text) {
+        // $text is XML code (video transcript), extract text from XML string
+        $xml_text = $this->extractTextFromXML($text);
+
+        if ($xml_text != false) {
+            $text = $xml_text;
+        } 
+
         // get learning language ISO name
         $result = $this->con->query("SELECT LgName 
             FROM languages 
@@ -321,6 +377,8 @@ class Texts extends DBEntity {
             return false;
         }
     }
+
+
 }
 
 ?>
