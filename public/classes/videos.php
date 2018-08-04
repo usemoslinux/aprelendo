@@ -23,7 +23,7 @@ class Videos extends DBEntity {
         parent::__construct($con, $user_id);
         
         $this->learning_lang_id = $learning_lang_id;
-        $this->table = 'texts';
+        $this->table = 'sharedtexts';
     }
 
     /**
@@ -83,7 +83,7 @@ class Videos extends DBEntity {
     public function getById($id) {
         $result = $this->con->query("SELECT * 
             FROM $this->table 
-            WHERE textId='$id'");
+            WHERE stextId='$id'");
         
         return $result ? $result->fetch_assoc() : false;
     }

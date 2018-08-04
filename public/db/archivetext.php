@@ -15,8 +15,8 @@ try {
         $words_table->updateByName($_POST['words']);    
     }  
 
-    // change text status (archive or unarchive text)
-    if (isset($_POST['textIDs'])) {
+    // if text is not shared, then archive or unarchive text accordingly
+    if (isset($_POST['textIDs']) && !empty($_POST['textIDs'])) {
         if ($_POST['archivetext'] === 'true') { //archive text
             $texts_table = new Texts($con, $user_id, $learning_lang_id);
             $result = $texts_table->archiveByIds($_POST['textIDs']);

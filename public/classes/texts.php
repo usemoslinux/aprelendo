@@ -33,8 +33,6 @@ class Texts extends DBEntity {
             'sourceURI' => 'textSourceURI', 
             'audioURI' => 'textAudioURI', 
             'type' => 'textType', 
-            'isshared' => 'textIsShared', 
-            'likes' => 'textLikes',
             'nrofwords' => 'textNrOfWords',
             'level' => 'textLevel');
     }
@@ -144,8 +142,8 @@ class Texts extends DBEntity {
     public function archiveByIds($ids) {
         $textIDs = $this->convertJSONtoCSV($ids);
 
-        $insertsql = "INSERT INTO archivedtexts (atextUserId, atextLgID, atextTitle, atextAuthor, atext, atextAudioURI, atextSourceURI, atextType, atextIsShared, atextLikes)
-            SELECT textUserId, textLgID, textTitle, textAuthor, text, textAudioURI, textSourceURI, textType, textIsShared, textLikes
+        $insertsql = "INSERT INTO archivedtexts (atextUserId, atextLgID, atextTitle, atextAuthor, atext, atextAudioURI, atextSourceURI, atextType)
+            SELECT textUserId, textLgID, textTitle, textAuthor, text, textAudioURI, textSourceURI, textType 
             FROM texts WHERE textID IN ($textIDs)";
         $deletesql = "DELETE FROM texts WHERE textID IN ($textIDs)";
         
@@ -175,7 +173,7 @@ class Texts extends DBEntity {
             AND {$this->cols['lgid']}='$this->learning_lang_id' $filter_sql AND {$this->cols['title']} LIKE '%$search_text%'");
         
         if ($result) {
-            $row = $result->fetch_array();
+            $row = $result->fetch_array(MYSQLI_NUM);
             $total_rows = $row[0];
             return $total_rows;
         } else {
@@ -223,8 +221,7 @@ class Texts extends DBEntity {
         $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
 
         $result = $this->con->query("SELECT {$this->cols['id']}, {$this->cols['title']}, {$this->cols['author']}, 
-            {$this->cols['audioURI']}, {$this->cols['type']}, {$this->cols['isshared']}, {$this->cols['likes']},
-            {$this->cols['nrofwords']}, {$this->cols['level']} 
+            {$this->cols['audioURI']}, {$this->cols['type']}, {$this->cols['nrofwords']}, {$this->cols['level']} 
             FROM $this->table 
             WHERE {$this->cols['userid']}='$this->user_id' AND {$this->cols['lgid']}='$this->learning_lang_id' $filter_sql 
             AND {$this->cols['title']} LIKE '%$search_text%' ORDER BY $sort_sql LIMIT $offset, $limit");
@@ -249,9 +246,8 @@ class Texts extends DBEntity {
         $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
 
         $result = $this->con->query("SELECT {$this->cols['id']}, {$this->cols['title']}, {$this->cols['author']}, 
-            {$this->cols['audioURI']}, {$this->cols['type']}, {$this->cols['isshared']}, {$this->cols['likes']},
-            {$this->cols['nrofwords']}, {$this->cols['level']} 
-            FROM $this->table 
+            {$this->cols['audioURI']}, {$this->cols['type']}, {$this->cols['nrofwords']}, {$this->cols['level']} 
+            FROM $this->table
             WHERE {$this->cols['userid']}='$this->user_id' AND {$this->cols['lgid']}='$this->learning_lang_id' 
             ORDER BY $sort_sql LIMIT $offset, $limit");
         

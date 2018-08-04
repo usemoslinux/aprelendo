@@ -20,6 +20,7 @@ require_once('header.php');
               $art_author = $_POST['art_author'];
               $art_url = $_POST['art_url'];
               $art_content = $_POST['art_content'];
+              $art_is_shared = $_POST['art_is_shared'];
           } elseif (isset($_GET['url'])) { // external call (bookmarklet, addon)
               $art_url = $_GET['url'];
               $external_call = true;
@@ -72,6 +73,7 @@ require_once('header.php');
                 required><?php if (isset($art_content)) {echo $art_content;}?></textarea>
                 <label for="upload-text" id="upload-txtfile-label">Upload txt file:</label>
                 <input id="upload-text" type="file" name="upload-text" accept=".txt">
+                <label for="shared-text" id="shared-text-label"><input id="shared-text" type="checkbox" name="shared-text" <?php if (isset($art_is_shared)) {echo 'checked';}?>> Shared text <small>(only texts whose copyright you own, those already in the public domain or those with a license that allows its distribution free of charge)</small></label>
             </div>
             <div class="form-group col-xs-12">
               <?php if (isset($external_call)) { echo '<input id="external_call" type="hidden">'; } ?>

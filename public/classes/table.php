@@ -10,6 +10,7 @@ abstract class Table
     protected $action_menu;
     protected $sort_menu;
     protected $url;
+    protected $has_chkbox;
 
     /**
      * Constructor
@@ -59,8 +60,13 @@ abstract class Table
             $html .= "<col width='$col_width'>";
         }
         
-        $html .= '</colgroup><thead><tr>
-            <th class="col-checkbox"><input id="chkbox-selall" type="checkbox"></th>';
+        $html .= '</colgroup><thead><tr>';
+
+        if ($this->has_chkbox) {
+            $html .= '<th class="col-checkbox"><input id="chkbox-selall" type="checkbox"></th>';
+        } else {
+            $html .= '<th></th>';
+        }
 
         foreach ($this->headings as $heading) { 
             $html .= "<th class='col-title'>$heading</th>";
@@ -78,17 +84,24 @@ abstract class Table
      * @return string HTML for table footer
      */
     protected function print_footer($sort_by) {
-        $html = '</tbody></table><div class="row"><div class="col-xs-12"><div class="dropdown">
-        <button class="btn btn-default dropdown-toggle disabled" type="button" id="actions-menu" data-toggle="dropdown">Actions <span class="caret"></span></button>
-        <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="actions-menu" role="menu">';
-        
-        foreach ($this->action_menu as $menu_id => $menu_text) { 
-            $html .= "<li id='$menu_id'><a role='menuitem'>$menu_text</a></li>";
+        $html = '</tbody></table><div class="row"><div class="col-xs-12">';
+
+        if (!empty($this->action_menu)) {
+            $html .= '<div class="dropdown">
+            <button class="btn btn-default dropdown-toggle disabled" type="button" 
+                id="actions-menu" data-toggle="dropdown">Actions <span class="caret"></span></button><ul class="dropdown-menu 
+                dropdown-menu-left" aria-labelledby="actions-menu" role="menu">';
+
+            foreach ($this->action_menu as $menu_id => $menu_text) { 
+                $html .= "<li id='$menu_id'><a role='menuitem'>$menu_text</a></li>";
+            }
+
+            $html .= '</ul></div>';
         }
         
-        $html .= '</ul></div><div class="dropdown">
-        <button class="btn btn-default dropdown-toggle pull-right" type="button" id="sort-menu" data-toggle="dropdown">Sort by <span class="caret"></span></button>
-        <ul id="dropdown-menu-sort" class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-menu" role="menu">';
+        $html .= '<div class="dropdown"><button class="btn btn-default dropdown-toggle 
+            pull-right" type="button" id="sort-menu" data-toggle="dropdown">Sort by <span class="caret"></span></button>
+            <ul id="dropdown-menu-sort" class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-menu" role="menu">';
 
         $sort_index = 0;
         foreach ($this->sort_menu as $menu_id => $menu_text) {
@@ -106,6 +119,24 @@ abstract class Table
 }
 
 class TextTable extends Table {
+    protected $is_shared;
+
+    /**
+     * Constructor
+     *
+     * @param string $headings
+     * @param string $col_widths
+     * @param array $rows
+     * @param string $url
+     * @param string $action_menu HTML to create action menu
+     * @param string $sort_menu HTML to create sort menu
+     */
+    public function __construct($headings, $col_widths, $rows, $url, $action_menu, $sort_menu) {
+        parent::__construct($headings, $col_widths, $rows, $url, $action_menu, $sort_menu);
+        $this->has_chkbox = true;
+        $this->is_shared = false;
+    }
+
     /**
      * Prints table content (only for Texts table)
      *
@@ -125,36 +156,101 @@ class TextTable extends Table {
             $text_title = $this->rows[$i][1];
             $text_type = isset($this->rows[$i][4]) && !empty($this->rows[$i][4]) ? "Type: {$type_array[$this->rows[$i][4]-1]}" : '';
             $text_author = isset($this->rows[$i][2]) && !empty($this->rows[$i][2]) ? " - Author: {$this->rows[$i][2]}" : ' - Author: unkown';
-            $nr_of_words = isset($this->rows[$i][7]) && !empty($this->rows[$i][7]) ? " - {$this->rows[$i][7]} words" : '';
-            $text_level = isset($this->rows[$i][8]) && !empty($this->rows[$i][8]) ? " - Level: {$level_array[$this->rows[$i][8]-1]}" : '';
+            $nr_of_words = isset($this->rows[$i][5]) && !empty($this->rows[$i][5]) ? " - {$this->rows[$i][5]} words" : '';
+            $text_level = isset($this->rows[$i][6]) && !empty($this->rows[$i][6]) ? " - Level: {$level_array[$this->rows[$i][6]-1]}" : '';
             $has_audio = isset($this->rows[$i][3]) && !empty($this->rows[$i][3]) ? ' - <i title="Has audio" class="fas fa-headphones"></i>' : '';
             $link = '';
             
+            // if it's a video, then change link accordinly
             if ($this->rows[$i][4] && !empty($this->rows[$i][4])) {
                 if (isset($this->url) && !empty($this->url)) {
                     switch (true) {
                         case ($this->rows[$i][4] == 5):
                             $replace = str_replace('showtext.php', 'showvideo.php', $this->url);
-                            $link = empty($replace) ? '' : "<a href ='{$replace}?id=$text_id'>";
+                            $link = empty($replace) ? '' : "<a href ='{$replace}?id=$text_id";
                             break;
                         default:
-                            $link = empty($this->url) ? '' : "<a href ='{$this->url}?id=$text_id'>";
+                            $link = empty($this->url) ? '' : "<a href ='{$this->url}?id=$text_id";
                             break;
                     }
+                    // determine if text is shared or private
+                    $link .= $this->is_shared ? "&sh=1'>" : "&sh=0'>";
                 }
             } else {
                 $text_type = '';
             }
             
-            $html .= '<tr><td class="col-checkbox"><label><input class="chkbox-selrow" type="checkbox" data-idText="' .
-            $text_id . '"></label></td><td class="col-title">' . $link .
+            if ($this->has_chkbox) {
+                $html .= "<tr><td class='col-checkbox'><input class='chkbox-selrow' type='checkbox' data-idText='$text_id'></td>";
+            } else {
+                $total_likes = $this->total_user_likes[$i]; // get total user likes for this post
+                $user_liked = $this->active_user_liked[$i] ? 'fas' : 'far'; // check if user liked this post
+                $html .= "<tr><td class='text-center'><a href='#' title='Like' class='btn-like-text'><i class='$user_liked fa-heart' data-idText='$text_id'></i><br><small>$total_likes</small></a></td>";
+            }
+            
+            $html .= '<td class="col-title">' . $link .
             $text_title . '</a><br/><small>' . $text_type . $text_author . $nr_of_words . $text_level . $has_audio . '</small></td></tr>';
         }
         return $html;
     }
 }
 
+class SharedTextTable extends TextTable {
+    protected $con;
+    protected $active_user_liked = [];
+    protected $total_user_likes = [];
+
+    /**
+     * Constructor
+     *
+     * @param string $headings
+     * @param string $col_widths
+     * @param array $rows
+     * @param string $url
+     * @param string $action_menu HTML to create action menu
+     * @param string $sort_menu HTML to create sort menu
+     */
+    public function __construct($con, $headings, $col_widths, $rows, $url, $action_menu, $sort_menu) {
+        parent::__construct($headings, $col_widths, $rows, $url, $action_menu, $sort_menu);
+        $this->con = $con;
+        $this->is_shared = true;
+        $this->has_chkbox = false;
+
+        foreach ($rows as $row) {
+            $text_id = $row[0];
+            
+            $result = $this->con->query("SELECT SUM(likesLiked), likesLiked FROM likes WHERE likesTextId=$text_id");
+            $query_rows = $result->fetch_array(MYSQLI_NUM);
+
+            // how many likes does this article have?
+            $this->total_user_likes[] = $query_rows[0] != null ? $query_rows[0] : '0';
+
+            // did user liked this artile ?
+            if ($query_rows) {
+                $this->active_user_liked[] = $query_rows[1] == 1 ? true : false;
+            } else {
+                $this->active_user_liked[] = false;
+            }
+        }
+    }
+}
+
 class WordTable extends Table {
+    /**
+     * Constructor
+     *
+     * @param string $headings
+     * @param string $col_widths
+     * @param array $rows
+     * @param string $url
+     * @param string $action_menu HTML to create action menu
+     * @param string $sort_menu HTML to create sort menu
+     */
+    public function __construct($headings, $col_widths, $rows, $url, $action_menu, $sort_menu) {
+        parent::__construct($headings, $col_widths, $rows, $url, $action_menu, $sort_menu);
+        $this->has_chkbox = true;
+    }
+
     /**
      * Prints table content (only for Words table)
      *
@@ -170,9 +266,11 @@ class WordTable extends Table {
             $status = array('fa-hourglass-end status_learned', 'fa-hourglass-half status_learning', 'fa-hourglass-start status_new');
             $status_text = array('Learned', 'Learning', 'New');
 
-            $html .= '<tr><td class="col-checkbox"><label><input class="chkbox-selrow" type="checkbox" data-idWord="' .
-                $word_id . '"></label></td><td class="col-title">' . 
-                $word . '</td><td class="col-status text-center">' .
+            if ($this->has_chkbox) {
+                $html .= "<tr><td class='col-checkbox'><label><input class='chkbox-selrow' type='checkbox' data-idWord='$word_id'></label></td>";
+            } 
+            
+            $html .= '<td class="col-title">' . $word . '</td><td class="col-status text-center">' .
                 '<i title="' . $status_text[$word_status] . '" class="fas ' . $status[$word_status] . '"></i></td></tr>';
         }
         return $html;

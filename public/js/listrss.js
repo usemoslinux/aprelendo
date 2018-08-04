@@ -32,7 +32,8 @@ $(document).ready(function () {
         .append('<input type="hidden" name="art_author" value="' + htmlEscape(art_author) + '">')
         .append('<input type="hidden" name="art_url" value="' + htmlEscape(art_url) + '">')
         .append('<input type="hidden" name="art_pubdate" value="' + htmlEscape(art_pubdate) + '">')
-        .append('<input type="hidden" name="art_content" value="' + htmlEscape(art_content) + '">');
+        .append('<input type="hidden" name="art_content" value="' + htmlEscape(art_content) + '">')
+        .append('<input type="hidden" name="art_is_shared" value="true">');
       $('body').append(form);
       form.submit();
     } else {

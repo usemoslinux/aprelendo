@@ -4,25 +4,17 @@ require_once('header.php');
 
 $search_text = '';
 $filter = -1;
-$filter_sql = '';
-$show_archived = false;
 $sort_by = 0;
 
 if (!empty($_GET)) {
     $search_text = isset($_GET['s']) ? $_GET['s'] : '';
     $filter = isset($_GET['f']) ? $_GET['f'] : -1;  
-    $show_archived = isset($_GET['sa']) ? $_GET['sa'] == '1' : '0';
     $sort_by = isset($_GET['o']) ? $_GET['o'] : 0;  
 }
 
 // set filter sql
-if (!empty($filter)) {
-    if ($filter == 10) {
-        $show_archived = true;
-    } elseif ($filter > -1) {
-        $filter_sql = $show_archived ? "AND atextType=$filter" : "AND textType=$filter";
-    }
-}
+
+$filter_sql = !empty($filter) && $filter > -1 ? "AND stextType=$filter" : '';
 
 ?>
 
@@ -34,14 +26,13 @@ if (!empty($filter)) {
                     <a href="texts.php">Home</a>
                 </li>
                 <li>
-                    <a class="active">My texts</a>
+                    <a class="active">Shared texts</a>
                 </li>
             </ol>
             <div class="row flex">
                 <div class="col-xs-12">
                     <form class="form-flex-row" action="" method="get">
                         <input id="f" name="f" value="<?php echo $filter; ?>" type="hidden">
-                        <input id="sa" name="sa" value="<?php echo $show_archived ? '1' : '0'; ?>" type="hidden">
                         <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
                         <div class="input-group searchbox">
                             <div class="input-group-btn">
@@ -65,16 +56,11 @@ if (!empty($filter)) {
                                     <li onclick="$('#f').val(4);" <?php echo $filter==4 ? ' class="active" ' : ''; ?> >
                                         <a role="menuitem">Songs</a>
                                     </li>
-                                    <!-- <li onclick="$('#f').val(5);" <?php echo $filter==5 ? ' class="active" ' : ''; ?> >
+                                    <li onclick="$('#f').val(5);" <?php echo $filter==5 ? ' class="active" ' : ''; ?> >
                                         <a role="menuitem">Videos</a>
-                                    </li> -->
+                                    </li>
                                     <li onclick="$('#f').val(6);" <?php echo $filter==6 ? ' class="active" ' : ''; ?> >
                                         <a role="menuitem">Others</a>
-                                    </li>
-                                    <li role="separator" class="divider"></li>
-                                    <li id="show_archived" onclick="var show_archived = $('#sa'); show_archived.val(1 - show_archived.val());" <?php echo $show_archived==true
-                                        ? 'class="active"' : ''; ?> >
-                                        <a href="#">Archived</a>
                                     </li>
                                 </ul>
                             </div>
@@ -109,7 +95,7 @@ if (!empty($filter)) {
                     </form>
                 </div>
             </div>
-            <?php require_once('listtexts.php') ?>
+            <?php require_once('listsharedtexts.php') ?>
         </div>
     </div>
 </div>

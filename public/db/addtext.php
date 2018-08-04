@@ -1,6 +1,7 @@
 <?php 
 require_once('dbinit.php'); // connect to database
 require_once(PUBLIC_PATH . '/classes/texts.php'); // loads Texts class
+require_once(PUBLIC_PATH . '/classes/sharedtexts.php'); // loads Texts class
 require_once(PUBLIC_PATH . '/db/checklogin.php'); // loads User class & checks if user is logged in
 
 $user_id = $user->id;
@@ -14,24 +15,31 @@ try {
             $source_url = $_POST['url'];
             $text = $_POST['text'];
             
-            $texts_table = new Texts($con, $user_id, $learning_lang_id);
+            $texts_table = new SharedTexts($con, $user_id, $learning_lang_id);
             
             // if successful, return insert_id in json format
-            if ($texts_table->add($title, $author, $text, $source_url, '', '0')) {
+            if ($texts_table->add($title, $author, $text, $source_url, '', '1')) {
                 $arr = array('insert_id' => $con->insert_id);
                 echo json_encode($arr);
             }
         }
-    } else if ($_POST['mode'] == 'simple' || $_POST['mode'] == 'video') { // add simple text
+    } else if ($_POST['mode'] == 'simple' || $_POST['mode'] == 'video') { // add simple text, shared text or video
         if (isset($_POST['title']) && isset($_POST['text'])) {
             $title = $_POST['title'];
             $author = $_POST['author'];
             $source_url = $_POST['url'];
             $text = $_POST['text'];
             $type = $_POST['type'];
+            $is_shared = isset($_POST['shared-text']) ? true : false;
             $target_file_name = '';
-            $texts_table = new Texts($con, $user_id, $learning_lang_id);
             $errors = [];
+
+            // initialize text table
+            if ($is_shared) {
+                $texts_table = new SharedTexts($con, $user_id, $learning_lang_id);
+            } else {
+                $texts_table = new Texts($con, $user_id, $learning_lang_id);
+            }
 
             // check if required fields are set
             if (!isset($title) || empty($title)) {
@@ -115,8 +123,6 @@ try {
             
             if (empty($errors)) {
                 // save text in db
-
-
                 if (!empty($_POST['id'])) {
                     $id = $_POST['id'];
                     $result = $texts_table->update($id, $title, $author, $text, $source_url, $target_file_name, $type);
@@ -144,7 +150,7 @@ try {
                 //         "<br>If you can't, please ask your host to increase the size limits.</div>";
                 // }
         }
-    }    
+    }  // end simple text
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());
     header('Content-Type: application/json');

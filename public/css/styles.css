@@ -69,6 +69,7 @@ a:hover,
 a:focus {
     color: #01b2fe;
     text-decoration: none;
+    outline: none;
 }
 
 ::-moz-selection {

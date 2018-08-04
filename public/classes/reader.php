@@ -2,13 +2,14 @@
 
 class Text 
 {
-    public $con;
-    public $id;
-    public $title;
-    public $author;
-    public $source_uri;
-    public $audio_uri;
-    public $text;
+    protected $con;
+    protected $id;
+    protected $title;
+    protected $author;
+    protected $source_uri;
+    protected $audio_uri;
+    protected $text;
+    protected $is_shared;
     
     /**
      * Constructor
@@ -17,20 +18,26 @@ class Text
      * @param mysqli_connect $con
      * @param integer $id
      */
-    public function __construct($con, $id) {
+    public function __construct($con, $id, $is_shared) {
         $this->con = $con;
         $id = $con->escape_string($id);
-        $result = $con->query("SELECT text, textTitle, textAuthor, textSourceURI, textAudioURI FROM texts WHERE textID='$id'");
+        $this->is_shared = $is_shared;
+
+        if ($is_shared) {
+            $result = $con->query("SELECT stext, stextTitle, stextAuthor, stextSourceURI, stextAudioURI FROM sharedtexts WHERE stextID='$id'");
+        } else {
+            $result = $con->query("SELECT text, textTitle, textAuthor, textSourceURI, textAudioURI FROM texts WHERE textID='$id'");
+        }
         
         if ($result) {
-            $row = $result->fetch_assoc();
+            $row = $result->fetch_array(MYSQLI_NUM);
 
             $this->id = $id;
-            $this->title = $row['textTitle'];
-            $this->author = $row['textAuthor'];
-            $this->source_uri = $row['textSourceURI'];
-            $this->audio_uri = $row['textAudioURI'];
-            $this->text = $row['text'];
+            $this->text = $row[0];
+            $this->title = $row[1];
+            $this->author = $row[2];
+            $this->source_uri = $row[3];
+            $this->audio_uri = $row[4];
         }
     }
 
@@ -75,8 +82,8 @@ class Reader extends Text
             case 3:
                 self::createMiniReader($argv[0], $argv[1], $argv[2]);
                 break;
-            case 4:
-                self::createFullReader($argv[0], $argv[1], $argv[2], $argv[3]);
+            case 5:
+                self::createFullReader($argv[0], $argv[1], $argv[2], $argv[3], $argv[4]);
                 break;
          }
     }
@@ -91,8 +98,8 @@ class Reader extends Text
      * @param integer $learning_lang_id
      * @return void
      */
-    private function createFullReader($con, $text_id, $user_id, $learning_lang_id) {
-        parent::__construct($con, $text_id);
+    private function createFullReader($con, $is_shared, $text_id, $user_id, $learning_lang_id) {
+        parent::__construct($con, $text_id, $is_shared);
         $this->createMiniReader($con, $user_id, $learning_lang_id);
     }
 
@@ -109,7 +116,6 @@ class Reader extends Text
         $this->con = $con;
         $this->user_id = $user_id = $con->escape_string($user_id);
         $this->learning_lang_id =  $con->escape_string($learning_lang_id);
-        
 
         if ($result = $con->query("SELECT * FROM preferences WHERE prefUserId = '$user_id'")) {
             $row = $result->fetch_assoc();

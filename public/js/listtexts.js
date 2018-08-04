@@ -101,13 +101,13 @@ $(document).ready(function () {
     */
     $('#btn-filter + ul > li').on('click', function() {
         var $item = $(this);
-        if ($item.is(':last-child')) {
+        if ($item.is(':last-child') && $item.text().trim() == 'Archived') {
             $item.toggleClass('active');    
         } else {
             $item.addClass('active');
             
             $item.siblings('.active').each(function(index, element) {
-                if ($(this).text() !== 'Archived') {
+                if ($(this).text().trim() !== 'Archived') {
                     $(this).removeClass();
                 }
             });
@@ -118,8 +118,17 @@ $(document).ready(function () {
      * Selects sorting
      */
     $('#dropdown-menu-sort').on('click', function(e) {
+        var url = window.location.pathname;
+
+        var filename = '';
+        if (url.indexOf('&') > -1) {
+            filename = url.substring(url.lastIndexOf('/')+1, url.indexOf('&'));    
+        } else {
+            filename = url.substring(url.lastIndexOf('/')+1);    
+        }
+        
         var params = 'f=' + $('#f').val() + '&s=' + $('#s').val() + '&sa=' + $('#sa').val() + '&o=' + $('#o').val();
-        window.location.replace('texts.php?' + params);        
+        window.location.replace(filename + '?' + params);        
     });
     
 });

@@ -1,12 +1,48 @@
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /var/www/langx/public/classes/connect.php on line 63
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP Stack trace:
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/db/archivetext.php:0
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP   2. Words->updateByName() /var/www/langx/public/db/archivetext.php:15
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP   3. Words->convertJSONtoCSV() /var/www/langx/public/classes/words.php:51
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP   4. json_decode() /var/www/langx/public/classes/connect.php:63
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP Warning:  implode(): Invalid arguments passed in /var/www/langx/public/classes/connect.php on line 64
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP Stack trace:
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/db/archivetext.php:0
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP   2. Words->updateByName() /var/www/langx/public/db/archivetext.php:15
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP   3. Words->convertJSONtoCSV() /var/www/langx/public/classes/words.php:51
-[01-Aug-2018 12:46:58 Europe/Berlin] PHP   4. implode() /var/www/langx/public/classes/connect.php:64
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /var/www/langx/public/classes/connect.php on line 63
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP Stack trace:
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/db/archivetext.php:0
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP   2. Words->updateByName($words = *uninitialized*) /var/www/langx/public/db/archivetext.php:15
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP   3. Words->convertJSONtoCSV($json = *uninitialized*) /var/www/langx/public/classes/words.php:51
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP   4. json_decode(*uninitialized*) /var/www/langx/public/classes/connect.php:63
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP Warning:  implode(): Invalid arguments passed in /var/www/langx/public/classes/connect.php on line 64
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP Stack trace:
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/db/archivetext.php:0
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP   2. Words->updateByName($words = *uninitialized*) /var/www/langx/public/db/archivetext.php:15
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP   3. Words->convertJSONtoCSV($json = *uninitialized*) /var/www/langx/public/classes/words.php:51
+[04-Aug-2018 20:39:08 Europe/Berlin] PHP   4. implode(*uninitialized*, *uninitialized*) /var/www/langx/public/classes/connect.php:64
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /var/www/langx/public/classes/connect.php on line 63
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP Stack trace:
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/db/archivetext.php:0
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP   2. Words->updateByName($words = *uninitialized*) /var/www/langx/public/db/archivetext.php:15
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP   3. Words->convertJSONtoCSV($json = *uninitialized*) /var/www/langx/public/classes/words.php:51
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP   4. json_decode(*uninitialized*) /var/www/langx/public/classes/connect.php:63
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP Warning:  implode(): Invalid arguments passed in /var/www/langx/public/classes/connect.php on line 64
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP Stack trace:
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/db/archivetext.php:0
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP   2. Words->updateByName($words = *uninitialized*) /var/www/langx/public/db/archivetext.php:15
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP   3. Words->convertJSONtoCSV($json = *uninitialized*) /var/www/langx/public/classes/words.php:51
+[04-Aug-2018 20:40:55 Europe/Berlin] PHP   4. implode(*uninitialized*, *uninitialized*) /var/www/langx/public/classes/connect.php:64
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /var/www/langx/public/classes/connect.php on line 63
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP Stack trace:
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/db/archivetext.php:0
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP   2. Words->updateByName($words = *uninitialized*) /var/www/langx/public/db/archivetext.php:15
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP   3. Words->convertJSONtoCSV($json = *uninitialized*) /var/www/langx/public/classes/words.php:51
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP   4. json_decode(*uninitialized*) /var/www/langx/public/classes/connect.php:63
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP Warning:  implode(): Invalid arguments passed in /var/www/langx/public/classes/connect.php on line 64
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP Stack trace:
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/db/archivetext.php:0
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP   2. Words->updateByName($words = *uninitialized*) /var/www/langx/public/db/archivetext.php:15
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP   3. Words->convertJSONtoCSV($json = *uninitialized*) /var/www/langx/public/classes/words.php:51
+[04-Aug-2018 20:42:01 Europe/Berlin] PHP   4. implode(*uninitialized*, *uninitialized*) /var/www/langx/public/classes/connect.php:64
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /var/www/langx/public/classes/connect.php on line 63
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP Stack trace:
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/db/archivetext.php:0
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP   2. Words->updateByName($words = *uninitialized*) /var/www/langx/public/db/archivetext.php:15
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP   3. Words->convertJSONtoCSV($json = *uninitialized*) /var/www/langx/public/classes/words.php:51
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP   4. json_decode(*uninitialized*) /var/www/langx/public/classes/connect.php:63
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP Warning:  implode(): Invalid arguments passed in /var/www/langx/public/classes/connect.php on line 64
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP Stack trace:
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP   1. {main}() /var/www/langx/public/db/archivetext.php:0
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP   2. Words->updateByName($words = *uninitialized*) /var/www/langx/public/db/archivetext.php:15
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP   3. Words->convertJSONtoCSV($json = *uninitialized*) /var/www/langx/public/classes/words.php:51
+[04-Aug-2018 20:44:08 Europe/Berlin] PHP   4. implode(*uninitialized*, *uninitialized*) /var/www/langx/public/classes/connect.php:64

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    emptyForm(false);
+    // emptyForm(false);
 
     // Check for an external api call. If detected, try to fetch text using Mozilla's readability parser
     if ($('#external_call').length) {
@@ -124,13 +124,14 @@ $(document).ready(function() {
 function emptyForm(exceptSourceURI) {
     $('#alert-error-msg').addClass('hidden');
     $('#type').prop('selectedIndex', 0);
-    $('#title').empty();
-    $('#author').empty();
-    $('#title').empty();
-    $('#text').empty();
+    $('#title').val('');
+    $('#author').val('');
+    $('#title').val('');
+    $('#text').val('');
     $('#upload-text').val('');
     $('#audio-uri').val('');
     if (!exceptSourceURI) {
-        $('#url').empty();
+        $('#url').val('');
     }
+    $('#shared-text').prop('checked', false);
 }

@@ -358,8 +358,10 @@ $('#btn_save').on('click', archiveTextAndSaveWords);
 function archiveTextAndSaveWords() {
     // build array with underlined words
     var oldwords = [];
-    var ids = [];
+    var id = [];
     var word = "";
+    var archive_text = true;
+    
     $(".learning").each(function () {
         word = $(this)
         .text()
@@ -369,15 +371,20 @@ function archiveTextAndSaveWords() {
         }
     });
     
-    ids.push($("#container").attr("data-textID")); // get text ID
+    id.push($("#container").attr("data-textID")); // get text ID
     
+    if ($("#is_shared").length > 0) {
+        id = undefined;
+        archive_text = undefined;
+    } 
+
     $.ajax({
         type: "POST",
         url: "db/archivetext.php",
         data: {
             words: oldwords,
-            textIDs: JSON.stringify(ids),
-            archivetext: true
+            textIDs: JSON.stringify(id),
+            archivetext: archive_text
         }
     }).done(function (data) {
         window.location.replace("texts.php");

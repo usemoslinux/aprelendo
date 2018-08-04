@@ -29,7 +29,8 @@ require_once(PUBLIC_PATH . '/classes/reader.php'); // load Reader class
 
 try {
     if (isset($_GET['id']) && !empty($_GET['id'])) {
-        $reader = new Reader($con, $_GET['id'], $user->id, $user->learning_lang_id);
+        $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
+        $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->learning_lang_id);
         
         switch ($reader->display_mode) {
             case 'light':
@@ -62,8 +63,12 @@ try {
                 <div class="col-sm-12 col-md-6 col-md-offset-3">
                 <?php
                     echo $reader->showText();
+                    if ($is_shared) {
+                        echo '<input type="hidden" id="is_shared">';
+                    }
                 ?>
                 </div>
+                
             </div>
         </div>
 

@@ -29,11 +29,12 @@ require_once(PUBLIC_PATH . '/classes/videos.php'); // load Reader class
 try {
     $id_is_set = isset($_GET['id']) && !empty($_GET['id']);
     if ($id_is_set) {
-        $reader = new Reader($con, $_GET['id'], $user->id, $user->learning_lang_id);
+        $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
+        $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->learning_lang_id);
         
         $video = new Videos($con, $user->id, $user->learning_lang_id);
         $video_row = $video->getById($_GET['id']);
-        $yt_id = $video->extractYTId($video_row['textSourceURI']);
+        $yt_id = $video->extractYTId($video_row['stextSourceURI']);
 
         switch ($reader->display_mode) {
             case 'light':

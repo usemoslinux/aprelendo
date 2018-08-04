@@ -1,5 +1,8 @@
 ## ALPHA 1
 
+- names: langx, "readglot", "polyglot", "lingua", "lingo", "rosetta", "learn", "natural", "active reading",
+    algo distintivo de LA, 
+
 - que pasa si subo un archivo con una URL ya existente? Ojo, y si lo sube otro usuario?
 
 - esta borrando bien los archivos de audio? hay muchos acumulados...
