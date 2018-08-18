@@ -27,7 +27,7 @@ class Connect
         $con = new mysqli($this->host, $this->user, $this->password, $this->db);
         
         if ($con->connect_errno) {
-            error_log('MySQL Error: ' . $con->connect_error, 3, PUBLIC_PATH . 'errors.log');
+            // error_log('MySQL Error: ' . $con->connect_error, 3, PUBLIC_PATH . 'errors.log');
             throw new Exception('Unable to connect to database!');
         } 
 

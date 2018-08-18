@@ -58,9 +58,9 @@ function printRSSFeed($feed, $groupindex) {
                 
                 $result .= "<div class='list-group collapse' id='item-$groupindex-$itemindex'>
                 <div class='list-group-item entry-text'>" . strip_tags($art_content, '<p>') .
-                "<div><button type='button' class='btn btn-default btn-addsound'>Add sound file</button>
-                <button type='button' class='btn btn-default btn-readnow'>Read now</button>
-                <button type='button' class='btn btn-default btn-readlater'>Read later</button>
+                "<div><button type='button' class='btn btn-default btn-addsound'>Edit</button>
+                <button type='button' class='btn btn-default btn-readnow'>Add & Read now</button>
+                <button type='button' class='btn btn-default btn-readlater'>Add & Read later</button>
                 <span class='message'></span></div></div></div>";
                 $itemindex++;
             }

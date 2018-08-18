@@ -50,6 +50,7 @@ if (!empty($filter)) {
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
+                                    <li class="dropdown-header">Type</li>
                                     <li onclick="$('#f').val(-1);" <?php echo $filter==-1 ? ' class="active" ' : ''; ?> >
                                         <a role="menuitem">All</a>
                                     </li>
@@ -69,6 +70,9 @@ if (!empty($filter)) {
                                         <a role="menuitem">Videos</a>
                                     </li> -->
                                     <li onclick="$('#f').val(6);" <?php echo $filter==6 ? ' class="active" ' : ''; ?> >
+                                        <a role="menuitem">Ebooks</a>
+                                    </li>
+                                    <li onclick="$('#f').val(7);" <?php echo $filter==7 ? ' class="active" ' : ''; ?> >
                                         <a role="menuitem">Others</a>
                                     </li>
                                     <li role="separator" class="divider"></li>
@@ -97,6 +101,9 @@ if (!empty($filter)) {
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li>
                                     <a href="addtext.php">Plain text</a>
+                                </li>
+                                <li>
+                                    <a href="addebook.php">Ebook (epub)</a>
                                 </li>
                                 <li>
                                     <a href="addrss.php">RSS text</a>

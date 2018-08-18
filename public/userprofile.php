@@ -63,7 +63,7 @@
                                     <?php $native_lang_index = $user->getLanguageIndex($user->native_lang); ?>
                                     <option value="en" <?php echo $native_lang_index==0 ? ' selected ' : ''; ?>>English</option>
                                     <option value="es" <?php echo $native_lang_index==1 ? ' selected ' : ''; ?>>Spanish</option>
-                                    <option value="pr" <?php echo $native_lang_index==2 ? ' selected ' : ''; ?>>Portuguese</option>
+                                    <option value="pt" <?php echo $native_lang_index==2 ? ' selected ' : ''; ?>>Portuguese</option>
                                     <option value="fr" <?php echo $native_lang_index==3 ? ' selected ' : ''; ?>>French</option>
                                     <option value="it" <?php echo $native_lang_index==4 ? ' selected ' : ''; ?>>Italian</option>
                                     <option value="de" <?php echo $native_lang_index==5 ? ' selected ' : ''; ?>>German</option>
@@ -75,7 +75,7 @@
                                     <?php $learning_lang_index = $user->getLanguageIndex($user->learning_lang); ?>
                                     <option value="en" <?php echo $learning_lang_index==0 ? ' selected ' : ''; ?>>English</option>
                                     <option value="es" <?php echo $learning_lang_index==1 ? ' selected ' : ''; ?>>Spanish</option>
-                                    <option value="pr" <?php echo $learning_lang_index==2 ? ' selected ' : ''; ?>>Portuguese</option>
+                                    <option value="pt" <?php echo $learning_lang_index==2 ? ' selected ' : ''; ?>>Portuguese</option>
                                     <option value="fr" <?php echo $learning_lang_index==3 ? ' selected ' : ''; ?>>French</option>
                                     <option value="it" <?php echo $learning_lang_index==4 ? ' selected ' : ''; ?>>Italian</option>
                                     <option value="de" <?php echo $learning_lang_index==5 ? ' selected ' : ''; ?>>German</option>
@@ -83,8 +83,11 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" id="cancelbtn" name="cancel" class="btn btn-default" onclick="window.location='/'">Cancel</button>
-                    <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
+                    <div class="text-right">
+                        <a type="button" id="cancelbtn" name="cancel" class="btn btn-static" onclick="window.location='/'">Cancel</a>
+                        <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
+                    </div>
+                    
                 </form>
             </div>
         </div>

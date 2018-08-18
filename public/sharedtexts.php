@@ -41,6 +41,7 @@ $filter_sql = !empty($filter) && $filter > -1 ? "AND stextType=$filter" : '';
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
+                                    <li class="dropdown-header">Type</li>
                                     <li onclick="$('#f').val(-1);" <?php echo $filter==-1 ? ' class="active" ' : ''; ?> >
                                         <a role="menuitem">All</a>
                                     </li>

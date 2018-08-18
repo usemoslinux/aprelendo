@@ -1,7 +1,23 @@
 ## ALPHA 1
 
-- names: langx, "readglot", "polyglot", "lingua", "lingo", "rosetta", "learn", "natural", "active reading",
+- ebook pagination : http://jsfiddle.net/Eric/WTPzn/?utm_source=website&utm_medium=embed&utm_campaign=WTPzn
+- names: langx, "readglot", "mapudungu", "polyglot", "lingua", "lingo", "rosetta", "learn", "natural", "active reading",
     algo distintivo de LA, 
+    - libres: 
+        - "readinguru": xq guru?
+        - "redulang":  redu?
+        - "langchimp": 
+        - "youreadlearn": no tiene sentido
+        - "youreadyoulearn": demasiado largo
+        - "lingogalaxy": fresh but competes with "samsung galaxy", etc.
+        - "readutopia": 
+        - "readalphabet": todo libre (menos .com, vence el 9-11-2018)
+        - "learningrunes"
+        - "readingrunes"
+        - "aprelendo"
+        - "aprelecto"
+         
+    - casi libres: "lingoread"
 
 - que pasa si subo un archivo con una URL ya existente? Ojo, y si lo sube otro usuario?
 
@@ -9,9 +25,7 @@
 
 - video levels
   - impossibility to select phrases that continue in another DIV
-  - autoplay is always on. Add possibility to disable it?
-  - add possibility to determine difficulty level of videos?
-
+  
 - calculate level for texts
  - https://www.universeofmemory.com/how-many-words-you-should-know/
  - http://www.php.net/manual/en/function.array-intersect.php

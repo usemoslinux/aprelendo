@@ -5,7 +5,14 @@ require_once('header.php');
   <div class="container mtb">
     <div class="row">
       <div class="col-lg-12">
-
+        <ol class="breadcrumb">
+            <li>
+                <a href="texts.php">Home</a>
+            </li>
+            <li>
+                <a class="active">Add text</a>
+            </li>
+        </ol>
         <?php
           if (isset($_GET['id'])) { // modify text
               $id = $_GET['id'];
@@ -38,7 +45,7 @@ require_once('header.php');
                   <option value="2">Conversation</option>
                   <option value="3">Letter</option>
                   <option value="4">Song</option>
-                  <option value="6">Other</option>
+                  <option value="7">Other</option>
               </select>
             </div>
               <div class="form-group col-md-6">
@@ -73,11 +80,16 @@ require_once('header.php');
                 required><?php if (isset($art_content)) {echo $art_content;}?></textarea>
                 <label for="upload-text" id="upload-txtfile-label">Upload txt file:</label>
                 <input id="upload-text" type="file" name="upload-text" accept=".txt">
-                <label for="shared-text" id="shared-text-label"><input id="shared-text" type="checkbox" name="shared-text" <?php if (isset($art_is_shared)) {echo 'checked';}?>> Shared text <small>(only texts whose copyright you own, those already in the public domain or those with a license that allows its distribution free of charge)</small></label>
+                <div class="checkbox">
+                <label for="shared-text" id="shared-text-label">
+                    <input id="shared-text" type="checkbox" name="shared-text" <?php if (isset($art_is_shared)) {echo 'checked';}?>> Shared text <small>(only texts whose copyright you own, those already in the public domain or those with a license that allows its distribution free of charge)</small>
+                </label>
+                </div>
+                
             </div>
-            <div class="form-group col-xs-12">
+            <div class="form-group col-xs-12 text-right">
               <?php if (isset($external_call)) { echo '<input id="external_call" type="hidden">'; } ?>
-              <button type="button" id="btn_cancel" name="cancel" class="btn btn-default" onclick="window.location='/'">Cancel</button>
+              <a type="button" id="btn_cancel" name="cancel" class="btn btn-static" onclick="window.location='/'">Cancel</a>
               <button type="submit" id="btn_add_text" name="submit" class="btn btn-success">Save</button>
             </div>
           </form>

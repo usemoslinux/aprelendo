@@ -19,11 +19,13 @@ HEADERWRAP
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2">
-                    <h1>Learn a language by reading
+                    <h1>Learn a language
                         <br>
-                        <u>interesting</u> texts.</h1>
+                        by reading
+                        <br>
+                        your <u>favorite</u> texts.</h1>
                     <h5>Want to know more about
-                        <a href="">active-reading</a>?</h5>
+                        <a href=""><u>active-reading</u></a>?</h5>
                     <br/>
                     <button type="button" class="btn btn-lg btn-success" onclick="window.location.href='chooselanguage.php'">Start learning</button>
                     <br/>
@@ -101,18 +103,19 @@ SERVICE LOGOS
         <div class="container">
             <div class="row centered">
                 <div class="col-md-4">
-                    <i class="fa fa-heart"></i>
-                    <h4>Handsomely Crafted</h4>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-                        standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
-                        it to make a type specimen book.</p>
+                    <i class="fab fa-osi"></i>
+                    <h4>Open source</h4>
+                    <p>LangX is open source software, meaning you can download and fiddle with its source code. This may not mean anything
+                        to you, but is critically important. It allows us to be super transparent and build a community of users and developers 
+                        around LangX. Moreover, with some technical knowledge and persistance you can build your own LangX environment. 
+                        This can be particularly useful for schools and other educational organizations.</p>
                     <p>
                         <br/>
                         <a href="#" class="btn btn-theme">More Info</a>
                     </p>
                 </div>
                 <div class="col-md-4">
-                    <i class="fa fa-book-open"></i>
+                    <i class="fas fa-book-open"></i>
                     <h4>Active Reading</h4>
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
                         standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
@@ -123,11 +126,11 @@ SERVICE LOGOS
                     </p>
                 </div>
                 <div class="col-md-4">
-                    <i class="fa fa-trophy"></i>
-                    <h4>Quality Theme</h4>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-                        standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
-                        it to make a type specimen book.</p>
+                    <i class="fas fa-mobile-alt"></i>
+                    <h4>Use it on any device</h4>
+                    <p>You can use LangX on mobile and desktop devices as long as they have an Internet connection. We offer addons for Firefox 
+                        and Chrome to add texts to your library with the click of a mouse. Bookmarklets are also available for those who prefer
+                        a browser agnostic solution.</p>
                     <p>
                         <br/>
                         <a href="#" class="btn btn-theme">More Info</a>
@@ -139,9 +142,6 @@ SERVICE LOGOS
         <!--/container -->
     </div>
     <!--/service -->
-
-
-
 
     <?php require_once 'footer.php'?>
 

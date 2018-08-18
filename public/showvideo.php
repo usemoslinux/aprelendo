@@ -30,6 +30,12 @@ try {
     $id_is_set = isset($_GET['id']) && !empty($_GET['id']);
     if ($id_is_set) {
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
+
+        // check if user has access to view this text
+        if (!$user->isAllowedToAccessElement('sharedtexts', $_GET['id']) || !$is_shared) {
+            throw new Exception ('User is not authorized to access this file.');
+        }
+        
         $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->learning_lang_id);
         
         $video = new Videos($con, $user->id, $user->learning_lang_id);
@@ -55,10 +61,10 @@ try {
         
         echo " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;>'";
     } else {
-        throw new Exception ('>Oops! There was an error trying to fetch that video.');
+        throw new Exception ('Oops! There was an error trying to fetch that video.');
     }
 } catch (Exception $e) {
-    echo $e->getMessage();
+    header('Location:/login.php');
 }
 ?>
 >

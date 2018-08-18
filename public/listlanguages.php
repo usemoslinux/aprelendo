@@ -4,6 +4,7 @@
 $result = $con->query("SELECT LgID, LgName FROM languages WHERE LgUserId='$user_id'");
 
 if ($result) {
+    echo '<div class="list-group list-group-root well">';
     while ($row = $result->fetch_assoc()) {
         $lg_id = $row['LgID'];  
         $lg_iso_code = $row['LgName'];
@@ -26,6 +27,7 @@ if ($result) {
                   <span class='message'></span></div></div>";
         }
     }
+    echo '</div>';
 }
 
 ?>

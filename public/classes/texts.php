@@ -1,6 +1,7 @@
 <?php 
 
 require_once('connect.php');
+require_once('files.php');
 
 class Texts extends DBEntity {
     protected $learning_lang_id;
@@ -56,15 +57,20 @@ class Texts extends DBEntity {
         $text = $this->con->real_escape_string($text); // escape $text
         $audio_url = $this->con->real_escape_string($audio_url);
         $type = $this->con->real_escape_string($type);
-        $level = $this->calcTextLevel($text);
-        $nr_of_words = $this->nr_of_words;
+        $level = 0;
+        $nr_of_words = 0;
+        
+        if (isset($text) && !empty($text))  {
+            $level = $this->calcTextLevel($text);
+            $nr_of_words = $this->nr_of_words;
+        }
 
         $result = $this->con->query("INSERT INTO $this->table ({$this->cols['userid']}, {$this->cols['lgid']}, 
                 {$this->cols['title']}, {$this->cols['author']}, {$this->cols['text']}, {$this->cols['sourceURI']}, 
                 {$this->cols['audioURI']}, {$this->cols['type']}, {$this->cols['nrofwords']}, {$this->cols['level']})
                 VALUES ('$this->user_id', '$this->learning_lang_id', '$title', '$author', '$text', '$source_url', 
-                '$audio_url', '$type', '$nr_of_words', '$level')");
-
+                '$audio_url', '$type', $nr_of_words, $level)");
+        
         return $result;
     }
 
@@ -104,29 +110,27 @@ class Texts extends DBEntity {
      */
     public function deleteByIds($ids) {
         $textIDs = $this->convertJSONtoCSV($ids);
+        $audio_uri_col_name = $this->cols['audioURI'];
+        $source_uri_col_name = $this->cols['sourceURI'];
 
-        $selectsql = "SELECT {$this->cols['audioURI']} FROM $this->table WHERE {$this->cols['id']} IN ($textIDs)";
+        $selectsql = "SELECT $audio_uri_col_name, $source_uri_col_name FROM $this->table WHERE {$this->cols['id']} IN ($textIDs)";
         $deletesql = "DELETE FROM $this->table WHERE {$this->cols['id']} IN ($textIDs)";
 
         $result = $this->con->query($selectsql);
 
         if ($result) {
-            $audiouris = $result->fetch_all();
+            $uris = $result->fetch_all();
         
             // delete entries from db
             $deletedfromdb = $this->con->query($deletesql);
             
-            // delete audio files
+            // delete audio (mp3, oggs) & source files (epubs, etc.)
             if ($deletedfromdb) {
-                // check if there is an audio file associated to this text and store its URI
-                foreach ($audiouris as $key => $value) {
-                    $filename = PRIVATE_PATH . 'uploads/' . $audiouris[$key][0];
-                    if (is_file($filename) && file_exists($filename)) {
-                        unlink($filename);
-                    } else {
-                        throw new Exception('There was an error deleting the associated audio file.');
-                        log_error("Error: removing audio file $filename");
-                    }
+                $file = new File();
+                // delete associated audio file
+                foreach ($uris as $key => $value) {
+                    $file->delete($value[0]);
+                    $file->delete($value[1]);
                 }
             }
         }

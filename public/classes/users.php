@@ -303,6 +303,32 @@ class User
         
         return $result;  
     }
+
+    public function isAllowedToAccessElement($table, $id)
+    {
+        $col_names = array(
+            array('texts', 'textID', 'textUserId'),
+            array('archivedtexts', 'atextID', 'atextUserId'),
+            array('sharedtexts', 'stextID', 'stextUserId'),
+            array('words', 'wordID', 'wordUserId')
+        );
+
+        foreach ($col_names as $col_name) {
+            if ($col_name[0] == $table) {
+                $id_col_name = $col_name[1];
+                $user_id_col_name = $col_name[2];
+                break;
+            }
+        }
+
+        $result = $this->con->query("SELECT * FROM $table WHERE $id_col_name = '$id' AND $user_id_col_name = {$this->id}");
+        
+        if ($result && $result->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     
     /**
      * Generate token to store in cookie

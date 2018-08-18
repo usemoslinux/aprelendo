@@ -29,7 +29,13 @@ require_once(PUBLIC_PATH . '/classes/reader.php'); // load Reader class
 
 try {
     if (isset($_GET['id']) && !empty($_GET['id'])) {
-        $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
+        // check if user has access to view this text
+        $table = isset($_GET['sh']) && $_GET['sh'] != 0 ? 'sharedtexts' : 'texts';
+        if (!$user->isAllowedToAccessElement($table, $_GET['id'])) {
+            throw new Exception ('User is not authorized to access this file.');
+        }
+
+        $is_shared = $table == 'sharedtexts' ? true : false;
         $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->learning_lang_id);
         
         switch ($reader->display_mode) {
@@ -51,10 +57,10 @@ try {
         
         echo " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;>'";
     } else {
-        throw new Exception ('>Oops! There was an error trying to fetch that video.');
+        throw new Exception ('>Oops! There was an error trying to fetch that text.');
     }
 } catch (Exception $e) {
-    echo $e->getMessage();
+    header('Location:/login.php');
 }
 ?>
 >

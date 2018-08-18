@@ -16,7 +16,6 @@ $adjacents = 2; // adjacent page numbers
 // set variables used for creating the table
 $headings = array('Word', 'Status');
 $col_widths = array('33', '*', '60');
-$url = '';
 $action_menu = array('mDelete' => 'Delete');
 $sort_menu = array( 'mSortNewFirst' => 'New first', 
                     'mSortOldFirst' => 'Old first', 
@@ -42,7 +41,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 
     // print table
     if (sizeof($rows) > 0) { // if there are any results, show them
-        $table = New WordTable($headings, $col_widths, $rows, $url, $action_menu, $sort_menu);
+        $table = New WordTable($headings, $col_widths, $rows, $action_menu, $sort_menu);
         echo $table->print($sort_by);
     } else { // if there are not, show a message
         echo '<p>No words found with that criteria. Try again.</p>';
@@ -63,7 +62,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 
     // print table
     if (sizeof($rows) > 0) {
-        $table = New WordTable($headings, $col_widths, $rows, $url, $action_menu, $sort_menu);
+        $table = New WordTable($headings, $col_widths, $rows, $action_menu, $sort_menu);
         echo $table->print($sort_by);
     } else {
         echo '<p>There are no words in your private library.</p>';

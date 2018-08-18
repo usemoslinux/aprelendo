@@ -35,9 +35,8 @@
             <li>Show the Bookmarks Toolbar:
               <p>In Firefox: Go to <kbd>View</kbd> > <kbd>Toolbars</kbd> > <kbd>Bookmarks toolbar</kbd></p>
               <p>In Google Chrome: Go to <kbd>View</kbd> > <kbd>Show bookmarks bar</kbd></p></li>
-            <li>Drag the following link (<a href="javascript:(function()%7Bvar%20is_yt_url%20%3D%20false%3B%0A%20%20%20%20%20%20%20%20var%20url%20%3D%20location.href%3B%0A%20%20%20%20%20%20%20%20var%20yt_urls%20%3D%20new%20Array('https%3A%2F%2Fwww.youtube.com%2Fwatch'%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20'https%3A%2F%2Fm.youtube.com%2Fwatch'%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20'https%3A%2F%2Fyoutu.be%2F')%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20for%20(let%20i%20%3D%200%3B%20i%20%3C%20yt_urls.length%3B%20i%2B%2B)%20%7B%0A%20%20%20%20%20%20%20%20%09if%20(url.lastIndexOf(yt_urls%5Bi%5D)%20%3D%3D%3D%200)%20%7B%0A%09%09%09%09location.href%3D'https%3A%2F%2Flocalhost%2Faddvideo.php%3Furl%3D'%2BencodeURIComponent(url)%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20is_yt_url%20%3D%20true%3B%0A%20%20%20%20%20%20%20%20%09%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20if%20(!is_yt_url)%0A%20%20%20%20%20%20%20%20%09location.href%3D'https%3A%2F%2Flocalhost%2Faddtext.php%3Furl%3D'%2BencodeURIComponent(url)%3B%7D)()%3B">Add to LangX</a>) to your Bookmarks Toolbar. It should now appear on the toolbar. </li>
+            <li>Drag the following link (<a href="javascript:void(location.href='https://localhost/addtext.php?url='+encodeURIComponent(location.href));">LangX</a> bookmarklet) to your Bookmarks Toolbar. It should now appear on the toolbar. </li>
           </ol>
-          <p>test </p>
           <h5>Mobile devices</h5>
           <p>Adding bookmarklets to mobile devices can easily become very cumbersome if you do not know how to do it.</p>
           <p>The easiest way is to add the bookmarklet in your desktop device, synchronize your favorite Internet browser and wait for the bookmarklet to be automatically added to your mobile device.</p>

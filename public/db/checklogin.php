@@ -6,4 +6,5 @@ $user = new User($con);
 
 if (!$user->isLoggedIn()) {
     header('Location:/login.php');
+    exit;
 }

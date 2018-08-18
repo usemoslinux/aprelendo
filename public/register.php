@@ -31,7 +31,7 @@
               <select name="native_lang" id="native_lang">
                 <option value="en" selected>English</option>
                 <option value="es">Spanish</option>
-                <option value="pr">Portuguese</option>
+                <option value="pt">Portuguese</option>
                 <option value="fr">French</option>
                 <option value="it">Italian</option>
                 <option value="de">German</option>
@@ -42,7 +42,7 @@
               <select name="learning_lang" id="learning_lang">
                 <option value="en" <?php echo $to_lang=='English' ? 'selected' : ''; ?>>English</option>
                 <option value="es" <?php echo $to_lang=='Spanish' ? 'selected' : ''; ?>>Spanish</option>
-                <option value="pr" <?php echo $to_lang=='Portuguese' ? 'selected' : ''; ?>>Portuguese</option>
+                <option value="pt" <?php echo $to_lang=='Portuguese' ? 'selected' : ''; ?>>Portuguese</option>
                 <option value="fr" <?php echo $to_lang=='French' ? 'selected' : ''; ?>>French</option>
                 <option value="it" <?php echo $to_lang=='Italian' ? 'selected' : ''; ?>>Italian</option>
                 <option value="de" <?php echo $to_lang=='German' ? 'selected' : ''; ?>>German</option>

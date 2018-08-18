@@ -4,6 +4,16 @@ require_once('header.php');
 
 <div class="container mtb">
     <div class="row">
+        <div class="col-xs-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="texts.php">Home</a>
+                </li>
+                <li>
+                    <a class="active">Add video</a>
+                </li>
+            </ol>
+        </div>
         <!-- VIDEO CONTAINER -->
         <div id="add-video-container" class="col-xs-12 col-sm-6">
             <div id="add-video-wrapper">
@@ -34,7 +44,12 @@ require_once('header.php');
         //       $art_url = $_GET['url'];
         //       $external_call = true;
         //   }
-        ?>
+
+                if (isset($_GET['url'])) { // external call (bookmarklet, addon)
+                    $video_url = $_GET['url'];
+                    $external_call = true;
+                }
+            ?>
                 <div id="error-msg" class="hidden"></div>
                 <form id="form-addvideo" action="" class="add-form" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="mode" value="video" />
@@ -56,26 +71,22 @@ require_once('header.php');
                             <div class="input-group">
                                 <label for="url">Source URL:</label>
                                 <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (required) >> start here: copy URL & press fetch button"
-                                    value="" required>
+                                    value="<?php if (isset($_GET['url']) && !empty($_GET['url'])) { echo $_GET['url']; } ?>" required>
                                 <div class="input-group-btn">
                                     <button id="btn-fetch" class="btn btn-default" type="button">
                                         <i id="btn-fetch-img" class="fas fa-arrow-down"></i> Fetch</button>
                                 </div>
                             </div>
-                            <small>
-                                <i>Should be: https://www.youtube.com/watch?v=video_id or https://youtu.be/video_id</i>
-                            </small>
                         </div>
                     </div>
                     <input type="hidden" name="text" id="text" class="form-control" value="5">
 
                     <div class="form-row">
-                        <div class="form-group col-xs-12">
-
+                        <div class="form-group col-xs-12 text-right">
                             <?php 
-                // if (isset($external_call)) { echo '<input id="external_call" type="hidden">'; } 
-              ?>
-                            <button type="button" id="btn_cancel" name="cancel" class="btn btn-default" onclick="window.location='/'">Cancel</button>
+                                if (isset($external_call)) { echo '<input id="external_call" type="hidden">'; } 
+                            ?>
+                            <a type="button" id="btn_cancel" name="cancel" class="btn btn-static" onclick="window.location='/'">Cancel</a>
                             <button type="submit" id="btn_add_text" name="submit" class="btn btn-success">Save</button>
                         </div>
                     </div>

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel='shortcut icon' type='image/x-icon' href='images/favicon.ico' />
+    <link rel='shortcut icon' type='image/x-icon' href='images/logo.svg' />
 
     <title>LangX</title>
 
@@ -23,7 +23,6 @@
   </head>
 
   <body>
-    <?php //require('checklogin.php'); ?>
     <!-- Fixed navbar -->
     <div class="navbar navbar-default" role="navigation">
       <div class="container">

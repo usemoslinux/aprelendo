@@ -20,7 +20,7 @@ class Text
      */
     public function __construct($con, $id, $is_shared) {
         $this->con = $con;
-        $id = $con->escape_string($id);
+        $id = $con->escape_string($id); 
         $this->is_shared = $is_shared;
 
         if ($is_shared) {
@@ -158,10 +158,13 @@ class Reader extends Text
     */
     public function addLinks($text)
     {
-        $find = array('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|([-\w’]+)/iu', '/(?:<span[^>]*>.*?<\/span>(*SKIP)(*F))|[^\w<]+/u');
+        // $find = array('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|([-\w’]+)/iu', '/(?:<span[^>]*>.*?<\/span>(*SKIP)(*F))|[^\w<]+/u');
+        $find = array('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|<[^>]*>(*SKIP)(*F)|([-\w’]+)/iu', '/<[^>]*>(*SKIP)(*F)|[^\w<]+/u');
+        
         $replace = array("<span class='word' data-toggle='modal' data-target='#myModal'>$0</span>", "<span>$0</span>");
         
         return preg_replace($find, $replace, $text);
+        // return $text;
     }
     
     /**
@@ -179,21 +182,24 @@ class Reader extends Text
         
         // 1. colorize phrases & words that are being reviewed
         $result = $this->con->query("SELECT word FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND wordStatus>0");
-        
+        // <[^>]*>(*SKIP)(*F)|\bpablo\b
         if ($result) {
             while ($row = $result->fetch_assoc()) {
                 $phrase = $row['word'];
-                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                
+                // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                 "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
             }
             
-            // 2. colorize phrases & words that are were already learned
+            // 2. colorize phrases & words that were already learned
             $result = $this->con->query("SELECT word FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND wordStatus=0");
             
             if ($result) {
                 while ($row = $result->fetch_assoc()) {
                     $phrase = $row['word'];
-                    $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                    // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                    $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                     "<span class='word learned' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
                 }
                 
@@ -209,7 +215,8 @@ class Reader extends Text
                         if ($result) {
                             while ($row = $result->fetch_assoc()) {
                                 $word = $row['freqWord'];
-                                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
+                                // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
+                                $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                                 "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
                             }
                         }
@@ -308,6 +315,11 @@ class Reader extends Text
         
         $html .= '<p></p></div>';
         return $html;
+    }
+
+    public function showEbook($start_pos, $length)
+    {
+        # code...
     }
 
 

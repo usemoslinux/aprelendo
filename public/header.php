@@ -11,7 +11,7 @@ require_once('db/checklogin.php'); // check if logged in and set $user
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-        <link rel='shortcut icon' type='image/x-icon' href='images/favicon.ico' />
+        <link rel='shortcut icon' type='image/x-icon' href='images/logo.svg' />
 
         <title>LangX</title>
 
@@ -23,7 +23,7 @@ require_once('db/checklogin.php'); // check if logged in and set $user
         <link href="css/styles.css" rel="stylesheet">
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     </head>
 

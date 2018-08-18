@@ -1,6 +1,6 @@
 $(document).ready(function() {
     
-    emptyAll(); // empty all inputs & video iframe at start
+    emptyAll();
     $('#url').focus();
     
     /**
@@ -10,7 +10,8 @@ $(document).ready(function() {
     $('#form-addvideo').on('submit', function (e) {
         e.preventDefault();
         
-        var form_data = $('#form-addvideo').serialize();
+        var form_data = $('#form-addvideo').serializeArray();//serialize();
+        form_data.push({ name: "shared-text", value: true });
         
         $.ajax({
             type: "POST",
@@ -59,7 +60,9 @@ $(document).ready(function() {
                     } else {
                         
                         if ($('#yt-video').length) {
-                            $('#yt-video').attr('src', embed_url);
+                            $('#yt-video').get(0).contentWindow.location.replace(embed_url);
+                            // changing $('#yt-video') src attribute would affect browser history, that's why
+                            // we do it this way 
                         }
                         $('#title').val(toSentenceCase(data.title));
                         $('#author').val(toSentenceCase(data.author));
@@ -100,9 +103,11 @@ $(document).ready(function() {
      * Empties form
      */
     function emptyAll() {
-        $('input').not(':hidden').val('');
-        $('#text').val('');
-        $('#yt-video').attr('src', 'about:blank');
+        if ($('#external_call').length == 0) {
+            $('input').not(':hidden').val('');
+            $('#text').val('');
+            $('#yt-video').attr('src', 'about:blank');
+        }
     } // end of emptyAll
 
     /**
@@ -129,9 +134,9 @@ $(document).ready(function() {
             for (let i = 0; i < yt_urls.length; i++) {
                 if (url_split[0].lastIndexOf(yt_urls[i]) === 0) {
                     // extract youtube video id
-                    for (let i = 0; i < url_params.length; i++) {
-                        if(url_params[i].lastIndexOf('v=') === 0) {
-                            return url_params[i].substring(2);
+                    for (let z = 0; z < url_params.length; z++) {
+                        if(url_params[z].lastIndexOf('v=') === 0) {
+                            return url_params[z].substring(2);
                         }
                     }
                 }
@@ -139,4 +144,8 @@ $(document).ready(function() {
         }
     }
 
+    // Check for an external api call. If detected, try to fetch text using Mozilla's readability parser
+    if ($('#external_call').length) {
+        $('#btn-fetch').trigger('click');
+    }
 });

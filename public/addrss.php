@@ -10,7 +10,7 @@
             <a href="texts.php">Home</a>
           </li>
           <li>
-            <a class="active">RSS feeds</a>
+            <a class="active">Add RSS article</a>
           </li>
         </ol>
         <?php require_once('listrss.php'); ?>

@@ -1,12 +1,10 @@
-.*
-php-info.php
 temp/
 public/tests/
 private/uploads/
 private/langx-addon/
 private/passwords.php
-todo.md
 .vscode/
+php-info.php
 jsconfig.json
 .stylelintrc
-public/error.log
+todo.md
