@@ -62,7 +62,7 @@ try {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel='shortcut icon' type='image/x-icon' href='images/favicon.ico' />
-        <title>LangX</title>
+        <title>Aprelendo</title>
 
         <!-- Epub.js & jszip -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>

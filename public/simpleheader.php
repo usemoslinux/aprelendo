@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel='shortcut icon' type='image/x-icon' href='images/logo.svg' />
 
-    <title>LangX</title>
+    <title>Aprelendo</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
@@ -37,7 +37,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">LangX</a>
+                <a class="navbar-brand" href="index.php">Aprelendo</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->

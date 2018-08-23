@@ -30,7 +30,7 @@ if (!$user->isLoggedIn()) {
                     <p>
                         <span class="bg-danger">
                             Company
-                        </span> uses cookies on LangX (the "Service"). By using it, you consent to the use of cookies.</p>
+                        </span> uses cookies on Aprelendo (the "Service"). By using it, you consent to the use of cookies.</p>
                     <p>Our Cookies Policy explains what cookies are, how we use cookies, how third-parties we may partner with
                         may use cookies on the Service, your choices regarding cookies and further information about cookies.</p>
                     <br>

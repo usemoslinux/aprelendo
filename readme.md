@@ -1,10 +1,10 @@
-# LangX
+# Aprelendo
 
-Let's start by saying that LangX is still under heavy development.
+Let's start by saying that Aprelendo is still under heavy development.
 
 I started developing it to help me learn new languages. It is based on the idea that acquiring vocabulary by reading texts that are of interest to us is easier, more appealing and -more importantly- more effective than reviewing stand alone flashcards, as most language learning software seem to do these days.
 
-Other programs, like [Learning with Texts (LWT)](http://lwt.sourceforge.net/) and [LangX](http://LangX.com/), are similar to LangX, but they end up skewing the reading process by converting it into a merely extractive process in which we end up focusing on choosing the words and phrases we don't know in order to create new flashcards. So, the endgame is to create new flashcards and the real learning process comes from reviewing them, not reading. Instead, reading becomes an instrument in that boring and tiresome scheme.
+Other programs, like [Learning with Texts (LWT)](http://lwt.sourceforge.net/) and [Readlang](https://readlang.com/), are similar to Aprelendo, but they end up skewing the reading process by converting it into a merely extractive process in which we end up focusing on choosing the words and phrases we don't know in order to create new flashcards. So, the endgame is to create new flashcards and the real learning process comes from reviewing them, not reading. Instead, reading becomes an instrument in that boring and tiresome scheme.
 
 If you ever used [Anki](https://apps.ankiweb.net/) and other [spaced repetition software](https://en.wikipedia.org/wiki/Spaced_repetition) you probably know that creating new flashcards can become a very tiresome and time consuming task and, after a while, reviewing them also becomes dull and monotonous. For me, learning new vocabulary is not just a memory exercise. Real learning consists of two phases: understanding and practice. The first one is easy to catch, you can't learn new vocabulary if you don't understand what it means or how to use it. Practice, on the other hand, is a repetitive task which includes making mistakes, correcting them and repeating this operation several times until you don't make mistakes any more. When learning a language, the only way to practice it is by putting it to use. We do that in two ways: speaking and writing.
 

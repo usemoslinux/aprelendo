@@ -98,13 +98,13 @@ if ($user->isLoggedIn()) {
                 <div class="col-md-4">
                     <i class="fab fa-osi"></i>
                     <h4>Open source</h4>
-                    <p>LangX is open source software, meaning you can download and fiddle with its source code. This allows
-                        us to be super transparent and build a community of users and developers around LangX. With some
-                        technical knowledge you can even build your own LangX environment. This can be particularly useful
+                    <p>Aprelendo is open source software, meaning you can download and fiddle with its source code. This allows
+                        us to be super transparent and build a community of users and developers around Aprelendo. With some
+                        technical knowledge you can even build your own Aprelendo environment. This can be particularly useful
                         for schools and other educational organizations.</p>
                     <p>
                         <br/>
-                        <a href="https://github.com/usemoslinux/langx" target="_blank" class="btn btn-theme">More Info</a>
+                        <a href="https://github.com/usemoslinux/aprelendo" target="_blank" class="btn btn-theme">More Info</a>
                     </p>
                 </div>
                 <div class="col-md-4">
@@ -121,7 +121,7 @@ if ($user->isLoggedIn()) {
                 <div class="col-md-4">
                     <i class="fas fa-mobile-alt"></i>
                     <h4>Use it on any device</h4>
-                    <p>You can use LangX on mobile and desktop devices as long as they have an Internet connection. We offer
+                    <p>You can use Aprelendo on mobile and desktop devices as long as they have an Internet connection. We offer
                         addons for Firefox and Chrome to add texts to your library with the click of a mouse. Bookmarklets
                         are also available for those who prefer a browser agnostic solution.</p>
                     <p>
@@ -146,7 +146,7 @@ if ($user->isLoggedIn()) {
                 </div>
                 <div class="col-lg-6">
                     <ol>
-                        <li>Add texts and videos to your LangX personal library using our craft-made extensions. You can also upload youtube videos and ebooks.</li>
+                        <li>Add texts and videos to your Aprelendo personal library using our craft-made extensions. You can also upload youtube videos and ebooks.</li>
                         <li>Read your texts (or transcripts) and look up words you don't know.</li>
                         <li>Next time, they will appear underlined, indicating you are learning these words. After seeing them a
                             couple times without looking for their meaning, the underlining will disappear.</li>
@@ -165,7 +165,7 @@ if ($user->isLoggedIn()) {
                 <div class="left col-lg-6">
                     <blockquote class="quote">
                         <p>
-                            LangX is probably my top resource now for learning new languages.
+                            Aprelendo is probably my top resource now for learning new languages.
                         </p>
                         <br>
                         <footer>Alex Rawlings - Language Teacher</footer>
@@ -174,7 +174,7 @@ if ($user->isLoggedIn()) {
                 <div class="right col-lg-6">
                     <blockquote class="quote">
                         <p>
-                            LangX is one of the best language learning tools I've ever used. It is especially good for helping you get past the beginner
+                            Aprelendo is one of the best language learning tools I've ever used. It is especially good for helping you get past the beginner
                             levels of a language and into the intermediate and advanced stages.
                         </p>
                         <br>

@@ -27,13 +27,13 @@ try {
                 // create reset link & send email
                 $reset_link = "https://localhost/forgotpassword.php?username=$username&reset=$password_hash";
                 $to = $email;
-                $subject = 'LangX - Password reset';
-                $message = 'We received a request to reset the password for ' . $username . ' on LangX. ' .
+                $subject = 'Aprelendo - Password reset';
+                $message = 'We received a request to reset the password for ' . $username . ' on Aprelendo. ' .
                 'If you submitted this request, you can use the following link to reset your password: ' . 
                 $reset_link;
                 
-                $headers = 'From: langx@langx.com' . "\r\n" .
-                'Reply-To: langx@langx.com' . "\r\n" .
+                $headers = 'From: aprelendo@aprelendo.com' . "\r\n" .
+                'Reply-To: aprelendo@aprelendo.com' . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
                 
                 $mail_sent = mail($to, $subject, $message); // send email to reset password (requires 'sendmail' package in Debian/Ubuntu)

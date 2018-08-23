@@ -433,7 +433,7 @@ $(document).ready(function () {
             // only for the first word we need to check if it exists in db
             setAddDeleteButtons();
         } else {
-            // for the rest, due to the selection method used in Langx, we can be sure
+            // for the rest, due to the selection method used in Aprelendo, we can be sure
             // they are not in the database
             $doc.find("#btnremove").hide();
             $doc.find("#btnadd").text("Add");

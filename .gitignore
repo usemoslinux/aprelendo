@@ -1,7 +1,7 @@
 temp/
 public/tests/
 private/uploads/
-private/langx-addon/
+private/aprelendo-addon/
 private/passwords.php
 .vscode/
 php-info.php

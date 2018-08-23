@@ -37,7 +37,7 @@ if (!$user->isLoggedIn()) {
         </div>
 
         <div class="col-lg-6">
-            <h4>About LangX.</h4>
+            <h4>About aprelendo.</h4>
             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
                 standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it
                 to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
@@ -69,10 +69,10 @@ if (!$user->isLoggedIn()) {
             <h5>CEO</h5>
             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
             <p>Contact Me:</p>
-            <a href="mailto:cecilia@langx.com">
+            <a href="mailto:cecilia@aprelendo.com">
                 <i class="fas fa-envelope"></i>
             </a>
-            <a href="https://twitter.com/langx" target="_blank">
+            <a href="https://twitter.com/aprelendo" target="_blank">
                 <i class="fab fa-twitter"></i>
             </a>
         </div>
@@ -90,10 +90,10 @@ if (!$user->isLoggedIn()) {
             <h5>Lead developer</h5>
             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
             <p>Contact Me:</p>
-            <a href="pablo@langx.com">
+            <a href="pablo@aprelendo.com">
                 <i class="fas fa-envelope"></i>
             </a>
-            <a href="https://twitter.com/langx">
+            <a href="https://twitter.com/aprelendo">
                 <i class="fab fa-twitter"></i>
             </a>
         </div>

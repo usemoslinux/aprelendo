@@ -25,7 +25,7 @@ if (!$user->isLoggedIn()) {
             </ol>
             <div class="row flex simple-text">
                 <div class="col-xs-12">
-                    <p>LangX was built using the following free and open source tools:</p>
+                    <p>Aprelendo was built using the following free and open source tools:</p>
                     <ul>
                         <li>
                             <a href="http://php.net/">PHP</a>, by The PHP Group</li>

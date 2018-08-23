@@ -19,12 +19,12 @@
                         <a href="extensions.php">Extensions</a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="https://www.facebook.com/aprelendo" target="_blank">
                             <i class="fab fa-facebook"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="https://twitter.com/aprelendo" target="_blank">
                             <i class="fab fa-twitter"></i>
                         </a>
                     </li>
