@@ -1,6 +1,6 @@
 <?php
-require_once('db/dbinit.php');
-require_once(PUBLIC_PATH . '/classes/users.php');
+require_once 'db/dbinit.php';
+require_once PUBLIC_PATH . '/classes/users.php';
 
 $user = new User($con);
 
@@ -10,22 +10,21 @@ if ($user->isLoggedIn()) {
 }
 ?>
 
-<?php require_once 'simpleheader.php'; ?>
+    <?php require_once 'simpleheader.php';?>
 
-<!-- *****************************************************************************************************************
-HEADERWRAP
-***************************************************************************************************************** -->
-    <div id="headerwrap" class="headerwrap nice-wallpaper-1">
+<!-- HEADERWRAP -->
+    <div id="headerwrap" class="headerwrap pattern-wallpaper">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <h1>Learn a language
-                        <br>
-                        by reading
-                        <br>
-                        your <u>favorite</u> texts.</h1>
+                <div class="col-lg-6">
+                    <img class="img-responsive" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Southern_plains_grey_langur_%28Semnopithecus_dussumieri%29_female_head.jpg/1200px-Southern_plains_grey_langur_%28Semnopithecus_dussumieri%29_female_head.jpg" alt="How it works">
+                </div>
+                <div class="col-lg-6">
+                    <h1>Learn languages by reading your <u>favorite</u> texts.</h1>
                     <h5>Want to know more about
-                        <a href=""><u>active-reading</u></a>?</h5>
+                        <a href="activereading.php">
+                            <u>active-reading</u>
+                        </a>?</h5>
                     <br/>
                     <button type="button" class="btn btn-lg btn-success" onclick="window.location.href='chooselanguage.php'">Start learning</button>
                     <br/>
@@ -33,12 +32,13 @@ HEADERWRAP
                     <br/>
                     <br/>
                 </div>
-                <div class="col-xs-12 flag-col">
-                    <div class="row">
+                </div></div>
+                <div class="container-fluid">
+                    <div class="row flag-col">
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=english">
                                 <span class="flag-icon">
-                                    <img src="images/flags/english.svg" alt="English" class="flag-icon">
+                                    <img src="images/flags/en.svg" alt="English" class="flag-icon">
                                     <p>English</p>
                                 </span>
                             </a>
@@ -46,7 +46,7 @@ HEADERWRAP
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=spanish">
                                 <span class="flag-icon">
-                                    <img src="images/flags/spanish.svg" alt="Spanish" class="flag-icon">
+                                    <img src="images/flags/es.svg" alt="Spanish" class="flag-icon">
                                     <p>Spanish</p>
                                 </span>
                             </a>
@@ -54,7 +54,7 @@ HEADERWRAP
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=portuguese">
                                 <span class="flag-icon">
-                                    <img src="images/flags/portuguese.svg" alt="Portuguese" class="flag-icon">
+                                    <img src="images/flags/pt.svg" alt="Portuguese" class="flag-icon">
                                     <p>Portuguese</p>
                                 </span>
                             </a>
@@ -62,7 +62,7 @@ HEADERWRAP
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=french">
                                 <span class="flag-icon">
-                                    <img src="images/flags/french.svg" alt="French" class="flag-icon">
+                                    <img src="images/flags/fr.svg" alt="French" class="flag-icon">
                                     <p>French</p>
                                 </span>
                             </a>
@@ -70,7 +70,7 @@ HEADERWRAP
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=italian">
                                 <span class="flag-icon">
-                                    <img src="images/flags/italian.svg" alt="Italian" class="flag-icon">
+                                    <img src="images/flags/it.svg" alt="Italian" class="flag-icon">
                                     <p>Italian</p>
                                 </span>
                             </a>
@@ -78,14 +78,11 @@ HEADERWRAP
                         <div class="col-xs-4 col-md-2">
                             <a href="register.php?tolang=german">
                                 <span class="flag-icon">
-                                    <img src="images/flags/german.svg" alt="German" class="flag-icon">
+                                    <img src="images/flags/de.svg" alt="German" class="flag-icon">
                                     <p>German</p>
                                 </span>
                             </a>
                         </div>
-                    </div>
-                    <!--/flag-row -->
-                </div>
                 <!--/col -->
             </div>
             <!-- /row -->
@@ -94,24 +91,20 @@ HEADERWRAP
     </div>
     <!-- /headerwrap -->
 
-
-
-    <!-- *****************************************************************************************************************
-SERVICE LOGOS
-***************************************************************************************************************** -->
+<!-- SERVICE -->
     <div id="service" class="service">
         <div class="container">
             <div class="row centered">
                 <div class="col-md-4">
                     <i class="fab fa-osi"></i>
                     <h4>Open source</h4>
-                    <p>LangX is open source software, meaning you can download and fiddle with its source code. This may not mean anything
-                        to you, but is critically important. It allows us to be super transparent and build a community of users and developers 
-                        around LangX. Moreover, with some technical knowledge and persistance you can build your own LangX environment. 
-                        This can be particularly useful for schools and other educational organizations.</p>
+                    <p>LangX is open source software, meaning you can download and fiddle with its source code. This allows
+                        us to be super transparent and build a community of users and developers around LangX. With some
+                        technical knowledge you can even build your own LangX environment. This can be particularly useful
+                        for schools and other educational organizations.</p>
                     <p>
                         <br/>
-                        <a href="#" class="btn btn-theme">More Info</a>
+                        <a href="https://github.com/usemoslinux/langx" target="_blank" class="btn btn-theme">More Info</a>
                     </p>
                 </div>
                 <div class="col-md-4">
@@ -122,18 +115,18 @@ SERVICE LOGOS
                         it to make a type specimen book.</p>
                     <p>
                         <br/>
-                        <a href="#" class="btn btn-theme">More Info</a>
+                        <a href="activereading.php" class="btn btn-theme">More Info</a>
                     </p>
                 </div>
                 <div class="col-md-4">
                     <i class="fas fa-mobile-alt"></i>
                     <h4>Use it on any device</h4>
-                    <p>You can use LangX on mobile and desktop devices as long as they have an Internet connection. We offer addons for Firefox 
-                        and Chrome to add texts to your library with the click of a mouse. Bookmarklets are also available for those who prefer
-                        a browser agnostic solution.</p>
+                    <p>You can use LangX on mobile and desktop devices as long as they have an Internet connection. We offer
+                        addons for Firefox and Chrome to add texts to your library with the click of a mouse. Bookmarklets
+                        are also available for those who prefer a browser agnostic solution.</p>
                     <p>
                         <br/>
-                        <a href="#" class="btn btn-theme">More Info</a>
+                        <a href="extensions.php" class="btn btn-theme">More Info</a>
                     </p>
                 </div>
             </div>
@@ -143,6 +136,124 @@ SERVICE LOGOS
     </div>
     <!--/service -->
 
-    <?php require_once 'footer.php'?>
+    <!-- HOW IT WORKS -->
+    <div class="hiw">
+        <div class="container">
+            <div class="row">
+                <h1><a id="hiw">How it works</a></h1>
+                <div class="col-lg-6">
+                    <img class="img-responsive" src="images/backgrounds/01-pattern-wallpaper.png" alt="How it works">
+                </div>
+                <div class="col-lg-6">
+                    <ol>
+                        <li>Add texts and videos to your LangX personal library using our craft-made extensions. You can also upload youtube videos and ebooks.</li>
+                        <li>Read your texts (or transcripts) and look up words you don't know.</li>
+                        <li>Next time, they will appear underlined, indicating you are learning these words. After seeing them a
+                            couple times without looking for their meaning, the underlining will disappear.</li>
+                    </ol>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <div class="testimonials">
+        <div id="testimonials" class="container">
+            <div class="row">
+                <h1><a id="testimonials">What are people saying?</a></h1>
+                <div class="left col-lg-6">
+                    <blockquote class="quote">
+                        <p>
+                            LangX is probably my top resource now for learning new languages.
+                        </p>
+                        <br>
+                        <footer>Alex Rawlings - Language Teacher</footer>
+                    </blockquote>
+                </div>
+                <div class="right col-lg-6">
+                    <blockquote class="quote">
+                        <p>
+                            LangX is one of the best language learning tools I've ever used. It is especially good for helping you get past the beginner
+                            levels of a language and into the intermediate and advanced stages.
+                        </p>
+                        <br>
+                        <footer>Ron Gullekson - Language Surfer</footer>
+                    </blockquote>
+                </div>
+                <div class="left col-lg-6">
+                    <blockquote class="quote">
+                        <p>
+                            It is difficult to give something that is so young a five star rating, but this is already one of the best sites (along with
+                            stuff like Anki, Memrise, "X"Pod, Duolingo, LingQ, etc.) around for this and it is only getting
+                            better.
+                        </p>
+                        <footer>Joseph Heavner - Quora </footer>
+                    </blockquote>
+                </div>
+                <div class="right col-lg-6">
+                    <blockquote class="quote">
+                        <p>
+                            This is one of the most fantastic language learning tools I have ever encountered.
+                        </p>
+                        <footer>Foreigner on German Soil </footer>
+                    </blockquote>
+                </div>
+            </div>
+            <!-- row -->
+        </div>
+        <!-- container -->
+    </div>
+    <!-- testimonials -->
+
+    <!-- PRICING -->
+    <div class="pricing">
+        <h1><a id="pricing">Pricing</a></h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-2 col-sm-6">
+                    <div class="pricingTable">
+                        <span class="icon">
+                            <i class="fa fa-globe"></i>
+                        </span>
+                        <div class="pricingTable-header">
+                            <h3 class="title">Free</h3>
+                            <span class="price-value">Free</span>
+                        </div>
+                        <ul class="pricing-content">
+                            <li>1 private text per day</li>
+                            <li>Unlimited shared texts</li>
+                            <li>Unlimited videos</li>
+                            <li>No ebooks allowed</li>
+                            <li>&lt;5 MB audio attachments</li>
+                            <li>Unlimited words</li>
+                        </ul>
+                        <a href="#" class="pricingTable-signup">Sign Up</a>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="pricingTable">
+                        <span class="icon">
+                            <i class="fa fa-briefcase"></i>
+                        </span>
+                        <div class="pricingTable-header">
+                            <h3 class="title">Premium</h3>
+                            <span class="price-value">$5/month</span>
+                        </div>
+                        <ul class="pricing-content">
+                            <li>Unlimited private texts</li>
+                            <li>Unlimited shared texts</li>
+                            <li>Unlimited videos</li>
+                            <li>Ebook support (&lt;5 MB) </li>
+                            <li>&lt;10 MB audio attachments</li>
+                            <li>Unlimited words</li>
+                        </ul>
+                        <a href="#" class="pricingTable-signup">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script type="text/javascript" src="js/register.js"></script>
+    <?php require_once 'footer.php'?>

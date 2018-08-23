@@ -12,8 +12,8 @@
 
 <?php require_once 'simpleheader.php'; ?>
 
-<div class="container mtb nice-wallpaper-3">
-  <div id="more_content" class="row">
+<div class="container mtb pattern-wallpaper">
+  <div class="row">
     <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
       <section>
         <header>

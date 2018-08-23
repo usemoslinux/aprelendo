@@ -14,7 +14,8 @@
 
     <!-- Custom styles for this template -->
     <link href="css/styles.css" rel="stylesheet">
-
+    
+    <!-- JQuery & Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
@@ -86,7 +87,7 @@ try {
                     <div class="modal-header">
                         <button id="btnremove" type="button" data-dismiss="modal" class="btn btn-danger">Delete</button>
                         <button id="btnadd" type="button" class="btn btn-primary btn-success pull-right add-btn" data-dismiss="modal">Add</button>
-                        <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-default pull-right cancel-btn">Cancel</button>
+                        <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-static pull-right cancel-btn">Cancel</button>
                         <select class="modal-selPhrase" name="selPhrase" id="selPhrase">
                             <option value="translate_sentence">Translate sentence</option>
                         </select>

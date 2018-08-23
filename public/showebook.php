@@ -124,7 +124,7 @@ crossorigin="anonymous"></script> -->
                     <div class="modal-header">
                         <button id="btnremove" type="button" data-dismiss="modal" class="btn btn-danger">Delete</button>
                         <button id="btnadd" type="button" class="btn btn-primary btn-success pull-right add-btn" data-dismiss="modal">Add</button>
-                        <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-default pull-right cancel-btn">Cancel</button>
+                        <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-static pull-right cancel-btn">Cancel</button>
                         <select class="modal-selPhrase" name="selPhrase" id="selPhrase">
                             <option value="translate_sentence">Translate sentence</option>
                         </select>

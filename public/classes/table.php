@@ -49,7 +49,7 @@ abstract class Table
     protected function print_header() {
         $html = '<div class="row">
             <div class="col-xs-12">
-            <table id="textstable" class="table table-hover table-bordered">
+            <table id="textstable" class="table table-hover">
             <colgroup>';
         
         foreach ($this->col_widths as $col_width) { 

@@ -1,22 +1,22 @@
 <?php require_once 'simpleheader.php'; ?>
 
-<div class="container mtb nice-wallpaper-3">
-  <div id="more_content" class="row">
+<div class="container mtb pattern-wallpaper">
+  <div class="row">
     <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
       <section>
         <header>
           <h1 class="text-center">
             <?php
-            $title_array = array('English' => 'Welcome!',
-                'Spanish' => '¡Bienvenido!',
-                'Portuguese' => 'Bemvindo!',
-                'French' => 'Bienvenue!',
-                'Italian' => 'Benvenuto!',
-                'German' => 'Willkommen!');
+            $title_array = array('English' => array('en', 'Welcome!'),
+                'Spanish' => array('es', '¡Bienvenido!'),
+                'Portuguese' => array('pt', 'Bemvindo!'),
+                'French' => array('fr', 'Bienvenue!'),
+                'Italian' => array('it', 'Benvenuto!'),
+                'German' => array('de', 'Willkommen!'));
             $to_lang = isset($_GET['tolang']) ? ucfirst($_GET['tolang']) : 'English';
             $native_lang = isset($_GET['srclang']) ? ucfirst($_GET['srclang']) : 'English';
-            echo '<img src="images/flags/' . strtolower($to_lang) . '.svg" alt="' . $to_lang . '" class="flag-icon">';
-            echo $title_array["$to_lang"];
+            echo '<img src="images/flags/' . $title_array["$to_lang"][0] . '.svg" alt="' . $to_lang . '" class="flag-icon">';
+            echo $title_array["$to_lang"][1];
             ?>
           </h1>
           <div class="text-muted text-center">You are only one step away from learning

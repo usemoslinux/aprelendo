@@ -11,7 +11,7 @@
           <a class="active">Bookmarklet</a>
         </li>
       </ol>
-      <div id="more_content" class="row flex">
+      <div class="row flex">
         <div class="col-xs-12">
           <h4>What are bookmarklets?</h4>
           <p>Bookmarklets are a "one-click" tool which add functionality to the browser. From a user perspective, they work very much like regular bookmarks.</p>

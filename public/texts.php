@@ -92,9 +92,9 @@ if (!empty($filter)) {
                         </div>
                         <!-- Split button -->
                         <div class="btn-group btn-add-text searchbox">
-                            <a class="btn btn-success" href="addtext.php">
+                            <a class="btn btn-success col-xs-10 col-sm-9" href="addtext.php">
                                 <i class="fas fa-plus"></i> Add</a>
-                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-success col-xs-2 col-sm-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>

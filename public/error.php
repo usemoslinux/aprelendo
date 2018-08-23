@@ -3,7 +3,7 @@
 <!-- *****************************************************************************************************************
 HEADERWRAP
 ***************************************************************************************************************** -->
-    <div id="headerwrap" class="headerwrap nice-wallpaper-4">
+    <div id="headerwrap" class="headerwrap pattern-wallpaper">
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">

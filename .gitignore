@@ -8,3 +8,4 @@ php-info.php
 jsconfig.json
 .stylelintrc
 todo.md
+**/*.log

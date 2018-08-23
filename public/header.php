@@ -42,17 +42,21 @@ require_once('db/checklogin.php'); // check if logged in and set $user
                 </div>
                 <div class="navbar-collapse collapse navbar-right">
                     <ul class="nav navbar-nav">
-                        <li>
-                            <a href="about.html">FAQ</a>
-                        </li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">SECTIONS
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="/images/flags/<?php echo $user->learning_lang . '.svg';?>" alt="">
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <a href="languages.php">Languages</a>
-                                </li>
+                                <li><a href="<?php echo 'languages.php?chg=' . $user->learning_lang_id; ?>"><?php echo ucfirst($user->getLanguageName($user->learning_lang)); ?> settings</a></li>
+                                <li><a href="languages.php">Change current language</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">SECTIONS
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
                                 <li>
                                     <a href="texts.php">My texts</a>
                                 </li>
@@ -68,7 +72,7 @@ require_once('db/checklogin.php'); // check if logged in and set $user
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a id="user-menu" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fas fa-user-circle"></i>
                                 <?php echo strtoupper($user->name); ?>
                                 <b class="caret"></b>

@@ -240,7 +240,7 @@ class Reader extends Text
         
         // display source, if available
         if (!empty($this->source_uri)) {
-            $html .= '<a class="source" href="' . $this->source_uri . '">' . $this->getHost($this->source_uri) . '</a>'; 
+            $html .= '<a class="source" href="' . $this->source_uri . '" target="_blank">' . $this->getHost($this->source_uri) . '</a>'; 
         }
         
         $html .= '<h1>' . $this->title . '</h1>'; // display title

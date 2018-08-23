@@ -10,10 +10,7 @@ if(!isset($_COOKIE['accept_cookies']))
         }
     </script>
 <?php } ?>
-    <title>EU Cookie Law Script 1</title>
-    </head>
 
-    <body>
 <?php
 if(!isset($_COOKIE['accept_cookies']))
 { ?>

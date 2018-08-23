@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    var book = ePub();
     emptyForm();
 
     $("#btn-upload-epub").on("click", function() {
@@ -20,8 +21,12 @@ $(document).ready(function () {
             $epub_file.val('');
         } else {
             if ($('#title').val() == '') {
-                $('#title').val(file_name);    
-            }
+                if (window.FileReader) {
+                    var reader = new FileReader();
+                    reader.onload = openBook;
+                    reader.readAsArrayBuffer($epub_file[0].files[0]);
+                }
+            } 
         }
     }); // end of #file-upload-epub.on.change
 
@@ -77,4 +82,34 @@ $(document).ready(function () {
         $('#author').val('');
         $('#url').val('');
     }
+
+    /**
+     * Opens and renders an ebook using epub.js
+     * @param {arrayBuffer} e 
+     */
+    function openBook(e) {
+        var bookData = e.target.result;
+        book.open(bookData);
+    
+        window.addEventListener("unload", function () {
+            book.destroy();
+        });
+
+        book.loaded.metadata.then(function (meta) {
+            var $title = document.getElementById("title");
+            var $author = document.getElementById("author");
+
+            if ($title != null) {
+                $title.value = meta.title;
+                $author.value = meta.creator;
+            }
+        });
+    }
+
+
+
+
+
+
+
 });
