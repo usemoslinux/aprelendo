@@ -41,17 +41,17 @@
                             </div>
                         </div>
                          <!-- Split button -->
-                         <div class="btn-group btn-export-words searchbox">
-                            <a class="btn btn-success" href="db/exportwords.php"><i class="fas fa-file-export"></i> Export to CSV</a>
-                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         <div class="btn-group btn-searchbox searchbox">
+                            <a class="btn btn-success <?php echo $user->premium_until !== NULL ? '"' : 'disabled"'; ?> href="db/exportwords.php"><i class="fas fa-file-export"></i> Export</a>
+                            <button type="button" class="btn btn-success dropdown-toggle <?php echo $user->premium_until !== NULL ? '"' : 'disabled" title="Premium users only"'; ?> " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
-                                <li>
+                                <li <?php echo $user->premium_until !== NULL ? '' : 'class="disabled" title="Premium users only"'; ?> >
                                     <a href=" db/exportwords.php">Export all</a>
                                 </li>
-                                <li>
+                                <li <?php echo $user->premium_until !== NULL ? '' : 'class="disabled" title="Premium users only"'; ?> >
                                     <a href="db/exportwords.php<?php echo !empty($query_str) ? $query_str : '' ?>">Export search results</a>
                                 </li>
                             </ul>

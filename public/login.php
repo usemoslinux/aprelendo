@@ -7,6 +7,7 @@
   // if user is already logged in, go to "My Texts" section
   if ($user->isLoggedIn()) {
     header('Location:/texts.php');
+    exit;
   }
 ?>
 

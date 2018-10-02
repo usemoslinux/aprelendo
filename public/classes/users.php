@@ -1,4 +1,22 @@
 <?php 
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 class User 
 {
@@ -8,6 +26,7 @@ class User
     public $learning_lang;
     public $learning_lang_id;
     public $native_lang;
+    public $premium_until;
     public $error_msg;
     
     private $con;
@@ -145,6 +164,7 @@ class User
         } 
         
         header('Location:index.php');
+        exit;
     } // end logout
         
     /**
@@ -163,19 +183,27 @@ class User
                 $this->id = $user_id = $row['userid'];
                 
                 // get username & other user data
-                if ($result = $this->con->query("SELECT userName, userEmail, userNativeLang, userLearningLang FROM users WHERE userId='$user_id'")) {
+                if ($result = $this->con->query("SELECT userName, userEmail, userNativeLang, userLearningLang, userPremiumUntil FROM users WHERE userId='$user_id'")) {
                     $row = $result->fetch_assoc();
-                    $this->name = $username = $row['userName'];
+                    $this->name = $row['userName'];
                     $this->email = $row['userEmail'];
                     $this->native_lang = $row['userNativeLang'];
                     $this->learning_lang = $learning_lang = $row['userLearningLang'];
+                    $this->premium_until = $row['userPremiumUntil'];
                     
                     // get active language id (learning_lang_id)
                     if ($result = $this->con->query("SELECT LgId FROM languages WHERE LgUserId='$user_id' AND LgName='$learning_lang'")) {
                         $row = $result->fetch_assoc();
                         $this->learning_lang_id = $row['LgId'];
                         $is_logged = true;
-                    }  
+                    }
+                    
+                    // restart premium status in case premium_until date expired
+                    if ($this->premium_until !== NULL && $this->premium_until < date('Y-m-d')) {
+                        if ($result = $this->con->query("UPDATE users SET userPremiumUntil=NULL WHERE userId='$user_id'")) {
+                            $this->premium_until = NULL;
+                        }
+                    }
                 }
             }
         }

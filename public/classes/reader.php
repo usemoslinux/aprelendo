@@ -1,4 +1,22 @@
 <?php 
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 class Text 
 {
@@ -181,14 +199,14 @@ class Reader extends Text
         $learning_lang_id = $this->learning_lang_id;
         
         // 1. colorize phrases & words that are being reviewed
-        $result = $this->con->query("SELECT word FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND wordStatus>0");
+        $result = $this->con->query("SELECT word FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND wordStatus>0 ORDER BY isPhrase ASC");
         // <[^>]*>(*SKIP)(*F)|\bpablo\b
         if ($result) {
             while ($row = $result->fetch_assoc()) {
                 $phrase = $row['word'];
                 
-                // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
-                $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                // $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                 "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
             }
             
@@ -198,8 +216,8 @@ class Reader extends Text
             if ($result) {
                 while ($row = $result->fetch_assoc()) {
                     $phrase = $row['word'];
-                    // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
-                    $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                    $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                    // $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                     "<span class='word learned' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
                 }
                 
@@ -215,8 +233,8 @@ class Reader extends Text
                         if ($result) {
                             while ($row = $result->fetch_assoc()) {
                                 $word = $row['freqWord'];
-                                // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
-                                $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
+                                // $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                                 "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
                             }
                         }
@@ -271,7 +289,7 @@ class Reader extends Text
             $html .= 'Your browser does not support the audio element.</audio>
             <form>
             <div class="form-group flex-pbr-form">
-            <label id="label-speed" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
+            <label id="label-speed" class="basic" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
             <input id="pbr" type="range" class="flex-pbr" value="1" min="0.5" max="2" step="0.1">
             </div>
             </form>';
@@ -301,10 +319,10 @@ class Reader extends Text
         $html .= '<p></p>';
         
         if ($this->assisted_learning) {
-            $html .= '<button type="button" id="btn_next_phase" class="btn btn-lg btn-primary btn-block">Go to phase 2
+            $html .= '<button type="button" id="btn-next-phase" class="basic btn btn-lg btn-primary btn-block">Go to phase 2
             <div class="small">Look up words/phrases</div></button>';
         } else {
-            $html .= '<button type="button" id="btn_save" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
+            $html .= '<button type="button" id="btn-save" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
             
             // if there is audio available & at least 1 learning word in current document
             $learningwords = strpos($html, "<span class='word learning'") || strpos($html, "<span class='new learning'");
@@ -357,7 +375,7 @@ class Reader extends Text
         
         $html .= '</div><p></p>';
         
-        $html .= '<button type="button" id="btn_save" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
+        $html .= '<button type="button" id="btn-save" class="basic btn btn-lg btn-success btn-block">Finish & Save</button>';
         
         $time_end = microtime(true);
         $execution_time = ($time_end - $time_start);

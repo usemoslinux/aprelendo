@@ -1,8 +1,27 @@
 <?php 
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 class File
 {
     protected $allowed_extensions = array('txt');
+    protected $max_size = 0;
     public $file_name = '';
     
     public function __construct() {
@@ -32,9 +51,7 @@ class File
         $target_file_name = uniqid() . '.' . $file_extension; // create unique filename for audio file
         $target_file_URI = $target_dir . $target_file_name;
         
-        $file_size = $files_array['size'] / 1024; // size in KBs
-        $upload_max_filesize = ini_get('upload_max_filesize'); // max file size
-        
+        $file_size = $files_array['size'];
         
         // Check if file exists
         if (file_exists($target_file_URI)) {
@@ -42,11 +59,9 @@ class File
         }
         
         // Check file size
-        if ($files_array['error'] == UPLOAD_ERR_INI_SIZE) {
-            $errors[] = "<li>File size should be less than $upload_max_filesize<br>" .
-            "This is a limitation of the hosting server.<br>" .
-            "If you have access to the php ini file you can fix this by changing the <code>upload_max_filesize</code> setting.<br>" .
-            "If you can't, please ask your host to increase the size limits.</li>";
+        if ($file_size > $this->max_size || $files_array['error'] == UPLOAD_ERR_INI_SIZE) {
+            $errors[] = '<li>File size should be less than ' . number_format($this->max_size) . 
+                ' bytes. Your file has ' . number_format($file_size) . ' bytes.<br>';
         }
         
         // Check file extension
@@ -606,21 +621,30 @@ class File
     }
 }
 
-
 class AudioFile extends File
 {
-    public function __construct()
+    public function __construct($owned_by_premium_user)
     {
-        $this->allowed_extensions = array('mp3', 'ogg');
         parent::__construct();
+        $this->allowed_extensions = array('mp3', 'ogg');
+        if ($owned_by_premium_user) {
+            $this->max_size = 10485760; // 10 MB
+        } else {
+            $this->max_size = 2097152; // 2 MB
+        }
     }
 }
 
 class EbookFile extends File {
-    public function __construct()
+    public function __construct($owned_by_premium_user)
     {
-        $this->allowed_extensions = array('epub');
         parent::__construct();
+        $this->allowed_extensions = array('epub');
+        if ($owned_by_premium_user) {
+            $this->max_size = 2097152; // 2 MB
+        } else {
+            $this->max_size = 0; // ebook uploading is not allowed for non-premium users
+        }
     }
 }
 

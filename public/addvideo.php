@@ -13,6 +13,7 @@ require_once('header.php');
                     <a class="active">Add video</a>
                 </li>
             </ol>
+            <div class="alert alert-info"><i class="fas fa-info-circle"></i> Any Youtube videos you add to Aprelendo will be automatically "shared" with the rest of our community.</div>
         </div>
         <!-- VIDEO CONTAINER -->
         <div id="add-video-container" class="col-xs-12 col-sm-6">

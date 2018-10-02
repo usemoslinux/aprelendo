@@ -1,3 +1,6 @@
+<?php 
+    $is_premium_user = $user->premium_until !== NULL;
+?>
 <form class="" action="languages.php" method="post">
 
     <input type="hidden" name="id" value="<?php echo $lang->id; ?>">
@@ -32,8 +35,9 @@
         </div>
     </div>
 
+    <fieldset <?php echo $is_premium_user ? '' : 'disabled'; ?> >
     <div class="panel panel-default">
-        <div class="panel-heading">RSS feeds</div>
+        <div class="panel-heading">RSS feeds <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?></div>
         <div class="panel-body">
             <div class="form-group">
                 <label for="rssfeedURI1">RSS feed URI 1:</label>
@@ -49,9 +53,11 @@
             </div>
         </div>
     </div>
+    </fieldset>
 
+    <fieldset <?php echo $is_premium_user ? '' : 'disabled'; ?> >
     <div class="panel panel-default">
-        <div class="panel-heading">Frequency list</div>
+        <div class="panel-heading">Frequency list <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?></div>
         <div class="panel-body">
             <div class="form-group">
                 <label for="freq-list">Underline 5000 most used words:</label>
@@ -62,6 +68,8 @@
             </div>
         </div>
     </div>
+    </fieldset>
+
     <div class="text-right">
         <a type="button" id="cancelbtn" name="cancel" class="btn btn-static" onclick="window.location='languages.php'">Cancel</a>
         <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>

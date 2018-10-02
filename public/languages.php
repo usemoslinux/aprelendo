@@ -6,7 +6,7 @@ $user_id = $user->id;
 
 if (isset($_POST['submit'])) {                  // check if we need to save new language data
     $lang = new Language($con, $_POST['id'], $user_id);
-    $lang->edit($_POST);
+    $lang->edit($_POST, $user->premium_until !== NULL);
 } elseif (isset($_GET['chg'])) {        
     $lang = new Language($con, $_GET['chg'], $user_id);
 } elseif(isset($_GET['act'])) { 
@@ -33,17 +33,12 @@ if (isset($_POST['submit'])) {                  // check if we need to save new 
 
                 <?php 
 
-                if (isset($_GET['chg'])) {              // chg paramter = show edit language page
-                    // $lang = new Language($con, $_GET['chg'], $user_id);
-                    
+                if (isset($_GET['chg'])) { // chg parameter = show edit language page
                     include('editlanguage.php');
-                } elseif(isset($_GET['act'])) {      // act parameter = set active language
-                    // $lang = new Language($con, $_GET['act'], $user_id);
-                    
+                } elseif(isset($_GET['act'])) { // act parameter = set active language
                     $user->setActiveLang($_GET['act']);
-                    
                     include('listlanguages.php');
-                } else {                                // just show list of languages
+                } else { // just show list of languages
                     include('listlanguages.php');
                 }
                 ?>

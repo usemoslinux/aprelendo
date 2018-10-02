@@ -1,6 +1,28 @@
 <?php
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 require_once('db/dbinit.php'); // connect to database
 require_once('db/checklogin.php'); // check if logged in and set $user
+
+$learning_lang_full = ucfirst($user->getLanguageName($user->learning_lang));
+
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -44,19 +66,25 @@ require_once('db/checklogin.php'); // check if logged in and set $user
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="/images/flags/<?php echo $user->learning_lang . '.svg';?>" alt="">
+                                <img id="img-language-flag" src="/images/flags/<?php echo $user->learning_lang . '.svg';?>" alt="<?php echo $learning_lang_full; ?> flag">
+                                <span id="learning-lang-span">&nbsp;<?php echo $learning_lang_full; ?></span>
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="<?php echo 'languages.php?chg=' . $user->learning_lang_id; ?>"><?php echo ucfirst($user->getLanguageName($user->learning_lang)); ?> settings</a></li>
+                                <li><a href="<?php echo 'languages.php?chg=' . $user->learning_lang_id; ?>"><?php echo $learning_lang_full; ?> settings</a></li>
                                 <li><a href="languages.php">Change current language</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">SECTIONS
+                            <a id="user-menu" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fas fa-user-circle"></i>
+                                <?php echo ucfirst($user->name); ?>
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
+                                <li class="dropdown-header">
+                                    Sections
+                                </li>
                                 <li>
                                     <a href="texts.php">My texts</a>
                                 </li>
@@ -69,21 +97,17 @@ require_once('db/checklogin.php'); // check if logged in and set $user
                                 <li>
                                     <a href="stats.php">Statistics</a>
                                 </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a id="user-menu" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fas fa-user-circle"></i>
-                                <?php echo strtoupper($user->name); ?>
-                                <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
+                                <li class="divider"></li>
+                                <li class="dropdown-header">
+                                    Settings
+                                </li>
                                 <li>
                                     <a href="userprofile.php">My profile</a>
                                 </li>
                                 <li>
                                     <a href="preferences.php">Preferences</a>
                                 </li>
+                                <li class="divider"></li>
                                 <li>
                                     <a href="logout.php">Logout</a>
                                 </li>

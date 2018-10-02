@@ -1,4 +1,23 @@
 <?php
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 require_once('header.php');
 ?>
 
@@ -34,7 +53,7 @@ require_once('header.php');
           }
         ?>
                 <div id="alert-error-msg" class="hidden"></div>
-                <form id="form-addtext" action="" class="add-form" method="post" enctype="multipart/form-data">
+                <form id="form-addtext" data-premium="<?php echo $user->premium_until !== NULL ? 1 : 0; ?>" action="" class="add-form" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
                     <input type="hidden" name="mode" value="simple" />
                     <div class="form-row">
@@ -71,8 +90,10 @@ require_once('header.php');
                             </div>
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="audio">Audio:</label>
-                            <input id="audio-uri" type="file" name="audio" accept="audio/mpeg,audio/ogg">
+                            <input class="hidden" id="audio-uri" type="file" name="audio" accept="audio/mpeg,audio/ogg">
+                            <button id="btn-upload-audio" type="button" class="btn btn-primary btn-upload">
+                                <i class="fas fa-upload"></i>&nbsp;Upload audio
+                            </button>
                         </div>
                     </div>
                     <div class="form-row">

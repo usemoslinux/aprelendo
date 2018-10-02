@@ -1,5 +1,22 @@
 <?php 
-// require_once('connect.php');
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 class Language //extends DBEntity
 {
@@ -47,7 +64,7 @@ class Language //extends DBEntity
      * @param array $array
      * @return boolean
      */
-    public function edit($array) {
+    public function edit($array, $is_premium_user) {
         $id = $this->id;
         $user_id = $this->user_id;
         $name = $this->name;
@@ -58,9 +75,16 @@ class Language //extends DBEntity
         $rss_feed_3_uri = $array['rssfeedURI3'];
         $show_freq_list = $array['freq-list'];
         
-        $result = $this->con->query("UPDATE languages SET LgName='$name', LgDict1URI='$dictionary_uri',
-        LgTranslatorURI='$translator_uri', LgRSSFeed1URI='$rss_feed_1_uri', LgRSSFeed2URI='$rss_feed_2_uri', 
-        LgRSSFeed3URI='$rss_feed_3_uri', LgShowFreqList=$show_freq_list WHERE LgUserId='$user_id' AND LgID='$id'");
+        if ($is_premium_user) {
+            $sql_str = "UPDATE languages SET LgName='$name', LgDict1URI='$dictionary_uri',
+                LgTranslatorURI='$translator_uri', LgRSSFeed1URI='$rss_feed_1_uri', LgRSSFeed2URI='$rss_feed_2_uri', 
+                LgRSSFeed3URI='$rss_feed_3_uri', LgShowFreqList=$show_freq_list WHERE LgUserId='$user_id' AND LgID='$id'";
+        } else {
+            $sql_str = "UPDATE languages SET LgName='$name', LgDict1URI='$dictionary_uri',
+                LgTranslatorURI='$translator_uri' WHERE LgUserId='$user_id' AND LgID='$id'";
+        }
+        
+        $result = $this->con->query($sql_str);
 
         return $result;
     }

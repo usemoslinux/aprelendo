@@ -1,4 +1,22 @@
 <?php 
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 class Connect 
 {
@@ -63,6 +81,25 @@ class DBEntity {
         $json = json_decode($json);
         $result = implode(',', $json);
         return $this->con->real_escape_string($result);
+    }
+
+    /**
+     * Converts Array to CSV
+     *
+     * @param array 
+     * @return string in CSV format
+     */
+    protected function convertArraytoCSV($array) {
+        if (is_array($array)) {
+            // escape all array elements
+            foreach ($array as $value) {
+                $value = $this->con->real_escape_string($value);
+            }
+            
+            return "'" . implode("','",$array) . "'";
+        } else {
+            return "'$array'";
+        }
     }
 
     protected function xml2array($xmlObject)

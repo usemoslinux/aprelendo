@@ -1,5 +1,30 @@
 <?php
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 require_once('header.php');
+
+// only premium users are allowed to visit this page
+if ($user->premium_until === NULL) {
+    header('Location:texts.php');
+    exit;
+}
 ?>
 
 <div class="container mtb">
@@ -13,6 +38,7 @@ require_once('header.php');
                     <a class="active">Add ebook</a>
                 </li>
             </ol>
+            <div class="alert alert-info"><i class="fas fa-info-circle"></i> Ebooks will remain in your "private" library. Therefore, you will be the only one with access to them.</div>
             <div id="alert-error-msg" class="hidden"></div>
             <form id="form-addebook" action="" class="add-form" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
@@ -31,7 +57,9 @@ require_once('header.php');
                     </div>
                     <div class="form-group col-md-4">
                         <input class="hidden" id="url" name="url" type="file" accept=".epub">
-                        <button id="btn-upload-epub" type="button" class="btn btn-primary">Upload epub file</button>
+                        <button id="btn-upload-epub" type="button" class="btn btn-primary btn-upload">
+                            <i class="fas fa-upload"></i>&nbsp;Upload epub file
+                        </button>
                     </div>
                 </div>
                 <div class="form-row">

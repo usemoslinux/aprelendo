@@ -1,4 +1,23 @@
 <?php 
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 require_once('dbinit.php'); // connect to database
 require_once(PUBLIC_PATH . '/classes/texts.php'); // loads Texts class
 require_once(PUBLIC_PATH . '/classes/sharedtexts.php'); // loads SharedTexts class
@@ -68,7 +87,7 @@ try {
                 // Audio file validation
                 if (empty($errors)) {
                     if (isset($_FILES['audio']) && !empty($_FILES['audio']) && $_FILES['audio']['error'] !== UPLOAD_ERR_NO_FILE) {
-                        $audio_file = new AudioFile();
+                        $audio_file = new AudioFile($user->premium_until !== NULL);
                         $file_uploaded = $audio_file->put($_FILES['audio']);
                         $target_file_name = $audio_file->file_name;
                     }
@@ -122,7 +141,7 @@ try {
                 $text = null;
 
                 if (isset($_FILES['url']) && $_FILES['url']['error'] !== UPLOAD_ERR_NO_FILE) {
-                    $ebook_file = new EbookFile();
+                    $ebook_file = new EbookFile($user->premium_until !== NULL);
                     $ebook_file->put($_FILES['url']);
                     $target_file_name = $ebook_file->file_name;
                 }

@@ -1,13 +1,36 @@
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 $(document).ready(function () {
-    $selword = null;
-    time_handler = null;
-    dictionaryURI = "";
-    translatorURI = "";
-    prevsel = 0; // previous selection index in #selPhrase
-    phase = 1; // first phase of the learning cycle
-    playingaudio = false;
-    $doc = $(parent.document);
-    $pagereader = $doc.find('iframe[id^="epubjs"]');
+    var $selword = null; // jQuery object of the selected word/phrase
+    var time_handler = null;
+    var dictionaryURI = "";
+    var translatorURI = "";
+    var prevsel = 0; // previous selection index in #selPhrase
+    var phase = 1; // first phase of the learning cycle
+    var playingaudio = false;
+    
+    // $doc & $pagereader are used to make this JS code work when showing simple texts & 
+    // ebooks (which are displayed inside an iframe)
+    var $doc = $(parent.document); 
+    var $pagereader = $doc.find('iframe[id^="epubjs"]');
+    var $pagereader = $pagereader.length > 0 ? $pagereader : $('#text');
 
     /**
      * Sets keyboard shortcuts for media player
@@ -23,11 +46,17 @@ $(document).ready(function () {
                     } else {
                         $audioplayer.trigger("pause");
                     }
+
+                    playingaudio = !playingaudio;
                     break;
             }
         }
     });
 
+    /**
+     * Pauses dictation audio when user is typing an answer inside an input
+     * @param {event object} e Used to get keycodes
+     */
     $("body").on("keydown", "input:text", function (e) {
         var lastkeypress = new Date().getTime();
         var keyCode = e.keyCode || e.which;
@@ -78,12 +107,10 @@ $(document).ready(function () {
         // var $btncancel = $("#btncancel");
         if ($selword.is(".learning, .new, .forgotten, .learned")) {
             if ($btnremove.is(":visible") === false) {
-                // $btncancel.hide();
                 $btnremove.show();
                 $btnadd.text("Forgot meaning");
             }
         } else {
-            // $btncancel.show();
             $btnremove.hide();
             $btnadd.text("Add");
         }
@@ -167,6 +194,7 @@ $(document).ready(function () {
 
         prevsel = 0;
         $(parent.document).find('#myModal').modal('show');
+        // $(parent.document).find('#myModal')
     });
 
     /**
@@ -255,7 +283,7 @@ $(document).ready(function () {
                 // if user is in phase 2 (underlining words) and there was no previous word underlined,
                 // (therefore dictation was off), when user adds his first new word, allow dictation
                 if (phase == 3 && $('audio').length > 0 && $('#alert-msg-phase').text().indexOf('Phase 2') > -1) {
-                    $('#btn_next_phase').html('Go to phase 3<div class="small">Dictation</div>');
+                    $('#btn-next-phase').html('Go to phase 3<div class="small">Dictation</div>');
                     phase--;
                 }
 
@@ -299,7 +327,7 @@ $(document).ready(function () {
                     // if user is in phase 2 (underlining words) and deleted the only word that was underlined
                     // don't allow phase 3 (dictation) & go directly to last phase (save changes)
                     if (phase == 2 && $('audio').length > 0 && $('.learning, .new, .forgotten').length == 0) {
-                        $('#btn_next_phase').html('Finished<div class="small">Save changes</div>');
+                        $('#btn-next-phase').html('Finished<div class="small">Save changes</div>');
                         phase++;
                     }
                 });
@@ -313,7 +341,7 @@ $(document).ready(function () {
      * Triggers next phase of assisted learning
      * Executes when the user presses the big blue button at the end
      */
-    $("body").on("click", "#btn_next_phase", function () {
+    $("body").on("click", "#btn-next-phase", function () {
         switch (phase) {
             case 1:
                 $("html, body").animate({
@@ -354,10 +382,10 @@ $(document).ready(function () {
      * Finished studying this text. Archives text & saves new status of words/phrases 
      * Executes when the user presses the big green button at the end
      */
-    $("body").on("click", "#btn_save", archiveTextAndSaveWords);
+    $("body").on("click", "#btn-save", archiveTextAndSaveWords);
 
     /**
-     * Archives text and updates status of all underlined words & phrases
+     * Archives text (only if necessary) and updates status of all underlined words & phrases
      */
     function archiveTextAndSaveWords() {
         // build array with underlined words
@@ -365,6 +393,7 @@ $(document).ready(function () {
         var id = [];
         var word = "";
         var archive_text = true;
+        var is_shared = $("#is_shared").length > 0
 
         $(".learning").each(function () {
             word = $(this)
@@ -377,14 +406,14 @@ $(document).ready(function () {
 
         id.push($("#container").attr("data-textID")); // get text ID
 
-        if ($("#is_shared").length > 0) {
+        if (is_shared) {
             id = undefined;
             archive_text = undefined;
         }
 
         $.ajax({
                 type: "POST",
-                url: "db/archivetext.php",
+                url: "/db/archivetext.php",
                 data: {
                     words: oldwords,
                     textIDs: JSON.stringify(id),
@@ -421,8 +450,9 @@ $(document).ready(function () {
      * Updates dictionary in modal window when user selects a new word/phrase
      * If user chooses to "translate sentence", the translator pops up
      */
-
     $doc.on("change", "#selPhrase", function () {
+        // workaround to set $selword in ebooks. For some reason, it's value is lost when the modal opens
+        $selword = typeof $selword === "undefined" ? $(parent)[0][1].$selword: $selword;
         
         var selindex = $doc.find("#selPhrase").prop("selectedIndex");
         var trans_whole_p_index = $doc.find("#selPhrase option").length - 1;
@@ -442,8 +472,8 @@ $(document).ready(function () {
         // define behaviour when user clicks on a phrase or "translate sentence"
         if (selindex == trans_whole_p_index) {
             // translate sentence
-            var $start_obj = $selword.prevUntil(':contains(".")').last();
-            var $end_obj = $selword.nextUntil(':contains(".")').last().next();
+            var $start_obj = $selword.prevUntil(':contains(.)').last();
+            var $end_obj = $selword.nextUntil(':contains(.)').last().next();
             var $sentence = $start_obj.nextUntil($end_obj).addBack().next().addBack();
 
             url = translatorURI.replace(
@@ -472,6 +502,9 @@ $(document).ready(function () {
         }
     });
 
+    /**
+     * Toggles dictation on/off
+     */
     function toggleDictation() {
         if ($(".dict-answer").length == 0) {
             // toggle dictation on
@@ -522,10 +555,12 @@ $(document).ready(function () {
         toggleDictation();
     });
 
-    $("body").on("blur", ":text", function (event) {
+    /**
+     * Checks if answer is correct and shows a cue to indicate status when user moves 
+     * focus out of an input box.
+     */
+    $("body").on("blur", ":text", function () {
         $curinput = $(this);
-        // when user moves focus out of the input box, check if answer is correct
-        // and show a cue to indicate status
         if (
             $curinput.val().toLowerCase() == $curinput.attr("data-text").toLowerCase()
         ) {
@@ -544,6 +579,9 @@ $(document).ready(function () {
         }
     });
 
+    /**
+     * Jumps to next input when user presses Enter inside an input
+     */
     $("body").on("keydown", ".dict", function (e) {
         if (e.which === 13) {
             var index = $(".dict").index(this) + 1;

@@ -74,7 +74,7 @@ $filter_sql = !empty($filter) && $filter > -1 ? "AND stextType=$filter" : '';
                             </div>
                         </div>
                         <!-- Split button -->
-                        <div class="btn-group btn-add-text searchbox">
+                        <div class="btn-group btn-searchbox searchbox">
                             <a class="btn btn-success" href="addtext.php">
                                 <i class="fas fa-plus"></i> Add</a>
                             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -86,10 +86,10 @@ $filter_sql = !empty($filter) && $filter > -1 ? "AND stextType=$filter" : '';
                                     <a href="addtext.php">Plain text</a>
                                 </li>
                                 <li>
-                                    <a href="addrss.php">RSS text</a>
-                                </li>
-                                <li>
                                     <a href="addvideo.php">Youtube video</a>
+                                </li>
+                                <li <?php echo $user->premium_until !== NULL ? '' : 'class="disabled" title="Premium users only"'; ?> >
+                                    <a href="addrss.php">RSS text</a>
                                 </li>
                             </ul>
                         </div>

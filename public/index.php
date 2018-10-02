@@ -7,6 +7,7 @@ $user = new User($con);
 // if user is already logged in, go to "My Texts" section
 if ($user->isLoggedIn()) {
     header('Location:texts.php');
+    exit;
 }
 ?>
 
@@ -221,12 +222,14 @@ if ($user->isLoggedIn()) {
                             <span class="price-value">Free</span>
                         </div>
                         <ul class="pricing-content">
-                            <li>1 private text per day</li>
-                            <li>Unlimited shared texts</li>
+                            <li>Unlimited texts</li>
                             <li>Unlimited videos</li>
-                            <li>No ebooks allowed</li>
-                            <li>&lt;5 MB audio attachments</li>
                             <li>Unlimited words</li>
+                            <li>Web browser Extensions</li>
+                            <li>Audio attachments (&lt;2 MB)</li>
+                            <li><del>RSS support</del></li>
+                            <li><del>Ebook support</del></li>
+                            <li><del>Export words</del></li>
                         </ul>
                         <a href="#" class="pricingTable-signup">Sign Up</a>
                     </div>
@@ -241,12 +244,14 @@ if ($user->isLoggedIn()) {
                             <span class="price-value">$5/month</span>
                         </div>
                         <ul class="pricing-content">
-                            <li>Unlimited private texts</li>
-                            <li>Unlimited shared texts</li>
+                            <li>Unlimited texts</li>
                             <li>Unlimited videos</li>
-                            <li>Ebook support (&lt;5 MB) </li>
-                            <li>&lt;10 MB audio attachments</li>
                             <li>Unlimited words</li>
+                            <li>Web browser Extensions</li>
+                            <li>Audio attachments (&lt;10 MB)</li>
+                            <li>Up to 3 RSS feeds</li>
+                            <li>Ebook support (&lt;2 MB)</li>
+                            <li>Export words (CSV)</li>
                         </ul>
                         <a href="#" class="pricingTable-signup">Sign Up</a>
                     </div>

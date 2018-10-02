@@ -52,6 +52,7 @@ if (!$user->isLoggedIn()) {
                         <ul>
                             <li>user_token: user id to enable auto-login</li>
                             <li>accept_cookies: tells if you have accepted to use cookies</li>
+                            <li>[ebook_key]-lastpos: indicates ebook's last reading position</li>
                         </ul>
                         <br>
                         <h4>Third-party cookies</h4>

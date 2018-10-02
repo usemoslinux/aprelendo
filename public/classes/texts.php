@@ -1,4 +1,22 @@
 <?php 
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 require_once('connect.php');
 require_once('files.php');
@@ -129,8 +147,12 @@ class Texts extends DBEntity {
                 $file = new File();
                 // delete associated audio file
                 foreach ($uris as $key => $value) {
-                    $file->delete($value[0]);
-                    $file->delete($value[1]);
+                    if (!empty($value[0]) && (strpos($value[0], '.ogg') !== false || strpos($value[0], '.mp3') !== false)) {
+                        $file->delete($value[0]);
+                    }
+                    if (!empty($value[1]) && (strpos($value[1], '.epub') !== false)) {
+                        $file->delete($value[1]);
+                    }
                 }
             }
         }

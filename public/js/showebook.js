@@ -1,6 +1,24 @@
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 $(document).ready(function () {
     var ebook_id = $("script[src*='showebook.js']").attr('data-id');
-    var currentSectionIndex = 0;
     var book = ePub();
 
     var formData = new FormData();
@@ -44,9 +62,7 @@ $(document).ready(function () {
         book.open(bookData);
 
         var rendition = book.renderTo("viewer", {
-            width: "100%",
-            height: window.innerHeight - 45,
-            spread: "always"
+            flow: "scrolled-doc"
         });
 
         // theming
@@ -57,24 +73,31 @@ $(document).ready(function () {
         rendition.themes.register("sepiamode", "/css/ebooks.css");
 
         rendition.themes.default({
-            h1: {
+            body: {
                 'font-family': reader.style.fontFamily + ' !important'
             },
             p: {
-                'font-family': reader.style.fontFamily + ' !important',
                 'font-size': reader.style.fontSize + ' !important',
-                'text-align': reader.style.textAlign + ' !important'
+                'text-align': reader.style.textAlign + ' !important',
+                'line-height': reader.style.lineHeight + ' !important'
             }
         });
 
         rendition.themes.select(reader.className);
 
-        book.ready.then(() => {
-
-            // alert('ready');
-
+        book.ready.then(function () {
+            var key = book.key()+'-lastpos';
+            var last_pos = localStorage.getItem(key);
+            if (last_pos) {
+                rendition.display(last_pos);
+            }
+            else {
+                var hash = window.location.hash.slice(2);
+                rendition.display(hash || undefined);
+            }
+            
             rendition.hooks.content.register(function (contents) {
-                // alert('hook');
+                
                 // Add JQuery
                 contents.addScript("https://code.jquery.com/jquery-3.3.1.min.js")
                     .then(function () {
@@ -82,8 +105,6 @@ $(document).ready(function () {
                         Promise.all([
                             contents.addScript("/js/showtext.js"),
                             contents.addScript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
-                            // contents.addStylesheet("/css/ebooks.css")
-                            // contents.addStylesheet("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
                         ]);
 
                     });
@@ -106,95 +127,97 @@ $(document).ready(function () {
             });
 
             var next = document.getElementById("next");
-
-            next.addEventListener("click", function (e) {
-                book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
-                this.blur();
+            next.addEventListener("click", function(e){
                 e.preventDefault();
+                $.when( SaveWords() ).then(function() {
+                    rendition.next();
+                });
             }, false);
 
             var prev = document.getElementById("prev");
-            prev.addEventListener("click", function (e) {
-                book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();
-                this.blur();
+            prev.addEventListener("click", function(e){
                 e.preventDefault();
+                $.when( SaveWords() ).then(function() {
+                    rendition.prev();
+                });
             }, false);
-
-            var keyListener = function (e) {
-
-                // Left Key
-                if ((e.keyCode || e.which) == 37) {
-                    book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();
-                }
-
-                // Right Key
-                if ((e.keyCode || e.which) == 39) {
-                    book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
-                }
-
-            };
-
-            rendition.on("keyup", keyListener);
-            document.addEventListener("keyup", keyListener, false);
-
+           
         })
 
-        var title = document.getElementById("title");
+        rendition.on("rendered", function(section){
+            var nextSection = section.next();
+            var prevSection = section.prev();
+      
+            if(nextSection) {
+              nextNav = book.navigation.get(nextSection.href);
+      
+              if(nextNav) {
+                nextLabel = nextNav.label;
+              } else {
+                nextLabel = "next";
+              }
+      
+              next.textContent = nextLabel + " »";
+            } else {
+              next.textContent = "";
+            }
+      
+            if(prevSection) {
+              prevNav = book.navigation.get(prevSection.href);
+      
+              if(prevNav) {
+                prevLabel = prevNav.label;
+              } else {
+                prevLabel = "previous";
+              }
+      
+              prev.textContent = "« " + prevLabel;
+            } else {
+              prev.textContent = "";
+            }
+      
+          });
 
-        rendition.display(currentSectionIndex);
+        $('body').on('click', '#btn-save', function() {
+            var cfi = rendition.currentLocation().start.cfi;
 
-        rendition.on("rendered", function (section) {
-            // alert('rendered');
-            var current = book.navigation && book.navigation.get(section.href);
+            localStorage.setItem(book.key()+'-lastpos', cfi);
 
-            if (current) {
-                var $select = document.getElementById("toc");
-                var $selected = $select.querySelector("option[selected]");
-                if ($selected) {
-                    $selected.removeAttribute("selected");
+            window.location.replace('texts.php');
+        });
+
+        /**
+         * Updates status of all underlined words & phrases
+         */
+        function SaveWords() {
+            // build array with underlined words
+            var $pagereader = $(document).find('iframe[id^="epubjs"]');
+            var oldwords = [];
+            var word = "";
+            
+
+            $pagereader.contents().find(".learning").each(function () {
+                word = $(this)
+                    .text()
+                    .toLowerCase();
+                if (jQuery.inArray(word, oldwords) == -1) {
+                    oldwords.push(word);
                 }
+            });
 
-                var $options = $select.querySelectorAll("option");
-                for (var i = 0; i < $options.length; ++i) {
-                    let selected = $options[i].getAttribute("ref") === current.href;
-                    if (selected) {
-                        $options[i].setAttribute("selected", "");
+            $.ajax({
+                    type: "POST",
+                    url: "/db/archivetext.php",
+                    data: {
+                        words: oldwords
                     }
-                }
-            }
+                })
+                .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Oops! There was an error updating the database.");
+                });
+        }
 
-        });
-
-        rendition.on("relocated", function (location) {
-            // alert('relocated');
-            var next = book.package.metadata.direction === "rtl" ? document.getElementById("prev") : document.getElementById("next");
-            var prev = book.package.metadata.direction === "rtl" ? document.getElementById("next") : document.getElementById("prev");
-
-            if (location.atEnd) {
-                next.style.visibility = "hidden";
-            } else {
-                next.style.visibility = "visible";
-            }
-
-            if (location.atStart) {
-                prev.style.visibility = "hidden";
-            } else {
-                prev.style.visibility = "visible";
-            }
-
-        });
-
-        rendition.on("layout", function (layout) {
-            let viewer = document.getElementById("viewer");
-
-            if (layout.spread) {
-                viewer.classList.remove('single');
-            } else {
-                viewer.classList.add('single');
-            }
-        });
-
-        window.addEventListener("unload", function () {
+        window.addEventListener("beforeunload", function () {
             book.destroy();
         });
 
