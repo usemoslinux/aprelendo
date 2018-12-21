@@ -82,7 +82,7 @@ $(document).ready(function () {
                 .fadeOut(2000);
               break;
             case "readnow":
-              location.replace("../showtext.php?id=" + data.insert_id);
+              location.replace("../showtext.php?id=" + data.insert_id + "&sh=1");
               break;
             default:
               break;

@@ -376,6 +376,10 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     padding: 10px;
 }
 
+.alert a {
+    color: #337ab7;
+}
+
 .close {
     right: 0 !important;
 }
@@ -912,6 +916,7 @@ input {
 .modal-dialog {
     display: flex;
     flex: 1;
+    font-family: "Lato", sans-serif;
     height: 97%;
 }
 

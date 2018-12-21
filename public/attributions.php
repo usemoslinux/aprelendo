@@ -39,6 +39,7 @@ if (!$user->isLoggedIn()) {
                             <a href="https://github.com/mozilla/readability">Readability</a>, by Mozilla (used to fetch texts from web sources)</li>
                         <li>
                             <a href="https://github.com/futurepress/epub.js/">EpubJS</a>, by Futurepress (used to render epub files)</li>
+                        <li><a href="https://bootstraptour.com/">Bootstrap Tour</a>, by Bootstrap Tour Team (used for introductory tour)</li>
                     </ul>
                     <p>Other attributions:</p>
                     <ul>

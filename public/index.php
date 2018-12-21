@@ -226,7 +226,6 @@ if ($user->isLoggedIn()) {
                             <li>Unlimited videos</li>
                             <li>Unlimited words</li>
                             <li>Web browser Extensions</li>
-                            <li>Audio attachments (&lt;2 MB)</li>
                             <li><del>RSS support</del></li>
                             <li><del>Ebook support</del></li>
                             <li><del>Export words</del></li>
@@ -248,7 +247,6 @@ if ($user->isLoggedIn()) {
                             <li>Unlimited videos</li>
                             <li>Unlimited words</li>
                             <li>Web browser Extensions</li>
-                            <li>Audio attachments (&lt;10 MB)</li>
                             <li>Up to 3 RSS feeds</li>
                             <li>Ebook support (&lt;2 MB)</li>
                             <li>Export words (CSV)</li>

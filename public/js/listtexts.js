@@ -176,5 +176,12 @@ $(document).ready(function () {
             $(this).closest('tr').removeClass("info");
         }
     });
+
+    /**
+     * Turn off clicking for disabled navigation items
+     */
+    $(document).on('click', 'li.disabled', function () {
+        return false;
+    });
     
 });

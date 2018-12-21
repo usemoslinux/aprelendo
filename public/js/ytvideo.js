@@ -27,6 +27,8 @@
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     
+    var video_paused = false;
+
     // 3. This function creates an <iframe> (and YouTube player)
     //    after the API code downloads.
     var player;
@@ -52,15 +54,16 @@
     //    The function indicates that when playing a video (state=1),
     //    the player should play for six seconds and then stop.
     function onPlayerStateChange(event) {
-        switch (event.data) {
-            case YT.PlayerState.PLAYING:
-                video_paused = false;
-                var timer;     
-                var $obj = $('div.text-center','#container');
-                var video_time = 0;
-                
-                function updateTime(time_interval) {
-                    timer = setInterval(function(){
+        if (event.data === YT.PlayerState.PLAYING) {
+            var $obj = $('div.text-center','#container');
+            var video_time = 0;
+            var timer;    
+            video_paused = false;
+
+            function updateTime(time_interval) {
+
+                timer = setInterval(function(){
+                    if (!video_paused) {
                         video_time = player.getCurrentTime();
                         $next_obj = $obj.filter(function() {
                             return $(this).attr("data-start") < video_time;
@@ -68,18 +71,16 @@
                         $obj.removeClass('video-reading-line');
                         if ($next_obj.length > 0) {
                             $next_obj.addClass('video-reading-line');
-                        }
-                    }, time_interval);
-                }
+                        }    
+                    } else {
+                        clearInterval(timer);
+                    }
+                }, time_interval);
+            }
 
-                updateTime(0);     
-                break;
-            case YT.PlayerState.PAUSED:
-                clearInterval(timer);
-                video_paused = true;
-                
-            default:
-                break;
+            updateTime(0);     
+        } else {
+            video_paused = true;
         }
     }
     

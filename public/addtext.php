@@ -103,7 +103,7 @@ require_once('header.php');
                                 required><?php if (isset($art_content)) {echo $art_content;}?></textarea>
                             <label for="upload-text" id="upload-txtfile-label">Upload txt file:</label>
                             <input id="upload-text" type="file" name="upload-text" accept=".txt">
-                            <div class="checkbox">
+                            <div id="shared-text-wrapper-div" class="checkbox">
                                 <label for="shared-text" id="shared-text-label">
                                     <input id="shared-text" type="checkbox" name="shared-text" <?php if (isset($art_is_shared)) {echo 'checked';}?>> Shared text
                                     <small>(only texts whose copyright you own, those already in the public domain or those with a license

@@ -28,24 +28,6 @@ require_once('header.php');
             <!-- <div class="col-lg-12"> -->
 
             <?php
-        //   if (isset($_GET['id'])) { // modify text
-        //       $id = $_GET['id'];
-        //       $result = $con->query("SELECT textTitle, textAuthor, text, textSourceURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
-        //       $row = $result->fetch_assoc();
-        //       $art_title = $row['textTitle'];
-        //       $art_author = $row['textAuthor'];
-        //       $art_url = $row['textSourceURI'];
-        //       $art_content = $row['text'];
-        //   } elseif (isset($_POST['art_title'])) { // rss
-        //       $art_title = $_POST['art_title'];
-        //       $art_author = $_POST['art_author'];
-        //       $art_url = $_POST['art_url'];
-        //       $art_content = $_POST['art_content'];
-        //   } elseif (isset($_GET['url'])) { // external call (bookmarklet, addon)
-        //       $art_url = $_GET['url'];
-        //       $external_call = true;
-        //   }
-
                 if (isset($_GET['url'])) { // external call (bookmarklet, addon)
                     $video_url = $_GET['url'];
                     $external_call = true;
@@ -80,6 +62,7 @@ require_once('header.php');
                             </div>
                         </div>
                     </div>
+                    
                     <input type="hidden" name="text" id="text" class="form-control" value="5">
 
                     <div class="form-row">

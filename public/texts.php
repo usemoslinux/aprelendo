@@ -43,8 +43,8 @@ if (!empty($filter)) {
                         <input id="f" name="f" value="<?php echo $filter; ?>" type="hidden">
                         <input id="sa" name="sa" value="<?php echo $show_archived ? '1' : '0'; ?>" type="hidden">
                         <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
-                        <div class="input-group searchbox">
-                            <div class="input-group-btn">
+                        <div id="search-wrapper-div" class="input-group searchbox">
+                            <div id="filter-wrapper-div" class="input-group-btn">
                                 <button type="button" id="btn-filter" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">Filter
                                     <span class="caret"></span>
@@ -91,7 +91,7 @@ if (!empty($filter)) {
                             </div>
                         </div>
                         <!-- Split button -->
-                        <div class="btn-group btn-searchbox searchbox">
+                        <div id="add-wrapper-div" class="btn-group btn-searchbox searchbox">
                             <a class="btn btn-success" href="addtext.php">
                                 <i class="fas fa-plus"></i> Add</a>
                             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

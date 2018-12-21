@@ -100,6 +100,7 @@ try {
             </div>
         </div>
 
+        <script type="text/javascript" src='js/voicerss/jquery.voicerss-tts.min.js'></script>
         <script type="text/javascript" src="js/showtext.js"></script>
 
 </body>

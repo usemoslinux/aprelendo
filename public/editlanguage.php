@@ -27,6 +27,7 @@
                     URLs should meet the following requirements to work properly:
                 </p>
                 <ul>
+                    <li>Some websites ensure that their content is not embedded into other sites. Therefore, some dictionaries may not work with Aprelendo. For further help, check the list of <a href="compatibledics.php">compatible dictionaries</a>.</li>
                     <li>For security reasons, only https websites are supported.</li>
                     <li>As the dictionary is going to be shown inside a modal window, it is highly recommended to use websites that support smaller screens. In case that support is not automatic, look for the mobile version of that website (if there is one) and use that one instead.</li>
                     <li>Don't forget to indicate the position of the lookup phrase by using "%s" (without quotation marks).</li>
@@ -71,7 +72,7 @@
     </fieldset>
 
     <div class="text-right">
-        <a type="button" id="cancelbtn" name="cancel" class="btn btn-static" onclick="window.location='languages.php'">Cancel</a>
+        <a type="button" id="cancelbtn" name="cancel" class="btn btn-static" onclick="window.location='texts.php'">Cancel</a>
         <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
     </div>
 </form>

@@ -68,7 +68,7 @@ try {
 
         <!-- Epub.js & jszip -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/epubjs@0.2.15/server.min.js"></script>
 
         <!-- JQuery -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -97,6 +97,7 @@ crossorigin="anonymous"></script> -->
             </span>
             <span>
                 <button class="basic btn btn-default pull-right" id="btn-save">Save & Close</button>
+                <div class="loader pull-right"></div>
             </span>
         </div>
         

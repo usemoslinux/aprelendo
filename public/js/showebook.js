@@ -107,22 +107,24 @@ $(document).ready(function () {
                             contents.addScript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
                         ]);
 
+                        $('.loader').fadeIn(1000);
+                        // underline words
+                        $.ajax({
+                            type: "POST",
+                            url: "../db/underlinewords.php",
+                            data: {
+                                txt: contents.content.innerHTML
+                            }
+                        })
+                        .done(function (result) {
+                            contents.content.innerHTML = result;
+                            $('.loader').fadeOut(1000);
+                        })
+                        .fail(function (xhr, ajaxOptions, thrownError) {
+                            alert('There was an unexpected error when trying to underline words for this ebook!');
+                        });
                     });
 
-                // underline words
-                $.ajax({
-                        type: "POST",
-                        url: "../db/underlinewords.php",
-                        data: {
-                            txt: contents.content.innerHTML
-                        }
-                    })
-                    .done(function (result) {
-                        contents.content.innerHTML = result;
-                    })
-                    .fail(function (xhr, ajaxOptions, thrownError) {
-                        alert('There was an unexpected error when trying to underline words for this ebook!');
-                    });
 
             });
 

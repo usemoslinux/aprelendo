@@ -70,12 +70,13 @@ class Language //extends DBEntity
         $name = $this->name;
         $dictionary_uri = $array['dictionaryURI'];
         $translator_uri = $array['translatorURI'];
-        $rss_feed_1_uri = $array['rssfeedURI1'];
-        $rss_feed_2_uri = $array['rssfeedURI2'];
-        $rss_feed_3_uri = $array['rssfeedURI3'];
-        $show_freq_list = $array['freq-list'];
         
         if ($is_premium_user) {
+            $rss_feed_1_uri = $array['rssfeedURI1'];
+            $rss_feed_2_uri = $array['rssfeedURI2'];
+            $rss_feed_3_uri = $array['rssfeedURI3'];
+            $show_freq_list = $array['freq-list'];
+            
             $sql_str = "UPDATE languages SET LgName='$name', LgDict1URI='$dictionary_uri',
                 LgTranslatorURI='$translator_uri', LgRSSFeed1URI='$rss_feed_1_uri', LgRSSFeed2URI='$rss_feed_2_uri', 
                 LgRSSFeed3URI='$rss_feed_3_uri', LgShowFreqList=$show_freq_list WHERE LgUserId='$user_id' AND LgID='$id'";

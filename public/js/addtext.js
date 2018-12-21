@@ -45,7 +45,11 @@ $(document).ready(function() {
             if(typeof data != 'undefined') {
                 showError(data.error_msg);
             } else {
-                window.location.replace('texts.php');
+                if (form_data.get('shared-text') == 'on') {
+                    window.location.replace('sharedtexts.php');
+                } else {
+                    window.location.replace('texts.php');    
+                }
             }
         })
         .fail(function (xhr, ajaxOptions, thrownError) {

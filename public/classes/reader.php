@@ -267,36 +267,22 @@ class Reader extends Text
         if (!empty($this->author)) {
             $html .= '<div class="author">' . $this->author . '</div>';
         }
-        
-        // $html .= $this->text; // display text
-        
-        $html .= '<div id="reader-estimated-time" class="meta-data">' .
-        $this->estimatedReadingTime() . ' minutes</div>'; // show estimated reading time
-        
-        // if there an associated audio file, show audio player
-        if (!empty($this->audio_uri)) {
-            $html .= '<hr>';
-            
-            $html .= "<audio controls class='mejs__player' id='audioplayer'>";
-            
-            $textAudioURI = 'getaudio.php?file=' . $this->audio_uri;
-            if (strcasecmp(pathinfo($textAudioURI, PATHINFO_EXTENSION), 'mp3') == 0) {
-                $html .= "<source src='$textAudioURI' type='audio/mpeg'>";
-            } else {
-                $html .= "<source src='$textAudioURI' type='audio/ogg'>";
-            }
-            
-            $html .= 'Your browser does not support the audio element.</audio>
-            <form>
-            <div class="form-group flex-pbr-form">
-            <label id="label-speed" class="basic" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
-            <input id="pbr" type="range" class="flex-pbr" value="1" min="0.5" max="2" step="0.1">
-            </div>
-            </form>';
-        }
+       
+        // display audio player
+        $html .= '<hr>';
+        $html .= '<audio controls id="audioplayer">
+        <source src="" type="audio/mpeg">
+        Your browser does not support the audio element.</audio>
+        <form>
+        <div class="form-group flex-pbr-form">
+        <label id="label-speed" class="basic" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
+        <input id="pbr" type="range" class="flex-pbr" value="1" min="0.5" max="2" step="0.1">
+        </div>
+        </form>';
         
         $html .= '<hr>';
         
+        // display assisted learning message
         if ($this->assisted_learning) {
             $html .= '<div id="alert-msg-phase" class="alert alert-info alert-dismissible show" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -304,6 +290,7 @@ class Reader extends Text
             <strong>Assisted learning - Phase 1:</strong> Reading & listening.</div>';   
         }
         
+        // display text
         $html .= '<div id="text" style="line-height:' . $this->line_height . ';">';
         
         $text = $this->colorizeWords($this->text);
@@ -312,6 +299,7 @@ class Reader extends Text
 
         $html .= $text . '</div>';
         
+        // display total execution time
         $time_end = microtime(true);
         $execution_time = ($time_end - $time_start);
         $html .= '<b>Total Execution Time:</b> ' . $execution_time . ' Secs';
@@ -333,11 +321,6 @@ class Reader extends Text
         
         $html .= '<p></p></div>';
         return $html;
-    }
-
-    public function showEbook($start_pos, $length)
-    {
-        # code...
     }
 
 

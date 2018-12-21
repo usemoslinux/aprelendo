@@ -32,6 +32,19 @@ $(document).ready(function () {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $('#text');
 
+    // load audio
+    var txt = $('#text').text();
+        $.speech({
+            key: 'ea7a24d128894ce38b7e81610324e3e3',
+            src: txt,
+            hl: 'fr-fr',
+            r: 0, 
+            c: 'mp3',
+            f: '44khz_16bit_stereo',
+            ssml: 'false',
+            b64: 'true'
+        });
+
     /**
      * Sets keyboard shortcuts for media player
      * @param {event object} e Used to get keycodes
@@ -144,6 +157,7 @@ $(document).ready(function () {
         $(parent.document).find("#dicFrame")
             .get(0)
             .contentWindow.location.replace(url);
+        $('#btnadd').focus();
         // the previous line loads iframe content without adding it to browser history,
         // as this one does: $('#dicFrame').attr('src', url);
 
@@ -194,7 +208,6 @@ $(document).ready(function () {
 
         prevsel = 0;
         $(parent.document).find('#myModal').modal('show');
-        // $(parent.document).find('#myModal')
     });
 
     /**
@@ -472,8 +485,10 @@ $(document).ready(function () {
         // define behaviour when user clicks on a phrase or "translate sentence"
         if (selindex == trans_whole_p_index) {
             // translate sentence
-            var $start_obj = $selword.prevUntil(':contains(.)').last();
-            var $end_obj = $selword.nextUntil(':contains(.)').last().next();
+            var $start_obj = $selword.prevUntil(":contains('.')").last();
+            $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
+            var $end_obj = $selword.prev().nextUntil(":contains('.')").last().next();
+            $end_obj = $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
             var $sentence = $start_obj.nextUntil($end_obj).addBack().next().addBack();
 
             url = translatorURI.replace(

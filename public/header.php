@@ -41,11 +41,17 @@ $learning_lang_full = ucfirst($user->getLanguageName($user->learning_lang));
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <!-- Font awesome icons -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css " integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+        <!-- Bootstraptour CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-tour@0.12.0/build/css/bootstrap-tour.min.css">
         <!-- Custom styles for this template -->
         <link href="css/styles.css" rel="stylesheet">
 
+        <!-- JQuery JS -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <!-- Bootstrap JS -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <!-- Bootstraptour JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-tour@0.12.0/build/js/bootstrap-tour.min.js"></script>
 
     </head>
 
@@ -64,7 +70,7 @@ $learning_lang_full = ucfirst($user->getLanguageName($user->learning_lang));
                 </div>
                 <div class="navbar-collapse collapse navbar-right">
                     <ul class="nav navbar-nav">
-                        <li class="dropdown">
+                        <li id="language-dropdown" class="dropdown">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                                 <img id="img-language-flag" src="/images/flags/<?php echo $user->learning_lang . '.svg';?>" alt="<?php echo $learning_lang_full; ?> flag">
                                 <span id="learning-lang-span">&nbsp;<?php echo $learning_lang_full; ?></span>
@@ -75,7 +81,7 @@ $learning_lang_full = ucfirst($user->getLanguageName($user->learning_lang));
                                 <li><a href="languages.php">Change current language</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown">
+                        <li id="user-dropdown" class="dropdown">
                             <a id="user-menu" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fas fa-user-circle"></i>
                                 <?php echo ucfirst($user->name); ?>
