@@ -35,8 +35,8 @@ class File
             unlink($full_filename);
         } else {
             if (!empty($filename)) {
-                throw new Exception('There was an error deleting the associated audio file.');
-                log_error("Error: removing audio file $full_filename");
+                throw new Exception('There was an error deleting the associated file.');
+                log_error("Error: removing file $full_filename");
             }
         }
     }
@@ -48,7 +48,7 @@ class File
         $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
         
         $temp_file_URI = $files_array['tmp_name'];
-        $target_file_name = uniqid() . '.' . $file_extension; // create unique filename for audio file
+        $target_file_name = uniqid() . '.' . $file_extension; // create unique filename for file
         $target_file_URI = $target_dir . $target_file_name;
         
         $file_size = $files_array['size'];

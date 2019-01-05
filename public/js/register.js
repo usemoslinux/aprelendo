@@ -30,26 +30,28 @@ $(document).ready(function () {
     })
     .done(function (data) {
       if(data.error_msg == null) {
-        window.location.replace('texts.php');
+        // window.location.replace('texts.php');
+        showMessage('An email has been sent to your account with the activation link.', 'alert-success');
       } else {
-        showError(data.error_msg);
+        showMessage(data.error_msg, 'alert-danger');
       }
     })
     .fail(function (xhr, ajaxOptions, thrownError) {
-      showError('Oops! There was an unexpected error when trying to register you. Please try again later.');
+      showMessage('Oops! There was an unexpected error when trying to register you. Please try again later.', 'alert-danger');
     }); // end of ajax
   }); // end of #form_register.on.submit
 
 
   /**
-   * Shows custom error message in the top section of the screen
-   * @param {string} error_msg 
+   * Shows custom message in the top section of the screen
+   * @param {string} html
+   * @param {string} type 
    */
-  function showError(error_msg) {
-    $('#error-msg').text(error_msg)
+  function showMessage(html, type) {
+    $('#error-msg').html(html)
       .removeClass('hidden')
-      .addClass('alert alert-danger');
+      .addClass('alert ' + type);
     $(window).scrollTop(0);
-  } // end of showError
+  } // end of showMessage
 
 });

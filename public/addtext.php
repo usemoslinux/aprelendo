@@ -79,7 +79,7 @@ require_once('header.php');
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-9">
+                        <div class="form-group col-xs-12">
                             <div class="input-group">
                                 <label for="url">Source URL:</label>
                                 <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (optional)" value="<?php if (isset($art_url)) {echo $art_url;}?>">
@@ -89,12 +89,12 @@ require_once('header.php');
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-md-3">
+                        <!-- <div class="form-group col-md-3">
                             <input class="hidden" id="audio-uri" type="file" name="audio" accept="audio/mpeg,audio/ogg">
                             <button id="btn-upload-audio" type="button" class="btn btn-primary btn-upload">
                                 <i class="fas fa-upload"></i>&nbsp;Upload audio
                             </button>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="form-row">
                         <div class="form-group col-xs-12">

@@ -1,10 +1,10 @@
 // Instance the tour
 var tour = new Tour({
-    name: "addtext",
+    name: "showtext",
     container: "body",
     smartPlacement: false,
     orphan: true,
-    // storage: false,
+    storage: false,
     template: "<div class='popover tour'> \
                     <div class='arrow'></div> \
                     <h3 class='popover-title'></h3> \

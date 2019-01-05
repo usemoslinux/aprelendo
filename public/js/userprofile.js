@@ -54,4 +54,30 @@ $(document).ready(function () {
         $('#password, #newpassword1, #newpassword2').val('');
       });
   });
+
+  $('#btn-delete-account').on('click', function () {
+    $(document).find('#delete-account-modal').modal('show');
+  });
+
+  $('#btn-confirm-delete-account').on('click', function () {
+    $.ajax({
+        url: 'db/deleteaccount.php',
+        type: 'post',
+        data: $('#userprofile-form').serialize()
+      })
+      .done(function (data) {
+        if (data.error_msg) {
+            $('#msgbox').html(data.error_msg)
+            .removeClass()
+            .addClass('alert alert-danger');    
+        } else {
+            window.location.replace('index.php'); 
+        }
+      })
+      .fail(function () {
+        $('#msgbox').html('<strong>Oops!</strong> Something went wrong when trying to delete your user account.')
+          .removeClass()
+          .addClass('alert alert-danger');
+      });
+  });
 });

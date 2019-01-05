@@ -18,38 +18,67 @@
  */
 
 $(document).ready(function () {
-  $('#form_forgot_password').on('submit', function (e) {
-    e.preventDefault();
-    var form_data = $('#form_forgot_password').serialize();
-    showMsg('Your request is being procesed. Please wait...', 'success');
+    $(document).on('submit', '#form_forgot_password', function (e) {
+        e.preventDefault();
+        var form_data = $('#form_forgot_password').serialize();
+        showMsg('Your request is being processed. Please wait...', 'alert-info');
 
-    $.ajax({
-      type: "post",
-      url: "db/forgotpassword.php",
-      data: form_data
-    })
-    .done(function (data) {
-      if (data.error_msg == null) {
-        showMsg('An email was sent. Access the link and create a new password.', 'success');  
-      } else {
-        showMsg(data.error_msg, 'error');
-      }
-    })
-    .fail(function (xhr, ajaxOptions, thrownError) {
-      showMsg('Oops! There was an unexpected error when trying to register you. Please try again later.', 'error');
+        $.ajax({
+                type: "post",
+                url: "db/forgotpassword.php",
+                data: form_data
+            })
+            .done(function (data) {
+                if (data.error_msg == null) {
+                    showMsg('An email was sent. Access the link and create a new password.', 'alert-success');
+                } else {
+                    showMsg(data.error_msg, 'alert-danger');
+                }
+            })
+            .fail(function (xhr, ajaxOptions, thrownError) {
+                showMsg('Oops! There was an unexpected error when trying to register you. Please try again later.', 'alert-danger');
+            });
     });
-  });
 
+    $(document).on('submit', '#form_create_new_password', function (e) {
+        e.preventDefault();
+        var form_data = $('#form_create_new_password').serialize();
+        showMsg('Your request is being processed. Please wait...', 'alert-info');
 
-  /**
-   * Shows custom error message in the top section of the screen
-   * @param {string} msg 
-   */
-  function showMsg(msg, msg_type) {
-    var msg_class = msg_type == 'error' ? 'alert-danger' : 'alert-success';
-    $('#alert_msg').text(msg)
-      .removeClass('hidden')
-      .addClass('alert ' + msg_class);
-    $(window).scrollTop(0);
-  } // end of showError
+        // 1. passwords entered by user are identical
+        if ($('#pass1').val() === $('#pass2').val()) {
+            $.ajax({
+                type: "post",
+                url: "db/forgotpassword.php",
+                data: form_data
+            })
+            .done(function (data) {
+                if (data.error_msg == null) {
+                    showMsg('Your new password was successfully saved!<br/>You will soon be redirected to the login page', 'alert-success');
+                    setTimeout(function() {window.location.replace("https://www.aprelendo.com/login.php")}, 5000);
+                } else {
+                    showMsg(data.error_msg, 'alert-danger');
+                }
+            })
+            .fail(function (xhr, ajaxOptions, thrownError) {
+                showMsg('Oops! There was an unexpected error when trying to save your new password. Please try again later.', 'alert-danger');
+            });    
+        } else { // 2. passwords entered by user are not identical 
+            showMsg('The passwords you entered are not identical. Please try again.', 'alert-danger');
+            $('#pass1').val('');
+            $('#pass2').val('');
+        }
+        
+    });
+
+    /**
+     * Shows custom error message in the top section of the screen
+     * @param {string} msg 
+     */
+    function showMsg(msg, msg_type) {
+        $('#alert_msg').html(msg)
+            .removeClass()
+            .addClass('alert ' + msg_type);
+        $(window).scrollTop(0);
+    } // end of showError
 });

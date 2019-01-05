@@ -145,7 +145,7 @@ class Texts extends DBEntity {
             // delete audio (mp3, oggs) & source files (epubs, etc.)
             if ($deletedfromdb) {
                 $file = new File();
-                // delete associated audio file
+                // delete associated file
                 foreach ($uris as $key => $value) {
                     if (!empty($value[0]) && (strpos($value[0], '.ogg') !== false || strpos($value[0], '.mp3') !== false)) {
                         $file->delete($value[0]);

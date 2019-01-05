@@ -22,9 +22,9 @@
 <body id="readerpage"
 <?php
 require_once('db/dbinit.php');  // connect to database
-require_once(PUBLIC_PATH . '/db/checklogin.php'); // check if user is logged in and set $user object
-require_once(PUBLIC_PATH . '/classes/reader.php'); // load Reader class
-require_once(PUBLIC_PATH . '/classes/videos.php'); // load Reader class
+require_once(PUBLIC_PATH . 'db/checklogin.php'); // check if user is logged in and set $user object
+require_once(PUBLIC_PATH . 'classes/reader.php'); // load Reader class
+require_once(PUBLIC_PATH . 'classes/videos.php'); // load Reader class
 
 try {
     $id_is_set = isset($_GET['id']) && !empty($_GET['id']);

@@ -1,4 +1,7 @@
-<?php require_once 'simpleheader.php'; ?>
+<?php 
+require_once('db/dbinit.php'); // connect to database
+require_once 'simpleheader.php'; 
+?>
 
 <div class="container mtb pattern-wallpaper">
   <div class="row">

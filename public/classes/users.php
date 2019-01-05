@@ -27,6 +27,8 @@ class User
     public $learning_lang_id;
     public $native_lang;
     public $premium_until;
+    public $activation_hash;
+    public $active;
     public $error_msg;
     
     private $con;
@@ -65,7 +67,8 @@ class User
         $password = $this->con->escape_string($password);
         $native_lang = $this->native_lang = $this->con->escape_string($native_lang);
         $learning_lang = $this->learning_lang = $this->con->escape_string($learning_lang);
-        
+        $this->active = false;
+
         // check if user already exists
         $result = $this->con->query("SELECT userName FROM users WHERE userName='$username'");
         if ($result->num_rows > 0) {
@@ -75,19 +78,23 @@ class User
         // check if email already exists
         $result = $this->con->query("SELECT userEmail FROM users WHERE userEmail='$email'");
         if ($result->num_rows > 0) {
-            throw new Exception ('Email already exists. Did you forget you username or password?');
+            throw new Exception ('Email already exists. Did you <a href="forgotpassword.php">forget</a> you username or password?');
         }
         
-        // create hash
+        // create password hash
         $options = ['cost' => 11];
         $password_hash = password_hash($password, PASSWORD_BCRYPT, $options);
+
+        // create account activation hash
+        $activation_hash = $this->activation_hash = md5(rand(0,1000));
+
         // save user data in db
-        $result = $this->con->query("INSERT INTO users (userName, userPasswordHash, userEmail, userNativeLang, userLearningLang) 
-            VALUES ('$username', '$password_hash', '$email', '$native_lang', '$learning_lang')"); 
+        $result = $this->con->query("INSERT INTO users (userName, userPasswordHash, userEmail, userNativeLang, userLearningLang, userActivationHash, userActive) 
+            VALUES ('$username', '$password_hash', '$email', '$native_lang', '$learning_lang', '$activation_hash', false)"); 
         if ($result) {
             $user_id = $this->id = $this->con->insert_id;
             
-            // save default language preferences for user
+            // create & save default language preferences for user
             foreach ($this->lg_iso_codes as $key => $value) {
                 $translator_uri = mysqli_escape_string($this->con,'https://translate.google.com/m?hl=' . $value . '&sl=' . $this->lg_iso_codes[$native_lang] . '&&ie=UTF-8&q=%s');
                 $dict_uri = $this->con->escape_string('https://www.linguee.com/' . $value . '-' . $this->lg_iso_codes[$native_lang] . '/search?source=auto&query=%s');
@@ -99,7 +106,8 @@ class User
             if ($result) {
                 $result = $this->con->query("INSERT INTO preferences (prefUserId, prefFontFamily, prefFontSize, prefLineHeight, prefAlignment, prefMode, prefAssistedLearning) 
                     VALUES ('$user_id', 'Helvetica', '12pt', '1.5', 'left', 'light', '1')");
-                return true; // full registration process was successful
+                
+                return $this->sendActivationEmail($email, $username, $activation_hash);
                 
                 if (!$result) {
                     throw new Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
@@ -110,9 +118,68 @@ class User
         } else {
             throw new Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
         }
-        return true;
     } // end register
     
+    /**
+     * Send activation email to user.
+     * Without completing this step, the account should be considered inactive.
+     *
+     * @param string $email
+     * @param string $username
+     * @param string $hash
+     * @return boolean
+     */
+    public function sendActivationEmail($email, $username, $hash)
+    {
+        // create activation link
+        $reset_link = "https://www.aprelendo.com/accountactivation.php?username=$username&hash=$hash";
+
+        // create email html
+        $to = $email;
+        $subject = 'Aprelendo - Account activation';
+        
+        $message = file_get_contents(PUBLIC_PATH . 'templates/welcome.html');
+        $message = str_replace('{{action_url}}', $reset_link, $message);
+        $message = str_replace('{{name}}', $username, $message);
+        
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= 'From:' . EMAIL_SENDER;
+        
+        // send email
+        $mail_sent = @mail($to, $subject, $message, $headers); // send email to reset password (requires 'sendmail' package in Debian/Ubuntu)
+        if (!$mail_sent) {
+            throw new Exception ('There was an error trying to send you an e-mail to activate your account.');
+        }
+        return true;
+    } // end sendActivationEmail
+
+    /**
+     * Activates user
+     *
+     * @param string $username
+     * @param string $hash
+     * @return void
+     */
+    public function activate($username, $hash)
+    {
+        $username = $this->con->escape_string($username);
+        $hash = $this->con->escape_string($hash);
+
+        // check if user name & hash exist in db
+        $result = $this->con->query("SELECT userActive FROM users WHERE userName='$username' AND userActivationHash='$hash'");
+        
+        if ($result->num_rows > 0) {
+            $result = $this->con->query("UPDATE users SET userActive=true WHERE userName='$username' AND userActivationHash='$hash'");
+            if (!$result) {
+                throw new Exception ('Oops! There was an unexpected error when trying to activate your account.');
+            }
+        } else { // if no user is registered with that name & hash
+            throw new Exception ('The activation link seems to be malformed. Please try again using the one provided in the email we\'ve sent you.');
+        } 
+        return true;
+    }
+
     /**
      * Creates "remember me" cookie
      *
@@ -129,6 +196,10 @@ class User
         $hashedPassword = $row['userPasswordHash'];
         if ($result->num_rows == 0) { // wrong username
             throw new Exception ('Username and password combination is incorrect. Please try again.');
+        }
+
+        if ($row['userActive'] == false) {
+            throw new Exception ('You need to activate your account first. Check your email for the activation link.');
         }
         
         if (password_verify($password, $hashedPassword)) { // login successful, remember me
@@ -151,19 +222,20 @@ class User
             throw new Exception ('Username and password combination is incorrect. Please try again.');
         }
         return true;
-    } // end login
+    } // end createRememberMeCookie
     
     /**
      * Logout user
      *
+     * @param boolean $deleted_account
      * @return void
      */
-    public function logout() {
-        if ($this->isLoggedIn()) {
+    public function logout($deleted_account) {
+        if ($deleted_account || $this->isLoggedIn()) {
             setcookie('user_token', '', time() - 3600, "/", false, 0); // delete user_token cookie
         } 
         
-        header('Location:index.php');
+        header('Location:/index.php');
         exit;
     } // end logout
         
@@ -282,6 +354,46 @@ class User
         }
         return true;
     }
+
+    /**
+     * Delete user account
+     *
+     * @return void
+     */
+    public function delete() {
+        if ($this->isLoggedIn()) {
+            require_once('files.php');
+
+            // delete files uploaded by user
+            $table_names = array('texts', 'archivedtexts');
+            
+            foreach ($table_names as $table) {
+                $user_id_col_name = $table == 'texts' ? 'textUserId' : 'atextUserId';
+                $source_uri_col_name = $table == 'texts' ? 'textSourceURI' : 'atextSourceURI';
+                $result = $this->con->query("SELECT $source_uri_col_name FROM $table WHERE $user_id_col_name='{$this->id}'");
+                
+                if ($result->num_rows > 0) {
+                    $file = new File();
+                    $filename = '';
+                    $file_extensions = array('.epub', '.mp3', '.ogg');
+
+                    while ($row = $result->fetch_assoc()) {
+                        $filename = $row[$source_uri_col_name];
+                        if (in_array(substr($filename, -5), $file_extensions)) {
+                            $file->delete($filename);
+                        }
+                    }
+                }
+            }
+            
+            // delete user from db
+            $result = $this->con->query("DELETE FROM users WHERE userId='{$this->id}'");
+            if (!$result) {
+                throw new Exception('Oops! There was an unexpected problem trying to delete your account. Please try again later.');
+            }
+            $this->logout(true);
+        } 
+    } // end logout
     
     /**
      * Converts full language names to 639-1 iso codes (ie. 'English' => 'en')

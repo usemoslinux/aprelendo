@@ -19,7 +19,7 @@
  */
 
 require_once('dbinit.php'); // connect to database
-require_once(PUBLIC_PATH . '/db/checklogin.php'); // loads User class & checks if user is logged in
+require_once(PUBLIC_PATH . 'db/checklogin.php'); // loads User class & checks if user is logged in
 
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;

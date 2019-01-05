@@ -135,11 +135,15 @@ $(document).ready(function() {
                 $('#author').val(article.byline);
                 var txt = '';
                 var $tempDom = $('<output>').append($.parseHTML(article.content));
-                $('p', $tempDom).each(function() {
-                    txt += $(this).text() + '\n\n';
+                $('p, h1, h2, h3, h4, h5, h6', $tempDom).each(function() {
+                    txt += $(this).text().replace(/\s+/g, ' ') + '\n\n';
                 });
+
+                txt = txt.replace(/(\n){3,}/g, '\n'); // remove multiple line breaks
+                txt = txt.replace(/\t/g, ''); // remove tabs
+                // txt = txt.replace(/  /g, ' '); // remove multiple spaces
                 
-                $('#text').val($.trim(txt));
+                $('#text').val($.trim(txt)); 
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
                 alert('Oops! There was an error trying to fetch this text.');

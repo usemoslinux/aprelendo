@@ -1,6 +1,6 @@
 <?php
   require_once('db/dbinit.php'); // connect to database
-  require_once(PUBLIC_PATH . '/classes/users.php');
+  require_once(PUBLIC_PATH . 'classes/users.php');
 
   $user = new User($con);
   
@@ -38,7 +38,7 @@
         </form>
         <br/>
         <footer>
-          <p class="text-muted text-center font-italic">You are not registered? <a href="chooselanguage.php">Create an account</a>.</p>
+          <p class="text-muted text-center font-italic">You are not registered? <a href="index.php">Create an account</a>.</p>
         </footer>
       </section>
     </div>

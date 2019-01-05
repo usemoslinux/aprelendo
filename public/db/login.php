@@ -19,7 +19,7 @@
  */
 
 require_once('dbinit.php'); // connect to database
-require_once(PUBLIC_PATH . '/classes/users.php'); // loads User class
+require_once(PUBLIC_PATH . 'classes/users.php'); // loads User class
 
 try {
     if (isset($_POST['username']) && isset($_POST['password'])) {

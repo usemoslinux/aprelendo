@@ -1,9 +1,9 @@
 
 <?php
-require_once(PUBLIC_PATH . '/classes/words.php'); // loads Words class
-require_once(PUBLIC_PATH . '/classes/table.php'); // table class
-require_once(PUBLIC_PATH . '/classes/pagination.php'); // pagination class
-require_once(PUBLIC_PATH . '/db/checklogin.php'); // loads User class & checks if user is logged in
+require_once(PUBLIC_PATH . 'classes/words.php'); // loads Words class
+require_once(PUBLIC_PATH . 'classes/table.php'); // table class
+require_once(PUBLIC_PATH . 'classes/pagination.php'); // pagination class
+require_once(PUBLIC_PATH . 'db/checklogin.php'); // loads User class & checks if user is logged in
 
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;

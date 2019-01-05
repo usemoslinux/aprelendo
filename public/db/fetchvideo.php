@@ -19,8 +19,8 @@
  */
 
 require_once('dbinit.php');  // connect to database
-require_once(PUBLIC_PATH . '/db/checklogin.php'); // check if user is logged in and set $user object
-require_once(PUBLIC_PATH . '/classes/videos.php'); // load Reader class
+require_once(PUBLIC_PATH . 'db/checklogin.php'); // check if user is logged in and set $user object
+require_once(PUBLIC_PATH . 'classes/videos.php'); // load Reader class
 
 try {
     if (isset($_POST['video_id']) && !empty($_POST['video_id'])) {

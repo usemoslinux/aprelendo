@@ -1,7 +1,7 @@
 <?php
 require_once('db/dbinit.php');  // connect to database
-require_once(PUBLIC_PATH . '/db/checklogin.php'); // check if user is logged in and set $user object
-require_once(PUBLIC_PATH . '/classes/reader.php'); // load Reader class
+require_once(PUBLIC_PATH . 'db/checklogin.php'); // check if user is logged in and set $user object
+require_once(PUBLIC_PATH . 'classes/reader.php'); // load Reader class
 
 function getCSS($class, $styles) {
     $class_str = "class='$class'";
@@ -68,7 +68,7 @@ try {
 
         <!-- Epub.js & jszip -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/epubjs@0.2.15/server.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
 
         <!-- JQuery -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -78,6 +78,9 @@ try {
             crossorigin="anonymous">
         <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 crossorigin="anonymous"></script> -->
+
+        <!-- Bootstraptour JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-tour@0.12.0/build/js/bootstrap-tour.min.js"></script>
 
         <!-- Extra style sheets -->
         <link rel="stylesheet" type="text/css" href="css/ebooks.css">
@@ -147,6 +150,13 @@ crossorigin="anonymous"></script> -->
 
         <!-- <script type="text/javascript" src="js/showtext.js"></script> -->
         <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" src="js/showebook.js"></script>
+
+        <?php
+        $file_name = 'js/bootstraptour/' . basename($_SERVER['PHP_SELF'], ".php") . '.js';
+        if (file_exists(PUBLIC_PATH . $file_name)) {
+            echo "<script src='/$file_name'></script>";
+        }
+        ?>
 
     </body>
 

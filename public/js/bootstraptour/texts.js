@@ -5,6 +5,17 @@ var tour = new Tour({
     smartPlacement: false,
     orphan: true,
     // storage: false,
+    template: "<div class='popover tour'> \
+                    <div class='arrow'></div> \
+                    <h3 class='popover-title'></h3> \
+                    <div class='popover-content'></div> \
+                    <div class='popover-navigation'> \
+                        <div class='btn-group'> \
+                            <button class='btn btn-sm btn-default disabled' data-role='prev' disabled='' tabindex='-1'>« Prev</button> \
+                            <button class='btn btn-sm btn-default' data-role='next'>Next »</button>  \
+                        </div> \
+                        <button class='btn btn-sm btn-default' data-role='end'>Close</button> </div> \
+                </div>",
     steps: [
         {
             element: "#body",
@@ -34,25 +45,25 @@ var tour = new Tour({
             element: "#extensions-link",
             title: "Extensions & Bookmarklets",
             placement: 'top',
-            content: "Another, more practical, way to add texts and Youtube videos to Aprelendo is by using our tailor made extensions (Firefox & Chrome) or bookmarklet (browser agnostic). </br></br>We strongly suggest you to take a look at this page after the tour ends."
+            content: "Another, more practical, way to add texts and Youtube videos to Aprelendo is by using our tailor made extensions (Firefox & Chrome) or bookmarklet (all browsers). <br/><br/>We strongly suggest to take a look at this page after the tour ends."
         },
         {
             element: "#search-wrapper-div",
             title: "Search",
             placement: 'bottom',
-            content: "Use this box to search for texts in your private library. </br></br>Remember: if you want to search texts shared by the community you need to go to the appropriate section, via the <i class='fas fa-user-circle'></i> user menu."
+            content: "Use this box to search for texts in your private library. <br/><br/>Remember: if you want to search texts shared by the community you need to go to the appropriate section, via the <i class='fas fa-user-circle'></i> user menu."
         },
         {
             element: "#filter-wrapper-div",
             title: "Filter",
             placement: 'right',
-            content: "You can also filter search results by selecting one of six different types of texts (articles, conversations, letters, songs, ebooks and others). </br></br>Here you will also find an option to search for archived texts, which are those you have already finished reading."
+            content: "You can also filter search results by selecting one of six different types of texts (articles, conversations, letters, songs, ebooks and others). <br/><br/>Here you will also find an option to search for archived texts, which are those you have already finished reading."
         },
         {
             element: "#actions-menu",
             title: "Actions menu",
             placement: 'right',
-            content: "The 'actions' menu has two entries: delete and archive. </br></br>The first will delete the selected texts from your library. </br></br>The second will tag them as 'archived', meaning they will stay hidden unles you specifically set your search results to show 'archived' texts."
+            content: "The 'actions' menu has two entries: delete and archive. <br/><br/>The first will delete the selected texts from your library. <br/><br/>The second will tag them as 'archived', meaning they will stay hidden unles you specifically set your search results to show 'archived' texts."
         },
         {
             element: "#sort-menu",

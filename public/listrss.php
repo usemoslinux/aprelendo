@@ -2,7 +2,7 @@
 <div class="col-xs-12">
 <?php 
 require_once('db/dbinit.php'); // connect to database
-require_once(PUBLIC_PATH . '/classes/rssfeeds.php'); // load RSSFeed & RSSFeeds classes
+require_once(PUBLIC_PATH . 'classes/rssfeeds.php'); // load RSSFeed & RSSFeeds classes
 
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;
