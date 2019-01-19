@@ -1,9 +1,10 @@
 <?php
-require_once(PUBLIC_PATH . 'classes/texts.php'); // loads Texts class
-require_once(PUBLIC_PATH . 'classes/archivedtexts.php'); // loads ArchivedTexts class
-require_once(PUBLIC_PATH . 'classes/table.php'); // table class
-require_once(PUBLIC_PATH . 'classes/pagination.php'); // pagination class
-require_once(PUBLIC_PATH . 'db/checklogin.php'); // loads User class & checks if user is logged in
+require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks if user is logged in
+
+use Aprelendo\Includes\Classes\Texts;
+use Aprelendo\Includes\Classes\TextTable;
+use Aprelendo\Includes\Classes\ArchivedTexts;
+use Aprelendo\Includes\Classes\Pagination;
 
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;
@@ -73,7 +74,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 
         echo $pagination->print('texts.php', '', $sort_by, $filter, $show_archived); // print pagination
     } else { // if there are no texts to show, print a message
-        echo '<p>There are no texts in your private library.</p>';
+        echo '<div class="simple-text"><p>Your private library is empty. Check out some <a href="sources.php">popular sources</a> for this language.</p></div>';
     }
     
 }

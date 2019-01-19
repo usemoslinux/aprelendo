@@ -34,7 +34,7 @@ $(document).ready(function() {
         
         $.ajax({
             type: "POST",
-            url: "db/addtext.php",
+            url: "ajax/addtext.php",
             data: form_data            
         })
         .done(function (data) {
@@ -69,7 +69,7 @@ $(document).ready(function() {
             
             $.ajax({
                 type: "POST",
-                url: "db/fetchvideo.php",
+                url: "ajax/fetchvideo.php",
                 data: { 'video_id' : video_id },
             })
             .done(function (data) {

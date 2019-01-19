@@ -1,6 +1,7 @@
 <?php
     require_once('header.php');
-    require_once(PUBLIC_PATH . 'classes/reader.php'); // load Reader class
+    
+    use Aprelendo\Includes\Classes\Reader;
 
     $reader = new Reader($con, $user->id, $user->learning_lang_id);
 ?>
@@ -106,11 +107,10 @@
                                             Assisted mode is designed to aid you in your language learning process. It typically consists of 3 phases:
                                         </p>
                                         <ol>
-                                            <li>First read (skimming and general comprehension of what the text is about) + listening
-                                                (only if audio is available).</li>
-                                            <li>Second read (to acquire a deeper understanding of the text) + opportunity to
+                                            <li>First read (skimming and general comprehension of what the text is about) &amp; listening.</li>
+                                            <li>Second read (to acquire a deeper understanding of the text) &amp; opportunity to
                                                 look up words in the dictionary or use the translator.</li>
-                                            <li>Dictation (only if audio is available).</li>
+                                            <li>Dictation.</li>
                                         </ol>
                                         Remember: assisted mode only works for simple texts (articles, songs, conversation transcripts, etc.), not videos or ebooks.
                                     </div>

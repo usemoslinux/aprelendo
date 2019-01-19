@@ -28,7 +28,7 @@ $(document).ready(function () {
         e.preventDefault(); // avoid to execute the actual submit of the form.
         
         $.ajax({
-            url: 'db/savepreferences.php',
+            url: 'ajax/savepreferences.php',
             type: 'post',
             data: $('#prefs-form').serialize()
         })

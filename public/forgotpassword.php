@@ -1,5 +1,5 @@
 <?php
-require_once('db/dbinit.php'); // connect to database
+require_once('../includes/dbinit.php'); // connect to database
 require_once('simpleheader.php');
 ?>
 
@@ -11,7 +11,7 @@ require_once('simpleheader.php');
                 <header>
                     <h1 class="text-center">Restore password</h1>
                 </header>
-                <br />
+                <br/>
                 <div id="alert_msg" class="hidden"></div>
 
                 <?php 
@@ -71,7 +71,7 @@ require_once('simpleheader.php');
                 }
                 ?>
 
-                <br />
+                <br/>
                 <footer>
                 </footer>
             </section>

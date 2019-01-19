@@ -1,6 +1,7 @@
 <?php
-require_once 'db/dbinit.php';
-require_once PUBLIC_PATH . 'classes/users.php';
+require_once '../includes/dbinit.php';
+
+use Aprelendo\Includes\Classes\User;
 
 $user = new User($con);
 
@@ -19,14 +20,14 @@ if ($user->isLoggedIn()) {
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <h1>Learn foreign languages<br />by reading<br /> your favorite texts</h1>
+                    <h1>Learn foreign languages<br/>by reading<br/> your favorite texts</h1>
                     <h5>Want to know more about our method? We call it
-                        <a href="activereading.php">
-                            <u>active-reading.</u>
+                        <a href="totalreading.php">
+                            <u>total reading.</u>
                         </a></h5>
-                    <br />
+                    <br/>
                     <h4>Select the language you want to learn to create an account</h4>
-                    <br />
+                    <br/>
                 </div>
             </div>
         </div>
@@ -35,7 +36,7 @@ if ($user->isLoggedIn()) {
                 <div class="col-xs-4 col-md-2">
                     <a href="register.php?tolang=english">
                         <span class="flag-icon">
-                            <img src="images/flags/en.svg" alt="English" class="flag-icon">
+                            <img src="img/flags/en.svg" alt="English" class="flag-icon">
                             <p>English</p>
                         </span>
                     </a>
@@ -43,7 +44,7 @@ if ($user->isLoggedIn()) {
                 <div class="col-xs-4 col-md-2">
                     <a href="register.php?tolang=spanish">
                         <span class="flag-icon">
-                            <img src="images/flags/es.svg" alt="Spanish" class="flag-icon">
+                            <img src="img/flags/es.svg" alt="Spanish" class="flag-icon">
                             <p>Spanish</p>
                         </span>
                     </a>
@@ -51,7 +52,7 @@ if ($user->isLoggedIn()) {
                 <div class="col-xs-4 col-md-2">
                     <a href="register.php?tolang=portuguese">
                         <span class="flag-icon">
-                            <img src="images/flags/pt.svg" alt="Portuguese" class="flag-icon">
+                            <img src="img/flags/pt.svg" alt="Portuguese" class="flag-icon">
                             <p>Portuguese</p>
                         </span>
                     </a>
@@ -59,7 +60,7 @@ if ($user->isLoggedIn()) {
                 <div class="col-xs-4 col-md-2">
                     <a href="register.php?tolang=french">
                         <span class="flag-icon">
-                            <img src="images/flags/fr.svg" alt="French" class="flag-icon">
+                            <img src="img/flags/fr.svg" alt="French" class="flag-icon">
                             <p>French</p>
                         </span>
                     </a>
@@ -67,7 +68,7 @@ if ($user->isLoggedIn()) {
                 <div class="col-xs-4 col-md-2">
                     <a href="register.php?tolang=italian">
                         <span class="flag-icon">
-                            <img src="images/flags/it.svg" alt="Italian" class="flag-icon">
+                            <img src="img/flags/it.svg" alt="Italian" class="flag-icon">
                             <p>Italian</p>
                         </span>
                     </a>
@@ -75,7 +76,7 @@ if ($user->isLoggedIn()) {
                 <div class="col-xs-4 col-md-2">
                     <a href="register.php?tolang=german">
                         <span class="flag-icon">
-                            <img src="images/flags/de.svg" alt="German" class="flag-icon">
+                            <img src="img/flags/de.svg" alt="German" class="flag-icon">
                             <p>German</p>
                         </span>
                     </a>
@@ -97,29 +98,19 @@ if ($user->isLoggedIn()) {
             <div class="col-md-4">
                 <i class="fab fa-osi"></i>
                 <h4>Open source</h4>
-                <p>Aprelendo is open source software, meaning you can download and fiddle with its source code. This
-                    allows
-                    us to be super transparent and build a community of users and developers around Aprelendo. With
-                    some
-                    technical knowledge you can even build your own Aprelendo environment. This can be particularly
-                    useful
-                    for schools and other educational organizations.</p>
+                <p>Aprelendo is open source software, meaning you can download and fiddle with its source code. This allows us to be super transparent and build a community of users and developers. With some technical knowledge, you can even build your own Aprelendo environment.</p>
                 <p>
-                    <br />
+                    <br/>
                     <a href="https://github.com/usemoslinux/aprelendo" target="_blank" class="btn btn-theme">More Info</a>
                 </p>
             </div>
             <div class="col-md-4">
                 <i class="fas fa-book-open"></i>
-                <h4>Active Reading</h4>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                    industry's
-                    standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-                    scrambled
-                    it to make a type specimen book.</p>
+                <h4>Total Reading</h4>
+                <p>Immersion is the best way to learn a language, but few -if any- online tools allow you to create an immersive environement. Total reading is a system developed to achieve this goal, from the comfort of your home and with enough flexibility to adapt to your schedules and needs.</p>
                 <p>
-                    <br />
-                    <a href="activereading.php" class="btn btn-theme">More Info</a>
+                    <br/>
+                    <a href="totalreading.php" class="btn btn-theme">More Info</a>
                 </p>
             </div>
             <div class="col-md-4">
@@ -130,7 +121,7 @@ if ($user->isLoggedIn()) {
                     addons for Firefox and Chrome to add texts to your library with the click of a mouse. Bookmarklets
                     are also available for those who prefer a browser agnostic solution.</p>
                 <p>
-                    <br />
+                    <br/>
                     <a href="extensions.php" class="btn btn-theme">More Info</a>
                 </p>
             </div>
@@ -147,7 +138,7 @@ if ($user->isLoggedIn()) {
         <div class="row">
             <h1 id="hiw">How it works</h1>
             <div class="col-lg-6">
-                <img class="img-responsive" src="images/backgrounds/pattern-wallpaper.png" alt="How it works">
+                <img class="img-responsive" src="img/backgrounds/pattern-wallpaper.png" alt="How it works">
             </div>
             <div class="col-lg-6">
                 <ol>
@@ -174,7 +165,7 @@ if ($user->isLoggedIn()) {
                     <p>
                         Aprelendo is probably my top resource now for learning new languages.
                     </p>
-                    <br>
+                    <br/>
                     <footer>Alex Rawlings - Language Teacher</footer>
                 </blockquote>
             </div>
@@ -185,7 +176,7 @@ if ($user->isLoggedIn()) {
                         helping you get past the beginner
                         levels of a language and into the intermediate and advanced stages.
                     </p>
-                    <br>
+                    <br/>
                     <footer>Ron Gullekson - Language Surfer</footer>
                 </blockquote>
             </div>

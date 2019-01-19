@@ -61,7 +61,7 @@ $(document).ready(function () {
         
         $.ajax({
             type: "POST",
-            url: "db/addtext.php",
+            url: "ajax/addtext.php",
             data: form_data,
             dataType: 'json',
             contentType: false,

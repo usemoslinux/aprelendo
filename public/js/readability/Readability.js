@@ -459,22 +459,22 @@ Readability.prototype = {
   },
 
   /**
-   * Replaces 2 or more successive <br> elements with a single <p>.
-   * Whitespace between <br> elements are ignored. For example:
-   *   <div>foo<br>bar<br> <br><br>abc</div>
+   * Replaces 2 or more successive <br/> elements with a single <p>.
+   * Whitespace between <br/> elements are ignored. For example:
+   *   <div>foo<br/>bar<br/> <br/><br/>abc</div>
    * will become:
-   *   <div>foo<br>bar<p>abc</p></div>
+   *   <div>foo<br/>bar<p>abc</p></div>
    */
   _replaceBrs: function (elem) {
     this._forEachNode(this._getAllNodesWithTag(elem, ["br"]), function(br) {
       var next = br.nextSibling;
 
-      // Whether 2 or more <br> elements have been found and replaced with a
+      // Whether 2 or more <br/> elements have been found and replaced with a
       // <p> block.
       var replaced = false;
 
-      // If we find a <br> chain, remove the <br>s until we hit another element
-      // or non-whitespace. This leaves behind the first <br> in the chain
+      // If we find a <br/> chain, remove the <br/>s until we hit another element
+      // or non-whitespace. This leaves behind the first <br/> in the chain
       // (which will be replaced with a <p> later).
       while ((next = this._nextElement(next)) && (next.tagName == "BR")) {
         replaced = true;
@@ -483,8 +483,8 @@ Readability.prototype = {
         next = brSibling;
       }
 
-      // If we removed a <br> chain, replace the remaining <br> with a <p>. Add
-      // all sibling nodes as children of the <p> until we hit another <br>
+      // If we removed a <br/> chain, replace the remaining <br/> with a <p>. Add
+      // all sibling nodes as children of the <p> until we hit another <br/>
       // chain.
       if (replaced) {
         var p = this._doc.createElement("p");
@@ -492,7 +492,7 @@ Readability.prototype = {
 
         next = p.nextSibling;
         while (next) {
-          // If we've hit another <br><br>, we're done adding children to this <p>.
+          // If we've hit another <br/><br/>, we're done adding children to this <p>.
           if (next.tagName == "BR") {
             var nextElem = this._nextElement(next.nextSibling);
             if (nextElem && nextElem.tagName == "BR")
@@ -1716,12 +1716,12 @@ Readability.prototype = {
   isProbablyReaderable: function(helperIsVisible) {
     var nodes = this._getAllNodesWithTag(this._doc, ["p", "pre"]);
 
-    // Get <div> nodes which have <br> node(s) and append them into the `nodes` variable.
+    // Get <div> nodes which have <br/> node(s) and append them into the `nodes` variable.
     // Some articles' DOM structures might look like
     // <div>
-    //   Sentences<br>
-    //   <br>
-    //   Sentences<br>
+    //   Sentences<br/>
+    //   <br/>
+    //   Sentences<br/>
     // </div>
     var brNodes = this._getAllNodesWithTag(this._doc, ["div > br"]);
     if (brNodes.length) {

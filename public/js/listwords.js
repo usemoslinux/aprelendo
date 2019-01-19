@@ -41,7 +41,7 @@ $(document).ready(function () {
        * @param  {integer array} textIDs Ids of the selected elements in the database
        */
       $.ajax({
-          url: 'db/removeword.php',
+          url: 'ajax/removeword.php',
           type: 'POST',
           data: {
             wordIDs: JSON.stringify(ids)

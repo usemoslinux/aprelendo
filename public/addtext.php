@@ -105,9 +105,7 @@ require_once('header.php');
                             <input id="upload-text" type="file" name="upload-text" accept=".txt">
                             <div id="shared-text-wrapper-div" class="checkbox">
                                 <label for="shared-text" id="shared-text-label">
-                                    <input id="shared-text" type="checkbox" name="shared-text" <?php if (isset($art_is_shared)) {echo 'checked';}?>> Shared text
-                                    <small>(only texts whose copyright you own, those already in the public domain or those with a license
-                                        that allows its distribution free of charge)</small>
+                                    <input id="shared-text" type="checkbox" name="shared-text" <?php if (isset($art_is_shared)) {echo 'checked';}?>> Share text with the community
                                 </label>
                             </div>
                         </div>

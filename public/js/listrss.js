@@ -58,7 +58,7 @@ $(document).ready(function () {
     } else {
       $.ajax({
           type: "POST",
-          url: "db/addtext.php",
+          url: "ajax/addtext.php",
           dataType: "JSON",
           data: {
             title: art_title,

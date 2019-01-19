@@ -1,5 +1,7 @@
 <?php
 
+use Aprelendo\Includes\Classes\Language;
+
 // show list of available languages
 $result = $con->query("SELECT LgID, LgName FROM languages WHERE LgUserId='$user_id'");
 
@@ -8,7 +10,7 @@ if ($result) {
     while ($row = $result->fetch_assoc()) {
         $lg_id = $row['LgID'];  
         $lg_iso_code = $row['LgName'];
-        $lgname = ucfirst($user->getLanguageName($lg_iso_code));
+        $lgname = ucfirst(Language::getLanguageName($lg_iso_code));
         
         $is_active = $lg_id == $user->learning_lang_id ? 'active' : '';
         echo "<a href='#item-$lg_iso_code' class='list-group-item entry-info $is_active' data-toggle='collapse'>" .

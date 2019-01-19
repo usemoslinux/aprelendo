@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel='shortcut icon' type='image/x-icon' href='images/logo.svg' />
+    <link rel='shortcut icon' type='image/x-icon' href='img/logo.svg' />
     <title>Aprelendo</title>
 
     <!-- Bootstrap core CSS -->
@@ -21,10 +21,11 @@
 
 <body id="readerpage"
 <?php
-require_once('db/dbinit.php');  // connect to database
-require_once(PUBLIC_PATH . 'db/checklogin.php'); // check if user is logged in and set $user object
-require_once(PUBLIC_PATH . 'classes/reader.php'); // load Reader class
-require_once(PUBLIC_PATH . 'classes/videos.php'); // load Reader class
+require_once('../includes/dbinit.php');  // connect to database
+require_once(APP_ROOT . 'includes/checklogin.php'); // check if user is logged in and set $user object
+
+use Aprelendo\Includes\Classes\Reader;
+use Aprelendo\Includes\Classes\Videos;
 
 try {
     $id_is_set = isset($_GET['id']) && !empty($_GET['id']);

@@ -26,7 +26,7 @@ $(document).ready(function () {
 
     /**
      * Throws error if response.status !== 200
-     * db/getebook.php returns 404 in case ebook was not found or if user is not allowed
+     * ajax/getebook.php returns 404 in case ebook was not found or if user is not allowed
      * to have access to it. 
      * @param response 
      */
@@ -42,7 +42,7 @@ $(document).ready(function () {
      * Ajax call to fetch an ebook. Response has to be converted to arrayBuffer to allow 
      * epub.js (book.open function) to process it correctly
      */
-    fetch('db/getebook.php', {
+    fetch('ajax/getebook.php', {
             method: 'POST',
             body: formData,
         })
@@ -111,7 +111,7 @@ $(document).ready(function () {
                         // underline words
                         $.ajax({
                             type: "POST",
-                            url: "../db/underlinewords.php",
+                            url: "../ajax/underlinewords.php",
                             data: {
                                 txt: contents.content.innerHTML
                             }
@@ -209,7 +209,7 @@ $(document).ready(function () {
 
             $.ajax({
                     type: "POST",
-                    url: "/db/archivetext.php",
+                    url: "/ajax/archivetext.php",
                     data: {
                         words: oldwords
                     }

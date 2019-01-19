@@ -1,9 +1,11 @@
 <?php
-require_once(PUBLIC_PATH . 'classes/texts.php'); // loads Texts class
-require_once(PUBLIC_PATH . 'classes/sharedtexts.php'); // loads ArchivedTexts class
-require_once(PUBLIC_PATH . 'classes/table.php'); // table class
-require_once(PUBLIC_PATH . 'classes/pagination.php'); // pagination class
-require_once(PUBLIC_PATH . 'db/checklogin.php'); // loads User class & checks if user is logged in
+require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks if user is logged in
+
+use Aprelendo\Includes\Classes\Texts;
+use Aprelendo\Includes\Classes\TextTable;
+use Aprelendo\Includes\Classes\SharedTexts;
+use Aprelendo\Includes\Classes\SharedTextTable;
+use Aprelendo\Includes\Classes\Pagination;
 
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;

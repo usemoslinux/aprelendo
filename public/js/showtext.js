@@ -103,7 +103,7 @@ $(document).ready(function () {
 
     // ajax call to get dictionary & translator URIs
     $.ajax({
-        url: "/db/getdicuris.php",
+        url: "/ajax/getdicuris.php",
         type: "GET",
         dataType: "json"
     }).done(function (data) {
@@ -224,7 +224,7 @@ $(document).ready(function () {
         // add selection to "words" table
         $.ajax({
                 type: "POST",
-                url: "/db/addword.php",
+                url: "/ajax/addword.php",
                 data: {
                     word: selection,
                     isphrase: is_phrase
@@ -314,7 +314,7 @@ $(document).ready(function () {
     $doc.on("click", "#btnremove", function () {
         $.ajax({
                 type: "POST",
-                url: "/db/removeword.php",
+                url: "/ajax/removeword.php",
                 data: {
                     word: $selword.text()
                 }
@@ -329,7 +329,7 @@ $(document).ready(function () {
                 });
 
                 $.ajax({
-                    url: "/db/underlinewords.php",
+                    url: "/ajax/underlinewords.php",
                     type: "POST",
                     data: {
                         txt: $selword.text()
@@ -426,7 +426,7 @@ $(document).ready(function () {
 
         $.ajax({
                 type: "POST",
-                url: "/db/archivetext.php",
+                url: "/ajax/archivetext.php",
                 data: {
                     words: oldwords,
                     textIDs: JSON.stringify(id),

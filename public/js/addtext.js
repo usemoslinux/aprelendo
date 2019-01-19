@@ -35,7 +35,7 @@ $(document).ready(function() {
         
         $.ajax({
             type: "POST",
-            url: "db/addtext.php",
+            url: "ajax/addtext.php",
             data: form_data,
             dataType: 'json',
             contentType: false,
@@ -123,7 +123,7 @@ $(document).ready(function() {
             $('#btn-fetch-img').removeClass().addClass('fas fa-sync fa-spin');
             $.ajax({
                 type: "GET",
-                url: 'db/fetchurl.php',
+                url: 'ajax/fetchurl.php',
                 data: { url: url },
                 dataType: "html"
             })

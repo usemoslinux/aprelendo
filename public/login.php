@@ -1,6 +1,7 @@
 <?php
-  require_once('db/dbinit.php'); // connect to database
-  require_once(PUBLIC_PATH . 'classes/users.php');
+  require_once('../includes/dbinit.php'); // connect to database
+
+  use Aprelendo\Includes\Classes\User;
 
   $user = new User($con);
   

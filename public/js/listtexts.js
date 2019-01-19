@@ -38,7 +38,7 @@ $(document).ready(function () {
             * @param  {integer array} textIDs Ids of the selected elements in the database
             */
             $.ajax({
-                url: 'db/removetext.php',
+                url: 'ajax/removetext.php',
                 type: 'POST',
                 data: {
                     textIDs: JSON.stringify(ids)
@@ -73,7 +73,7 @@ $(document).ready(function () {
         * @param {boolean} archivetxt If true, archive text; else, unarchive text
         */
         $.ajax({
-            url: 'db/archivetext.php',
+            url: 'ajax/archivetext.php',
             type: 'POST',
             data: {
                 textIDs: JSON.stringify(ids),

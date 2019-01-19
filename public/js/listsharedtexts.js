@@ -23,7 +23,7 @@ $(document).ready(function () {
         var text_id = like_btn.attr('data-idText');
         $.ajax({
             type: "POST",
-            url: "db/togglelike.php",
+            url: "ajax/togglelike.php",
             data: {id: text_id}
             // dataType: "dataType"
         })

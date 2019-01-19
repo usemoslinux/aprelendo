@@ -1,7 +1,7 @@
 <?php
-require_once('db/dbinit.php'); // connect to database
-require_once(PUBLIC_PATH . 'classes/users.php'); // loads User class
+require_once('../includes/dbinit.php'); // connect to database
 require_once(PUBLIC_PATH . 'simpleheader.php');
+use Aprelendo\Includes\Classes\User;
 ?>
 
 <div class="container mtb pattern-wallpaper">
@@ -12,7 +12,7 @@ require_once(PUBLIC_PATH . 'simpleheader.php');
                 <header>
                     <h1 class="text-center">Account activation</h1>
                 </header>
-                <br />
+                <br/>
                 <div id="alert_msg" class="hidden"></div>
 
                 <?php 
@@ -52,7 +52,7 @@ require_once(PUBLIC_PATH . 'simpleheader.php');
                 endif;
                 ?>
 
-                <br />
+                <br/>
                 <footer>
                 </footer>
             </section>

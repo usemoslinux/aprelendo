@@ -1,5 +1,5 @@
 <?php 
-require_once('db/dbinit.php'); // connect to database
+require_once('../includes/dbinit.php'); // connect to database
 require_once 'simpleheader.php'; 
 ?>
 
@@ -18,7 +18,7 @@ require_once 'simpleheader.php';
                 'German' => array('de', 'Willkommen!'));
             $to_lang = isset($_GET['tolang']) ? ucfirst($_GET['tolang']) : 'English';
             $native_lang = isset($_GET['srclang']) ? ucfirst($_GET['srclang']) : 'English';
-            echo '<img src="images/flags/' . $title_array["$to_lang"][0] . '.svg" alt="' . $to_lang . '" class="flag-icon">';
+            echo '<img src="img/flags/' . $title_array["$to_lang"][0] . '.svg" alt="' . $to_lang . '" class="flag-icon">';
             echo $title_array["$to_lang"][1];
             ?>
           </h1>

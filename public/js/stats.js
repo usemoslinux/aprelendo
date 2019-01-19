@@ -26,7 +26,7 @@ $(document).ready(function () {
 
     $.ajax({
             type: "GET",
-            url: "db/getstats.php",
+            url: "ajax/getstats.php",
             async: false,
             //data: "data",
             dataType: "json"
@@ -43,7 +43,7 @@ $(document).ready(function () {
         });
 
     // build chart
-    // color scheme: { blue: new; green: learned; yellow: learning; red: relearning }
+    // color scheme: { blue: new; green: learned; yellow: learning; red: forgotten }
     var ctx = document.getElementById("myChart").getContext("2d");
     var myChart = new Chart(ctx, {
         type: "line",

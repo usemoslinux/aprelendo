@@ -25,7 +25,7 @@ $(document).ready(function () {
 
         $.ajax({
                 type: "post",
-                url: "db/forgotpassword.php",
+                url: "ajax/forgotpassword.php",
                 data: form_data
             })
             .done(function (data) {
@@ -49,7 +49,7 @@ $(document).ready(function () {
         if ($('#pass1').val() === $('#pass2').val()) {
             $.ajax({
                 type: "post",
-                url: "db/forgotpassword.php",
+                url: "ajax/forgotpassword.php",
                 data: form_data
             })
             .done(function (data) {

@@ -18,10 +18,12 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('db/dbinit.php'); // connect to database
-require_once('db/checklogin.php'); // check if logged in and set $user
+require_once('../includes/dbinit.php'); // connect to database
+require_once(APP_ROOT . 'includes/checklogin.php'); // check if logged in and set $user
 
-$learning_lang_full = ucfirst($user->getLanguageName($user->learning_lang));
+use Aprelendo\Includes\Classes\Language;
+
+$learning_lang_full = ucfirst(Language::getLanguageName($user->learning_lang));
 
 ?>
     <!DOCTYPE html>
@@ -33,7 +35,7 @@ $learning_lang_full = ucfirst($user->getLanguageName($user->learning_lang));
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-        <link rel='shortcut icon' type='image/x-icon' href='images/logo.svg' />
+        <link rel='shortcut icon' type='image/x-icon' href='img/logo.svg' />
 
         <title>Aprelendo</title>
 
@@ -72,7 +74,7 @@ $learning_lang_full = ucfirst($user->getLanguageName($user->learning_lang));
                     <ul class="nav navbar-nav">
                         <li id="language-dropdown" class="dropdown">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                <img id="img-language-flag" src="/images/flags/<?php echo $user->learning_lang . '.svg';?>" alt="<?php echo $learning_lang_full; ?> flag">
+                                <img id="img-language-flag" src="/img/flags/<?php echo $user->learning_lang . '.svg';?>" alt="<?php echo $learning_lang_full; ?> flag">
                                 <span id="learning-lang-span">&nbsp;<?php echo $learning_lang_full; ?></span>
                                 <b class="caret"></b>
                             </a>
@@ -96,6 +98,9 @@ $learning_lang_full = ucfirst($user->getLanguageName($user->learning_lang));
                                 </li>
                                 <li>
                                     <a href="sharedtexts.php">Shared texts</a>
+                                </li>
+                                <li>
+                                    <a href="sources.php">Popular sources</a>
                                 </li>
                                 <li>
                                     <a href="words.php">Word list</a>

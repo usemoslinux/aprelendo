@@ -28,7 +28,7 @@ $(document).ready(function () {
     e.preventDefault(); // avoid to execute the actual submit of the form.
     
     $.ajax({
-        url: 'db/saveuserprofile.php',
+        url: 'ajax/saveuserprofile.php',
         type: 'post',
         data: $('#userprofile-form').serialize()
       })
@@ -61,7 +61,7 @@ $(document).ready(function () {
 
   $('#btn-confirm-delete-account').on('click', function () {
     $.ajax({
-        url: 'db/deleteaccount.php',
+        url: 'ajax/deleteaccount.php',
         type: 'post',
         data: $('#userprofile-form').serialize()
       })

@@ -63,7 +63,7 @@ var tour = new Tour({
             element: "#actions-menu",
             title: "Actions menu",
             placement: 'right',
-            content: "The 'actions' menu has two entries: delete and archive. <br/><br/>The first will delete the selected texts from your library. <br/><br/>The second will tag them as 'archived', meaning they will stay hidden unles you specifically set your search results to show 'archived' texts."
+            content: "The 'actions' menu has two entries: delete and archive. <br/><br/>The first will delete the selected texts from your library. <br/><br/>The second will tag them as 'archived', meaning they will stay hidden unless you specifically set your search results to show 'archived' texts."
         },
         {
             element: "#sort-menu",

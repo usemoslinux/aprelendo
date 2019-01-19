@@ -1,6 +1,7 @@
 <?php
 require_once('header.php');
-require_once('classes/languages.php');
+
+use Aprelendo\Includes\Classes\Language;
 
 $user_id = $user->id;
 
@@ -26,7 +27,7 @@ if (isset($_POST['submit'])) {                  // check if we need to save new 
                     </li>
                     <?php 
                         if (isset($_GET['chg'])) {
-                            echo '<li><a class="active">' . ucfirst($user->getLanguageName($lang->name)) . '</a></li>';    
+                            echo '<li><a class="active">' . ucfirst(Language::getLanguageName($lang->name)) . '</a></li>';    
                         }
                     ?>
                 </ol>

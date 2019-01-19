@@ -115,7 +115,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 }
 
 .navbar-brand {
-    background-image: url("../images/logo.svg");
+    background-image: url("../img/logo.svg");
     background-repeat: no-repeat;
     background-size: contain;
     font-family: "Raleway", sans-serif;
@@ -1221,9 +1221,17 @@ div.blurry-background {
 /* CREATE ACCOUNT */
 
 .pattern-wallpaper {
-    background: #ffffff url("../images/backgrounds/pattern-wallpaper.png") repeat left top;
+    background: #ffffff url("../img/backgrounds/pattern-wallpaper.png") repeat left top;
     margin: 0;
     width: 100%;
+}
+
+/* ABOUT US */
+
+.vertical-align-center {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 /* OTHER PAGES */
@@ -1237,11 +1245,11 @@ div.blurry-background {
     margin-left: 30px;
 }
 
-.simple-text a {
+.simple-text a, p > a {
     color: #0275d8;
 }
 
-.simple-text a:hover {
+.simple-text a:not(.btn):hover, p > a:hover {
     text-decoration: underline;
     color: #384452;
 }
@@ -1277,7 +1285,7 @@ div.blurry-background {
 }
 
 .landing-page-background {
-    background: #ffffff url("../images/backgrounds/welcome-page-background.jpeg");
+    background: #ffffff url("../img/backgrounds/welcome-page-background.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;

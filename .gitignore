@@ -1,8 +1,8 @@
 temp/
 public/tests/
-private/uploads/
-private/aprelendo-addon/
-private/passwords.php
+uploads/
+addons/
+config/config.php
 .vscode/
 php-info.php
 jsconfig.json

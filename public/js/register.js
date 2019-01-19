@@ -25,7 +25,7 @@ $(document).ready(function () {
     
     $.ajax({
       type: "POST",
-      url: "db/register.php",
+      url: "ajax/register.php",
       data: form_data
     })
     .done(function (data) {
