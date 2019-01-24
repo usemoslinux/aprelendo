@@ -47,9 +47,9 @@ class Text
         $this->is_shared = $is_shared;
 
         if ($is_shared) {
-            $result = $con->query("SELECT stext, stextTitle, stextAuthor, stextSourceURI, stextAudioURI FROM sharedtexts WHERE stextID='$id'");
+            $result = $con->query("SELECT stext, stextTitle, stextAuthor, stextSourceURI FROM sharedtexts WHERE stextID='$id'");
         } else {
-            $result = $con->query("SELECT text, textTitle, textAuthor, textSourceURI, textAudioURI FROM texts WHERE textID='$id'");
+            $result = $con->query("SELECT text, textTitle, textAuthor, textSourceURI FROM texts WHERE textID='$id'");
         }
         
         if ($result) {
@@ -60,7 +60,6 @@ class Text
             $this->title = $row[1];
             $this->author = $row[2];
             $this->source_uri = $row[3];
-            $this->audio_uri = $row[4];
         }
     }
 
@@ -181,7 +180,6 @@ class Reader extends Text
     */
     public function addLinks($text)
     {
-        // $find = array('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|([-\w’]+)/iu', '/(?:<span[^>]*>.*?<\/span>(*SKIP)(*F))|[^\w<]+/u');
         $find = array('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|<[^>]*>(*SKIP)(*F)|([-\w’]+)/iu', '/<[^>]*>(*SKIP)(*F)|[^\w<]+/u');
         
         $replace = array("<span class='word' data-toggle='modal' data-target='#myModal'>$0</span>", "<span>$0</span>");

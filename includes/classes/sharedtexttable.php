@@ -24,8 +24,6 @@ use Aprelendo\Includes\Classes\TextTable;
 
 class SharedTextTable extends TextTable {
     protected $con;
-    protected $active_user_liked = [];
-    protected $total_user_likes = [];
 
     /**
      * Constructor
@@ -36,28 +34,11 @@ class SharedTextTable extends TextTable {
      * @param string $action_menu HTML to create action menu
      * @param string $sort_menu HTML to create sort menu
      */
-    public function __construct($con, $headings, $col_widths, $rows, $action_menu, $sort_menu) {
+    public function __construct($con, $user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu) {
         parent::__construct($headings, $col_widths, $rows, false, $action_menu, $sort_menu);
         $this->con = $con;
         $this->is_shared = true;
         $this->has_chkbox = false;
-
-        foreach ($rows as $row) {
-            $text_id = $row[0];
-            
-            $result = $this->con->query("SELECT SUM(likesLiked), likesLiked FROM likes WHERE likesTextId=$text_id");
-            $query_rows = $result->fetch_array(MYSQLI_NUM);
-
-            // how many likes does this article have?
-            $this->total_user_likes[] = $query_rows[0] != null ? $query_rows[0] : '0';
-
-            // did user liked this artile ?
-            if ($query_rows) {
-                $this->active_user_liked[] = $query_rows[1] == 1 ? true : false;
-            } else {
-                $this->active_user_liked[] = false;
-            }
-        }
     }
 }
 

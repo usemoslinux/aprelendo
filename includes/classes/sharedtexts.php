@@ -44,10 +44,11 @@ class SharedTexts extends Texts
             'author' => 'stextAuthor', 
             'text' => 'stext', 
             'sourceURI' => 'stextSourceURI', 
-            'audioURI' => 'stextAudioURI', 
             'type' => 'stextType', 
             'nrofwords' => 'stextNrOfWords',
-            'level' => 'stextLevel');
+            'level' => 'stextLevel',
+            'totallikes' => 'totallikes',
+            'userliked' => 'userliked');
     }
 
     /**
@@ -70,11 +71,27 @@ class SharedTexts extends Texts
         $limit = $this->con->real_escape_string($limit);
         $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
 
-        $result = $this->con->query("SELECT {$this->cols['id']}, (SELECT userName FROM users WHERE userId = {$this->cols['userid']}), {$this->cols['title']}, {$this->cols['author']}, 
-            {$this->cols['audioURI']}, {$this->cols['type']}, {$this->cols['nrofwords']}, {$this->cols['level']} 
-            FROM $this->table 
-            WHERE {$this->cols['lgid']}='$this->learning_lang_id' $filter_sql 
-            AND {$this->cols['title']} LIKE '%$search_text%' ORDER BY $sort_sql LIMIT $offset, $limit");
+        $lang = new Language($this->con, $this->learning_lang_id, $this->user_id);
+
+        $sql = "SELECT {$this->cols['id']}, 
+                (SELECT userName FROM users WHERE userId = {$this->cols['userid']}), 
+                {$this->cols['title']}, 
+                {$this->cols['author']}, 
+                {$this->cols['type']}, 
+                {$this->cols['nrofwords']}, 
+                {$this->cols['level']}, 
+                languages.LgName, 
+                (SELECT COUNT(likesId) FROM likes WHERE likesTextId = {$this->cols['id']}) AS {$this->cols['totallikes']},
+                (SELECT COUNT(likesId) FROM likes WHERE likesTextId = {$this->cols['id']} AND likesUserId = $this->user_id) AS {$this->cols['userliked']}
+                FROM {$this->table} 
+                INNER JOIN languages ON {$this->table}.stextLgId = languages.LgID
+                WHERE LgName = '{$lang->name}' $filter_sql 
+                AND {$this->cols['title']} 
+                LIKE '%$search_text%' 
+                ORDER BY $sort_sql 
+                LIMIT $offset, $limit";
+        
+        $result = $this->con->query($sql);
 
         return $result ? $result->fetch_all() : false;
     }
@@ -95,13 +112,52 @@ class SharedTexts extends Texts
         $limit = $this->con->real_escape_string($limit);
         $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
 
-        $result = $this->con->query("SELECT {$this->cols['id']}, (SELECT userName FROM users WHERE userId = {$this->cols['userid']}), {$this->cols['title']}, {$this->cols['author']}, 
-            {$this->cols['audioURI']}, {$this->cols['type']}, {$this->cols['nrofwords']}, {$this->cols['level']} 
-            FROM $this->table
-            WHERE {$this->cols['lgid']}='$this->learning_lang_id' 
-            ORDER BY $sort_sql LIMIT $offset, $limit");
+        $lang = new Language($this->con, $this->learning_lang_id, $this->user_id);
+
+        $sql = "SELECT {$this->cols['id']}, 
+                (SELECT userName FROM users WHERE userId = {$this->cols['userid']}), 
+                {$this->cols['title']}, 
+                {$this->cols['author']}, 
+                {$this->cols['type']}, 
+                {$this->cols['nrofwords']}, 
+                {$this->cols['level']}, 
+                languages.LgName
+                FROM {$this->table} 
+                INNER JOIN languages ON {$this->table}.stextLgId = languages.LgID
+                WHERE LgName = '{$lang->name}'
+                ORDER BY $sort_sql 
+                LIMIT $offset, $limit";
+
+        $result = $this->con->query($sql);
         
         return $result ? $result->fetch_all() : false;
+    }
+
+    /**
+     * Converts sorting patterns selected by user (expressed as an integer value in the sort menu) 
+     * to valid SQL strings
+     *
+     * @param integer $sort_by
+     * @return string
+     */
+    public function getSortSQL($sort_by) {
+        $result = parent::getSortSQL($sort_by);
+
+        if (!empty($result)) {
+            return $result;
+        } else {
+            switch ($sort_by) {
+                case '2': // more likes first
+                    return $this->cols['totallikes'] . ' DESC';
+                    break;
+                case '3': // less likes first
+                    return $this->cols['totallikes'];
+                    break;
+                default:
+                    return '';
+                    break;
+            }
+        }
     }
 }
 

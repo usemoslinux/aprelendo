@@ -44,7 +44,6 @@ class ArchivedTexts extends Texts
             'author' => 'atextAuthor', 
             'text' => 'atext', 
             'sourceURI' => 'atextSourceURI', 
-            'audioURI' => 'atextAudioURI', 
             'type' => 'atextType', 
             'nrofwords' => 'atextNrOfWords',
             'level' => 'atextLevel');
@@ -59,9 +58,16 @@ class ArchivedTexts extends Texts
     public function unarchiveByIds($ids) {
         $textIDs = $this->JSONtoCSV($ids);
 
-        $insertsql = "INSERT INTO texts (textUserId, textLgID, textTitle, textAuthor, text, textAudioURI, textSourceURI, textType)
-                SELECT atextUserId, atextLgID, atextTitle, atextAuthor, atext, atextAudioURI, atextSourceURI, atextType  
-                FROM archivedtexts WHERE atextID IN ($textIDs)";
+        $insertsql = "INSERT INTO texts (
+            textUserId, 
+            textLgID, 
+            textTitle, 
+            textAuthor, 
+            text, 
+            textSourceURI, 
+            textType)
+            SELECT atextUserId, atextLgID, atextTitle, atextAuthor, atext, atextSourceURI, atextType  
+            FROM archivedtexts WHERE atextID IN ($textIDs)";
         $deletesql = "DELETE FROM archivedtexts WHERE atextID IN ($textIDs)";
         
         if ($result = $this->con->query($insertsql)) {

@@ -19,7 +19,10 @@ $adjacents = 2; // adjacent page numbers
 $headings = array('Title');
 $col_widths = array('69', '*');
 $action_menu = [];
-$sort_menu = array( 'mSortByNew' => 'New first', 'mSortByOld' => 'Old first');
+$sort_menu = array( 'mSortByNew' => 'New first', 
+                    'mSortByOld' => 'Old first', 
+                    'mSortByMoreLikes' => 'More likes first', 
+                    'mSortByLessLikes' => 'Less likes first');
 $sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
 
 if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searched for something, show search results
@@ -39,7 +42,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 
     // print table
     if ($rows != false) { // if there are any results, show them
-        $table = New SharedTextTable($con, $headings, $col_widths, $rows, $action_menu, $sort_menu);
+        $table = New SharedTextTable($con, $user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
         echo $table->print($sort_by);
 
         echo $pagination->print('texts.php', $search_text, $sort_by, $filter); // print pagination
@@ -61,7 +64,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     
     // print table
     if ($rows != false) {
-        $table = New SharedTextTable($con, $headings, $col_widths, $rows, $action_menu, $sort_menu);
+        $table = New SharedTextTable($con, $user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
         echo $table->print($sort_by);
 
         echo $pagination->print('texts.php', '', $sort_by, $filter); // print pagination

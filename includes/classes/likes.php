@@ -50,11 +50,14 @@ class Likes extends DBEntity
      */
     public function toggle()
     {
-        $result = $this->con->query("INSERT INTO likes (likesTextId, likesUserId, likesLgId, likesLiked)
-            VALUES ('$this->text_id', '$this->user_id', '$this->learning_lang_id', true) ON DUPLICATE KEY UPDATE
-            likesTextId='$this->text_id', likesUserId='$this->user_id', likesLgId='$this->learning_lang_id', likesLiked=NOT likesLiked");
+        $result = $this->con->query("SELECT likesTextId FROM likes WHERE likesTextId='$this->text_id' AND likesUserId='$this->user_id'");
 
-        return $result;
+        if ($result->num_rows > 0) {
+            return $this->con->query("DELETE FROM likes WHERE likesTextId='$this->text_id' AND likesUserId='$this->user_id'");
+        } else {
+            return $this->con->query("INSERT INTO likes (likesTextId, likesUserId, likesLgId) 
+                VALUES ('$this->text_id', '$this->user_id', '$this->learning_lang_id')");
+        }
     }
 }
 

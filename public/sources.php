@@ -19,12 +19,6 @@
  */
 
 require_once('header.php');
-
-// only premium users are allowed to visit this page
-if ($user->premium_until === NULL) {
-    header('Location:texts.php');
-    exit;
-}
 ?>
 
     <div class="container mtb">
