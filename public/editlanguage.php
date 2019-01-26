@@ -28,7 +28,7 @@
                 </p>
                 <ul>
                     <li>Some websites ensure that their content is not embedded into other sites. Therefore, some dictionaries may not work with Aprelendo. For further help, check the list of <a href="compatibledics.php">compatible dictionaries</a>.</li>
-                    <li>For security reasons, only https websites are supported.</li>
+                    <li>For security reasons, only HTTPS websites are supported. Make sure you use URL addresses that start with HTTPS, not HTTP.</li>
                     <li>As the dictionary is going to be shown inside a modal window, it is highly recommended to use websites that support smaller screens. In case that support is not automatic, look for the mobile version of that website (if there is one) and use that one instead.</li>
                     <li>Don't forget to indicate the position of the lookup phrase by using "%s" (without quotation marks).</li>
                 </ul>

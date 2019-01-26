@@ -1,4 +1,12 @@
 <?php
+
+require_once('../includes/dbinit.php'); // connect to database
+require_once(APP_ROOT . 'includes/checklogin.php'); // check if logged in and set $user
+
+if (isset($_GET['act'])) {
+    $user->setActiveLang($_GET['act']);
+}
+
 require_once('header.php');
 
 use Aprelendo\Includes\Classes\Language;
@@ -37,7 +45,6 @@ if (isset($_POST['submit'])) {                  // check if we need to save new 
                 if (isset($_GET['chg'])) { // chg parameter = show edit language page
                     include('editlanguage.php');
                 } elseif(isset($_GET['act'])) { // act parameter = set active language
-                    $user->setActiveLang($_GET['act']);
                     include('listlanguages.php');
                 } else { // just show list of languages
                     include('listlanguages.php');

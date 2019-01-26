@@ -95,13 +95,13 @@ try {
                         </select>
                     </div>
                     <div class="modal-body" id="definitions">
-                        <iframe id="dicFrame" style="width:100%;" frameborder="0"></iframe>
+                        <iframe id="dicFrame" style="width:100%;border:none;"></iframe>
                     </div>
                 </div>
             </div>
         </div>
 
-        <script type="text/javascript" src="js/showvideo.js"></script>
+        <script src="js/showvideo.js"></script>
 
 </body>
 

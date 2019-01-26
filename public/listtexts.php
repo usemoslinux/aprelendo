@@ -80,4 +80,4 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 }
 ?>
 
-<script type="text/javascript" src="js/listtexts.js"></script>
+<script src="js/listtexts.js"></script>

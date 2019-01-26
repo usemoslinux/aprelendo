@@ -273,24 +273,42 @@ class Reader extends Text
        
         // display audio player
         $html .= '<hr>';
-        $html .= '<audio controls id="audioplayer">
-        <source src="" type="audio/mpeg">
-        Your browser does not support the audio element.</audio>
-        <form>
-        <div class="form-group flex-pbr-form">
-        <label id="label-speed" class="basic" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
-        <input id="pbr" type="range" class="flex-pbr" value="1" min="0.5" max="2" step="0.1">
-        </div>
-        </form>';
+
+        $html .=   '<div id="audioplayer-loader" class="loader">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>';
+
+        $html .=   '<div id="audioplayer-container" class="hidden">
+                        <audio controls id="audioplayer">
+                        <source type="audio/mpeg">
+                        Your browser does not support the audio element.</audio>
+                        <form>
+                            <div class="form-group flex-pbr-form">
+                                <label id="label-speed" class="basic" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
+                                <input id="pbr" type="range" class="flex-pbr" value="1" min="0.5" max="2" step="0.1">
+                            </div>
+                        </form>
+                    </div>';
         
         $html .= '<hr>';
         
         // display assisted learning message
         if ($this->assisted_learning) {
-            $html .= '<div id="alert-msg-phase" class="alert alert-info alert-dismissible show" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span></button>
-            <strong>Assisted learning - Phase 1:</strong> Reading & listening.</div>';   
+            $html .=   '<div id="alert-msg-phase" class="alert alert-info alert-dismissible show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <strong>Assisted learning - Phase 1:</strong> Reading & listening.
+                        </div>';   
         }
         
         // display text
@@ -298,7 +316,8 @@ class Reader extends Text
         
         $text = $this->colorizeWords($this->text);
         $text = $this->addLinks($text);
-        $text = $this->addParagraphs($text); // convert /n to HTML <p>
+        // $text = $this->addParagraphs($text); // convert /n to HTML <p>
+        $text = nl2br($text);
 
         $html .= $text . '</div>';
         
@@ -311,7 +330,7 @@ class Reader extends Text
         
         if ($this->assisted_learning) {
             $html .= '<button type="button" id="btn-next-phase" class="basic btn btn-lg btn-primary btn-block">Go to phase 2
-            <div class="small">Look up words/phrases</div></button>';
+            <br/><span class="small">Look up words/phrases</span></button>';
         } else {
             $html .= '<button type="button" id="btn-save" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
             

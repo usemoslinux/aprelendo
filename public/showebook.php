@@ -143,13 +143,13 @@ crossorigin="anonymous"></script> -->
                         </select>
                     </div>
                     <div class="modal-body" id="definitions">
-                        <iframe id="dicFrame" style="width:100%;" frameborder="0"></iframe>
+                        <iframe id="dicFrame" style="width:100%;border:none;"></iframe>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- <script type="text/javascript" src="js/showtext.js"></script> -->
+        <!-- <script src="js/showtext.js"></script> -->
         <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" src="js/showebook.js"></script>
 
         <?php

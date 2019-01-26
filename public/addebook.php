@@ -77,7 +77,6 @@ if ($user->premium_until === NULL) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
 
-<!-- <script type="text/javascript" src="js/addtext.js"></script> -->
-<script type="text/javascript" src="js/addebook.js"></script>
+<script src="js/addebook.js"></script>
 
 <?php require_once 'footer.php'?>

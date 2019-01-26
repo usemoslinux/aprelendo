@@ -34,16 +34,19 @@ $(document).ready(function () {
 
     // load audio
     var txt = $('#text').text();
-        $.speech({
-            key: 'ea7a24d128894ce38b7e81610324e3e3',
-            src: txt,
-            hl: 'fr-fr',
-            r: 0, 
-            c: 'mp3',
-            f: '44khz_16bit_stereo',
-            ssml: 'false',
-            b64: 'true'
-        });
+    var doclang = $('html').attr('lang');
+    var audiolang = {en: 'en-gb', es: 'es-es', pt: 'pt-pt', fr: 'fr-fr', it: 'it-it', de: 'de-de'};
+
+    $.speech({
+        key: 'ea7a24d128894ce38b7e81610324e3e3',
+        src: txt,
+        hl: audiolang[doclang],
+        r: 0, 
+        c: 'mp3',
+        f: '44khz_16bit_stereo',
+        ssml: 'false',
+        b64: 'true'
+    });
 
     /**
      * Sets keyboard shortcuts for media player
@@ -296,7 +299,7 @@ $(document).ready(function () {
                 // if user is in phase 2 (underlining words) and there was no previous word underlined,
                 // (therefore dictation was off), when user adds his first new word, allow dictation
                 if (phase == 3 && $('audio').length > 0 && $('#alert-msg-phase').text().indexOf('Phase 2') > -1) {
-                    $('#btn-next-phase').html('Go to phase 3<div class="small">Dictation</div>');
+                    $('#btn-next-phase').html('Go to phase 3<br/><span class="small">Dictation</span>');
                     phase--;
                 }
 
@@ -340,7 +343,7 @@ $(document).ready(function () {
                     // if user is in phase 2 (underlining words) and deleted the only word that was underlined
                     // don't allow phase 3 (dictation) & go directly to last phase (save changes)
                     if (phase == 2 && $('audio').length > 0 && $('.learning, .new, .forgotten').length == 0) {
-                        $('#btn-next-phase').html('Finished<div class="small">Save changes</div>');
+                        $('#btn-next-phase').html('Finished<br/><span class="small">Save changes</span>');
                         phase++;
                     }
                 });
@@ -365,12 +368,12 @@ $(document).ready(function () {
                 $('#alert-msg-phase').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 2:</strong> Review old words & look up new words/phrases.');
                 if ($(".learning, .new, .forgotten").length > 0 && $("audio").length > 0) {
                     $(this).html(
-                        'Go to phase 3<div class="small">Dictation</div>'
+                        'Go to phase 3<br/><span class="small">Dictation</span>'
                     );
                     phase++;
                 } else {
                     $(this).html(
-                        'Finished<div class="small">Save changes</div>'
+                        'Finished<br/><span class="small">Save changes</span>'
                     );
                     phase += 2;
                 }
@@ -378,7 +381,7 @@ $(document).ready(function () {
             case 2:
                 toggleDictation();
                 $(this).html(
-                    'Finished<div class="small">Save changes</div>'
+                    'Finished<br/><span class="small">Save changes</span>'
                 );
                 $('#alert-msg-phase').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 3:</strong> Dictation.');
                 phase++;

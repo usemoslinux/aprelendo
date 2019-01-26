@@ -88,4 +88,4 @@ require_once 'simpleheader.php';
 
 <?php require_once 'footer.php'?>
 
-<script type="text/javascript" src="js/register.js"></script>
+<script src="js/register.js"></script>

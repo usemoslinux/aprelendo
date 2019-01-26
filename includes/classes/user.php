@@ -426,6 +426,7 @@ class User
             
             if ($result) {
                 $this->learning_lang_id = $lang_id;
+                $this->learning_lang = $lang_name;
             }
         }
         

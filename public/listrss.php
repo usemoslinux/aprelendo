@@ -77,4 +77,4 @@ function printRSSFeed($feed, $groupindex) {
 </div>
 </div>
 
-<script type="text/javascript" src="js/listrss.js"></script>
+<script src="js/listrss.js"></script>

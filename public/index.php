@@ -257,5 +257,5 @@ if ($user->isLoggedIn()) {
     </div>
 </div>
 
-<script type="text/javascript" src="js/register.js"></script>
+<script src="js/register.js"></script>
 <?php require_once 'footer.php'?>

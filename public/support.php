@@ -63,6 +63,6 @@ if (!$user->isLoggedIn()) {
     </div>
 </div>
 
-<script type="text/javascript" src="js/support.js"></script>
+<script src="js/support.js"></script>
 
 <?php require_once 'footer.php';?>

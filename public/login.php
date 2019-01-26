@@ -48,4 +48,4 @@
 
 <?php require_once 'footer.php'?>
 
-<script type="text/javascript" src="js/login.js"></script>
+<script src="js/login.js"></script>

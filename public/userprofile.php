@@ -121,4 +121,4 @@
 
 <?php require_once('footer.php') ?>
 
-<script type="text/javascript" src="js/userprofile.js"></script>
+<script src="js/userprofile.js"></script>

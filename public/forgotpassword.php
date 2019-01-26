@@ -82,4 +82,4 @@ require_once('simpleheader.php');
 
 <?php require_once 'footer.php'?>
 
-<script type="text/javascript" src="js/forgotpassword.js"></script>
+<script src="js/forgotpassword.js"></script>

@@ -19,7 +19,7 @@ require_once('header.php');
         <div id="add-video-container" class="col-xs-12 col-sm-6">
             <div id="add-video-wrapper">
                 <i id="yt-logo" class="fab fa-youtube fa-3x"></i>
-                <iframe id="yt-video" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <iframe id="yt-video" style="border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
         </div>
         <!-- FORM CONTAINER -->
@@ -79,6 +79,6 @@ require_once('header.php');
     </div>
 </div>
 
-<script type="text/javascript" src="js/addvideo.js"></script>
+<script src="js/addvideo.js"></script>
 
 <?php require_once 'footer.php'?>

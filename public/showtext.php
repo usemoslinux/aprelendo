@@ -1,5 +1,9 @@
+<?php 
+require_once('../includes/dbinit.php');  // connect to database
+require_once(APP_ROOT . 'includes/checklogin.php'); // check if user is logged in and set $user object
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang=<?php echo '"' . $user->learning_lang . '"'; ?>>
 
 <head>
     <meta charset="utf-8">
@@ -24,9 +28,6 @@
 
 <body id="readerpage"
 <?php
-require_once('../includes/dbinit.php');  // connect to database
-require_once(APP_ROOT . 'includes/checklogin.php'); // check if user is logged in and set $user object
-
 use Aprelendo\Includes\Classes\Reader;
 
 try {
@@ -57,7 +58,7 @@ try {
         $font_size = $reader->font_size;
         $text_align = $reader->text_align;
         
-        echo " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;>'";
+        echo " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
         throw new Exception ('>Oops! There was an error trying to fetch that text.');
     }
@@ -95,14 +96,14 @@ try {
                         </select>
                     </div>
                     <div class="modal-body" id="definitions">
-                        <iframe id="dicFrame" style="width:100%;" frameborder="0"></iframe>
+                        <iframe id="dicFrame" style="width:100%;border:none;"></iframe>
                     </div>
                 </div>
             </div>
         </div>
 
-        <script type="text/javascript" src='js/voicerss/jquery.voicerss-tts.min.js'></script>
-        <script type="text/javascript" src="js/showtext.js"></script>
+        <script src='js/voicerss/jquery.voicerss-tts.min.js'></script>
+        <script src="js/showtext.js"></script>
 
 </body>
 

@@ -76,4 +76,4 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 
 ?>
 
-  <script type="text/javascript" src="js/listwords.js"></script>
+  <script src="js/listwords.js"></script>

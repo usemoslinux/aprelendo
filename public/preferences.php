@@ -128,5 +128,5 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="js/preferences.js"></script>
+    <script src="js/preferences.js"></script>
     <?php require_once('footer.php') ?>
