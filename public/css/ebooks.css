@@ -288,6 +288,11 @@ body {
     min-height: 800px;
 }
 
+.epub-view {
+	height: auto !important;
+	width: auto !important;
+}
+
 /* SPINNER */
 
 .loader {

@@ -20,9 +20,10 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\Files;
+use Aprelendo\Includes\Classes\File;
 use Aprelendo\Includes\Classes\PopularSources;
 use Aprelendo\Includes\Classes\Url;
+use Aprelendo\Includes\Classes\Language;
 
 class Texts extends DBEntity {
     protected $learning_lang_id;
@@ -113,6 +114,7 @@ class Texts extends DBEntity {
             // add entry to popularsources
             $pop_sources = new PopularSources($this->con);
             $lang = new Language($this->con, $this->learning_lang_id, $this->user_id);
+            
             $result = $pop_sources->add($lang->name, Url::getDomainName($source_url));
         }
         

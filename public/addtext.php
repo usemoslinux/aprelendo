@@ -53,7 +53,7 @@ require_once('header.php');
           }
         ?>
                 <div id="alert-error-msg" class="hidden"></div>
-                <form id="form-addtext" data-premium="<?php echo $user->premium_until !== NULL ? 1 : 0; ?>" action="" class="add-form" method="post" enctype="multipart/form-data">
+                <form id="form-addtext" data-premium="<?php echo $user->isPremium() ? 1 : 0; ?>" action="" class="add-form" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
                     <input type="hidden" name="mode" value="simple" />
                     <div class="form-row">
@@ -114,7 +114,7 @@ require_once('header.php');
                         <div class="form-group col-xs-12 text-right">
                             <?php if (isset($external_call)) { echo '<input id="external_call" type="hidden">'; } ?>
                             <a type="button" id="btn_cancel" name="cancel" class="btn btn-static" onclick="window.location='/'">Cancel</a>
-                            <button type="submit" id="btn_add_text" name="submit" class="btn btn-success">Save</button>
+                            <button type="submit" id="btn-save" name="submit" class="btn btn-success">Save</button>
                         </div>
                     </div>                    
                 </form>

@@ -18,7 +18,6 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// require_once('connect.php');
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Connect;

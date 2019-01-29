@@ -20,6 +20,8 @@
 
 namespace Aprelendo\Includes\Classes;
 
+use Exception;
+
 class File
 {
     protected $allowed_extensions = array('txt');
@@ -87,7 +89,7 @@ class File
             }
         } else {
             $error_str = '<ul>' . implode("<br/>", $errors) . '</ul>'; // show upload errors
-            throw new Exception ($error_str);  
+            throw new Exception($error_str);  
         }
     }
     
@@ -100,7 +102,7 @@ class File
         }
         // try to move file to uploads folder. If this fails, show error message
         if (!move_uploaded_file($temp_file_URI, $target_file_URI)) {
-            throw new Exception ("<li>Sorry, there was an error uploading your file.</li>");  
+            throw new Exception("<li>Sorry, there was an error uploading your file.</li>");  
         } else {
             return true;
         }
@@ -622,38 +624,5 @@ class File
         return 'x-extension/' . $ext;
     }
 }
-
-class AudioFile extends File
-{
-    public function __construct($owned_by_premium_user)
-    {
-        parent::__construct();
-        $this->allowed_extensions = array('mp3', 'ogg');
-        if ($owned_by_premium_user) {
-            $this->max_size = 10485760; // 10 MB
-        } else {
-            $this->max_size = 2097152; // 2 MB
-        }
-    }
-}
-
-class EbookFile extends File {
-    public function __construct($owned_by_premium_user)
-    {
-        parent::__construct();
-        $this->allowed_extensions = array('epub');
-        if ($owned_by_premium_user) {
-            $this->max_size = 2097152; // 2 MB
-        } else {
-            $this->max_size = 0; // ebook uploading is not allowed for non-premium users
-        }
-    }
-}
-
-
-
-
-
-
 
 ?>

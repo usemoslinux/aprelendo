@@ -46,7 +46,7 @@ if (!$user->isLoggedIn()) {
 
                     <h4>Let's try an alternative: total reading</h4>
                     <p>Reading alone has some nice benefits. It allows us to acquire vocabulary in context, by presenting words and phrases as they are used, including grammar, spelling, inflections, etc. Also, the importance of commonly used words or phrases is more evident while reading them.<p>
-                    <p>These benefits are enhaced if we are interested in the subject of the text. In that case, the context of the words or phrases we are trying to learn becomes more relevant and memorable, therefore facilitating vocabulary acquisition. It can also help us learn vocabulary that we know we will often want to use ourselves, therefore creating a hidden need to fully incorporate it.</p>
+                    <p>These benefits are enhaced if we are interested in the subject of the text. In that case, the context of the words or phrases we are trying to learn becomes more relevant and memorable, therefore facilitating vocabulary acquisition. It can also help us learn vocabulary that we know we will often want to use ourselves, therefore creating a hidden need to incorporate it.</p>
                     <p>Reading has one final advantage: we already do it a lot as we surf the Web. We only need to take advantage of this to learn new languages. However, the biggest limitation of this strategy is that it would only cover one of the four dimensions mentioned above. To become "total", the reading process has to meet certain criteria (which usually does not):</p>
                     <ol>
                         <li>Texts should be short (the length of a newspaper article or a short story, not a book)</li>

@@ -23,7 +23,7 @@ require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks
 
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\SharedTexts;
-use Aprelendo\Includes\Classes\File;
+use Aprelendo\Includes\Classes\EbookFile;
 
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;
@@ -88,7 +88,7 @@ try {
                 // Audio file validation
                 if (empty($errors)) {
                     if (isset($_FILES['audio']) && !empty($_FILES['audio']) && $_FILES['audio']['error'] !== UPLOAD_ERR_NO_FILE) {
-                        $audio_file = new AudioFile($user->premium_until !== NULL);
+                        $audio_file = new AudioFile($user->isPremium());
                         $file_uploaded = $audio_file->put($_FILES['audio']);
                         $target_file_name = $audio_file->file_name;
                     }
@@ -142,7 +142,7 @@ try {
                 $text = null;
 
                 if (isset($_FILES['url']) && $_FILES['url']['error'] !== UPLOAD_ERR_NO_FILE) {
-                    $ebook_file = new EbookFile($user->premium_until !== NULL);
+                    $ebook_file = new EbookFile($user->isPremium());
                     $ebook_file->put($_FILES['url']);
                     $target_file_name = $ebook_file->file_name;
                 }
@@ -158,7 +158,9 @@ try {
                 
                 if ($result) {
                     // if everything goes fine return HTTP code 204 (No content), as nothing is returned 
-                    http_response_code(204);
+                    $filename = array('filename' => $target_file_name);
+                    header('Content-Type: application/json');
+                    echo json_encode($filename);
                 } else { // in case of error, show message
                     throw new Exception ('Oops! There was an unexpected error when uploading this text.');
                 }

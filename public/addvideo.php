@@ -13,7 +13,7 @@ require_once('header.php');
                     <a class="active">Add video</a>
                 </li>
             </ol>
-            <div class="alert alert-info"><i class="fas fa-info-circle"></i> Any Youtube videos you add to Aprelendo will be automatically "shared" with the rest of our community.</div>
+            <div class="alert alert-info"><i class="fas fa-info-circle"></i> All Youtube videos you add to Aprelendo will be "shared" with the rest of our community.</div>
         </div>
         <!-- VIDEO CONTAINER -->
         <div id="add-video-container" class="col-xs-12 col-sm-6">
@@ -71,7 +71,7 @@ require_once('header.php');
                                 if (isset($external_call)) { echo '<input id="external_call" type="hidden">'; } 
                             ?>
                             <a type="button" id="btn_cancel" name="cancel" class="btn btn-static" onclick="window.location='/'">Cancel</a>
-                            <button type="submit" id="btn_add_text" name="submit" class="btn btn-success">Save</button>
+                            <button type="submit" id="btn-save" name="submit" class="btn btn-success">Save</button>
                         </div>
                     </div>
                 </form>

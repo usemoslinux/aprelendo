@@ -20,6 +20,8 @@
 
 namespace Aprelendo\Includes\Classes;
 
+use Exception;
+
 class RSSFeed
 {
     public $title;

@@ -20,7 +20,9 @@
 
 namespace Aprelendo\Includes\Classes;
 
+use Aprelendo\Includes\Classes\File;
 use Aprelendo\Includes\Classes\Languages;
+use Exception;
 
 class User 
 {
@@ -168,10 +170,12 @@ class User
         $result = $this->con->query("SELECT userActive FROM users WHERE userName='$username' AND userActivationHash='$hash'");
         
         if ($result->num_rows > 0) {
-            $result = $this->con->query("UPDATE users SET userActive=true WHERE userName='$username' AND userActivationHash='$hash'");
+            $yesterday = date("Y-m-d", time() - 60 * 60 * 24);
+            $result = $this->con->query("UPDATE users SET userActive=true, userPremiumUntil='$yesterday' WHERE userName='$username' AND userActivationHash='$hash'");
+
             if (!$result) {
                 throw new Exception ('Oops! There was an unexpected error when trying to activate your account.');
-            }
+            }            
         } else { // if no user is registered with that name & hash
             throw new Exception ('The activation link seems to be malformed. Please try again using the one provided in the email we\'ve sent you.');
         } 
@@ -267,19 +271,21 @@ class User
                         $this->learning_lang_id = $row['LgId'];
                         $is_logged = true;
                     }
-                    
-                    // restart premium status in case premium_until date expired
-                    if ($this->premium_until !== NULL && $this->premium_until < date('Y-m-d')) {
-                        if ($result = $this->con->query("UPDATE users SET userPremiumUntil=NULL WHERE userId='$user_id'")) {
-                            $this->premium_until = NULL;
-                        }
-                    }
                 }
             }
         }
         return $is_logged;
     } // end isLoggedIn
     
+    /**
+     * Checks if user has access to premium features
+     *
+     * @return boolean
+     */
+    public function isPremium() {
+        return $this->premium_until > date('Y-m-d');
+    } // end isPremium
+
     /**
      * Updates user profile in db
      *

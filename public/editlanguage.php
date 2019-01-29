@@ -1,5 +1,5 @@
 <?php 
-    $is_premium_user = $user->premium_until !== NULL;
+    $is_premium_user = $user->isPremium();
 ?>
 <form class="" action="languages.php" method="post">
 

@@ -50,7 +50,8 @@ $(document).ready(function () {
         .then(response => response.arrayBuffer())
         .then(arraybuffer => openBook(arraybuffer))
         .catch(function () {
-            // window.location.replace("texts.php")
+            alert('There was an unexpected problem opening this ebook file. Try again later.');
+            window.location.replace("texts.php");
         });
 
     /**

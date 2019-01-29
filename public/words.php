@@ -42,16 +42,16 @@
                         </div>
                          <!-- Split button -->
                          <div class="btn-group btn-searchbox searchbox">
-                            <a class="btn btn-success <?php echo $user->premium_until !== NULL ? '"' : 'disabled"'; ?> href="ajax/exportwords.php"><i class="fas fa-file-export"></i> Export</a>
-                            <button type="button" class="btn btn-success dropdown-toggle <?php echo $user->premium_until !== NULL ? '"' : 'disabled" title="Premium users only"'; ?> " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="btn btn-success <?php echo $user->isPremium() ? '"' : 'disabled"'; ?> href="ajax/exportwords.php"><i class="fas fa-file-export"></i> Export</a>
+                            <button type="button" class="btn btn-success dropdown-toggle <?php echo $user->isPremium() ? '"' : 'disabled" title="Premium users only"'; ?> " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
-                                <li <?php echo $user->premium_until !== NULL ? '' : 'class="disabled" title="Premium users only"'; ?> >
+                                <li <?php echo $user->isPremium() ? '' : 'class="disabled" title="Premium users only"'; ?> >
                                     <a href=" ajax/exportwords.php">Export all</a>
                                 </li>
-                                <li <?php echo $user->premium_until !== NULL ? '' : 'class="disabled" title="Premium users only"'; ?> >
+                                <li <?php $user->isPremium() ? '' : 'class="disabled" title="Premium users only"'; ?> >
                                     <a href="ajax/exportwords.php<?php echo !empty($query_str) ? $query_str : '' ?>">Export search results</a>
                                 </li>
                             </ul>

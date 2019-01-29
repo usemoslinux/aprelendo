@@ -18,15 +18,15 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// put all passwords in a single file
+defined('DB_SERVER')    ? null : define('DB_SERVER', 'localhost');
+defined('DB_NAME')      ? null : define('DB_NAME', 'aprelendo');
+defined('DB_USER')      ? null : define('DB_USER', 'username');
+defined('DB_PASSWORD')  ? null : define('DB_PASSWORD', 'password');
+defined('DB_CHARSET')   ? null : define('DB_CHARSET', 'utf8');
 
-define('DB_SERVER', 'localhost');
-define('DB_NAME', 'aprelendo');
-define('DB_USER', 'username');
-define('DB_PASSWORD', 'password');
+defined('YOUTUBE_API_KEY')  ? null : define('YOUTUBE_API_KEY', 'your_youtube_api_key');
+defined('VOICERSS_API_KEY')  ? null : define('VOICERSS_API_KEY', 'your_voicerss_api_key');
 
-define('YOUTUBE_API_KEY', 'your_youtube_api_key');
-define('EMAIL_SENDER', 'example@mail.com');
-
+defined('EMAIL_SENDER')     ? null : define('EMAIL_SENDER', 'example@mail.com');
 
 ?>

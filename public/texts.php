@@ -105,10 +105,10 @@ if (!empty($filter)) {
                                 <li>
                                     <a href="addvideo.php">Youtube video</a>
                                 </li>
-                                <li <?php echo $user->premium_until !== NULL ? '' : 'class="disabled" title="Premium users only"'; ?> >
+                                <li <?php echo $user->isPremium() ? '' : 'class="disabled" title="Premium users only"'; ?> >
                                     <a href="addebook.php">Ebook (epub)</a>
                                 </li>
-                                <li <?php echo $user->premium_until !== NULL ? '' : 'class="disabled" title="Premium users only"'; ?> >
+                                <li <?php echo $user->isPremium() ? '' : 'class="disabled" title="Premium users only"'; ?> >
                                     <a href="addrss.php">RSS text</a>
                                 </li>
                             </ul>

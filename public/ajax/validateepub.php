@@ -1,0 +1,45 @@
+<?php
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+require_once('../../includes/dbinit.php'); // connect to database
+require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks if user is logged in
+
+use Exception;
+
+try {
+    $file_uri = APP_ROOT . 'uploads/' . $_POST['filename'];
+
+    if (!isset($_POST['filename']) || empty($_POST['filename']) || !file_exists($file_uri)) {
+        throw new Exception ("Incorrect file name error.");
+    }
+
+    exec('java -jar ' . APP_ROOT . 'tools/epubcheck/epubcheck.jar ' . $file_uri, $output, $return);
+
+    // Return will return non-zero upon an error
+    if ($return) {
+        throw new Exception ('Your ebook was uploaded, but it contains errors and may not render well. For more info go to http://validator.idpf.org/');
+    }
+} catch (Exception $e) {
+    $error = array('error_msg' => $e->getMessage());
+    header('Content-Type: application/json');
+    echo json_encode($error);
+}
+
+?>

@@ -29,9 +29,9 @@ class AudioFile extends File
         parent::__construct();
         $this->allowed_extensions = array('mp3', 'ogg');
         if ($owned_by_premium_user) {
-            $this->max_size = 10485760; // 10 MB
-        } else {
             $this->max_size = 2097152; // 2 MB
+        } else {
+            $this->max_size = 0; // audio uploading is not allowed for non-premium users
         }
     }
 }

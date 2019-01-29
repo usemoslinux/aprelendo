@@ -101,7 +101,7 @@ if ($user->isLoggedIn()) {
                 <p>Aprelendo is open source software, meaning you can download and fiddle with its source code. This allows us to be super transparent and build a community of users and developers. With some technical knowledge, you can even build your own Aprelendo environment.</p>
                 <p>
                     <br/>
-                    <a href="https://github.com/usemoslinux/aprelendo" target="_blank" class="btn btn-theme">More Info</a>
+                    <a href="https://github.com/usemoslinux/aprelendo" target="_blank" rel="noopener noreferrer" class="btn btn-theme">More Info</a>
                 </p>
             </div>
             <div class="col-md-4">

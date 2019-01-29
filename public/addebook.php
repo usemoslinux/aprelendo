@@ -18,13 +18,19 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('header.php');
+require_once('../includes/dbinit.php'); // connect to database
+require_once(APP_ROOT . 'includes/checklogin.php'); // check if logged in and set $user
+
+use Aprelendo\Includes\Classes\User;
 
 // only premium users are allowed to visit this page
-if ($user->premium_until === NULL) {
+if (!$user->isPremium()) {
     header('Location:texts.php');
     exit;
 }
+
+require_once('header.php');
+
 ?>
 
 <div class="container mtb">
@@ -40,6 +46,11 @@ if ($user->premium_until === NULL) {
             </ol>
             <div class="alert alert-info"><i class="fas fa-info-circle"></i> Ebooks will remain in your "private" library. Therefore, you will be the only one with access to them.</div>
             <div id="alert-error-msg" class="hidden"></div>
+            <div class="progress hidden">
+                <div id="upload-progress-bar" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                </div>
+            </div>
             <form id="form-addebook" action="" class="add-form" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
                 <input type="hidden" name="mode" value="ebook" />
@@ -65,7 +76,7 @@ if ($user->premium_until === NULL) {
                 <div class="form-row">
                     <div class="form-group col-xs-12 text-right">
                     <a type="button" id="btn_cancel" name="cancel" class="btn btn-static" onclick="window.location='/'">Cancel</a>
-                    <button type="submit" id="btn_add_text" name="submit" class="btn btn-success">Save</button>
+                    <button type="submit" id="btn-save" name="submit" class="btn btn-success">Save</button>
                     </div>
                 </div>
             </form>

@@ -35,17 +35,22 @@ $(document).ready(function () {
     // load audio
     var txt = $('#text').text();
     var doclang = $('html').attr('lang');
-    var audiolang = {en: 'en-gb', es: 'es-es', pt: 'pt-pt', fr: 'fr-fr', it: 'it-it', de: 'de-de'};
 
-    $.speech({
-        key: 'ea7a24d128894ce38b7e81610324e3e3',
-        src: txt,
-        hl: audiolang[doclang],
-        r: 0, 
-        c: 'mp3',
-        f: '44khz_16bit_stereo',
-        ssml: 'false',
-        b64: 'true'
+    $.ajax({
+        type: "POST",
+        url: "ajax/fetchaudiostream.php",
+        data: {'text': txt, 'langiso': doclang}
+    })
+    .done(function (e) {
+        if (0 == e.indexOf("ERROR")) throw e;
+        var $audio_player = $('#audioplayer');
+        $audio_player.find('source').attr('src', e);
+        $audio_player[0].load();
+        $('#audioplayer-loader').addClass('hidden');
+        $('#audioplayer-container').removeClass('hidden');
+    })
+    .fail(function (xhr, ajaxOptions, thrownError) {
+        $('#audioplayer-loader').replaceWith('<div class="alert alert-danger">There was an unexpected error trying to create audio from this text. Try again later.</div>')
     });
 
     /**

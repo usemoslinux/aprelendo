@@ -23,6 +23,7 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Connect;
 use Aprelendo\Includes\Classes\Texts;
+use Aprelendo\Includes\Classes\Language;
 
 class SharedTexts extends Texts
 {

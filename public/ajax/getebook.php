@@ -21,7 +21,7 @@
 require_once('../../includes/dbinit.php'); // connect to database
 require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks if user is logged in
 
-use Aprelendo\Includes\Classes\File;
+use Aprelendo\Includes\Classes\EbookFile;
 
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;
@@ -32,7 +32,7 @@ try {
     
     if ($result) {
         $row = $result->fetch_assoc();
-        $ebook_file = new EbookFile($user->premium_until !== NULL);
+        $ebook_file = new EbookFile($user->isPremium());
         $ebook_content = $ebook_file->get($row['textSourceURI']);
         if ($ebook_content != false) {
             return $ebook_content;

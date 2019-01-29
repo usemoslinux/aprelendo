@@ -27,7 +27,7 @@ $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;
 
 try {
-    if ($user->premium_until !== NULL) {
+    if ($user->isPremium()) {
         // set search criteria, if any
         $search_text = isset($_GET['s']) ? $_GET['s'] : '';
         $order_by = isset($_GET['o']) ? $_GET['o'] : '';

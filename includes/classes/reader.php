@@ -22,6 +22,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Url;
+use SimpleXMLElement;
 
 class Text 
 {
@@ -261,7 +262,7 @@ class Reader extends Text
         
         // display source, if available
         if (!empty($this->source_uri)) {
-            $html .= '<a class="source" href="' . $this->source_uri . '" target="_blank">' . Url::getDomainName($this->source_uri) . '</a>'; 
+            $html .= '<a class="source" href="' . $this->source_uri . '" target="_blank" rel="noopener noreferrer">' . Url::getDomainName($this->source_uri) . '</a>'; 
         }
         
         $html .= '<h1>' . $this->title . '</h1>'; // display title
@@ -274,7 +275,7 @@ class Reader extends Text
         // display audio player
         $html .= '<hr>';
 
-        $html .=   '<div id="audioplayer-loader" class="loader">
+        $html .=   '<div id="audioplayer-loader">
                         <span></span>
                         <span></span>
                         <span></span>

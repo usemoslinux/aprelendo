@@ -33,7 +33,12 @@ class Url {
             return '';
         }
         
-        $parseUrl = parse_url(trim($url)); 
+        $parseUrl = parse_url(trim($url));
+        
+        if (!isset($parseUrl['host']) || !isset($parseUrl['path'])) {
+            return '';
+        } 
+
         return trim($parseUrl['host'] ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2))); 
     }
 }
