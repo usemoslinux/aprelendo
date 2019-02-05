@@ -6,14 +6,14 @@ use Aprelendo\Includes\Classes\User;
 
 <div class="container mtb pattern-wallpaper">
     <div class="row">
-        <div class="col-xs-0 col-sm-1 col-md-3"></div>
-        <div class="col-xs-12 col-sm-10 col-md-6">
+        <div class="col-sm-0 col-sm-1 col-lg-3"></div>
+        <div class="col-sm-12 col-sm-10 col-lg-6">
             <section>
                 <header>
                     <h1 class="text-center">Account activation</h1>
                 </header>
                 <br/>
-                <div id="alert_msg" class="hidden"></div>
+                <div id="alert_msg" class="d-none"></div>
 
                 <?php 
                 // 1. check if username & hash values passed by the reset link are set
@@ -57,7 +57,7 @@ use Aprelendo\Includes\Classes\User;
                 </footer>
             </section>
         </div>
-        <div class="col-xs-0 col-sm-1 col-md-3"></div>
+        <div class="col-sm-0 col-sm-1 col-lg-3"></div>
     </div>
 </div>
 

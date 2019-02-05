@@ -8,25 +8,25 @@
 
     <div class="container mtb">
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-sm-12">
                 <ol class="breadcrumb">
-                    <li>
+                    <li class="breadcrumb-item">
                         <a href="texts.php">Home</a>
                     </li>
-                    <li>
+                    <li class="breadcrumb-item">
                         <a class="active">Preferences</a>
                     </li>
                 </ol>
-                <div class="row flex">
-                    <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-12">
                         <div id="msgbox"></div>
-                        <form id="prefs-form" class="form-horizontal" action="" method="post">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Reader</div>
-                                <div class="panel-body">
+                        <form id="prefs-form" action="" method="post">
+                            <div class="card">
+                                <div class="card-header">Reader</div>
+                                <div class="card-body">
                                     <div class="form-group">
-                                        <label for="fontfamily" class="control-label col-sm-2">Font Family:</label>
-                                        <div class="col-sm-10">
+                                        <label for="fontfamily">Font Family:</label>
+                                        <div>
                                             <select name="fontfamily" id="fontfamily" class="form-control">
                                                 <option value="Helvetica" <?php echo $reader->font_family=='Helvetica' ? ' selected ' : ''; ?>>Helvetica</option>
                                                 <option value="Open Sans" <?php echo $reader->font_family=='Open Sans' ? ' selected ' : ''; ?>>Open Sans</option>
@@ -37,8 +37,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="fontsize" class="control-label col-sm-2">Font Size:</label>
-                                        <div class="col-sm-10">
+                                        <label for="fontsize">Font Size:</label>
+                                        <div>
                                             <select name="fontsize" id="fontsize" class="form-control">
                                                 <option value="12pt" <?php echo $reader->font_size=='12pt' ? ' selected ' : ''; ?>>12 pt</option>
                                                 <option value="14pt" <?php echo $reader->font_size=='14pt' ? ' selected ' : ''; ?>>14 pt</option>
@@ -48,8 +48,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="lineheight" class="control-label col-sm-2">Line height:</label>
-                                        <div class="col-sm-10">
+                                        <label for="lineheight">Line height:</label>
+                                        <div>
                                             <select name="lineheight" id="lineheight" class="form-control">
                                                 <option value="1.5" <?php echo $reader->line_height=='1.5' ? ' selected ' : ''; ?>>1.5 Lines</option>
                                                 <option value="2" <?php echo $reader->line_height=='2' ? ' selected ' : ''; ?>>2</option>
@@ -59,8 +59,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="alignment" class="control-label col-sm-2">Text alignment:</label>
-                                        <div class="col-sm-10">
+                                        <label for="alignment">Text alignment:</label>
+                                        <div>
                                             <select name="alignment" id="alignment" class="form-control">
                                                 <option value="left" <?php echo $reader->text_align=='left' ? ' selected ' : ''; ?>>Left</option>
                                                 <option value="center" <?php echo $reader->text_align=='center' ? ' selected ' : ''; ?>>Center</option>
@@ -70,8 +70,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="mode" class="control-label col-sm-2">Display mode:</label>
-                                        <div class="col-sm-10">
+                                        <label for="mode">Display mode:</label>
+                                        <div>
                                             <select name="mode" id="mode" class="form-control">
                                                 <option value="light" <?php echo $reader->display_mode=='light' ? ' selected ' : ''; ?>>Light</option>
                                                 <option value="sepia" <?php echo $reader->display_mode=='sepia' ? ' selected ' : ''; ?>>Sepia</option>
@@ -81,15 +81,15 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
+                            <br/>
+                            <div class="card">
+                                <div class="card-header">
                                     Learning
                                 </div>
-                                <div class="panel-body">
+                                <div class="card-body">
                                     <div class="form-group">
-                                        <label for="assistedlearning" class="control-label col-sm-2">Mode:</label>
-                                        <div class="col-sm-10">
+                                        <label for="assistedlearning">Mode:</label>
+                                        <div>
                                             <select name="assistedlearning" id="assistedlearning" class="form-control">
                                                 <option value="1" <?php echo $reader->assisted_learning==true ? ' selected ' : ''; ?>>Assisted</option>
                                                 <option value="0" <?php echo $reader->assisted_learning==false ? ' selected ' : ''; ?>>Free</option>
@@ -116,9 +116,9 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <br/>
                             <div class="text-right">
-                                <a type="button" id="cancelbtn" name="cancel" class="btn btn-static" onclick="window.location='/'">Cancel</a>
+                                <button id="cancelbtn" name="cancel" class="btn btn-link" onclick="window.location='/'">Cancel</button>
                                 <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
                             </div>
                         </form>

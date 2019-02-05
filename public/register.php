@@ -5,7 +5,7 @@ require_once 'simpleheader.php';
 
 <div class="container mtb pattern-wallpaper">
   <div class="row">
-    <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+    <div class="col-sm-12 col-sm-10 offset-sm-1 col-lg-6 offset-lg-3">
       <section>
         <header>
           <h1 class="text-center">
@@ -26,10 +26,10 @@ require_once 'simpleheader.php';
             <?php echo $to_lang; ?>.</div>
         </header>
         <br/>
-        <div id="error-msg" class="hidden"></div>
+        <div id="error-msg" class="d-none"></div>
         <form action="" id="form_register">
           <div>
-            <div class="form-group col-xs-6">
+            <div class="form-group col-sm-6">
               <label for="native_lang">Native language:</label>
               <select name="native_lang" id="native_lang">
                 <option value="en" selected>English</option>
@@ -40,7 +40,7 @@ require_once 'simpleheader.php';
                 <option value="de">German</option>
               </select>
             </div>
-            <div class="form-group text-right nopadding col-xs-6">
+            <div class="form-group text-right nopadding col-sm-6">
               <label for="learning_lang">Want to learn:</label>
               <select name="learning_lang" id="learning_lang">
                 <option value="en" <?php echo $to_lang=='English' ? 'selected' : ''; ?>>English</option>

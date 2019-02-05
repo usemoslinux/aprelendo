@@ -14,12 +14,12 @@ if (!$user->isLoggedIn()) {
 
 <div class="container mtb">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-sm-12">
             <ol class="breadcrumb">
-                <li>
+                <li class="breadcrumb-item">
                     <a href="index.php">Home</a>
                 </li>
-                <li>
+                <li class="breadcrumb-item">
                     <a class="active">About us</a>
                 </li>
             </ol>
@@ -44,8 +44,8 @@ if (!$user->isLoggedIn()) {
                     way foreign languages are taught at school or in other academic environments. Aprelendo is my small
                     contribution to change that situation.</p>
             </div>
-            <div class="col-sm-3 hidden-xs">
-                <img class="img-circle" src="img/avatar_pablo.jpg" alt="Pablo Castagnino - Photo">
+            <div class="col-sm-3 d-none d-sm-block">
+                <img class="rounded-circle" src="img/avatar_pablo.jpg" alt="Pablo Castagnino - Photo">
             </div>
         </div>
         <!--/row -->
@@ -78,8 +78,8 @@ if (!$user->isLoggedIn()) {
                     possible, from the comfort of their home and adapting to their schedules and interests.</p>
             </div>
 
-            <div class="col-sm-3 hidden-xs">
-                <img class="img-responsive" src="img/logo.svg" alt="Aprelendo logo">
+            <div class="col-sm-3 d-none d-sm-block">
+                <img class="img-fluid" src="img/logo.svg" alt="Aprelendo logo">
             </div>
         </div>
         <!--/row -->

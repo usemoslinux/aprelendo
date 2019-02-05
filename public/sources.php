@@ -23,12 +23,12 @@ require_once('header.php');
 
     <div class="container mtb">
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-sm-12">
                 <ol class="breadcrumb">
-                    <li>
+                    <li class="breadcrumb-item">
                         <a href="texts.php">Home</a>
                     </li>
-                    <li>
+                    <li class="breadcrumb-item">
                         <a class="active">Popular sources</a>
                     </li>
                 </ol>

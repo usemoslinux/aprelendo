@@ -64,7 +64,7 @@ $(document).ready(function() {
         if (video_id != '') {
             var embed_url = 'https://www.youtube.com/embed/' + video_id; 
 
-            $('#error-msg').addClass('hidden');
+            $('#error-msg').addClass('d-none');
             $('#btn-fetch-img').removeClass().addClass('fas fa-sync fa-spin');
             
             $.ajax({
@@ -113,7 +113,7 @@ $(document).ready(function() {
     */
     function showError(error_msg) {
         $('#error-msg').html(error_msg)
-        .removeClass('hidden')
+        .removeClass('d-none')
         .addClass('alert alert-danger');
         $(window).scrollTop(0);
     } // end of showError

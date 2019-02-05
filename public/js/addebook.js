@@ -26,7 +26,7 @@ $(document).ready(function () {
     });
 
     $('#url').on('change', function () {
-        $('#alert-error-msg').addClass('hidden');
+        $('#alert-error-msg').addClass('d-none');
 
         var $epub_file = $(this);
         var file_name = $epub_file[0].files[0].name.split('.');
@@ -59,7 +59,7 @@ $(document).ready(function () {
         var $progressbar = $('#upload-progress-bar');
         var form_data = new FormData(document.getElementById("form-addebook"));
 
-        $progressbar.parent().removeClass('hidden');
+        $progressbar.parent().removeClass('d-none');
         $('#btn-upload-epub').addClass('disabled');
         $('#btn-save').addClass('disabled');
         $progressbar.width('33%');
@@ -117,9 +117,9 @@ $(document).ready(function () {
      * @param {string} error_msg 
      */
     function showError(error_msg) {
-        $('#upload-progress-bar').parent().addClass('hidden');
+        $('#upload-progress-bar').parent().addClass('d-none');
         $('#alert-error-msg').html(error_msg)
-            .removeClass('hidden')
+            .removeClass('d-none')
             .addClass('alert alert-danger');
         $(window).scrollTop(0);
     } // end of showError
@@ -129,7 +129,7 @@ $(document).ready(function () {
      * Empties form input fields
      */
     function emptyForm() {
-        $('#alert-error-msg').addClass('hidden');
+        $('#alert-error-msg').addClass('d-none');
         $('#title').val('');
         $('#author').val('');
         $('#url').val('');

@@ -26,106 +26,93 @@ use Aprelendo\Includes\Classes\Language;
 $learning_lang_full = ucfirst(Language::getLanguageName($user->learning_lang));
 
 ?>
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel='shortcut icon' type='image/x-icon' href='img/logo.svg' />
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel='shortcut icon' type='image/x-icon' href='img/logo.svg' />
 
-        <title>Aprelendo</title>
+    <title>Aprelendo</title>
 
-        <!-- Bootstrap core CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <!-- Font awesome icons -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css " integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-        <!-- Bootstraptour CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-tour@0.12.0/build/css/bootstrap-tour.min.css">
-        <!-- Custom styles for this template -->
-        <link href="css/styles.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="css/styles.css" rel="stylesheet">
+    <!-- Font awesome icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css " integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+        crossorigin="anonymous">
 
-        <!-- JQuery JS -->
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-        <!-- Bootstrap JS -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <!-- Bootstraptour JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap-tour@0.12.0/build/js/bootstrap-tour.min.js"></script>
+    <!-- JQuery JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-    </head>
+</head>
 
-    <body>
-        <!-- Fixed navbar -->
-        <div class="navbar navbar-default" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="index.php">Aprelendo</a>
-                </div>
-                <div class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li id="language-dropdown" class="dropdown">
-                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                <img id="img-language-flag" src="/img/flags/<?php echo $user->learning_lang . '.svg';?>" alt="<?php echo $learning_lang_full; ?> flag">
-                                <span id="learning-lang-span">&nbsp;<?php echo $learning_lang_full; ?></span>
-                                <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="<?php echo 'languages.php?chg=' . $user->learning_lang_id; ?>"><?php echo $learning_lang_full; ?> settings</a></li>
-                                <li><a href="languages.php">Change current language</a></li>
-                            </ul>
-                        </li>
-                        <li id="user-dropdown" class="dropdown">
-                            <a id="user-menu" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fas fa-user-circle"></i>
-                                <?php echo ucfirst($user->name); ?>
-                                <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-header">
-                                    Sections
-                                </li>
-                                <li>
-                                    <a href="texts.php">My texts</a>
-                                </li>
-                                <li>
-                                    <a href="sharedtexts.php">Shared texts</a>
-                                </li>
-                                <li>
-                                    <a href="sources.php">Popular sources</a>
-                                </li>
-                                <li>
-                                    <a href="words.php">Word list</a>
-                                </li>
-                                <li>
-                                    <a href="stats.php">Statistics</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li class="dropdown-header">
-                                    Settings
-                                </li>
-                                <li>
-                                    <a href="userprofile.php">My profile</a>
-                                </li>
-                                <li>
-                                    <a href="preferences.php">Preferences</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="logout.php">Logout</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <!--/.nav-collapse -->
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-light">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand" href="index.php">Aprelendo</a>
+
+            <!-- Toggler/collapsibe Button -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ml-auto">
+                    <li id="language-dropdown" class="nav-item dropdown">
+                        <a href="javascript:;" id="language-menu" class="nav-link dropdown-toggle" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img id="img-language-flag" src="/img/flags/<?php echo $user->learning_lang . '.svg';?>"
+                                alt="<?php echo $learning_lang_full; ?> flag">
+                            <span id="learning-lang-span">&nbsp;
+                                <?php echo $learning_lang_full; ?></span>
+                            <b class="caret"></b>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="language-menu">
+                            <a class="dropdown-item" href="<?php echo 'languages.php?chg=' . $user->learning_lang_id; ?>">
+                                <?php echo $learning_lang_full; ?> settings</a>
+                            <a class="dropdown-item" href="languages.php">Change current language</a>
+                        </div>
+                    </li>
+
+                    <li id="user-dropdown" class="nav-item dropdown">
+                        <a id="user-menu" href="javascript:;" class="nav-link dropdown-toggle" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i>
+                            <?php echo ucfirst($user->name); ?>
+                            <b class="caret"></b>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu">
+                            <div class="dropdown-header">
+                                Sections
+                            </div>
+                            <a href="texts.php" class="dropdown-item">My texts</a>
+                            <a href="sharedtexts.php" class="dropdown-item">Shared texts</a>
+                            <a href="sources.php" class="dropdown-item">Popular sources</a>
+                            <a href="words.php" class="dropdown-item">Word list</a>
+                            <a href="stats.php" class="dropdown-item">Statistics</a>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-header">
+                                Settings
+                            </div>
+                            <a href="userprofile.php" class="dropdown-item">My profile</a>
+                            <a href="preferences.php" class="dropdown-item">Preferences</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="logout.php" class="dropdown-item">Logout</a>
+                    </li>
+                </ul>
             </div>
         </div>
+    </nav>
+    

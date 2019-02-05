@@ -68,7 +68,7 @@ abstract class Table
      */
     protected function print_header() {
         $html = '<div class="row">
-            <div class="col-xs-12">
+            <div class="col-sm-12">
             <table id="textstable" class="table table-hover">
             <colgroup>';
         
@@ -100,33 +100,33 @@ abstract class Table
      * @return string HTML for table footer
      */
     protected function print_footer($sort_by) {
-        $html = '</tbody></table><div class="row"><div class="col-xs-12">';
+        $html = '</tbody></table><div class="row"><div class="col-sm-12">';
 
         if (!empty($this->action_menu)) {
-            $html .= '<div class="dropdown">
-            <button class="btn btn-default dropdown-toggle disabled" type="button" 
-                id="actions-menu" data-toggle="dropdown">Actions <span class="caret"></span></button><ul class="dropdown-menu 
+            $html .= '<div class="dropdown d-inline-block">
+            <button class="btn btn-secondary dropdown-toggle disabled" type="button" 
+                id="actions-menu" data-toggle="dropdown">Actions <span class="caret"></span></button><div class="dropdown-menu 
                 dropdown-menu-left" aria-labelledby="actions-menu" role="menu">';
 
             foreach ($this->action_menu as $menu_id => $menu_text) { 
-                $html .= "<li id='$menu_id'><a role='menuitem'>$menu_text</a></li>";
+                $html .= "<a id='$menu_id' class='dropdown-item'>$menu_text</a>";
             }
 
-            $html .= '</ul></div>';
+            $html .= '</div></div>';
         }
         
-        $html .= '<div class="dropdown"><button class="btn btn-default dropdown-toggle 
-            pull-right" type="button" id="sort-menu" data-toggle="dropdown">Sort by <span class="caret"></span></button>
-            <ul id="dropdown-menu-sort" class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-menu" role="menu">';
+        $html .= '<div class="dropdown d-inline-block float-right"><button class="btn btn-secondary dropdown-toggle 
+            float-right" type="button" id="sort-menu" data-toggle="dropdown">Sort by <span class="caret"></span></button>
+            <div id="dropdown-menu-sort" class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-menu" role="menu">';
 
         $sort_index = 0;
         foreach ($this->sort_menu as $menu_id => $menu_text) {
-            $is_active = $sort_by == $sort_index ? ' class="active" ' : ''; 
-            $html .= "<li id='$menu_id' onclick=\"$('#o').val($sort_index);\" $is_active><a role='menuitem'>$menu_text</a></li>";
+            $is_active = $sort_by == $sort_index ? ' class="dropdown-item active" ' : 'class="dropdown-item"'; 
+            $html .= "<a id='$menu_id' onclick=\"$('#o').val($sort_index);\" $is_active>$menu_text</a>";
             $sort_index++;
         }
 
-        $html .= '</ul></div></div></div></div></div>';
+        $html .= '</div></div></div></div></div></div>';
 
         return $html;
     }

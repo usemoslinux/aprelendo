@@ -4,27 +4,27 @@
 <div id="footerwrap" class="footer">
     <div class="container">
         <div class="row text-center">
-            <div class="col-xs-12">
+            <div class="col-sm-12">
                 <ul class="list-inline">
-                    <li>
+                    <li class="list-inline-item">
                         <a href="aboutus.php">About us</a>
                     </li>
-                    <li>
+                    <li class="list-inline-item">
                         <a href="privacy.php">Privacy</a>
                     </li>
-                    <li>
+                    <li class="list-inline-item">
                         <a href="attributions.php">Attributions</a>
                     </li>
-                    <li>
+                    <li class="list-inline-item">
                         <a id="extensions-link" href="extensions.php">Extensions</a>
                     </li>
-                    <li>
-                        <a href="https://www.facebook.com/aprelendo" target="_blank">
+                    <li class="list-inline-item">
+                        <a href="https://www.facebook.com/aprelendo" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-facebook"></i>
                         </a>
                     </li>
-                    <li>
-                        <a href="https://twitter.com/aprelendo" target="_blank">
+                    <li class="list-inline-item">
+                        <a href="https://twitter.com/aprelendo" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-twitter"></i>
                         </a>
                     </li>
@@ -35,10 +35,10 @@
 </div>
 
 <?php
-$file_name = 'js/bootstraptour/' . basename($_SERVER['PHP_SELF'], ".php") . '.js';
-if (file_exists(PUBLIC_PATH . $file_name)) {
-    echo "<script src='/$file_name'></script>";
-}
+// $file_name = 'js/bootstraptour/' . basename($_SERVER['PHP_SELF'], ".php") . '.js';
+// if (file_exists(PUBLIC_PATH . $file_name)) {
+//     echo "<script src='/$file_name'></script>";
+// }
 ?>
 
 <?php require_once 'eucookies.php'?>

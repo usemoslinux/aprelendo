@@ -64,7 +64,7 @@ $(document).ready(function() {
     */
     function showError(error_msg) {
         $('#alert-error-msg').html(error_msg)
-        .removeClass('hidden')
+        .removeClass('d-none')
         .addClass('alert alert-danger');
         $(window).scrollTop(0);
     } // end of showError
@@ -159,7 +159,7 @@ $(document).ready(function() {
 });
 
 function emptyForm(exceptSourceURI) {
-    $('#alert-error-msg').addClass('hidden');
+    $('#alert-error-msg').addClass('d-none');
     $('#type').prop('selectedIndex', 0);
     $('#title').val('');
     $('#author').val('');

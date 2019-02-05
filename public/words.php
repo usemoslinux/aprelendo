@@ -19,41 +19,41 @@
 
 <div class="container mtb">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-sm-12">
             <ol class="breadcrumb">
-                <li>
+                <li class="breadcrumb-item">
                     <a href="texts.php">Home</a>
                 </li>
-                <li>
+                <li class="breadcrumb-item">
                     <a class="active">Word list</a>
                 </li>
             </ol>
             <div class="row flex">
-                <div class="col-xs-12">
+                <div class="col-sm-12">
                     <form class="form-flex-row" action="" method="get">
                         <div class="input-group searchbox">
                             <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
                             <input type="text" id="s" name="s" class="form-control" placeholder="Search..." value="<?php echo $search_text ?>">
-                            <div class="input-group-btn">
-                                <button type="submit" name="submit" class="btn btn-default">
+                            <div class="input-group-append">
+                                <button type="submit" name="submit" class="btn btn-secondary">
                                 <i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </div>
                          <!-- Split button -->
                          <div class="btn-group btn-searchbox searchbox">
-                            <a class="btn btn-success <?php echo $user->isPremium() ? '"' : 'disabled"'; ?> href="ajax/exportwords.php"><i class="fas fa-file-export"></i> Export</a>
+                            <a class="btn btn-success btn-flex <?php echo $user->isPremium() ? '"' : 'disabled"'; ?> href="ajax/exportwords.php"><i class="fas fa-file-export"></i> Export</a>
                             <button type="button" class="btn btn-success dropdown-toggle <?php echo $user->isPremium() ? '"' : 'disabled" title="Premium users only"'; ?> " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
-                                <li <?php echo $user->isPremium() ? '' : 'class="disabled" title="Premium users only"'; ?> >
-                                    <a href=" ajax/exportwords.php">Export all</a>
-                                </li>
-                                <li <?php $user->isPremium() ? '' : 'class="disabled" title="Premium users only"'; ?> >
-                                    <a href="ajax/exportwords.php<?php echo !empty($query_str) ? $query_str : '' ?>">Export search results</a>
-                                </li>
+                                <a href="ajax/exportwords.php" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"'; ?> >
+                                    Export all
+                                </a>
+                                <a href="ajax/exportwords.php<?php echo !empty($query_str) ? $query_str : '' ?>" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"'; ?> >
+                                    Export search results
+                                </a>
                             </ul>
                         </div>
                     </form>

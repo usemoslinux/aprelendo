@@ -18,124 +18,138 @@
  */
 
 $(document).ready(function () {
-  $(".list-group-item").on("click", function () {
-    $(".fas", this)
-      .toggleClass("fas fa-chevron-right")
-      .toggleClass("fas fa-chevron-down");
-  });
+    $(".btn-link").on("click", function () {
+        $sel_card = $(".fas", this);
 
-  function htmlEscape(str) {
-    return str
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-  }
+        $sel_card.toggleClass("fa-chevron-right")
+            .toggleClass("fa-chevron-down");
 
-  function addTextToLibrary($entry_info, $entry_text, add_mode) {
-    var art_title = $.trim($entry_info.text());
-    var art_author = $entry_info.attr("data-author");
-    var art_url = $entry_info.attr("data-src");
-    var art_pubdate = $entry_info.attr("data-pubdate");
-    var art_content = "";
+        if ($(this).parents('.card-body').length > 0) {
+            $accordion = $(this).closest(".card-body"); 
+        } else {
+            $accordion = $('.subaccordion > .card > .card-header    ');
+        }
 
-    $entry_text.children("p").each(function () {
-      art_content += $(this).text() + "\n";
-    });
-    art_content = $.trim(art_content);
-
-    if (add_mode == 'addaudio') {
-      var form = $('<form id="form_add_audio" action="../addtext.php" method="post"></form>')
-        .append('<input type="hidden" name="art_title" value="' + htmlEscape(art_title) + '">')
-        .append('<input type="hidden" name="art_author" value="' + htmlEscape(art_author) + '">')
-        .append('<input type="hidden" name="art_url" value="' + htmlEscape(art_url) + '">')
-        .append('<input type="hidden" name="art_pubdate" value="' + htmlEscape(art_pubdate) + '">')
-        .append('<input type="hidden" name="art_content" value="' + htmlEscape(art_content) + '">')
-        .append('<input type="hidden" name="art_is_shared" value="true">');
-      $('body').append(form);
-      form.submit();
-    } else {
-      $.ajax({
-          type: "POST",
-          url: "ajax/addtext.php",
-          dataType: "JSON",
-          data: {
-            title: art_title,
-            author: art_author,
-            url: art_url,
-            pubdate: art_pubdate,
-            text: art_content,
-            mode: 'rss'
-          }
-        }).done(function (data) {
-          switch (add_mode) {
-            case "readlater":
-              $entry_text
-                .find("button")
-                .remove()
-                .end()
-                .find("span.message")
-                .addClass("text-success")
-                .text("Text was successfully added to your library")
-                .show()
-                .fadeOut(2000);
-              break;
-            case "readnow":
-              location.replace("../showtext.php?id=" + data.insert_id + "&sh=1");
-              break;
-            default:
-              break;
-          }
-        })
-        .fail(function () {
-          $entry_text
-            .find("span.message")
-            .addClass("text-failure")
-            .text("There was an error trying to add this text to your library!")
-            .show()
-            .fadeOut(2000);
+        $('.fas', $accordion).each(function () {
+            if ($(this).hasClass('fa-chevron-down') && $(this)[0] !== $sel_card[0]) {
+                $(this).toggleClass("fa-chevron-right")
+                    .toggleClass("fa-chevron-down");
+            }
         });
+    });
+
+    function htmlEscape(str) {
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     }
-  }
 
-  $(".btn-readlater").on("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    addTextToLibrary(
-      $(this)
-      .closest(".entry-text")
-      .parent()
-      .prev(".entry-info"),
-      $(this).closest(".entry-text"),
-      "readlater"
-    );
-  });
+    function addTextToLibrary($entry_info, $entry_text, add_mode) {
+        var art_title = $.trim($entry_info.text());
+        var art_author = $entry_info.attr("data-author");
+        var art_url = $entry_info.attr("data-src");
+        var art_pubdate = $entry_info.attr("data-pubdate");
+        var art_content = "";
 
-  $(".btn-readnow").on("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    addTextToLibrary(
-      $(this)
-      .closest(".entry-text")
-      .parent()
-      .prev(".entry-info"),
-      $(this).closest(".entry-text"),
-      "readnow"
-    );
-  });
+        $entry_text.children("p").each(function () {
+            art_content += $(this).text() + "\n";
+        });
+        art_content = $.trim(art_content);
 
-  $(".btn-addsound").on("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    addTextToLibrary(
-      $(this)
-      .closest(".entry-text")
-      .parent()
-      .prev(".entry-info"),
-      $(this).closest(".entry-text"),
-      "addaudio"
-    );
-  });
+        if (add_mode == 'addaudio') {
+            var form = $('<form id="form_add_audio" action="../addtext.php" method="post"></form>')
+                .append('<input type="hidden" name="art_title" value="' + htmlEscape(art_title) + '">')
+                .append('<input type="hidden" name="art_author" value="' + htmlEscape(art_author) + '">')
+                .append('<input type="hidden" name="art_url" value="' + htmlEscape(art_url) + '">')
+                .append('<input type="hidden" name="art_pubdate" value="' + htmlEscape(art_pubdate) + '">')
+                .append('<input type="hidden" name="art_content" value="' + htmlEscape(art_content) + '">')
+                .append('<input type="hidden" name="art_is_shared" value="true">');
+            $('body').append(form);
+            form.submit();
+        } else {
+            $.ajax({
+                    type: "POST",
+                    url: "ajax/addtext.php",
+                    dataType: "JSON",
+                    data: {
+                        title: art_title,
+                        author: art_author,
+                        url: art_url,
+                        pubdate: art_pubdate,
+                        text: art_content,
+                        mode: 'rss'
+                    }
+                }).done(function (data) {
+                    switch (add_mode) {
+                        case "readlater":
+                            $entry_text
+                                .find("button")
+                                .remove()
+                                .end()
+                                .find("span.message")
+                                .addClass("text-success")
+                                .text("Text was successfully added to your library")
+                                .show()
+                                .fadeOut(2000);
+                            break;
+                        case "readnow":
+                            location.replace("../showtext.php?id=" + data.insert_id + "&sh=1");
+                            break;
+                        default:
+                            break;
+                    }
+                })
+                .fail(function () {
+                    $entry_text
+                        .find("span.message")
+                        .addClass("text-failure")
+                        .text("There was an error trying to add this text to your library!")
+                        .show()
+                        .fadeOut(2000);
+                });
+        }
+    }
+
+    $(".btn-readlater").on("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        addTextToLibrary(
+            $(this)
+            .closest(".entry-text")
+            .parent()
+            .prev(".entry-info"),
+            $(this).closest(".entry-text"),
+            "readlater"
+        );
+    });
+
+    $(".btn-readnow").on("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        addTextToLibrary(
+            $(this)
+            .closest(".entry-text")
+            .parent()
+            .prev(".entry-info"),
+            $(this).closest(".entry-text"),
+            "readnow"
+        );
+    });
+
+    $(".btn-addsound").on("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        addTextToLibrary(
+            $(this)
+            .closest(".entry-text")
+            .parent()
+            .prev(".entry-info"),
+            $(this).closest(".entry-text"),
+            "addaudio"
+        );
+    });
 
 });

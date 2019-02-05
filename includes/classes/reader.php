@@ -288,7 +288,7 @@ class Reader extends Text
                         <span></span>
                     </div>';
 
-        $html .=   '<div id="audioplayer-container" class="hidden">
+        $html .=   '<div id="audioplayer-container" class="d-none">
                         <audio controls id="audioplayer">
                         <source type="audio/mpeg">
                         Your browser does not support the audio element.</audio>
@@ -358,12 +358,12 @@ class Reader extends Text
 
         $yt_id = $yt_id ? $yt_id : '';
 
-        $html = '<div id="show-video-container" class="col-xs-12 col-sm-6">' .
+        $html = '<div id="show-video-container" class="col-md-6">' .
             '<div class="video-wrapper">' .
                 '<div data-ytid="' . $yt_id . '" id="player"></div>' .
             '</div>' .
             '</div>' .
-            '<div id="show-transcript-container" class="col-xs-12 col-sm-6">';
+            '<div id="show-transcript-container" class="col-md-6">';
 
         $html .= "<div id='container' data-textID='" . $this->id . "'>";
         $html .= '<div id="message-window"></div>';

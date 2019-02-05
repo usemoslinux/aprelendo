@@ -6,7 +6,7 @@ HEADERWRAP
     <div id="headerwrap" class="headerwrap pattern-wallpaper">
         <div class="container">
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-sm-12">
                     <h1>Hmm... that's weird!</h1>
                     <h5>There was an fatal error trying to connect to the database. Try again later.</h5>
                     <br/>

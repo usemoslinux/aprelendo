@@ -49,7 +49,7 @@ $(document).ready(function () {
    */
   function showMessage(html, type) {
     $('#error-msg').html(html)
-      .removeClass('hidden')
+      .removeClass('d-none')
       .addClass('alert ' + type);
     $(window).scrollTop(0);
   } // end of showMessage

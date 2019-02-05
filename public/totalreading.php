@@ -15,17 +15,17 @@ if (!$user->isLoggedIn()) {
 
 <div class="container mtb">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-sm-12">
             <ol class="breadcrumb">
-                <li>
+                <li class="breadcrumb-item">
                     <a href="index.php">Home</a>
                 </li>
-                <li>
+                <li class="breadcrumb-item">
                     <a class="active">Total reading</a>
                 </li>
             </ol>
             <div class="row flex simple-text">
-                <div class="col-xs-12">
+                <div class="col-sm-12">
                     <h4>Fluency in a second language</h4>
                     <p>There are four dimensions to learning a language: listening, reading, speaking and writing. Practicing all of them at the same time seems impossible. Therefore, it may seem a good idea to try to segment our efforts and even prioritize these dimensions. However, sorting them in order of difficulty or importance can become a challenge and is a waste of time.</p> 
                     </p>We can be tempted to think that passive dimensions (listening & reading) are easier than active (speaking & writing) ones, or that dominating the spoken word is easier than mastering the written word. There might be some truth in this, but that entirely depends on the language you are trying to learn and how much this language resembles your mother tongue or some other language you've already mastered. Also, it would be logical to say that one of these dimensions is more important than the other.</p>

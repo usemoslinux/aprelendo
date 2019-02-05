@@ -105,7 +105,7 @@ $(document).ready(function () {
                         // Add the rest of the scripts and stylesheets
                         Promise.all([
                             contents.addScript("/js/showtext.js"),
-                            contents.addScript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
+                            contents.addScript("https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js")
                         ]);
 
                         $('.loader').fadeIn(1000);

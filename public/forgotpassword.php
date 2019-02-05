@@ -5,14 +5,14 @@ require_once('simpleheader.php');
 
 <div class="container mtb pattern-wallpaper">
     <div class="row">
-        <div class="col-xs-0 col-sm-1 col-md-3"></div>
-        <div class="col-xs-12 col-sm-10 col-md-6">
+        <div class="col-sm-0 col-sm-1 col-lg-3"></div>
+        <div class="col-sm-12 col-sm-10 col-lg-6">
             <section>
                 <header>
                     <h1 class="text-center">Restore password</h1>
                 </header>
                 <br/>
-                <div id="alert_msg" class="hidden"></div>
+                <div id="alert_msg" class="d-none"></div>
 
                 <?php 
                 // 1. check if username & password values passed by the reset link are set
@@ -76,7 +76,7 @@ require_once('simpleheader.php');
                 </footer>
             </section>
         </div>
-        <div class="col-xs-0 col-sm-1 col-md-3"></div>
+        <div class="col-sm-0 col-sm-1 col-lg-3"></div>
     </div>
 </div>
 

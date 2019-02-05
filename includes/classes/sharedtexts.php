@@ -122,7 +122,9 @@ class SharedTexts extends Texts
                 {$this->cols['type']}, 
                 {$this->cols['nrofwords']}, 
                 {$this->cols['level']}, 
-                languages.LgName
+                languages.LgName,
+                (SELECT COUNT(likesId) FROM likes WHERE likesTextId = {$this->cols['id']}) AS {$this->cols['totallikes']},
+                (SELECT COUNT(likesId) FROM likes WHERE likesTextId = {$this->cols['id']} AND likesUserId = $this->user_id) AS {$this->cols['userliked']}
                 FROM {$this->table} 
                 INNER JOIN languages ON {$this->table}.stextLgId = languages.LgID
                 WHERE LgName = '{$lang->name}'

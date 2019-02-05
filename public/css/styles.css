@@ -46,6 +46,7 @@ body {
     background: #e9e9e9;
     color: #384452;
     font-family: "Lato", sans-serif;
+    font-size: 14px;
     font-weight: 400;
     height: 100%;
     margin: 0;
@@ -137,7 +138,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     }
 }
 
-.navbar-header .navbar-brand {
+.navbar-light .navbar-brand {
     color: white;
 }
 
@@ -145,8 +146,8 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     box-shadow: none;
 }
 
-.navbar-default .navbar-collapse,
-.navbar-default .navbar-form {
+.navbar-light .navbar-collapse,
+.navbar-light .form-inline {
     border: none;
 }
 
@@ -162,43 +163,31 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     border-top-right-radius: 3px;
 }
 
-.dropdown-menu>li>a:focus,
-.dropdown-menu>li>a:hover {
-    color: white;
+.dropdown-menu>a:focus,
+.dropdown-menu>a:hover,
+.dropdown-item.active, 
+.dropdown-item:active {
+    color: white !important;
+    cursor: pointer;
     background-color: #0275d8;
 }
 
-.dropdown-menu>li>a {
+.dropdown-menu>a {
     color: #262626;
     font-size: 12px;
     font-weight: 700;
 }
 
-.dropdown,
-.dropup {
-    display: contents;
-}
-
 #user-menu,
 #login-menu {
     background-color: white;
-    color: black;
-    border-radius: 98px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin-top: 5px;
-}
-
-#user-menu:hover,
-#user-menu:focus,
-#login-menu:hover,
-#login-menu:focus {
     color: #0275d8;
+    border-radius: 98px;
+    font-size: 16px;
 }
 
-#user-menu,
-#login-menu {
-    font-size: 18px;
+.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
+    color: white;
 }
 
 #learning-lang-span {
@@ -233,30 +222,25 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     }
 }
 
-.navbar-default .navbar-nav>li>a {
+.navbar-light .navbar-nav .nav-link {
     color: white;
     font-size: 12px;
     font-weight: 700;
 }
 
-.navbar-default .navbar-nav>.active>a {
-    background-color: #0275d8;
-    color: #0275d8;
-}
-
-.navbar-default .navbar-brand:focus,
-.navbar-default .navbar-brand:hover {
+.navbar-light .navbar-brand:focus,
+.navbar-light .navbar-brand:hover {
     color: white;
 }
 
-.navbar-default .navbar-nav>.active>a:focus,
-.navbar-default .navbar-nav>.active>a:hover {
+.navbar-light .nav-item>.active>a:focus,
+.navbar-light .nav-item>.active>a:hover {
     background-color: transparent;
     color: #0275d8;
 }
 
-.navbar-default .navbar-nav>li>a:focus,
-.navbar-default .navbar-nav>li>a:hover {
+.navbar-light .nav-item>li>a:focus,
+.navbar-light .nav-item>li>a:hover {
     color: white;
 }
 
@@ -267,16 +251,16 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 }
 
 @media screen and (max-width: 767px) {
-    .navbar-default .navbar-nav .open .dropdown-menu>li>a:focus,
-    .navbar-default .navbar-nav .open .dropdown-menu>li>a:hover {
+    .navbar-light .navbar-nav .open .dropdown-menu>a:focus,
+    .navbar-light .navbar-nav .open .dropdown-menu>a:hover {
         color: black;
     }
-    .navbar-default .navbar-nav .open .dropdown-menu>li>a {
+    .navbar-light .navbar-nav .open .dropdown-menu>a {
         color: white;
     }
 }
 
-.navbar-default {
+.navbar-light {
     background-color: #0275d8;
     border-color: transparent;
 }
@@ -290,15 +274,21 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 }
 
 .breadcrumb,
-.panel,
+.card,
 .btn,
 .btn-group,
 .form-control {
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 .25rem .25rem 0 rgba(0, 0, 0, 0.1);
+    font-size: inherit;
+}
+
+.breadcrumb {
+    padding: 10px 15px;
+    background-color: whitesmoke;
 }
 
 .breadcrumb .active:hover {
-    color: inherit;
+	color: #6c757d;
 }
 
 .form-control:focus {
@@ -351,8 +341,8 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 }
 
 .mtb {
-    margin-bottom: 40px;
-    margin-top: 40px;
+    padding-bottom: 40px;
+    padding-top: 40px;
 }
 
 .mb {
@@ -548,11 +538,15 @@ APRELENDO CUSTOMIZATIONS
 
 /* GENERAL ADJUSTMENTS */
 
-.navbar-default .navbar-nav>.open>a,
-.navbar-default .navbar-nav>.open>a:focus,
-.navbar-default .navbar-nav>.open>a:hover {
+.navbar-light .navbar-nav>.open>a,
+.navbar-light .navbar-nav>.open>a:focus,
+.navbar-light .navbar-nav>.open>a:hover {
     color: white;
     background-color: inherit;
+}
+
+.bg-primary {
+    background-color: #0275d8 !important;
 }
 
 ul,
@@ -564,7 +558,7 @@ ol {
 
 @media screen and (min-width: 767px) {
     ul.nav,
-    .navbar-right {
+    .ml-auto {
         padding-right: 0;
     }
 }
@@ -607,6 +601,51 @@ ol {
     display: none;
     z-index: 9999;
 }
+
+/* PAGINATION */
+
+.pagination {
+    margin-top: 1rem;
+}
+
+/* ACCORDION */
+
+.accordion .card:first-of-type {
+    border-top: 1px;
+    border-radius: .25rem .25rem 0 0;
+}
+
+.accordion .card {
+    border-top: 0;
+    border-radius: 0;
+}
+
+.accordion .card:last-of-type {
+    border-radius: 0 0 .25rem .25rem;
+}
+
+.subaccordion > .card > .card-header {
+    border: 0;
+}
+
+.subaccordion > .card {
+    border-radius: 0 !important;
+}
+
+.card .bg-primary {
+	border-radius: inherit;
+}
+
+.card .btn-link {
+	white-space: normal;
+	text-align: left;
+}
+
+.accordion .card-header {
+    padding: 2px;
+}
+
+/* COOKIES */
 
 #eucookielaw p {
     float: left;
@@ -709,10 +748,6 @@ a[role="menuitem"] {
 
 .list-group.list-group-root>.list-group>.list-group>.list-group-item {
     padding-left: 45px;
-}
-
-#dropdown-menu-sort {
-    margin-right: 15px;
 }
 
 /* SHOW TEXT PAGE */
@@ -896,6 +931,7 @@ input[type="range"]::-ms-thumb {
 
 .dict-input-group {
     display: inline-table;
+    width: auto;
 }
 
 .dict-answer {
@@ -931,6 +967,10 @@ input {
     margin-bottom: 20px;
 }
 
+#myModal .modal-header {
+    padding-bottom: 2px;
+}
+
 #myModal .modal-body {
     display: flex;
     flex: 1;
@@ -940,7 +980,7 @@ input {
 #myModal .modal-selPhrase {
     display: block;
     padding: 3px;
-    margin-top: 12px;
+    margin-top: 2px;
     width: 100%;
 }
 
@@ -973,11 +1013,11 @@ input {
         display: flex;
         flex-wrap: wrap;
     }
-    .flex>.col-md-3 {
+    .flex>.col-lg-3 {
         flex: 1;
         max-width: 247px;
     }
-    .flex>.col-md-9 {
+    .flex>.col-lg-9 {
         flex: 1;
         width: auto;
     }
@@ -988,19 +1028,25 @@ input {
 
 /* TABLE ADJUSTMENTS (USED TO LIST TEXTS/WORDS) */
 
-table {
+.table {
     background-color: white;
     border-radius: 4px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
 }
 
-th,
-td {
-    vertical-align: middle !important;
+.table td, .table th {
+    line-height: inherit;
+    padding: 0.5rem;
+    vertical-align: middle;
 }
 
-td>label {
+.table td>label {
     margin-bottom: inherit;
+}
+
+.chkbox-selrow,
+#chkbox-selall {
+    vertical-align: middle;
 }
 
 .nopadding {
@@ -1012,12 +1058,33 @@ td>label {
 
 @media screen and (min-width: 992px) {
     .btn-upload {
-        margin-top: 25px;
+        margin-top: 29px;
     }
 }
 
 .btn-upload {
     width: 100%;
+}
+
+.btn-link {
+    box-shadow: none;
+    color: inherit;
+}
+
+.btn-link:hover,
+.btn-link:active, .btn-link.active,
+.btn-link:focus, .btn-link.focus {
+    text-decoration: none;
+    color: inherit;
+}
+
+.btn-flex {
+    width: 100%;
+}
+
+.form-group,
+.form-check {
+    padding-left: 0;
 }
 
 /* ADD TEXT */
@@ -1043,10 +1110,6 @@ td>label {
     border-left-color: #d9534f;
 }
 
-.form-group {
-    padding-left: 0;
-}
-
 #upload-text {
     margin-top: 10px;
 }
@@ -1055,24 +1118,10 @@ td>label {
     height: 257px;
 }
 
-#btn-fetch {
-    top: 12.5px;
-}
-
 #upload-txtfile-label {
     float: left;
     margin-top: 11px;
     margin-right: 10px;
-}
-
-.btn-static,
-.btn-static:active {
-    box-shadow: none;
-    background: inherit;
-}
-
-.form-row {
-    margin-right: -15px;
 }
 
 /* WORDS */
@@ -1169,18 +1218,6 @@ i.status_learned {
     }
 }
 
-/* ADD EBOOK */
-
-@media screen and (min-width: 992px) {
-    #btn-upload-epub {
-        margin-top: 25px;
-    }
-}
-
-#btn-upload-epub {
-    width: 100%;
-}
-
 /* SET DEFAULT LANGUAGE */
 
 #help-dictionary>ul,
@@ -1249,7 +1286,8 @@ div.blurry-background {
     margin-left: 30px;
 }
 
-.simple-text a, p > a {
+.simple-text a:not(.btn), 
+p > a:not(.btn) {
     color: #0275d8;
 }
 
@@ -1279,7 +1317,7 @@ div.blurry-background {
     margin-bottom: 25px;
 }
 
-.headerwrap .img-responsive {
+.headerwrap .img-fluid {
     margin: 0 auto;
 }
 

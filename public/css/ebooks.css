@@ -182,11 +182,10 @@ select {
 }
 
 #navigation h1 {
-    /* width: 200px; */
     font-size: 16px;
     font-weight: normal;
-    /* color: #fff; */
     margin-bottom: 10px;
+    margin-top: 7px;
     text-align: center;
 }
 

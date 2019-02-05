@@ -74,7 +74,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 
         echo $pagination->print('texts.php', '', $sort_by, $filter, $show_archived); // print pagination
     } else { // if there are no texts to show, print a message
-        echo '<div class="simple-text"><p>Your private library is empty. Check out some <a href="sources.php">popular sources</a> for this language.</p></div>';
+        echo '<p class="text-center">Your private library is empty. Check out some <a href="sources.php">popular sources</a> for this language.</p>';
     }
     
 }

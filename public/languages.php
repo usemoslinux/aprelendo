@@ -25,17 +25,17 @@ if (isset($_POST['submit'])) {                  // check if we need to save new 
 
     <div class="container mtb">
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-sm-12">
                 <ol class="breadcrumb">
-                    <li>
+                    <li class="breadcrumb-item">
                         <a href="texts.php">Home</a>
                     </li>
-                    <li>
+                    <li class="breadcrumb-item">
                         <a <?php echo isset($_GET['chg']) ? '' : 'class="active"'; ?> >Languages</a>
                     </li>
                     <?php 
                         if (isset($_GET['chg'])) {
-                            echo '<li><a class="active">' . ucfirst(Language::getLanguageName($lang->name)) . '</a></li>';    
+                            echo '<li class="breadcrumb-item active">' . ucfirst(Language::getLanguageName($lang->name)) . '</li>';    
                         }
                     ?>
                 </ol>
@@ -55,4 +55,6 @@ if (isset($_POST['submit'])) {                  // check if we need to save new 
         </div>
     </div>
 
+    <script src="js/languages.js"></script>
     <?php require_once('footer.php') ?>
+    

@@ -30,7 +30,7 @@ $(document).ready(function () {
     // ebooks (which are displayed inside an iframe)
     var $doc = $(parent.document); 
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
-    var $pagereader = $pagereader.length > 0 ? $pagereader : $('#text');
+    var $pagereader = $pagereader.length > 0 ? $pagereader : $('html');
 
     // load audio
     var txt = $('#text').text();
@@ -46,8 +46,8 @@ $(document).ready(function () {
         var $audio_player = $('#audioplayer');
         $audio_player.find('source').attr('src', e);
         $audio_player[0].load();
-        $('#audioplayer-loader').addClass('hidden');
-        $('#audioplayer-container').removeClass('hidden');
+        $('#audioplayer-loader').addClass('d-none');
+        $('#audioplayer-container').removeClass('d-none');
     })
     .fail(function (xhr, ajaxOptions, thrownError) {
         $('#audioplayer-loader').replaceWith('<div class="alert alert-danger">There was an unexpected error trying to create audio from this text. Try again later.</div>')
@@ -125,7 +125,6 @@ $(document).ready(function () {
     function setAddDeleteButtons() {
         var $btnremove = $(parent.document).find("#btnremove");
         var $btnadd = $(parent.document).find("#btnadd");
-        // var $btncancel = $("#btncancel");
         if ($selword.is(".learning, .new, .forgotten, .learned")) {
             if ($btnremove.is(":visible") === false) {
                 $btnremove.show();
@@ -543,7 +542,7 @@ $(document).ready(function () {
                         '<div class="input-group dict-input-group"><input type="text" class="dict" ' +
                         'style="width:' + width + 'px; line-height:' + line_height + ';" ' +
                         'maxlength="' + length + '" data-text="' + $elem.text() + '">' +
-                        '<span class="input-group-addon dict-answer hidden"></span></div>'
+                        '<span class="input-group-append dict-answer d-none"></span></div>'
                     );
             });
             $("html, body").animate({
@@ -590,13 +589,13 @@ $(document).ready(function () {
             $curinput.css("border-color", "yellowgreen");
             $curinput
                 .next("span")
-                .not(".hidden")
-                .addClass("hidden");
+                .not(".d-none")
+                .addClass("d-none");
         } else if ($.trim($curinput.val()) != "") {
             $curinput.css("border-color", "tomato");
             $curinput
                 .next("span")
-                .removeClass("hidden")
+                .removeClass("d-none")
                 .addClass("dict-wronganswer")
                 .text('[ ' + $curinput.attr("data-text") + ' ]');
         }

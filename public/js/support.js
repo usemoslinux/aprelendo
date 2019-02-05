@@ -67,7 +67,7 @@ $(document).ready(function () {
      * Empties form input fields
      */
     function emptyForm() {
-        $('#alert-msg').addClass('hidden');
+        $('#alert-msg').addClass('d-none');
         $('#name').val('');
         $('#email').val('');
         $('#message').val('');

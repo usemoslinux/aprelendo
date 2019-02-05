@@ -69,7 +69,7 @@
                             return $(this).attr("data-start") < video_time;
                         }).last();
                         $obj.removeClass('video-reading-line');
-                        if ($next_obj.length > 0) {
+                        if ($next_obj.length > 0 && !$next_obj.hasClass('video-reading-line')) {
                             $next_obj.addClass('video-reading-line');
                         }    
                     } else {
@@ -78,7 +78,7 @@
                 }, time_interval);
             }
 
-            updateTime(0);     
+            updateTime(500);     
         } else {
             video_paused = true;
         }

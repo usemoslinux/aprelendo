@@ -11,10 +11,10 @@ var tour = new Tour({
                     <div class='popover-content'></div> \
                     <div class='popover-navigation'> \
                         <div class='btn-group'> \
-                            <button class='btn btn-sm btn-default disabled' data-role='prev' disabled='' tabindex='-1'>« Prev</button> \
-                            <button class='btn btn-sm btn-default' data-role='next'>Next »</button>  \
+                            <button class='btn btn-sm btn-secondary disabled' data-role='prev' disabled='' tabindex='-1'>« Prev</button> \
+                            <button class='btn btn-sm btn-secondary' data-role='next'>Next »</button>  \
                         </div> \
-                        <button class='btn btn-sm btn-default' data-role='end'>Close</button> </div> \
+                        <button class='btn btn-sm btn-secondary' data-role='end'>Close</button> </div> \
                 </div>",
     steps: [
         {

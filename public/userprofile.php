@@ -4,20 +4,20 @@
 
 <div class="container mtb">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-sm-12">
             <ol class="breadcrumb">
-                <li>
+                <li class="breadcrumb-item">
                     <a href="texts.php">Home</a>
                 </li>
-                <li>
+                <li class="breadcrumb-item">
                     <a class="active">User profile</a>
                 </li>
             </ol>
             <div id="msgbox"></div>
             <form id="userprofile-form" class="" action="" method="post">
-                <div class="panel panel-default">
-                    <div class="panel-heading">User details</div>
-                    <div class="panel-body">
+                <div class="card">
+                    <div class="card-header">User details</div>
+                    <div class="card-body">
                         <div class="form-group">
                             <label for="username">Username:</label>
                             <input type="text" id="username" name="username" class="form-control" value="<?php echo $user->name;?>"
@@ -30,9 +30,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Password</div>
-                    <div class="panel-body">
+                <br/>
+                <div class="card">
+                    <div class="card-header">Password</div>
+                    <div class="card-body">
                         <div class="form-group">
                             <label for="password">Current password:</label>
                             <small>
@@ -57,9 +58,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Languages</div>
-                    <div class="panel-body">
+                <br/>
+                <div class="card">
+                    <div class="card-header">Languages</div>
+                    <div class="card-body">
                         <div class="form-group">
                             <label for="src_lang">Your native language:</label>
                             <select name="src_lang" class="form-control" id="src_lang">
@@ -86,10 +88,11 @@
                         </div>
                     </div>
                 </div>
+                <br/>
                 <div class="text-right">
-                    <button type="button" id="btn-delete-account" name="deleteaccount" class="btn btn-danger pull-left">Delete
+                    <button id="btn-delete-account" name="deleteaccount" class="btn btn-danger float-left">Delete
                         Account</button>
-                    <a type="button" id="cancelbtn" name="cancel" class="btn btn-static" onclick="window.location='/'">Cancel</a>
+                    <button id="cancelbtn" name="cancel" class="btn btn-link" onclick="window.location='/'">Cancel</a>
                     <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
                 </div>
             </form>
@@ -112,7 +115,7 @@
                 <p>Also, all the files (e.g., epub files) you uploaded to our servers will be deleted, as well as your word list and your private and shared texts libraries. This applies to all the languages you were learning using Aprelendo.</p>
             </div>
             <div class="modal-footer">
-            <button id="btn-cancel" type="button" data-dismiss="modal" class="btn btn-static pull-left cancel-btn">Cancel</button>
+            <button id="btn-cancel" type="button" data-dismiss="modal" class="btn btn-static float-left cancel-btn">Cancel</button>
                 <button id="btn-confirm-delete-account" type="button" data-dismiss="modal" class="btn btn-danger">Delete Account</button>
             </div>
         </div>

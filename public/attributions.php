@@ -15,17 +15,17 @@ if (!$user->isLoggedIn()) {
 
 <div class="container mtb">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-sm-12">
             <ol class="breadcrumb">
-                <li>
+                <li class="breadcrumb-item">
                     <a href="index.php">Home</a>
                 </li>
-                <li>
+                <li class="breadcrumb-item">
                     <a class="active">Attributions</a>
                 </li>
             </ol>
             <div class="row flex simple-text">
-                <div class="col-xs-12">
+                <div class="col-sm-12">
                     <p>Aprelendo was built using the following free and open source tools:</p>
                     <ul>
                         <li>

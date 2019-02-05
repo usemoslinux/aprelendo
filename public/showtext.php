@@ -13,16 +13,14 @@ require_once(APP_ROOT . 'includes/checklogin.php'); // check if user is logged i
     <title>Aprelendo</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
     <!-- Custom styles for this template -->
     <link href="css/styles.css" rel="stylesheet">
     
     <!-- JQuery & Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     
 </head>
 
@@ -70,7 +68,7 @@ try {
 >
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12 col-md-6 col-md-offset-3">
+                <div class="col-sm-12 col-lg-6 offset-lg-3">
                 <?php
                     echo $reader->showText();
                     if ($is_shared) {
@@ -82,27 +80,10 @@ try {
             </div>
         </div>
 
-        <!-- Modal window -->
-        <div id="myModal" class="modal fade" data-keyboard="true" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button id="btnremove" type="button" data-dismiss="modal" class="btn btn-danger">Delete</button>
-                        <button id="btnadd" type="button" class="btn btn-primary btn-success pull-right add-btn" data-dismiss="modal">Add</button>
-                        <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-static pull-right cancel-btn">Cancel</button>
-                        <select class="modal-selPhrase" name="selPhrase" id="selPhrase">
-                            <option value="translate_sentence">Translate sentence</option>
-                        </select>
-                    </div>
-                    <div class="modal-body" id="definitions">
-                        <iframe id="dicFrame" style="width:100%;border:none;"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php 
+        require_once(PUBLIC_PATH . 'showdicmodal.php'); // load dictionary modal window
+        ?>
 
-        <script src='js/voicerss/jquery.voicerss-tts.min.js'></script>
         <script src="js/showtext.js"></script>
 
 </body>

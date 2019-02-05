@@ -47,7 +47,7 @@ $(document).ready(function () {
    */
   function showError(error_msg) {
     $('#error-msg').text(error_msg)
-      .removeClass('hidden')
+      .removeClass('d-none')
       .addClass('alert alert-danger');
     $(window).scrollTop(0);
   } // end of showError

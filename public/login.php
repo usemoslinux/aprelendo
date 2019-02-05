@@ -14,15 +14,16 @@
 
 <?php require_once 'simpleheader.php'; ?>
 
-<div class="container mtb pattern-wallpaper">
+<div class="pattern-wallpaper">
+<div class="container mtb">
   <div class="row">
-    <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+    <div class="col-sm-12 col-md-10 offset-md-1 col-lg-6 offset-lg-3">
       <section>
         <header>
-          <h1 class="text-center">Sign in</h1>
+          <h3 class="text-center">Sign in</h3>
         </header>
         <br/>
-        <div id="error-msg" class="hidden"></div>
+        <div id="error-msg" class="d-none"></div>
         <form action="" id="form_login">
           <div class="form-group">
             <label for="username">Username:</label>
@@ -45,6 +46,8 @@
     </div>
   </div>
 </div>
+</div>
+
 
 <?php require_once 'footer.php'?>
 

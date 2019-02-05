@@ -69,7 +69,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 
         echo $pagination->print('texts.php', '', $sort_by, $filter); // print pagination
     } else { // if there are no texts to show, print a message
-        echo '<p>There are no shared texts yet. Be the first to add one!</p>';
+        echo '<p class="text-center">There are no shared texts yet. Be the first to add one!</p>';
     }
     
 }

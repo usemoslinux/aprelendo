@@ -19,7 +19,7 @@ if ($user->isLoggedIn()) {
     <div class="blurry-background">
         <div class="container">
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-sm-12">
                     <h1>Learn foreign languages<br/>by reading<br/> your favorite texts</h1>
                     <h5>Want to know more about our method? We call it
                         <a href="totalreading.php">
@@ -33,7 +33,7 @@ if ($user->isLoggedIn()) {
         </div>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-xs-4 col-md-2">
+                <div class="col-sm-4 col-lg-2">
                     <a href="register.php?tolang=english">
                         <span class="flag-icon">
                             <img src="img/flags/en.svg" alt="English" class="flag-icon">
@@ -41,7 +41,7 @@ if ($user->isLoggedIn()) {
                         </span>
                     </a>
                 </div>
-                <div class="col-xs-4 col-md-2">
+                <div class="col-sm-4 col-lg-2">
                     <a href="register.php?tolang=spanish">
                         <span class="flag-icon">
                             <img src="img/flags/es.svg" alt="Spanish" class="flag-icon">
@@ -49,7 +49,7 @@ if ($user->isLoggedIn()) {
                         </span>
                     </a>
                 </div>
-                <div class="col-xs-4 col-md-2">
+                <div class="col-sm-4 col-lg-2">
                     <a href="register.php?tolang=portuguese">
                         <span class="flag-icon">
                             <img src="img/flags/pt.svg" alt="Portuguese" class="flag-icon">
@@ -57,7 +57,7 @@ if ($user->isLoggedIn()) {
                         </span>
                     </a>
                 </div>
-                <div class="col-xs-4 col-md-2">
+                <div class="col-sm-4 col-lg-2">
                     <a href="register.php?tolang=french">
                         <span class="flag-icon">
                             <img src="img/flags/fr.svg" alt="French" class="flag-icon">
@@ -65,7 +65,7 @@ if ($user->isLoggedIn()) {
                         </span>
                     </a>
                 </div>
-                <div class="col-xs-4 col-md-2">
+                <div class="col-sm-4 col-lg-2">
                     <a href="register.php?tolang=italian">
                         <span class="flag-icon">
                             <img src="img/flags/it.svg" alt="Italian" class="flag-icon">
@@ -73,7 +73,7 @@ if ($user->isLoggedIn()) {
                         </span>
                     </a>
                 </div>
-                <div class="col-xs-4 col-md-2">
+                <div class="col-sm-4 col-lg-2">
                     <a href="register.php?tolang=german">
                         <span class="flag-icon">
                             <img src="img/flags/de.svg" alt="German" class="flag-icon">
@@ -95,7 +95,7 @@ if ($user->isLoggedIn()) {
 <div id="service" class="service">
     <div class="container">
         <div class="row centered">
-            <div class="col-md-4">
+            <div class="col-lg-4">
                 <i class="fab fa-osi"></i>
                 <h4>Open source</h4>
                 <p>Aprelendo is open source software, meaning you can download and fiddle with its source code. This allows us to be super transparent and build a community of users and developers. With some technical knowledge, you can even build your own Aprelendo environment.</p>
@@ -104,7 +104,7 @@ if ($user->isLoggedIn()) {
                     <a href="https://github.com/usemoslinux/aprelendo" target="_blank" rel="noopener noreferrer" class="btn btn-theme">More Info</a>
                 </p>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4">
                 <i class="fas fa-book-open"></i>
                 <h4>Total Reading</h4>
                 <p>Immersion is the best way to learn a language, but few -if any- online tools allow you to create an immersive environement. Total reading is a system developed to achieve this goal, from the comfort of your home and with enough flexibility to adapt to your schedules and needs.</p>
@@ -113,7 +113,7 @@ if ($user->isLoggedIn()) {
                     <a href="totalreading.php" class="btn btn-theme">More Info</a>
                 </p>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4">
                 <i class="fas fa-mobile-alt"></i>
                 <h4>Use it on any device</h4>
                 <p>You can use Aprelendo on mobile and desktop devices as long as they have an Internet connection. We
@@ -136,11 +136,11 @@ if ($user->isLoggedIn()) {
 <div class="hiw">
     <div class="container">
         <div class="row">
-            <h1 id="hiw">How it works</h1>
-            <div class="col-lg-6">
-                <img class="img-responsive" src="img/backgrounds/pattern-wallpaper.png" alt="How it works">
+            <h1 id="hiw" class="col-12">How it works</h1>
+            <div class="col-xl-6">
+                <img class="img-fluid" src="img/backgrounds/pattern-wallpaper.png" alt="How it works">
             </div>
-            <div class="col-lg-6">
+            <div class="col-xl-6">
                 <ol>
                     <li>Add texts to your Aprelendo personal library using our extensions. Premium users can also
                         upload Youtube videos and ebooks.</li>
@@ -159,8 +159,8 @@ if ($user->isLoggedIn()) {
 <div class="testimonials">
     <div id="testimonials" class="container">
         <div class="row">
-            <h1 id="testimonials">What are people saying?</h1>
-            <div class="left col-lg-6">
+            <h1 id="testimonials" class="col-12">What are people saying?</h1>
+            <div class="left col-xl-6">
                 <blockquote class="quote">
                     <p>
                         Aprelendo is probably my top resource now for learning new languages.
@@ -169,7 +169,7 @@ if ($user->isLoggedIn()) {
                     <footer>Alex Rawlings - Language Teacher</footer>
                 </blockquote>
             </div>
-            <div class="right col-lg-6">
+            <div class="right col-xl-6">
                 <blockquote class="quote">
                     <p>
                         Aprelendo is one of the best language learning tools I've ever used. It is especially good for
@@ -180,7 +180,7 @@ if ($user->isLoggedIn()) {
                     <footer>Ron Gullekson - Language Surfer</footer>
                 </blockquote>
             </div>
-            <div class="left col-lg-6">
+            <div class="left col-xl-6">
                 <blockquote class="quote">
                     <p>
                         It is difficult to give something that is so young a five star rating, but this is already one
@@ -191,7 +191,7 @@ if ($user->isLoggedIn()) {
                     <footer>Joseph Heavner - Quora </footer>
                 </blockquote>
             </div>
-            <div class="right col-lg-6">
+            <div class="right col-xl-6">
                 <blockquote class="quote">
                     <p>
                         This is one of the most fantastic language learning tools I have ever encountered.
@@ -208,10 +208,10 @@ if ($user->isLoggedIn()) {
 
 <!-- PRICING -->
 <div class="pricing">
-    <h1 id="pricing">Pricing</h1>
+    <h1 id="pricing" class="col-12">Pricing</h1>
     <div class="container">
         <div class="row">
-            <div class="col-md-4 col-md-offset-2 col-sm-6">
+            <div class="col-lg-4 offset-lg-2 col-sm-6">
                 <div class="pricingTable">
                     <span class="icon">
                         <i class="fa fa-globe"></i>
@@ -225,6 +225,7 @@ if ($user->isLoggedIn()) {
                         <li>Unlimited videos</li>
                         <li>Unlimited words</li>
                         <li>Web browser Extensions</li>
+                        <li>TTS support (1 text p/day max.)</li>
                         <li><del>RSS support</del></li>
                         <li><del>Ebook support</del></li>
                         <li><del>Export words</del></li>
@@ -232,7 +233,7 @@ if ($user->isLoggedIn()) {
                     <a href="#" class="pricingTable-signup">Sign Up</a>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6">
+            <div class="col-lg-4 col-sm-6">
                 <div class="pricingTable">
                     <span class="icon">
                         <i class="fa fa-briefcase"></i>
@@ -246,6 +247,7 @@ if ($user->isLoggedIn()) {
                         <li>Unlimited videos</li>
                         <li>Unlimited words</li>
                         <li>Web browser Extensions</li>
+                        <li>TTS support (3 texts p/day max.)</li>
                         <li>Up to 3 RSS feeds</li>
                         <li>Ebook support (&lt;2 MB)</li>
                         <li>Export words (CSV)</li>

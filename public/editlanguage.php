@@ -6,9 +6,9 @@
     <input type="hidden" name="id" value="<?php echo $lang->id; ?>">
     <input type="hidden" name="language" class="form-control" value="<?php echo $lang->name; ?>">
     
-    <div class="panel panel-default">
-        <div class="panel-heading">Dictionary & Translator</div>
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-header">Dictionary & Translator</div>
+        <div class="card-body">
             <div class="form-group">
                 <label for="dictionaryURI">Dictionary URI:</label>
                 <input type="url" name="dictionaryURI" class="form-control" value="<?php echo $lang->dictionary_uri; ?>">
@@ -35,11 +35,11 @@
             </div>
         </div>
     </div>
-
+    <br/>
     <fieldset <?php echo $is_premium_user ? '' : 'disabled'; ?> >
-    <div class="panel panel-default">
-        <div class="panel-heading">RSS feeds <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?></div>
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-header">RSS feeds <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?></div>
+        <div class="card-body">
             <div class="form-group">
                 <label for="rssfeedURI1">RSS feed URI 1:</label>
                 <input type="url" name="rssfeedURI1" class="form-control" value="<?php echo $lang->rss_feed_1_uri; ?>">
@@ -55,11 +55,11 @@
         </div>
     </div>
     </fieldset>
-
+    <br/>
     <fieldset <?php echo $is_premium_user ? '' : 'disabled'; ?> >
-    <div class="panel panel-default">
-        <div class="panel-heading">Frequency list <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?></div>
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-header">Frequency list <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?></div>
+        <div class="card-body">
             <div class="form-group">
                 <label for="freq-list">Underline 5000 most used words:</label>
                 <select name="freq-list" id="freq-list" class="form-control">
@@ -70,9 +70,9 @@
         </div>
     </div>
     </fieldset>
-
+    <br/>
     <div class="text-right">
-        <a type="button" id="cancelbtn" name="cancel" class="btn btn-static" onclick="window.location='texts.php'">Cancel</a>
+        <button id="cancelbtn" name="cancel" class="btn btn-link" onclick="window.location='texts.php'">Cancel</button>
         <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
     </div>
 </form>

@@ -1,5 +1,5 @@
 <div class="row flex">
-<div class="col-xs-12">
+<div class="col-sm-12">
 <?php 
 require_once('../includes/dbinit.php'); // connect to database
 require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks if user is logged in
@@ -21,9 +21,9 @@ function printSources($sources) {
 
     foreach ($sources as $source) {
         $html .= 
-        "<a href='//{$source['popsources_domain']}' target='_blank' class='list-group-item'>
-            <span class='badge'>{$source['popsources_times_used']}</span> 
+        "<a href='//{$source['popsources_domain']}' target='_blank' class='list-group-item d-flex justify-content-between align-items-center list-group-item-action'>
             {$source['popsources_domain']}
+            <span class='badge badge-secondary badge-pill'>{$source['popsources_times_used']}</span> 
         </a>";
     }
 
