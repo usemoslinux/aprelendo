@@ -20,14 +20,14 @@ if ($user->isLoggedIn()) {
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1>Learn foreign languages<br/>by reading<br/> your favorite texts</h1>
+                    <h1>Learn foreign languages<br />by reading<br /> your favorite texts</h1>
                     <h5>Want to know more about our method? We call it
                         <a href="totalreading.php">
                             <u>total reading.</u>
                         </a></h5>
-                    <br/>
+                    <br />
                     <h4>Select the language you want to learn to create an account</h4>
-                    <br/>
+                    <br />
                 </div>
             </div>
         </div>
@@ -98,18 +98,23 @@ if ($user->isLoggedIn()) {
             <div class="col-lg-4">
                 <i class="fab fa-osi"></i>
                 <h4>Open source</h4>
-                <p>Aprelendo is open source software, meaning you can download and fiddle with its source code. This allows us to be super transparent and build a community of users and developers. With some technical knowledge, you can even build your own Aprelendo environment.</p>
+                <p>Aprelendo is open source software, meaning you can download and fiddle with its source code. This
+                    allows us to be super transparent and build a community of users and developers. With some
+                    technical knowledge, you can even build your own Aprelendo environment.</p>
                 <p>
-                    <br/>
-                    <a href="https://github.com/usemoslinux/aprelendo" target="_blank" rel="noopener noreferrer" class="btn btn-theme">More Info</a>
+                    <br />
+                    <a href="https://github.com/usemoslinux/aprelendo" target="_blank" rel="noopener noreferrer" class="btn btn-theme">More
+                        Info</a>
                 </p>
             </div>
             <div class="col-lg-4">
                 <i class="fas fa-book-open"></i>
                 <h4>Total Reading</h4>
-                <p>Immersion is the best way to learn a language, but few -if any- online tools allow you to create an immersive environement. Total reading is a system developed to achieve this goal, from the comfort of your home and with enough flexibility to adapt to your schedules and needs.</p>
+                <p>Immersion is the best way to learn a language, but few -if any- online tools allow you to create an
+                    immersive environement. Total reading is a system developed to achieve this goal, from the comfort
+                    of your home and with enough flexibility to adapt to your schedules and needs.</p>
                 <p>
-                    <br/>
+                    <br />
                     <a href="totalreading.php" class="btn btn-theme">More Info</a>
                 </p>
             </div>
@@ -121,7 +126,7 @@ if ($user->isLoggedIn()) {
                     addons for Firefox and Chrome to add texts to your library with the click of a mouse. Bookmarklets
                     are also available for those who prefer a browser agnostic solution.</p>
                 <p>
-                    <br/>
+                    <br />
                     <a href="extensions.php" class="btn btn-theme">More Info</a>
                 </p>
             </div>
@@ -165,7 +170,7 @@ if ($user->isLoggedIn()) {
                     <p>
                         Aprelendo is probably my top resource now for learning new languages.
                     </p>
-                    <br/>
+                    <br />
                     <footer>Alex Rawlings - Language Teacher</footer>
                 </blockquote>
             </div>
@@ -176,7 +181,7 @@ if ($user->isLoggedIn()) {
                         helping you get past the beginner
                         levels of a language and into the intermediate and advanced stages.
                     </p>
-                    <br/>
+                    <br />
                     <footer>Ron Gullekson - Language Surfer</footer>
                 </blockquote>
             </div>
@@ -207,57 +212,80 @@ if ($user->isLoggedIn()) {
 <!-- testimonials -->
 
 <!-- PRICING -->
-<div class="pricing">
-    <h1 id="pricing" class="col-12">Pricing</h1>
+<section class="pricing py-5">
     <div class="container">
         <div class="row">
-            <div class="col-lg-4 offset-lg-2 col-sm-6">
-                <div class="pricingTable">
-                    <span class="icon">
-                        <i class="fa fa-globe"></i>
-                    </span>
-                    <div class="pricingTable-header">
-                        <h3 class="title">Free</h3>
-                        <span class="price-value">Free</span>
+            <!-- Free Tier -->
+            <div class="col-lg-4">
+                <div class="card mb-5 mb-lg-0">
+                    <div class="card-body">
+                        <h5 class="card-title text-muted text-uppercase text-center">Free</h5>
+                        <h6 class="card-price text-center">$0<span class="period">/month</span></h6>
+                        <hr>
+                        <ul class="fa-ul">
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited videos</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited words</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Web browser extensions</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>TTS support
+                                (1 text p/day)</li>
+                            <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Up to 3 RSS
+                                feeds</li>
+                            <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Ebook support
+                                (&lt;2 MB)</li>
+                            <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Export words
+                                (CSV)</li>
+                        </ul>
+                        <a href="#" class="btn btn-block btn-primary text-uppercase">Sign up</a>
                     </div>
-                    <ul class="pricing-content">
-                        <li>Unlimited texts</li>
-                        <li>Unlimited videos</li>
-                        <li>Unlimited words</li>
-                        <li>Web browser Extensions</li>
-                        <li>TTS support (1 text p/day max.)</li>
-                        <li><del>RSS support</del></li>
-                        <li><del>Ebook support</del></li>
-                        <li><del>Export words</del></li>
-                    </ul>
-                    <a href="#" class="pricingTable-signup">Sign Up</a>
                 </div>
             </div>
-            <div class="col-lg-4 col-sm-6">
-                <div class="pricingTable">
-                    <span class="icon">
-                        <i class="fa fa-briefcase"></i>
-                    </span>
-                    <div class="pricingTable-header">
-                        <h3 class="title">Premium</h3>
-                        <span class="price-value">$5/month</span>
+            <!-- Plus Tier -->
+            <div class="col-lg-4">
+                <div class="card mb-5 mb-lg-0">
+                    <div class="card-body">
+                        <h5 class="card-title text-muted text-uppercase text-center">Premium</h5>
+                        <h6 class="card-price text-center">$10<span class="period">/month</span></h6>
+                        <hr>
+                        <ul class="fa-ul">
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited videos</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited words</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Web browser extensions</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>TTS support (3 texts p/day)</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Up to 3 RSS feeds</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Ebook support (&lt;2 MB)</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Export words (CSV)</li>
+                        </ul>
+                        <a href="#" class="btn btn-block btn-primary text-uppercase">Sign up</a>
                     </div>
-                    <ul class="pricing-content">
-                        <li>Unlimited texts</li>
-                        <li>Unlimited videos</li>
-                        <li>Unlimited words</li>
-                        <li>Web browser Extensions</li>
-                        <li>TTS support (3 texts p/day max.)</li>
-                        <li>Up to 3 RSS feeds</li>
-                        <li>Ebook support (&lt;2 MB)</li>
-                        <li>Export words (CSV)</li>
-                    </ul>
-                    <a href="#" class="pricingTable-signup">Sign Up</a>
+                </div>
+            </div>
+            <!-- Pro Tier -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-muted text-uppercase text-center">Premium</h5>
+                        <h6 class="card-price text-center">$90<span class="period">/year</span></h6>
+                        <hr>
+                        <ul class="fa-ul">
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited videos</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited words</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Web browser extensions</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>TTS support (3 texts p/day)</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Up to 3 RSS feeds</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Ebook support (&lt;2 MB)</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Export words (CSV)</li>
+                        </ul>
+                        <a href="#" class="btn btn-block btn-primary text-uppercase">Sign up</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
 
 <script src="js/register.js"></script>
 <?php require_once 'footer.php'?>

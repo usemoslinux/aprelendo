@@ -32,24 +32,24 @@ $(document).ready(function () {
       if(data.error_msg == null) {
         window.location.replace('texts.php');
       } else {
-        showError(data.error_msg);
+        showMessage(data.error_msg, 'alert-danger');
       }
     })
     .fail(function (xhr, ajaxOptions, thrownError) {
-      showError('Oops! There was an unexpected error when trying to log you in. Please try again later.');
+      showMessage('Oops! There was an unexpected error when trying to log you in. Please try again later.', 'alert-danger');
     }); // end of ajax
   }); // end of #form_login.on.submit
 
-
   /**
-   * Shows custom error message in the top section of the screen
-   * @param {string} error_msg 
-   */
-  function showError(error_msg) {
-    $('#error-msg').text(error_msg)
-      .removeClass('d-none')
-      .addClass('alert alert-danger');
-    $(window).scrollTop(0);
-  } // end of showError
+     * Shows custom message in the top section of the screen
+     * @param {string} html
+     * @param {string} type 
+     */
+    function showMessage(html, type) {
+        $('#error-msg').text(html)
+            .removeClass()
+            .addClass('alert ' + type);
+        $(window).scrollTop(0);
+    } // end of showMessage
 
 });

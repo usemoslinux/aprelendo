@@ -43,7 +43,7 @@ $(document).ready(function() {
         })
         .done(function (data) {
             if(typeof data != 'undefined') {
-                showError(data.error_msg);
+                showMessage(data.error_msg, 'alert-danger');
             } else {
                 if (form_data.get('shared-text') == 'on') {
                     window.location.replace('sharedtexts.php');
@@ -53,21 +53,22 @@ $(document).ready(function() {
             }
         })
         .fail(function (xhr, ajaxOptions, thrownError) {
-            showError('Oops! There was an unexpected error when uploading this text.');
+            showMessage('Oops! There was an unexpected error when uploading this text.', 'alert-danger');
         }); // end of ajax
     }); // end of #form-addtext.on.submit
     
     
     /**
-    * Shows custom error message in the top section of the screen
-    * @param {string} error_msg 
-    */
-    function showError(error_msg) {
-        $('#alert-error-msg').html(error_msg)
-        .removeClass('d-none')
-        .addClass('alert alert-danger');
+     * Shows custom message in the top section of the screen
+     * @param {string} html
+     * @param {string} type 
+     */
+    function showMessage(html, type) {
+        $('#alert-msg').html(html)
+            .removeClass()
+            .addClass('alert ' + type);
         $(window).scrollTop(0);
-    } // end of showError
+    } // end of showMessage
     
     /**
      * Makes #btn-upload-audio (button) behave like #audio-uri (input).
@@ -86,8 +87,8 @@ $(document).ready(function() {
         var $input_audio = $(this);
         var max_file_size = $('#form-addtext').attr('data-premium') == '0' ? 2097152 : 10485760;
         if ($input_audio[0].files[0].size > max_file_size) {
-            showError('This file is bigger than the allowed limit (' + max_file_size / 1048576 + ' MB). ' +
-                'Notice that if f you decide to continue the text will be uploaded without an audio file.');
+            showMessage('This file is bigger than the allowed limit (' + max_file_size / 1048576 + ' MB). ' +
+                'Notice that if f you decide to continue the text will be uploaded without an audio file.', 'alert-danger');
             $input_audio.val('');
         }
     }); // end of #audio-uri.on.change
@@ -102,7 +103,7 @@ $(document).ready(function() {
         reader.onload = (function(e) {
             var text = e.target.result;
             if (text.length > 20000) {
-                showError('This file has more than 20000 characters. Please try again with a shorter one.')
+                showMessage('This file has more than 20000 characters. Please try again with a shorter one.', 'alert-danger')
             } else {
                 $('#text').val($.trim(text));  
             }

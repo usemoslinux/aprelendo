@@ -21,7 +21,7 @@ $(document).ready(function () {
     $(document).on('submit', '#form_forgot_password', function (e) {
         e.preventDefault();
         var form_data = $('#form_forgot_password').serialize();
-        showMsg('Your request is being processed. Please wait...', 'alert-info');
+        showMessage('Your request is being processed. Please wait...', 'alert-info');
 
         $.ajax({
                 type: "post",
@@ -30,20 +30,20 @@ $(document).ready(function () {
             })
             .done(function (data) {
                 if (data.error_msg == null) {
-                    showMsg('An email was sent. Access the link and create a new password.', 'alert-success');
+                    showMessage('An email was sent. Access the link and create a new password.', 'alert-success');
                 } else {
-                    showMsg(data.error_msg, 'alert-danger');
+                    showMessage(data.error_msg, 'alert-danger');
                 }
             })
             .fail(function (xhr, ajaxOptions, thrownError) {
-                showMsg('Oops! There was an unexpected error when trying to register you. Please try again later.', 'alert-danger');
+                showMessage('Oops! There was an unexpected error when trying to register you. Please try again later.', 'alert-danger');
             });
     });
 
     $(document).on('submit', '#form_create_new_password', function (e) {
         e.preventDefault();
         var form_data = $('#form_create_new_password').serialize();
-        showMsg('Your request is being processed. Please wait...', 'alert-info');
+        showMessage('Your request is being processed. Please wait...', 'alert-info');
 
         // 1. passwords entered by user are identical
         if ($('#pass1').val() === $('#pass2').val()) {
@@ -54,31 +54,33 @@ $(document).ready(function () {
             })
             .done(function (data) {
                 if (data.error_msg == null) {
-                    showMsg('Your new password was successfully saved!<br/>You will soon be redirected to the login page', 'alert-success');
+                    showMessage('Your new password was successfully saved!<br/>You will soon be redirected to the login page', 'alert-success');
                     setTimeout(function() {window.location.replace("https://www.aprelendo.com/login.php")}, 5000);
                 } else {
-                    showMsg(data.error_msg, 'alert-danger');
+                    showMessage(data.error_msg, 'alert-danger');
                 }
             })
             .fail(function (xhr, ajaxOptions, thrownError) {
-                showMsg('Oops! There was an unexpected error when trying to save your new password. Please try again later.', 'alert-danger');
+                showMessage('Oops! There was an unexpected error when trying to save your new password. Please try again later.', 'alert-danger');
             });    
         } else { // 2. passwords entered by user are not identical 
-            showMsg('The passwords you entered are not identical. Please try again.', 'alert-danger');
+            showMessage('The passwords you entered are not identical. Please try again.', 'alert-danger');
             $('#pass1').val('');
             $('#pass2').val('');
         }
         
     });
 
+    
     /**
-     * Shows custom error message in the top section of the screen
-     * @param {string} msg 
+     * Shows custom message in the top section of the screen
+     * @param {string} html
+     * @param {string} type 
      */
-    function showMsg(msg, msg_type) {
-        $('#alert_msg').html(msg)
+    function showMessage(html, type) {
+        $('#alert-msg').html(html)
             .removeClass()
-            .addClass('alert ' + msg_type);
+            .addClass('alert ' + type);
         $(window).scrollTop(0);
-    } // end of showError
+    } // end of showMessage
 });

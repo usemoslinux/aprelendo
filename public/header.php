@@ -110,6 +110,7 @@ $learning_lang_full = ucfirst(Language::getLanguageName($user->learning_lang));
                             <a href="preferences.php" class="dropdown-item">Preferences</a>
                             <div class="dropdown-divider"></div>
                             <a href="logout.php" class="dropdown-item">Logout</a>
+                        </div>
                     </li>
                 </ul>
             </div>

@@ -1,4 +1,3 @@
-
 <?php
 require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks if user is logged in
 

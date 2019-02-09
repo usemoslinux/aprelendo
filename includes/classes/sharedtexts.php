@@ -162,6 +162,22 @@ class SharedTexts extends Texts
             }
         }
     }
+
+    /**
+     * Checks if text was already exists in database, to avoid duplicate entries.
+     * It does this by checking the source url of the text to be added.
+     *
+     * @param string $source_url
+     * @return boolean
+     */
+    public function isAlreadyinDB($source_url)
+    {
+        $sql = "SELECT 1
+                FROM $this->table
+                WHERE {$this->cols['sourceURI']} = '$source_url'";
+            
+        return ($result = $this->con->query($sql)) && ($result->num_rows > 0);
+    }
 }
 
 

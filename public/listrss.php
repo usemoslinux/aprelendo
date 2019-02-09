@@ -69,7 +69,7 @@ function printRSSFeed($feed, $groupindex) {
 
                 $html .= "<div class='card'>
                             <div class='card-header' id='$heading_id'>
-                                <button id='$label_id' class='btn btn-link collapsed' data-toggle='collapse' data-target='#$item_id' data-pubdate='$art_date' data-author='$art_author' data-src='$art_src' aria-expanded='false' aria-controls='$item_id'>
+                                <button id='$label_id' class='btn btn-link collapsed entry-info' data-toggle='collapse' data-target='#$item_id' data-pubdate='$art_date' data-author='$art_author' data-src='$art_src' aria-expanded='false' aria-controls='$item_id'>
                                     <i class='fas fa-chevron-right'></i>
                                     $art_title</a>
                                 </button>
@@ -77,13 +77,13 @@ function printRSSFeed($feed, $groupindex) {
                             <div id='$item_id' class='collapse' aria-labelledby='$label_id' data-parent='#$accordion_id'>
                                 <div class='card-body'>";
 
-                $html .= strip_tags($art_content, '<p>');
+                $html .= '<div class="entry-text">' . strip_tags($art_content, '<p>') . '</div>';
                 
                 $html .= "<hr>
                           <div>
-                            <button type='button' class='btn btn-secondary'>Edit</button>
-                            <button type='button' class='btn btn-secondary'>Add & Read now</button>
-                            <button type='button' class='btn btn-secondary'>Add & Read later</button>
+                            <button type='button' class='btn btn-secondary btn-edit'>Edit</button>
+                            <button type='button' class='btn btn-secondary btn-readnow'>Add & Read now</button>
+                            <button type='button' class='btn btn-secondary btn-readlater'>Add & Read later</button>
                             <span class='message'></span>
                           </div></div></div></div>";
 

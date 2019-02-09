@@ -204,13 +204,12 @@ class Reader extends Text
         
         // 1. colorize phrases & words that are being reviewed
         $result = $this->con->query("SELECT word FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND wordStatus>0 ORDER BY isPhrase ASC");
-        // <[^>]*>(*SKIP)(*F)|\bpablo\b
+        
         if ($result) {
             while ($row = $result->fetch_assoc()) {
                 $phrase = $row['word'];
                 
                 $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
-                // $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                 "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
             }
             

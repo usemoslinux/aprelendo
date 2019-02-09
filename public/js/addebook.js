@@ -33,10 +33,10 @@ $(document).ready(function () {
         var ext = file_name.pop().toLowerCase();
 
         if ($epub_file[0].files[0].size > 2097152) {
-            showError('This file is bigger than the allowed limit (2 MB). Please try again.');
+            showMessage('This file is bigger than the allowed limit (2 MB). Please try again.', 'alert-danger');
             $epub_file.val('');
         } else if (ext != 'epub') {
-            showError('Invalid file extension. Only .epub files are allowed.');
+            showMessage('Invalid file extension. Only .epub files are allowed.', 'alert-danger');
             $epub_file.val('');
         } else {
             if ($('#title').val() == '') {
@@ -75,7 +75,7 @@ $(document).ready(function () {
             })
             .done(function (data) {
                 if (typeof data.error_msg !== 'undefined' && data.error_msg.length != 0) {
-                    showError(data.error_msg);
+                    showMessage(data.error_msg, 'alert-danger');
                 } else {
                     $progressbar.width('66%');
                     $progressbar.text('Validating epub file structure...');
@@ -102,27 +102,27 @@ $(document).ready(function () {
                             }
                         })
                         .fail(function (xhr, ajaxOptions, thrownError) {
-                            showError('Oops2! There was an unexpected error uploading this text.');
+                            showMessage('Oops2! There was an unexpected error uploading this text.', 'alert-danger');
                         });
                 }
             })
             .fail(function (xhr, ajaxOptions, thrownError) {
-                showError('Oops1! There was an unexpected error uploading this text.');
+                showMessage('Oops! There was an unexpected error uploading this text.', 'alert-danger');
             }); // end of ajax
     }); // end of #form-addebook.on.submit
 
 
     /**
-     * Shows custom error message in the top section of the screen
-     * @param {string} error_msg 
+     * Shows custom message in the top section of the screen
+     * @param {string} html
+     * @param {string} type 
      */
-    function showError(error_msg) {
-        $('#upload-progress-bar').parent().addClass('d-none');
-        $('#alert-error-msg').html(error_msg)
-            .removeClass('d-none')
-            .addClass('alert alert-danger');
+    function showMessage(html, type) {
+        $('#alert-msg').html(html)
+            .removeClass()
+            .addClass('alert ' + type);
         $(window).scrollTop(0);
-    } // end of showError
+    } // end of showMessage
 
 
     /**

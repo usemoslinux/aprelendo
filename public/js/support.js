@@ -45,7 +45,7 @@ $(document).ready(function () {
                 }
             })
             .fail(function (xhr, ajaxOptions, thrownError) {
-                showError('Oops! There was an unexpected error uploading this text.');
+                showMessage('Oops! There was an unexpected error uploading this text.');
             }); // end of ajax
     }); // end of #form-support.on.submit
 

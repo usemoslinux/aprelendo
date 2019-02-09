@@ -45,7 +45,7 @@ require_once('header.php');
                 </li>
             </ol>
             <div class="alert alert-info"><i class="fas fa-info-circle"></i> Ebooks will remain in your "private" library. Therefore, you will be the only one with access to them.</div>
-            <div id="alert-error-msg" class="d-none"></div>
+            <div id="alert-msg" class="d-none"></div>
             <div class="progress d-none">
                 <div id="upload-progress-bar" class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" role="progressbar"
                 aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
@@ -75,7 +75,7 @@ require_once('header.php');
                 </div>
                 <div class="form-row">
                     <div class="form-group col-sm-12 text-right">
-                    <button id="btn_cancel" name="cancel" class="btn btn-link" onclick="window.location='/'">Cancel</button>
+                    <button id="btn_cancel" name="cancel" type="button" class="btn btn-link" onclick="window.location='/'">Cancel</button>
                     <button type="submit" id="btn-save" name="submit" class="btn btn-success">Save</button>
                     </div>
                 </div>

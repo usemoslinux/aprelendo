@@ -85,18 +85,26 @@ try {
                     }
                 }
                 
-                // Audio file validation
+                
+                // save text in db
                 if (empty($errors)) {
-                    if (isset($_FILES['audio']) && !empty($_FILES['audio']) && $_FILES['audio']['error'] !== UPLOAD_ERR_NO_FILE) {
-                        $audio_file = new AudioFile($user->isPremium());
-                        $file_uploaded = $audio_file->put($_FILES['audio']);
-                        $target_file_name = $audio_file->file_name;
-                    }
-                    // save text in db
+                    // Audio file validation
+                    // if (isset($_FILES['audio']) && !empty($_FILES['audio']) && $_FILES['audio']['error'] !== UPLOAD_ERR_NO_FILE) {
+                    //     $audio_file = new AudioFile($user->isPremium());
+                    //     $file_uploaded = $audio_file->put($_FILES['audio']);
+                    //     $target_file_name = $audio_file->file_name;
+                    // }
+                    
                     if (!empty($_POST['id'])) {
                         $id = $_POST['id'];
                         $result = $texts_table->update($id, $title, $author, $text, $source_url, $target_file_name, $type);
                     } else {
+                        if ($texts_table->isAlreadyinDB($source_url)) {
+                            $msg = 'The text you are trying to add already exists in our database. ';
+                            $msg .= $is_shared ? 'Look for it in the <a href="sharedtexts.php">shared texts</a> section.' : 'Look for it in your <a href="texts.php">private library</a>.';
+
+                            throw new Exception($msg);
+                        }
                         $result = $texts_table->add($title, $author, $text, $source_url, $target_file_name, $type);
                     }
                     
@@ -123,8 +131,8 @@ try {
                 $texts_table = new SharedTexts($con, $user_id, $learning_lang_id);
                 
                 // if successful, return insert_id in json format
-                if ($texts_table->add($title, $author, $text, $source_url, '', '1')) {
-                    $arr = array('insert_id' => $con->insert_id);
+                if ($insert_id = $texts_table->add($title, $author, $text, $source_url, '', '1')) {
+                    $arr = array('insert_id' => $insert_id);
                     echo json_encode($arr);
                 }
             }

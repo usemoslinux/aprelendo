@@ -35,12 +35,13 @@ if (!$user->isLoggedIn()) {
                         <li>
                             <a href="https://www.apache.org/" target="_blank" rel="noopener noreferrer">Apache</a>, by the Apache Software Foundation</li>
                         <li>
-                            <a href="https://getbootstrap.com/" target="_blank" rel="noopener noreferrer">Bootstrap 3.3</a>, by Bootstrap Core Team</li>
+                            <a href="https://getbootstrap.com/" target="_blank" rel="noopener noreferrer">Bootstrap 4.1</a>, by Bootstrap Core Team</li>
                         <li>
                             <a href="https://github.com/mozilla/readability" target="_blank" rel="noopener noreferrer">Readability</a>, by Mozilla (used to fetch texts from web sources)</li>
                         <li>
                             <a href="https://github.com/futurepress/epub.js/">EpubJS</a>, by Futurepress (used to render epub files)</li>
                             <li><a href="https://github.com/w3c/epubcheck" target="_blank" rel="noopener noreferrer">EPUBCheck</a>, by <a href="http://www.daisy.org/" target="_blank" rel="noopener noreferrer">DAISY Consortium</a> on behalf of <a href="https://www.w3.org/publishing/epubcheck_fundraising" target="_blank" rel="noopener noreferrer">W3C</a> (used to validate epub files)</li>
+                        <li><a href="https://www.chartjs.org/" target="_blank" rel="noopener noreferrer">Chart.js</a>, by Chart.js Team (used to render statistics charts)</li>
                         <li><a href="https://bootstraptour.com/" target="_blank" rel="noopener noreferrer">Bootstrap Tour</a>, by Bootstrap Tour Team (used for introductory tour)</li>
                     </ul>
                     <p>Other attributions:</p>

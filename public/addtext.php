@@ -47,12 +47,15 @@ require_once('header.php');
               $art_url = $_POST['art_url'];
               $art_content = $_POST['art_content'];
               $art_is_shared = $_POST['art_is_shared'];
-          } elseif (isset($_GET['url'])) { // external call (bookmarklet, addon)
+          } elseif (isset($_GET['sh'])) {
+              $art_is_shared = true;  
+          } 
+          elseif (isset($_GET['url'])) { // external call (bookmarklet, addon)
               $art_url = $_GET['url'];
               $external_call = true;
           }
         ?>
-            <div id="alert-error-msg" class="d-none"></div>
+            <div id="alert-msg" class="d-none"></div>
             <form id="form-addtext" data-premium="<?php echo $user->isPremium() ? 1 : 0; ?>" action="" class="add-form"
                 method="post" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
@@ -83,9 +86,9 @@ require_once('header.php');
                 </div>
                 <div class="form-row">
                     <div class="form-group col-12">
-                    <label class="mr-2 mt-2" for="url">Source URL:</label>
+                        <label class="mr-2 mt-2" for="url">Source URL:</label>
                         <div class="input-group">
-                            
+
                             <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (optional)"
                                 value="<?php if (isset($art_url)) {echo $art_url;}?>">
                             <div class="input-group-append">
@@ -118,7 +121,7 @@ require_once('header.php');
                 <div class="form-row">
                     <div class="form-group col-12 text-right">
                         <?php if (isset($external_call)) { echo '<input id="external_call" type="hidden">'; } ?>
-                        <button id="btn_cancel" name="cancel" class="btn btn-link" onclick="window.location='/'">Cancel</button>
+                        <button id="btn_cancel" name="cancel" type="button" class="btn btn-link" onclick="window.location='/'">Cancel</button>
                         <button type="submit" id="btn-save" name="submit" class="btn btn-success">Save</button>
                     </div>
                 </div>

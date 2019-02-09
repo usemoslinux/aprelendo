@@ -440,7 +440,17 @@ $(document).ready(function () {
                     archivetext: archive_text
                 }
             }).done(function (data) {
-                window.location.replace("texts.php");
+                var url = '/textstats.php';
+                var total_words = Number($('.word').length) + Number($('.phrase').length);
+                var form = $('<form action="' + url + '" method="post">' +
+                            '<input type="hidden" name="created" value="' + $('.reviewing.new').length + '" />' +
+                            '<input type="hidden" name="reviewed" value="' +  $('.reviewing.learning').length + '" />' +
+                            '<input type="hidden" name="learned" value="' +  $('.learned').length + '" />' +
+                            '<input type="hidden" name="forgotten" value="' +  $('.reviewing.forgotten').length + '" />' +
+                            '<input type="hidden" name="total" value="' + total_words + '" />' +
+                            '</form>');
+                $('body').append(form);
+                form.submit(); 
             })
             .fail(function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("Oops! There was an error updating the database.");

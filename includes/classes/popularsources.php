@@ -45,7 +45,17 @@ class PopularSources extends DBEntity {
      * @return boolean
      */
     public function add($lg_iso, $domain) {
+        $invalid_sources = array('feedproxy.google.com',
+                                 'www.youtube.com',
+                                 'm.youtube.com',
+                                 'youtu.be');
+
         if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain))  {
+            return true; // end execution
+        }
+
+        $domain = \strtolower($domain);
+        if (\in_array($domain, $invalid_sources)) {
             return true; // end execution
         }
 

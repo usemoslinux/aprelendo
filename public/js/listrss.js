@@ -52,14 +52,9 @@ $(document).ready(function () {
         var art_author = $entry_info.attr("data-author");
         var art_url = $entry_info.attr("data-src");
         var art_pubdate = $entry_info.attr("data-pubdate");
-        var art_content = "";
+        var art_content = $entry_text.text();
 
-        $entry_text.children("p").each(function () {
-            art_content += $(this).text() + "\n";
-        });
-        art_content = $.trim(art_content);
-
-        if (add_mode == 'addaudio') {
+        if (add_mode == 'edit') {
             var form = $('<form id="form_add_audio" action="../addtext.php" method="post"></form>')
                 .append('<input type="hidden" name="art_title" value="' + htmlEscape(art_title) + '">')
                 .append('<input type="hidden" name="art_author" value="' + htmlEscape(art_author) + '">')
@@ -86,12 +81,11 @@ $(document).ready(function () {
                     switch (add_mode) {
                         case "readlater":
                             $entry_text
-                                .find("button")
+                                .siblings()
                                 .remove()
                                 .end()
-                                .find("span.message")
-                                .addClass("text-success")
-                                .text("Text was successfully added to your library")
+                                .after("<p class='alert alert-success'>Text was successfully added to your library</p>")
+                                .next()
                                 .show()
                                 .fadeOut(2000);
                             break;
@@ -104,9 +98,11 @@ $(document).ready(function () {
                 })
                 .fail(function () {
                     $entry_text
-                        .find("span.message")
-                        .addClass("text-failure")
-                        .text("There was an error trying to add this text to your library!")
+                        .siblings()
+                        .remove()
+                        .end()
+                        .after("<p class='alert alert-danger'>There was an error trying to add this text to your library!</p>")
+                        .next()
                         .show()
                         .fadeOut(2000);
                 });
@@ -117,11 +113,8 @@ $(document).ready(function () {
         e.preventDefault();
         e.stopPropagation();
         addTextToLibrary(
-            $(this)
-            .closest(".entry-text")
-            .parent()
-            .prev(".entry-info"),
-            $(this).closest(".entry-text"),
+            $(this).closest(".card").find(' .entry-info'),
+            $(this).parent().siblings(".entry-text"),
             "readlater"
         );
     });
@@ -130,25 +123,19 @@ $(document).ready(function () {
         e.preventDefault();
         e.stopPropagation();
         addTextToLibrary(
-            $(this)
-            .closest(".entry-text")
-            .parent()
-            .prev(".entry-info"),
-            $(this).closest(".entry-text"),
+            $(this).closest(".card").find(' .entry-info'),
+            $(this).parent().siblings(".entry-text"),
             "readnow"
         );
     });
 
-    $(".btn-addsound").on("click", function (e) {
+    $(".btn-edit").on("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
         addTextToLibrary(
-            $(this)
-            .closest(".entry-text")
-            .parent()
-            .prev(".entry-info"),
-            $(this).closest(".entry-text"),
-            "addaudio"
+            $(this).closest(".card").find(' .entry-info'),
+            $(this).parent().siblings(".entry-text"),
+            "edit"
         );
     });
 

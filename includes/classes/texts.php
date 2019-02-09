@@ -75,7 +75,7 @@ class Texts extends DBEntity {
         $title = $this->con->real_escape_string($title);
         $author = $this->con->real_escape_string($author);
         $source_url = $this->con->real_escape_string($source_url);
-        $text = $this->con->real_escape_string($text); // escape $text
+        $text = $this->con->real_escape_string($text);
         $audio_url = $this->con->real_escape_string($audio_url);
         $type = $this->con->real_escape_string($type);
         $level = 0;
@@ -109,6 +109,7 @@ class Texts extends DBEntity {
                 
         // add text to table
         $result = $this->con->query($sql);
+        $insert_id = $this->con->insert_id;
         
         if ($result) {
             // add entry to popularsources
@@ -118,7 +119,7 @@ class Texts extends DBEntity {
             $result = $pop_sources->add($lang->name, Url::getDomainName($source_url));
         }
         
-        return $result;
+        return $result ? $insert_id : false;
     }
             
     /**
@@ -210,9 +211,25 @@ class Texts extends DBEntity {
     public function archiveByIds($ids) {
         $textIDs = $this->JSONtoCSV($ids);
         
-        $insertsql = "INSERT INTO archivedtexts (atextUserId, atextLgID, atextTitle, atextAuthor, atext, atextSourceURI, atextType)
-        SELECT textUserId, textLgID, textTitle, textAuthor, text, textSourceURI, textType 
-        FROM texts WHERE textID IN ($textIDs)";
+        $insertsql = "INSERT INTO archivedtexts (
+                            atextUserId, 
+                            atextLgID, 
+                            atextTitle, 
+                            atextAuthor, 
+                            atext, 
+                            atextSourceURI, 
+                            atextType)
+                        SELECT 
+                            textUserId, 
+                            textLgID, 
+                            textTitle, 
+                            textAuthor, 
+                            text, 
+                            textSourceURI, 
+                            textType 
+                        FROM texts 
+                        WHERE textID IN ($textIDs)";
+        
         $deletesql = "DELETE FROM texts WHERE textID IN ($textIDs)";
         
         if ($result = $this->con->query($insertsql)) {
@@ -220,6 +237,22 @@ class Texts extends DBEntity {
         }
         
         return $result;
+    }
+
+    /**
+     * Checks if text was already exists in database, to avoid duplicate entries.
+     * It does this by checking the source url of the text to be added.
+     *
+     * @param string $source_url
+     * @return boolean
+     */
+    public function isAlreadyinDB($source_url)
+    {
+        $sql = "SELECT 1
+                FROM $this->table
+                WHERE {$this->cols['sourceURI']} = '$source_url' AND {$this->cols['userid']} = $this->user_id";
+            
+        return ($result = $this->con->query($sql)) && ($result->num_rows > 0);
     }
     
     /**

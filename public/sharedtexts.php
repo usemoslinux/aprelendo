@@ -89,7 +89,7 @@ $filter_sql = !empty($filter) && $filter > -1 ? "AND stextType=$filter" : '';
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="addtext.php">Plain text</a>
+                                <a class="dropdown-item" href="addtext.php?sh">Plain text</a>
                                 <a class="dropdown-item" href="addvideo.php">Youtube video</a>
                                 <a href="addrss.php" <?php echo $user->isPremium() ? 
                                 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"'; ?> >

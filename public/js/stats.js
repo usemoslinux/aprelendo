@@ -20,7 +20,7 @@
 $(document).ready(function () {
     // get data to feed chart
     var created = [],
-        modified = [],
+        reviewed = [],
         learned = [],
         forgotten = [];
 
@@ -28,7 +28,6 @@ $(document).ready(function () {
             type: "GET",
             url: "ajax/getstats.php",
             async: false,
-            //data: "data",
             dataType: "json"
         })
         .done(function (data) {
@@ -101,7 +100,8 @@ $(document).ready(function () {
                         labelString: 'Number of words',
                     }
                 }]
-            }
+            },
+            maintainAspectRatio: false // Add to prevent default behaviour of full-width/height
         }
     });
 });

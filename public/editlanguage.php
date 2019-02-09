@@ -72,7 +72,7 @@
     </fieldset>
     <br/>
     <div class="text-right">
-        <button id="cancelbtn" name="cancel" class="btn btn-link" onclick="window.location='texts.php'">Cancel</button>
+        <button id="cancelbtn" name="cancel" type="button" class="btn btn-link" onclick="window.location='texts.php'">Cancel</button>
         <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
     </div>
 </form>

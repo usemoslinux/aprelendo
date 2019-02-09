@@ -35,7 +35,7 @@ require_once('header.php');
 
     <div class="container mtb">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-12">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="texts.php">Home</a>
@@ -44,6 +44,9 @@ require_once('header.php');
                         <a class="active">Add RSS article</a>
                     </li>
                 </ol>
+                <div class="alert alert-info"><i class="fas fa-info-circle"></i> All RSS texts you add to Aprelendo will be shared with the rest of our community. You will find them in the "<a href="sharedtexts.php">shared texts</a>" section.</div>
+            </div>
+            <div class="col-12">
                 <?php require_once('listrss.php'); ?>
             </div>
         </div>
