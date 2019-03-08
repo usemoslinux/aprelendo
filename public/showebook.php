@@ -80,6 +80,10 @@ try {
         <!-- Extra style sheets -->
         <link rel="stylesheet" type="text/css" href="css/ebooks.css">
         <link rel="stylesheet" type="text/css" href="css/styles.css">
+
+        <!-- Bootstrap Tour -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.11.0/css/bootstrap-tour-standalone.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.11.0/js/bootstrap-tour-standalone.min.js"></script>
     </head>
 
     <body id="readerpage" <?php echo getCSS($class, $styles); ?> >
@@ -131,7 +135,7 @@ try {
         <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" src="js/showebook.js"></script>
 
         <?php
-        $file_name = 'js/bootstraptour/' . basename($_SERVER['PHP_SELF'], ".php") . '.js';
+        $file_name = 'js/tour/' . basename($_SERVER['PHP_SELF'], ".php") . '.js';
         if (file_exists(PUBLIC_PATH . $file_name)) {
             echo "<script src='/$file_name'></script>";
         }

@@ -47,9 +47,19 @@ require_once('header.php');
                 <div class="alert alert-info"><i class="fas fa-info-circle"></i> All RSS texts you add to Aprelendo will be shared with the rest of our community. You will find them in the "<a href="sharedtexts.php">shared texts</a>" section.</div>
             </div>
             <div class="col-12">
-                <?php require_once('listrss.php'); ?>
+                <div class="row flex">
+                    <div class="col-sm-12">
+                        <div class="lds-ripple mx-auto">
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <script src="js/addrss.js"></script>
     <?php require_once('footer.php') ?>
+
+    

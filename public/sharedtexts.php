@@ -59,7 +59,7 @@ $filter_sql = !empty($filter) && $filter > -1 ? "AND stextType=$filter" : '';
                                     </a>
                                     <a onclick="$('#f').val(4);" <?php echo $filter==4 ?
                                         ' class="dropdown-item active" ' : 'class="dropdown-item"' ; ?> >
-                                        Songs
+                                        Lyrics
                                     </a>
                                     <a onclick="$('#f').val(5);" <?php echo $filter==5 ?
                                         ' class="dropdown-item active" ' : 'class="dropdown-item"' ; ?> >

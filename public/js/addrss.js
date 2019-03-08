@@ -18,6 +18,24 @@
  */
 
 $(document).ready(function () {
+
+    // load rss feeds
+    $.ajax({
+        type: "GET",
+        url: "ajax/fetchrssfeeds.php",
+    })
+    .done(function (data) {
+        $('.lds-ripple').fadeOut(function () { 
+            $(this).after(data);
+         })
+    })
+    .fail(function (xhr, ajaxOptions, thrownError) {
+        $('.lds-ripple').fadeOut(function () { 
+            $(this).after('<div class="alert alert-danger">Oops! There was an error trying to retrieve your RSS feeds. Please try again later.</div>');
+        });    
+    });
+
+
     $(".btn-link").on("click", function () {
         $sel_card = $(".fas", this);
 

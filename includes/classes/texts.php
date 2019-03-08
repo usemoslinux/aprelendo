@@ -325,6 +325,7 @@ class Texts extends DBEntity {
         NULL, 
         {$this->cols['title']}, 
         {$this->cols['author']}, 
+        {$this->cols['sourceURI']}, 
         {$this->cols['type']}, 
         {$this->cols['nrofwords']}, 
         {$this->cols['level']} 
@@ -360,6 +361,7 @@ class Texts extends DBEntity {
         NULL, 
         {$this->cols['title']}, 
         {$this->cols['author']}, 
+        {$this->cols['sourceURI']}, 
         {$this->cols['type']}, 
         {$this->cols['nrofwords']}, 
         {$this->cols['level']} 

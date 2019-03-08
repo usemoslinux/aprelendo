@@ -100,12 +100,14 @@ require_once('header.php');
                 </div>
                 <div class="form-row">
                     <div class="form-group col-12">
-                        <label for="text">Text:</label>
+                        <div class="d-flex justify-content-between">
+                            <label for="text">Text:</label>
+                            <span id="span-chars-left" class="text-success">20,000 chars left</span>
+                        </div>
                         <textarea id="text" name="text" class="form-control" rows="16" cols="80" maxlength="20000"
                             placeholder="Text goes here (required), max. length = 20,000 chars" required><?php if (isset($art_content)) {echo $art_content;}?></textarea>
                         <label for="upload-text" id="upload-txtfile-label">Upload txt file:</label>
                         <input id="upload-text" type="file" name="upload-text" accept=".txt">
-
                     </div>
                 </div>
                 <div class="form-row">

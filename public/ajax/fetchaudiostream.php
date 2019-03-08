@@ -48,7 +48,7 @@ try {
         'b64' => 'true'
     ]);
     
-    echo $voice['response'];
+    echo json_encode($voice);
     
 } catch (Exception $e) {
     http_response_code($e->getMessage());

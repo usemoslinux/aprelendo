@@ -39,15 +39,29 @@ $(document).ready(function () {
     $.ajax({
         type: "POST",
         url: "ajax/fetchaudiostream.php",
-        data: {'text': txt, 'langiso': doclang}
+        data: {'text': txt, 'langiso': doclang},
+        dataType: 'json'
     })
     .done(function (e) {
-        if (0 == e.indexOf("ERROR")) throw e;
+        if (e.error != null) {
+            $('#audioplayer-loader')
+                .nextAll()
+                .addBack()
+                .slice(0,3)
+                .remove();
+
+            $('#btn-next-phase').html(
+                'Finish & Save<br/><span class="small">Skipped phases 2, 3 & 4: no audio detected</span>'
+            );
+            phase = 4;
+            throw e;
+        }
         var $audio_player = $('#audioplayer');
-        $audio_player.find('source').attr('src', e);
+        $audio_player.find('source').attr('src', e.response);
         $audio_player[0].load();
         $('#audioplayer-loader').addClass('d-none');
-        $('#audioplayer-container').removeClass('d-none');
+        $('#audioplayer').removeClass('d-none');
+        $('#audioplayer-speedbar').removeClass('d-none');
     })
     .fail(function (xhr, ajaxOptions, thrownError) {
         $('#audioplayer-loader').replaceWith('<div class="alert alert-danger">There was an unexpected error trying to create audio from this text. Try again later.</div>')
@@ -227,6 +241,7 @@ $(document).ready(function () {
         var selphrase_count = $doc.find("#selPhrase option").length;
         var is_phrase =
             selphrase_sel_index > 0 && selphrase_sel_index != selphrase_count - 1;
+        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != undefined && $("#audioplayer").find("source").attr("src") != "";
 
         // add selection to "words" table
         $.ajax({
@@ -300,11 +315,14 @@ $(document).ready(function () {
                     filterword.contents().unwrap();
                 }
 
-                // if user is in phase 2 (underlining words) and there was no previous word underlined,
-                // (therefore dictation was off), when user adds his first new word, allow dictation
-                if (phase == 3 && $('audio').length > 0 && $('#alert-msg-phase').text().indexOf('Phase 2') > -1) {
-                    $('#btn-next-phase').html('Go to phase 3<br/><span class="small">Dictation</span>');
-                    phase--;
+                // if there were no previous word underlined, therefore phases 2 & 3 were off, 
+                // when user adds his first new word, activate these phases
+                var actual_phase = $('#alert-msg-phase').attr('data-phase');
+                if (phase == 4 && audio_is_loaded && actual_phase == 3) {
+                    var phase_names = ['Reading', 'Listening', 'Speaking', 'Writing'];
+                    $('#btn-next-phase').html('Go to phase ' + phase + '<br/><span class="small">' + 
+                    phase_names[phase-1] + '</span>');
+                    phase = parseInt(actual_phase);
                 }
 
             })
@@ -319,6 +337,8 @@ $(document).ready(function () {
      * Remove selected word or phrase from database
      */
     $doc.on("click", "#btnremove", function () {
+        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != undefined && $("#audioplayer").find("source").attr("src") != "";
+
         $.ajax({
                 type: "POST",
                 url: "/ajax/removeword.php",
@@ -344,10 +364,10 @@ $(document).ready(function () {
                 }).done(function (result) {
                     filter.html(result);
                     filter.contents().unwrap();
-                    // if user is in phase 2 (underlining words) and deleted the only word that was underlined
-                    // don't allow phase 3 (dictation) & go directly to last phase (save changes)
-                    if (phase == 2 && $('audio').length > 0 && $('.learning, .new, .forgotten').length == 0) {
-                        $('#btn-next-phase').html('Finished<br/><span class="small">Save changes</span>');
+                    // if user is in phase 3 (speaking) and deleted the only word that was underlined
+                    // don't allow phase 3 (writing) & go directly to last phase (save changes)
+                    if (phase == 3 && audio_is_loaded > 0 && $('.learning, .new, .forgotten').length == 0) {
+                        $('#btn-next-phase').html('Finish & Save<br/><span class="small">Skipped phase 4 (writing): no underlined words</span>');
                         phase++;
                     }
                 });
@@ -362,6 +382,9 @@ $(document).ready(function () {
      * Executes when the user presses the big blue button at the end
      */
     $("body").on("click", "#btn-next-phase", function () {
+        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != undefined && $("#audioplayer").find("source").attr("src") != "";
+        var $msg_phase = $('#alert-msg-phase');
+
         switch (phase) {
             case 1:
                 $("html, body").animate({
@@ -369,34 +392,82 @@ $(document).ready(function () {
                     },
                     "slow"
                 );
-                $('#alert-msg-phase').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 2:</strong> Review old words & look up new words/phrases.');
-                if ($(".learning, .new, .forgotten").length > 0 && $("audio").length > 0) {
+                
+                if (!audio_is_loaded) {
                     $(this).html(
-                        'Go to phase 3<br/><span class="small">Dictation</span>'
+                        'Finished (no audio detected)<br/><span class="small">Save changes</span>'
                     );
-                    phase++;
-                } else {
-                    $(this).html(
-                        'Finished<br/><span class="small">Save changes</span>'
-                    );
-                    phase += 2;
+                    phase = 4;
+                    break;
                 }
+                
+                phase++;
+                
+                $msg_phase.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 2:</strong> Listening <br/><span class="small">Pay attention to the pronunciation of each word. You can slow down the audio if necessary.</span>')
+                .attr('data-phase', phase);
+
+                $(this).html(
+                    'Go to phase 3<br/><span class="small">Speaking</span>'
+                );
+                
+                playAudioFromBeginning();
                 break;
             case 2:
-                toggleDictation();
-                $(this).html(
-                    'Finished<br/><span class="small">Save changes</span>'
+                $("html, body").animate({
+                        scrollTop: 0
+                    },
+                    "slow"
                 );
-                $('#alert-msg-phase').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 3:</strong> Dictation.');
-                phase++;
+                if (!audio_is_loaded) {
+                    $(this).html(
+                        'Finish & Save<br/><span class="small">Skipped phase 4 (writing): no audio detected</span>'
+                    );
+                    phase = 4;
+                    break;
+                }
+
+                if ($(".learning, .new, .forgotten").length == 0) {
+                    $(this).html(
+                        'Finish & Save<br/><span class="small">Skipped phase 4 (writing): no underlined words</span>'
+                    );
+                    phase = 4;
+                    $msg_phase.attr('data-phase', 3);
+                } else {
+                    $(this).html(
+                        'Go to phase 4<br/><span class="small">Writing</span>'
+                    );
+                    phase++;
+                    $msg_phase.attr('data-phase', phase);
+                }
+                
+                $msg_phase.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 3:</strong> Speaking <br/><span class="small">Read out loud and try to emulate the pronunciation of each word as you listen to the audio. You can slow it down if necessary.</span>')
+                
+                playAudioFromBeginning();
                 break;
             case 3:
+                $("html, body").animate({
+                        scrollTop: 0
+                    },
+                    "slow"
+                );
+                
+                phase++;
+
+                $(this).html('Finish & Save');
+                
+                $msg_phase.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 4:</strong> Writing.<br/><span class="small">Fill in the blanks as you listen to the dictation.</span>')
+                .attr('data-phase', phase);
+                
+                toggleDictation();
+                break;
+            case 4:
                 archiveTextAndSaveWords();
                 break;
             default:
                 break;
         }
     });
+
 
     /**
      * Finished studying this text. Archives text & saves new status of words/phrases 
@@ -535,6 +606,15 @@ $(document).ready(function () {
     });
 
     /**
+     * Play audio from beginning
+     */
+    function playAudioFromBeginning() {
+        var $audioplayer = $("#audioplayer");
+        $audioplayer.prop("currentTime", "0");
+        $audioplayer.trigger("play");
+    }
+
+    /**
      * Toggles dictation on/off
      */
     function toggleDictation() {
@@ -562,9 +642,7 @@ $(document).ready(function () {
             ); // go back to the top of the page
 
             // automatically play audio, from the beginning
-            var $audioplayer = $("#audioplayer");
-            $audioplayer.prop("currentTime", "0");
-            $audioplayer.trigger("play");
+            playAudioFromBeginning()
 
             $(":text:first").focus(); // focus first input
         } else {

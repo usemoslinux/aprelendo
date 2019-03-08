@@ -1,7 +1,6 @@
-<div class="row flex">
-<div class="col-sm-12">
 <?php 
-require_once('../includes/dbinit.php'); // connect to database
+require_once('../../includes/dbinit.php'); // connect to database
+require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks if user is logged in
 
 use Aprelendo\Includes\Classes\RSSFeeds;
 
@@ -98,7 +97,3 @@ function printRSSFeed($feed, $groupindex) {
 }
 
 ?>
-</div>
-</div>
-
-<script src="js/listrss.js"></script>

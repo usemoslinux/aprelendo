@@ -69,7 +69,12 @@ class RSSFeed
                             $this->articles[$itemindex]['author'] = $article->author; // ATOM: feed>entry>author; RSS: rss>channel>item>author
                             $this->articles[$itemindex]['src'] = $isatom ? $article->link->attributes()->href : $article->link;  // ATOM: feed>entry>link>href attr; RSS: rss>channel>item>link
                             $this->articles[$itemindex]['content'] = $isatom ? $article->content : $article->description; // ATOM: feed>entry>content; rss>channel>item>description
-                            $itemindex++;
+                            
+                            if ($itemindex >= 5) {
+                                break;
+                            } else {
+                                $itemindex++;
+                            }
                         }
                     }
                 }

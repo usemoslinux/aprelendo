@@ -112,7 +112,7 @@
                                                 look up words in the dictionary or use the translator.</li>
                                             <li>Dictation.</li>
                                         </ol>
-                                        Remember: assisted mode only works for simple texts (articles, songs, conversation transcripts, etc.), not videos or ebooks.
+                                        Remember: assisted mode only works for simple texts (articles, lyrics, conversation transcripts, etc.), not videos or ebooks.
                                     </div>
                                 </div>
                             </div>

@@ -35,10 +35,10 @@
 </div>
 
 <?php
-// $file_name = 'js/bootstraptour/' . basename($_SERVER['PHP_SELF'], ".php") . '.js';
-// if (file_exists(PUBLIC_PATH . $file_name)) {
-//     echo "<script src='/$file_name'></script>";
-// }
+$file_name = 'js/tour/' . basename($_SERVER['PHP_SELF'], ".php") . '.js';
+if (file_exists(PUBLIC_PATH . $file_name)) {
+    echo "<script src='/$file_name'></script>";
+}
 ?>
 
 <?php require_once 'eucookies.php'?>

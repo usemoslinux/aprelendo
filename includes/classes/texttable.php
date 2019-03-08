@@ -21,6 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Table;
+use Aprelendo\Includes\Classes\Url;
 
 class TextTable extends Table {
     protected $is_shared;
@@ -65,14 +66,15 @@ class TextTable extends Table {
             $text_id = $this->rows[$i][0];
             $shared_by = isset($this->rows[$i][1]) && !empty($this->rows[$i][1]) ? " via {$this->rows[$i][1]}" : '';
             $text_title = $this->rows[$i][2];
-            $text_author = isset($this->rows[$i][3]) && !empty($this->rows[$i][3]) ? "by {$this->rows[$i][3]}" : 'by Unkown';
+            $source_uri = isset($this->rows[$i][4]) && !empty($this->rows[$i][4]) ? ' (' . Url::getDomainName($this->rows[$i][4]) . ')': '';
+            $text_author = isset($this->rows[$i][3]) && !empty($this->rows[$i][3]) ? "by {$this->rows[$i][3]}" : 'by Unkown' . $source_uri;
             
             $link = $this->show_archived ? '' : 'showtext.php';
             
             // if it's a video, then change link accordinly
-            if ($this->rows[$i][4] && !empty($this->rows[$i][4])) {
+            if ($this->rows[$i][5] && !empty($this->rows[$i][5])) {
                 if (isset($link) && !empty($link)) {
-                    switch ($this->rows[$i][4]) {
+                    switch ($this->rows[$i][5]) {
                         case 5: // videos
                         $replace = str_replace('showtext.php', 'showvideo.php', $link);
                         $link = empty($replace) ? '' : "<a href ='$replace?id=$text_id";
@@ -92,20 +94,20 @@ class TextTable extends Table {
                 $text_type = '';
             }
             
-            $nr_of_words = isset($this->rows[$i][5]) && !empty($this->rows[$i][5]) ? ' - ' . number_format($this->rows[$i][5]) . ' words' : '';
+            $nr_of_words = isset($this->rows[$i][6]) && !empty($this->rows[$i][6]) ? ' - ' . number_format($this->rows[$i][6]) . ' words' : '';
             
-            $text_level = isset($this->rows[$i][6]) && !empty($this->rows[$i][6]) ? " - {$level_array[$this->rows[$i][6]-1]}" : '';
+            $text_level = isset($this->rows[$i][7]) && !empty($this->rows[$i][7]) ? " - {$level_array[$this->rows[$i][7]-1]}" : '';
             
             if ($this->has_chkbox) {
                 $html .= "<tr><td class='col-checkbox'><input class='chkbox-selrow' type='checkbox' data-idText='$text_id'></td>";
             } else {
-                $total_likes = isset($this->rows[$i][8]) ? $this->rows[$i][8] : 0; // get total user likes for this post
-                $user_liked = $this->rows[$i][9] ? 'fas' : 'far'; // check if user liked this post
+                $total_likes = isset($this->rows[$i][9]) ? $this->rows[$i][9] : 0; // get total user likes for this post
+                $user_liked = $this->rows[$i][10] ? 'fas' : 'far'; // check if user liked this post
 
                 $html .= "<tr><td class='text-center'><span title='Like'><i class='$user_liked fa-heart' data-idText='$text_id'></i><br/><small>$total_likes</small></span></td>";
             }
             
-            $html .= '<td class="col-title">' . $type_array[$this->rows[$i][4]-1][1] . ' ' . $link .
+            $html .= '<td class="col-title">' . $type_array[$this->rows[$i][5]-1][1] . ' ' . $link .
             $text_title . '</a><br/><small>' . $text_author . $shared_by . $text_level . $nr_of_words . '</small></td></tr>';
         }
         return $html;

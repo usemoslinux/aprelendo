@@ -92,6 +92,26 @@ $(document).ready(function() {
             $input_audio.val('');
         }
     }); // end of #audio-uri.on.change
+
+    /**
+     * Checks how many characters are left for user input
+     */
+    $('#text').on('input', function () {
+        var $textarea = $(this);
+        var $span_chars_left = $('#span-chars-left');
+        var chars_left = 20000 - $textarea.val().length;
+        var msg_text = chars_left < 0 ? ' chars over maximum' : ' left';
+
+        if (chars_left < 0) {
+            $span_chars_left.removeClass('text-success').addClass('text-danger');
+            $span_chars_left.text(chars_left.toLocaleString() +  ' over maximum');
+        } else {
+            $span_chars_left.removeClass('text-danger').addClass('text-success');
+            $span_chars_left.text(chars_left.toLocaleString() +  ' left');
+        }
+
+        
+    });
     
     /**
     * Checks if the text file being uploaded is bigger than the allowed limit
@@ -145,6 +165,7 @@ $(document).ready(function() {
                 // txt = txt.replace(/  /g, ' '); // remove multiple spaces
                 
                 $('#text').val($.trim(txt)); 
+                $('#text').trigger('input');
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
                 alert('Oops! There was an error trying to fetch this text.');

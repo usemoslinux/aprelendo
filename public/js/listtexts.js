@@ -124,7 +124,7 @@ $(document).ready(function () {
     /**
     * Shows selection in Filter menu
     */
-    $('#btn-filter + ul > li').on('click', function() {
+    $('#btn-filter + div > a').on('click', function() {
         var $item = $(this);
         if ($item.is(':last-child') && $item.text().trim() == 'Archived') {
             $item.toggleClass('active');    
@@ -133,7 +133,7 @@ $(document).ready(function () {
             
             $item.siblings('.active').each(function(index, element) {
                 if ($(this).text().trim() !== 'Archived') {
-                    $(this).removeClass();
+                    $(this).toggleClass('active');
                 }
             });
         }    
