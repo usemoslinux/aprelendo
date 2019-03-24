@@ -32,41 +32,8 @@ $(document).ready(function () {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $('html');
 
-    // load audio
-    var txt = $('#text').text();
-    var doclang = $('html').attr('lang');
-
-    $.ajax({
-        type: "POST",
-        url: "ajax/fetchaudiostream.php",
-        data: {'text': txt, 'langiso': doclang},
-        dataType: 'json'
-    })
-    .done(function (e) {
-        if (e.error != null) {
-            $('#audioplayer-loader')
-                .nextAll()
-                .addBack()
-                .slice(0,3)
-                .remove();
-
-            $('#btn-next-phase').html(
-                'Finish & Save<br/><span class="small">Skipped phases 2, 3 & 4: no audio detected</span>'
-            );
-            phase = 4;
-            throw e;
-        }
-        var $audio_player = $('#audioplayer');
-        $audio_player.find('source').attr('src', e.response);
-        $audio_player[0].load();
-        $('#audioplayer-loader').addClass('d-none');
-        $('#audioplayer').removeClass('d-none');
-        $('#audioplayer-speedbar').removeClass('d-none');
-    })
-    .fail(function (xhr, ajaxOptions, thrownError) {
-        $('#audioplayer-loader').replaceWith('<div class="alert alert-danger">There was an unexpected error trying to create audio from this text. Try again later.</div>')
-    });
-
+    loadAudio();
+    
     /**
      * Sets keyboard shortcuts for media player
      * @param {event object} e Used to get keycodes
@@ -700,4 +667,52 @@ $(document).ready(function () {
                 .focus();
         }
     });
+
+    $(document).on("click", "#retry-audio-load", function (e) {
+        e.preventDefault();
+        $('#alert-msg-audio').remove;
+        $('#audioplayer-loader').removeClass('d-none');
+        loadAudio();
+    });
+
+    function loadAudio() { 
+        if ($('#audioplayer').length > 0) {
+            var txt = $('#text').text();
+            var doclang = $('html').attr('lang');
+    
+            $.ajax({
+                type: "POST",
+                url: "ajax/fetchaudiostream.php",
+                data: {'text': txt, 'langiso': doclang},
+                dataType: 'json'
+            })
+            .done(function (e) {
+                if (e.error != null) {
+                    $('#audioplayer-loader')
+                        .nextAll()
+                        .addBack()
+                        .slice(0,3)
+                        .remove();
+        
+                    $('#btn-next-phase').html(
+                        'Finish & Save<br/><span class="small">Skipped phases 2, 3 & 4: no audio detected</span>'
+                    );
+                    phase = 4;
+                    throw e;
+                }
+                var $audio_player = $('#audioplayer');
+                $audio_player.find('source').attr('src', e.response);
+                $audio_player[0].load();
+                $('#audioplayer-loader').addClass('d-none');
+                $('#audioplayer').removeClass('d-none');
+                $('#audioplayer-speedbar').removeClass('d-none');
+            })
+            .fail(function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.statusText);
+                console.log(ajaxOptions);
+                console.log(thrownError);
+                $('#audioplayer-loader').replaceWith('<div id="alert-msg-audio" class="alert alert-danger">There was an unexpected error trying to create audio from this text. <a href="#" id="retry-audio-load">Try again</a> later.</div>')
+            });        
+        }
+     }
 });

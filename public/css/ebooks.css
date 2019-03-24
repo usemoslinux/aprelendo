@@ -163,18 +163,18 @@ select {
 #navigation {
     background: whitesmoke;
     font: 14px 'Lato';
-    height: 100vh;
+    max-height: 100vh;
     left: 0;
     max-width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
-    position: absolute;
+    position: fixed;
     top: 0;
     transition: transform .25s ease-out;
     -moz-transition: -moz-transform .25s ease-out;
     -ms-transition: -moz-transform .25s ease-out;
     -webkit-transition: -webkit-transform .25s ease-out;
-    width: 400px;
+    width: 300px;
 }
 
 #navigation.fixed {
@@ -198,11 +198,11 @@ select {
 }
 
 #navigation ul {
-    padding-left: 36px;
+    padding-left: 25px;
+    padding-right: 25px;
     margin-left: 0;
     margin-top: 12px;
     margin-bottom: 12px;
-    width: 340px;
 }
 
 #navigation ul li {
@@ -227,21 +227,18 @@ select {
     margin: 24px auto;
 }
 
-#navigation #closer {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 12px 12px 0 0;
-    color: #cccddd;
-    width: 24px;
-    cursor: pointer;
+#navigation.sidebar-closed {
+    transform: translate(-300px, 0);
+    -webkit-transform: translate(-300px, 0);
+    -moz-transform: translate(-300px, 0);
+    -ms-transform: translate(-300px, 0);
 }
 
-#navigation.closed {
-    transform: translate(-400px, 0);
-    -webkit-transform: translate(-400px, 0);
-    -moz-transform: translate(-400px, 0);
-    -ms-transform: translate(-400px, 0);
+#main.sidebar-opened {
+    transform: translate(300px, 0);
+    -webkit-transform: translate(300px, 0);
+    -moz-transform: translate(300px, 0);
+    -ms-transform: translate(300px, 0);
 }
 
 svg {
@@ -254,13 +251,18 @@ svg {
     cursor: pointer;
     left: 10px;
     position: absolute;
-    top: 15px;
+    top: 10px;
 }
 
 /* HEADER  */
 #btn-save {
-    margin-top: 10px;
+    margin-top: 5px;
     margin-right: 10px;
+}
+
+#btn-save:hover, #btn-save:focus, #btn-save.focus {
+	color: white;
+	text-decoration: none;
 }
 
 #book-title {
@@ -271,9 +273,48 @@ svg {
 }
 
 #header {
+    background-color: whitesmoke;
     font: 14px 'Lato';
     height: 44px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
+
+/* Underline words spinner */
+.loading-spinner {
+    position: relative;
+    margin-top: 4px;
+    width: 44px;
+    height: 44px;
+  }
+  .loading-spinner div {
+    position: absolute;
+    border: 4px solid #0275d8;
+    opacity: 1;
+    border-radius: 50%;
+    animation: loading-spinner 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  }
+  .loading-spinner div:nth-child(2) {
+    animation-delay: -0.5s;
+  }
+
+@keyframes loading-spinner {
+    0% {
+      top: 18px;
+      left: 18px;
+      width: 0;
+      height: 0;
+      opacity: 1;
+    }
+    100% {
+      top: -1px;
+      left: -1px;
+      width: 38px;
+      height: 38px;
+      opacity: 0;
+    }
+  }
 
 /* OTHER */
 body {

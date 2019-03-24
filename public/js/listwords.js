@@ -31,7 +31,7 @@ $(document).ready(function () {
   $("#mDelete").on("click", function () {
     if (confirm("Really delete?")) {
       var ids = [];
-      $("input[class=chkbox-selrow]:checked").each(function () {
+      $("input.chkbox-selrow:checked").each(function () {
         ids.push($(this).attr('data-idWord'));
       });
 
@@ -119,7 +119,7 @@ $(document).ready(function () {
      * Makes it easier for mobile device users to select texts.
      */
     $('tr').on('click', function(e) {
-        if (e.target.type !== 'checkbox' && e.target.tagName !== 'A') {
+        if (e.target.type !== 'label' && e.target.tagName !== 'A') {
             $(':checkbox', this).trigger('click');
         }
     });

@@ -256,7 +256,7 @@ class Reader extends Text
      */
     public function showText() {
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
-        $time_start = microtime(true);
+        // $time_start = microtime(true);
         $html = "<div id='container' data-textID='" . $this->id . "'>";
         
         // display source, if available
@@ -274,17 +274,10 @@ class Reader extends Text
         // display audio player
         $html .= '<hr>';
 
-        $html .=   '<div id="audioplayer-loader">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+        $html .=   '<div id="audioplayer-loader" class="lds-facebook mx-auto">
+                        <div></div>
+                        <div></div>
+                        <div></div>
                     </div>';
 
         $html .=   '<audio controls id="audioplayer" class="d-none">
@@ -294,7 +287,7 @@ class Reader extends Text
                     <form id="audioplayer-speedbar" class="d-none">
                         <div class="form-group flex-pbr-form">
                             <label id="label-speed" class="basic" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
-                            <input id="pbr" type="range" class="flex-pbr" value="1" min="0.5" max="2" step="0.1">
+                            <input id="pbr" type="range" class="custom-range flex-pbr" value="1" min="0.5" max="2" step="0.1">
                         </div>
                     </form>
                     ';
@@ -323,9 +316,9 @@ class Reader extends Text
         $html .= $text . '</div>';
         
         // display total execution time
-        $time_end = microtime(true);
-        $execution_time = ($time_end - $time_start);
-        $html .= '<b>Total Execution Time:</b> ' . $execution_time . ' Secs';
+        // $time_end = microtime(true);
+        // $execution_time = ($time_end - $time_start);
+        // $html .= '<b>Total Execution Time:</b> ' . $execution_time . ' Secs';
         
         $html .= '<p></p>';
         
@@ -356,7 +349,7 @@ class Reader extends Text
      */
     public function showVideo($yt_id) {
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
-        $time_start = microtime(true);
+        // $time_start = microtime(true);
 
         $yt_id = $yt_id ? $yt_id : '';
 
@@ -385,9 +378,9 @@ class Reader extends Text
         
         $html .= '<button type="button" id="btn-save" class="basic btn btn-lg btn-success btn-block">Finish & Save</button>';
         
-        $time_end = microtime(true);
-        $execution_time = ($time_end - $time_start);
-        $html .= '<b>Total Execution Time:</b> ' . $execution_time . ' Secs';
+        // $time_end = microtime(true);
+        // $execution_time = ($time_end - $time_start);
+        // $html .= '<b>Total Execution Time:</b> ' . $execution_time . ' Secs';
 
         return $html.'</div>';
     }

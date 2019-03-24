@@ -1,7 +1,7 @@
 // instance tour steps
 var tour_steps = [
     {
-        element: ".loader",
+        element: ".lds-ripple",
         title: "Processing words",
         placement: 'bottom',
         content: "This loader indicates that Aprelendo is still processing the current chapter to underline words accordingly.<br/><br/>Please, be patient. It can take a while depending on the number of words of the current chapter and those you've already saved in your library.",

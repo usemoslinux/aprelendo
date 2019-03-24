@@ -31,7 +31,7 @@ require_once 'simpleheader.php';
                     <form action="" id="form_register">
                             <div class="form-group">
                                 <label for="native_lang">Native language:</label>
-                                <select name="native_lang" class="form-control" id="native_lang">
+                                <select name="native_lang" class="form-control custom-select" id="native_lang">
                                     <option value="en" selected>English</option>
                                     <option value="es">Spanish</option>
                                     <option value="pt">Portuguese</option>
@@ -42,7 +42,7 @@ require_once 'simpleheader.php';
                             </div>
                             <div class="form-group">
                                 <label for="learning_lang">Want to learn:</label>
-                                <select name="learning_lang" class="form-control" id="learning_lang">
+                                <select name="learning_lang" class="form-control custom-select" id="learning_lang">
                                     <option value="en" <?php echo $to_lang=='English' ? 'selected' : '' ; ?>>English</option>
                                     <option value="es" <?php echo $to_lang=='Spanish' ? 'selected' : '' ; ?>>Spanish</option>
                                     <option value="pt" <?php echo $to_lang=='Portuguese' ? 'selected' : '' ; ?>>Portuguese</option>

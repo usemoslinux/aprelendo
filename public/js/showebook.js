@@ -89,6 +89,7 @@ $(document).ready(function () {
         book.ready.then(function () {
             var key = book.key()+'-lastpos';
             var last_pos = localStorage.getItem(key);
+            
             if (last_pos) {
                 rendition.display(last_pos);
             }
@@ -105,10 +106,11 @@ $(document).ready(function () {
                         // Add the rest of the scripts and stylesheets
                         Promise.all([
                             contents.addScript("/js/showtext.js"),
-                            contents.addScript("https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js")
+                            contents.addScript("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"),
+                            contents.addScript("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"),
                         ]);
 
-                        $('.loader').fadeIn(1000);
+                        $('.loading-spinner').fadeIn(1000);
                         // underline words
                         $.ajax({
                             type: "POST",
@@ -119,14 +121,12 @@ $(document).ready(function () {
                         })
                         .done(function (result) {
                             contents.content.innerHTML = result;
-                            $('.loader').fadeOut(1000);
+                            $('.loading-spinner').fadeOut(1000);
                         })
                         .fail(function (xhr, ajaxOptions, thrownError) {
                             alert('There was an unexpected error when trying to underline words for this ebook!');
                         });
                     });
-
-
             });
 
             var next = document.getElementById("next");
@@ -134,6 +134,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 $.when( SaveWords() ).then(function() {
                     rendition.next();
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
                 });
             }, false);
 
@@ -142,6 +143,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 $.when( SaveWords() ).then(function() {
                     rendition.prev();
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
                 });
             }, false);
            
@@ -189,6 +191,10 @@ $(document).ready(function () {
             window.location.replace('texts.php');
         });
 
+        rendition.on("relocated", function(location){
+            console.log(location);
+        });
+
         /**
          * Updates status of all underlined words & phrases
          */
@@ -225,18 +231,14 @@ $(document).ready(function () {
         });
 
         var navigation = document.getElementById("navigation");
+        var main = document.getElementById("main");
         var opener = document.getElementById("opener");
         opener.addEventListener("click", function (e) {
-            navigation.classList.remove("closed");
+            navigation.classList.toggle("sidebar-closed");
+            main.classList.toggle("sidebar-opened");
             e.preventDefault();
         }, false);
-
-        var closer = document.getElementById("closer");
-        closer.addEventListener("click", function (e) {
-            navigation.classList.add("closed");
-            e.preventDefault();
-        }, false);
-
+        
         book.loaded.navigation.then(function(toc){
             var $nav = document.getElementById("toc"),
                 docfrag = document.createDocumentFragment();

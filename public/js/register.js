@@ -22,6 +22,8 @@ $(document).ready(function () {
     e.preventDefault();
 
     var form_data = $('#form_register').serialize();
+
+    showMessage('Processing...', 'alert-info');
     
     $.ajax({
       type: "POST",
@@ -49,7 +51,7 @@ $(document).ready(function () {
    */
   function showMessage(html, type) {
     $('#error-msg').html(html)
-      .removeClass('d-none')
+      .removeClass()
       .addClass('alert ' + type);
     $(window).scrollTop(0);
   } // end of showMessage

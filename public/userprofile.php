@@ -64,7 +64,7 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="src_lang">Your native language:</label>
-                            <select name="src_lang" class="form-control" id="src_lang">
+                            <select name="src_lang" class="form-control custom-select" id="src_lang">
                                 <?php $native_lang_index = $user->getLanguageIndex($user->native_lang); ?>
                                 <option value="en" <?php echo $native_lang_index==0 ? ' selected ' : '' ; ?>>English</option>
                                 <option value="es" <?php echo $native_lang_index==1 ? ' selected ' : '' ; ?>>Spanish</option>
@@ -76,7 +76,7 @@
                         </div>
                         <div class="form-group">
                             <label for="to_lang">Active learning language:</label>
-                            <select name="to_lang" class="form-control" id="to_lang">
+                            <select name="to_lang" class="form-control custom-select" id="to_lang">
                                 <?php $learning_lang_index = $user->getLanguageIndex($user->learning_lang); ?>
                                 <option value="en" <?php echo $learning_lang_index==0 ? ' selected ' : '' ; ?>>English</option>
                                 <option value="es" <?php echo $learning_lang_index==1 ? ' selected ' : '' ; ?>>Spanish</option>

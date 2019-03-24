@@ -149,7 +149,8 @@ class User
         // send email
         $mail_sent = @mail($to, $subject, $message, $headers); // send email to reset password (requires 'sendmail' package in Debian/Ubuntu)
         if (!$mail_sent) {
-            throw new Exception ('There was an error trying to send you an e-mail to activate your account.');
+            $this->delete();
+            throw new Exception ('Oops! There was an unexpected error trying to send you an e-mail to activate your account. Please try again later.');
         }
         return true;
     } // end sendActivationEmail
@@ -366,37 +367,38 @@ class User
      */
     public function delete() {
         if ($this->isLoggedIn()) {
-            require_once('files.php');
+            $this->logout(true);
+        }
 
-            // delete files uploaded by user
-            $table_names = array('texts', 'archivedtexts');
+        // require_once('files.php');
+
+        // delete files uploaded by user
+        $table_names = array('texts', 'archivedtexts');
+        
+        foreach ($table_names as $table) {
+            $user_id_col_name = $table == 'texts' ? 'textUserId' : 'atextUserId';
+            $source_uri_col_name = $table == 'texts' ? 'textSourceURI' : 'atextSourceURI';
+            $result = $this->con->query("SELECT $source_uri_col_name FROM $table WHERE $user_id_col_name='{$this->id}'");
             
-            foreach ($table_names as $table) {
-                $user_id_col_name = $table == 'texts' ? 'textUserId' : 'atextUserId';
-                $source_uri_col_name = $table == 'texts' ? 'textSourceURI' : 'atextSourceURI';
-                $result = $this->con->query("SELECT $source_uri_col_name FROM $table WHERE $user_id_col_name='{$this->id}'");
-                
-                if ($result->num_rows > 0) {
-                    $file = new File();
-                    $filename = '';
-                    $file_extensions = array('.epub', '.mp3', '.ogg');
+            if ($result->num_rows > 0) {
+                $file = new File();
+                $filename = '';
+                $file_extensions = array('.epub', '.mp3', '.ogg');
 
-                    while ($row = $result->fetch_assoc()) {
-                        $filename = $row[$source_uri_col_name];
-                        if (in_array(substr($filename, -5), $file_extensions)) {
-                            $file->delete($filename);
-                        }
+                while ($row = $result->fetch_assoc()) {
+                    $filename = $row[$source_uri_col_name];
+                    if (in_array(substr($filename, -5), $file_extensions)) {
+                        $file->delete($filename);
                     }
                 }
             }
-            
-            // delete user from db
-            $result = $this->con->query("DELETE FROM users WHERE userId='{$this->id}'");
-            if (!$result) {
-                throw new Exception('Oops! There was an unexpected problem trying to delete your account. Please try again later.');
-            }
-            $this->logout(true);
-        } 
+        }
+        
+        // delete user from db
+        $result = $this->con->query("DELETE FROM users WHERE userId='{$this->id}'");
+        if (!$result) {
+            throw new Exception('Oops! There was an unexpected problem trying to delete your account. Please try again later.');
+        }
     } // end logout
     
     /**

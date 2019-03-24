@@ -211,24 +211,10 @@ class Texts extends DBEntity {
     public function archiveByIds($ids) {
         $textIDs = $this->JSONtoCSV($ids);
         
-        $insertsql = "INSERT INTO archivedtexts (
-                            atextUserId, 
-                            atextLgID, 
-                            atextTitle, 
-                            atextAuthor, 
-                            atext, 
-                            atextSourceURI, 
-                            atextType)
-                        SELECT 
-                            textUserId, 
-                            textLgID, 
-                            textTitle, 
-                            textAuthor, 
-                            text, 
-                            textSourceURI, 
-                            textType 
-                        FROM texts 
-                        WHERE textID IN ($textIDs)";
+        $insertsql = "INSERT INTO archivedtexts 
+                      SELECT *
+                      FROM texts 
+                      WHERE textID IN ($textIDs)";
         
         $deletesql = "DELETE FROM texts WHERE textID IN ($textIDs)";
         

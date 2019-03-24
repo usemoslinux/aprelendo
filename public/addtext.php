@@ -63,7 +63,7 @@ require_once('header.php');
                 <div class="form-row">
                     <div class="form-group col-12">
                         <label for="type">Type:</label>
-                        <select name="type" id="type" class="form-control">
+                        <select name="type" id="type" class="form-control custom-select">
                             <option value="1">Article</option>
                             <option value="2">Conversation</option>
                             <option value="3">Letter</option>
@@ -112,11 +112,10 @@ require_once('header.php');
                 </div>
                 <div class="form-row">
                     <div class="col-12">
-                        <div id="shared-text-wrapper-div" class="form-group form-check">
-                            <label class="form-check-label" for="shared-text" id="shared-text-label">
-                                <input id="shared-text" type="checkbox" name="shared-text" <?php if
-                                    (isset($art_is_shared)) {echo 'checked' ;}?>> Share text with the community
-                            </label>
+                        <div id="shared-text-wrapper-div" class="custom-control custom-switch">
+                            <input id="shared-text" class="custom-control-input" type="checkbox" name="shared-text" <?php if
+                                (isset($art_is_shared)) {echo 'checked' ;}?>>
+                            <label class="custom-control-label" for="shared-text" id="shared-text-label"> Share text with the community</label>
                         </div>
                     </div>
                 </div>

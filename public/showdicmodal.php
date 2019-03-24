@@ -1,7 +1,7 @@
 <div id="myModal" class="modal fade" data-keyboard="true" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
-        <div class="modal-content">
+        <div class="modal-content mb-xs-3">
             <div class="modal-header">
                 <button id="btnremove" type="button" data-dismiss="modal" class="btn btn-danger mr-3">Delete</button>
                 <select class="modal-selPhrase" name="selPhrase" id="selPhrase">

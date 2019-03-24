@@ -62,7 +62,7 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="freq-list">Underline 5000 most used words:</label>
-                <select name="freq-list" id="freq-list" class="form-control">
+                <select name="freq-list" id="freq-list" class="form-control custom-select">
                     <option value="1" <?php echo $lang->show_freq_list==true ? 'selected' : ''; ?>>Yes</option>
                     <option value="0" <?php echo $lang->show_freq_list==false ? 'selected' : ''; ?>>No</option>
                 </select>

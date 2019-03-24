@@ -99,7 +99,7 @@ class TextTable extends Table {
             $text_level = isset($this->rows[$i][7]) && !empty($this->rows[$i][7]) ? " - {$level_array[$this->rows[$i][7]-1]}" : '';
             
             if ($this->has_chkbox) {
-                $html .= "<tr><td class='col-checkbox'><input class='chkbox-selrow' type='checkbox' data-idText='$text_id'></td>";
+                $html .= "<tr><td class='col-checkbox'><div class='custom-control custom-checkbox'><input id='row-$text_id' class='custom-control-input chkbox-selrow' type='checkbox' data-idText='$text_id'><label class='custom-control-label' for='row-$text_id'></label></div></td>";
             } else {
                 $total_likes = isset($this->rows[$i][9]) ? $this->rows[$i][9] : 0; // get total user likes for this post
                 $user_liked = $this->rows[$i][10] ? 'fas' : 'far'; // check if user liked this post

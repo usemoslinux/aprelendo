@@ -27,7 +27,7 @@
                                     <div class="form-group">
                                         <label for="fontfamily">Font Family:</label>
                                         <div>
-                                            <select name="fontfamily" id="fontfamily" class="form-control">
+                                            <select name="fontfamily" id="fontfamily" class="form-control custom-select">
                                                 <option value="Helvetica" <?php echo $reader->font_family=='Helvetica' ? ' selected ' : ''; ?>>Helvetica</option>
                                                 <option value="Open Sans" <?php echo $reader->font_family=='Open Sans' ? ' selected ' : ''; ?>>Open Sans</option>
                                                 <option value="Times New Roman" <?php echo $reader->font_family=='Times New Roman' ? ' selected ' : ''; ?>>Times New Roman</option>
@@ -39,7 +39,7 @@
                                     <div class="form-group">
                                         <label for="fontsize">Font Size:</label>
                                         <div>
-                                            <select name="fontsize" id="fontsize" class="form-control">
+                                            <select name="fontsize" id="fontsize" class="form-control custom-select">
                                                 <option value="12pt" <?php echo $reader->font_size=='12pt' ? ' selected ' : ''; ?>>12 pt</option>
                                                 <option value="14pt" <?php echo $reader->font_size=='14pt' ? ' selected ' : ''; ?>>14 pt</option>
                                                 <option value="16pt" <?php echo $reader->font_size=='16pt' ? ' selected ' : ''; ?>>16 pt</option>
@@ -50,7 +50,7 @@
                                     <div class="form-group">
                                         <label for="lineheight">Line height:</label>
                                         <div>
-                                            <select name="lineheight" id="lineheight" class="form-control">
+                                            <select name="lineheight" id="lineheight" class="form-control custom-select">
                                                 <option value="1.5" <?php echo $reader->line_height=='1.5' ? ' selected ' : ''; ?>>1.5 Lines</option>
                                                 <option value="2" <?php echo $reader->line_height=='2' ? ' selected ' : ''; ?>>2</option>
                                                 <option value="2.5" <?php echo $reader->line_height=='2.5' ? ' selected ' : ''; ?>>2.5</option>
@@ -61,7 +61,7 @@
                                     <div class="form-group">
                                         <label for="alignment">Text alignment:</label>
                                         <div>
-                                            <select name="alignment" id="alignment" class="form-control">
+                                            <select name="alignment" id="alignment" class="form-control custom-select">
                                                 <option value="left" <?php echo $reader->text_align=='left' ? ' selected ' : ''; ?>>Left</option>
                                                 <option value="center" <?php echo $reader->text_align=='center' ? ' selected ' : ''; ?>>Center</option>
                                                 <option value="right" <?php echo $reader->text_align=='right' ? ' selected ' : ''; ?>>Right</option>
@@ -72,7 +72,7 @@
                                     <div class="form-group">
                                         <label for="mode">Display mode:</label>
                                         <div>
-                                            <select name="mode" id="mode" class="form-control">
+                                            <select name="mode" id="mode" class="form-control custom-select">
                                                 <option value="light" <?php echo $reader->display_mode=='light' ? ' selected ' : ''; ?>>Light</option>
                                                 <option value="sepia" <?php echo $reader->display_mode=='sepia' ? ' selected ' : ''; ?>>Sepia</option>
                                                 <option value="dark" <?php echo $reader->display_mode=='dark' ? ' selected ' : ''; ?>>Dark</option>
@@ -90,7 +90,7 @@
                                     <div class="form-group">
                                         <label for="assistedlearning">Mode:</label>
                                         <div>
-                                            <select name="assistedlearning" id="assistedlearning" class="form-control">
+                                            <select name="assistedlearning" id="assistedlearning" class="form-control custom-select">
                                                 <option value="1" <?php echo $reader->assisted_learning==true ? ' selected ' : ''; ?>>Assisted</option>
                                                 <option value="0" <?php echo $reader->assisted_learning==false ? ' selected ' : ''; ?>>Free</option>
                                             </select>

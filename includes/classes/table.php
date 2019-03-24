@@ -79,7 +79,7 @@ abstract class Table
         $html .= '</colgroup><thead><tr>';
 
         if ($this->has_chkbox) {
-            $html .= '<th class="col-checkbox"><input id="chkbox-selall" type="checkbox"></th>';
+            $html .= '<th class="col-checkbox"><div class="custom-control custom-checkbox"><input id="chkbox-selall" class="custom-control-input" type="checkbox"><label class="custom-control-label" for="header-row"></label></div></th>';
         } else {
             $html .= '<th></th>';
         }

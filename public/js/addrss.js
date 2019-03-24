@@ -35,8 +35,7 @@ $(document).ready(function () {
         });    
     });
 
-
-    $(".btn-link").on("click", function () {
+    $(document).on("click", ".btn-link", function () {
         $sel_card = $(".fas", this);
 
         $sel_card.toggleClass("fa-chevron-right")
