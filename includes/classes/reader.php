@@ -220,7 +220,6 @@ class Reader extends Text
                 while ($row = $result->fetch_assoc()) {
                     $phrase = $row['word'];
                     $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
-                    // $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                     "<span class='word learned' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
                 }
                 
@@ -237,7 +236,6 @@ class Reader extends Text
                             while ($row = $result->fetch_assoc()) {
                                 $word = $row['freqWord'];
                                 $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
-                                // $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                                 "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
                             }
                         }

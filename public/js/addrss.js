@@ -126,7 +126,8 @@ $(document).ready(function () {
         }
     }
 
-    $(".btn-readlater").on("click", function (e) {
+
+    $(document).on("click", ".btn-readlater", function (e) {
         e.preventDefault();
         e.stopPropagation();
         addTextToLibrary(
@@ -136,7 +137,7 @@ $(document).ready(function () {
         );
     });
 
-    $(".btn-readnow").on("click", function (e) {
+    $(document).on("click", ".btn-readnow", function (e) {
         e.preventDefault();
         e.stopPropagation();
         addTextToLibrary(
@@ -146,7 +147,7 @@ $(document).ready(function () {
         );
     });
 
-    $(".btn-edit").on("click", function (e) {
+    $(document).on("click", ".btn-edit", function (e) {
         e.preventDefault();
         e.stopPropagation();
         addTextToLibrary(
