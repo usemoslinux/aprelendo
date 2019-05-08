@@ -22,7 +22,6 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\File;
 use Aprelendo\Includes\Classes\Languages;
-use Exception;
 
 class User 
 {
@@ -72,13 +71,13 @@ class User
         // check if user already exists
         $result = $this->con->query("SELECT userName FROM users WHERE userName='$username'");
         if ($result->num_rows > 0) {
-            throw new Exception ('Username already exists. Please try again.');
+            throw new \Exception ('Username already exists. Please try again.');
         }
         
         // check if email already exists
         $result = $this->con->query("SELECT userEmail FROM users WHERE userEmail='$email'");
         if ($result->num_rows > 0) {
-            throw new Exception ('Email already exists. Did you <a href="forgotpassword.php">forget</a> you username or password?');
+            throw new \Exception ('Email already exists. Did you <a href="forgotpassword.php">forget</a> you username or password?');
         }
         
         // create password hash
@@ -110,13 +109,13 @@ class User
                 return $this->sendActivationEmail($email, $username, $activation_hash);
                 
                 if (!$result) {
-                    throw new Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
+                    throw new \Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
                 }
             } else {
-                throw new Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
+                throw new \Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
             }
         } else {
-            throw new Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
+            throw new \Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
         }
     } // end register
     
@@ -150,7 +149,7 @@ class User
         $mail_sent = @mail($to, $subject, $message, $headers); // send email to reset password (requires 'sendmail' package in Debian/Ubuntu)
         if (!$mail_sent) {
             $this->delete();
-            throw new Exception ('Oops! There was an unexpected error trying to send you an e-mail to activate your account. Please try again later.');
+            throw new \Exception ('Oops! There was an unexpected error trying to send you an e-mail to activate your account. Please try again later.');
         }
         return true;
     } // end sendActivationEmail
@@ -175,10 +174,10 @@ class User
             $result = $this->con->query("UPDATE users SET userActive=true, userPremiumUntil='$yesterday' WHERE userName='$username' AND userActivationHash='$hash'");
 
             if (!$result) {
-                throw new Exception ('Oops! There was an unexpected error when trying to activate your account.');
+                throw new \Exception ('Oops! There was an unexpected error when trying to activate your account.');
             }            
         } else { // if no user is registered with that name & hash
-            throw new Exception ('The activation link seems to be malformed. Please try again using the one provided in the email we\'ve sent you.');
+            throw new \Exception ('The activation link seems to be malformed. Please try again using the one provided in the email we\'ve sent you.');
         } 
         return true;
     }
@@ -198,11 +197,11 @@ class User
         $row = $result->fetch_assoc();
         $hashedPassword = $row['userPasswordHash'];
         if ($result->num_rows == 0) { // wrong username
-            throw new Exception ('Username and password combination is incorrect. Please try again.');
+            throw new \Exception ('Username and password combination is incorrect. Please try again.');
         }
 
         if ($row['userActive'] == false) {
-            throw new Exception ('You need to activate your account first. Check your email for the activation link.');
+            throw new \Exception ('You need to activate your account first. Check your email for the activation link.');
         }
         
         if (password_verify($password, $hashedPassword)) { // login successful, remember me
@@ -219,10 +218,10 @@ class User
             if ($result) {
                 setcookie('user_token', $token, $time_stamp, "/", false, 0);
             } else {
-                throw new Exception ('There was a problem trying to create the authentication cookie. Please try again.');
+                throw new \Exception ('There was a problem trying to create the authentication cookie. Please try again.');
             }
         } else { // wrong password
-            throw new Exception ('Username and password combination is incorrect. Please try again.');
+            throw new \Exception ('Username and password combination is incorrect. Please try again.');
         }
         return true;
     } // end createRememberMeCookie
@@ -314,7 +313,7 @@ class User
             if ($this->name != $new_username) {
                 $result = $this->con->query("SELECT userName FROM users WHERE userName='$new_username'");
                 if ($result->num_rows > 0) {
-                    throw new Exception ('Username already exists. Please try again.');
+                    throw new \Exception ('Username already exists. Please try again.');
                 }
             }
             
@@ -322,7 +321,7 @@ class User
             if ($this->email != $new_email) {
                 $result = $this->con->query("SELECT userEmail FROM users WHERE userEmail='$new_email'");
                 if ($result->num_rows > 0) {
-                    throw new Exception ('Email already exists. Please try using another one.');
+                    throw new \Exception ('Email already exists. Please try using another one.');
                 }
             }
             
@@ -354,7 +353,7 @@ class User
                     }
                 }
             } else {
-                throw new Exception ('There was an unknown problem trying to update your profile. Please try again later.');
+                throw new \Exception ('There was an unknown problem trying to update your profile. Please try again later.');
             }
         }
         return true;
@@ -397,7 +396,7 @@ class User
         // delete user from db
         $result = $this->con->query("DELETE FROM users WHERE userId='{$this->id}'");
         if (!$result) {
-            throw new Exception('Oops! There was an unexpected problem trying to delete your account. Please try again later.');
+            throw new \Exception('Oops! There was an unexpected problem trying to delete your account. Please try again later.');
         }
     } // end logout
     
@@ -494,7 +493,7 @@ class User
                 if (password_verify($password, $hashedPassword)) {
                     return true;
                 } else {
-                    throw new Exception ('Username and password combination are incorrect. Please try again.');
+                    throw new \Exception ('Username and password combination are incorrect. Please try again.');
                 }
             }
     }

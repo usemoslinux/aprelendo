@@ -51,12 +51,13 @@ class Language
      * @param integer $user_id
      */
     public function __construct ($con, $id, $user_id) {
+        $id = $con->real_escape_string($id);
         $result = $con->query("SELECT * FROM languages WHERE LgID='$id'");
         if ($result) {
             $row = $result->fetch_assoc();
             
             $this->con = $con;
-            $this->id = $con->real_escape_string($id);
+            $this->id = $id;
             $this->user_id = $con->real_escape_string($user_id);
             $this->name = $con->real_escape_string($row['LgName']);
             $this->dictionary_uri = $con->real_escape_string($row['LgDict1URI']);
@@ -95,9 +96,7 @@ class Language
                 LgTranslatorURI='$translator_uri' WHERE LgUserId='$user_id' AND LgID='$id'";
         }
         
-        $result = $this->con->query($sql_str);
-
-        return $result;
+        return $this->con->query($sql_str);
     }
 
     /**

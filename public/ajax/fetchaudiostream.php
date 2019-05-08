@@ -22,11 +22,20 @@ require_once('../../includes/dbinit.php'); // connect to database
 require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks if user is logged in
 
 use Aprelendo\Includes\Classes\VoiceRSS;
-use Exception;
+use Aprelendo\Includes\Classes\LogAudioStreams;
 
 try {
     if (!isset($_POST['text']) || empty($_POST['text'] || !isset($_POST['langiso']) || empty($_POST['langiso']))){
-        throw new Exception (404);
+        throw new \Exception (404);
+    }
+
+    $stream_log = new LogAudioStreams($con, $user->id);
+    $streams_today = $stream_log->getTodayRecords();
+    $nr_of_streams_today = $streams_today === NULL ? 0 : count($streams_today);
+    $premium_user = $user->isPremium();
+
+    if ((!$premium_user && $nr_of_streams_today >= 1) || ($premium_user && $nr_of_streams_today >= 3)){
+        throw new \Exception (403);
     }
 
     $audiolang = array( 'en' => 'en-gb', 
@@ -49,8 +58,13 @@ try {
     ]);
     
     echo json_encode($voice);
+
+    // if no errors, log audio stream 
+    if ($voice['error'] === NULL) {
+        $stream_log->addRecord();
+    }
     
-} catch (Exception $e) {
+} catch (\Exception $e) {
     http_response_code($e->getMessage());
 }
 

@@ -21,22 +21,21 @@
 require_once('../../includes/dbinit.php'); // connect to database
 require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks if user is logged in
 
-use Exception;
-
 try {
     $file_uri = APP_ROOT . 'uploads/' . $_POST['filename'];
 
+    // check file name & if file exists
     if (!isset($_POST['filename']) || empty($_POST['filename']) || !file_exists($file_uri)) {
-        throw new Exception ("Incorrect file name error.");
+        throw new \Exception ("Incorrect file name error.");
     }
 
+    // verify epub file structure & integrity ($return == non-zero in case of error)
     exec('java -jar ' . APP_ROOT . 'tools/epubcheck/epubcheck.jar ' . $file_uri, $output, $return);
-
-    // Return will return non-zero upon an error
+    
     if ($return) {
-        throw new Exception ('Your ebook was uploaded, but it contains errors and may not render well. For more info go to http://validator.idpf.org/');
+        throw new \Exception ('Your ebook was uploaded, but it contains errors and may not render well. For more info go to http://validator.idpf.org/');
     }
-} catch (Exception $e) {
+} catch (\Exception $e) {
     $error = array('error_msg' => $e->getMessage());
     header('Content-Type: application/json');
     echo json_encode($error);

@@ -20,8 +20,6 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Exception;
-
 class File
 {
     protected $allowed_extensions = array('txt');
@@ -39,7 +37,7 @@ class File
             unlink($full_filename);
         } else {
             if (!empty($filename)) {
-                throw new Exception('There was an error deleting the associated file.');
+                throw new \Exception('There was an error deleting the associated file.');
                 log_error("Error: removing file $full_filename");
             }
         }
@@ -89,7 +87,7 @@ class File
             }
         } else {
             $error_str = '<ul>' . implode("<br/>", $errors) . '</ul>'; // show upload errors
-            throw new Exception($error_str);  
+            throw new \Exception($error_str);  
         }
     }
     
@@ -102,7 +100,7 @@ class File
         }
         // try to move file to uploads folder. If this fails, show error message
         if (!move_uploaded_file($temp_file_URI, $target_file_URI)) {
-            throw new Exception("<li>Sorry, there was an error uploading your file.</li>");  
+            throw new \Exception("<li>Sorry, there was an error uploading your file.</li>");  
         } else {
             return true;
         }

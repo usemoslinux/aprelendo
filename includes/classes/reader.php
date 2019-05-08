@@ -44,7 +44,7 @@ class Text
      */
     public function __construct($con, $id, $is_shared) {
         $this->con = $con;
-        $id = $con->escape_string($id); 
+        $id = $con->real_escape_string($id); 
         $this->is_shared = $is_shared;
 
         if ($is_shared) {

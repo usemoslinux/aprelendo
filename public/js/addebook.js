@@ -19,14 +19,14 @@
 
 $(document).ready(function () {
     var book = ePub();
-    emptyForm();
+    resetControls(true);
 
     $("#btn-upload-epub").on("click", function () {
         $("#url").trigger("click");
     });
 
     $('#url').on('change', function () {
-        $('#alert-error-msg').addClass('d-none');
+        $('#alert-msg').addClass('d-none');
 
         var $epub_file = $(this);
         var file_name = $epub_file[0].files[0].name.split('.');
@@ -65,6 +65,7 @@ $(document).ready(function () {
         $progressbar.width('33%');
         $progressbar.text('Uploading epub file...')
 
+        // try to upload file
         $.ajax({
                 type: "POST",
                 url: "ajax/addtext.php",
@@ -74,18 +75,24 @@ $(document).ready(function () {
                 processData: false
             })
             .done(function (data) {
+                // in case of error while trying to upload, show error message
                 if (typeof data.error_msg !== 'undefined' && data.error_msg.length != 0) {
                     showMessage(data.error_msg, 'alert-danger');
-                } else {
+                    resetControls(false);
+                } 
+                // if upload succeeds, validate epub file structure & integrity
+                else { 
                     $progressbar.width('66%');
-                    $progressbar.text('Validating epub file structure...');
+                    $progressbar.text('Validating epub file...');
 
                     $.ajax({
                             type: "POST",
                             url: "ajax/validateepub.php",
                             data: {'filename': data.filename} 
                         })
+                        // validate epub
                         .done(function (data) {
+                            // if epub file fails integrity checks, show error message
                             if (typeof data.error_msg !== 'undefined' && data.error_msg.length != 0) {
                                 $progressbar.width('100%');
                                 $progressbar.removeClass('progress-bar-success').addClass('progress-bar-danger');
@@ -93,7 +100,9 @@ $(document).ready(function () {
                                 $progressbar.parent().delay(4000).fadeOut('slow', function () {
                                     window.location.replace('texts.php');
                                 });
-                            } else {
+                            } 
+                            // if epub file has no errors...
+                            else {
                                 $progressbar.width('100%');
                                 $progressbar.text('Upload complete...');
                                 $progressbar.parent().delay(1500).fadeOut('slow', function () {
@@ -101,13 +110,16 @@ $(document).ready(function () {
                                 });
                             }
                         })
+                        // if validation fails, show error message
                         .fail(function (xhr, ajaxOptions, thrownError) {
-                            showMessage('Oops2! There was an unexpected error uploading this text.', 'alert-danger');
+                            showMessage('Oops! There was an unexpected error uploading this text.', 'alert-danger');
+                            resetControls(false);
                         });
                 }
             })
             .fail(function (xhr, ajaxOptions, thrownError) {
                 showMessage('Oops! There was an unexpected error uploading this text.', 'alert-danger');
+                resetControls(false);
             }); // end of ajax
     }); // end of #form-addebook.on.submit
 
@@ -124,15 +136,18 @@ $(document).ready(function () {
         $(window).scrollTop(0);
     } // end of showMessage
 
-
     /**
      * Empties form input fields
      */
-    function emptyForm() {
-        $('#alert-error-msg').addClass('d-none');
-        $('#title').val('');
-        $('#author').val('');
-        $('#url').val('');
+    function resetControls(empty_values) {
+        $('#upload-progress-bar').parent().addClass('d-none');
+        $('#btn-upload-epub').removeClass('disabled');
+        $('#btn-save').removeClass('disabled');
+        if (empty_values) {
+            $('#title').val('');
+            $('#author').val('');
+            $('#url').val('');    
+        }
     }
 
     /**

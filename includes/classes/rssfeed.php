@@ -20,8 +20,6 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Exception;
-
 class RSSFeed
 {
     public $title;
@@ -80,7 +78,7 @@ class RSSFeed
                 }
             }
         } else {
-            throw new Exception ('Oops! There was a problem trying to get this feed: ' . $url);
+            throw new \Exception ('Oops! There was a problem trying to get this feed: ' . $url);
         }
         return true;
     }

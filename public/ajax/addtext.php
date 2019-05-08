@@ -24,6 +24,7 @@ require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\SharedTexts;
 use Aprelendo\Includes\Classes\EbookFile;
+use Aprelendo\Includes\Classes\LogFileUploads;
 
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;
@@ -149,11 +150,25 @@ try {
                 $target_file_name = '';
                 $text = null;
 
-                if (isset($_FILES['url']) && $_FILES['url']['error'] !== UPLOAD_ERR_NO_FILE) {
-                    $ebook_file = new EbookFile($user->isPremium());
-                    $ebook_file->put($_FILES['url']);
-                    $target_file_name = $ebook_file->file_name;
+                // check if file exists
+                if (!isset($_FILES['url']) || $_FILES['url']['error'] === UPLOAD_ERR_NO_FILE) {
+                    throw new Exception('No file found. Please select a file to upload.');
                 }
+
+                // check if user is allowed to upload file & does not exceed the daily upload limit
+                $file_upload_log = new LogFileUploads($con, $user->id);
+                $uploads_today = $file_upload_log->getTodayRecords();
+                $nr_of_uploads_today = $uploads_today === NULL ? 0 : count($uploads_today);
+                $premium_user = $user->isPremium();
+
+                if ((!$premium_user) || ($premium_user && $nr_of_uploads_today >= 1)){
+                    throw new Exception ('Sorry, you have reached your file upload limit for today.');
+                }
+
+                // upload file
+                $ebook_file = new EbookFile($user->isPremium());
+                $ebook_file->put($_FILES['url']);
+                $target_file_name = $ebook_file->file_name;
 
                 // save text in db
                 $texts_table = new Texts($con, $user_id, $learning_lang_id);
@@ -165,7 +180,8 @@ try {
                 }
                 
                 if ($result) {
-                    // if everything goes fine return HTTP code 204 (No content), as nothing is returned 
+                    // if everything goes fine log upload & return HTTP code 204 (No content), as nothing is returned 
+                    $file_upload_log->addRecord();
                     $filename = array('filename' => $target_file_name);
                     header('Content-Type: application/json');
                     echo json_encode($filename);

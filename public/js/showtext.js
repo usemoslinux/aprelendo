@@ -675,6 +675,20 @@ $(document).ready(function () {
         loadAudio();
     });
 
+    function skipAudioPhases() {
+        $('#audioplayer-loader')
+                        .nextAll()
+                        .addBack()
+                        .slice(0,3)
+                        .remove();
+        
+        $('#btn-next-phase').html(
+            'Finish & Save<br/><span class="small">Skipped phases 2, 3 & 4: no audio detected</span>'
+        );
+
+        phase = 4;
+    }
+
     function loadAudio() { 
         if ($('#audioplayer').length > 0) {
             var txt = $('#text').text();
@@ -688,17 +702,8 @@ $(document).ready(function () {
             })
             .done(function (e) {
                 if (e.error != null) {
-                    $('#audioplayer-loader')
-                        .nextAll()
-                        .addBack()
-                        .slice(0,3)
-                        .remove();
-        
-                    $('#btn-next-phase').html(
-                        'Finish & Save<br/><span class="small">Skipped phases 2, 3 & 4: no audio detected</span>'
-                    );
-                    phase = 4;
-                    throw e;
+                    skipAudioPhases();
+                    // throw e;
                 }
                 var $audio_player = $('#audioplayer');
                 $audio_player.find('source').attr('src', e.response);
@@ -708,10 +713,19 @@ $(document).ready(function () {
                 $('#audioplayer-speedbar').removeClass('d-none');
             })
             .fail(function (xhr, ajaxOptions, thrownError) {
+                // FIXME: audio streaming sometimes fails with no reason... need to investigate more.
                 console.log(xhr.statusText);
                 console.log(ajaxOptions);
                 console.log(thrownError);
-                $('#audioplayer-loader').replaceWith('<div id="alert-msg-audio" class="alert alert-danger">There was an unexpected error trying to create audio from this text. <a href="#" id="retry-audio-load">Try again</a> later.</div>')
+
+                if (xhr.status == 403) {
+                    // TODO: implement "upgrade" page
+                    $('#audioplayer-loader').replaceWith('<div id="alert-msg-audio" class="alert alert-danger">You have reached your audio streaming limit for today. Although it is possible to continue with the revision of the text, we do not recommend it. Alternatively, you can try again tomorrow or you can consider supporting us and improving your plan to increase the daily audio streaming limit.</div>');
+                } else {
+                    $('#audioplayer-loader').replaceWith('<div id="alert-msg-audio" class="alert alert-danger">There was an unexpected error trying to create audio from this text. <a href="#" id="retry-audio-load">Try again</a> later.</div>')
+                }
+
+                skipAudioPhases();
             });        
         }
      }

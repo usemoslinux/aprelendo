@@ -20,7 +20,6 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Exception;
 use mysqli;
 
 class Connect 
@@ -47,11 +46,11 @@ class Connect
      * @return mysqli_connect
      */
     public function connect() {
-        $con = new  mysqli($this->host, $this->user, $this->password, $this->db);
+        $con = new mysqli($this->host, $this->user, $this->password, $this->db);
         
         if ($con->connect_errno) {
             // error_log('MySQL Error: ' . $con->connect_error, 3, PUBLIC_PATH . 'errors.log');
-            throw new Exception('Unable to connect to database!');
+            throw new \Exception('Unable to connect to database!');
         } 
 
         $con->set_charset($this->charset);

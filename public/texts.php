@@ -98,7 +98,7 @@ if (!empty($filter)) {
                             </div>
                         </div>
                         <!-- Split button -->
-                        <div class="dropdown ml-md-2 my-2">
+                        <div class="dropdown dropdown-add ml-md-2 my-2">
                             <button type="button" class="btn btn-success dropdown-btn dropdown-toggle" data-toggle="dropdown">
                                 <i class="fas fa-plus"></i> Add</a>
                             </button>

@@ -40,6 +40,9 @@ class RSSFeeds
      * @param integer $learning_lang_id
      */
     public function __construct($con, $user_id, $learning_lang_id) {
+        $user_id = $con->real_escape_string($user_id);
+        $learning_lang_id = $con->real_escape_string($learning_lang_id);
+
         $result = $con->query("SELECT LgRSSFeed1URI, LgRSSFeed2URI, LgRSSFeed3URI FROM languages WHERE LgUserId='$user_id' AND LgID='$learning_lang_id'");
 
         if ($result) {

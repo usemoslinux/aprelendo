@@ -39,7 +39,7 @@ $(document).ready(function () {
                 if (data.error_msg == null) {
                     showMessage('Your message was successfully sent. You shall receive an answer briefly.', 'alert-success');
                     
-                    setTimeout(emptyForm, 3000);
+                    setTimeout(resetControls, 3000);
                 } else {
                     showMessage(data.error_msg, 'alert-danger');
                 }
@@ -66,7 +66,7 @@ $(document).ready(function () {
     /**
      * Empties form input fields
      */
-    function emptyForm() {
+    function resetControls() {
         $('#alert-msg').addClass('d-none');
         $('#name').val('');
         $('#email').val('');

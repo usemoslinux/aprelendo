@@ -136,7 +136,7 @@ $(document).ready(function() {
     * This is triggered when user clicks the Fetch button or, externally, by bookmarklet/addons calls
     */
     function fetch_url() {
-        emptyForm(true);
+        resetControls(true);
 
         var url = $('#url').val();
         
@@ -180,7 +180,7 @@ $(document).ready(function() {
     
 });
 
-function emptyForm(exceptSourceURI) {
+function resetControls(exceptSourceURI) {
     $('#alert-error-msg').addClass('d-none');
     $('#type').prop('selectedIndex', 0);
     $('#title').val('');

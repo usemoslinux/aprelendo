@@ -213,7 +213,7 @@ if ($user->isLoggedIn()) {
 
 <!-- PRICING -->
 <section class="pricing py-5">
-    <div class="container">
+    <div id="pricing" class="container">
         <div class="row">
             <!-- Free Tier -->
             <div class="col-lg-4">
