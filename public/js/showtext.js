@@ -59,7 +59,7 @@ $(document).ready(function () {
      * Pauses dictation audio when user is typing an answer inside an input
      * @param {event object} e Used to get keycodes
      */
-    $("body").on("keydown", "input:text", function (e) {
+    $("body").on("input", "input:text", function (e) {
         var lastkeypress = new Date().getTime();
         var keyCode = e.keyCode || e.which;
 
@@ -287,7 +287,7 @@ $(document).ready(function () {
                 var actual_phase = $('#alert-msg-phase').attr('data-phase');
                 if (phase == 4 && audio_is_loaded && actual_phase == 3) {
                     var phase_names = ['Reading', 'Listening', 'Speaking', 'Writing'];
-                    $('#btn-next-phase').html('Go to phase ' + phase + '<br/><span class="small">' + 
+                    $('#btn-next-phase').html('Go to phase ' + phase + '<br><span class="small">' + 
                     phase_names[phase-1] + '</span>');
                     phase = parseInt(actual_phase);
                 }
@@ -334,7 +334,7 @@ $(document).ready(function () {
                     // if user is in phase 3 (speaking) and deleted the only word that was underlined
                     // don't allow phase 3 (writing) & go directly to last phase (save changes)
                     if (phase == 3 && audio_is_loaded > 0 && $('.learning, .new, .forgotten').length == 0) {
-                        $('#btn-next-phase').html('Finish & Save<br/><span class="small">Skipped phase 4 (writing): no underlined words</span>');
+                        $('#btn-next-phase').html('Finish & Save<br><span class="small">Skipped phase 4 (writing): no underlined words</span>');
                         phase++;
                     }
                 });
@@ -362,7 +362,7 @@ $(document).ready(function () {
                 
                 if (!audio_is_loaded) {
                     $(this).html(
-                        'Finished (no audio detected)<br/><span class="small">Save changes</span>'
+                        'Finished (no audio detected)<br><span class="small">Save changes</span>'
                     );
                     phase = 4;
                     break;
@@ -370,11 +370,11 @@ $(document).ready(function () {
                 
                 phase++;
                 
-                $msg_phase.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 2:</strong> Listening <br/><span class="small">Pay attention to the pronunciation of each word. You can slow down the audio if necessary.</span>')
+                $msg_phase.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 2:</strong> Listening <br><span class="small">Pay attention to the pronunciation of each word. You can slow down the audio if necessary.</span>')
                 .attr('data-phase', phase);
 
                 $(this).html(
-                    'Go to phase 3<br/><span class="small">Speaking</span>'
+                    'Go to phase 3<br><span class="small">Speaking</span>'
                 );
                 
                 playAudioFromBeginning();
@@ -387,7 +387,7 @@ $(document).ready(function () {
                 );
                 if (!audio_is_loaded) {
                     $(this).html(
-                        'Finish & Save<br/><span class="small">Skipped phase 4 (writing): no audio detected</span>'
+                        'Finish & Save<br><span class="small">Skipped phase 4 (writing): no audio detected</span>'
                     );
                     phase = 4;
                     break;
@@ -395,19 +395,19 @@ $(document).ready(function () {
 
                 if ($(".learning, .new, .forgotten").length == 0) {
                     $(this).html(
-                        'Finish & Save<br/><span class="small">Skipped phase 4 (writing): no underlined words</span>'
+                        'Finish & Save<br><span class="small">Skipped phase 4 (writing): no underlined words</span>'
                     );
                     phase = 4;
                     $msg_phase.attr('data-phase', 3);
                 } else {
                     $(this).html(
-                        'Go to phase 4<br/><span class="small">Writing</span>'
+                        'Go to phase 4<br><span class="small">Writing</span>'
                     );
                     phase++;
                     $msg_phase.attr('data-phase', phase);
                 }
                 
-                $msg_phase.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 3:</strong> Speaking <br/><span class="small">Read out loud and try to emulate the pronunciation of each word as you listen to the audio. You can slow it down if necessary.</span>')
+                $msg_phase.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 3:</strong> Speaking <br><span class="small">Read out loud and try to emulate the pronunciation of each word as you listen to the audio. You can slow it down if necessary.</span>')
                 
                 playAudioFromBeginning();
                 break;
@@ -422,7 +422,7 @@ $(document).ready(function () {
 
                 $(this).html('Finish & Save');
                 
-                $msg_phase.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 4:</strong> Writing.<br/><span class="small">Fill in the blanks as you listen to the dictation.</span>')
+                $msg_phase.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Assisted learning - Phase 4:</strong> Writing.<br><span class="small">Fill in the blanks as you listen to the dictation.</span>')
                 .attr('data-phase', phase);
                 
                 toggleDictation();
@@ -659,7 +659,7 @@ $(document).ready(function () {
     /**
      * Jumps to next input when user presses Enter inside an input
      */
-    $("body").on("keydown", ".dict", function (e) {
+    $("body").on("input", ".dict", function (e) {
         if (e.which === 13) {
             var index = $(".dict").index(this) + 1;
             $(".dict")
@@ -683,7 +683,7 @@ $(document).ready(function () {
                         .remove();
         
         $('#btn-next-phase').html(
-            'Finish & Save<br/><span class="small">Skipped phases 2, 3 & 4: no audio detected</span>'
+            'Finish & Save<br><span class="small">Skipped phases 2, 3 & 4: no audio detected</span>'
         );
 
         phase = 4;

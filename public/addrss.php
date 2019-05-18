@@ -59,7 +59,7 @@ require_once('header.php');
         </div>
     </div>
 
-    <script src="js/addrss.js"></script>
+    <script defer src="js/addrss.js"></script>
     <?php require_once('footer.php') ?>
 
     

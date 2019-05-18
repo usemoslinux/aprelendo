@@ -143,16 +143,20 @@ if ($user->isLoggedIn()) {
         <div class="row">
             <h1 id="hiw" class="col-12">How it works</h1>
             <div class="col-xl-6">
-                <img class="img-fluid" src="img/backgrounds/pattern-wallpaper.png" alt="How it works">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/5HLr9uxJNDs" 
+                        frameborder="0" allowfullscreen class="video"></iframe>
+                </div>
             </div>
             <div class="col-xl-6">
                 <ol>
-                    <li>Add texts to your Aprelendo personal library using our extensions. Premium users can also
-                        upload Youtube videos and ebooks.</li>
-                    <li>Read your texts (or transcripts) and look up words you don't know.</li>
+                    <li>Add texts to your Aprelendo library using our extensions. Premium users can also
+                        upload ebooks and add RSS feeds.</li>
+                    <li>Read texts (or transcripts) and look up words you don't know.</li>
                     <li>Whenever you encounter these words in other texts they will appear underlined, indicating you
                         are still learning them. After a couple times without looking for their meaning, the
                         underlining will disappear.</li>
+                    <li>If you turn on assisted learning, you will practice not only your reading comprehension skills but also your listening, speaking and writing skills. For more info on this, check our <a href="totalreading.php">total reading</a> section.</li>
                 </ol>
 
             </div>
@@ -168,40 +172,35 @@ if ($user->isLoggedIn()) {
             <div class="left col-xl-6">
                 <blockquote class="quote">
                     <p>
-                        Aprelendo is probably my top resource now for learning new languages.
+                        ...........
                     </p>
                     <br />
-                    <footer>Alex Rawlings - Language Teacher</footer>
+                    <footer>......... - ..........</footer>
                 </blockquote>
             </div>
             <div class="right col-xl-6">
                 <blockquote class="quote">
                     <p>
-                        Aprelendo is one of the best language learning tools I've ever used. It is especially good for
-                        helping you get past the beginner
-                        levels of a language and into the intermediate and advanced stages.
+                        ........
                     </p>
                     <br />
-                    <footer>Ron Gullekson - Language Surfer</footer>
+                    <footer>..... - .....</footer>
                 </blockquote>
             </div>
             <div class="left col-xl-6">
                 <blockquote class="quote">
                     <p>
-                        It is difficult to give something that is so young a five star rating, but this is already one
-                        of the best sites (along with
-                        stuff like Anki, Memrise, "X"Pod, Duolingo, LingQ, etc.) around for this and it is only getting
-                        better.
+                        ...........
                     </p>
-                    <footer>Joseph Heavner - Quora </footer>
+                    <footer>.........</footer>
                 </blockquote>
             </div>
             <div class="right col-xl-6">
                 <blockquote class="quote">
                     <p>
-                        This is one of the most fantastic language learning tools I have ever encountered.
+                        ...........
                     </p>
-                    <footer>Foreigner on German Soil </footer>
+                    <footer>.........</footer>
                 </blockquote>
             </div>
         </div>
@@ -287,5 +286,5 @@ if ($user->isLoggedIn()) {
 </section>
 
 
-<script src="js/register.js"></script>
+<script defer src="js/register.js"></script>
 <?php require_once 'footer.php'?>

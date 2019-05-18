@@ -34,9 +34,9 @@ try {
     if (empty($_FILES) && empty($_POST) && isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
         $post_max_size = ini_get('post_max_size'); //grab the size limits...
         throw new Exception("Please note that posts larger than $post_max_size will result in this error!" .
-            "<br/>This is a limitation of the hosting server." .
-            "<br/>If you have access to the php ini file you can fix this by changing the <code>post_max_size</code> setting." .
-            "<br/>If you can't, please ask your host to increase the size limits.");
+            "<br>This is a limitation of the hosting server." .
+            "<br>If you have access to the php ini file you can fix this by changing the <code>post_max_size</code> setting." .
+            "<br>If you can't, please ask your host to increase the size limits.");
     } else {
         switch ($_POST['mode']) {
             case 'simple':
@@ -116,7 +116,7 @@ try {
                         throw new Exception ('Oops! There was an unexpected error when uploading this text.');
                     }
                 } else {
-                    $error_str = '<ul>' . implode("<br/>", $errors) . '</ul>'; // show upload errors
+                    $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
                     throw new Exception ($error_str);    
                 }
             }

@@ -7,7 +7,7 @@ var tour_steps = [
     {
         element: "#user-dropdown",
         title: "User menu",
-        content: "There are four different 'sections' in Aprelendo: <ol><li>your private texts,</li><li>texts shared by the community,</li><li>the list of words you are learning,</li><li>your learning stats.</li></ol>Here you can access all of them. <br/><br/>Also, you will find the settings page and your user profile. In case of doubt, remember to look for this <i class='far fa-question-circle'></i> symbol.",
+        content: "There are four different 'sections' in Aprelendo: <ol><li>your private texts,</li><li>texts shared by the community,</li><li>the list of words you are learning,</li><li>your learning stats.</li></ol>Here you can access all of them. <br><br>Also, you will find the settings page and your user profile. In case of doubt, remember to look for this <i class='far fa-question-circle'></i> symbol.",
         placement: 'bottom'
     },
     {
@@ -19,31 +19,31 @@ var tour_steps = [
     {
         element: "#add-wrapper-div",
         title: "Adding content",
-        content: "This button allows you to add 'simple' texts (articles, conversations, letters, song lyrics and others) to your library. <br/><br/>By clicking in the dropdown arrow you can add other types of content, such as YouTube videos, ebooks and RSS texts. The last two are available for premium users only.",
+        content: "This button allows you to add 'simple' texts (articles, conversations, letters, song lyrics and others) to your library. <br><br>By clicking in the dropdown arrow you can add other types of content, such as YouTube videos, ebooks and RSS texts. The last two are available for premium users only.",
         placement: 'bottom'
     },
     {
         element: "#extensions-link",
         title: "Extensions & Bookmarklets",
-        content: "Another, more practical, way to add texts and YouTube videos to Aprelendo is by using our tailor made extensions (Firefox & Chrome). <br/><br/>For more information on this, we strongly suggest to take a look at this page after the tour ends.",
+        content: "Another, more practical, way to add texts and YouTube videos to Aprelendo is by using our tailor made extensions (Firefox & Chrome). <br><br>For more information on this, we strongly suggest to take a look at this page after the tour ends.",
         placement: 'top'
     },
     {
         element: "#search-wrapper-div",
         title: "Search",
-        content: "Use this box to search for texts in your <u>private</u> library. <br/><br/>To search texts shared by the community you need to go to the appropriate section, via the <i class='fas fa-user-circle'></i> user menu, in the upper right.",
+        content: "Use this box to search for texts in your <u>private</u> library. <br><br>To search texts shared by the community you need to go to the appropriate section, via the <i class='fas fa-user-circle'></i> user menu, in the upper right.",
         placement: 'bottom'
     },
     {
         element: "#filter-wrapper-div",
         title: "Filter",
-        content: "Filter search results by selecting one of six different types of texts (articles, conversations, letters, song lyrics, ebooks and others). <br/><br/>Here you will also find an option to search for archived texts, which are those you have already finished reading.",
+        content: "Filter search results by selecting one of six different types of texts (articles, conversations, letters, song lyrics, ebooks and others). <br><br>Here you will also find an option to search for archived texts, which are those you have already finished reading.",
         placement: 'bottom'
     },
     {
         element: "#actions-menu",
         title: "Actions menu",
-        content: "The 'actions' menu has two entries: delete and archive. <br/><br/>The first will delete the selected texts from your library. <br/><br/>The second will tag them as 'archived', meaning they will stay hidden unless you specifically set your search results to show 'archived' texts.",
+        content: "The 'actions' menu has two entries: delete and archive. <br><br>The first will delete the selected texts from your library. <br><br>The second will tag them as 'archived', meaning they will stay hidden unless you specifically set your search results to show 'archived' texts.",
         placement: 'top'
     },
     {

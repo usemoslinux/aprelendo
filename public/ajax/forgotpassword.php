@@ -48,7 +48,7 @@ try {
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
             $headers .= 'From:' . EMAIL_SENDER;
             
-            $mail_sent = mail($to, $subject, $message, $headers); // send email to reset password (requires 'sendmail' package in Debian/Ubuntu)
+            $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
             if (!$mail_sent) {
                 throw new Exception ('There was an error trying to send you an e-mail with your new temporary password.');
             }

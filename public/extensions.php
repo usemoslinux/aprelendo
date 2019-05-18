@@ -29,36 +29,36 @@ if (!$user->isLoggedIn()) {
                     <h4>Extensions</h4>
                     <p>Simply download the corresponding extension file and install it in your favorite Web browser.</p>
                     <div class="btn-group">
-                        <a href="#" class="btn btn-secondary"><i class="fab fa-chrome"></i> Download Chrome extension</a>
-                        <a href="#" class="btn btn-secondary"><i class="fab fa-firefox"></i> Download Firefox extension</a>
+                        <a href="https://chrome.google.com/webstore/detail/aprelendo/aocicejjgilfkeeklfcomejgphjhjonj/related?hl=en-US" target="_blank" rel="noopener noreferrer" class="btn btn-secondary"><i class="fab fa-chrome"></i> Download Chrome extension</a>
+                        <a href="https://addons.mozilla.org/en-US/firefox/addon/aprelendo/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary"><i class="fab fa-firefox"></i> Download Firefox extension</a>
                     </div>
                     <p>Once installed, click the Aprelendo button to import the content of the page being displayed in
                         the active tab.</p>
-                    <br/>
+                    <br>
                     <h4>Bookmarklets</h4>
                     <p>Bookmarklets are a "one-click" tool which add functionality to the browser. From a user
                         perspective, they work very much like regular bookmarks.</p>
                     <p>For more information on bookmarklets, we suggest reading
                         <a href="https://en.wikipedia.org/wiki/Bookmarklet">Wikipedia's article</a> on this subject.
                     </p>
-                    <br/>
-                    <h4>How are bookmarklets different from extensions?</h4>
+                    <br>
+                    <h6>How are bookmarklets different from extensions?</h6>
                     <ul>
                         <li>They do basic tasks on clicking.</li>
                         <li>They are universal, i.e. they usually work on any browser and whatever the platform, mobile
                             or desktop.</li>
                         <li>They are managed as any bookmarks.</li>
                     </ul>
-                    <br/>
-                    <h4>What does Aprelendo use bookmarklets for?</h4>
+                    <br>
+                    <h6>What does Aprelendo use bookmarklets for?</h6>
                     <p>Aprelendo uses bookmarklets to automagically parse the text of the current web page and add it
                         to your library.</p>
                     <p>It's an alternative to creating specific addons for different browsers. It's easier to implement
                         and has the added advantage that it works in almost any device and/or browser.</p>
-                    <br/>
-                    <h4>How do I install Aprelendo's bookmarklet in my web browser?</h4>
+                    <br>
+                    <h6>How do I install Aprelendo's bookmarklet in my web browser?</h6>
                     <p>To install the bookmarklet, simply:</p>
-                    <h5>Desktops</h5>
+                    <strong>Desktops</strong>
                     <ol>
                         <li>Show the Bookmarks Toolbar:
                             <p>In Firefox: Go to
@@ -76,15 +76,15 @@ if (!$user->isLoggedIn()) {
                                 to Aprelendo</a>
                                 <p>It should now appear on the toolbar. </li>
                     </ol>
-                    <h5>Mobile devices</h5>
+                    <strong>Mobile devices</strong>
                     <p>The easiest way is to add the bookmarklet in your desktop device, synchronize your favorite
                         Internet browser and wait for the bookmarklet to be automatically added to your mobile device.</p>
-                    <br/>
-                    <h4>How to use Aprelendo's bookmarklet once installed</h4>
-                    <h5>Desktops</h5>
+                    <br>
+                    <h6>How to use Aprelendo's bookmarklet once installed</h6>
+                    <strong>Desktops</strong>
                     <p>Simply go to the web page you would like to add to you library and click on Aprelendo's
                         bookmarklet. It's as easy as it gets.</p>
-                    <h5>Mobile devices</h5>
+                    <strong>Mobile devices</strong>
                     <p>Go to the web page you would like to add to you library, tap on the URL bar and start to write
                         "Aprelendo". Choose Aprelendo's bookmarklet and let the magic happen.</p>
                     <p>In both cases, you'll be redirected to Aprelendo so that you can do

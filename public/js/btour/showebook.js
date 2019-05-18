@@ -4,7 +4,7 @@ var tour_steps = [
         element: ".lds-ripple",
         title: "Processing words",
         placement: 'bottom',
-        content: "This loader indicates that Aprelendo is still processing the current chapter to underline words accordingly.<br/><br/>Please, be patient. It can take a while depending on the number of words of the current chapter and those you've already saved in your library.",
+        content: "This loader indicates that Aprelendo is still processing the current chapter to underline words accordingly.<br><br>Please, be patient. It can take a while depending on the number of words of the current chapter and those you've already saved in your library.",
     },
     {
         element: "#hamburger",
@@ -16,7 +16,7 @@ var tour_steps = [
         element: "#btn-save",
         title: "Save & Close",
         placement: 'bottom',
-        content: "Always remember to click this button once you finish your reading session.<br/><br/>This ensures that you reading position is saved and that the status of the words you learned is updated correctly.",
+        content: "Always remember to click this button once you finish your reading session.<br><br>This ensures that you reading position is saved and that the status of the words you learned is updated correctly.",
     }
 ];
 

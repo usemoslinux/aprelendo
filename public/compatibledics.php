@@ -64,12 +64,12 @@ if (!$user->isLoggedIn()) {
                         target="_blank" rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/english-spanish/%s</a></li>
                         <li>Wordreference: <a href="https://www.wordreference.com/es/translation.asp?tranword=%s"
                         target="_blank" rel="noopener noreferrer">https://www.wordreference.com/es/translation.asp?tranword=%s</a></li>
-                        <small><i>(*) Only English-&gt;Spanish dictionaries are listed.<br/>To make them work in your native language make sure to replace "es" or "spanish" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br/>
+                        <small><i>(*) Only English-&gt;Spanish dictionaries are listed.<br>To make them work in your native language make sure to replace "es" or "spanish" with the ISO code or name corresponding to your language.</i></small>
+                        <br /><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version).
                     </ul>
-                    <br/>
+                    <br>
                     <h4>Spanish</h4>
                     <strong>Monolingual dictionaries</strong>
                     <ul>
@@ -95,12 +95,12 @@ if (!$user->isLoggedIn()) {
                         <li>Cambridge dictionary: <a href="https://dictionary.cambridge.org/dictionary/spanish-english/%s"
                                 target="_blank" rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/spanish-english/%s</a></li>
                         <li>Wordreference: <a href="https://www.wordreference.com/esen/%s" target="_blank" rel="noopener noreferrer">https://www.wordreference.com/esen/%s</a></li>
-                        <small><i>Only Spanish-&gt;English dictionaries are listed.<br/>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br/>
+                        <small><i>Only Spanish-&gt;English dictionaries are listed.<br>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
+                        <br /><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version).
                     </ul>
-                    <br/>
+                    <br>
                     <h4>Portuguese</h4>
                     <strong>Monolingual dictionaries</strong>
                     <ul>
@@ -124,19 +124,19 @@ if (!$user->isLoggedIn()) {
                         <li>Cambridge dictionary: <a href="https://dictionary.cambridge.org/dictionary/portuguese-english/%s"
                                 target="_blank" rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/portuguese-english/%s</a></li>
                         <li>Wordreference: <a href="https://www.wordreference.com/pten/%s" target="_blank" rel="noopener noreferrer">https://www.wordreference.com/pten/%s</a></li>
-                        <small><i>Only Portuguese-&gt;English dictionaries are listed.<br/>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br/>
+                        <small><i>Only Portuguese-&gt;English dictionaries are listed.<br>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
+                        <br /><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version).
                     </ul>
-                    <br/>
+                    <br>
                     <h4>French</h4>
                     <strong>Monolingual dictionaries</strong>
                     <ul>
                         <li>Wiktionary: <a href="https://fr.m.wiktionary.org/wiki/%s" target="_blank" rel="noopener noreferrer">https://fr.m.wiktionary.org/wiki/%s</a></li>
                         <li>The Free Dictionary: <a href="https://fr.thefreedictionary.com/%s" target="_blank" rel="noopener noreferrer">https://fr.thefreedictionary.com/%s</a></li>
                         <li>Forvo: <a href="https://forvo.com/search/%s/fr/" target="_blank" rel="noopener noreferrer">https://forvo.com/search/%s/fr/</a></li>
-                        <br/>
+                        <br>
                         The following have been reported not to work: <a href="http://dictionnaire.sensagent.leparisien.fr" target="_blank" rel="noopener noreferrer">Le Parisien</a> (bad HTTPS certificate), <a href="https://www.larousse.fr/" target="_blank" rel="noopener noreferrer">Larousse</a> (no mobile version), <a href="http://www.le-dictionnaire.com/" target="_blank" rel="noopener noreferrer">Le Dictionnaire</a> (no HTTPS site).
                     </ul>
                     <br>
@@ -152,12 +152,12 @@ if (!$user->isLoggedIn()) {
                         <li>Cambridge dictionary: <a href="https://dictionary.cambridge.org/dictionary/french-english/%s"
                                 target="_blank" rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/french-english/%s</a></li>
                         <li>Wordreference: <a href="https://www.wordreference.com/fren/%s" target="_blank" rel="noopener noreferrer">https://www.wordreference.com/fren/%s</a></li>
-                        <small><i>Only French-&gt;English dictionaries are listed.<br/>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br/>
+                        <small><i>Only French-&gt;English dictionaries are listed.<br>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
+                        <br /><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version).
                     </ul>
-                    <br/>
+                    <br>
                     <h4>Italian</h4>
                     <strong>Monolingual dictionaries</strong>
                     <ul>
@@ -180,12 +180,12 @@ if (!$user->isLoggedIn()) {
                         <li>Cambridge dictionary: <a href="https://dictionary.cambridge.org/dictionary/italian-english/%s"
                                 target="_blank" rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/italian-english/%s</a></li>
                         <li>Wordreference: <a href="https://www.wordreference.com/iten/%s" target="_blank" rel="noopener noreferrer">https://www.wordreference.com/iten/%s</a></li>
-                        <small><i>Only Italian-&gt;English dictionaries are listed.<br/>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br/>
+                        <small><i>Only Italian-&gt;English dictionaries are listed.<br>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
+                        <br /><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version).
                     </ul>
-                    <br/>
+                    <br>
                     <h4>German</h4>
                     <strong>Monolingual dictionaries</strong>
                     <ul>
@@ -209,8 +209,8 @@ if (!$user->isLoggedIn()) {
                                 target="_blank" rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/german-english/%s</a></li>
                         <li>Wordreference: <a href="https://www.wordreference.com/deen/%s" target="_blank" rel="noopener noreferrer">https://www.wordreference.com/deen/%s</a></li>
                         <li>Dict.cc: <a href="https://deen.dict.cc/?s=%s" target="_blank" rel="noopener noreferrer">https://deen.dict.cc/?s=%s</a></li>
-                        <small><i>Only German-&gt;English dictionaries are listed.<br/>To make them work in your native language. Just make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br/>
+                        <small><i>Only German-&gt;English dictionaries are listed.<br>To make them work in your native language. Just make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
+                        <br /><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version). 
                     </ul>

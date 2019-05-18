@@ -181,7 +181,7 @@ class Reader extends Text
     */
     public function addLinks($text)
     {
-        $find = array('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|<[^>]*>(*SKIP)(*F)|([-\w’]+)/iu', '/<[^>]*>(*SKIP)(*F)|[^\w<]+/u');
+        $find = array('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|<[^>]*>(*SKIP)(*F)|(\w+)/iu', '/<[^>]*>(*SKIP)(*F)|[^\w<]+/u');
         
         $replace = array("<span class='word' data-toggle='modal' data-target='#myModal'>$0</span>", "<span>$0</span>");
         
@@ -299,7 +299,7 @@ class Reader extends Text
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <strong>Assisted learning - Phase 1:</strong> Reading
-                            <br/>
+                            <br>
                             <span class="small">Look up words in the dictionary. Try to understand the meaning of both the text as a whole and each word/phrase.</span>
                         </div>';   
         }
@@ -322,7 +322,7 @@ class Reader extends Text
         
         if ($this->assisted_learning) {
             $html .= '<button type="button" id="btn-next-phase" class="basic btn btn-lg btn-primary btn-block">Go to phase 2
-                      <br/>
+                      <br>
                       <span class="small">Listening</span>
                       </button>';
         } else {

@@ -4,7 +4,7 @@ var tour_steps = [
         element: "",
         title: "Adding RSS/Atom feeds",
         placement: 'auto',
-        content: "RSS and Atom are web feeds that allow you to access your favorite content in a standardized, computer-readable format.<br/><br/>Aprelendo supports them both, but only up to 3 feeds by language are allowed.<br/><br/>You can add new feeds in your Languages section. Once that's done, here you will be able to access all your feed entries and add them to your library.",
+        content: "RSS and Atom are web feeds that allow you to access your favorite content in a standardized, computer-readable format.<br><br>Aprelendo supports them both, but only up to 3 feeds by language are allowed.<br><br>You can add new feeds in your Languages section. Once that's done, here you will be able to access all your feed entries and add them to your library.",
         onNext: function (tour) {
             $('#item-1').collapse('toggle');
             $('#item-1-1').collapse('toggle');
@@ -14,7 +14,7 @@ var tour_steps = [
         element: "#item-1-1 .btn-addsound",
         title: "Edit",
         placement: 'auto',
-        content: "Adds this RSS entry to your library and redirects you to the 'edit' page so that you can make further changes to the text.<br/><br/>This option can be useful if the RSS shows a shortened version of the post, which is fairly common these days. Once you are in the 'edit' page, click the 'Fetch' button and Aprelendo will try to extract the complete post text, not just the summary shown here.",
+        content: "Adds this RSS entry to your library and redirects you to the 'edit' page so that you can make further changes to the text.<br><br>This option can be useful if the RSS shows a shortened version of the post, which is fairly common these days. Once you are in the 'edit' page, click the 'Fetch' button and Aprelendo will try to extract the complete post text, not just the summary shown here.",
     },
     {
         element: "#item-1-1 .btn-readnow",

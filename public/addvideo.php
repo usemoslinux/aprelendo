@@ -77,6 +77,6 @@ require_once('header.php');
     </div>
 </div>
 
-<script src="js/addvideo.js"></script>
+<script defer src="js/addvideo.js"></script>
 
 <?php require_once 'footer.php'?>

@@ -2,7 +2,7 @@
 require_once('header.php')
 ?>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 
 <div class="container mtb">
     <div class="row">
@@ -32,6 +32,6 @@ require_once('header.php')
         </div>
     </div>
 </div>
-<script src="js/stats.js"></script>
+<script defer src="js/stats.js"></script>
 
 <?php require_once('footer.php') ?>

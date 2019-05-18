@@ -54,8 +54,8 @@ class PopularSources extends DBEntity {
             return true; // end execution
         }
 
-        $domain = \strtolower($domain);
-        if (\in_array($domain, $invalid_sources)) {
+        $domain = strtolower($domain);
+        if (in_array($domain, $invalid_sources) || strpos($domain, '.epub', -1) === 5) {
             return true; // end execution
         }
 

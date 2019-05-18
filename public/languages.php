@@ -55,6 +55,6 @@ if (isset($_POST['submit'])) {                  // check if we need to save new 
         </div>
     </div>
 
-    <script src="js/languages.js"></script>
+    <script defer src="js/languages.js"></script>
     <?php require_once('footer.php') ?>
     

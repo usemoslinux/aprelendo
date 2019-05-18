@@ -104,11 +104,11 @@ class TextTable extends Table {
                 $total_likes = isset($this->rows[$i][9]) ? $this->rows[$i][9] : 0; // get total user likes for this post
                 $user_liked = $this->rows[$i][10] ? 'fas' : 'far'; // check if user liked this post
 
-                $html .= "<tr><td class='text-center'><span title='Like'><i class='$user_liked fa-heart' data-idText='$text_id'></i><br/><small>$total_likes</small></span></td>";
+                $html .= "<tr><td class='text-center'><span title='Like'><i class='$user_liked fa-heart' data-idText='$text_id'></i><br><small>$total_likes</small></span></td>";
             }
             
             $html .= '<td class="col-title">' . $type_array[$this->rows[$i][5]-1][1] . ' ' . $link .
-            $text_title . '</a><br/><small>' . $text_author . $shared_by . $text_level . $nr_of_words . '</small></td></tr>';
+            $text_title . '</a><br><small>' . $text_author . $shared_by . $text_level . $nr_of_words . '</small></td></tr>';
         }
         return $html;
     }

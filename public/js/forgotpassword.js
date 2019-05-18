@@ -54,7 +54,7 @@ $(document).ready(function () {
             })
             .done(function (data) {
                 if (data.error_msg == null) {
-                    showMessage('Your new password was successfully saved!<br/>You will soon be redirected to the login page', 'alert-success');
+                    showMessage('Your new password was successfully saved!<br>You will soon be redirected to the login page', 'alert-success');
                     setTimeout(function() {window.location.replace("https://www.aprelendo.com/login.php")}, 5000);
                 } else {
                     showMessage(data.error_msg, 'alert-danger');

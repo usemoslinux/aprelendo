@@ -85,9 +85,9 @@ require_once('header.php');
 </div>
 
 <!-- Epub.js & jszip -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-<script src="js/epubjs/epub.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+<script defer src="js/epubjs/epub.min.js"></script>
 
-<script src="js/addebook.js"></script>
+<script defer src="js/addebook.js"></script>
 
 <?php require_once 'footer.php'?>

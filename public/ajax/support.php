@@ -50,7 +50,7 @@ try {
         $message .= "\r\n\r\nIP: " . $_SERVER['REMOTE_ADDR'];
         $message .= "\r\n\r\nDevice: " . $_SERVER['HTTP_USER_AGENT'];
         
-        $mail_sent = mail($to, $subject, $message, $headers); // send email 
+        $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
         if (!$mail_sent) {
             throw new Exception ('There was an unexpected error trying to send your query. Please try again later.');
         }

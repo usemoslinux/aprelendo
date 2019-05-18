@@ -37,7 +37,7 @@
 <?php
 $file_name = 'js/tour/' . basename($_SERVER['PHP_SELF'], ".php") . '.js';
 if (file_exists(PUBLIC_PATH . $file_name)) {
-    echo "<script src='/$file_name'></script>";
+    echo "<script defer src='/$file_name'></script>";
 }
 ?>
 

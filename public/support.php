@@ -25,7 +25,7 @@ if (!$user->isLoggedIn()) {
             </ol>
             <div class="row flex">
                 <div class="col-sm-12">
-                    <p>Use the form below to drop us an e-mail.<br/><small>Please note that, for security reasons, your IP and user agent details will be stored.</small></p>
+                    <p>Use the form below to drop us an e-mail.<br><small>Please note that, for security reasons, your IP and user agent details will be stored.</small></p>
                     <div id="alert-msg" class="d-none"></div>
                     <form id="form-support" action="" class="add-form" method="post" enctype="multipart/form-data">
                         <div class="form-row">
@@ -63,6 +63,6 @@ if (!$user->isLoggedIn()) {
     </div>
 </div>
 
-<script src="js/support.js"></script>
+<script defer src="js/support.js"></script>
 
 <?php require_once 'footer.php';?>

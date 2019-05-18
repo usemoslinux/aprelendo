@@ -68,16 +68,19 @@ try {
     <title>Aprelendo</title>
 
     <!-- Epub.js & jszip -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="js/epubjs/epub.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script defer src="js/epubjs/epub.min.js"></script>
 
     <!-- JQuery -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    <script defer src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" />
+    
     <!-- Extra style sheets -->
     <link rel="stylesheet" type="text/css" href="css/ebooks.css">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
@@ -123,13 +126,13 @@ try {
         require_once(PUBLIC_PATH . 'showdicmodal.php'); // load dictionary modal window
         ?>
 
-    <!-- <script src="js/showtext.js"></script> -->
+    <!-- <script defer src="js/showtext.js"></script> -->
     <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" src="js/showebook.js"></script>
 
     <?php
         $file_name = 'js/tour/' . basename($_SERVER['PHP_SELF'], ".php") . '.js';
         if (file_exists(PUBLIC_PATH . $file_name)) {
-            echo "<script src='/$file_name'></script>";
+            echo "<script defer src='/$file_name'></script>";
         }
         ?>
 

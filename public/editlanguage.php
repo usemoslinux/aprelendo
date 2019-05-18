@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-    <br/>
+    <br>
     <fieldset <?php echo $is_premium_user ? '' : 'disabled'; ?> >
     <div class="card">
         <div class="card-header">RSS feeds <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?></div>
@@ -55,7 +55,7 @@
         </div>
     </div>
     </fieldset>
-    <br/>
+    <br>
     <fieldset <?php echo $is_premium_user ? '' : 'disabled'; ?> >
     <div class="card">
         <div class="card-header">Frequency list <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?></div>
@@ -70,7 +70,7 @@
         </div>
     </div>
     </fieldset>
-    <br/>
+    <br>
     <div class="text-right">
         <button id="cancelbtn" name="cancel" type="button" class="btn btn-link" onclick="window.location='texts.php'">Cancel</button>
         <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>

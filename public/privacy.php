@@ -26,54 +26,32 @@ if (!$user->isLoggedIn()) {
             </ol>
             <div class="row flex simple-text">
                 <div class="col-sm-12">
-                    <h4>Cookies Policy</h4>
-                    <i>Last updated: August 2018</i>
-                    <p>
-                        Aprelendo (the "Service") uses cookies. By using it, you consent to this.</p>
-                    <p>Our Cookies Policy explains what cookies are, how we use cookies, how third-parties we may
-                        partner with may use cookies on the Service, your choices regarding cookies and further
-                        information about cookies.</p>
-                    <br/>
-                    <h4>What are cookies</h4>
-                    <p>Cookies are small pieces of text sent by your web browser by a website you visit. A cookie file
-                        is stored in your web browser and allows the Service or a third-party to recognize you and make
-                        your next visit easier and the Service more useful to you.</p>
-                    <p>Cookies can be "persistent" (they expire on a specified date, usually remote in time) or
-                        "session" wise (they expire when you leave a website or after a short while).</p>
-                    <br/>
-                    <h4>How Aprelendo uses cookies</h4>
-                    <p>When you use and access the Service, we may place a number of cookies files in your web browser.</p>
-                    <p>We use cookies for the following purposes: to enable auto-login ("remember me") functionality.</p>
-                    <p>Unlike most websites, we don't use cookies to provide analytics, to store your preferences,
-                        to enable advertisements delivery or including behavioral advertising.</p>
-                    <p>We use both session and persistent cookies on the Service and we use different types of
-                        cookies to run the Service:</p>
+                    <h4>Our privacy policy</h4>
+                    <i>Last updated: May 2019</i>
+                    <p>Protecting the privacy of Aprelendo website users is important to us. Our Online Privacy Policy is designed to inform you about our collection and use of personal information on this website. From time to time, we may make changes to this Privacy Policy, so we encourage you to check back and review it regularly to ensure you are aware of current practices.</p>
+                    <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us through email at <a href="mailto:aprelendo@gmail.com">aprelendo@gmail.com</a></p>
+                    <br>
+                    <h6>Personal information</h6>
+                    <p>We collect some minimal information about you on this website. This information includes only your user name and email address, which you provide directly when you register to our service. Additionally, we may log the IP address and web browser details of the computer or device you use to connect with us. You provide this indirectly, by using our service.</p>
+                    <br>
+                    <h6>Cookies</h6>
+                    <p>When you use and access Aprelendo we place a number of cookies in your web browser.</p>
+                    <p>Unlike most websites, we won't use them to provide analytics, store your preferences, enable advertisements delivery or include behavioral advertising. We only use cookies to enable auto-login ("remember me") functionality and to remember the last reading chapter of ebooks.</p>
+                    <p>Here is a detailed description of the cookies we store in your computer:</p>
                     <ul>
                         <li>user_token: user id to enable auto-login</li>
                         <li>accept_cookies: tells if you have accepted to use cookies</li>
                         <li>[ebook_key]-lastpos: indicates ebook's last reading position</li>
                     </ul>
-                    <br/>
-                    <h4>Third-party cookies</h4>
-                    <p>We do not use third-party cookies to report usage statistics of the Service, deliver
-                        advertisements on and through the Service, and so on.</p>
-                    <br/>
-                    <h4>What are your choices regarding cookies</h4>
-                    <p>If you'd like to delete cookies or instruct your web browser to delete or refuse cookies,
-                        please visit the help pages of your web browser.</p>
-                    <p>Please note, however, that if you delete cookies or refuse to accept them, you might not be
-                        able to use all of the features we offer and some of our pages might not display properly.</p>
-                    <br/>
-                    <h4>Where can your find more information about cookies</h4>
-                    <p>You can learn more about cookies on the following third-party websites:</p>
-                    <ul>
-                        <li>
-                            <a href="http://www.allaboutcookies.org/">AllAboutCookies</a>
-                        </li>
-                        <li>
-                            <a href="http://www.networkadvertising.org/">Network Advertising Initiative</a>
-                        </li>
-                    </ul>
+                    <br>
+                    <strong>Third-party cookies</strong>
+                    <p>We don't use third-party cookies.</p>
+                    <br>
+                    <strong>Deleting/blocking cookies</strong>
+                    <p>Please note that if you delete cookies or refuse to accept them, you might not be able to use all of the features we offer and some of our pages might not display properly.</p>
+                    <br>
+                    <h6>Consent</h6>
+                    <p>By using our website, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.</p>
                 </div>
             </div>
         </div>

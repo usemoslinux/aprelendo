@@ -131,7 +131,7 @@ require_once('header.php');
     </div>
 </div>
 
-<script src="js/readability/Readability.js"></script>
-<script src="js/addtext.js"></script>
+<script defer src="js/readability/Readability.js"></script>
+<script defer src="js/addtext.js"></script>
 
 <?php require_once 'footer.php'?>

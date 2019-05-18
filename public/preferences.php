@@ -81,7 +81,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <br/>
+                            <br>
                             <div class="card">
                                 <div class="card-header">
                                     Learning
@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <br/>
+                            <br>
                             <div class="text-right">
                                 <button id="cancelbtn" name="cancel" type="button" class="btn btn-link" onclick="window.location='/'">Cancel</button>
                                 <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
@@ -128,5 +128,5 @@
         </div>
     </div>
 
-    <script src="js/preferences.js"></script>
+    <script defer src="js/preferences.js"></script>
     <?php require_once('footer.php') ?>

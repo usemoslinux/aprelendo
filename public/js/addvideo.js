@@ -103,7 +103,7 @@ $(document).ready(function() {
                 $('#btn-fetch-img').removeClass().addClass('fas fa-arrow-down');
             }); // end ajax
         } else {
-            showMessage('Malformed Youtube URL link. It should have the following format: https://www.youtube.com/watch?v=video_id or https://youtu.be/video_id<br/>Remember to replace "video_id" with the corresponding video ID and try again.', 'alert-danger');
+            showMessage('Malformed Youtube URL link. It should have the following format: https://www.youtube.com/watch?v=video_id or https://youtu.be/video_id<br>Remember to replace "video_id" with the corresponding video ID and try again.', 'alert-danger');
         }
     }); // end of #btn-fetch.on.click
     

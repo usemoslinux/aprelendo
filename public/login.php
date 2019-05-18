@@ -54,4 +54,4 @@
 
 <?php require_once 'footer.php'?>
 
-<script src="js/login.js"></script>
+<script defer src="js/login.js"></script>

@@ -63,7 +63,7 @@ class File
         // Check file size
         if ($file_size > $this->max_size || $files_array['error'] == UPLOAD_ERR_INI_SIZE) {
             $errors[] = '<li>File size should be less than ' . number_format($this->max_size) . 
-                ' bytes. Your file has ' . number_format($file_size) . ' bytes.<br/>';
+                ' bytes. Your file has ' . number_format($file_size) . ' bytes.<br>';
         }
         
         // Check file extension
@@ -86,7 +86,7 @@ class File
                 return true;
             }
         } else {
-            $error_str = '<ul>' . implode("<br/>", $errors) . '</ul>'; // show upload errors
+            $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
             throw new \Exception($error_str);  
         }
     }

@@ -129,6 +129,6 @@ function print_table_footer($array_table_rows) {
         </div>
     </div>
 </div>
-<script src="js/textstats.js"></script>
+<script defer src="js/textstats.js"></script>
 
 <?php require_once('footer.php') ?>

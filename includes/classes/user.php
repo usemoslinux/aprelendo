@@ -146,7 +146,7 @@ class User
         $headers .= 'From:' . EMAIL_SENDER;
         
         // send email
-        $mail_sent = @mail($to, $subject, $message, $headers); // send email to reset password (requires 'sendmail' package in Debian/Ubuntu)
+        $mail_sent = @mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
         if (!$mail_sent) {
             $this->delete();
             throw new \Exception ('Oops! There was an unexpected error trying to send you an e-mail to activate your account. Please try again later.');

@@ -30,7 +30,7 @@
                         </div>
                     </div>
                 </div>
-                <br/>
+                <br>
                 <div class="card">
                     <div class="card-header">Password</div>
                     <div class="card-body">
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                 </div>
-                <br/>
+                <br>
                 <div class="card">
                     <div class="card-header">Languages</div>
                     <div class="card-body">
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                 </div>
-                <br/>
+                <br>
                 <div class="text-right">
                     <button id="btn-delete-account" name="deleteaccount" class="btn btn-danger float-left">Delete
                         Account</button>
@@ -124,4 +124,4 @@
 
 <?php require_once('footer.php') ?>
 
-<script src="js/userprofile.js"></script>
+<script defer src="js/userprofile.js"></script>
