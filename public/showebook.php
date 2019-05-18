@@ -129,13 +129,6 @@ try {
     <!-- <script defer src="js/showtext.js"></script> -->
     <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook.js"></script>
 
-    <?php
-        $file_name = 'js/tour/' . basename($_SERVER['PHP_SELF'], ".php") . '.js';
-        if (file_exists(PUBLIC_PATH . $file_name)) {
-            echo "<script defer src='/$file_name'></script>";
-        }
-        ?>
-
 </body>
 
 </html>

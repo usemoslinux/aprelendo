@@ -1359,26 +1359,6 @@ section.pricing {
     }
 }
 
-/* TOUR */
-
-.tour {
-    font-family: 'Lato', sans-serif;
-    font-size: 13px;
-    font-weight: 400;
-}
-
-.tour .btn-default:hover,
-.tour .btn-default:focus,
-.tour .btn-default.focus {
-    color: inherit;
-}
-
-.tour .btn-primary:hover,
-.tour .btn-primary:focus,
-.tour .btn-primary.focus {
-    color: #fff;
-}
-
 /* AUDIO LOADER */
 
 .lds-facebook {
