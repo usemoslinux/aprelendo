@@ -1,9 +1,9 @@
-temp/
-public/tests/
-uploads/
+.vscode/
 addons/
 config/config.php
-.vscode/
+public/tests/
+temp/
+uploads/
 php-info.php
 jsconfig.json
 .stylelintrc
