@@ -19,8 +19,21 @@
  */
 ?>
 
+<?php 
+$curpage = basename($_SERVER['PHP_SELF']); /* Returns The Current PHP File Name */
+$show_pages = array('showtext.php', 'showvideo.php', 'showebook.php');
+$this_is_show_page = in_array($curpage, $show_pages);
+
+if ($this_is_show_page) {
+    $doclang = isset($user->learning_lang) && !empty($user->learning_lang) ? $user->learning_lang : 'en';
+} else {
+    $doclang = 'en';
+}
+
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang=<?php echo "\"$doclang\""; ?> >
 
 <head>
     <meta charset="utf-8">
@@ -55,11 +68,8 @@
 </head>
 
 <?php
-// don't show wallpaper in certain pages
-$curpage = basename($_SERVER['PHP_SELF']); /* Returns The Current PHP File Name */
-$no_wall_pages = array('showtext.php', 'showvideo.php', 'showebook.php');
-
-if (!in_array($curpage, $no_wall_pages)) {
+// show wallpaper on every page, except those in $show_pages array
+if (!$this_is_show_page) {
     echo '<body class="pattern-wallpaper">';
 }
 ?>
