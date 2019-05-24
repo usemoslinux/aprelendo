@@ -1,6 +1,29 @@
 <?php 
-    $is_premium_user = $user->isPremium();
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+require_once '../includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+
+$is_premium_user = $user->isPremium();
 ?>
+
 <form class="" action="languages.php" method="post">
 
     <input type="hidden" name="id" value="<?php echo $lang->id; ?>">
@@ -11,11 +34,11 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="dictionaryURI">Dictionary URI:</label>
-                <input type="url" name="dictionaryURI" class="form-control" value="<?php echo $lang->dictionary_uri; ?>">
+                <input type="url" id="dictionaryURI" name="dictionaryURI" class="form-control" value="<?php echo htmlentities($lang->dictionary_uri); ?>">
             </div>
             <div class="form-group">
                 <label for="translatorURI">Translator URI:</label>
-                <input type="url" name="translatorURI" class="form-control" value="<?php echo $lang->translator_uri; ?>">
+                <input type="url" id="translatorURI" name="translatorURI" class="form-control" value="<?php echo htmlentities($lang->translator_uri); ?>">
             </div>
             <div class="text-right">
                 <a href="javascript:;" title="Help" data-toggle="collapse" data-target="#help-dictionary"><i class="far fa-question-circle"></i></a>
@@ -42,15 +65,15 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="rssfeedURI1">RSS feed URI 1:</label>
-                <input type="url" name="rssfeedURI1" class="form-control" value="<?php echo $lang->rss_feed_1_uri; ?>">
+                <input type="url" id="rssfeedURI1" name="rssfeedURI1" class="form-control" value="<?php echo htmlentities($lang->rss_feed_1_uri); ?>">
             </div>
             <div class="form-group">
                 <label for="rssfeedURI2">RSS feed URI 2:</label>
-                <input type="url" name="rssfeedURI2" class="form-control" value="<?php echo $lang->rss_feed_2_uri; ?>">
+                <input type="url" id="rssfeedURI2" name="rssfeedURI2" class="form-control" value="<?php echo htmlentities($lang->rss_feed_2_uri); ?>">
             </div>
             <div class="form-group">
                 <label for="rssfeedURI3">RSS feed URI 3:</label>
-                <input type="url" name="rssfeedURI3" class="form-control" value="<?php echo $lang->rss_feed_3_uri; ?>">
+                <input type="url" id="rssfeedURI3" name="rssfeedURI3" class="form-control" value="<?php echo htmlentities($lang->rss_feed_3_uri); ?>">
             </div>
         </div>
     </div>

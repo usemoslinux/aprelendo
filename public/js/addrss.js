@@ -64,16 +64,23 @@ $(document).ready(function () {
             .replace(/>/g, '&gt;');
     }
 
+    /**
+     * Adds RSS text to the db
+     * @param {html entity} $entry_info contains text info (author, src, pubdate, etc.)
+     * @param {html entity} $entry_text contains text to add
+     * @param {string} add_mode three possibilities, each corresponding to one button: 'edit', 'readlater', 'readnow'
+     */
     function addTextToLibrary($entry_info, $entry_text, add_mode) {
         var art_title = $.trim($entry_info.text());
         var art_author = $entry_info.attr("data-author");
         var art_url = $entry_info.attr("data-src");
         var art_pubdate = $entry_info.attr("data-pubdate");
-        var art_content = $entry_text.text();
+        var art_content = $entry_text[0].innerText;
 
         if (add_mode == 'edit') {
+            // create a hidden form and submit it
             var form = $('<form id="form_add_audio" action="../addtext.php" method="post"></form>')
-                .append('<input type="hidden" name="art_title" value="' + htmlEscape(art_title) + '">')
+                .append('<input type="hidden" name="art_title" value="' + art_title + '">')
                 .append('<input type="hidden" name="art_author" value="' + htmlEscape(art_author) + '">')
                 .append('<input type="hidden" name="art_url" value="' + htmlEscape(art_url) + '">')
                 .append('<input type="hidden" name="art_pubdate" value="' + htmlEscape(art_pubdate) + '">')

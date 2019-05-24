@@ -1,20 +1,40 @@
 <?php
-  require_once('../includes/dbinit.php'); // connect to database
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-  use Aprelendo\Includes\Classes\User;
+require_once '../includes/dbinit.php'; // connect to database
 
-  $user = new User($con);
-  
-  // if user is already logged in, go to "My Texts" section
-  if ($user->isLoggedIn()) {
+use Aprelendo\Includes\Classes\User;
+
+$user = new User($con);
+
+// if user is already logged in, go to "My Texts" section
+if ($user->isLoggedIn()) {
     header('Location:/texts.php');
     exit;
-  }
+}
+
+require_once PUBLIC_PATH . 'head.php';
+require_once PUBLIC_PATH . 'simpleheader.php';
 ?>
 
-<?php require_once 'simpleheader.php'; ?>
-
-<div class="pattern-wallpaper">
+<div>
     <div class="container mtb">
         <div class="row">
             <div class="col-sm-12 col-md-10 offset-md-1 col-lg-6 offset-lg-3">
@@ -24,7 +44,7 @@
                     </header>
                     <br />
                     <div id="error-msg" class="d-none"></div>
-                    <form action="" id="form_login">
+                    <form id="form_login">
                         <div class="form-group">
                             <label for="username">Username:</label>
                             <input type="text" id="username" name="username" class="form-control" maxlength="20"
@@ -42,8 +62,7 @@
                     </form>
                     <br />
                     <footer>
-                        <p class="text-muted text-center font-italic">You are not registered? <a href="index.php">Create
-                                an account</a>.</p>
+                        <p class="text-muted text-center">Not registered? <a href="index.php">Create an account</a></p>
                     </footer>
                 </section>
             </div>

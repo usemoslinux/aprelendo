@@ -18,10 +18,16 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('../../includes/dbinit.php'); // connect to database
-require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks if user is logged in
+require_once '../../includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
+use Aprelendo\Includes\Classes\User;
 use Aprelendo\Includes\Classes\EbookFile;
+
+// only premium users are allowed to visit this page
+if (!$user->isPremium()) {
+    exit;
+}
 
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;

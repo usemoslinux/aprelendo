@@ -18,7 +18,12 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('../../includes/dbinit.php'); // connect to database
+require_once '../../includes/dbinit.php'; // connect to database
+
+// check that $_POST is set & not empty
+if (!isset($_POST) || empty($_POST)) {
+    exit;
+}
 
 use Aprelendo\Includes\Classes\User;
 

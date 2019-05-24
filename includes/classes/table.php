@@ -73,13 +73,17 @@ abstract class Table
             <colgroup>';
         
         foreach ($this->col_widths as $col_width) { 
-            $html .= "<col width='$col_width'>";
+            if (empty($col_width)) {
+                $html .= "<col>";
+            } else {
+                $html .= "<col style='width: $col_width;'>";
+            }
         }
         
         $html .= '</colgroup><thead><tr>';
 
         if ($this->has_chkbox) {
-            $html .= '<th class="col-checkbox"><div class="custom-control custom-checkbox"><input id="chkbox-selall" class="custom-control-input" type="checkbox"><label class="custom-control-label" for="header-row"></label></div></th>';
+            $html .= '<th class="col-checkbox"><div class="custom-control custom-checkbox"><input id="chkbox-selall" class="custom-control-input" type="checkbox"><label class="custom-control-label" for="chkbox-selall"></label></div></th>';
         } else {
             $html .= '<th></th>';
         }

@@ -21,7 +21,7 @@
 use Aprelendo\Includes\Classes\User;
 
 if (!isset($user)) {
-    require_once('dbinit.php'); // connect to database
+    require_once 'dbinit.php'; // connect to database
 
     $user = new User($con);
 

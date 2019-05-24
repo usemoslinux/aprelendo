@@ -18,8 +18,8 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('../includes/dbinit.php'); // connect to database
-require_once(APP_ROOT . 'includes/checklogin.php'); // check if logged in and set $user
+require_once '../includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
 
 use Aprelendo\Includes\Classes\User;
 
@@ -29,8 +29,8 @@ if (!$user->isPremium()) {
     exit;
 }
 
-require_once('header.php');
-
+require_once PUBLIC_PATH . 'head.php';
+require_once PUBLIC_PATH . 'header.php';
 ?>
 
 <div class="container mtb">
@@ -51,7 +51,7 @@ require_once('header.php');
                 aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
                 </div>
             </div>
-            <form id="form-addebook" action="" class="add-form" method="post" enctype="multipart/form-data">
+            <form id="form-addebook" class="add-form" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
                 <input type="hidden" name="mode" value="ebook" />
                 <input type="hidden" name="type" value="6">

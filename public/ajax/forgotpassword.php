@@ -18,10 +18,15 @@
 * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+require_once '../../includes/dbinit.php'; // connect to database
+
+// check that $_POST is set & not empty
+if (!isset($_POST) || empty($_POST)) {
+    exit;
+}
+
 try {
     if (isset($_POST['email'])) {
-        require_once('../../includes/dbinit.php'); // connect to database
-        
         $email = $con->escape_string($_POST['email']);
         
         // check if email exists in db
@@ -56,8 +61,6 @@ try {
             throw new Exception ('No user registered with that email address. Please try again.');
         } 
     } else if(isset($_POST['username']) && isset($_POST['pass1']) && isset($_POST['pass2'])) {
-        require_once('../../includes/dbinit.php'); // connect to database
-        
         if ($_POST['pass1'] === $_POST['pass2']) {
             // create password hash
             $options = [

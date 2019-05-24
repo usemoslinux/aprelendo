@@ -1,6 +1,27 @@
 <?php 
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-require_once('header.php'); 
+require_once '../includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once PUBLIC_PATH . 'head.php';
+require_once PUBLIC_PATH . 'header.php';
 
 $search_text = '';
 $filter = -1;
@@ -31,7 +52,7 @@ $filter_sql = !empty($filter) && $filter > -1 ? "AND stextType=$filter" : '';
             </ol>
             <div class="row flex">
                 <div class="col-sm-12">
-                    <form class="form-flex-row" action="" method="get">
+                    <form class="form-flex-row" method="get">
                         <input id="f" name="f" value="<?php echo $filter; ?>" type="hidden">
                         <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
                         <div id="search-wrapper-div" class="input-group my-2">
@@ -82,7 +103,7 @@ $filter_sql = !empty($filter) && $filter > -1 ? "AND stextType=$filter" : '';
                         <!-- Split button -->
                         <div class="dropdown ml-md-2 my-2">
                             <button type="button" class="btn btn-success dropdown-btn dropdown-toggle" data-toggle="dropdown">
-                                <i class="fas fa-plus"></i> Add</a>
+                                <i class="fas fa-plus"></i> Add
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="addtext.php?sh">Plain text</a>
@@ -96,9 +117,9 @@ $filter_sql = !empty($filter) && $filter > -1 ? "AND stextType=$filter" : '';
                     </form>
                 </div>
             </div>
-            <?php require_once('listsharedtexts.php') ?>
+            <?php require_once 'listsharedtexts.php'; ?>
         </div>
     </div>
 </div>
 
-<?php require_once('footer.php') ?>
+<?php require_once 'footer.php'; ?>

@@ -18,8 +18,8 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('../includes/dbinit.php'); // connect to database
-require_once(APP_ROOT . 'includes/checklogin.php'); // check if logged in and set $user
+require_once '../includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
 
 use Aprelendo\Includes\Classes\User;
 
@@ -29,8 +29,8 @@ if (!$user->isPremium()) {
     exit;
 }
 
-require_once('header.php');
-
+require_once PUBLIC_PATH . 'head.php';
+require_once PUBLIC_PATH . 'header.php';
 ?>
 
     <div class="container mtb">
@@ -60,6 +60,6 @@ require_once('header.php');
     </div>
 
     <script defer src="js/addrss.js"></script>
-    <?php require_once('footer.php') ?>
+    <?php require_once 'footer.php'; ?>
 
     

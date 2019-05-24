@@ -18,7 +18,12 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('../../includes/dbinit.php'); // connect to database
+require_once '../../includes/dbinit.php'; // connect to database
+
+// check that $_POST is set & not empty
+if (!isset($_POST) || empty($_POST)) {
+    exit;
+}
 
 use Aprelendo\Includes\Classes\User;
 
@@ -47,10 +52,11 @@ try {
 
         $subject = 'Support request - ' . $name;
 
+        $message .= "\r\n\r\nE-mail: " . $to;
         $message .= "\r\n\r\nIP: " . $_SERVER['REMOTE_ADDR'];
         $message .= "\r\n\r\nDevice: " . $_SERVER['HTTP_USER_AGENT'];
         
-        $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
+        $mail_sent = mail(SUPPORT_EMAIL, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
         if (!$mail_sent) {
             throw new Exception ('There was an unexpected error trying to send your query. Please try again later.');
         }

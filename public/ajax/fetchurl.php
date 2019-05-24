@@ -18,6 +18,9 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once '../../includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+
 echo isset($_GET['url']) ? file_get_contents($_GET['url']) : '';
 
 ?>

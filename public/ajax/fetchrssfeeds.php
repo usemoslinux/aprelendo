@@ -1,6 +1,6 @@
 <?php 
-require_once('../../includes/dbinit.php'); // connect to database
-require_once(APP_ROOT . 'includes/checklogin.php'); // loads User class & checks if user is logged in
+require_once '../../includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
 use Aprelendo\Includes\Classes\RSSFeeds;
 

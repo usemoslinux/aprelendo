@@ -18,7 +18,10 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('header.php');
+require_once '../includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once PUBLIC_PATH . 'head.php';
+require_once PUBLIC_PATH . 'header.php';
 ?>
 
 <div class="container mtb">
@@ -47,7 +50,7 @@ require_once('header.php');
               $art_url = $_POST['art_url'];
               $art_content = $_POST['art_content'];
               $art_is_shared = $_POST['art_is_shared'];
-          } elseif (isset($_GET['sh'])) {
+          } elseif (isset($_GET['sh'])) { // shared text
               $art_is_shared = true;  
           } 
           elseif (isset($_GET['url'])) { // external call (bookmarklet, addon)
@@ -56,7 +59,7 @@ require_once('header.php');
           }
         ?>
             <div id="alert-msg" class="d-none"></div>
-            <form id="form-addtext" data-premium="<?php echo $user->isPremium() ? 1 : 0; ?>" action="" class="add-form"
+            <form id="form-addtext" data-premium="<?php echo $user->isPremium() ? 1 : 0; ?>" class="add-form"
                 method="post" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
                 <input type="hidden" name="mode" value="simple" />

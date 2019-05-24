@@ -1,9 +1,29 @@
 <?php 
-require_once('../includes/dbinit.php'); // connect to database
-require_once 'simpleheader.php'; 
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+require_once '../includes/dbinit.php'; // connect to database
+require_once PUBLIC_PATH . 'head.php';
+require_once PUBLIC_PATH . 'simpleheader.php';
 ?>
 
-<div class="pattern-wallpaper">
+<div>
     <div class="container mtb">
         <div class="row">
             <div class="col-12 col-lg-6 offset-lg-3">
@@ -28,7 +48,7 @@ require_once 'simpleheader.php';
                     </header>
                     <br />
                     <div id="error-msg" class="d-none"></div>
-                    <form action="" id="form_register">
+                    <form id="form_register">
                             <div class="form-group">
                                 <label for="native_lang">Native language:</label>
                                 <select name="native_lang" class="form-control custom-select" id="native_lang">
@@ -80,9 +100,7 @@ require_once 'simpleheader.php';
                     </form>
                     <br />
                     <footer>
-                        <p class="text-muted text-center font-italic">By registering, you declare to have read and
-                            accepted the
-                            <a href="privacy.php">privacy policy</a>.</p>
+                        <p class="text-muted text-center font-italic">By registering, you declare to have read and accepted the <a href="privacy.php" target="_blank" rel="noopener noreferrer">privacy policy</a>.</p>
                     </footer>
                 </section>
             </div>

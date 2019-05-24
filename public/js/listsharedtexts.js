@@ -25,7 +25,6 @@ $(document).ready(function () {
             type: "POST",
             url: "ajax/togglelike.php",
             data: {id: text_id}
-            // dataType: "dataType"
         })
         .done(function (data) {
             if (data.error_msg) {

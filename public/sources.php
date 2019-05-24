@@ -18,7 +18,10 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('header.php');
+require_once '../includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once PUBLIC_PATH . 'head.php';
+require_once PUBLIC_PATH . 'header.php';
 ?>
 
     <div class="container mtb">
@@ -32,9 +35,13 @@ require_once('header.php');
                         <a class="active">Popular sources</a>
                     </li>
                 </ol>
-                <?php require_once('listsources.php'); ?>
+                <div class="row flex">
+                    <div class="col-sm-12">
+                        <?php require_once 'listsources.php'; ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <?php require_once('footer.php') ?>
+    <?php require_once 'footer.php'; ?>

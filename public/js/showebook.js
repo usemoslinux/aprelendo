@@ -43,7 +43,7 @@ $(document).ready(function () {
      * epub.js (book.open function) to process it correctly
      */
     fetch('ajax/getebook.php', {
-            method: 'POST',
+            method: 'GET',
             body: formData,
         })
         .then(fetchStatusHandler)

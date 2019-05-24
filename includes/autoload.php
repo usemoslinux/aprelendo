@@ -11,7 +11,7 @@ spl_autoload_register('AutoLoader');
 function AutoLoader($class)
 {
     $class_name = str_replace('\\', '/', $class);
-    require_once(dirname(APP_ROOT) . '/' . strtolower($class_name) . '.php'); 
+    require_once dirname(APP_ROOT) . '/' . strtolower($class_name) . '.php'; 
 }
 
 ?>

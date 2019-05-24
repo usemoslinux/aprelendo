@@ -29,7 +29,7 @@ $(document).ready(function () {
     
     $.ajax({
         url: 'ajax/saveuserprofile.php',
-        type: 'post',
+        type: 'POST',
         data: $('#userprofile-form').serialize()
       })
       .done(function (data) {
@@ -62,7 +62,7 @@ $(document).ready(function () {
   $('#btn-confirm-delete-account').on('click', function () {
     $.ajax({
         url: 'ajax/deleteaccount.php',
-        type: 'post',
+        type: 'POST',
         data: $('#userprofile-form').serialize()
       })
       .done(function (data) {

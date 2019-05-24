@@ -369,8 +369,6 @@ class User
             $this->logout(true);
         }
 
-        // require_once('files.php');
-
         // delete files uploaded by user
         $table_names = array('texts', 'archivedtexts');
         

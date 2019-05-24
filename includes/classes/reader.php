@@ -18,7 +18,6 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// require_once('url.php');
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Url;
@@ -372,15 +371,15 @@ class Reader extends Text
             $html .= "<div class='text-center' data-start='$start' data-dur='$dur' >". $text .'</div>';
         }
         
-        $html .= '</div><p></p>';
+        $html .= '</div>';
         
-        $html .= '<button type="button" id="btn-save" class="basic btn btn-lg btn-success btn-block">Finish & Save</button>';
+        $html .= '<br><button type="button" id="btn-save" class="basic btn btn-lg btn-success btn-block">Finish & Save</button>';
         
         // $time_end = microtime(true);
         // $execution_time = ($time_end - $time_start);
         // $html .= '<b>Total Execution Time:</b> ' . $execution_time . ' Secs';
 
-        return $html.'</div>';
+        return $html.'<br></div>';
     }
 }
 

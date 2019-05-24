@@ -108,9 +108,7 @@ $(document).ready(function() {
         } else {
             $span_chars_left.removeClass('text-danger').addClass('text-success');
             $span_chars_left.text(chars_left.toLocaleString() +  ' left');
-        }
-
-        
+        }        
     });
     
     /**
@@ -176,21 +174,27 @@ $(document).ready(function() {
         } // end if  
     }
     
-    $('#btn-fetch').on('click', fetch_url);
-    
+    $('#btn-fetch').on('click', fetch_url);    
+
+    function resetControls(exceptSourceURI) {
+        $('#alert-error-msg').addClass('d-none');
+        $('#type').prop('selectedIndex', 0);
+        $('#title').val('');
+        $('#author').val('');
+        $('#title').val('');
+        $('#text').val('');
+        $('#upload-text').val('');
+        $('#audio-uri').val('');
+        if (!exceptSourceURI) {
+            $('#url').val('');
+        }
+        $('#shared-text').prop('checked', false);
+    }
+
+    // when page loads, check if text was imported from RSS feed
+    // in that case, trigger an input event to refresh the amount of chars left
+    if ($("#text").text().length > 0) {
+        $('#text').trigger('input');    
+    }
 });
 
-function resetControls(exceptSourceURI) {
-    $('#alert-error-msg').addClass('d-none');
-    $('#type').prop('selectedIndex', 0);
-    $('#title').val('');
-    $('#author').val('');
-    $('#title').val('');
-    $('#text').val('');
-    $('#upload-text').val('');
-    $('#audio-uri').val('');
-    if (!exceptSourceURI) {
-        $('#url').val('');
-    }
-    $('#shared-text').prop('checked', false);
-}

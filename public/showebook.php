@@ -1,6 +1,33 @@
 <?php
-require_once('../includes/dbinit.php');  // connect to database
-require_once(APP_ROOT . 'includes/checklogin.php'); // check if user is logged in and set $user object
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+require_once '../includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+
+use Aprelendo\Includes\Classes\User;
+
+// only premium users are allowed to visit this page
+if (!$user->isPremium()) {
+    header('Location:texts.php');
+    exit;
+}
 
 use Aprelendo\Includes\Classes\Reader;
 
@@ -54,7 +81,6 @@ try {
     header('Location:/login.php');
     exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -79,13 +105,11 @@ try {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CRaleway:400,700" />
     
     <!-- Extra style sheets -->
     <link rel="stylesheet" type="text/css" href="css/ebooks.css">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
-
-
 </head>
 
 <body id="readerpage" <?php echo getCSS($class, $styles); ?> >
@@ -123,8 +147,8 @@ try {
     </div>
 
     <?php 
-        require_once(PUBLIC_PATH . 'showdicmodal.php'); // load dictionary modal window
-        ?>
+        require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
+    ?>
 
     <!-- <script defer src="js/showtext.js"></script> -->
     <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook.js"></script>

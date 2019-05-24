@@ -1,9 +1,29 @@
 <?php
-require_once('../includes/dbinit.php'); // connect to database
-require_once('simpleheader.php');
+/**
+ * Copyright (C) 2018 Pablo Castagnino
+ * 
+ * This file is part of aprelendo.
+ * 
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+require_once '../includes/dbinit.php'; // connect to database
+require_once PUBLIC_PATH . 'head.php';
+require_once PUBLIC_PATH . 'simpleheader.php';
 ?>
 
-<div class="pattern-wallpaper">
+<div>
     <div class="container mtb">
         <div class="row">
             <div class="col-sm-0 col-sm-1 col-lg-3"></div>
@@ -29,7 +49,7 @@ require_once('simpleheader.php');
                 ?>
 
                     <p>Enter your new password twice.</p>
-                    <form action="" id="form_create_new_password">
+                    <form id="form_create_new_password">
                         <input type="hidden" id="username" name="username" value="<?php echo $_GET['username']; ?>">
                         <div class="form-group">
                             <label for="pass1">New password:</label>
@@ -63,7 +83,7 @@ require_once('simpleheader.php');
                 ?>
 
                     <p>Enter your email address to receive a link to reset your password.</p>
-                    <form action="" id="form_forgot_password">
+                    <form id="form_forgot_password">
                         <div class="form-group">
                             <label for="email">E-mail address:</label>
                             <input type="email" id="email" name="email" class="form-control" maxlength="50" required>

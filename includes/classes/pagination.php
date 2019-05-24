@@ -100,12 +100,12 @@ class Pagination
         <!-- Link of the first page -->
         <li class='page-item " . ($this->page <= 1 ? ' disabled ' : ' ') . "'>
           <a class='page-link' href='$url" . $query . "p=1'>
-            <<</a>
+          &lt;&lt;</a>
         </li>
         <!-- Link of the previous page -->
         <li class='page-item " . ($this->page <= 1 ? ' disabled ' : ' ') . "'>
           <a class='page-link' href='$url" . $query . "p=" . ($this->page>1 ? $this->page-1 : 1) . "'>
-            <</a>
+          &lt;</a>
         </li>
         <!-- Links of the pages with page number -->";
 
@@ -119,11 +119,11 @@ class Pagination
         
         $result .= "<!-- Link of the next page -->
         <li class='page-item " . ($this->page >= $this->total_pages ? ' disabled ' : ' ') . "'>
-          <a class='page-link' href='$url" . $query . "p=" . ($this->page < $this->total_pages ? $this->page+1 : $this->total_pages) . "'>></a>
+          <a class='page-link' href='$url" . $query . "p=" . ($this->page < $this->total_pages ? $this->page+1 : $this->total_pages) . "'>&gt;</a>
         </li>
         <!-- Link of the last page -->
         <li class='page-item " . ($this->page >= $this->total_pages ? ' disabled ' : ' ') . "'>
-          <a class='page-link' href='$url" . $query . "p=$this->total_pages'>>>
+          <a class='page-link' href='$url" . $query . "p=$this->total_pages'>&gt;&gt;
           </a>
         </li>
       </ul>
