@@ -195,31 +195,51 @@ class User
         $password = $this->con->escape_string($password);
         
         $result = $this->con->query("SELECT * FROM users WHERE userName='$username'");
-        $row = $result->fetch_assoc();
-        $hashedPassword = $row['userPasswordHash'];
+        
+        // check if username exists
         if ($result->num_rows == 0) { // wrong username
             throw new \Exception ('Username and password combination is incorrect. Please try again.');
         }
 
+        $row = $result->fetch_assoc();
+        $user_id = $row['userId'];
+        $hashedPassword = $row['userPasswordHash'];
+
+        // check if user account is active
         if ($row['userActive'] == false) {
             throw new \Exception ('You need to activate your account first. Check your email for the activation link.');
         }
         
         if (password_verify($password, $hashedPassword)) { // login successful, remember me
-            // first, clean auth_tokens table
+            // first, remove old tokens from auth_tokens table
             $result = $this->con->query("DELETE FROM auth_tokens WHERE expires < NOW()");
             
-            // then, save new token in auth_tokens table
-            $token = $this->token = $this->generateToken();
-            $user_id = $this->user_id = $row['userId'];
-            $time_stamp = time() + 31536000; // 1 year
-            $expires = $this->token_expire_date = date('Y-m-d H:i:s', $time_stamp);
-            
-            $result = $this->con->query("INSERT INTO auth_tokens (token, userid, expires) VALUES ('$token', $user_id, '$expires')");
-            if ($result) {
+            // check if valid token is already in db
+            $sql = "SELECT token
+                    FROM auth_tokens
+                    WHERE userid=5 AND expires >= NOW()
+                    LIMIT 1";
+
+            $result = $this->con->query($sql);
+            if ($result->num_rows > 0) {
+                // a valid token is already in the db
+                $row = $result->fetch_assoc();
+                $token = $row['token'];
+                $time_stamp = $row['expires'];
                 setcookie('user_token', $token, $time_stamp, "/", false, 0);
             } else {
-                throw new \Exception ('There was a problem trying to create the authentication cookie. Please try again.');
+                // create new token, insert it in db & set cookie
+                $token = $this->token = $this->generateToken();
+                $user_id = $this->user_id = $row['userId'];
+                $time_stamp = time() + 31536000; // 1 year
+                $expires = $this->token_expire_date = date('Y-m-d H:i:s', $time_stamp);
+                
+                $result = $this->con->query("INSERT INTO auth_tokens (token, userid, expires) VALUES ('$token', $user_id, '$expires')");
+                if ($result) {
+                    setcookie('user_token', $token, $time_stamp, "/", false, 0);
+                } else {
+                    throw new \Exception ('There was a problem trying to create the authentication cookie. Please try again.');
+                }
             }
         } else { // wrong password
             throw new \Exception ('Username and password combination is incorrect. Please try again.');
