@@ -31,17 +31,19 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <header>
                         <h1 class="text-center">
                             <?php
-            $title_array = array('English' => array('en', 'Welcome!'),
-                'Spanish' => array('es', '¡Bienvenido!'),
-                'Portuguese' => array('pt', 'Bemvindo!'),
-                'French' => array('fr', 'Bienvenue!'),
-                'Italian' => array('it', 'Benvenuto!'),
-                'German' => array('de', 'Willkommen!'));
-            $to_lang = isset($_GET['tolang']) ? ucfirst($_GET['tolang']) : 'English';
-            $native_lang = isset($_GET['srclang']) ? ucfirst($_GET['srclang']) : 'English';
-            echo '<img src="img/flags/' . $title_array["$to_lang"][0] . '.svg" alt="' . $to_lang . '" class="flag-icon">';
-            echo $title_array["$to_lang"][1];
-            ?>
+                            $title_array = array('English' => array('en', 'Welcome!'),
+                                'Spanish' => array('es', '¡Bienvenido!'),
+                                'Portuguese' => array('pt', 'Bemvindo!'),
+                                'French' => array('fr', 'Bienvenue!'),
+                                'Italian' => array('it', 'Benvenuto!'),
+                                'German' => array('de', 'Willkommen!'));
+                            
+                            $to_lang = isset($_GET['tolang']) ? htmlspecialchars(ucfirst($_GET['tolang']), ENT_QUOTES, 'UTF-8') : 'English';
+                            $native_lang = isset($_GET['srclang']) ? ucfirst($_GET['srclang']) : 'English';
+                            
+                            echo '<img src="img/flags/' . $title_array["$to_lang"][0] . '.svg" alt="' . $to_lang . '" class="flag-icon">';
+                            echo $title_array["$to_lang"][1];
+                            ?>
                         </h1>
                         <div class="text-muted text-center">You are only one step away from learning
                             <?php echo $to_lang; ?>.</div>
@@ -85,22 +87,35 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             <div class="form-group">
                                 <label for="password">Password:</label>
                                 <small>
-                                    <i>at least 8 characters long</i>
+                                    <i>at least 8 chars long (including letters, numbers &amp; special chars)</i>
                                 </small>
-                                <input type="password" id="password" name="password" class="form-control" pattern=".{8,}"
-                                    required>
+                                <div class="input-group">
+                                    <input type="password" id="password" name="password" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                                <small id="password-strength-text"></small>
                             </div>
-                            <p>
-                                <a href="forgotpassword.php">Forgot password</a>
-                            </p>
-
-                            <button type="submit" id="btn_register" class="btn btn-success">Register</button>
+                            <div class="form-group">
+                                <label for="password">Confirm password:</label>
+                                <div class="input-group">
+                                    <input type="password" id="password-confirmation" name="password-confirmation" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required >
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                                <small id="passwords-match-text"></small>
+                            </div>
+                            <button type="submit" id="btn_register" class="btn btn-block btn-success">Register</button>
+                            <small>By registering, you declare to have read and accepted the <a href="privacy.php" target="_blank" rel="noopener noreferrer">privacy policy</a>.</small>    
                         </div>
-
                     </form>
                     <br />
                     <footer>
-                        <p class="text-muted text-center font-italic">By registering, you declare to have read and accepted the <a href="privacy.php" target="_blank" rel="noopener noreferrer">privacy policy</a>.</p>
+                        <p class="text-muted text-center">
+                            Already have an account? <a href="login.php">Sign in</a>
+                        </p>
                     </footer>
                 </section>
             </div>
@@ -108,6 +123,6 @@ require_once PUBLIC_PATH . 'simpleheader.php';
     </div>
 </div>
 
-<?php require_once 'footer.php'?>
-
 <script defer src="js/register.js"></script>
+
+<?php require_once 'footer.php'?>

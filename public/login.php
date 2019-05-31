@@ -56,12 +56,15 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                 required>
                         </div>
                         <p>
-                            <a href="forgotpassword.php">Forgot password</a>
+                            
                         </p>
-                        <button type="submit" id="btn_login" class="btn btn-success">Log in</button>
+                        <button type="submit" id="btn_login" class="btn btn-block btn-success">Log in</button>
                     </form>
                     <br />
                     <footer>
+                        <p class="text-muted text-center">
+                            <a href="forgotpassword.php">Forgot password</a>?
+                        </p>
                         <p class="text-muted text-center">Not registered? <a href="index.php">Create an account</a></p>
                     </footer>
                 </section>

@@ -140,6 +140,7 @@ class User
         $message = file_get_contents(APP_ROOT . 'templates/welcome.html');
         $message = str_replace('{{action_url}}', $reset_link, $message);
         $message = str_replace('{{name}}', $username, $message);
+        $message = str_replace('{{current_year}}', date("Y"), $message);
         
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";

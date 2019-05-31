@@ -300,6 +300,16 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     color: #fff;
 }
 
+.btn-outline-secondary {
+	border-color: #ced4da;
+}
+
+.btn-outline-secondary:focus {
+	color: #fff;
+	background-color: #6c757d;
+	border-color: #6c757d;
+}
+
 .breadcrumb {
     padding: 10px 15px;
     background-color: whitesmoke;
@@ -1125,13 +1135,15 @@ div.blurry-background {
 }
 
 .simple-text a:not(.btn),
-p>a:not(.btn) {
+p>a:not(.btn),
+small>a:not(.btn) {
     color: #0275d8;
     text-decoration: underline;
 }
 
 .simple-text a:not(.btn):hover,
-p>a:hover {
+p>a:hover,
+small>a:not(.btn):hover {
     text-decoration: none;
 }
 

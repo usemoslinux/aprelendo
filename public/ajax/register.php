@@ -28,12 +28,31 @@ if (!isset($_POST) || empty($_POST)) {
 use Aprelendo\Includes\Classes\User;
 
 try {
-    if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email'])) {
-        $user = new User($con);
-        $user->register($_POST['username'], $_POST['email'], $_POST['password'], $_POST['native_lang'], $_POST['learning_lang']);
-    } else {
+    // check username, email & password are set and not empty
+    if (!isset($_POST['username']) || empty($_POST['username']) ||
+        !isset($_POST['password']) || empty($_POST['password']) ||
+        !isset($_POST['email'])    || empty($_POST['email'])) {
         throw new Exception ('Either username, email or password were not provided. Please try again.');
-    }    
+    }
+
+    // check e-mail address is valid
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        throw new Exception ('Invalid e-mail address. Please try again.');
+    }
+
+    // check password is valid
+    $regex = '/(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}/';
+    if (!preg_match($regex, $_POST['password'])) {
+        throw new Exception ("Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters. Please try again.");
+    }
+
+    // check password & password confirmation match
+    if ($_POST['password'] != $_POST['password-confirmation']) {
+        throw new Exception ("Passwords don't match. Please try again.");
+    }
+    
+    $user = new User($con);
+    $user->register($_POST['username'], $_POST['email'], $_POST['password'], $_POST['native_lang'], $_POST['learning_lang']);
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());
     header('Content-Type: application/json');

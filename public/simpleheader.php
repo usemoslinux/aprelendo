@@ -21,7 +21,9 @@
     <nav class="navbar navbar-expand-md navbar-light">
         <div class="container">
             <!-- Brand -->
-            <a class="navbar-brand" href="index.php">Aprelendo</a>
+            <a class="navbar-brand" href="index.php">Aprelendo
+                <small> Beta</small>
+            </a>
 
             <!-- Toggler Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">

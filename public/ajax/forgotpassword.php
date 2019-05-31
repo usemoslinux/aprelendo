@@ -48,6 +48,7 @@ try {
             $message = str_replace('{{name}}', $username, $message);
             $message = str_replace('{{ip}}', $_SERVER['REMOTE_ADDR'], $message);
             $message = str_replace('{{device}}', $_SERVER['HTTP_USER_AGENT'], $message);
+            $message = str_replace('{{current_year}}', date("Y"), $message);
             
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";

@@ -54,11 +54,14 @@ try {
 
         $message .= "\r\n\r\nE-mail: " . $to;
         $message .= "\r\n\r\nIP: " . $_SERVER['REMOTE_ADDR'];
-        $message .= "\r\n\r\nDevice: " . $_SERVER['HTTP_USER_AGENT'];
+        $message .= "\r\n\r\nDevice: " . $_SERVER['HTTP_USER_AGENT'] . "\r\n\r\n";
+        // it's important to include that last double \r\n in $message, otherwise email won't be well formed. This is true especially because Content-Type:text/plain
         
         $mail_sent = mail(SUPPORT_EMAIL, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
         if (!$mail_sent) {
             throw new Exception ('There was an unexpected error trying to send your query. Please try again later.');
+        } else {
+            throw new Exception ('Support email: ' . SUPPORT_EMAIL . "\r\nSubject: $subject \r\nMessage: $message \r\n Headers: $headers \r\n Sender email: " . EMAIL_SENDER);
         }
     } else {
         throw new Exception ('You need to complete all form fields in order to send your query. Please try again.');
