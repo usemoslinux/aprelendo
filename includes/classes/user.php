@@ -217,7 +217,7 @@ class User
             // check if valid token is already in db
             $sql = "SELECT token
                     FROM auth_tokens
-                    WHERE userid=5 AND expires >= NOW()
+                    WHERE userid=$user_id AND expires >= NOW()
                     LIMIT 1";
 
             $result = $this->con->query($sql);

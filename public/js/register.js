@@ -57,6 +57,26 @@ $(document).ready(function () {
     } // end of showMessage
 
     /**
+     * Checks password confirmation matches original password
+     */
+    function checkPasswordAreEqual() { 
+        var $password = $('#password');
+        var $password_confirmation = $('#password-confirmation');
+        var $text = $('#passwords-match-text');
+
+        if ($password.val() == '' || $password_confirmation.val() == '') {
+            $password_confirmation.css('border-bottom', '1px solid #ced4da');
+            $text.text('');
+        } else if ($password_confirmation.val() != $password.val()) {
+            $password_confirmation.css('border-bottom', '2px solid red');
+            $text.text('Passwords dont match');
+        } else {
+            $password_confirmation.css('border-bottom', '2px solid green');
+            $text.text('Passwords match');
+        }
+    }
+
+    /**
      * Checks password strength and changes progress bar accordingly
      */
     $('#password').on('input', function () {
@@ -65,6 +85,7 @@ $(document).ready(function () {
         var special_chars = /([~`!@#$%^&*()\-_+={};:\[\]\?\.\/,])/;
 
         var $password = $(this);
+        var $password_confirmation = $('#password-confirmation');
         var $text = $('#password-strength-text');
 
         if ($password.val().length < 8) {
@@ -77,23 +98,17 @@ $(document).ready(function () {
             $password.css('border-bottom', '2px solid yellow');
             $text.text('Medium (should include letters, numbers and special characters)');
         }
-    });
 
+        if ($password_confirmation.val() != '') {
+            checkPasswordAreEqual();    
+        }
+    });
+    
     /**
-     * Checks password confirmation matches original password
+     * Triggered when user is writing password confirmation
      */
     $('#password-confirmation').on('input', function () {
-        var $password = $('#password');
-        var $password_confirmation = $(this);
-        var $text = $('#passwords-match-text');
-
-        if ($password_confirmation.val() != $password.val()) {
-            $password_confirmation.css('border-bottom', '2px solid red');
-            $text.text('Passwords dont match');
-        } else {
-            $password_confirmation.css('border-bottom', '2px solid green');
-            $text.text('Passwords match');
-        }
+        checkPasswordAreEqual();
     });
 
     /**

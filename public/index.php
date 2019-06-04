@@ -134,11 +134,7 @@ require_once PUBLIC_PATH . 'head.php';
             <div class="col-lg-4">
                 <i class="fas fa-book-open"></i>
                 <h4>Total Reading</h4>
-                <p>Immersion is the best way to learn a language, but few -if any- online tools allow you to create
-                    an
-                    immersive environement. Total reading is a system developed to achieve this goal, from the
-                    comfort
-                    of your home and with enough flexibility to adapt to your schedules and needs.</p>
+                <p>Immersion is the best way to learn a language, but few -if any- online tools allow you to create an immersive environement. Total reading is a system developed to achieve this goal, from the comfort of your home and with enough flexibility to adapt to your schedules and needs.</p>
                 <p>
                     <br />
                     <a href="totalreading.php" class="btn btn-theme">More Info</a>
@@ -147,12 +143,7 @@ require_once PUBLIC_PATH . 'head.php';
             <div class="col-lg-4">
                 <i class="fas fa-mobile-alt"></i>
                 <h4>Use it on any device</h4>
-                <p>You can use Aprelendo on mobile and desktop devices as long as they have an Internet connection.
-                    We
-                    offer
-                    addons for Firefox and Chrome to add texts to your library with the click of a mouse.
-                    Bookmarklets
-                    are also available for those who prefer a browser agnostic solution.</p>
+                <p>You can use Aprelendo on mobile and desktop devices as long as they have an Internet connection. We offer addons for Firefox and Chrome to easily add texts to your library, as well as bookmarklets for those who prefer a browser agnostic solution.</p>
                 <p>
                     <br />
                     <a href="extensions.php" class="btn btn-theme">More Info</a>

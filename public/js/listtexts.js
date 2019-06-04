@@ -183,5 +183,11 @@ $(document).ready(function () {
     $(document).on('click', 'li.disabled', function () {
         return false;
     });
+
+    $('.close').on('click', function (e) {
+        e.preventDefault();
+
+        setCookie('hide_welcome_msg', true, 365 * 10);
+    });   
     
 });

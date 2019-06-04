@@ -17,12 +17,46 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(document).ready(function () {
-    if (document.cookie.indexOf("accept_cookies") === -1) {
-        $("#eucookielaw").fadeIn(1200, function(){ $(this).show();});
+/**
+ * Creates a cookie
+ * @param {string} name 
+ * @param {string} value 
+ * @param {integer} days 
+ */
+function setCookie(name, value, days) {
+    var expires;
+
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toGMTString();
+    } else {
+        expires = "";
     }
-    $("#removecookie").click(function () {
-        SetCookie('accept_cookies', true, 365 * 10);
-        $("#eucookielaw").fadeOut(1200, function(){ $(this).remove();});
-    });
-});
+    document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
+}
+
+/**
+ * Retrieves a cookie value
+ * @param {string} name 
+ */
+function getCookie(name) {
+    var nameEQ = encodeURIComponent(name) + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) === ' ')
+            c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0)
+            return decodeURIComponent(c.substring(nameEQ.length, c.length));
+    }
+    return null;
+}
+
+/**
+ * Deletes a cookie
+ * @param {string} name 
+ */
+function deleteCookie(name) {
+    setCookie(name, "", -1);
+}

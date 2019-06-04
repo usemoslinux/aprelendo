@@ -466,7 +466,8 @@ APRELENDO CUSTOMIZATIONS
 
 ul,
 ol {
-    padding: inherit;
+    /* padding: inherit; */
+    padding: 0 25px;
 }
 
 /* HEADER */
