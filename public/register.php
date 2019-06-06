@@ -41,19 +41,19 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             $to_lang = isset($_GET['tolang']) ? htmlspecialchars(ucfirst($_GET['tolang']), ENT_QUOTES, 'UTF-8') : 'English';
                             $native_lang = isset($_GET['srclang']) ? ucfirst($_GET['srclang']) : 'English';
                             
-                            echo '<img src="img/flags/' . $title_array["$to_lang"][0] . '.svg" alt="' . $to_lang . '" class="flag-icon">';
+                            echo '<img id="learning-flag" src="img/flags/' . $title_array["$to_lang"][0] . '.svg" alt="' . $to_lang . '" class="flag-icon">';
                             echo $title_array["$to_lang"][1];
                             ?>
                         </h1>
-                        <div class="text-muted text-center">You are only one step away from learning
+                        <div id="welcome-msg" class="text-muted text-center">You are only one step away from learning
                             <?php echo $to_lang; ?>.</div>
                     </header>
                     <br />
                     <div id="error-msg" class="d-none"></div>
-                    <form id="form_register">
+                    <form id="form-register">
                             <div class="form-group">
-                                <label for="native_lang">Native language:</label>
-                                <select name="native_lang" class="form-control custom-select" id="native_lang">
+                                <label for="native-lang">Native language:</label>
+                                <select name="native-lang" class="form-control custom-select" id="native-lang">
                                     <option value="en" selected>English</option>
                                     <option value="es">Spanish</option>
                                     <option value="pt">Portuguese</option>
@@ -63,8 +63,8 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="learning_lang">Want to learn:</label>
-                                <select name="learning_lang" class="form-control custom-select" id="learning_lang">
+                                <label for="learning-lang">Want to learn:</label>
+                                <select name="learning-lang" class="form-control custom-select" id="learning-lang">
                                     <option value="en" <?php echo $to_lang=='English' ? 'selected' : '' ; ?>>English</option>
                                     <option value="es" <?php echo $to_lang=='Spanish' ? 'selected' : '' ; ?>>Spanish</option>
                                     <option value="pt" <?php echo $to_lang=='Portuguese' ? 'selected' : '' ; ?>>Portuguese</option>
@@ -87,7 +87,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             <div class="form-group">
                                 <label for="password">Password:</label>
                                 <small>
-                                    <i>at least 8 chars long (including letters, numbers &amp; special chars)</i>
+                                    <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
                                 </small>
                                 <div class="input-group">
                                     <input type="password" id="password" name="password" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required>

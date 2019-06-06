@@ -18,10 +18,14 @@
  */
 
 $(document).ready(function () {
-    $('#form_register').on('submit', function (e) {
+
+    /**
+     * Sends user registration form
+     */
+    $('#form-register').on('submit', function (e) {
         e.preventDefault();
 
-        var form_data = $('#form_register').serialize();
+        var form_data = $('#form-register').serialize();
 
         showMessage('Processing...', 'alert-info');
 
@@ -32,8 +36,12 @@ $(document).ready(function () {
             })
             .done(function (data) {
                 if (data.error_msg == null) {
-                    // window.location.replace('texts.php');
-                    showMessage('An email has been sent to your account with the activation link.', 'alert-success');
+                    showMessage('An email has been sent to your account with the activation link. Redirecting to login page...', 'alert-success');
+                    $('#form-register').fadeOut('fast', function() {
+                        $('#error-msg').fadeOut(4000, function() {
+                            window.location.replace('login.php');
+                        });    
+                    });
                 } else {
                     showMessage(data.error_msg, 'alert-danger');
                 }
@@ -41,8 +49,22 @@ $(document).ready(function () {
             .fail(function (xhr, ajaxOptions, thrownError) {
                 showMessage('Oops! There was an unexpected error when trying to register you. Please try again later.', 'alert-danger');
             }); // end of ajax
-    }); // end of #form_register.on.submit
+    }); // end of #form-register.on.submit
 
+    /**
+     * Updates flag and welcome message based on changes in the selected learning language
+     */
+    $('#learning-lang').on('change', function () {
+        var lang_array = ['English', 'Spanish', 'Portuguese', 'French', 'Italian', 'German'];
+        var iso_array = ['en', 'es', 'pt', 'fr', 'it', 'de'];
+        var welcome_array = ['Welcome!', '¡Bienvenido!', 'Bemvindo!', 'Bienvenue!', 'Benvenuto!', 'Willkommen!'];
+        var sel_index = $(this).prop('selectedIndex');
+        var img_uri = 'img/flags/' + iso_array[sel_index] + '.svg';
+
+        $('h1').text(welcome_array[sel_index])
+            .prepend('<img id="learning-flag" class="flag-icon" src="' + img_uri + '" alt="' + lang_array[sel_index] + '"></img>');
+        $('#welcome-msg').text('You are only one step away from learning ' + lang_array[sel_index]);
+    });
 
     /**
      * Shows custom message in the top section of the screen
@@ -59,7 +81,7 @@ $(document).ready(function () {
     /**
      * Checks password confirmation matches original password
      */
-    function checkPasswordAreEqual() { 
+    function checkPasswordAreEqual() {
         var $password = $('#password');
         var $password_confirmation = $('#password-confirmation');
         var $text = $('#passwords-match-text');
@@ -100,10 +122,10 @@ $(document).ready(function () {
         }
 
         if ($password_confirmation.val() != '') {
-            checkPasswordAreEqual();    
+            checkPasswordAreEqual();
         }
     });
-    
+
     /**
      * Triggered when user is writing password confirmation
      */

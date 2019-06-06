@@ -143,11 +143,11 @@ class User
         $message = str_replace('{{current_year}}', date("Y"), $message);
         
         $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= 'From:' . EMAIL_SENDER;
+        $headers .= "Content-type: text/html;charset=UTF-8" . "\r\n";
+        $headers .= 'From: Aprelendo <' . EMAIL_SENDER . ">\r\n";
         
         // send email
-        $mail_sent = @mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
+        $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
         if (!$mail_sent) {
             $this->delete();
             throw new \Exception ('Oops! There was an unexpected error trying to send you an e-mail to activate your account. Please try again later.');

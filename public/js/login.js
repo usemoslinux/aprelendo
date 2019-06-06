@@ -18,29 +18,33 @@
  */
 
 $(document).ready(function () {
-  $('#form_login').on('submit', function (e) {
-    e.preventDefault();
 
-    var form_data = $('#form_login').serialize();
+    /**
+     * Sends user login form
+     */
+    $('#form_login').on('submit', function (e) {
+        e.preventDefault();
+
+        var form_data = $('#form_login').serialize();
+
+        $.ajax({
+                type: "POST",
+                url: "ajax/login.php",
+                data: form_data
+            })
+            .done(function (data) {
+                if (data.error_msg == null) {
+                    window.location.replace('texts.php');
+                } else {
+                    showMessage(data.error_msg, 'alert-danger');
+                }
+            })
+            .fail(function (xhr, ajaxOptions, thrownError) {
+                showMessage('Oops! There was an unexpected error when trying to log you in. Please try again later.', 'alert-danger');
+            }); // end of ajax
+    }); // end of #form_login.on.submit
     
-    $.ajax({
-      type: "POST",
-      url: "ajax/login.php",
-      data: form_data
-    })
-    .done(function (data) {
-      if(data.error_msg == null) {
-        window.location.replace('texts.php');
-      } else {
-        showMessage(data.error_msg, 'alert-danger');
-      }
-    })
-    .fail(function (xhr, ajaxOptions, thrownError) {
-      showMessage('Oops! There was an unexpected error when trying to log you in. Please try again later.', 'alert-danger');
-    }); // end of ajax
-  }); // end of #form_login.on.submit
-
-  /**
+    /**
      * Shows custom message in the top section of the screen
      * @param {string} html
      * @param {string} type 

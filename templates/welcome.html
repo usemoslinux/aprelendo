@@ -1,25 +1,198 @@
-<!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Welcome to Aprelendo, {{name}}!</title>
-</head>
 
-<body
-    style="-webkit-text-size-adjust: none; box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; height: 100%; line-height: 1.4; margin: 0; width: 100% !important;"
-    bgcolor="#F2F4F6">
     <style type="text/css">
         body {
+            font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+            font-size: 16px;
             width: 100% !important;
             height: 100%;
             margin: 0;
             line-height: 1.4;
-            background-color: #F2F4F6;
+            background-color:#F2F4F6;
             color: #74787E;
             -webkit-text-size-adjust: none;
+        }
+
+        .content-cell>h1 {
+            box-sizing: border-box;
+            color: #2F3133;
+            font-size: 19px;
+            font-weight: bold;
+            margin-top: 0;
+        }
+
+        .content-cell>p {
+            box-sizing: border-box;
+            color: #74787E;
+            line-height: 1.5em;
+            margin-top: 0;
+        }
+
+        .attributes_content>table {
+            box-sizing: border-box;
+        }
+
+        .attributes_item>strong {
+            box-sizing: border-box;
+        }
+
+        .attributes_item>a {
+            box-sizing: border-box;
+            color: #3869D4;
+        }
+
+        .attributes_item>strong {
+            box-sizing: border-box;
+        }
+
+        .preheader {
+            box-sizing: border-box;
+            display: none !important;
+            font-size: 1px;
+            line-height: 1px;
+            max-height: 0;
+            max-width: 0;
+            opacity: 0;
+            overflow: hidden;
+            visibility: hidden;
+        }
+
+        .email-wrapper {
+            box-sizing: border-box;
+            background-color: #F2F4F6;
+            margin: auto;
+            padding: 0;
+        }
+
+        .email-content {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .email-masthead {
+            box-sizing: border-box;
+            padding: 25px 0;
+            text-align: center;
+        }
+
+        .email-masthead_name {
+            box-sizing: border-box;
+            color: #bbbfc3;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            text-shadow: 0 1px 0 white;
+        }
+
+        .email-body {
+            -premailer-cellpadding: 0;
+            -premailer-cellspacing: 0;
+            border-bottom-color: #EDEFF2;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-top-color: #EDEFF2;
+            border-top-style: solid;
+            border-top-width: 1px;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background-color: #FFFFFF;
+        }
+
+        .email-body_inner {
+            box-sizing: border-box;
+            margin: 0 auto;
+            padding: 0;
+            width: 570px;
+            text-align: center;
+            background-color: #FFFFFF;
+        }
+
+        .content-cell {
+            box-sizing: border-box;
+            padding: 35px;
+            text-align: center;
+        }
+
+        .body-action {
+            box-sizing: border-box;
+            margin: 30px auto;
+            padding: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .button.button-- {
+            -webkit-text-size-adjust: none;
+            background: #3869D4;
+            border-color: #3869d4;
+            border-radius: 3px;
+            border-style: solid;
+            border-width: 10px 18px;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16);
+            box-sizing: border-box;
+            color: #FFF;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .attributes {
+            box-sizing: border-box;
+            margin: 0 0 21px;
+            width: 100%;
+        }
+
+        .attributes_content {
+            box-sizing: border-box;
+            padding: 16px;
+            background-color: #EDEFF2;
+        }
+
+        .attributes_item {
+            box-sizing: border-box;
+            padding: 0;
+        }
+
+        .body-sub {
+            border-top-color: #EDEFF2;
+            border-top-style: solid;
+            border-top-width: 1px;
+            box-sizing: border-box;
+            margin-top: 25px;
+            padding-top: 25px;
+        }
+
+        .sub {
+            box-sizing: border-box;
+            color: #74787E;
+            font-size: 12px;
+            line-height: 1.5em;
+            margin-top: 0;
+            text-align: left;
+        }
+
+        .email-footer {
+            box-sizing: border-box;
+            margin: 0 auto;
+            padding: 0;
+            text-align: center;
+            width: 570px;
+        }
+
+        .sub.align-center {
+            box-sizing: border-box;
+            color: #AEAEAE;
+            font-size: 12px;
+            line-height: 1.5em;
+            margin-top: 0;
         }
 
         .img-logo {
@@ -43,128 +216,65 @@
             }
         }
     </style>
-    <span class="preheader"
-        style="box-sizing: border-box; display: none !important; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 1px; line-height: 1px; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; visibility: hidden;">Thanks
-        for trying out Aprelendo. We’ve pulled together some information and resources to help you get started.</span>
-    <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0"
-        style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 0; padding: 0; width: 100%;"
-        bgcolor="#F2F4F6">
+</head>
+
+<body>
+    <span class="preheader">Thanks for trying out Aprelendo. We’ve pulled together some information and resources to help you get started.</span>
+    <table class="email-wrapper">
         <tr>
-            <td align="center"
-                style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; word-break: break-word;">
-                <table class="email-content" width="100%" cellpadding="0" cellspacing="0"
-                    style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 0; padding: 0; width: 100%;">
+            <td style="text-align: center">
+                <table class="email-content">
                     <tr>
-                        <td class="email-masthead"
-                            style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; padding: 25px 0; word-break: break-word;"
-                            align="center">
-                            <a href="https://www.aprelendo.com/" class="email-masthead_name"
-                                style="box-sizing: border-box; color: #bbbfc3; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; font-weight: bold; text-decoration: none; text-shadow: 0 1px 0 white;">
-                                <img src="https://www.aprelendo.com/img/logo.svg" class="img-logo" alt="Aprelendo logo" title="Aprelendo">
+                        <td class="email-masthead" style="text-align: center">
+                            <a href="https://www.aprelendo.com/" class="email-masthead_name">
+                                <img src="https://www.aprelendo.com/img/email_logo.png" class="img-logo" alt="Aprelendo" />
                             </a>
                         </td>
                     </tr>
 
                     <tr>
-                        <td class="email-body" width="100%" cellpadding="0" cellspacing="0"
-                            style="-premailer-cellpadding: 0; -premailer-cellspacing: 0; border-bottom-color: #EDEFF2; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: #EDEFF2; border-top-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 0; padding: 0; width: 100%; word-break: break-word;"
-                            bgcolor="#FFFFFF">
-                            <table class="email-body_inner" align="center" width="570" cellpadding="0" cellspacing="0"
-                                style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 0 auto; padding: 0; width: 570px;"
-                                bgcolor="#FFFFFF">
-
+                        <td class="email-body">
+                            <table class="email-body_inner">
                                 <tr>
-                                    <td class="content-cell"
-                                        style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; padding: 35px; word-break: break-word;">
-                                        <h1 style="box-sizing: border-box; color: #2F3133; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 19px; font-weight: bold; margin-top: 0;"
-                                            align="left">Welcome to Aprelendo, {{name}}!</h1>
-                                        <p style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;"
-                                            align="left">Thanks for signing up! We’re thrilled to have you on board.</p>
-                                        <p style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;"
-                                            align="left">To be able to login you first need to activate your account by
+                                    <td class="content-cell">
+                                        <h1 style="text-align: left">Welcome to Aprelendo, {{name}}!</h1>
+                                        <p style="text-align: left">Thanks for signing up! We’re thrilled to have you on board.</p>
+                                        <p style="text-align: left">To be able to login you first need to activate your account by
                                             pressing the button below:</p>
-                                        <table class="body-action" align="center" width="100%" cellpadding="0"
-                                            cellspacing="0"
-                                            style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 30px auto; padding: 0; text-align: center; width: 100%;">
+                                        <table class="body-action">
                                             <tr>
-                                                <td align="center"
-                                                    style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; word-break: break-word;">
-
-                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0"
-                                                        style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                                                        <tr>
-                                                            <td align="center"
-                                                                style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; word-break: break-word;">
-                                                                <table border="0" cellspacing="0" cellpadding="0"
-                                                                    style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                                                                    <tr>
-                                                                        <td
-                                                                            style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; word-break: break-word;">
-                                                                            <a href="{{action_url}}"
-                                                                                class="button button--" target="_blank"
-                                                                                rel="noopener noreferrer"
-                                                                                style="-webkit-text-size-adjust: none; background: #3869D4; border-color: #3869d4; border-radius: 3px; border-style: solid; border-width: 10px 18px; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16); box-sizing: border-box; color: #FFF; display: inline-block; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; text-decoration: none;">Activate
-                                                                                your account</a>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
+                                                <td style="text-align: center">
+                                                    <a href="{{action_url}}" class="button button--" target="_blank" rel="noopener noreferrer">Activate your account</a>
                                                 </td>
                                             </tr>
                                         </table>
-                                        <p style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;"
-                                            align="left">For reference, here's your login information:</p>
-                                        <table class="attributes" width="100%" cellpadding="0" cellspacing="0"
-                                            style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 0 0 21px;">
+                                        <p style="text-align: left">For reference, here's your login information:</p>
+                                        <table class="attributes">
                                             <tr>
-                                                <td class="attributes_content"
-                                                    style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; padding: 16px; word-break: break-word;"
-                                                    bgcolor="#EDEFF2">
-                                                    <table width="100%" cellpadding="0" cellspacing="0"
-                                                        style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;">
+                                                <td class="attributes_content">
+                                                    <table style="width: 100%">
                                                         <tr>
-                                                            <td class="attributes_item"
-                                                                style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; padding: 0; word-break: break-word;">
-                                                                <strong
-                                                                    style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;">Login
-                                                                    Page:</strong> <a
-                                                                    href="https://www.aprelendo.com/login.php"
-                                                                    style="box-sizing: border-box; color: #3869D4; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;">https://www.aprelendo.com/login.php</a>
+                                                            <td class="attributes_item">
+                                                                <strong>Login Page:</strong> <a
+                                                                    href="https://www.aprelendo.com/login.php">https://www.aprelendo.com/login.php</a>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="attributes_item"
-                                                                style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; padding: 0; word-break: break-word;">
-                                                                <strong
-                                                                    style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;">Username:</strong>
+                                                            <td class="attributes_item">
+                                                                <strong>Username:</strong>
                                                                 {{name}}</td>
                                                         </tr>
                                                     </table>
                                                 </td>
                                             </tr>
                                         </table>
-                                        <p style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;"
-                                            align="left">If you have any questions, feel free to <a
-                                                href="https://www.aprelendo.com/support.php"
-                                                style="box-sizing: border-box; color: #3869D4; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;">contact
-                                                our support team</a>. They are lightning quick at replying.</p>
-                                        <p style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;"
-                                            align="left">Thanks,
-                                            <br>The Aprelendo Team</p>
-                                        <table class="body-sub"
-                                            style="border-top-color: #EDEFF2; border-top-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin-top: 25px; padding-top: 25px;">
+                                        <p style="text-align: left">Please do not reply to this e-mail. If you have any questions, feel free to <a href="https://www.aprelendo.com/support.php">contact our support team</a>.</p>
+                                        <p style="text-align: left">Thanks, <br>The Aprelendo Team</p>
+                                        <table class="body-sub">
                                             <tr>
-                                                <td
-                                                    style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; word-break: break-word;">
-                                                    <p class="sub"
-                                                        style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 1.5em; margin-top: 0;"
-                                                        align="left">If you’re having trouble with the button above,
-                                                        copy and paste the URL below into your web browser.</p>
-                                                    <p class="sub"
-                                                        style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 1.5em; margin-top: 0;"
-                                                        align="left">{{action_url}}</p>
+                                                <td>
+                                                    <p class="sub">If you’re having trouble with the button above, copy and paste the URL below into your web browser.</p>
+                                                    <p class="sub">{{action_url}}</p>
                                                 </td>
                                             </tr>
                                         </table>
@@ -174,16 +284,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; word-break: break-word;">
-                            <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0"
-                                style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 0 auto; padding: 0; text-align: center; width: 570px;">
+                        <td>
+                            <table class="email-footer">
                                 <tr>
-                                    <td class="content-cell" align="center"
-                                        style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; padding: 35px; word-break: break-word;">
-                                        <p class="sub align-center"
-                                            style="box-sizing: border-box; color: #AEAEAE; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 1.5em; margin-top: 0;"
-                                            align="center">© {{current_year}} Aprelendo. All rights reserved.</p>
+                                    <td class="content-cell" style="text-align: center">
+                                        <p class="sub align-center" style="text-align: center">© {{current_year}} Aprelendo. All
+                                            rights reserved.</p>
                                     </td>
                                 </tr>
                             </table>
