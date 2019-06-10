@@ -107,7 +107,7 @@ class PopularSources extends DBEntity {
             return false; // return error
         }
 
-        $result = $this->con->query("SELECT * FROM `popularsources` WHERE popsources_lg_iso='$lg_iso' LIMIT 50");
+        $result = $this->con->query("SELECT * FROM `popularsources` WHERE popsources_lg_iso='$lg_iso' ORDER BY popsources_times_used DESC LIMIT 50");
 
         if (!$result) {
             return false;

@@ -362,7 +362,7 @@ $(document).ready(function () {
                 
                 if (!audio_is_loaded) {
                     $(this).html(
-                        'Finished (no audio detected)<br><span class="small">Save changes</span>'
+                        'Finish & Save<br><span class="small">Skipped phases 2, 3 & 4: no audio detected</span>'
                     );
                     phase = 4;
                     break;

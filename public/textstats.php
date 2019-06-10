@@ -22,6 +22,8 @@ if (!isset($_POST) || empty($_POST)) {
     header('Location:texts.php');
 }
 
+require_once '../includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
@@ -100,7 +102,16 @@ function print_table_footer($array_table_rows) {
     </div>
     <div class="row">
         <div class="col-12">
-            <button class="btn btn-success float-right mb-3" type="button" onclick="window.location.replace('texts.php');"><i class="fas fa-chevron-circle-left"></i> Go back to your library</button>
+            <button class="btn btn-success float-right mb-3" type="button"
+                onclick="window.location.replace('texts.php');"><i class="fas fa-chevron-circle-left"></i> Go back to
+                your library</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                Congrats! You've finished reviewing this text. It will now be marked as "archived".
+            </div>
         </div>
     </div>
     <div class="row">
@@ -122,7 +133,7 @@ function print_table_footer($array_table_rows) {
                     </tfoot>
                 </table>
             </div>
-            
+
             <table class="table table-light">
                 <thead class="thead-light">
                     <tr>
@@ -141,13 +152,16 @@ function print_table_footer($array_table_rows) {
         </div>
         <div class="col-12">
             <p><strong class="word reviewing new">New</strong>: words you've just added to your learning list.</p>
-            <p><strong class="word reviewing learning">Reviewed</strong>: words that you already reviewed at least once, but still need to review more times.</p>
-            <p><strong class="word learned">Learned</strong>: words that the system thinks you have already reviewed enough times.</p>
-            <p><strong class="word reviewing forgotten">Forgotten</strong>: words you reviewed or learned in the past and you marked for learning once again.</p>
-            <p><strong class="word frequency-list">Other</strong>: words that you never marked for learning and you seem to understand well.</p>
+            <p><strong class="word reviewing learning">Reviewed</strong>: words that you already reviewed at least once,
+                but still need to review more times.</p>
+            <p><strong class="word learned">Learned</strong>: words that the system thinks you have already reviewed
+                enough times.</p>
+            <p><strong class="word reviewing forgotten">Forgotten</strong>: words you reviewed or learned in the past
+                and you marked for learning once again.</p>
+            <p><strong class="word frequency-list">Other</strong>: words that you never marked for learning and you seem
+                to understand well.</p>
         </div>
     </div>
 </div>
-<script defer src="js/textstats.js"></script>
 
 <?php require_once 'footer.php'; ?>
