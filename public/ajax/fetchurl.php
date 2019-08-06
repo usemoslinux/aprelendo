@@ -21,6 +21,27 @@
 require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
-echo isset($_GET['url']) ? file_get_contents($_GET['url']) : '';
+stream_context_set_default(
+    array(
+     'http' => array(
+      'proxy' => "tcp://www-proxy.mrec.ar:8080",
+      'request_fulluri' => true      
+     )
+    )
+   );
+
+try {
+    if (isset($_GET['url']) && !empty($_GET['url'])) {
+        $url = $_GET['url'];
+        $result = @file_get_contents($url);
+        echo $result ? $result : '';
+    } else {
+        throw new Exception ('There was a problem retrieving that URL. Please check it is not empty or malformed.');
+    }    
+} catch (Exception $e) {
+    $error = array('error_msg' => $e->getMessage());
+    header('Content-Type: application/json');
+    echo json_encode($error);
+}
 
 ?>

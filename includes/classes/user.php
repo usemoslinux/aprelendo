@@ -211,11 +211,13 @@ class User
         }
         
         if (password_verify($password, $hashedPassword)) { // login successful, remember me
+            $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : "";
+
             // first, remove old tokens from auth_tokens table
             $result = $this->con->query("DELETE FROM auth_tokens WHERE expires < NOW()");
             
             // check if valid token is already in db
-            $sql = "SELECT token
+            $sql = "SELECT token, expires
                     FROM auth_tokens
                     WHERE userid=$user_id AND expires >= NOW()
                     LIMIT 1";
@@ -226,7 +228,7 @@ class User
                 $row = $result->fetch_assoc();
                 $token = $row['token'];
                 $time_stamp = $row['expires'];
-                setcookie('user_token', $token, $time_stamp, "/", false, 0);
+                $cookie = setcookie('user_token', $token, strtotime($time_stamp), "/", $domain, true);
             } else {
                 // create new token, insert it in db & set cookie
                 $token = $this->token = $this->generateToken();
@@ -236,7 +238,8 @@ class User
                 
                 $result = $this->con->query("INSERT INTO auth_tokens (token, userid, expires) VALUES ('$token', $user_id, '$expires')");
                 if ($result) {
-                    setcookie('user_token', $token, $time_stamp, "/", false, 0);
+
+                    setcookie('user_token', $token, $time_stamp, "/", $domain, true);
                 } else {
                     throw new \Exception ('There was a problem trying to create the authentication cookie. Please try again.');
                 }
@@ -254,8 +257,10 @@ class User
      * @return void
      */
     public function logout($deleted_account) {
+        $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;
+
         if ($deleted_account || $this->isLoggedIn()) {
-            setcookie('user_token', '', time() - 3600, "/", false, 0); // delete user_token cookie
+            setcookie('user_token', '', time() - 3600, "/", $domain, true); // delete user_token cookie
         } 
         
         header('Location:/index.php');

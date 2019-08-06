@@ -254,7 +254,7 @@ class Reader extends Text
     public function showText() {
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
         // $time_start = microtime(true);
-        $html = "<div id='container' data-textID='" . $this->id . "'>";
+        $html = "<div id='text-container' data-textID='" . $this->id . "'>";
         
         // display source, if available
         if (!empty($this->source_uri)) {
@@ -357,7 +357,7 @@ class Reader extends Text
             '</div>' .
             '<div id="show-transcript-container" class="col-md-6">';
 
-        $html .= "<div id='container' data-textID='" . $this->id . "'>";
+        $html .= "<div id='text-container' data-textID='" . $this->id . "'>";
         $html .= '<div id="message-window"></div>';
         $xml = new SimpleXMLElement($this->text);
 

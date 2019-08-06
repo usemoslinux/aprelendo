@@ -18,14 +18,15 @@
  */
 
 $(document).ready(function () {
+	var highlighting = false;
+    var $sel_start, $sel_end;
     var $selword = null; // jQuery object of the selected word/phrase
     var time_handler = null;
     var dictionaryURI = "";
     var translatorURI = "";
-    var prevsel = 0; // previous selection index in #selPhrase
     var phase = 1; // first phase of the learning cycle
     var playingaudio = false;
-    
+
     // $doc & $pagereader are used to make this JS code work when showing simple texts & 
     // ebooks (which are displayed inside an iframe)
     var $doc = $(parent.document); 
@@ -89,7 +90,53 @@ $(document).ready(function () {
             }, 1000);
         }
     }
-
+    
+    $doc.on("mousedown", ".word", function() {
+		// e.preventDefault();
+        // e.stopPropagation();
+        highlighting = true;
+        $sel_start = $(this);
+	});
+	
+	$doc.on("mouseup", ".word", function(e) {
+        // e.preventDefault();
+        // e.stopPropagation();
+        highlighting = false;
+        if ($sel_start.text() != $(e.target).text()) {
+            showModal();
+        }
+	});
+	
+	$doc.on("click", ".word", function() {
+        $selword = $(this);
+        $(".word").removeClass("highlighted");
+        $selword.addClass("highlighted");
+        showModal();
+	});
+	
+	$.fn.isAfter = function(sel) {
+		return this.prevUntil(sel).length !== this.prevAll().length;
+	}
+	
+	$.fn.isBefore = function(sel) {
+		return this.nextUntil(sel).length !== this.nextAll().length;
+	}
+	
+	$doc.on("mouseover", ".word", function() {
+		$sel_end = $(this);
+		if(highlighting) {
+			$(".word").removeClass("highlighted");
+			
+			if ($sel_end.isAfter($sel_start)) {
+				$sel_start.prev().nextUntil($sel_end.next(), ".word").addClass("highlighted");
+				$selword = $sel_start.prev().nextUntil($sel_end.next());
+			} else {
+				$sel_start.next().prevUntil($sel_end.prev(), ".word").addClass("highlighted");
+				$selword = $sel_end.prev().nextUntil($sel_start.next());
+			}
+		}
+    });
+    
     // ajax call to get dictionary & translator URIs
     $.ajax({
         url: "/ajax/getdicuris.php",
@@ -100,6 +147,19 @@ $(document).ready(function () {
         translatorURI = data.LgTranslatorURI;
     });
 
+    function buildTranslateParagraphLink() {
+        var $start_obj = $selword.prevUntil(":contains('.')").last();
+        $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
+        var $end_obj = $selword.prev().nextUntil(":contains('.')").last().next();
+        $end_obj = $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
+        var $sentence = $start_obj.nextUntil($end_obj).addBack().next().addBack();
+
+        return translatorURI.replace(
+            "%s",
+            encodeURIComponent($sentence.text())
+        );
+    }
+
     /**
      * Sets Add & Delete buttons depending on whether selection exists in database
      */
@@ -109,7 +169,7 @@ $(document).ready(function () {
         if ($selword.is(".learning, .new, .forgotten, .learned")) {
             if ($btnremove.is(":visible") === false) {
                 $btnremove.show();
-                $btnadd.text("Forgot meaning");
+                $btnadd.text("Forgot");
             }
         } else {
             $btnremove.hide();
@@ -121,7 +181,7 @@ $(document).ready(function () {
      * Shows dictionary when user clicks a word
      * All words are enclosed in span.word tags
      */
-    $(document).on("click", "span.word", function () {
+    function showModal() {
         var audioplayer = $("#audioplayer");
 
         if (audioplayer.length) {
@@ -134,10 +194,10 @@ $(document).ready(function () {
             }
         }
 
-        $selword = $(this);
-        $phrase_selector = $(parent.document).find("#selPhrase");
-
         setAddDeleteButtons();
+
+        // build translate sentence url
+        $("#gt-link").attr("href", buildTranslateParagraphLink());
 
         // show dictionary
         var url = dictionaryURI.replace("%s", encodeURIComponent($selword.text()));
@@ -149,155 +209,107 @@ $(document).ready(function () {
         // the previous line loads iframe content without adding it to browser history,
         // as this one does: $('#dicFrame').attr('src', url);
 
-        // build phrase select element in modal window
-        $phrase_selector.empty();
-        $phrase_selector.append(
-            $("<option>", {
-                value: $selword.text(),
-                text: $selword.text()
-            })
-        );
-        phraselength = 0;
-
-        // chose max. 5 words. If .?! detected, then stop (it's the end of the sentence).
-        $selword
-            .nextAll("span")
-            .slice(0, 20)
-            .each(function (i, item) {
-                if (
-                    phraselength == 5 ||
-                    $(item)
-                    .text()
-                    .search(/[.?!]/i) > -1
-                ) {
-                    return false;
-                } else {
-                    if ($(item).hasClass("word")) {
-                        $phrase_selector.append(
-                            $("<option>", {
-                                value: $selword.text() +
-                                    $selword
-                                    .nextAll("span")
-                                    .slice(0, i + 1)
-                                    .text(),
-                                text: $selword.text() + "..." + $(item).text()
-                            })
-                        );
-                        phraselength++;
-                    }
-                }
-            });
-        $phrase_selector.append(
-            $("<option>", {
-                value: "translate_sentence",
-                text: "Translate sentence"
-            })
-        );
-
-        prevsel = 0;
         $(parent.document).find('#myModal').modal('show');
-    });
+    }
 
-    /**
-     * Adds selected word or phrase to the database and underlines it in the text
-     */
-    $doc.on("click", "#btnadd", function () {
-        // check if selection is a word or phrase
-        var selection = $doc.find("#selPhrase option:selected").val();
-        var selphrase_sel_index = $doc.find("#selPhrase").prop("selectedIndex");
-        var selphrase_count = $doc.find("#selPhrase option").length;
-        var is_phrase =
-            selphrase_sel_index > 0 && selphrase_sel_index != selphrase_count - 1;
-        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != undefined && $("#audioplayer").find("source").attr("src") != "";
+    $doc.on("click", "#btnadd", function() {
+        var is_phrase = $selword.length > 1;
+        var sel_text = $selword.text();
 
         // add selection to "words" table
         $.ajax({
-                type: "POST",
-                url: "/ajax/addword.php",
-                data: {
-                    word: selection,
-                    isphrase: is_phrase
-                }
-            })
-            .done(function () {
-                // if successful, underline word or phrase
-                if (is_phrase) { // if it's a phrase
-                    var firstword = $selword.text();
-                    var phraseext = selphrase_sel_index + 1;
-                    var filterphrase = $pagereader.contents().find("span.word").filter(function () {
-                        return (
-                            $(this)
-                            .text()
-                            .toLowerCase() === firstword.toLowerCase()
-                        );
-                    });
+            type: "POST",
+            url: "/ajax/addword.php",
+            data: {
+                word: sel_text,
+                isphrase: is_phrase
+            }
+        })
+        .done(function () {
+            // if successful, underline word or phrase
+            if (is_phrase) { // if it's a phrase
+                var word_count = $selword.filter(".word").length;
 
-                    filterphrase.each(function () {
-                        var lastword = $(this)
-                            .nextAll("span.word")
-                            .slice(0, phraseext - 1)
-                            .last();
-                        var phrase = $(this)
-                            .nextUntil(lastword)
-                            .addBack()
-                            .next("span.word")
-                            .addBack();
+                // build filter based on first word of the phrase
+                var filterphrase = $pagereader.contents().find("span.word").filter(function () {
+                    return (
+                        $(this)
+                        .text()
+                        .toLowerCase() === $selword.eq(0).text().toLowerCase()
+                    );
+                });
 
-                        if (phrase.text().toLowerCase() === selection.toLowerCase()) {
-                            if ($(this).is('.new, .learning, .learned, .forgotten')) {
-                                phrase.wrapAll(
-                                    "<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></span>"
-                                );
-                            } else {
-                                phrase.wrapAll(
-                                    "<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>"
-                                );
-                            }
+                // loop through the filter and underline all instances of the phrase
+                filterphrase.each(function () {
+                    var $lastword = $(this)
+                        .nextAll("span.word")
+                        .slice(0, word_count - 1)
+                        .last();
+                    var $phrase = $(this)
+                        .nextUntil($lastword)
+                        .addBack()
+                        .next("span.word")
+                        .addBack();
 
-                            phrase.contents().unwrap();
-                        }
-                    });
-                } else { // if it's a word
-                    var filterword = $pagereader.contents().find("span.word").filter(function () {
-                        return (
-                            $(this)
-                            .text()
-                            .toLowerCase() === selection.toLowerCase()
-                        );
-                    });
-
-                    filterword.each(function () {
-                        var $word = $(this);
-                        if ($word.is('.new, .learning, .learned, .forgotten')) {
-                            $word.html("<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'>" +
-                                selection +
-                                "</span>");
+                    if ($phrase.text().toLowerCase() === sel_text.toLowerCase()) {
+                        if ($(this).is('.new, .learning, .learned, .forgotten')) {
+                            $phrase.wrapAll(
+                                "<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></span>"
+                            );
                         } else {
-                            $word.html("<span class='word reviewing new' data-toggle='modal' data-target='#myModal'>" +
-                                selection +
-                                "</span>");
+                            $phrase.wrapAll(
+                                "<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>"
+                            );
                         }
-                    });
 
-                    filterword.contents().unwrap();
-                }
+                        $phrase.contents().unwrap();
+                    }
+                });
+            } else { // if it's a word
+                // build filter with all the instances of the word in the text                
+                var filterword = $pagereader.contents().find("span.word").filter(function () {
+                    return (
+                        $(this)
+                        .text()
+                        .toLowerCase() === sel_text.toLowerCase()
+                    );
+                });
 
-                // if there were no previous word underlined, therefore phases 2 & 3 were off, 
-                // when user adds his first new word, activate these phases
-                var actual_phase = $('#alert-msg-phase').attr('data-phase');
-                if (phase == 4 && audio_is_loaded && actual_phase == 3) {
-                    var phase_names = ['Reading', 'Listening', 'Speaking', 'Writing'];
-                    $('#btn-next-phase').html('Go to phase ' + phase + '<br><span class="small">' + 
-                    phase_names[phase-1] + '</span>');
-                    phase = parseInt(actual_phase);
-                }
+                // loop through the filter and underline all instances of the word
+                filterword.each(function () {
+                    var $word = $(this);
+                    if ($word.is('.new, .learning, .learned, .forgotten')) {
+                        $word.html("<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'>" +
+                            sel_text +
+                            "</span>");
+                    } else {
+                        $word.html("<span class='word reviewing new' data-toggle='modal' data-target='#myModal'>" +
+                            sel_text +
+                            "</span>");
+                    }
+                });
 
-            })
-            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(
-                    "Oops! There was an error adding this word or phrase to the database."
-                );
-            });
+                filterword.contents().unwrap();
+            }
+
+            // if there were no previous word underlined, therefore phases 2 & 3 were off, 
+            // when user adds his first new word, activate these phases
+            var actual_phase = $('#alert-msg-phase').attr('data-phase');
+            if (phase == 4 && audio_is_loaded && actual_phase == 3) {
+                var phase_names = ['Reading', 'Listening', 'Speaking', 'Writing'];
+                $('#btn-next-phase').html('Go to phase ' + phase + '<br><span class="small">' + 
+                phase_names[phase-1] + '</span>');
+                phase = parseInt(actual_phase);
+            }
+
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(
+                "Oops! There was an error adding this word or phrase to the database."
+            );
+        });
+        
+        $selword.removeClass("highlighted");
     });
 
     /**
@@ -342,6 +354,11 @@ $(document).ready(function () {
             .fail(function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("Oops! There was an error removing the word from the database.");
             });
+    });
+
+    $doc.on("click", "#btncancel", function() {
+
+        $selword.removeClass("highlighted");
     });
 
     /**
@@ -462,7 +479,7 @@ $(document).ready(function () {
             }
         });
 
-        id.push($("#container").attr("data-textID")); // get text ID
+        id.push($("#text-container").attr("data-textID")); // get text ID
 
         if (is_shared) {
             id = undefined;
@@ -513,65 +530,7 @@ $(document).ready(function () {
         $("#currentpbr").text(cpbr);
         $("#audioplayer").prop("playbackRate", cpbr);
     });
-
-    /**
-     * Updates dictionary in modal window when user selects a new word/phrase
-     * If user chooses to "translate sentence", the translator pops up
-     */
-    $doc.on("change", "#selPhrase", function () {
-        // workaround to set $selword in ebooks. For some reason, it's value is lost when the modal opens
-        $selword = typeof $selword === "undefined" ? $(parent)[0][1].$selword: $selword;
-        
-        var selindex = $doc.find("#selPhrase").prop("selectedIndex");
-        var trans_whole_p_index = $doc.find("#selPhrase option").length - 1;
-        var url = '';
-
-        // set Add & Delete buttons depending on whether selection exists in database
-        if (selindex == 0 || selindex == trans_whole_p_index) {
-            // only for the first word we need to check if it exists in db
-            setAddDeleteButtons();
-        } else {
-            // for the rest, due to the selection method used in Aprelendo, we can be sure
-            // they are not in the database
-            $doc.find("#btnremove").hide();
-            $doc.find("#btnadd").text("Add");
-        }
-
-        // define behaviour when user clicks on a phrase or "translate sentence"
-        if (selindex == trans_whole_p_index) {
-            // translate sentence
-            var $start_obj = $selword.prevUntil(":contains('.')").last();
-            $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
-            var $end_obj = $selword.prev().nextUntil(":contains('.')").last().next();
-            $end_obj = $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
-            var $sentence = $start_obj.nextUntil($end_obj).addBack().next().addBack();
-
-            url = translatorURI.replace(
-                "%s",
-                encodeURIComponent($sentence.text())
-            );
-            var win = window.open(url);
-            if (win) {
-                win.focus();
-            } else {
-                alert(
-                    "Unable to open translator. Disable pop-up blocking for this website and try again."
-                );
-            }
-            $(this).prop("selectedIndex", prevsel);
-        } else {
-            // else, select phrase & look it up in dictionary
-            phrase = $doc.find("#selPhrase option")
-                .eq(selindex)
-                .val();
-            url = dictionaryURI.replace("%s", encodeURIComponent(phrase));
-            $doc.find("#dicFrame")
-                .get(0)
-                .contentWindow.location.replace(url);
-            prevsel = selindex;
-        }
-    });
-
+    
     /**
      * Play audio from beginning
      */
@@ -637,7 +596,7 @@ $(document).ready(function () {
      * focus out of an input box.
      */
     $("body").on("blur", ":text", function () {
-        $curinput = $(this);
+        var $curinput = $(this);
         if (
             $curinput.val().toLowerCase() == $curinput.attr("data-text").toLowerCase()
         ) {
@@ -701,9 +660,9 @@ $(document).ready(function () {
                 dataType: 'json'
             })
             .done(function (e) {
-                if (e.error != null) {
+                if (e.error != null || e.response == false) {
                     skipAudioPhases();
-                    // throw e;
+                    return false;
                 }
                 var $audio_player = $('#audioplayer');
                 $audio_player.find('source').attr('src', e.response);
@@ -711,6 +670,7 @@ $(document).ready(function () {
                 $('#audioplayer-loader').addClass('d-none');
                 $('#audioplayer').removeClass('d-none');
                 $('#audioplayer-speedbar').removeClass('d-none');
+                return true;
             })
             .fail(function (xhr, ajaxOptions, thrownError) {
                 // FIXME: audio streaming sometimes fails with no reason... need to investigate more.
@@ -726,7 +686,10 @@ $(document).ready(function () {
                 }
 
                 skipAudioPhases();
+                return false;
             });        
+        } else {
+            return false;
         }
      }
 });

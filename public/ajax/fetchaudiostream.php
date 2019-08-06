@@ -65,8 +65,8 @@ try {
     echo json_encode($voice);
 
     // if no errors, log audio stream 
-    if ($voice['error'] === NULL) {
-        $stream_log->addRecord();
+    if ($voice['error'] === NULL && $voice['response'] !== false) {
+        // $stream_log->addRecord();
     }
     
 } catch (\Exception $e) {

@@ -25,11 +25,9 @@
         <div class="modal-content mb-xs-3">
             <div class="modal-header">
                 <button id="btnremove" type="button" data-dismiss="modal" class="btn btn-danger mr-3">Delete</button>
-                <select class="modal-selPhrase" name="selPhrase" id="selPhrase">
-                    <option value="translate_sentence">Translate sentence</option>
-                </select>
-                <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-link float-right cancel-btn">Cancel</button>
-                <button id="btnadd" type="button" class="btn btn-primary btn-success float-right add-btn" data-dismiss="modal">Add</button>
+                <a id="gt-link" class="mr-auto" target="_blank" rel="noopener noreferrer" href="" title="Translate sentence"><i id="gt-icon" class="fas fa-language"></i></a>
+                <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-link">Cancel</button>
+                <button id="btnadd" type="button" class="btn btn-primary btn-success btn-add" data-dismiss="modal">Add</button>
             </div>
             <div class="modal-body" id="definitions">
                 <iframe id="dicFrame" style="width:100%;border:none;"></iframe>

@@ -46,7 +46,7 @@ class RSSFeed
     * @return string
     */
     public function fetchXMLFeed($url) {
-        $this->xmlfeed = file_get_contents($url);
+        $this->xmlfeed = @file_get_contents($url);
         
         if ($this->xmlfeed) {
             $this->xmlfeed = simplexml_load_string($this->xmlfeed);

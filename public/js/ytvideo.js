@@ -55,7 +55,7 @@
     //    the player should play for six seconds and then stop.
     function onPlayerStateChange(event) {
         if (event.data === YT.PlayerState.PLAYING) {
-            var $obj = $('div.text-center','#container');
+            var $obj = $('div.text-center','#text-container');
             var video_time = 0;
             var timer;    
             video_paused = false;

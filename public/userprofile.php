@@ -137,7 +137,7 @@ require_once PUBLIC_PATH . 'header.php';
                 <p>Also, all the files (e.g., epub files) you uploaded to our servers will be deleted, as well as your word list and your private and shared texts libraries. This applies to all the languages you were learning using Aprelendo.</p>
             </div>
             <div class="modal-footer">
-            <button id="btn-cancel" type="button" data-dismiss="modal" class="btn btn-static float-left cancel-btn">Cancel</button>
+            <button id="btn-cancel" type="button" data-dismiss="modal" class="btn btn-static float-left btn-cancel">Cancel</button>
                 <button id="btn-confirm-delete-account" type="button" data-dismiss="modal" class="btn btn-danger">Delete Account</button>
             </div>
         </div>

@@ -46,7 +46,7 @@ $(document).ready(function () {
             if ($btnremove.is(":visible") === false) {
                 $btncancel.hide();
                 $btnremove.show();
-                $btnadd.text("Forgot meaning");
+                $btnadd.text("Forgot");
             }
         } else {
             $btncancel.show();
@@ -279,7 +279,7 @@ function archiveTextAndSaveWords() {
         }
     });
     
-    ids.push($("#container").attr("data-textID")); // get text ID
+    ids.push($("#text-container").attr("data-textID")); // get text ID
     
     $.ajax({
         type: "POST",

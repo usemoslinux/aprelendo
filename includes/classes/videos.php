@@ -56,17 +56,29 @@ class Videos extends DBEntity {
      *  
      */
     public function fetchVideo($learning_lang, $youtube_id) {
-        $transcript_xml = file_get_contents("https://video.google.com/timedtext?lang=$learning_lang&v=$youtube_id");
-        $transcript_xml = array ('text' => $transcript_xml);
-        
-        $file = file_get_contents("https://www.googleapis.com/youtube/v3/videos?id=$youtube_id&key=" . YOUTUBE_API_KEY . "&part=snippet");
-        $file = json_decode($file, true);
-        $title = array('title' => $file['items'][0]['snippet']['title']);
-        $author = array('author' => $file['items'][0]['snippet']['channelTitle']);
-
-        $merged = array_merge($title, $author, $transcript_xml); 
         header('Content-Type: application/json');
-        return json_encode($merged);
+        $learning_lang = urlencode($learning_lang);
+        $youtube_id = urlencode($youtube_id);
+        $transcript_xml = @file_get_contents("https://video.google.com/timedtext?lang=$learning_lang&v=$youtube_id");
+        if (!$transcript_xml) {
+            throw new \Exception("Oops! There was a problem trying to fetch this video's subtitles.");
+        } else {
+            $transcript_xml = array ('text' => $transcript_xml);
+        
+            $file = @file_get_contents("https://www.googleapis.com/youtube/v3/videos?id=$youtube_id&key=" . YOUTUBE_API_KEY . "&part=snippet");
+            
+            if (!$file) {
+                throw new \Exception('Oops! There was a problem trying to fetch author & title information for this video.');
+            } else {
+                $file = json_decode($file, true);
+                $title = array('title' => $file['items'][0]['snippet']['title']);
+                $author = array('author' => $file['items'][0]['snippet']['channelTitle']);
+
+                $result = array_merge($title, $author, $transcript_xml); 
+            }
+        }
+        
+        return json_encode($result);
     }
 
     /**

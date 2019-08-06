@@ -143,30 +143,38 @@ $(document).ready(function() {
             $.ajax({
                 type: "GET",
                 url: 'ajax/fetchurl.php',
-                data: { url: url },
-                dataType: "html"
+                data: { url: url }
+                //dataType: "html"
             })
             .done(function(data) {
-                var doc = document.implementation.createHTMLDocument("New Document");
-                doc.body.parentElement.innerHTML = data;
-                var article = new Readability(doc).parse();  
-                $('#title').val(article.title);
-                $('#author').val(article.byline);
-                var txt = '';
-                var $tempDom = $('<output>').append($.parseHTML(article.content));
-                $('p, h1, h2, h3, h4, h5, h6', $tempDom).each(function() {
-                    txt += $(this).text().replace(/\s+/g, ' ') + '\n\n';
-                });
+                if (typeof data.error_msg !== 'undefined' && data.error_msg.length != 0) {
+                    showMessage(data.error_msg, 'alert-danger');
+                } else {
+                    if (typeof data !== 'undefined' && data.length != 0) {
+                        var doc = document.implementation.createHTMLDocument("New Document");
+                        doc.body.parentElement.innerHTML = data;
+                        var article = new Readability(doc).parse();  
+                        $('#title').val(article.title);
+                        $('#author').val(article.byline);
+                        var txt = '';
+                        var $tempDom = $('<output>').append($.parseHTML(article.content));
+                        $('p, h1, h2, h3, h4, h5, h6', $tempDom).each(function() {
+                            txt += $(this).text().replace(/\s+/g, ' ') + '\n\n';
+                        });
 
-                txt = txt.replace(/(\n){3,}/g, '\n'); // remove multiple line breaks
-                txt = txt.replace(/\t/g, ''); // remove tabs
-                // txt = txt.replace(/  /g, ' '); // remove multiple spaces
-                
-                $('#text').val($.trim(txt)); 
-                $('#text').trigger('input');
+                        txt = txt.replace(/(\n){3,}/g, '\n'); // remove multiple line breaks
+                        txt = txt.replace(/\t/g, ''); // remove tabs
+                        // txt = txt.replace(/  /g, ' '); // remove multiple spaces
+                        
+                        $('#text').val($.trim(txt)); 
+                        $('#text').trigger('input');        
+                    } else {
+                        showMessage('Oops! There was an error trying to fetch this text.', 'alert-danger');
+                    }
+                }
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
-                alert('Oops! There was an error trying to fetch this text.');
+                showMessage('Oops! There was an error trying to fetch this text.', 'alert-danger');
             })
             .always(function() {
                 $('#btn-fetch-img').removeClass().addClass('fas fa-arrow-down');
@@ -177,7 +185,7 @@ $(document).ready(function() {
     $('#btn-fetch').on('click', fetch_url);    
 
     function resetControls(exceptSourceURI) {
-        $('#alert-error-msg').addClass('d-none');
+        $('#alert-msg').addClass('d-none');
         $('#type').prop('selectedIndex', 0);
         $('#title').val('');
         $('#author').val('');
