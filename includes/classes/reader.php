@@ -21,6 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Url;
+use Aprelendo\Includes\Classes\User;
 use SimpleXMLElement;
 
 class Text 
@@ -224,18 +225,21 @@ class Reader extends Text
                 
                 // 3. colorize frequency list words
                 if ($this->show_freq_list) {
-                    $result = $this->con->query("SELECT LgName FROM languages WHERE LgId='$this->learning_lang_id'");
+                    $user = new User($this->con);
+                    if ($user->isLoggedIn() && $user->isPremium()) {
+                        $result = $this->con->query("SELECT LgName FROM languages WHERE LgId='$this->learning_lang_id'");
                     
-                    if ($result) {
-                        $row = $result->fetch_assoc();
-                        $freq_table_name = $this->con->escape_string($row['LgName']);
-                        $result = $this->con->query('SELECT freqWord FROM frequencylist_' . $freq_table_name . ' LIMIT 5000');
-                        
                         if ($result) {
-                            while ($row = $result->fetch_assoc()) {
-                                $word = $row['freqWord'];
-                                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
-                                "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
+                            $row = $result->fetch_assoc();
+                            $freq_table_name = $this->con->escape_string($row['LgName']);
+                            $result = $this->con->query('SELECT freqWord FROM frequencylist_' . $freq_table_name);
+                            
+                            if ($result) {
+                                while ($row = $result->fetch_assoc()) {
+                                    $word = $row['freqWord'];
+                                    $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
+                                    "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
+                                }
                             }
                         }
                     }

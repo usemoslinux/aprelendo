@@ -171,12 +171,35 @@ $(document).ready(function () {
         }
     }
 
+    function getWordFrequency(word, lg_iso) {
+        var $freqlvl = $("#bdgfreqlvl");
+        
+        // ajax call to get word frequency
+        $.ajax({
+            type: "GET",
+            url: "/ajax/getwordfreq.php",
+            data: { "word" : word, "lg_iso": lg_iso }
+        }).done(function(data) {
+            console.log("freq: " + data );
+            if (data == 0) {
+                $freqlvl.hide();
+            } else if(data < 81) {
+                $freqlvl.hide().text("High frequency word")
+                    .removeClass().addClass("badge badge-danger").show();
+            } else {
+                $freqlvl.hide().text("Medium frequency word")
+                    .removeClass().addClass("badge badge-warning").show();
+            }
+        });        
+    }
+
     /**
      * Shows dictionary when user clicks a word
      * All words are enclosed in span.word tags
      */
     function showModal() {
         var audioplayer = $("#audioplayer");
+        var doclang = $('html').attr('lang');
 
         if (audioplayer.length) {
             // if there is audio playing
@@ -188,6 +211,7 @@ $(document).ready(function () {
             }
         }
 
+        getWordFrequency($selword.text(), doclang);
         setAddDeleteButtons();
 
         // build translate sentence url

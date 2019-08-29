@@ -29,6 +29,7 @@
                 <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-link">Cancel</button>
                 <button id="btnadd" type="button" class="btn btn-primary btn-success btn-add" data-dismiss="modal">Add</button>
             </div>
+            <span id="bdgfreqlvl" class="badge"></span>
             <div class="modal-body" id="definitions">
                 <iframe id="dicFrame" style="width:100%;border:none;"></iframe>
             </div>

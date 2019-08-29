@@ -840,6 +840,10 @@ input {
     width: 100%;
 }
 
+#bdgfreqlvl {
+    border-radius: 0;
+}
+
 .flex-pbr-form {
     display: flex;
 }

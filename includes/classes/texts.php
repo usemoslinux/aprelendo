@@ -82,7 +82,7 @@ class Texts extends DBEntity {
         $nr_of_words = 0;
         
         if (isset($text) && !empty($text))  {
-            $level = $this->calcTextLevel2($text);
+            $level = $this->calcTextLevel($text);
             $nr_of_words = $this->nr_of_words;
         }
         
@@ -234,6 +234,10 @@ class Texts extends DBEntity {
      */
     public function isAlreadyinDB($source_url)
     {
+        if (empty($sourcel_url)) {
+            return false;
+        }
+
         $sql = "SELECT 1
                 FROM $this->table
                 WHERE {$this->cols['sourceURI']} = '$source_url' AND {$this->cols['userid']} = $this->user_id";
@@ -408,7 +412,7 @@ class Texts extends DBEntity {
     * 
     * The algorithm is simple: 
     * 
-    * 1. determine how many words in $texts are NOT present in the 5000 most frequently 
+    * 1. determine how many words in $texts are NOT present in the most frequently 
     * used words table of the current language.
     * 
     * 2. Divide that by the total amount of words in $text ($unknown_words / $total_words)
@@ -422,71 +426,7 @@ class Texts extends DBEntity {
     * @param string $text
     * @return integer|boolean
     */
-    private function calcTextLevel($text) {
-        // $text is XML code (video transcript), extract text from XML string
-        $xml_text = $this->extractTextFromXML($text);
-        
-        if ($xml_text != false) {
-            $text = $xml_text;
-        } 
-        
-        // get learning language ISO name
-        $result = $this->con->query("SELECT LgName 
-        FROM languages 
-        WHERE LgID={$this->learning_lang_id}");
-        
-        if ($result) {
-            // build frequency list table name based on learning language name
-            $row = $result->fetch_array();
-            $frequency_list_table = 'frequencylist_' . $row[0];
-            
-            // build frequency list array for the corresponding language
-            $result = $this->con->query("SELECT freqWord 
-            FROM $frequency_list_table ORDER BY freq LIMIT 5000");
-            
-            if ($result) {
-                $frequency_list = array();
-                while($row = $result->fetch_array()){
-                    $frequency_list[] = $row[0];
-                }
-                
-                // build array with words in text
-                $text = stripcslashes(str_replace('\r\n', '', $text));
-                $this->nr_of_words = preg_match_all('/\b[^\d\W]+\b/u', $text, $words_in_text);
-                
-                // get total amount of words & how many words in the text don't appear in the frequency list
-                $diff = array_diff(array_map('strtolower', $words_in_text[0]), array_map('strtolower', $frequency_list));
-                
-                $total_words = sizeof($words_in_text[0]);
-                $unknown_words = sizeof($diff);
-                
-                // $index is calculated as the relation between $unknown_words and $total_words
-                // there's no need to remove duplicates from $diff 
-                // because they won't be removed from $total_words either
-                $index = $unknown_words / $total_words;
-                
-                switch (true) {
-                    case ($index < 0.15): // beginner
-                    return 1;
-                    break;
-                    case ($index >= 0.15 && $index <= 0.25): // intermediate
-                    return 2;
-                    break;
-                    case ($index > 0.25): // advanced
-                    return 3;
-                    break;
-                    default:
-                    break;
-                }
-            } else {
-                return false;
-            } 
-        } else {
-            return false;
-        }
-    }
-
-    private function calcTextLevel2($text = '') {
+    private function calcTextLevel($text = '') {
         $level_thresholds = array('80', '95'); // <=80: beginner; >80 & <=95: intermediate; >95: advanced
         $frequency_list_table = ''; // frequency list table name: should be something like frequencylist_ + ISO 639-1 (2 letter language) code
         
@@ -512,7 +452,7 @@ class Texts extends DBEntity {
         }
 
         // build array with words in text
-        $text = stripcslashes(str_replace('\r\n', '', $text));
+        $text = stripcslashes(str_replace('\r\n', ' ', $text));
         $accented_chars = 'àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ';
         $this->nr_of_words = preg_match_all('/[A-Za-z' . $accented_chars . ']+/u', $text, $words_in_text);
 
@@ -537,7 +477,8 @@ class Texts extends DBEntity {
                     }
                     
                     // get total amount of words & how many words in the text don't appear in the frequency list
-                    $diff = array_diff(array_map('strtolower', $words_in_text[0]), array_map('strtolower', $frequency_list));
+                    //$diff = array_diff(array_map('strtolower', $words_in_text[0]), array_map('strtolower', $frequency_list));
+                    $diff = array_udiff($words_in_text[0], $frequency_list, 'strcasecmp');
                     
                     $total_words = sizeof($words_in_text[0]);
                     $unknown_words = sizeof($diff);
@@ -547,11 +488,11 @@ class Texts extends DBEntity {
                     // because they won't be removed from $words_in_text either
                     $index = $unknown_words / $total_words;
                     if ($threshold === '80' && $index < 0.26) {
-                        return 1;
-                    } elseif ($threshold === '95' && $index < 0.11) {
-                        return 2;
-                    } elseif ($threshold === '95' && $index > 0.11) {
-                        return 3;
+                        return 1; // beginner
+                    } elseif ($threshold === '95' && $index < 0.26) {
+                        return 2; // intermediate
+                    } elseif ($threshold === '95' && $index > 0.25) {
+                        return 3; // advanced
                     }
                 } else {
                     return false;

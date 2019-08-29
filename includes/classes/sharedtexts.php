@@ -173,6 +173,10 @@ class SharedTexts extends Texts
      */
     public function isAlreadyinDB($source_url)
     {
+        if (empty($sourcel_url)) {
+            return false;
+        }
+
         $sql = "SELECT 1
                 FROM $this->table
                 WHERE {$this->cols['sourceURI']} = '$source_url'";
