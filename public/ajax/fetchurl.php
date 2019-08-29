@@ -21,15 +21,6 @@
 require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
-stream_context_set_default(
-    array(
-     'http' => array(
-      'proxy' => "tcp://www-proxy.mrec.ar:8080",
-      'request_fulluri' => true      
-     )
-    )
-   );
-
 try {
     if (isset($_GET['url']) && !empty($_GET['url'])) {
         $url = $_GET['url'];

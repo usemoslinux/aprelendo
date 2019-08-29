@@ -35,8 +35,8 @@ try {
         $learning_lang_id = $user->learning_lang_id;
     
         // decide wether we are deleting an archived text or not
-        $referer = basename($_SERVER['HTTP_REFERER']);
-        if (strpos($referer, 'sa=1') !== false) {
+        $query_str = basename($_SERVER['QUERY_STRING']);
+        if (strpos($query_str, 'sa=1') !== false) {
             $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id);
         } else {
             $texts_table = new Texts($con, $user_id, $learning_lang_id);

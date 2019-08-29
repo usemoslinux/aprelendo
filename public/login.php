@@ -58,8 +58,10 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <p>
                             
                         </p>
-                        <button type="submit" id="btn_login" class="btn btn-block btn-success">Log in</button>
+                        <button type="submit" id="btn_login" class="btn btn-block btn-success">Sign in</button>
                     </form>
+                    <hr>
+                    <center><div class="g-signin2" data-longtitle="true" data-theme="dark" data-onsuccess="onSignIn"></div></center>
                     <br />
                     <footer>
                         <p class="text-muted text-center">
@@ -73,7 +75,6 @@ require_once PUBLIC_PATH . 'simpleheader.php';
     </div>
 </div>
 
+<script defer src="js/login.js"></script>
 
 <?php require_once 'footer.php'?>
-
-<script defer src="js/login.js"></script>

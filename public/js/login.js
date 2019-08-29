@@ -43,7 +43,7 @@ $(document).ready(function () {
                 showMessage('Oops! There was an unexpected error when trying to log you in. Please try again later.', 'alert-danger');
             }); // end of ajax
     }); // end of #form_login.on.submit
-    
+
     /**
      * Shows custom message in the top section of the screen
      * @param {string} html
@@ -55,5 +55,29 @@ $(document).ready(function () {
             .addClass('alert ' + type);
         $(window).scrollTop(0);
     } // end of showMessage
-
 });
+
+/**
+ * Google Sign-in JS
+ * @param {object} googleUser 
+ */
+function onSignIn(googleUser) {
+    var profile = googleUser.getBasicProfile();
+
+    if (profile) {
+        $.ajax({
+            type: 'POST',
+            url: 'ajax/google_oauth.php',
+            data: {
+                id: profile.getId(),
+                name: profile.getName(),
+                email: profile.getEmail()
+            }
+        }).done(function (data) {
+            console.log(data);
+            // window.location.href = 'texts.php';
+        }).fail(function () {
+            alert("Sign-in with Google failed.");
+        });
+    }
+}

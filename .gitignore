@@ -1,5 +1,6 @@
 .vscode/
 addons/
+vendor/
 config/config.php
 public/tests/
 temp/

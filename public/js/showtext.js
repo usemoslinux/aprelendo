@@ -33,7 +33,7 @@ $(document).ready(function () {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $('html');
 
-    loadAudio();
+    //loadAudio();
     
     /**
      * Sets keyboard shortcuts for media player
@@ -91,26 +91,20 @@ $(document).ready(function () {
         }
     }
     
-    $doc.on("mousedown", ".word", function() {
+    $doc.on("vmousedown", ".word", function() {
 		// e.preventDefault();
         // e.stopPropagation();
         highlighting = true;
         $sel_start = $(this);
-	});
+    });
 	
-	$doc.on("mouseup", ".word", function(e) {
+	$doc.on("vmouseup", ".word", function(e) {
         // e.preventDefault();
         // e.stopPropagation();
         highlighting = false;
-        if ($sel_start.text() != $(e.target).text()) {
-            showModal();
+        if ($sel_start.text() === $(e.target).text()) {
+            $selword = $(this); 
         }
-	});
-	
-	$doc.on("click", ".word", function() {
-        $selword = $(this);
-        $(".word").removeClass("highlighted");
-        $selword.addClass("highlighted");
         showModal();
 	});
 	
@@ -122,7 +116,7 @@ $(document).ready(function () {
 		return this.nextUntil(sel).length !== this.nextAll().length;
 	}
 	
-	$doc.on("mouseover", ".word", function() {
+	$doc.on("vmouseover", ".word", function() {
 		$sel_end = $(this);
 		if(highlighting) {
 			$(".word").removeClass("highlighted");

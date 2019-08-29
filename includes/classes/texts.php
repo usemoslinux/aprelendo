@@ -30,7 +30,7 @@ class Texts extends DBEntity {
     protected $cols;
     protected $order_col;
     protected $nr_of_words;
-    
+
     /**
     * Constructor
     * 
@@ -82,7 +82,7 @@ class Texts extends DBEntity {
         $nr_of_words = 0;
         
         if (isset($text) && !empty($text))  {
-            $level = $this->calcTextLevel($text);
+            $level = $this->calcTextLevel2($text);
             $nr_of_words = $this->nr_of_words;
         }
         
@@ -414,45 +414,127 @@ class Texts extends DBEntity {
     * 2. Divide that by the total amount of words in $text ($unknown_words / $total_words)
     * 
     * 3. This will give us a difficulty index of sorts that will allow us to classify texts by their difficulty level:
-        * 
-        * Advanced:             index > 0.25  (>25% of words in $text where not in the 5000 most frequently used table)
-        * Intermediate: 0.15 >= index >= 0.25 (between 15% and 25% of words in $text where not in the 5000 most freq. used table)
-        * Beginner:             index < 0.15  (<15% of words in $text where not in the 5000 most frequently used table)
-        * 
-        * @param string $text
-        * @return integer|boolean
-        */
-        private function calcTextLevel($text) {
-            // $text is XML code (video transcript), extract text from XML string
-            $xml_text = $this->extractTextFromXML($text);
+    * 
+    * Advanced:             index > 0.25  (>25% of words in $text where not in the 5000 most frequently used table)
+    * Intermediate: 0.15 >= index >= 0.25 (between 15% and 25% of words in $text where not in the 5000 most freq. used table)
+    * Beginner:             index < 0.15  (<15% of words in $text where not in the 5000 most frequently used table)
+    * 
+    * @param string $text
+    * @return integer|boolean
+    */
+    private function calcTextLevel($text) {
+        // $text is XML code (video transcript), extract text from XML string
+        $xml_text = $this->extractTextFromXML($text);
+        
+        if ($xml_text != false) {
+            $text = $xml_text;
+        } 
+        
+        // get learning language ISO name
+        $result = $this->con->query("SELECT LgName 
+        FROM languages 
+        WHERE LgID={$this->learning_lang_id}");
+        
+        if ($result) {
+            // build frequency list table name based on learning language name
+            $row = $result->fetch_array();
+            $frequency_list_table = 'frequencylist_' . $row[0];
             
-            if ($xml_text != false) {
-                $text = $xml_text;
-            } 
-            
-            // get learning language ISO name
-            $result = $this->con->query("SELECT LgName 
-            FROM languages 
-            WHERE LgID={$this->learning_lang_id}");
+            // build frequency list array for the corresponding language
+            $result = $this->con->query("SELECT freqWord 
+            FROM $frequency_list_table ORDER BY freq LIMIT 5000");
             
             if ($result) {
-                // build frequency list table name based on learning language name
-                $row = $result->fetch_array();
-                $frequency_list_table = 'frequencylist_' . $row[0];
+                $frequency_list = array();
+                while($row = $result->fetch_array()){
+                    $frequency_list[] = $row[0];
+                }
                 
-                // build frequency list array for the corresponding language
+                // build array with words in text
+                $text = stripcslashes(str_replace('\r\n', '', $text));
+                $this->nr_of_words = preg_match_all('/\b[^\d\W]+\b/u', $text, $words_in_text);
+                
+                // get total amount of words & how many words in the text don't appear in the frequency list
+                $diff = array_diff(array_map('strtolower', $words_in_text[0]), array_map('strtolower', $frequency_list));
+                
+                $total_words = sizeof($words_in_text[0]);
+                $unknown_words = sizeof($diff);
+                
+                // $index is calculated as the relation between $unknown_words and $total_words
+                // there's no need to remove duplicates from $diff 
+                // because they won't be removed from $total_words either
+                $index = $unknown_words / $total_words;
+                
+                switch (true) {
+                    case ($index < 0.15): // beginner
+                    return 1;
+                    break;
+                    case ($index >= 0.15 && $index <= 0.25): // intermediate
+                    return 2;
+                    break;
+                    case ($index > 0.25): // advanced
+                    return 3;
+                    break;
+                    default:
+                    break;
+                }
+            } else {
+                return false;
+            } 
+        } else {
+            return false;
+        }
+    }
+
+    private function calcTextLevel2($text = '') {
+        $level_thresholds = array('80', '95'); // <=80: beginner; >80 & <=95: intermediate; >95: advanced
+        $frequency_list_table = ''; // frequency list table name: should be something like frequencylist_ + ISO 639-1 (2 letter language) code
+        
+        $frequency_list = []; // array with all the words in the corresponding frequency list table 
+        $words_in_text = []; // array with all the valid words in $text 
+        $diff = []; // array with elements in the $words_in_text array not present in the $frequency_list array
+        
+        $total_words = 0; // number of valid words in $text
+        $unknown_words = 0; // number of words in $diff
+        $index = 0; // $unknown_words / $total_words
+        
+        $xml_text = ''; // used to check if $text parameter is XML code
+        $accented_chars = ''; // holds list of accented characters that should be considered legal when counting words in a text
+        
+        $result = false; // values returned by SQL queries
+        $row = []; // array with all the rows from a successful SQL query
+
+        // if $text is XML code (video transcript), extract text from XML string
+        $xml_text = $this->extractTextFromXML($text);
+        
+        if ($xml_text != false) {
+            $text = $xml_text;
+        }
+
+        // build array with words in text
+        $text = stripcslashes(str_replace('\r\n', '', $text));
+        $accented_chars = 'àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ';
+        $this->nr_of_words = preg_match_all('/[A-Za-z' . $accented_chars . ']+/u', $text, $words_in_text);
+
+        // get learning language ISO name
+        $result = $this->con->query("SELECT LgName 
+        FROM languages 
+        WHERE LgID={$this->learning_lang_id}");
+        
+        if ($result) {
+            // build frequency list table name based on learning language name
+            $row = $result->fetch_array();
+            $frequency_list_table = 'frequencylist_' . $row[0];
+            
+            foreach ($level_thresholds as $threshold) {
+                // build frequency list array for "beginner" level words (80%)
                 $result = $this->con->query("SELECT freqWord 
-                FROM $frequency_list_table ORDER BY freq LIMIT 5000");
-                
+                    FROM $frequency_list_table WHERE freqWordFreq <= $threshold");
+
                 if ($result) {
-                    $frequency_list = array();
                     while($row = $result->fetch_array()){
                         $frequency_list[] = $row[0];
                     }
-                    
-                    // build array with words in text
-                    $text = stripcslashes(str_replace('\r\n', '', $text));
-                    $this->nr_of_words = preg_match_all('/\b[^\d\W]+\b/u', $text, $words_in_text);
                     
                     // get total amount of words & how many words in the text don't appear in the frequency list
                     $diff = array_diff(array_map('strtolower', $words_in_text[0]), array_map('strtolower', $frequency_list));
@@ -462,29 +544,23 @@ class Texts extends DBEntity {
                     
                     // $index is calculated as the relation between $unknown_words and $total_words
                     // there's no need to remove duplicates from $diff 
-                    // because they won't be removed from $total_words either
+                    // because they won't be removed from $words_in_text either
                     $index = $unknown_words / $total_words;
-                    
-                    switch (true) {
-                        case ($index < 0.15): // beginner
+                    if ($threshold === '80' && $index < 0.26) {
                         return 1;
-                        break;
-                        case ($index >= 0.15 && $index <= 0.25): // intermediate
+                    } elseif ($threshold === '95' && $index < 0.11) {
                         return 2;
-                        break;
-                        case ($index > 0.25): // advanced
+                    } elseif ($threshold === '95' && $index > 0.11) {
                         return 3;
-                        break;
-                        default:
-                        break;
                     }
                 } else {
                     return false;
-                } 
-            } else {
-                return false;
+                }
             }
+        } else {
+            return false;
         }
     }
+}
     
-    ?>
+?>
