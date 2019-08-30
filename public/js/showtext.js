@@ -91,16 +91,16 @@ $(document).ready(function () {
         }
     }
     
-    $doc.on("vmousedown", ".word", function() {
-		// e.preventDefault();
-        // e.stopPropagation();
+    $doc.on("mousedown", ".word", function(e) {
+		e.preventDefault();
+        e.stopPropagation();
         highlighting = true;
         $sel_start = $(this);
     });
 	
-	$doc.on("vmouseup", ".word", function(e) {
-        // e.preventDefault();
-        // e.stopPropagation();
+	$doc.on("mouseup", ".word", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         highlighting = false;
         if ($sel_start.text() === $(e.target).text()) {
             $selword = $(this); 
@@ -116,8 +116,11 @@ $(document).ready(function () {
 		return this.nextUntil(sel).length !== this.nextAll().length;
 	}
 	
-	$doc.on("vmouseover", ".word", function() {
-		$sel_end = $(this);
+	$doc.on("mouseover", ".word", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        $sel_end = $(this);
 		if(highlighting) {
 			$(".word").removeClass("highlighted");
 			

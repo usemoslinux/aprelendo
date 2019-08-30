@@ -108,15 +108,11 @@ $(document).ready(function () {
     /**
     * Selects/Unselects all texts from the list
     */
-    $(document).on('click', '#chkbox-selall', function () {
+    $(document).on('click', '#chkbox-selall', function (e) {
+        e.stopPropagation();
+        
         var $chkboxes = $('.chkbox-selrow');
         $chkboxes.prop('checked', $(this).prop('checked'));
-
-        if ($(this).is(":checked")) {
-            $chkboxes.closest('tr').addClass("info"); 
-        } else {
-            $chkboxes.closest('tr').removeClass("info");
-        }
 
         toggleActionMenu();
     });
@@ -154,27 +150,6 @@ $(document).ready(function () {
         
         var params = 'f=' + $('#f').val() + '&s=' + $('#s').val() + '&sa=' + $('#sa').val() + '&o=' + $('#o').val();
         window.location.replace(filename + '?' + params);        
-    });
-
-    /**
-     * Allows selecting text by clicking on a row, instead of the checkbox.
-     * Makes it easier for mobile device users to select texts.
-     */
-    $('tr').on('click', function(e) {
-        if (e.target.type !== 'label' && e.target.tagName !== 'A') {
-            $(':checkbox', this).trigger('click');
-        }
-    });
-
-    /**
-     * Adds/removes a blue background to selected/unselected rows
-     */
-    $('.chkbox-selrow').on('click', function() {
-        if ($(this).is(":checked")) {
-            $(this).closest('tr').addClass("info"); 
-        } else {
-            $(this).closest('tr').removeClass("info");
-        }
     });
 
     /**

@@ -408,26 +408,40 @@ class Texts extends DBEntity {
     }
     
     /**
-    * Calculates difficulty level of a given $text (possible subject to improvements)
+    * Calculates difficulty level of a given $text
     * 
-    * The algorithm is simple: 
+    * Each freqlist table contains the most used words for that specific language, based on opensubtitles data (2018). 
+    * This means there will be different records for "be, was, were", etc. This data was then filtered with MS Windows and 
+    * LibreOffice (hunspell) spellcheckers, and entries with strange characters, numbers, names, etc. were all removed. 
+    * From that filtered list, the % of use of each word was calculated. By adding them, it was possible to determine what 
+    * percentage of a text a person can understand if he or she knows that word and all the words that appear before in the list. 
+    * In other words, a freqWordFreq of 85 means that if a person knows that word and the previous ones, he or she will understand 
+    * 85% of the text. Each freqlist table includes words with a WordFreq index of up to 95. This was done to reduce table size
+    * and increase speed.
+    *
+    * So, the higher the WordFreq index, the rarer the word will be. We arbitrarily determined that an index of >95 will mean that the 
+    * word will only be known by advanced users. A word with an index between 85 and 95 will be known by intermediate users and a 
+    * word with an index lower than 85 will be known by novice users.
+    *
+    * With this in mind, the algorithm is simple:
     * 
-    * 1. determine how many words in $texts are NOT present in the most frequently 
-    * used words table of the current language.
+    * 1. Filter the corresponding freqlist table with words having an index <=85 (this will give all the words a beginner would know)
     * 
-    * 2. Divide that by the total amount of words in $text ($unknown_words / $total_words)
+    * 2. Compare this with all the words in $text being analyzed. The difference will be the total amount of $unknown_words.
     * 
-    * 3. This will give us a difficulty index of sorts that will allow us to classify texts by their difficulty level:
+    * 3. Divide that by the total amount of words in $text ($unknown_words / $total_words)
     * 
-    * Advanced:             index > 0.25  (>25% of words in $text where not in the 5000 most frequently used table)
-    * Intermediate: 0.15 >= index >= 0.25 (between 15% and 25% of words in $text where not in the 5000 most freq. used table)
-    * Beginner:             index < 0.15  (<15% of words in $text where not in the 5000 most frequently used table)
+    * 4. This will give us an index representing the % of unknow words. If it's < 25%, meaning a beginner would understand 85% of the text,
+    * we can say the text has a "beginner" difficulty.
+    * 
+    * 5. Otherwise, re-test points 1-4, but this time with an unfiltered freqlist table (i.e. with words having a WordFreq <=95). In case
+    * unknow words index is < 25%, tag the text as "intermediate", otherwise, tag it as "advanced".
     * 
     * @param string $text
     * @return integer|boolean
     */
     private function calcTextLevel($text = '') {
-        $level_thresholds = array('80', '95'); // <=80: beginner; >80 & <=95: intermediate; >95: advanced
+        $level_thresholds = array('85', '95'); // <=80: beginner; >80 & <=95: intermediate; >95: advanced
         $frequency_list_table = ''; // frequency list table name: should be something like frequencylist_ + ISO 639-1 (2 letter language) code
         
         $frequency_list = []; // array with all the words in the corresponding frequency list table 
@@ -487,11 +501,11 @@ class Texts extends DBEntity {
                     // there's no need to remove duplicates from $diff 
                     // because they won't be removed from $words_in_text either
                     $index = $unknown_words / $total_words;
-                    if ($threshold === '80' && $index < 0.26) {
+                    if ($threshold === '85' && $index < 0.25) {
                         return 1; // beginner
-                    } elseif ($threshold === '95' && $index < 0.26) {
+                    } elseif ($threshold === '95' && $index < 0.25) {
                         return 2; // intermediate
-                    } elseif ($threshold === '95' && $index > 0.25) {
+                    } elseif ($threshold === '95' && $index > 0.24) {
                         return 3; // advanced
                     }
                 } else {

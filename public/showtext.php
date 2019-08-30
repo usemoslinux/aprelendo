@@ -84,7 +84,6 @@ try {
         ?>
 
         <script defer src="js/showtext.js"></script>
-        <script src="https://code.jquery.com/mobile/1.5.0-rc1/jquery.mobile-1.5.0-rc1.min.js" integrity="sha384-utxQdGxVJvOroVjaeRwVIOr1dbBZ8E4UPqxR/d7cEW5eK9KetBfVEv/BT1SpfzAo" crossorigin="anonymous"></script>
         
 </body>
 
