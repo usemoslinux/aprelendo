@@ -33,7 +33,7 @@ $(document).ready(function () {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $('html');
 
-    //loadAudio();
+    loadAudio();
     
     /**
      * Sets keyboard shortcuts for media player
@@ -90,41 +90,60 @@ $(document).ready(function () {
             }, 1000);
         }
     }
-    
+
+    /**
+     * Word/Phrase selection start
+     * @param {event object} e
+     */
     $doc.on("mousedown touchstart", ".word", function(e) {
 		e.preventDefault();
         e.stopPropagation();
-        highlighting = true;
-        $sel_start = $sel_end = $(this);
+        if (e.which < 2) { // if left mouse button / touch...
+            highlighting = true;
+            $sel_start = $sel_end = $(this);
+        }
     });
-	
+    
+    /**
+     * Word/Phrase selection end
+     * @param {event object} e
+     */
 	$doc.on("mouseup touchend", ".word", function(e) {
         e.preventDefault();
         e.stopPropagation();
-        highlighting = false;
-        if ($sel_start === $sel_end) {
-            $selword = $(this); 
+        if (e.which < 2) { // if left mouse button / touch...
+            highlighting = false;
+            if ($sel_start === $sel_end) {
+                $selword = $(this); 
+            }
+            showModal();    
         }
-        showModal();
     });
     
+    /**
+     * Determines if an element is after another one
+     * @param {Jquery object} sel 
+     */
 	$.fn.isAfter = function(sel) {
 		return this.prevUntil(sel).length !== this.prevAll().length;
 	}
-	
-	$.fn.isBefore = function(sel) {
-		return this.nextUntil(sel).length !== this.nextAll().length;
-	}
-	
+    
+    /**
+     * Word/Phrase selection
+     * While user drags the mouse without releasing the mouse button
+     * or while touches an elements an moves the pointer without releasing
+     * Here we build the selected phrase & change its background color to gray
+     * @param {event object} e
+     */
 	$doc.on("mouseover touchmove", ".word", function(e) {
         e.preventDefault();
         e.stopPropagation();
         
-        $sel_end = e.type === "mouseover" ? $(this) : $(document.elementFromPoint(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY));
-        
 		if(highlighting) {
 			$(".word").removeClass("highlighted");
-			
+            
+            $sel_end = e.type === "mouseover" ? $(this) : $(document.elementFromPoint(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY));
+        
 			if ($sel_end.isAfter($sel_start)) {
 				$sel_start.prev().nextUntil($sel_end.next(), ".word").addClass("highlighted");
 				$selword = $sel_start.prev().nextUntil($sel_end.next());
