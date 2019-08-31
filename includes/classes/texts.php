@@ -416,23 +416,23 @@ class Texts extends DBEntity {
     * From that filtered list, the % of use of each word was calculated. By adding them, it was possible to determine what 
     * percentage of a text a person can understand if he or she knows that word and all the words that appear before in the list. 
     * In other words, a freqWordFreq of 85 means that if a person knows that word and the previous ones, he or she will understand 
-    * 85% of the text. Each freqlist table includes words with a WordFreq index of up to 95. This was done to reduce table size
+    * around 85% of any text. Each freqlist table includes words with a WordFreq index of up to 95. This was done to reduce table size
     * and increase speed.
     *
     * So, the higher the WordFreq index, the rarer the word will be. We arbitrarily determined that an index of >95 will mean that the 
     * word will only be known by advanced users. A word with an index between 85 and 95 will be known by intermediate users and a 
     * word with an index lower than 85 will be known by novice users.
     *
-    * With this in mind, the algorithm is simple:
+    * With this in mind, the algorithm goes as follows:
     * 
     * 1. Filter the corresponding freqlist table with words having an index <=85 (this will give all the words a beginner would know)
     * 
-    * 2. Compare this with all the words in $text being analyzed. The difference will be the total amount of $unknown_words.
+    * 2. Compare this with all the words in $text. The difference will be the total amount of $unknown_words.
     * 
     * 3. Divide that by the total amount of words in $text ($unknown_words / $total_words)
     * 
-    * 4. This will give us an index representing the % of unknow words. If it's < 25%, meaning a beginner would understand 85% of the text,
-    * we can say the text has a "beginner" difficulty.
+    * 4. This will give us an index representing the % of unknow words. If it's < 25%, meaning a beginner would understand at least 75% of 
+    * the text, we can say the text has a "beginner" difficulty.
     * 
     * 5. Otherwise, re-test points 1-4, but this time with an unfiltered freqlist table (i.e. with words having a WordFreq <=95). In case
     * unknow words index is < 25%, tag the text as "intermediate", otherwise, tag it as "advanced".
@@ -467,6 +467,7 @@ class Texts extends DBEntity {
 
         // build array with words in text
         $text = stripcslashes(str_replace('\r\n', ' ', $text));
+        // list of special characters in the supported languages (english, spanish, portuguese, french, german & italian)
         $accented_chars = 'àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ';
         $this->nr_of_words = preg_match_all('/[A-Za-z' . $accented_chars . ']+/u', $text, $words_in_text);
 

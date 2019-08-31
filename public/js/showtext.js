@@ -91,23 +91,23 @@ $(document).ready(function () {
         }
     }
     
-    $doc.on("mousedown", ".word", function(e) {
+    $doc.on("mousedown touchstart", ".word", function(e) {
 		e.preventDefault();
         e.stopPropagation();
         highlighting = true;
-        $sel_start = $(this);
+        $sel_start = $sel_end = $(this);
     });
 	
-	$doc.on("mouseup", ".word", function(e) {
+	$doc.on("mouseup touchend", ".word", function(e) {
         e.preventDefault();
         e.stopPropagation();
         highlighting = false;
-        if ($sel_start.text() === $(e.target).text()) {
+        if ($sel_start === $sel_end) {
             $selword = $(this); 
         }
         showModal();
-	});
-	
+    });
+    
 	$.fn.isAfter = function(sel) {
 		return this.prevUntil(sel).length !== this.prevAll().length;
 	}
@@ -116,11 +116,12 @@ $(document).ready(function () {
 		return this.nextUntil(sel).length !== this.nextAll().length;
 	}
 	
-	$doc.on("mouseover", ".word", function(e) {
+	$doc.on("mouseover touchmove", ".word", function(e) {
         e.preventDefault();
         e.stopPropagation();
         
-        $sel_end = $(this);
+        $sel_end = e.type === "mouseover" ? $(this) : $(document.elementFromPoint(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY));
+        
 		if(highlighting) {
 			$(".word").removeClass("highlighted");
 			
