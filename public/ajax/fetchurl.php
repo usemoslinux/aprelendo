@@ -24,8 +24,17 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 try {
     if (isset($_GET['url']) && !empty($_GET['url'])) {
         $url = $_GET['url'];
-        $result = @file_get_contents($url);
-        echo $result ? $result : '';
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_REFERER, $_SERVER['HTTP_REFERER']);
+        curl_setopt($ch, CURLOPT_PROXY, PROXY);
+        $file_contents = curl_exec($ch);
+        curl_close($ch); 
+        
+        echo $file_contents ? $file_contents : '';
     } else {
         throw new Exception ('There was a problem retrieving that URL. Please check it is not empty or malformed.');
     }    

@@ -25,6 +25,8 @@ use Aprelendo\Includes\Classes\Languages;
 
 class User 
 {
+    use Curl;
+
     public $id;
     public $name;
     public $email;
@@ -137,7 +139,10 @@ class User
         $to = $email;
         $subject = 'Aprelendo - Account activation';
         
-        $message = file_get_contents(APP_ROOT . 'templates/welcome.html');
+        // get template
+        $message = $this->get_contents(APP_ROOT . 'templates/welcome.html');
+        
+        // edit template
         $message = str_replace('{{action_url}}', $reset_link, $message);
         $message = str_replace('{{name}}', $username, $message);
         $message = str_replace('{{current_year}}', date("Y"), $message);

@@ -43,7 +43,17 @@ try {
             $to = $email;
             $subject = 'Aprelendo - Password reset';
             
-            $message = file_get_contents(APP_ROOT . 'templates/password_reset.html');
+            // get template
+            $ch = curl_init();
+            curl_setopt ($ch, CURLOPT_URL, APP_ROOT . 'templates/password_reset.html');
+            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_REFERER, $_SERVER['HTTP_REFERER']);
+            curl_setopt ($ch, CURLOPT_PROXY, PROXY);
+            $message = curl_exec($ch);
+            curl_close($ch); 
+
+            // edit template
             $message = str_replace('{{action_url}}', $reset_link, $message);
             $message = str_replace('{{name}}', $username, $message);
             $message = str_replace('{{ip}}', $_SERVER['REMOTE_ADDR'], $message);

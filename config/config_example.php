@@ -29,4 +29,6 @@ defined('VOICERSS_API_KEY')  ? null : define('VOICERSS_API_KEY', 'your_voicerss_
 
 defined('EMAIL_SENDER')     ? null : define('EMAIL_SENDER', 'Sender <example@mail.com>');
 defined('SUPPORT_EMAIL')     ? null : define('SUPPORT_EMAIL', 'example@mail.com');
+
+defined('PROXY')   ? null : define('PROXY', 'proxy:port');
 ?>
