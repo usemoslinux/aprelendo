@@ -164,6 +164,9 @@ $(document).ready(function () {
         translatorURI = data.LgTranslatorURI;
     });
 
+    /**
+     * Builds translator link including the paragraph to translate as a parameter
+     */
     function buildTranslateParagraphLink() {
         var $start_obj = $selword.prevUntil(":contains('.')").last();
         $start_obj = $start_obj.length > 0 ? $start_obj : $selword;

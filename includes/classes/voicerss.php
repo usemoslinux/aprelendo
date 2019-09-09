@@ -22,6 +22,8 @@ namespace Aprelendo\Includes\Classes;
 
 class VoiceRSS
 {
+	use Curl;
+
 	public function speech($settings) {
 	    $this->_validate($settings);
 	    return $this->_request($settings);
@@ -36,14 +38,14 @@ class VoiceRSS
 
 	private function _request($settings) {
     	$url = ((isset($settings['ssl']) && $settings['ssl']) ? 'https' : 'http') . '://api.voicerss.org/';
+		
 		$ch = curl_init($url);
-		$proxy = 'www-proxy.mrec.ar:8080';
 		
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_BINARYTRANSFER, (isset($settings['b64']) && $settings['b64']) ? 0 : 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded; charset=UTF-8'));
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_PROXY, $proxy);
+		curl_setopt($ch, CURLOPT_PROXY, self::$proxy);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_buildRequest($settings));
 
 		$resp = curl_exec($ch);

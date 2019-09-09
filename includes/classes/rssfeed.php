@@ -48,40 +48,46 @@ class RSSFeed
     * @return string
     */
     public function fetchXMLFeed($url) {
-        $this->xmlfeed = $this->get_contents($url);
+        $this->xmlfeed = $this->get_url_contents($url);
         
         if ($this->xmlfeed) {
             $this->xmlfeed = simplexml_load_string($this->xmlfeed);
-            $isatom = isset($this->xmlfeed->entry);
-            $isrss = isset($this->xmlfeed->channel);
-            
-            if ($isatom || $isrss) {
-                $this->title = $isatom ? $this->xmlfeed->title: $this->xmlfeed->channel->title; // ATOM: feed>title; RSS: rss>channel>title
-                $entry = $isatom ? $this->xmlfeed->entry: $this->xmlfeed->channel->item; // ATOM: feed>entry; RSS: rss>channel>item
+
+            if ($this->xmlfeed) {
+                $isatom = isset($this->xmlfeed->entry);
+                $isrss = isset($this->xmlfeed->channel);
                 
-                if(isset($this->title)) {
-                    if (isset($entry)) {
-                        $itemindex = 1;
-                        foreach ($entry as $article) {
-                            $artdate = $isatom ? $article->updated : $article->pubDate; // ATOM: feed>entry>updated; RSS: rss>channel>item>pubDate
-                            $this->articles[$itemindex]['title'] = $article->title;
-                            $this->articles[$itemindex]['date'] = date("d/m/Y - H:i", strtotime($artdate));
-                            $this->articles[$itemindex]['author'] = $article->author; // ATOM: feed>entry>author; RSS: rss>channel>item>author
-                            $this->articles[$itemindex]['src'] = $isatom ? $article->link->attributes()->href : $article->link;  // ATOM: feed>entry>link>href attr; RSS: rss>channel>item>link
-                            $this->articles[$itemindex]['content'] = $isatom ? $article->content : $article->description; // ATOM: feed>entry>content; rss>channel>item>description
-                            
-                            if ($itemindex >= 5) {
-                                break;
-                            } else {
-                                $itemindex++;
+                if ($isatom || $isrss) {
+                    $this->title = $isatom ? $this->xmlfeed->title: $this->xmlfeed->channel->title; // ATOM: feed>title; RSS: rss>channel>title
+                    $entry = $isatom ? $this->xmlfeed->entry: $this->xmlfeed->channel->item; // ATOM: feed>entry; RSS: rss>channel>item
+                    
+                    if(isset($this->title)) {
+                        if (isset($entry)) {
+                            $itemindex = 1;
+                            foreach ($entry as $article) {
+                                $artdate = $isatom ? $article->updated : $article->pubDate; // ATOM: feed>entry>updated; RSS: rss>channel>item>pubDate
+                                $this->articles[$itemindex]['title'] = $article->title;
+                                $this->articles[$itemindex]['date'] = date("d/m/Y - H:i", strtotime($artdate));
+                                $this->articles[$itemindex]['author'] = $article->author; // ATOM: feed>entry>author; RSS: rss>channel>item>author
+                                $this->articles[$itemindex]['src'] = $isatom ? $article->link->attributes()->href : $article->link;  // ATOM: feed>entry>link>href attr; RSS: rss>channel>item>link
+                                $this->articles[$itemindex]['content'] = $isatom ? $article->content : $article->description; // ATOM: feed>entry>content; rss>channel>item>description
+                                
+                                if ($itemindex >= 5) {
+                                    break;
+                                } else {
+                                    $itemindex++;
+                                }
                             }
                         }
                     }
                 }
+            } else {
+                throw new \Exception ('Oops! There was a problem trying to get this feed: ' . $url);
             }
         } else {
             throw new \Exception ('Oops! There was a problem trying to get this feed: ' . $url);
         }
+            
         return true;
     }
 }

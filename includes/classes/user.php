@@ -140,7 +140,7 @@ class User
         $subject = 'Aprelendo - Account activation';
         
         // get template
-        $message = $this->get_contents(APP_ROOT . 'templates/welcome.html');
+        $message = $this->get_url_contents(APP_ROOT . 'templates/welcome.html');
         
         // edit template
         $message = str_replace('{{action_url}}', $reset_link, $message);

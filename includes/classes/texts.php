@@ -26,6 +26,8 @@ use Aprelendo\Includes\Classes\Url;
 use Aprelendo\Includes\Classes\Language;
 
 class Texts extends DBEntity {
+    use Curl;
+
     protected $learning_lang_id;
     protected $cols;
     protected $order_col;

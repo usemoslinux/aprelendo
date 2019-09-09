@@ -32,7 +32,7 @@ class Text
     protected $author;
     protected $source_uri;
     protected $audio_uri;
-    protected $text;
+    public $text;
     protected $is_shared;
     
     /**
@@ -158,21 +158,6 @@ class Reader extends Text
     }
 
     /**
-    * Replaces line-breaks (\n) with <P></P> tags
-    * Returns the modified $text, which includes the new HTML code
-    *
-    * @param string $text
-    * @return string
-    */
-    public function addParagraphs($text) // Add paragraph elements to text
-    {
-        $text = preg_replace('/\n/', '</p><p>', $text);
-        $text = '<p>'.$text.'</p>';
-        
-        return $text;
-    }
-    
-    /**
     * Makes all words clickable by wrapping them in SPAN tags
     * Returns the modified $text, which includes the new HTML code
     * 
@@ -240,6 +225,57 @@ class Reader extends Text
                                     $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
                                     "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $text;
+    }
+
+    /**
+    * Underlines words with different colors depending on their status
+    * Returns the modified $text, which includes the new HTML code
+    *
+    * @param string $text
+    * @param mysqli_connect $con
+    * @return string
+    */
+    public function colorizeWords2($text)
+    {
+        $user_id = $this->user_id;
+        $learning_lang_id = $this->learning_lang_id;
+        
+        // 1. colorize phrases & words that are being reviewed
+        $result = $this->con->query("SELECT word, wordStatus FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id'");
+        
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $phrase = $row['word'];
+                $learning_level = $row['wordStatus'] > 0 ? 'learning' : 'learned';
+                
+                $text = preg_replace('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b' . $phrase . '\b/iu',
+                    '<span class="word reviewing ' . $learning_level . '" data-toggle="modal" data-target="#myModal">' . '$0' . '</span>', $text);
+            }
+
+            // 3. colorize frequency list words
+            if ($this->show_freq_list) {
+                $user = new User($this->con);
+                if ($user->isLoggedIn() && $user->isPremium()) {
+                    $result = $this->con->query("SELECT LgName FROM languages WHERE LgId='$this->learning_lang_id'");
+                
+                    if ($result) {
+                        $row = $result->fetch_assoc();
+                        $freq_table_name = $this->con->escape_string($row['LgName']);
+                        $result = $this->con->query('SELECT freqWord FROM frequencylist_' . $freq_table_name);
+                        
+                        if ($result) {
+                            while ($row = $result->fetch_assoc()) {
+                                $word = $row['freqWord'];
+                                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
+                                "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
                             }
                         }
                     }
