@@ -145,11 +145,11 @@ $(document).ready(function () {
             $sel_end = e.type === "mouseover" ? $(this) : $(document.elementFromPoint(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY));
         
 			if ($sel_end.isAfter($sel_start)) {
-				$sel_start.prev().nextUntil($sel_end.next(), ".word").addClass("highlighted");
-				$selword = $sel_start.prev().nextUntil($sel_end.next());
+				$sel_start.nextUntil($sel_end.next(), ".word").addBack().addClass("highlighted");
+				$selword = $sel_start.nextUntil($sel_end.next()).addBack();
 			} else {
-				$sel_start.next().prevUntil($sel_end.prev(), ".word").addClass("highlighted");
-				$selword = $sel_end.prev().nextUntil($sel_start.next());
+				$sel_start.prevUntil($sel_end.prev(), ".word").addBack().addClass("highlighted");
+				$selword = $sel_end.nextUntil($sel_start.next()).addBack();
 			}
 		}
     });
@@ -197,6 +197,11 @@ $(document).ready(function () {
         }
     }
 
+    /**
+     * Shows message for high & medium frequency words in dictionary modal window
+     * @param {string} word 
+     * @param {string} lg_iso 
+     */
     function getWordFrequency(word, lg_iso) {
         var $freqlvl = $("#bdgfreqlvl");
         
@@ -256,6 +261,10 @@ $(document).ready(function () {
         $(parent.document).find('#myModal').modal('show');
     }
 
+    /**
+     * Adds word to user db
+     * Triggered when user clicks the "Add" button in the dictionary modal window
+     */
     $doc.on("click", "#btnadd", function() {
         var is_phrase = $selword.length > 1;
         var sel_text = $selword.text();
@@ -357,7 +366,8 @@ $(document).ready(function () {
     });
 
     /**
-     * Remove selected word or phrase from database
+     * Removes word from db
+     * Triggered when user clicks the "Delete" button in the dictionary modal window
      */
     $doc.on("click", "#btnremove", function () {
         var audio_is_loaded = $("#audioplayer").find("source").attr("src") != undefined && $("#audioplayer").find("source").attr("src") != "";
@@ -400,14 +410,9 @@ $(document).ready(function () {
             });
     });
 
-    $doc.on("click", "#btncancel", function() {
-
-        $selword.removeClass("highlighted");
-    });
-
     /**
-     * Triggers next phase of assisted learning
-     * Executes when the user presses the big blue button at the end
+     * Executes next phase of assisted learning
+     * Triggered when the user presses the big blue button at the end
      */
     $("body").on("click", "#btn-next-phase", function () {
         var audio_is_loaded = $("#audioplayer").find("source").attr("src") != undefined && $("#audioplayer").find("source").attr("src") != "";
@@ -499,7 +504,7 @@ $(document).ready(function () {
 
     /**
      * Finished studying this text. Archives text & saves new status of words/phrases 
-     * Executes when the user presses the big green button at the end
+     * Triggered when the user presses the big green button at the end of the review
      */
     $("body").on("click", "#btn-save", archiveTextAndSaveWords);
 
@@ -557,13 +562,18 @@ $(document).ready(function () {
     }
 
     /**
-     * Resumes playing if audio was paused when clicking on a word
+     * Triggered when modal dictionary window is closed
      */
     $("body").on("hidden.bs.modal", "#myModal", function () {
         var audioplayer = $("#audioplayer");
+        
+        // Resumes playing if audio was paused when clicking on a word
         if (playingaudio && audioplayer.length) {
             audioplayer.trigger("play");
         }
+
+        // removes word selection
+        $selword.removeClass("highlighted");
     });
 
     /**
@@ -576,7 +586,7 @@ $(document).ready(function () {
     });
     
     /**
-     * Play audio from beginning
+     * Plays audio from beginning
      */
     function playAudioFromBeginning() {
         var $audioplayer = $("#audioplayer");
@@ -671,6 +681,11 @@ $(document).ready(function () {
         }
     });
 
+    /**
+     * Tries to reload audio
+     * When audio fails to load, an error message is shown with a link to reload audio
+     * This event is triggered when the user clicks this link
+     */
     $(document).on("click", "#retry-audio-load", function (e) {
         e.preventDefault();
         $('#alert-msg-audio').remove;
@@ -678,6 +693,9 @@ $(document).ready(function () {
         loadAudio();
     });
 
+    /**
+     * Helper function to skip audio phases
+     */
     function skipAudioPhases() {
         $('#audioplayer-loader')
                         .nextAll()
@@ -692,6 +710,9 @@ $(document).ready(function () {
         phase = 4;
     }
 
+    /**
+     * Loads audio for text
+     */
     function loadAudio() { 
         if ($('#audioplayer').length > 0) {
             var txt = $('#text').text();

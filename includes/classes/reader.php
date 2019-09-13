@@ -217,7 +217,7 @@ class Reader extends Text
                         if ($result) {
                             $row = $result->fetch_assoc();
                             $freq_table_name = $this->con->escape_string($row['LgName']);
-                            $result = $this->con->query('SELECT freqWord FROM frequencylist_' . $freq_table_name);
+                            $result = $this->con->query('SELECT freqWord, freqWordFreq FROM frequencylist_' . $freq_table_name . ' WHERE freqWordFreq < 0.8');
                             
                             if ($result) {
                                 while ($row = $result->fetch_assoc()) {
@@ -248,19 +248,19 @@ class Reader extends Text
         $user_id = $this->user_id;
         $learning_lang_id = $this->learning_lang_id;
         
-        // 1. colorize phrases & words that are being reviewed
-        $result = $this->con->query("SELECT word, wordStatus FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id'");
+        // 1. colorize words & phrases in db (learning + learned)
+        $result = $this->con->query("SELECT word, wordStatus FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' ORDER BY isPhrase ASC");
         
         if ($result) {
             while ($row = $result->fetch_assoc()) {
                 $phrase = $row['word'];
                 $learning_level = $row['wordStatus'] > 0 ? 'learning' : 'learned';
                 
-                $text = preg_replace('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b' . $phrase . '\b/iu',
-                    '<span class="word reviewing ' . $learning_level . '" data-toggle="modal" data-target="#myModal">' . '$0' . '</span>', $text);
+                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                "<span class='word reviewing $learning_level' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
             }
-
-            // 3. colorize frequency list words
+            
+            // 2. colorize high frequency list words
             if ($this->show_freq_list) {
                 $user = new User($this->con);
                 if ($user->isLoggedIn() && $user->isPremium()) {
@@ -269,7 +269,7 @@ class Reader extends Text
                     if ($result) {
                         $row = $result->fetch_assoc();
                         $freq_table_name = $this->con->escape_string($row['LgName']);
-                        $result = $this->con->query('SELECT freqWord FROM frequencylist_' . $freq_table_name);
+                        $result = $this->con->query('SELECT freqWord, freqWordFreq FROM frequencylist_' . $freq_table_name . ' WHERE freqWordFreq < 0.8');
                         
                         if ($result) {
                             while ($row = $result->fetch_assoc()) {
