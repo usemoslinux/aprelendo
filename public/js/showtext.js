@@ -173,10 +173,11 @@ $(document).ready(function () {
         var $end_obj = $selword.prev().nextUntil(":contains('.')").last().next();
         $end_obj = $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
         var $sentence = $start_obj.nextUntil($end_obj).addBack().next().addBack();
+        var sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ");
 
         return translatorURI.replace(
             "%s",
-            encodeURIComponent($sentence.text())
+            encodeURIComponent(sentence)
         );
     }
 
@@ -186,7 +187,11 @@ $(document).ready(function () {
     function setAddDeleteButtons() {
         var $btnremove = $(parent.document).find("#btnremove");
         var $btnadd = $(parent.document).find("#btnadd");
-        if ($selword.is(".learning, .new, .forgotten, .learned")) {
+        
+        var underlined_words_in_selection = $selword.filter(".learning, .new, .forgotten, .learned").length;
+        var words_in_selection = $selword.filter(".word").length;
+
+        if (words_in_selection == underlined_words_in_selection) {
             if ($btnremove.is(":visible") === false) {
                 $btnremove.show();
                 $btnadd.text("Forgot");
@@ -284,7 +289,7 @@ $(document).ready(function () {
                 var word_count = $selword.filter(".word").length;
 
                 // build filter based on first word of the phrase
-                var filterphrase = $pagereader.contents().find("span.word").filter(function () {
+                var $filterphrase = $pagereader.contents().find("span.word").filter(function () {
                     return (
                         $(this)
                         .text()
@@ -293,7 +298,7 @@ $(document).ready(function () {
                 });
 
                 // loop through the filter and underline all instances of the phrase
-                filterphrase.each(function () {
+                $filterphrase.each(function () {
                     var $lastword = $(this)
                         .nextAll("span.word")
                         .slice(0, word_count - 1)
@@ -320,7 +325,7 @@ $(document).ready(function () {
                 });
             } else { // if it's a word
                 // build filter with all the instances of the word in the text                
-                var filterword = $pagereader.contents().find("span.word").filter(function () {
+                var $filterword = $pagereader.contents().find("span.word").filter(function () {
                     return (
                         $(this)
                         .text()
@@ -329,20 +334,16 @@ $(document).ready(function () {
                 });
 
                 // loop through the filter and underline all instances of the word
-                filterword.each(function () {
+                $filterword.each(function () {
                     var $word = $(this);
                     if ($word.is('.new, .learning, .learned, .forgotten')) {
-                        $word.html("<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'>" +
-                            sel_text +
-                            "</span>");
+                        $word.wrap("<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></span>");
                     } else {
-                        $word.html("<span class='word reviewing new' data-toggle='modal' data-target='#myModal'>" +
-                            sel_text +
-                            "</span>");
+                        $word.wrap("<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>");
                     }
                 });
 
-                filterword.contents().unwrap();
+                $filterword.contents().unwrap();
             }
 
             // if there were no previous word underlined, therefore phases 2 & 3 were off, 
@@ -380,7 +381,7 @@ $(document).ready(function () {
                 }
             })
             .done(function () {
-                var filter = $pagereader.contents().find("span.word").filter(function () {
+                var $filter = $pagereader.contents().find("span.word").filter(function () {
                     return (
                         $(this)
                         .text()
@@ -395,8 +396,25 @@ $(document).ready(function () {
                         txt: $selword.text()
                     }
                 }).done(function (result) {
-                    filter.html(result);
-                    filter.contents().unwrap();
+                    // if everything went fine, remove the underlining
+                    // also, the case of the word/phrase in the text has to be respected
+                    // for phrases, we need to make sure that new underlining is added for each word (call to underlinewords.php)
+
+                    var $result = $(result);
+                    var $cur_filter = {};
+                    var cur_word = /""/;
+                    
+                    $filter.each(function() {
+                        $cur_filter = $(this);
+
+                        $result.filter(".word").each(function(key) {
+                            cur_word = new RegExp("\\b" + $(this).text() + "\\b", "iu").exec($cur_filter.text());
+                            $(this).text(cur_word); 
+                        });
+
+                        $cur_filter.replaceWith($result.clone());
+                    });
+
                     // if user is in phase 3 (speaking) and deleted the only word that was underlined
                     // don't allow phase 3 (writing) & go directly to last phase (save changes)
                     if (phase == 3 && audio_is_loaded > 0 && $('.learning, .new, .forgotten').length == 0) {
@@ -757,4 +775,15 @@ $(document).ready(function () {
             return false;
         }
      }
+
+    /**
+     * Removes selection when user clicks in white-space
+     */
+    $("#text-container").on("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        highlighting = false;
+        $("#text-container").find(".highlighted").removeClass("highlighted");
+    });
 });

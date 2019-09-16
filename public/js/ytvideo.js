@@ -47,7 +47,7 @@
     
     // 4. The API will call this function when the video player is ready.
     function onPlayerReady(event) {
-        event.target.playVideo();
+        // event.target.playVideo();
     }
     
     // 5. The API calls this function when the player's state changes.
@@ -60,6 +60,11 @@
             var timer;    
             video_paused = false;
 
+            var next_obj_offset = {};
+            var next_obj_height = {};
+            var window_height = $(window).height();
+            var offset;
+
             function updateTime(time_interval) {
 
                 timer = setInterval(function(){
@@ -71,6 +76,20 @@
                         $obj.removeClass('video-reading-line');
                         if ($next_obj.length > 0 && !$next_obj.hasClass('video-reading-line')) {
                             $next_obj.addClass('video-reading-line');
+                            
+                            // scroll element to the middle of screen
+                            next_obj_offset = $next_obj.offset().top;
+                            next_obj_height = $next_obj.height();
+
+                            if (next_obj_height < window_height) {
+                                offset = next_obj_offset - ((window_height / 2) - (next_obj_height / 2));
+                            }
+                            else {
+                                offset = next_obj_offset;
+                            }
+                            $('html,body').animate({
+                                scrollTop: offset
+                            }, 300);
                         }    
                     } else {
                         clearInterval(timer);

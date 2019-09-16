@@ -42,15 +42,13 @@ $(document).ready(function () {
      * Ajax call to fetch an ebook. Response has to be converted to arrayBuffer to allow 
      * epub.js (book.open function) to process it correctly
      */
-    fetch('ajax/getebook.php', {
-            method: 'GET',
-            body: formData,
-        })
+    fetch('ajax/getebook.php?id=' + ebook_id)
         .then(fetchStatusHandler)
         .then(response => response.arrayBuffer())
         .then(arraybuffer => openBook(arraybuffer))
-        .catch(function () {
-            alert('There was an unexpected problem opening this ebook file. Try again later.');
+        .catch(function (e) {
+            // alert('There was an unexpected problem opening this ebook file. Try again later.');
+            alert(e.message);
             window.location.replace("texts.php");
         });
 

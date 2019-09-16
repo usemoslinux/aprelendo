@@ -31,7 +31,7 @@ if (!$user->isPremium()) {
 
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;
-$id = $con->real_escape_string($_POST['id']);
+$id = $con->real_escape_string($_GET['id']);
 
 try {
     $result = $con->query("SELECT textSourceURI FROM texts WHERE textId='$id' AND textUserId='$user_id' AND textLgId = '$learning_lang_id'") or die(mysqli_error($con));

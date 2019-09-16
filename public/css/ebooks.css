@@ -76,16 +76,28 @@ select {
 .lightmode {
     background-color: white;
     color: #000000;
+    -moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 .darkmode {
     background-color: #323847;
     color: whitesmoke;
+    -moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 .sepiamode {
     background-color: #ebe7d9;
     color: #384452;
+    -moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 #toc {
@@ -330,7 +342,7 @@ body {
 
 .epub-view {
 	height: auto !important;
-	width: auto !important;
+    width: auto !important;
 }
 
 /* SPINNER */

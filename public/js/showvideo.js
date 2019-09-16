@@ -24,8 +24,8 @@ $(document).ready(function () {
     dictionaryURI = "";
     translatorURI = "";
     prevsel = 0; // previous selection index in #selPhrase
-    resume_video = true;
-    video_paused = false;
+    resume_video = false;
+    video_paused = true;
     
     // ajax call to get dictionary & translator URIs
     $.ajax({
@@ -49,8 +49,6 @@ $(document).ready(function () {
         if (!video_paused) {
             player.pauseVideo();
             resume_video = true;
-        } else {
-            resume_video = false;
         }
 
         if (e.which < 2) { // if left mouse button / touch...
@@ -116,14 +114,16 @@ $(document).ready(function () {
         var $btnremove = $("#btnremove");
         var $btnadd = $("#btnadd");
         var $btncancel = $("#btncancel");
-        if ($selword.is(".learning, .new, .forgotten, .learned")) {
+
+        var underlined_words_in_selection = $selword.filter(".learning, .new, .forgotten, .learned").length;
+        var words_in_selection = $selword.filter(".word").length;
+
+        if (words_in_selection == underlined_words_in_selection) {
             if ($btnremove.is(":visible") === false) {
-                $btncancel.hide();
                 $btnremove.show();
                 $btnadd.text("Forgot");
             }
         } else {
-            $btncancel.show();
             $btnremove.hide();
             $btnadd.text("Add");
         }
@@ -133,28 +133,23 @@ $(document).ready(function () {
     * Adds selected word or phrase to the database and underlines it in the text
     */
     $("#btnadd").on("click", function () {
-        // check if selection is a word or phrase
-        var selection = $("#selPhrase option:selected").val();
-        var selphrase_sel_index = $("#selPhrase").prop("selectedIndex");
-        var selphrase_count = $("#selPhrase option").length;
-        var is_phrase =
-        selphrase_sel_index > 0 && selphrase_sel_index != selphrase_count - 1;
-        
+        var sel_text = $selword.text();
+        var is_phrase = $selword.length > 1;
         // add selection to "words" table
         $.ajax({
             type: "POST",
             url: "ajax/addword.php",
             data: {
-                word: selection,
+                word: sel_text.toLowerCase(),
                 isphrase: is_phrase
             }
         })
         .done(function () {
             // if successful, underline word or phrase
             if (is_phrase) { // if it's a phrase
-                var firstword = $selword.text();
-                var phraseext = selphrase_sel_index + 1;
-                var filterphrase = $("span.word").filter(function () {
+                var firstword = $selword.eq(0).text();
+                var phraseext = $selword.filter(".word").length;
+                var $filterphrase = $("span.word").filter(function () {
                     return (
                         $(this)
                         .text()
@@ -162,7 +157,7 @@ $(document).ready(function () {
                     );
                 });
             
-                filterphrase.each(function () {
+                $filterphrase.each(function () {
                     var lastword = $(this)
                     .nextAll("span.word")
                     .slice(0, phraseext - 1)
@@ -173,7 +168,7 @@ $(document).ready(function () {
                     .next("span.word")
                     .addBack();
                     
-                    if (phrase.text().toLowerCase() === selection.toLowerCase()) {
+                    if (phrase.text().toLowerCase() === sel_text.toLowerCase()) {
                         if ($(this).is('.new, .learning, .learned, .forgotten')) {
                             phrase.wrapAll(
                                 "<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></span>"
@@ -188,28 +183,24 @@ $(document).ready(function () {
                     }
                 });
             } else { // if it's a word
-                var filterword = $("span.word").filter(function () {
+                var $filterword = $("span.word").filter(function () {
                     return (
                         $(this)
                         .text()
-                        .toLowerCase() === selection.toLowerCase()
-                );
-            });
+                        .toLowerCase() === sel_text.toLowerCase()
+                    );
+                });
         
-            filterword.each(function() {
-                var $word = $(this);
-                if ($word.is('.new, .learning, .learned, .forgotten')) {
-                    $word.html("<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'>" +
-                    selection +
-                    "</span>");
-                } else {
-                    $word.html("<span class='word reviewing new' data-toggle='modal' data-target='#myModal'>" +
-                    selection +
-                    "</span>");
-                }
-            });
+                $filterword.each(function() {
+                    var $word = $(this);
+                    if ($word.is('.new, .learning, .learned, .forgotten')) {
+                        $word.wrap("<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></span>");
+                    } else {
+                        $word.wrap("<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>");
+                    }
+                });
         
-            filterword.contents().unwrap();
+                $filterword.contents().unwrap();
             }   
         })
         .fail(function (XMLHttpRequest, textStatus, errorThrown) {
@@ -228,10 +219,11 @@ $(document).ready(function () {
         var $end_obj = $selword.prev().nextUntil(":contains('.')").last().next();
         $end_obj = $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
         var $sentence = $start_obj.nextUntil($end_obj).addBack().next().addBack();
+        var sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ");
 
         return translatorURI.replace(
             "%s",
-            encodeURIComponent($sentence.text())
+            encodeURIComponent(sentence)
         );
     }
 
@@ -297,11 +289,11 @@ $(document).ready(function () {
             type: "POST",
             url: "ajax/removeword.php",
             data: {
-                word: $selword.text()
+                word: $selword.text().toLowerCase()
             }
         })
         .done(function () {
-            var filter = $("span.word").filter(function () {
+            var $filter = $("span.word").filter(function () {
                 return (
                     $(this)
                     .text()
@@ -316,8 +308,24 @@ $(document).ready(function () {
                     txt: $selword.text()
                 }
             }).done(function (result) {
-                filter.html(result);
-                filter.contents().unwrap();
+                // if everything went fine, remove the underlining
+                // also, the case of the word/phrase in the text has to be respected
+                // for phrases, we need to make sure that new underlining is added for each word (call to underlinewords.php)
+
+                var $result = $(result);
+                var $cur_filter = {};
+                var cur_word = /""/;
+                
+                $filter.each(function() {
+                    $cur_filter = $(this);
+
+                    $result.filter(".word").each(function(key) {
+                        cur_word = new RegExp("\\b" + $(this).text() + "\\b", "iu").exec($cur_filter.text());
+                        $(this).text(cur_word); 
+                    });
+
+                    $cur_filter.replaceWith($result.clone());
+                });
             });
         })
         .fail(function (XMLHttpRequest, textStatus, errorThrown) {
@@ -372,9 +380,18 @@ $(document).ready(function () {
     $("#myModal").on("hidden.bs.modal", function () {
         if (resume_video) {
             player.playVideo();
+            resume_video = false;
         }
 
         // removes word selection
         $selword.removeClass("highlighted");
+    });
+
+    $("#text-container").on("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        highlighting = false;
+        $("#text-container").find(".highlighted").removeClass("highlighted");
     });
 });

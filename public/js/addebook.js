@@ -18,7 +18,6 @@
  */
 
 $(document).ready(function () {
-    var book = ePub();
     resetControls(true);
 
     $("#btn-upload-epub").on("click", function () {
@@ -34,17 +33,15 @@ $(document).ready(function () {
 
         if ($epub_file[0].files[0].size > 2097152) {
             showMessage('This file is bigger than the allowed limit (2 MB). Please try again.', 'alert-danger');
-            $epub_file.val('');
+            resetControls(true);
         } else if (ext != 'epub') {
             showMessage('Invalid file extension. Only .epub files are allowed.', 'alert-danger');
-            $epub_file.val('');
+            resetControls(true);
         } else {
-            if ($('#title').val() == '') {
-                if (window.FileReader) {
-                    var reader = new FileReader();
-                    reader.onload = openBook;
-                    reader.readAsArrayBuffer($epub_file[0].files[0]);
-                }
+            if (window.FileReader) {
+                var reader = new FileReader();
+                reader.onload = openBook;
+                reader.readAsArrayBuffer($epub_file[0].files[0]);
             }
         }
     }); // end of #file-upload-epub.on.change
@@ -155,13 +152,10 @@ $(document).ready(function () {
      * @param {arrayBuffer} e 
      */
     function openBook(e) {
+        var book = ePub();
         var bookData = e.target.result;
         book.open(bookData);
-
-        window.addEventListener("unload", function () {
-            book.destroy();
-        });
-
+        
         book.loaded.metadata.then(function (meta) {
             var $title = document.getElementById("title");
             var $author = document.getElementById("author");
@@ -171,12 +165,10 @@ $(document).ready(function () {
                 $author.value = meta.creator;
             }
         });
+
+        window.addEventListener("unload", function () {
+            book.destroy();
+        });
     }
-
-
-
-
-
-
 
 });
