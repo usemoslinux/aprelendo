@@ -20,8 +20,8 @@
 
 // perform all database initialization here, in a single file
 
-defined('APP_ROOT')     ? null : define('APP_ROOT', dirname(dirname(__FILE__)) . '/');
-defined('PUBLIC_PATH')  ? null : define('PUBLIC_PATH', APP_ROOT . 'public/');
+defined('APP_ROOT')     ? null : define('APP_ROOT', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
+defined('PUBLIC_PATH')  ? null : define('PUBLIC_PATH', APP_ROOT . 'public' . DIRECTORY_SEPARATOR);
 
 require_once dirname(__DIR__) . '/config/config.php';
 require_once dirname(__DIR__) . '/includes/autoload.php';

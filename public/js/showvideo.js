@@ -97,13 +97,19 @@ $(document).ready(function () {
             
             $sel_end = e.type === "mouseover" ? $(this) : $(document.elementFromPoint(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY));
         
-			if ($sel_end.isAfter($sel_start)) {
-				$sel_start.nextUntil($sel_end.next(), ".word").addBack().addClass("highlighted");
-				$selword = $sel_start.nextUntil($sel_end.next()).addBack();
-			} else {
-				$sel_start.prevUntil($sel_end.prev(), ".word").addBack().addClass("highlighted");
-				$selword = $sel_end.nextUntil($sel_start.next()).addBack();
-			}
+            // if $sel_start & $sel_end are on the same line, then...
+            if ($sel_start.parent().get(0) === $sel_end.parent().get(0)) {
+                if ($sel_end.isAfter($sel_start)) {
+                    $sel_start.nextUntil($sel_end.next(), ".word").addBack().addClass("highlighted");
+                    $selword = $sel_start.nextUntil($sel_end.next()).addBack();
+                } else {
+                    $sel_start.prevUntil($sel_end.prev(), ".word").addBack().addClass("highlighted");
+                    $selword = $sel_end.nextUntil($sel_start.next()).addBack();
+                }
+            } else {
+                $sel_end = $selword = $sel_start;
+            }
+			
 		}
     });
     
@@ -393,5 +399,9 @@ $(document).ready(function () {
 
         highlighting = false;
         $("#text-container").find(".highlighted").removeClass("highlighted");
+    });
+
+    $(window).on("beforeunload", function() {        
+        return "To save your progress, please click the Save button before you go. Otherwise, your changes will be lost. Are you sure you want to exit this page?";
     });
 });

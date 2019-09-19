@@ -44,6 +44,8 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     </header>
                     <br />
                     <div id="error-msg" class="d-none"></div>
+                    <div class="g-signin2" data-longtitle="true" data-onsuccess="googleSignIn" data-theme="dark"></div>
+                    <div class="login-separator">...  OR  ...</div>
                     <form id="form_login">
                         <div class="form-group">
                             <label for="username">Username:</label>
@@ -60,8 +62,6 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         </p>
                         <button type="submit" id="btn_login" class="btn btn-block btn-success">Sign in</button>
                     </form>
-                    <hr>
-                    <center><div class="g-signin2" data-longtitle="true" data-theme="dark" data-onsuccess="onSignIn"></div></center>
                     <br />
                     <footer>
                         <p class="text-muted text-center">
@@ -75,6 +75,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
     </div>
 </div>
 
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script defer src="js/login.js"></script>
 
 <?php require_once 'footer.php'?>

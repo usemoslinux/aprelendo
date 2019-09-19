@@ -25,7 +25,11 @@ select {
 }
 
 .word:hover {
-    background-color: #f2f2f2;
+    background-color: #e8e8e8;
+}
+
+.highlighted {
+    background-color: #e8e8e8 !important;
 }
 
 .reviewing {

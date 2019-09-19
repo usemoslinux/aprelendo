@@ -33,7 +33,7 @@ $(document).ready(function () {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $('html');
 
-    loadAudio();
+    // loadAudio();
     
     /**
      * Sets keyboard shortcuts for media player
@@ -95,7 +95,7 @@ $(document).ready(function () {
      * Word/Phrase selection start
      * @param {event object} e
      */
-    $doc.on("mousedown touchstart", ".word", function(e) {
+    $(document).on("mousedown touchstart", ".word", function(e) {
 		e.preventDefault();
         e.stopPropagation();
         if (e.which < 2) { // if left mouse button / touch...
@@ -108,7 +108,7 @@ $(document).ready(function () {
      * Word/Phrase selection end
      * @param {event object} e
      */
-	$doc.on("mouseup touchend", ".word", function(e) {
+	$(document).on("mouseup touchend", ".word", function(e) {
         e.preventDefault();
         e.stopPropagation();
         if (e.which < 2) { // if left mouse button / touch...
@@ -135,7 +135,7 @@ $(document).ready(function () {
      * Here we build the selected phrase & change its background color to gray
      * @param {event object} e
      */
-	$doc.on("mouseover touchmove", ".word", function(e) {
+	$(document).on("mouseover touchmove", ".word", function(e) {
         e.preventDefault();
         e.stopPropagation();
         
@@ -208,7 +208,7 @@ $(document).ready(function () {
      * @param {string} lg_iso 
      */
     function getWordFrequency(word, lg_iso) {
-        var $freqlvl = $("#bdgfreqlvl");
+        var $freqlvl = $doc.find("#bdgfreqlvl");
         
         // ajax call to get word frequency
         $.ajax({
@@ -216,7 +216,6 @@ $(document).ready(function () {
             url: "/ajax/getwordfreq.php",
             data: { "word" : word, "lg_iso": lg_iso }
         }).done(function(data) {
-            console.log("freq: " + data );
             if (data == 0) {
                 $freqlvl.hide();
             } else if(data < 81) {
@@ -582,7 +581,7 @@ $(document).ready(function () {
     /**
      * Triggered when modal dictionary window is closed
      */
-    $("body").on("hidden.bs.modal", "#myModal", function () {
+    $doc.on("hidden.bs.modal", "#myModal", function () {
         var audioplayer = $("#audioplayer");
         
         // Resumes playing if audio was paused when clicking on a word
@@ -779,11 +778,20 @@ $(document).ready(function () {
     /**
      * Removes selection when user clicks in white-space
      */
-    $("#text-container").on("click", function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+    $(document).on("click", $pagereader, function(e) {
+        if ($(e.target).is(".word") === false) {
+            e.preventDefault();
+            e.stopPropagation();
 
-        highlighting = false;
-        $("#text-container").find(".highlighted").removeClass("highlighted");
+            $text_container = $('#text-container').length ? $('#text-container') : $pagereader.contents();
+
+            highlighting = false;
+            $text_container.find(".highlighted").removeClass("highlighted");
+        }
     });
+
+    $(window).on("beforeunload", function() {        
+        return "To save your progress, please click the Save button before you go. Otherwise, your changes will be lost. Are you sure you want to exit this page?";
+    });
+
 });

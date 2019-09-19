@@ -365,7 +365,7 @@ class Reader extends Text
                       <span class="small">Listening</span>
                       </button>';
         } else {
-            $html .= '<button type="button" id="btn-save" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
+            $html .= '<button type="button" id="btn-save" title="Save the learning status of your words & archive this text" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
             
             // if there is audio available & at least 1 learning word in current document
             $learningwords = strpos($html, "<span class='word learning'") || strpos($html, "<span class='new learning'");
@@ -413,7 +413,7 @@ class Reader extends Text
         
         $html .= '</div>';
         
-        $html .= '<br><button type="button" id="btn-save" class="basic btn btn-lg btn-success btn-block">Finish & Save</button>';
+        $html .= '<br><button type="button" id="btn-save" title="Save the learning status of your words" class="basic btn btn-lg btn-success btn-block">Finish & Save</button>';
         
         // $time_end = microtime(true);
         // $execution_time = ($time_end - $time_start);

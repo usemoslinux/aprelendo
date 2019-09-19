@@ -32,7 +32,7 @@ class File
 
     public function delete($filename)
     {
-        $full_filename = APP_ROOT . 'uploads/' . $filename;
+        $full_filename = realpath(APP_ROOT . 'uploads' . DIRECTORY_SEPARATOR . $filename);
         if (is_file($full_filename) && file_exists($full_filename)) {
             unlink($full_filename);
         } else {
@@ -45,7 +45,7 @@ class File
 
     public function put($files_array)
     {
-        $target_dir = APP_ROOT . 'uploads/';
+        $target_dir = APP_ROOT . 'uploads' . DIRECTORY_SEPARATOR;
         $file_name = basename($files_array['name']);
         $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
         
@@ -109,7 +109,7 @@ class File
 
     public function get($file_name) {
         //Make sure it exists
-        $folder = APP_ROOT . 'uploads/';
+        $folder = APP_ROOT . 'uploads' . DIRECTORY_SEPARATOR;
         if(!$file = realpath($folder . $file_name))
             return $this->error(404);
         if(!is_file($file))

@@ -835,6 +835,7 @@ input {
 
 .modal-open {
     overflow: initial;
+    padding-right: 0 !important;
 }
 
 #bdgfreqlvl {
@@ -1135,6 +1136,17 @@ div.blurry-background {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+}
+
+/* LOGIN */
+
+.abcRioButton.abcRioButtonBlue {
+	width: 100% !important;
+}
+
+.login-separator {
+    text-align: center;
+    margin: 20px auto;
 }
 
 /* OTHER PAGES */
