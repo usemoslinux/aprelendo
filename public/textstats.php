@@ -20,6 +20,7 @@
 
 if (!isset($_POST) || empty($_POST)) {
     header('Location:texts.php');
+    exit;
 }
 
 require_once '../includes/dbinit.php'; // connect to database

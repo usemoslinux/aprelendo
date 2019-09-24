@@ -1144,9 +1144,24 @@ div.blurry-background {
 	width: 100% !important;
 }
 
-.login-separator {
-    text-align: center;
-    margin: 20px auto;
+.or-line {
+	margin: 1.875rem auto;
+}
+
+.or__line {
+	display: block;
+	text-align: center;
+	line-height: 0;
+	border-bottom: 1px solid #A7B0B7;
+}
+
+.or__text {
+	display: inline;
+	padding: 0 10px;
+	/* font-weight: 500; */
+	background: #fff;
+	color: #666E7E;
+	text-transform: lowercase;
 }
 
 /* OTHER PAGES */

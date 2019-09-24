@@ -45,7 +45,11 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <br />
                     <div id="error-msg" class="d-none"></div>
                     <div class="g-signin2" data-longtitle="true" data-onsuccess="googleSignIn" data-theme="dark"></div>
-                    <div class="login-separator">...  OR  ...</div>
+                    <div class="or-line">
+                        <p class="or__line">
+                            <span class="or__text">Or</span>
+                        </p>
+                    </div>
                     <form id="form_login">
                         <div class="form-group">
                             <label for="username">Username:</label>

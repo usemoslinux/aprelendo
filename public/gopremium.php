@@ -93,7 +93,6 @@ if (!$user->isLoggedIn()) {
                             <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Export words
                                 (CSV)</li>
                         </ul>
-                        <a href="register.php" class="btn btn-block btn-primary text-uppercase">Sign up</a>
                     </div>
                 </div>
             </div>
@@ -122,7 +121,18 @@ if (!$user->isLoggedIn()) {
                             <li><span class="fa-li"><i class="fas fa-check"></i></span>Export words
                                 (CSV)</li>
                         </ul>
-                        <a href="register.php" class="btn btn-block btn-primary text-uppercase">Sign up</a>
+                        
+                        <form name="form-monthly-subscription" action="/payment.php" method="post" target="_top">
+                            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+                            <input type="hidden" name="lc" value="US">
+                            <input type="hidden" name = "item_name" value = "Aprelendo - Monthly Subscription">
+                            <input type="hidden" name="no_note" value="1">
+                            <input type="hidden" name="src" value="1">
+                            <input type="hidden" name="t3" value="M">
+                            <input type="hidden" name="p3" value="1">
+                            <input type="hidden" name="bn" value="PP-SubscriptionsBF:btn_subscribeCC_LG.gif:NonHostedGuest">
+                            <input type="submit" name="submit" class="btn btn-block btn-primary text-uppercase" value="Subscribe"/>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -131,7 +141,7 @@ if (!$user->isLoggedIn()) {
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title text-muted text-uppercase text-center">Premium</h5>
-                        <h6 class="card-price text-center">$90<span class="period">/year</span></h6>
+                        <h6 class="card-price text-center">$99<span class="period">/year</span></h6>
                         <hr>
                         <ul class="fa-ul">
                             <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts
@@ -151,7 +161,18 @@ if (!$user->isLoggedIn()) {
                             <li><span class="fa-li"><i class="fas fa-check"></i></span>Export words
                                 (CSV)</li>
                         </ul>
-                        <a href="register.php" class="btn btn-block btn-primary text-uppercase">Sign up</a>
+                        
+                        <form name="form-monthly-subscription" action="/payment.php" method="post" target="_top">
+                            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+                            <input type="hidden" name="lc" value="US">
+                            <input type="hidden" name = "item_name" value = "Aprelendo - Yearly Subscription">
+                            <input type="hidden" name="no_note" value="1">
+                            <input type="hidden" name="src" value="1">
+                            <input type="hidden" name="t3" value="Y">
+                            <input type="hidden" name="p3" value="1">
+                            <input type="hidden" name="bn" value="PP-SubscriptionsBF:btn_subscribeCC_LG.gif:NonHostedGuest">
+                            <input type="submit" name="submit" class="btn btn-block btn-primary text-uppercase" value="Subscribe"/>
+                        </form>
                     </div>
                 </div>
             </div>
