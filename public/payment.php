@@ -18,17 +18,10 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace Aprelendo\Includes\Classes;
+
 require_once '../includes/dbinit.php'; // connect to database
-
-use Aprelendo\Includes\Classes\User;
-
-$user = new User($con);
-
-// if user is already logged in, go to "My Texts" section
-if ($user->isLoggedIn()) {
-    header('Location:/texts.php');
-    exit;
-}
+require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
 
 // For test payments we want to enable the sandbox mode. If you want to put live
 // payments through then this setting needs changing to `false`.
@@ -42,6 +35,8 @@ $paypalConfig = [
     'cancel_url' => 'https://www.aprelendo.com/payment-cancelled.html',
     'notify_url' => 'https://www.aprelendo.com/payment.php'
 ];
+
+$paypal = new Paypal($con, $user->id, $enableSandbox);
 
 // Check if paypal request or response
 if (!isset($_POST["txn_id"]) && !isset($_POST["txn_type"])) {
@@ -75,18 +70,16 @@ if (!isset($_POST["txn_id"]) && !isset($_POST["txn_type"])) {
     $queryString = http_build_query($data);
 
     // Redirect to paypal IPN
-    header('location:' . $paypalUrl . '?' . $queryString);
+    header('location:' . $paypal->url . '?' . $queryString);
     exit;
 
 } else {
     // Handle the PayPal response.
 
-    $paypal = new Paypal($con, $user->id, $enableSandbox);
-
     // Assign posted variables to local data array.
     $data = [
         'item_name'         =>  $_POST['item_name'],
-        'item_number'       =>  $_POST['item_number'],
+        // 'item_number'       =>  $_POST['item_number'],
         'payment_status'    =>  $_POST['payment_status'],
         'payment_amount'    =>  $_POST['mc_gross'],
         'payment_currency'  =>  $_POST['mc_currency'],
@@ -99,7 +92,7 @@ if (!isset($_POST["txn_id"]) && !isset($_POST["txn_type"])) {
     // We need to verify the transaction comes from PayPal and check we've not
     // already processed the transaction before adding the payment to our
     // database.
-    if ($paypal->verifyTransaction($_POST) && $paypal->checkTxnid($data['txn_id'])) {
+    if (!$paypal->verifyTransaction($_POST) && $paypal->checkTxnid($data['txn_id'])) {
         if ($paypal->addPayment($data)) {
             // Payment successfully added.
         }

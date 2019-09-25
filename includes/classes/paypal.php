@@ -22,6 +22,8 @@ namespace Aprelendo\Includes\Classes;
 
 class Paypal extends DBEntity
 {
+    use Curl;
+
     public $url;
 
     public function __construct($con, $user_id, $enable_sandbox) {
@@ -37,7 +39,7 @@ class Paypal extends DBEntity
             $req .= "&$key=$value";
         }
     
-        $ch = curl_init(self::$url);
+        $ch = curl_init($this->url);
         curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -48,8 +50,9 @@ class Paypal extends DBEntity
         curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
+        curl_setopt($ch, CURLOPT_PROXY, self::$proxy);
         $res = curl_exec($ch);
-    
+
         if (!$res) {
             $errno = curl_errno($ch);
             $errstr = curl_error($ch);
@@ -79,14 +82,18 @@ class Paypal extends DBEntity
             return false;
         }
 
-        $stmt = $this->con->prepare('INSERT INTO `payments` (payment_user_id, payment_txn_id, payment_amount, payment_status, payment_item_id, payment_created_time) VALUES(?, ?, ?, ?, ?)');
+        // falta payment_item_id : agregar ? al final tb
+        $stmt = $this->con->prepare('INSERT INTO `payments` (payment_user_id, payment_txn_id, payment_amount, payment_status, payment_created_time) VALUES(?, ?, ?, ?, ?)');
+        if (!$stmt) {
+            $error = $this->con->error;
+        }
         $stmt->bind_param(
-            'ssdsss',
+            'ssdss',
             $this->user_id,
             $data['txn_id'],
             $data['payment_amount'],
             $data['payment_status'],
-            $data['item_number'],
+            // $data['item_number'],
             $today
         );
 
@@ -114,9 +121,9 @@ class Paypal extends DBEntity
 
     public function checkTxnid($txnid) {
         $txnid = $this->con->real_escape_string($txnid);
-        $results = $this->con->query("SELECT * FROM `payments` WHERE txnid = '$txnid'");
+        $result = $this->con->query("SELECT * FROM `payments` WHERE payment_txn_id = '$txnid'");
     
-        return !$results->num_rows;
+        return $result === false;
     }
 }
 
