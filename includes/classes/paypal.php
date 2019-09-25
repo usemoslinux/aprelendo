@@ -71,42 +71,45 @@ class Paypal extends DBEntity
     }
 
     public function addPayment($data) {
-        if (is_array($data)) {
-            $stmt = $this->con->prepare('INSERT INTO `payments` (payment_user_id, payment_txn_id, payment_amount, payment_status, payment_item_id, payment_created_time) VALUES(?, ?, ?, ?, ?)');
-            $stmt->bind_param(
-                'ssdsss',
-                $this->user_id,
-                $data['txn_id'],
-                $data['payment_amount'],
-                $data['payment_status'],
-                $data['item_number'],
-                date('Y-m-d H:i:s')
-            );
+        $today = date('Y-m-d H:i:s');
+        // TODO: adjust date interval: 30 days for monthly subscriptions / 365 days for yearly subscriptions
+        $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 30 days'));
 
-            // <<<<<<<<<<<<<<<<<<< FALTA ACTUALIZAR CODIGO
-            if ($stmt->execute()) {
-                $stmt = $this->con->prepare('UPDATE `users` SET (payment_user_id, payment_txn_id, payment_amount, payment_status, payment_item_id, payment_created_time) VALUES(?, ?, ?, ?, ?)');
-                $stmt->bind_param(
-                    'ssdsss',
-                    $this->user_id,
-                    $data['txn_id'],
-                    $data['payment_amount'],
-                    $data['payment_status'],
-                    $data['item_number'],
-                    date('Y-m-d H:i:s')
-                );
-            }
-            
-            $stmt->close();
-    
-            return $this->con->insert_id; // >>>>> ojo con el return
-
-            // TODO update user premium_until 
-
-
+        if (!is_array($data)) {
+            return false;
         }
-    
-        return false;
+
+        $stmt = $this->con->prepare('INSERT INTO `payments` (payment_user_id, payment_txn_id, payment_amount, payment_status, payment_item_id, payment_created_time) VALUES(?, ?, ?, ?, ?)');
+        $stmt->bind_param(
+            'ssdsss',
+            $this->user_id,
+            $data['txn_id'],
+            $data['payment_amount'],
+            $data['payment_status'],
+            $data['item_number'],
+            $today
+        );
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return false;
+        }
+
+        $stmt = $this->con->prepare('UPDATE `users` SET `userPremiumUntil`= ? WHERE `userId` = ?');
+        $stmt->bind_param(
+            'ss',
+            $premium_until,
+            $this->user_id
+        );
+        $stmt->execute();
+        
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return false;
+        }
+
+        $stmt->close();
+        return true;
     }
 
     public function checkTxnid($txnid) {

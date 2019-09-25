@@ -100,7 +100,7 @@ if (!isset($_POST["txn_id"]) && !isset($_POST["txn_type"])) {
     // already processed the transaction before adding the payment to our
     // database.
     if ($paypal->verifyTransaction($_POST) && $paypal->checkTxnid($data['txn_id'])) {
-        if ($paypal->addPayment($data) !== false) {
+        if ($paypal->addPayment($data)) {
             // Payment successfully added.
         }
     }
