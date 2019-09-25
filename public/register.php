@@ -19,7 +19,6 @@
  */
 
 require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/google_oauth.php';
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'simpleheader.php';
 ?>
@@ -112,14 +111,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             <small>By registering, you declare to have read and accepted the <a href="privacy.php" target="_blank" rel="noopener noreferrer">privacy policy</a>.</small>    
                         </div>
                     </form>
-                    <hr>
-                    <?php if (isset($googleAuthUrl)): ?>
-                    <form action="<?php echo $googleAuthUrl; ?>" method="post">
-                    <button type="submit" id="google-button" class="btn btn-block btn-danger text-white">
-                        <i class="fab fa-google"></i> Sign up with Google
-                    </button>
-                    </form>
-                    <?php endif ?>
+                    
                     <br />
                     <footer>
                         <p class="text-muted text-center">

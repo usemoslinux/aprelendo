@@ -835,6 +835,7 @@ input {
 
 .modal-open {
     overflow: initial;
+    padding-right: 0 !important;
 }
 
 #bdgfreqlvl {
@@ -1135,6 +1136,32 @@ div.blurry-background {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+}
+
+/* LOGIN */
+
+.abcRioButton.abcRioButtonBlue {
+	width: 100% !important;
+}
+
+.or-line {
+	margin: 1.875rem auto;
+}
+
+.or__line {
+	display: block;
+	text-align: center;
+	line-height: 0;
+	border-bottom: 1px solid #A7B0B7;
+}
+
+.or__text {
+	display: inline;
+	padding: 0 10px;
+	/* font-weight: 500; */
+	background: #fff;
+	color: #666E7E;
+	text-transform: lowercase;
 }
 
 /* OTHER PAGES */

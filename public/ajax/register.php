@@ -52,7 +52,7 @@ try {
     }
     
     $user = new User($con);
-    $user->register($_POST['username'], $_POST['email'], $_POST['password'], $_POST['native-lang'], $_POST['learning-lang']);
+    $user->register($_POST['username'], $_POST['email'], $_POST['password'], $_POST['native-lang'], $_POST['learning-lang'], true);
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());
     header('Content-Type: application/json');

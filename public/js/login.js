@@ -43,41 +43,44 @@ $(document).ready(function () {
                 showMessage('Oops! There was an unexpected error when trying to log you in. Please try again later.', 'alert-danger');
             }); // end of ajax
     }); // end of #form_login.on.submit
-
-    /**
-     * Shows custom message in the top section of the screen
-     * @param {string} html
-     * @param {string} type 
-     */
-    function showMessage(html, type) {
-        $('#error-msg').text(html)
-            .removeClass()
-            .addClass('alert ' + type);
-        $(window).scrollTop(0);
-    } // end of showMessage
 });
 
 /**
- * Google Sign-in JS
- * @param {object} googleUser 
+ * Google Sign-in
  */
-function onSignIn(googleUser) {
+function googleSignIn(googleUser) {
     var profile = googleUser.getBasicProfile();
-
-    if (profile) {
-        $.ajax({
-            type: 'POST',
-            url: 'ajax/google_oauth.php',
-            data: {
-                id: profile.getId(),
-                name: profile.getName(),
-                email: profile.getEmail()
-            }
-        }).done(function (data) {
-            console.log(data);
-            // window.location.href = 'texts.php';
-        }).fail(function () {
-            alert("Sign-in with Google failed.");
-        });
-    }
+    // console.log('ID: ' + profile.getId());
+    // console.log('Name: ' + profile.getName());
+    // console.log('Image URL: ' + profile.getImageUrl());
+    // console.log('Email: ' + profile.getEmail());
+    
+    //pass information to server to insert or update the user record
+    $.ajax({
+        type: "POST",
+        data: profile,
+        url: 'ajax/google_oauth.php'
+    })
+    .done(function (data) {
+        if (data.error_msg == undefined) {
+            window.location.replace('texts.php');
+        } else {
+            showMessage(data.error_msg, 'alert-danger');
+        }
+    })
+    .fail(function (xhr, ajaxOptions, thrownError) {
+        showMessage('Oops! There was an unexpected error when trying to register you. Please try again later.', 'alert-danger');
+    }); // end of ajax
 }
+ 
+/**
+ * Shows custom message in the top section of the screen
+ * @param {string} html
+ * @param {string} type 
+ */
+function showMessage(html, type) {
+    $('#error-msg').html(html)
+        .removeClass()
+        .addClass('alert ' + type);
+    $(window).scrollTop(0);
+} // end of showMessage

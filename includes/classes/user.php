@@ -62,7 +62,7 @@ class User
      * @param string $learning_lang
      * @return boolean
      */
-    public function register($username, $email, $password, $native_lang = 'en', $learning_lang) {
+    public function register($username, $email, $password, $native_lang = 'en', $learning_lang = 'en', $send_email = false) {
         $username = $this->name = $this->con->escape_string($username);
         $email = $this->email = $this->con->escape_string($email);
         $password = $this->con->escape_string($password);
@@ -90,14 +90,15 @@ class User
         $activation_hash = $this->activation_hash = md5(rand(0,1000));
 
         // save user data in db
+        $user_active = !$send_email;
         $result = $this->con->query("INSERT INTO users (userName, userPasswordHash, userEmail, userNativeLang, userLearningLang, userActivationHash, userActive) 
-            VALUES ('$username', '$password_hash', '$email', '$native_lang', '$learning_lang', '$activation_hash', false)"); 
+            VALUES ('$username', '$password_hash', '$email', '$native_lang', '$learning_lang', '$activation_hash', '$user_active')"); 
         if ($result) {
             $user_id = $this->id = $this->con->insert_id;
             
             // create & save default language preferences for user
             foreach (Language::$lg_iso_codes as $key => $value) {
-                $translator_uri = mysqli_escape_string($this->con,'https://translate.google.com/m?hl=' . $value . '&sl=' . Language::$lg_iso_codes[$native_lang] . '&&ie=UTF-8&q=%s');
+                $translator_uri = $this->con->escape_string('https://translate.google.com/m?hl=' . $value . '&sl=' . Language::$lg_iso_codes[$native_lang] . '&&ie=UTF-8&q=%s');
                 $dict_uri = $this->con->escape_string('https://www.linguee.com/' . $value . '-' . Language::$lg_iso_codes[$native_lang] . '/search?source=auto&query=%s');
                 
                 $result = $this->con->query("INSERT INTO languages (LgUserId, LgName, LgDict1URI, LgTranslatorURI) 
@@ -108,7 +109,7 @@ class User
                 $result = $this->con->query("INSERT INTO preferences (prefUserId, prefFontFamily, prefFontSize, prefLineHeight, prefAlignment, prefMode, prefAssistedLearning) 
                     VALUES ('$user_id', 'Helvetica', '12pt', '1.5', 'left', 'light', '1')");
                 
-                return $this->sendActivationEmail($email, $username, $activation_hash);
+                return $send_email ? $this->sendActivationEmail($email, $username, $activation_hash) : true;
                 
                 if (!$result) {
                     throw new \Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
@@ -195,7 +196,7 @@ class User
      * @param string $password
      * @return boolean
      */
-    public function createRememberMeCookie($username, $password) {
+    public function createRememberMeCookie($username = "", $password = "", $google_id = "") {
         $username = $this->con->escape_string($username);
         $password = $this->con->escape_string($password);
         
@@ -215,7 +216,7 @@ class User
             throw new \Exception ('You need to activate your account first. Check your email for the activation link.');
         }
         
-        if (password_verify($password, $hashedPassword)) { // login successful, remember me
+        if (password_verify($password, $hashedPassword) || $google_id !== "") { // login successful, remember me
             $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : "";
 
             // first, remove old tokens from auth_tokens table
@@ -243,7 +244,6 @@ class User
                 
                 $result = $this->con->query("INSERT INTO auth_tokens (token, userid, expires) VALUES ('$token', $user_id, '$expires')");
                 if ($result) {
-
                     setcookie('user_token', $token, $time_stamp, "/", $domain, true);
                 } else {
                     throw new \Exception ('There was a problem trying to create the authentication cookie. Please try again.');

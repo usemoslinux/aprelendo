@@ -73,7 +73,8 @@ $(document).ready(function () {
 
         rendition.themes.default({
             body: {
-                'font-family': reader.style.fontFamily + ' !important'
+                'font-family': reader.style.fontFamily + ' !important',
+                'padding': '0 5% !important'
             },
             p: {
                 'font-size': reader.style.fontSize + ' !important',
@@ -224,7 +225,7 @@ $(document).ready(function () {
                 });
         }
 
-        window.addEventListener("beforeunload", function () {
+        parent.window.addEventListener("unload", function () {
             book.destroy();
         });
 

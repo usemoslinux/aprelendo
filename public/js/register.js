@@ -67,18 +67,6 @@ $(document).ready(function () {
     });
 
     /**
-     * Shows custom message in the top section of the screen
-     * @param {string} html
-     * @param {string} type 
-     */
-    function showMessage(html, type) {
-        $('#error-msg').html(html)
-            .removeClass()
-            .addClass('alert ' + type);
-        $(window).scrollTop(0);
-    } // end of showMessage
-
-    /**
      * Checks password confirmation matches original password
      */
     function checkPasswordAreEqual() {
@@ -152,4 +140,18 @@ $(document).ready(function () {
         }
     });
 
+        
+    /**
+     * Shows custom message in the top section of the screen
+     * @param {string} html
+     * @param {string} type 
+     */
+    function showMessage(html, type) {
+        $('#error-msg').html(html)
+            .removeClass()
+            .addClass('alert ' + type);
+        $(window).scrollTop(0);
+    } // end of showMessage
 });
+
+
