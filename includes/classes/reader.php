@@ -217,7 +217,7 @@ class Reader extends Text
                         if ($result) {
                             $row = $result->fetch_assoc();
                             $freq_table_name = $this->con->escape_string($row['LgName']);
-                            $result = $this->con->query('SELECT freqWord, freqWordFreq FROM frequencylist_' . $freq_table_name . ' WHERE freqWordFreq < 0.8');
+                            $result = $this->con->query('SELECT freqWord, freqWordFreq FROM frequencylist_' . $freq_table_name . ' WHERE freqWordFreq < 80');
                             
                             if ($result) {
                                 while ($row = $result->fetch_assoc()) {
@@ -269,7 +269,7 @@ class Reader extends Text
                     if ($result) {
                         $row = $result->fetch_assoc();
                         $freq_table_name = $this->con->escape_string($row['LgName']);
-                        $result = $this->con->query('SELECT freqWord, freqWordFreq FROM frequencylist_' . $freq_table_name . ' WHERE freqWordFreq < 0.8');
+                        $result = $this->con->query('SELECT freqWord, freqWordFreq FROM frequencylist_' . $freq_table_name . ' WHERE freqWordFreq < 80');
                         
                         if ($result) {
                             while ($row = $result->fetch_assoc()) {
@@ -284,6 +284,93 @@ class Reader extends Text
         }
         
         return $text;
+    }
+
+    /**
+    * Underlines words with different colors depending on their status
+    * Returns the modified $text, which includes the new HTML code
+    *
+    * @param string $text
+    * @param mysqli_connect $con
+    * @return string
+    */
+    public function colorizeWordsFast($text)
+    {
+        $user_id = $this->user_id;
+        $learning_lang_id = $this->learning_lang_id;
+        
+        // divide text in two arrays: words & word separators
+        \preg_match_all("/(\w+)/u", $text, $words);
+        \preg_match_all("/(\W+)/u", $text, $separators);
+        
+        // check if text starts with a word or a word separator (this will be used when merging again words & separators)
+        if (\preg_match("/\W/u", $text, $first_separator, PREG_OFFSET_CAPTURE)) {
+            $separator_first = $first_separator[0][1] === 0;
+        } else {
+            $separator_first = false;
+        }
+        
+        // get words in personal dictionary
+        $result = $this->con->query("SELECT word, wordStatus FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' ORDER BY isPhrase ASC");
+        
+        if (!$result) {
+            return false;
+        }
+
+        $dic_words = $result->fetch_all(MYSQLI_ASSOC);
+
+        // get high frequency words list, only if necessary
+        if ($this->show_freq_list) {
+            $user = new User($this->con);
+            if ($user->isLoggedIn() && $user->isPremium()) {
+                $result = $this->con->query("SELECT LgName FROM languages WHERE LgId='$this->learning_lang_id'");
+            
+                if ($result) {
+                    $row = $result->fetch_assoc();
+                    $freq_table_name = $this->con->escape_string($row['LgName']);
+                    $result = $this->con->query('SELECT freqWord, freqWordFreq FROM frequencylist_' . $freq_table_name . ' WHERE freqWordFreq < 80');
+                    
+                    if ($result) {
+                        $freq_words = $result->fetch_all(MYSQLI_ASSOC);
+                    }
+                }
+            }
+        }
+        
+        // replace words & separators with corresponding html code
+        foreach ($words[0] as &$word) {
+            $search_in_dic = \array_search($word, array_column($dic_words, 'word'));
+            if ($search_in_dic === false) {
+                // if necessary, underline frequency words
+                if ($this->show_freq_list) { 
+                    $search_in_freq_dic = \array_search($word, array_column($freq_words, 'freqWord'));
+                    if ($search_in_freq_dic === false) {
+                        $word = "<span class='word' data-toggle='modal' data-target='#myModal'>$word</span>";
+                    } else {
+                        $word = "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$word</span>";
+                    }
+                } else {
+                    $word = "<span class='word' data-toggle='modal' data-target='#myModal'>$word</span>";
+                }
+            } else {
+                $learning_level = $dic_words[$search_in_dic]['wordStatus'] > 0 ? 'learning' : 'learned';
+                $word = "<span class='word reviewing $learning_level' data-toggle='modal' data-target='#myModal'>$word</span>";
+            }
+        }
+
+        foreach ($separators[0] as &$separator) {
+            $separator = "<span>$separator</span>";
+        }
+
+        // merge words & separators and to create complete html code
+        $html = [];
+        if ($separator_first) {
+            array_map(function ($a, $b) use (&$html) { array_push($html, $a, $b); }, $separators[0], $words[0]);
+        } else {
+            array_map(function ($a, $b) use (&$html) { array_push($html, $a, $b); }, $words[0], $separators[0]);
+        }
+        
+        return implode($html);
     }
     
     /**
@@ -346,8 +433,8 @@ class Reader extends Text
         // display text
         $html .= '<div id="text" style="line-height:' . $this->line_height . ';">';
         
-        $text = $this->colorizeWords($this->text);
-        $text = $this->addLinks($text);
+        $text = $this->colorizeWordsFast($this->text);
+        // $text = $this->addLinks($text);
         $text = nl2br($text);
 
         $html .= $text . '</div>';
@@ -405,7 +492,7 @@ class Reader extends Text
             $start = $xml->text[$i]['start'];
             $dur = $xml->text[$i]['dur'];
 
-            $text = $this->colorizeWords(html_entity_decode($xml->text[$i], ENT_QUOTES | ENT_XML1, 'UTF-8'));
+            $text = $this->colorizeWordsFast(html_entity_decode($xml->text[$i], ENT_QUOTES | ENT_XML1, 'UTF-8'));
             $text = $this->addLinks($text);
 
             $html .= "<div class='text-center' data-start='$start' data-dur='$dur' >". $text .'</div>';

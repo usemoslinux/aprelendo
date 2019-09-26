@@ -28,9 +28,11 @@ IPN testing
     <input type="hidden" name="cmd" value="_xclick-subscriptions">
     <input type="hidden" name="lc" value="US">
     <input type="hidden" name = "item_name" value = "Monthly Subscription">
+    <input type="hidden" name = "item_number" value = "1">
     <input type="hidden" name="no_note" value="1">
     <input type="hidden" name="src" value="1">
-    <input type="hidden" name="a3" value="10">
+    <input type="hidden" name="sra" value="1">
+    <input type="hidden" name="a3" value="10.00">
     <input type="hidden" name="currency_code" value="USD">
     <input type="hidden" name="t3" value="M">
     <input type="hidden" name="p3" value="1">
@@ -38,11 +40,22 @@ IPN testing
     <input type="submit" name="submit" value="Subscribe"/>
 </form>
 
+<!-- 
+a3 (Required) Regular rate. This is the price of the subscription
+p3 (Required) Regular billing cycle. This is the length of the billing cycle. The number is modified by the
+    regular billing cycle units (t3, below)
+t3 (Required) Regular billing cycle units. This is the units of the regular billing cycle (p3, above) 
+    Acceptable values are: D (days), W (weeks), M (months), Y (years)
+src (Optional) Recurring payments. If set to “1,” the payment will recur unless your customer cancels the 
+    subscription before the end of the billing cycle. If omitted, the subscription payment will not recur 
+    at the end of the billing cycle 
+-->
+
 
 IPN response testing
 
 <form name="form-monthly-subscription-response" action="/payment.php" method="post" target="_top">
-        <!-- <input type="hidden" name="item_number" value="1"> -->
+        <input type="hidden" name="item_number" value="1">
         <input type="hidden" name="item_name" value="Monthly Subscription">
         <input type="hidden" name="payment_status" value="Completed">
         <input type="hidden" name="mc_gross" value="10.00">

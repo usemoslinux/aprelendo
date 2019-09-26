@@ -66,7 +66,7 @@ cursor: pointer;
 </style>
 CSS;
 
-$reader = new Reader($con, false, 45, 5, 1);
+$reader = new Reader($con, false, 55, 5, 1);
 
 $time_start = microtime(true);
 $text = $reader->colorizeWords($reader->text);
@@ -91,10 +91,10 @@ echo $html, $text, '<br><br>', $time_str;
 // optimized
 
 $time_start = microtime(true);
-$text = $reader->colorizeWords2($reader->text);
+$text = $reader->colorizeWordsFast($reader->text);
 $time_end = microtime(true);
 $execution_time = ($time_end - $time_start);
-$time_str = '<b>ColorizeWords2:</b> ' . $execution_time . ' Secs'. '<br>';
+$time_str = '<b>colorizeWordsFast:</b> ' . $execution_time . ' Secs'. '<br>';
         
 /* $time_start = microtime(true);
 $text = $reader->addLinks($text);

@@ -79,7 +79,7 @@ if (!isset($_POST["txn_id"]) && !isset($_POST["txn_type"])) {
     // Assign posted variables to local data array.
     $data = [
         'item_name'         =>  $_POST['item_name'],
-        // 'item_number'       =>  $_POST['item_number'],
+        'item_number'       =>  $_POST['item_number'],
         'payment_status'    =>  $_POST['payment_status'],
         'payment_amount'    =>  $_POST['mc_gross'],
         'payment_currency'  =>  $_POST['mc_currency'],
