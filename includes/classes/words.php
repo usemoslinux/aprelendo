@@ -55,9 +55,9 @@ class Words extends DBEntity {
         $status = $this->con->real_escape_string($status);
         $isphrase = $this->con->real_escape_string($isphrase);
         
-        $result = $this->con->query("INSERT INTO words (wordUserId, wordLgId, word, wordStatus, isPhrase)
+        $result = $this->con->query("INSERT INTO `words` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`)
             VALUES ('$this->user_id', '$this->learning_lang_id', '$word', $status, $isphrase) ON DUPLICATE KEY UPDATE
-            wordUserId='$this->user_id', wordLgId=$this->learning_lang_id, word='$word', wordStatus=$status, isPhrase=$isphrase, wordModified=now()");
+            `user_id`='$this->user_id', `lang_id`=$this->learning_lang_id, `word`='$word', `status`=$status, `is_phrase`=$isphrase, `date_modified`=NOW()");
 
         return $result;
     }
@@ -70,8 +70,8 @@ class Words extends DBEntity {
      */
     public function updateByName($words) {
         $csvwords = $this->ArraytoCSV($words);
-        $result = $this->con->query("UPDATE words SET wordStatus=wordStatus-1, wordModified=now() 
-            WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' AND word IN ($csvwords) ");
+        $result = $this->con->query("UPDATE `words` SET `status`=`status`-1, `date_modified`=NOW() 
+            WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id' AND `word` IN ($csvwords) ");
 
         return $result;
     }
@@ -86,7 +86,7 @@ class Words extends DBEntity {
         // escape parameters
         $word = $this->con->real_escape_string($word);
         
-        $result = $this->con->query("DELETE FROM words WHERE word='$word'");
+        $result = $this->con->query("DELETE FROM `words` WHERE `word`='$word'");
 
         return $result;
     }
@@ -99,7 +99,7 @@ class Words extends DBEntity {
      */
     public function deleteByIds($ids) {
         $wordIDs = $this->JSONtoCSV($ids);
-        $result = $this->con->query("DELETE FROM words WHERE wordID IN ($wordIDs)");
+        $result = $this->con->query("DELETE FROM `words` WHERE `id` IN ($wordIDs)");
 
         return $result;
     }
@@ -114,7 +114,7 @@ class Words extends DBEntity {
         // escape parameters
         $search_text = $this->con->real_escape_string($search_text);
 
-        $result = $this->con->query("SELECT COUNT(word) FROM words WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' AND word LIKE '%$search_text%'");
+        $result = $this->con->query("SELECT COUNT(`word`) FROM `words` WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id' AND `word` LIKE '%$search_text%'");
         
         if ($result) {
             $row = $result->fetch_array();
@@ -132,7 +132,7 @@ class Words extends DBEntity {
      * @return integer|boolean
      */
     public function countAllRows() {
-        $result = $this->con->query("SELECT COUNT(word) FROM words WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id'");
+        $result = $this->con->query("SELECT COUNT(word) FROM words WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id'");
         
         if ($result) {
             $row = $result->fetch_array();
@@ -161,9 +161,9 @@ class Words extends DBEntity {
         $limit = $this->con->real_escape_string($limit);
         $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
 
-        $result = $this->con->query("SELECT wordID, word, wordStatus 
-            FROM words 
-            WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' AND word LIKE '%$search_text%' 
+        $result = $this->con->query("SELECT `id`, `word`, `status` 
+            FROM `words` 
+            WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id' AND word LIKE '%$search_text%' 
             ORDER BY $sort_sql LIMIT $offset, $limit");
 
         return $result ? $result->fetch_all() : false;
@@ -185,9 +185,9 @@ class Words extends DBEntity {
         $limit = $this->con->real_escape_string($limit);
         $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
         
-        $result = $this->con->query("SELECT wordID, word, wordStatus 
-            FROM words 
-            WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' 
+        $result = $this->con->query("SELECT `id`, `word`, `status` 
+            FROM `words` 
+            WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id' 
             ORDER BY $sort_sql LIMIT $offset, $limit");
 
         return $result ? $result->fetch_all() : false;
@@ -203,16 +203,16 @@ class Words extends DBEntity {
     private function getSortSQL($sort_by) {
         switch ($sort_by) {
             case '0': // new first
-                return 'wordID DESC';
+                return '`id` DESC';
                 break;
             case '1': // old first
-                return 'wordID';
+                return '`id`';
                 break;
             case '2': // learned first
-                return 'wordStatus';
+                return '`status`';
                 break;
             case '3': // learning first
-                return 'wordStatus DESC';
+                return '`status` DESC';
                 break;
             default:
                 return '';
@@ -239,9 +239,9 @@ class Words extends DBEntity {
         $filter = !empty($search_text) ? "AND word LIKE '%$search_text%' " : '';
         $filter .= $order_by != '' ? "ORDER BY $sort_sql" : '';
 
-        $result = $this->con->query("SELECT word 
-            FROM words
-            WHERE wordUserId='$this->user_id' AND wordLgId='$this->learning_lang_id' $filter");
+        $result = $this->con->query("SELECT `word` 
+            FROM `words`
+            WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id' $filter");
         if ($result) {
             $num_fields = $this->con->field_count;
             $headers = array();

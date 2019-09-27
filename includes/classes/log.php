@@ -41,10 +41,10 @@ class Log extends DBEntity
         $user_id = $this->con->real_escape_string($this->user_id);
         $table = $this->con->real_escape_string($this->table);
 
-        $sql_str = "SELECT logDate 
-                    FROM $table 
-                    WHERE logUserId = '$user_id' 
-                    AND DATE(logDate) = CURDATE()";
+        $sql_str = "SELECT `date_created` 
+                    FROM `$table` 
+                    WHERE `user_id` = '$user_id' 
+                    AND DATE(`date_created`) = CURDATE()";
 
         $result = $this->con->query($sql_str);
 
@@ -61,8 +61,8 @@ class Log extends DBEntity
         $table = $this->con->real_escape_string($this->table);
         $today = date("Y-m-d H:i:s");
 
-        $sql_str = "INSERT INTO $table 
-                        (logUserId, logDate)
+        $sql_str = "INSERT INTO `$table` 
+                        (`user_id`, `date_created`)
                     VALUES
                         ('$user_id', '$today')";
 

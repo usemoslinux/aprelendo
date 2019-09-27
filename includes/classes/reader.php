@@ -177,6 +177,9 @@ class Reader extends Text
     /**
     * Underlines words with different colors depending on their status
     * Returns the modified $text, which includes the new HTML code
+    * It is used for ebooks, as they use HTML code as input ($text).
+    * Because of this, colorizeWords is much slower than colorizeWordsFast. 
+    * Also, span creation for the rest of the words and separators is done by AddLinks()
     *
     * @param string $text
     * @param mysqli_connect $con
@@ -236,59 +239,12 @@ class Reader extends Text
     }
 
     /**
-    * Underlines words with different colors depending on their status
+    * Underlines words with different colors depending on their status and creates spans
+    * for the rest of the words & separators.
     * Returns the modified $text, which includes the new HTML code
-    *
-    * @param string $text
-    * @param mysqli_connect $con
-    * @return string
-    */
-    public function colorizeWords2($text)
-    {
-        $user_id = $this->user_id;
-        $learning_lang_id = $this->learning_lang_id;
-        
-        // 1. colorize words & phrases in db (learning + learned)
-        $result = $this->con->query("SELECT word, wordStatus FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' ORDER BY isPhrase ASC");
-        
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $phrase = $row['word'];
-                $learning_level = $row['wordStatus'] > 0 ? 'learning' : 'learned';
-                
-                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
-                "<span class='word reviewing $learning_level' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
-            }
-            
-            // 2. colorize high frequency list words
-            if ($this->show_freq_list) {
-                $user = new User($this->con);
-                if ($user->isLoggedIn() && $user->isPremium()) {
-                    $result = $this->con->query("SELECT LgName FROM languages WHERE LgId='$this->learning_lang_id'");
-                
-                    if ($result) {
-                        $row = $result->fetch_assoc();
-                        $freq_table_name = $this->con->escape_string($row['LgName']);
-                        $result = $this->con->query('SELECT freqWord, freqWordFreq FROM frequencylist_' . $freq_table_name . ' WHERE freqWordFreq < 80');
-                        
-                        if ($result) {
-                            while ($row = $result->fetch_assoc()) {
-                                $word = $row['freqWord'];
-                                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
-                                "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        return $text;
-    }
-
-    /**
-    * Underlines words with different colors depending on their status
-    * Returns the modified $text, which includes the new HTML code
+    * It is used for simple texts, videos & RSS feeds, as they all use plain text as input ($text).
+    * Because of this, colorizeWordsFast is much faster than colorizeWords even though it does
+    * much more (it's like doing colorizeWords + AddLinks).
     *
     * @param string $text
     * @param mysqli_connect $con
@@ -434,7 +390,6 @@ class Reader extends Text
         $html .= '<div id="text" style="line-height:' . $this->line_height . ';">';
         
         $text = $this->colorizeWordsFast($this->text);
-        // $text = $this->addLinks($text);
         $text = nl2br($text);
 
         $html .= $text . '</div>';
@@ -493,7 +448,6 @@ class Reader extends Text
             $dur = $xml->text[$i]['dur'];
 
             $text = $this->colorizeWordsFast(html_entity_decode($xml->text[$i], ENT_QUOTES | ENT_XML1, 'UTF-8'));
-            $text = $this->addLinks($text);
 
             $html .= "<div class='text-center' data-start='$start' data-dur='$dur' >". $text .'</div>';
         }

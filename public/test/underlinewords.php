@@ -73,18 +73,6 @@ $text = $reader->colorizeWords($reader->text);
 $time_end = microtime(true);
 $execution_time = ($time_end - $time_start);
 $time_str = '<b>ColorizeWords:</b> ' . $execution_time . ' Secs'. '<br>';
-        
-/* $time_start = microtime(true);
-$text = $reader->addLinks($text);
-$time_end = microtime(true);
-$execution_time = ($time_end - $time_start);
-$time_str .= '<b>addLinks:</b> ' . $execution_time . ' Secs'. '<br>';
-
-$time_start = microtime(true);
-$text = nl2br($text);
-$time_end = microtime(true);
-$execution_time = ($time_end - $time_start);
-$time_str .= '<b>nl2br:</b> ' . $execution_time . ' Secs'. '<br>'; */
 
 echo $html, $text, '<br><br>', $time_str;
 
@@ -95,19 +83,5 @@ $text = $reader->colorizeWordsFast($reader->text);
 $time_end = microtime(true);
 $execution_time = ($time_end - $time_start);
 $time_str = '<b>colorizeWordsFast:</b> ' . $execution_time . ' Secs'. '<br>';
-        
-/* $time_start = microtime(true);
-$text = $reader->addLinks($text);
-$time_end = microtime(true);
-$execution_time = ($time_end - $time_start);
-$time_str .= '<b>addLinks:</b> ' . $execution_time . ' Secs'. '<br>';
-
-$time_start = microtime(true);
-$text = nl2br($text);
-$time_end = microtime(true);
-$execution_time = ($time_end - $time_start);
-$time_str .= '<b>nl2br:</b> ' . $execution_time . ' Secs'. '<br>'; */
-
-/* echo $text, '<br><br>', $time_str; */
 
 echo $text, '<br><br>', $time_str;

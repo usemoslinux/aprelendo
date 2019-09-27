@@ -63,7 +63,7 @@ class PopularSources extends DBEntity {
         $lg_iso = $this->con->real_escape_string($lg_iso);
         $domain = $this->con->real_escape_string($domain);
         
-        $result = $this->con->query("INSERT INTO `popularsources` (popsources_lg_iso, popsources_times_used, popsources_domain) VALUES ('$lg_iso', 1, '$domain') ON DUPLICATE KEY UPDATE popsources_times_used = popsources_times_used + 1");
+        $result = $this->con->query("INSERT INTO `popular_sources` (`lang_iso`, `times_used`, `domain`) VALUES ('$lg_iso', 1, '$domain') ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1");
         
         return $result;
     }
@@ -84,10 +84,10 @@ class PopularSources extends DBEntity {
         $lg_iso = $this->con->real_escape_string($lg_iso);
         $domain = $this->con->real_escape_string($domain);
         
-        $result = $this->con->query("DELETE FROM `popularsources` WHERE popsources_lg_iso='$lg_iso' AND popsources_domain='$domain' AND popsources_times_used = 1");
+        $result = $this->con->query("DELETE FROM `popular_sources` WHERE `lang_iso`='$lg_iso' AND `domain`='$domain' AND `times_used` = 1");
 
         if ($this->con->affected_rows <= 0) {
-            $result = $this->con->query("UPDATE `popularsources` SET popsources_times_used = popsources_times_used - 1 WHERE popsources_lg_iso='$lg_iso' AND popsources_domain='$domain'");
+            $result = $this->con->query("UPDATE `popular_sources` SET `times_used`=`times_used` - 1 WHERE `lang_iso`='$lg_iso' AND `domain`='$domain'");
         }
         
         return $result;
@@ -107,7 +107,7 @@ class PopularSources extends DBEntity {
             return false; // return error
         }
 
-        $result = $this->con->query("SELECT * FROM `popularsources` WHERE popsources_lg_iso='$lg_iso' ORDER BY popsources_times_used DESC LIMIT 50");
+        $result = $this->con->query("SELECT * FROM `popular_sources` WHERE `lang_iso`='$lg_iso' ORDER BY `times_used` DESC LIMIT 50");
 
         if (!$result) {
             return false;

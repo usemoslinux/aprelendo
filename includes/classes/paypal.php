@@ -83,7 +83,7 @@ class Paypal extends DBEntity
         }
 
         // falta payment_item_id : agregar ? al final tb
-        $stmt = $this->con->prepare('INSERT INTO `payments` (payment_user_id, payment_txn_id, payment_amount, payment_status, payment_item_id, payment_created_time) VALUES(?, ?, ?, ?, ?, ?)');
+        $stmt = $this->con->prepare('INSERT INTO `payments` (`user_id`, `txn_id`, `amount`, `status`, `item_id`, `date_created`) VALUES(?, ?, ?, ?, ?, ?)');
         if (!$stmt) {
             $error = $this->con->error;
         }
@@ -119,9 +119,9 @@ class Paypal extends DBEntity
         return true;
     }
 
-    public function checkTxnid($txnid) {
-        $txnid = $this->con->real_escape_string($txnid);
-        $result = $this->con->query("SELECT * FROM `payments` WHERE payment_txn_id = '$txnid'");
+    public function checkTxnid($txn_id) {
+        $txn_id = $this->con->real_escape_string($txn_id);
+        $result = $this->con->query("SELECT * FROM `payments` WHERE `txn_id` = '$txn_id'");
     
         return $result === false || $result->num_rows == 0;
     }
