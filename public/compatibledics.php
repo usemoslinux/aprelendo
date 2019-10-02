@@ -59,7 +59,7 @@ if (!$user->isLoggedIn()) {
                         <li>Forvo: <a href="https://forvo.com/search/%s/en/" target="_blank" rel="noopener noreferrer">https://forvo.com/search/%s/en/</a></li>
                         <li>Vocabulary.com: <a href="https://www.vocabulary.com/dictionary/%s" target="_blank" rel="noopener noreferrer">https://www.vocabulary.com/dictionary/%s</a></li>
                         <li>Google: <a href="https://www.google.com/search?q=define:%s" target="_blank" rel="noopener noreferrer">https://www.google.com/search?q=define:%s</a></li>
-                        <br />
+                        <br>
                         The following have been reported not to work: <a href="https://www.oxfordlearnersdictionaries.com"
                             target="_blank" rel="noopener noreferrer">Oxford Learners</a> (no modal support), <a href="https://en.oxforddictionaries.com"
                             target="_blank" rel="noopener noreferrer">Oxford compact</a> (no modal support), <a href="https://www.macmillandictionary.com"
@@ -69,9 +69,9 @@ if (!$user->isLoggedIn()) {
                             target="_blank" rel="noopener noreferrer">Wordnik</a>
                         (no modal support).
                     </ul>
-                    <br />
+                    <br>
                     <strong>Translation (*)</strong>
-                    <br />
+                    <br>
                     <ul>
                         <li>Google Translator: <a href="https://translate.google.com/#en/es/%s" target="_blank" rel="noopener noreferrer">https://translate.google.com/#en/es/%s</a></li>
                         <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=en-es&text=%s" target="_blank"
@@ -84,7 +84,7 @@ if (!$user->isLoggedIn()) {
                         <li>Wordreference: <a href="https://www.wordreference.com/es/translation.asp?tranword=%s"
                         target="_blank" rel="noopener noreferrer">https://www.wordreference.com/es/translation.asp?tranword=%s</a></li>
                         <small><i>(*) Only English-&gt;Spanish dictionaries are listed.<br>To make them work in your native language make sure to replace "es" or "spanish" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br>
+                        <br><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version).
                     </ul>
@@ -97,13 +97,13 @@ if (!$user->isLoggedIn()) {
                         <li>Wordreference: <a href="https://www.wordreference.com/definicion/%s" target="_blank" rel="noopener noreferrer">https://www.wordreference.com/definicion/%s</a></li>
                         <li>The Free Dictionary: <a href="https://es.thefreedictionary.com/%s" target="_blank" rel="noopener noreferrer">https://es.thefreedictionary.com/%s</a></li>
                         <li>Forvo: <a href="https://forvo.com/search/%s/es/" target="_blank" rel="noopener noreferrer">https://forvo.com/search/%s/es/</a></li>
-                        <br />
+                        <br>
                         The following have been reported not to work: <a href="https://es.oxforddictionaries.com/"
                             target="_blank" rel="noopener noreferrer">Oxford Dictionaries</a> (no modal support).
                     </ul>
                     <br>
                     <strong>Translation (*)</strong>
-                    <br />
+                    <br>
                     <ul>
                         <li>Google Translator: <a href="https://translate.google.com/#es/en/%s" target="_blank" rel="noopener noreferrer">https://translate.google.com/#es/en/%s</a></li>
                         <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=es-en&text=%s" target="_blank"
@@ -115,7 +115,7 @@ if (!$user->isLoggedIn()) {
                                 target="_blank" rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/spanish-english/%s</a></li>
                         <li>Wordreference: <a href="https://www.wordreference.com/esen/%s" target="_blank" rel="noopener noreferrer">https://www.wordreference.com/esen/%s</a></li>
                         <small><i>Only Spanish-&gt;English dictionaries are listed.<br>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br>
+                        <br><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version).
                     </ul>
@@ -131,7 +131,7 @@ if (!$user->isLoggedIn()) {
                         <li>The Free Dictionary: <a href="https://pt.thefreedictionary.com/%s" target="_blank" rel="noopener noreferrer">https://pt.thefreedictionary.com/%s</a></li>
                         <li>Forvo: <a href="https://forvo.com/search/%s/pt/" target="_blank" rel="noopener noreferrer">https://forvo.com/search/%s/pt/</a></li>
                     </ul>
-                    <br />
+                    <br>
                     <strong>Translation (*)</strong>
                     <ul>
                         <li>Google Translator: <a href="https://translate.google.com/#pt/en/%s" target="_blank" rel="noopener noreferrer">https://translate.google.com/#pt/en/%s</a></li>
@@ -144,7 +144,7 @@ if (!$user->isLoggedIn()) {
                                 target="_blank" rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/portuguese-english/%s</a></li>
                         <li>Wordreference: <a href="https://www.wordreference.com/pten/%s" target="_blank" rel="noopener noreferrer">https://www.wordreference.com/pten/%s</a></li>
                         <small><i>Only Portuguese-&gt;English dictionaries are listed.<br>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br>
+                        <br><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version).
                     </ul>
@@ -160,7 +160,7 @@ if (!$user->isLoggedIn()) {
                     </ul>
                     <br>
                     <strong>Translation (*)</strong>
-                    <br />
+                    <br>
                     <ul>
                         <li>Google Translator: <a href="https://translate.google.com/#fr/en/%s" target="_blank" rel="noopener noreferrer">https://translate.google.com/#fr/en/%s</a></li>
                         <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=fr-en&text=%s" target="_blank"
@@ -172,7 +172,7 @@ if (!$user->isLoggedIn()) {
                                 target="_blank" rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/french-english/%s</a></li>
                         <li>Wordreference: <a href="https://www.wordreference.com/fren/%s" target="_blank" rel="noopener noreferrer">https://www.wordreference.com/fren/%s</a></li>
                         <small><i>Only French-&gt;English dictionaries are listed.<br>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br>
+                        <br><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version).
                     </ul>
@@ -183,12 +183,12 @@ if (!$user->isLoggedIn()) {
                         <li>Wiktionary: <a href="https://it.m.wiktionary.org/wiki/%s" target="_blank" rel="noopener noreferrer">https://it.m.wiktionary.org/wiki/%s</a></li>
                         <li>The Free Dictionary: <a href="https://it.thefreedictionary.com/%s" target="_blank" rel="noopener noreferrer">https://it.thefreedictionary.com/%s</a></li>
                         <li>Forvo: <a href="https://forvo.com/search/%s/it/" target="_blank" rel="noopener noreferrer">https://forvo.com/search/%s/it/</a></li>
-                            <br />
+                            <br>
                         The following have been reported not to work: <a href="http://www.treccani.it/vocabolario/">Trecanni</a> (no HTTPS site)
                     </ul>
                     <br>
                     <strong>Translation (*)</strong>
-                    <br />
+                    <br>
                     <ul>
                         <li>Google Translator: <a href="https://translate.google.com/#it/en/%s" target="_blank" rel="noopener noreferrer">https://translate.google.com/#it/en/%s</a></li>
                         <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=it-en&text=%s" target="_blank"
@@ -200,7 +200,7 @@ if (!$user->isLoggedIn()) {
                                 target="_blank" rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/italian-english/%s</a></li>
                         <li>Wordreference: <a href="https://www.wordreference.com/iten/%s" target="_blank" rel="noopener noreferrer">https://www.wordreference.com/iten/%s</a></li>
                         <small><i>Only Italian-&gt;English dictionaries are listed.<br>To make them work in your native language make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br>
+                        <br><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version).
                     </ul>
@@ -216,7 +216,7 @@ if (!$user->isLoggedIn()) {
                     </ul>
                     <br>
                     <strong>Translation (*)</strong>
-                    <br />
+                    <br>
                     <ul>
                         <li>Google Translator: <a href="https://translate.google.com/#de/en/%s" target="_blank" rel="noopener noreferrer">https://translate.google.com/#de/en/%s</a></li>
                         <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=de-en&text=%s" target="_blank"
@@ -229,7 +229,7 @@ if (!$user->isLoggedIn()) {
                         <li>Wordreference: <a href="https://www.wordreference.com/deen/%s" target="_blank" rel="noopener noreferrer">https://www.wordreference.com/deen/%s</a></li>
                         <li>Dict.cc: <a href="https://deen.dict.cc/?s=%s" target="_blank" rel="noopener noreferrer">https://deen.dict.cc/?s=%s</a></li>
                         <small><i>Only German-&gt;English dictionaries are listed.<br>To make them work in your native language. Just make sure to replace "en" or "english" with the ISO code or name corresponding to your language.</i></small>
-                        <br /><br>
+                        <br><br>
                         The following have been reported not to work: <a href="https://en.bab.la/dictionary/" target="_blank" rel="noopener noreferrer">Bab.la</a> (no modal support), <a href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a> (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                             rel="noopener noreferrer">Reverso</a> (faulty https version). 
                     </ul>

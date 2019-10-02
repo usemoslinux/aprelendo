@@ -32,7 +32,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <header>
                         <h1 class="text-center">Restore password</h1>
                     </header>
-                    <br />
+                    <br>
                     <div id="alert-msg" class="d-none"></div>
 
                     <?php 
@@ -95,7 +95,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                 }
                 ?>
 
-                    <br />
+                    <br>
                     <footer>
                     </footer>
                 </section>

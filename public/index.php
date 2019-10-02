@@ -42,15 +42,15 @@ require_once PUBLIC_PATH . 'head.php';
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1>Improve your language skills<br />by reading<br /> your favorite texts</h1>
-                    <h5>Want to know more about our method?<br />
+                    <h1>Improve your language skills<br>by reading<br> your favorite texts</h1>
+                    <h5>Want to know more about our method?<br>
                     It&#39;s called
                         <a href="totalreading.php">
                             <u>total reading</u>
                         </a></h5>
-                    <br />
+                    <br>
                     <h4>Select the language you want to learn...</h4>
-                    <br />
+                    <br>
                 </div>
             </div>
         </div>
@@ -123,20 +123,22 @@ require_once PUBLIC_PATH . 'head.php';
                 <h4>1. Add</h4>
                 <p>Add texts & YouTube videos to your Aprelendo library using our <a href="extensions.php"
                             target="_blank" rel="noopener noreferrer">extensions</a>. Premium users can also upload
-                        ebooks and add texts from RSS feeds.</p>
+                        ebooks and texts from RSS feeds.</p>
             </div>
             <div class="col-lg-4">
                 <h4>2. Read</h4>
-                <p>Read your texts and video transcripts in our clutter-free reader. Look up words you don't know in your favorite dictionaries and get cues of the learning status of each word.</p>
+                <p>Read your texts and video transcripts in our clutter-free reader. Look up words you don't know in your favorite 
+                    dictionaries and get cues of the learning status of each word.</p>
             </div>
             <div class="col-lg-4">
                 <h4>3. Learn</h4>
-                <p>If you turn on assisted learning, you will practice not only your reading comprehension
-                        skills but also your listening, speaking and writing skills. For more info on this, check
-                        our <a href="totalreading.php" target="_blank" rel="noopener noreferrer">total reading</a>
+                <p>Our assisted learning method will help you to improve not only your reading comprehension
+                        but also your listening, speaking and writing skills. Check
+                        more on this on our <a href="totalreading.php" target="_blank" rel="noopener noreferrer">total reading</a>
                         section.</p>
             </div>
         </div>
+        <br>
         <div class="row">
             <div class="col-12">
                 <div class="video-container">
@@ -159,7 +161,7 @@ require_once PUBLIC_PATH . 'head.php';
                     allows us to be super transparent and build a community of users and developers. With some
                     technical knowledge, you can even build your own Aprelendo environment.</p>
                 <p>
-                    <br />
+                    <br>
                     <a href="https://github.com/usemoslinux/aprelendo" target="_blank" rel="noopener noreferrer"
                         class="btn btn-theme">More
                         Info</a>
@@ -168,9 +170,12 @@ require_once PUBLIC_PATH . 'head.php';
             <div class="col-lg-4">
                 <i class="fas fa-book-open"></i>
                 <h4>Total Reading</h4>
-                <p>Immersion is the best way to learn a language, but few -if any- online tools allow you to create an immersive environement. Total reading is a system developed to achieve this goal, from the comfort of your home and with enough flexibility to adapt to your schedules and needs.</p>
+                <p>Our language learning system is aimed especially (though not exclusively) at users with 
+                    a beginner-intermediate level upwards. Complete beginners may encounter difficulties in this system, 
+                    but it is very beneficial for those who are on a learning "plateau" or anyone seeking to improve 
+                    their language skills</p>
                 <p>
-                    <br />
+                    <br>
                     <a href="totalreading.php" class="btn btn-theme">More Info</a>
                 </p>
             </div>
@@ -179,7 +184,7 @@ require_once PUBLIC_PATH . 'head.php';
                 <h4>Use it on any device</h4>
                 <p>You can use Aprelendo on mobile and desktop devices as long as they have an Internet connection. We offer addons for Firefox and Chrome to easily add texts to your library, as well as bookmarklets for those who prefer a browser agnostic solution.</p>
                 <p>
-                    <br />
+                    <br>
                     <a href="extensions.php" class="btn btn-theme">More Info</a>
                 </p>
             </div>

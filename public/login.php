@@ -42,7 +42,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <header>
                         <h3 class="text-center">Sign in</h3>
                     </header>
-                    <br />
+                    <br>
                     <div id="error-msg" class="d-none"></div>
                     <div class="g-signin2" data-longtitle="true" data-onsuccess="googleSignIn" data-theme="dark"></div>
                     <div class="or-line">
@@ -66,7 +66,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         </p>
                         <button type="submit" id="btn_login" class="btn btn-block btn-success">Sign in</button>
                     </form>
-                    <br />
+                    <br>
                     <footer>
                         <p class="text-muted text-center">
                             <a href="forgotpassword.php">Forgot password</a>?

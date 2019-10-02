@@ -33,7 +33,7 @@ use Aprelendo\Includes\Classes\User;
                     <header>
                         <h1 class="text-center">Account activation</h1>
                     </header>
-                    <br />
+                    <br>
                     <div id="alert_msg" class="d-none"></div>
 
                     <?php 
@@ -53,8 +53,8 @@ use Aprelendo\Includes\Classes\User;
                         <a href="login.php" class="btn btn-lg btn-success">Login now</a>
                     </div>
 
-                    <br />
-                    <br />
+                    <br>
+                    <br>
 
                     <?php
                 else : // activation failed
@@ -74,7 +74,7 @@ use Aprelendo\Includes\Classes\User;
                 endif;
                 ?>
 
-                    <br />
+                    <br>
                     <footer>
                     </footer>
                 </section>

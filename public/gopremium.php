@@ -40,8 +40,8 @@ if (!$user->isLoggedIn()) {
             
             <div class="col-lg-3">
                 <i class="fas fa-assistive-listening-systems"></i>
-                <h4>&gt; TTS support </h4>
-                <p>Text-to-Speech (TTS) conversion is an inherent part of <a href="totalreading.php" target="_blank" rel="noopener noreferrer">total reading</a>. Premium users are able to listen up to 5 texts per day, instead of 1.</p>
+                <h4>Text-to-Speech</h4>
+                <p>Text-to-Speech (TTS) conversion is an inherent part of <a href="totalreading.php" target="_blank" rel="noopener noreferrer">total reading</a>. Premium users are able to listen up to 3 texts per day, instead of 1.</p>
             </div>
             <div class="col-lg-3">
                 <i class="fas fa-rss"></i>

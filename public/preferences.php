@@ -131,7 +131,7 @@ $reader = new Reader($con, $user->id, $user->learning_lang_id);
                                         <ol>
                                             <li>Reading: try to understand what the text is about. If you see words or phrases that you don&#39;t understand, look them up in the built-in dictionary.</li>
                                             <li>Listening: listen to the recording and pay attention to the different sounds.</li>
-                                            <li>Speaking: talk on top of the recording, trying to imitate the pronunciation of each word. You can reduce the speed of the recording if necessary.</li>
+                                            <li>Speaking: speak on top of the recording, trying to imitate the pronunciation of each word. You can reduce the speed of the recording if necessary.</li>
                                             <li>Dictation: type the words you marked for learning as they are spoken.</li>
                                         </ol>
                                         Remember: assisted mode only works for simple texts (articles, lyrics, conversation transcripts, etc.), not videos or ebooks.

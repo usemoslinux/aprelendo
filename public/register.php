@@ -48,7 +48,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <div id="welcome-msg" class="text-muted text-center">You are only one step away from learning
                             <?php echo $to_lang; ?>.</div>
                     </header>
-                    <br />
+                    <br>
                     <div id="error-msg" class="d-none"></div>
                     <form id="form-register">
                             <div class="form-group">
@@ -112,7 +112,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         </div>
                     </form>
                     
-                    <br />
+                    <br>
                     <footer>
                         <p class="text-muted text-center">
                             Already have an account? <a href="login.php">Sign in</a>
