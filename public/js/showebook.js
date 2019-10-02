@@ -115,7 +115,8 @@ $(document).ready(function () {
                             type: "POST",
                             url: "../ajax/underlinewords.php",
                             data: {
-                                txt: contents.content.innerHTML
+                                txt: contents.content.innerHTML,
+                                is_ebook: true
                             }
                         })
                         .done(function (result) {

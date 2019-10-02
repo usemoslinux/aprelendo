@@ -39,26 +39,26 @@ class WordFrequency extends DBEntity {
 
     /** 
      * Gets word frequency
-     * The number stored in freqWordFreq column is the result of processing all the subtitles available in opensubtitles (2018)
+     * The number stored in frequency_index column is the result of processing all the subtitles available in opensubtitles (2018)
      * for the language in question. This data was then filtered with MS Windows and LibreOffice (hunspell) spellcheckers, and 
      * entries with characters strange to the language, numbers, names, etc. were all removed. From that filtered list, the 
      * percentage of use of each word was then calculated. By adding these percentages, it was possible to determine what 
      * percentage of a text a person can understand if he or she knows that word and all the words that appear before in the list. 
-     * In other words, a freqWordFreq of 80 means that if a person knows that word and the previous ones, he or she will understand 
+     * In other words, a frequency_index of 80 means that if a person knows that word and the previous ones, he or she will understand 
      * 80% of the text. 
      * 
      * @param string $word
      * @param string $lg_iso
      */
     public function get($word = '', $lg_iso = '') {
-        $this->table = 'frequencylist_' . $lg_iso;
+        $this->table = 'frequency_list_' . $lg_iso;
         $word = mb_strtolower($word, "UTF-8");
-        $sql = "SELECT * FROM {$this->table} WHERE freqWord = '$word'";
+        $sql = "SELECT * FROM {$this->table} WHERE word = '$word'";
         $result = $this->con->query($sql);
 
         if ($result && $result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $word_freq = $row['freqWordFreq'];
+            $word_freq = $row['frequency_index'];
             return $word_freq;
         } else {
             return 0;

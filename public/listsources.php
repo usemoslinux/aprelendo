@@ -38,9 +38,9 @@ function printSources($sources) {
 
     foreach ($sources as $source) {
         $html .= 
-        "<a href='//{$source['popsources_domain']}' target='_blank' class='list-group-item d-flex justify-content-between align-items-center list-group-item-action'>
-            {$source['popsources_domain']}
-            <span class='badge badge-secondary badge-pill'>{$source['popsources_times_used']}</span> 
+        "<a href='//{$source['domain']}' target='_blank' class='list-group-item d-flex justify-content-between align-items-center list-group-item-action'>
+            {$source['domain']}
+            <span class='badge badge-secondary badge-pill'>{$source['times_used']}</span> 
         </a>";
     }
 

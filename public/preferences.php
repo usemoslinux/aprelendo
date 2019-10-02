@@ -126,13 +126,13 @@ $reader = new Reader($con, $user->id, $user->learning_lang_id);
                                     <div id="help-learning-mode" class="collapse small">
                                         <hr>
                                         <p>
-                                            Assisted mode is designed to aid you in your language learning process. It typically consists of 3 phases:
+                                            Assisted mode is designed to aid you in your language learning process. It typically consists of 4 phases:
                                         </p>
                                         <ol>
-                                            <li>First read (skimming and general comprehension of what the text is about) &amp; listening.</li>
-                                            <li>Second read (to acquire a deeper understanding of the text) &amp; opportunity to
-                                                look up words in the dictionary or use the translator.</li>
-                                            <li>Dictation.</li>
+                                            <li>Reading: try to understand what the text is about. If you see words or phrases that you don&#39;t understand, look them up in the built-in dictionary.</li>
+                                            <li>Listening: listen to the recording and pay attention to the different sounds.</li>
+                                            <li>Speaking: talk on top of the recording, trying to imitate the pronunciation of each word. You can reduce the speed of the recording if necessary.</li>
+                                            <li>Dictation: type the words you marked for learning as they are spoken.</li>
                                         </ol>
                                         Remember: assisted mode only works for simple texts (articles, lyrics, conversation transcripts, etc.), not videos or ebooks.
                                     </div>

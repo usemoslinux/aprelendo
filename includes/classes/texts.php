@@ -48,17 +48,6 @@ class Texts extends DBEntity {
         $this->learning_lang_id = $learning_lang_id;
         
         $this->table = 'texts';
-        $this->cols = array(
-            'id' => 'textId',
-            'userid' => 'textUserId', 
-            'lgid' => 'textLgId', 
-            'title' => 'textTitle', 
-            'author' => 'textAuthor', 
-            'text' => 'text', 
-            'sourceURI' => 'textSourceURI', 
-            'type' => 'textType', 
-            'nrofwords' => 'textNrOfWords',
-            'level' => 'textLevel');
         }
         
     /**
@@ -88,16 +77,7 @@ class Texts extends DBEntity {
             $nr_of_words = $this->nr_of_words;
         }
         
-        $sql = "INSERT INTO $this->table (
-            {$this->cols['userid']}, 
-            {$this->cols['lgid']}, 
-            {$this->cols['title']}, 
-            {$this->cols['author']}, 
-            {$this->cols['text']}, 
-            {$this->cols['sourceURI']}, 
-            {$this->cols['type']}, 
-            {$this->cols['nrofwords']}, 
-            {$this->cols['level']})
+        $sql = "INSERT INTO $this->table (`user_id`, `lang_id`, `title`, `author`, `text`, `source_uri`, `type`, `word_count`, `level`)
             VALUES (
                 '$this->user_id', 
                 '$this->learning_lang_id', 
@@ -137,25 +117,33 @@ class Texts extends DBEntity {
     * @return boolean
     */
     public function update($id, $title, $author, $text, $source_url, $audio_url, $type) {
+        $sql = "UPDATE {$this->table} 
+                SET `user_id`=?, `lang_id`=?, `title`=?, `author`=?, `text`=?, `source_uri`=?, `type`=? 
+                WHERE `id`=?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("ssssssss", $this->user_id, $this->learning_lang_id, $title, $author, $text, $source_url, $type, $id);
+        $result = $stmt->execute();
+        $stmt->close();
+
         // escape parameters
-        $title = $this->con->real_escape_string($title);
-        $author = $this->con->real_escape_string($author);
-        $text = $this->con->real_escape_string($text);
-        $source_url = $this->con->real_escape_string($source_url);
-        $audio_url = $this->con->real_escape_string($audio_url);
-        $type = $this->con->real_escape_string($type);
+        // $title = $this->con->real_escape_string($title);
+        // $author = $this->con->real_escape_string($author);
+        // $text = $this->con->real_escape_string($text);
+        // $source_url = $this->con->real_escape_string($source_url);
+        // $audio_url = $this->con->real_escape_string($audio_url);
+        // $type = $this->con->real_escape_string($type);
         
-        $sql = "UPDATE $this->table 
-        SET {$this->cols['userid']}='$this->user_id', 
-        {$this->cols['lgid']}='$this->learning_lang_id', 
-        {$this->cols['title']}='$title', 
-        {$this->cols['author']}='$author', 
-        text='$text', 
-        {$this->cols['sourceURI']}='$source_url', 
-        {$this->cols['type']}='$type' 
-        WHERE {$this->cols['id']}='$id'";
+        // $sql = "UPDATE $this->table 
+        // SET `user_id`='$this->user_id', 
+        // `lang_id`='$this->learning_lang_id', 
+        // `title`='$title', 
+        // `author`='$author', 
+        // `text`='$text', 
+        // `source_uri`='$source_url', 
+        // `type`='$type' 
+        // WHERE `id`='$id'";
         
-        $result = $this->con->query($sql);
+        // $result = $this->con->query($sql);
         
         return $result;
     }
@@ -168,14 +156,13 @@ class Texts extends DBEntity {
     */
     public function deleteByIds($ids) {
         $textIDs = $this->JSONtoCSV($ids);
-        $source_uri_col_name = $this->cols['sourceURI'];
         
-        $selectsql = "SELECT $source_uri_col_name 
-        FROM $this->table 
-        WHERE {$this->cols['id']} IN ($textIDs)";
+        $selectsql = "SELECT `source_uri` 
+        FROM `$this->table` 
+        WHERE `id` IN ($textIDs)";
         
-        $deletesql = "DELETE FROM $this->table 
-        WHERE {$this->cols['id']} IN ($textIDs)";
+        $deletesql = "DELETE FROM `$this->table` 
+        WHERE `id` IN ($textIDs)";
         
         $result = $this->con->query($selectsql);
         
@@ -213,12 +200,12 @@ class Texts extends DBEntity {
     public function archiveByIds($ids) {
         $textIDs = $this->JSONtoCSV($ids);
         
-        $insertsql = "INSERT INTO archivedtexts 
+        $insertsql = "INSERT INTO `archived_texts`
                       SELECT *
-                      FROM texts 
-                      WHERE textID IN ($textIDs)";
+                      FROM `texts` 
+                      WHERE `id` IN ($textIDs)";
         
-        $deletesql = "DELETE FROM texts WHERE textID IN ($textIDs)";
+        $deletesql = "DELETE FROM `texts` WHERE `id` IN ($textIDs)";
         
         if ($result = $this->con->query($insertsql)) {
             $result = $this->con->query($deletesql);
@@ -236,13 +223,13 @@ class Texts extends DBEntity {
      */
     public function isAlreadyinDB($source_url)
     {
-        if (empty($sourcel_url)) {
+        if (empty($source_url)) {
             return false;
         }
 
         $sql = "SELECT 1
-                FROM $this->table
-                WHERE {$this->cols['sourceURI']} = '$source_url' AND {$this->cols['userid']} = $this->user_id";
+                FROM `$this->table`
+                WHERE `source_uri` = '$source_url' AND `user_id` = $this->user_id";
             
         return ($result = $this->con->query($sql)) && ($result->num_rows > 0);
     }
@@ -261,9 +248,9 @@ class Texts extends DBEntity {
         $filter_sql = $this->con->real_escape_string($filter_sql);
         $search_text = $this->con->real_escape_string($search_text);
         
-        $result = $this->con->query("SELECT COUNT({$this->cols['id']}) FROM $this->table 
-        WHERE {$this->cols['userid']}='$this->user_id' 
-        AND {$this->cols['lgid']}='$this->learning_lang_id' $filter_sql AND {$this->cols['title']} LIKE '%$search_text%'");
+        $result = $this->con->query("SELECT COUNT(`id`) FROM $this->table 
+        WHERE `user_id`='$this->user_id' 
+        AND `lang_id`='$this->learning_lang_id' $filter_sql AND `title` LIKE '%$search_text%'");
         
         if ($result) {
             $row = $result->fetch_array(MYSQLI_NUM);
@@ -281,8 +268,8 @@ class Texts extends DBEntity {
     * @return integer|boolean
     */
     public function countAllRows() {
-        $result = $this->con->query("SELECT COUNT({$this->cols['id']}) FROM $this->table 
-        WHERE {$this->cols['userid']}='$this->user_id' AND {$this->cols['lgid']}='$this->learning_lang_id'");
+        $result = $this->con->query("SELECT COUNT(`id`) FROM $this->table 
+        WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id'");
         
         if ($result) {
             $row = $result->fetch_array();
@@ -313,18 +300,18 @@ class Texts extends DBEntity {
         $limit = $this->con->real_escape_string($limit);
         $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
         
-        $sql = "SELECT {$this->cols['id']}, 
+        $sql = "SELECT `id`, 
         NULL, 
-        {$this->cols['title']}, 
-        {$this->cols['author']}, 
-        {$this->cols['sourceURI']}, 
-        {$this->cols['type']}, 
-        {$this->cols['nrofwords']}, 
-        {$this->cols['level']} 
+        `title`, 
+        `author`, 
+        `source_uri`, 
+        `type`, 
+        `word_count`, 
+        `level`  
         FROM $this->table 
-        WHERE {$this->cols['userid']}='$this->user_id' 
-        AND {$this->cols['lgid']}='$this->learning_lang_id' $filter_sql 
-        AND {$this->cols['title']} LIKE '%$search_text%' 
+        WHERE `user_id`='$this->user_id' 
+        AND `lang_id`='$this->learning_lang_id' $filter_sql 
+        AND `title` LIKE '%$search_text%' 
         ORDER BY $sort_sql 
         LIMIT $offset, $limit";
         
@@ -349,17 +336,17 @@ class Texts extends DBEntity {
         $limit = $this->con->real_escape_string($limit);
         $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
         
-        $sql = "SELECT {$this->cols['id']}, 
+        $sql = "SELECT `id`, 
         NULL, 
-        {$this->cols['title']}, 
-        {$this->cols['author']}, 
-        {$this->cols['sourceURI']}, 
-        {$this->cols['type']}, 
-        {$this->cols['nrofwords']}, 
-        {$this->cols['level']} 
+        `title`, 
+        `author`, 
+        `source_uri`, 
+        `type`, 
+        `word_count`, 
+        `level`  
         FROM $this->table
-        WHERE {$this->cols['userid']}='$this->user_id' 
-        AND {$this->cols['lgid']}='$this->learning_lang_id' 
+        WHERE `user_id`='$this->user_id' 
+        AND `lang_id`='$this->learning_lang_id' 
         ORDER BY $sort_sql 
         LIMIT $offset, $limit";
 
@@ -398,14 +385,14 @@ class Texts extends DBEntity {
     public function getSortSQL($sort_by) {
         switch ($sort_by) {
             case '0': // new first
-            return $this->cols['id'] . ' DESC';
-            break;
+                return 'id' . ' DESC';
+                break;
             case '1': // old first
-            return $this->cols['id'];
-            break;
+                return 'id';
+                break;
             default:
-            return '';
-            break;
+                return '';
+                break;
         }
     }
     
@@ -417,7 +404,7 @@ class Texts extends DBEntity {
     * LibreOffice (hunspell) spellcheckers, and entries with strange characters, numbers, names, etc. were all removed. 
     * From that filtered list, the % of use of each word was calculated. By adding them, it was possible to determine what 
     * percentage of a text a person can understand if he or she knows that word and all the words that appear before in the list. 
-    * In other words, a freqWordFreq of 85 means that if a person knows that word and the previous ones, he or she will understand 
+    * In other words, a frequency_index of 85 means that if a person knows that word and the previous ones, he or she will understand 
     * around 85% of any text. Each freqlist table includes words with a WordFreq index of up to 95. This was done to reduce table size
     * and increase speed.
     *
@@ -444,7 +431,7 @@ class Texts extends DBEntity {
     */
     private function calcTextLevel($text = '') {
         $level_thresholds = array('85', '95'); // <=80: beginner; >80 & <=95: intermediate; >95: advanced
-        $frequency_list_table = ''; // frequency list table name: should be something like frequencylist_ + ISO 639-1 (2 letter language) code
+        $frequency_list_table = ''; // frequency list table name: should be something like frequency_list_ + ISO 639-1 (2 letter language) code
         
         $frequency_list = []; // array with all the words in the corresponding frequency list table 
         $words_in_text = []; // array with all the valid words in $text 
@@ -474,19 +461,19 @@ class Texts extends DBEntity {
         $this->nr_of_words = preg_match_all('/[A-Za-z' . $accented_chars . ']+/u', $text, $words_in_text);
 
         // get learning language ISO name
-        $result = $this->con->query("SELECT LgName 
-        FROM languages 
-        WHERE LgID={$this->learning_lang_id}");
+        $result = $this->con->query("SELECT `name` 
+        FROM `languages` 
+        WHERE `id`={$this->learning_lang_id}");
         
         if ($result) {
             // build frequency list table name based on learning language name
             $row = $result->fetch_array();
-            $frequency_list_table = 'frequencylist_' . $row[0];
+            $frequency_list_table = 'frequency_list_' . $row[0];
             
             foreach ($level_thresholds as $threshold) {
                 // build frequency list array for "beginner" level words (80%)
-                $result = $this->con->query("SELECT freqWord 
-                    FROM $frequency_list_table WHERE freqWordFreq <= $threshold");
+                $result = $this->con->query("SELECT `word` 
+                    FROM $frequency_list_table WHERE frequency_index <= $threshold");
 
                 if ($result) {
                     while($row = $result->fetch_array()){

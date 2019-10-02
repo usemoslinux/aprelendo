@@ -24,14 +24,14 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 use Aprelendo\Includes\Classes\Language;
 
 // show list of available languages
-$result = $con->query("SELECT LgID, LgName FROM languages WHERE LgUserId='$user_id'");
+$result = $con->query("SELECT `id`, `name` FROM `languages` WHERE `user_id`='$user_id'");
 
 if ($result) {
     $html = '<div id="accordion" class="accordion">';
 
     while ($row = $result->fetch_assoc()) {
-        $lg_id = $row['LgID'];  
-        $lg_iso_code = $row['LgName'];
+        $lg_id = $row['id'];  
+        $lg_iso_code = $row['name'];
 
         $item_id = 'item-' . $lg_iso_code;
         $heading_id = 'heading-' . $lg_iso_code;

@@ -18,7 +18,6 @@
  */
 
 $(document).ready(function () {
-
   $('#search').focus();
   $('input:checkbox').prop('checked', false);
 
@@ -48,7 +47,7 @@ $(document).ready(function () {
           }
         })
         .done(function () {
-          window.location.replace('words.php?p=' + getCurrentPage().page);
+          window.location.replace('words.php?p=' + getCurrentPage().p);
         })
         .fail(function (request, status, error) {
           alert("There was an error when trying to delete the selected words. Refresh the page and try again.");
@@ -76,7 +75,7 @@ $(document).ready(function () {
     var parts = window.location.search.substr(1).split("&");
     if (parts == '') {
       result = {
-        page: 1
+        p: 1
       };
     } else {
       var result = {};
@@ -103,11 +102,11 @@ $(document).ready(function () {
   });
 
   /**
-     * Selects sorting
-     */
-    $('#dropdown-menu-sort').on('click', function(e) {
-        var params = 's=' + $('#s').val() + '&o=' + $('#o').val();
-        window.location.replace('words.php?' + params);        
-    });
+   * Selects sorting
+   */
+  $('#dropdown-menu-sort').on('click', function(e) {
+      var params = 's=' + $('#s').val() + '&o=' + $('#o').val();
+      window.location.replace('words.php?' + params);        
+  });
 
 });

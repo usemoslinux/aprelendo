@@ -33,8 +33,8 @@ $(document).ready(function () {
         type: "GET",
         dataType: "json"
     }).done(function (data) {
-        dictionaryURI = data.LgDict1URI;
-        translatorURI = data.LgTranslatorURI;
+        dictionaryURI = data.dict1_uri;
+        translatorURI = data.translator_uri;
     });
 
      /**
@@ -311,7 +311,8 @@ $(document).ready(function () {
                 url: "ajax/underlinewords.php",
                 type: "POST",
                 data: {
-                    txt: $selword.text()
+                    txt: $selword.text(),
+                    is_ebook: false
                 }
             }).done(function (result) {
                 // if everything went fine, remove the underlining

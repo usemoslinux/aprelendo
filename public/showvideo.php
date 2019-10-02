@@ -32,7 +32,7 @@ try {
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
 
         // check if user has access to view this text
-        if (!$user->isAllowedToAccessElement('sharedtexts', $_GET['id']) || !$is_shared) {
+        if (!$user->isAllowedToAccessElement('shared_texts', $_GET['id']) || !$is_shared) {
             throw new Exception ('User is not authorized to access this file.');
         }
         

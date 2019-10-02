@@ -46,7 +46,7 @@ class Videos extends DBEntity {
         parent::__construct($con, $user_id);
         
         $this->learning_lang_id = $learning_lang_id;
-        $this->table = 'sharedtexts';
+        $this->table = 'shared_texts';
     }
 
     /**
@@ -70,11 +70,15 @@ class Videos extends DBEntity {
             $transcript_xml = array ('text' => $transcript_xml);
         
             $file = $this->get_url_contents("https://www.googleapis.com/youtube/v3/videos?id=$youtube_id&key=" . YOUTUBE_API_KEY . "&part=snippet");
-            
-            if (!$file) {
+            $file = json_decode($file, true);
+
+            if (isset($file['error']) && !empty($file['error'])) {
                 throw new \Exception('Oops! There was a problem trying to fetch author & title information for this video.');
             } else {
-                $file = json_decode($file, true);
+                if (count($file['items']) == 0) {
+                    throw new \Exception('Oops! There are no YouTube videos with this URL. Check and try again.');
+                }
+
                 $title = array('title' => $file['items'][0]['snippet']['title']);
                 $author = array('author' => $file['items'][0]['snippet']['channelTitle']);
 
@@ -120,7 +124,7 @@ class Videos extends DBEntity {
     public function getById($id) {
         $result = $this->con->query("SELECT * 
             FROM $this->table 
-            WHERE stextId='$id'");
+            WHERE `id`='$id'");
         
         return $result ? $result->fetch_assoc() : false;
     }

@@ -102,7 +102,7 @@ class Paypal extends DBEntity
             return false;
         }
 
-        $stmt = $this->con->prepare('UPDATE `users` SET `userPremiumUntil`= ? WHERE `userId` = ?');
+        $stmt = $this->con->prepare('UPDATE `users` SET `premium_until`= ? WHERE `user_id` = ?');
         $stmt->bind_param(
             'ss',
             $premium_until,

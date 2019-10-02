@@ -42,7 +42,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     $password_hash = $con->escape_string($_GET['reset']);
                     
                     // check if username & password exist in db
-                    $result = $con->query("SELECT userName, userPasswordHash FROM users WHERE userName='$username' AND userPasswordHash='$password_hash'");
+                    $result = $con->query("SELECT `name`, `password_hash` FROM `users` WHERE `name`='$username' AND `password_hash`='$password_hash'");
                     
                     // 1.1. if username & password values passed by the reset link are found in db, then...
                     if ($result->num_rows > 0) { // 

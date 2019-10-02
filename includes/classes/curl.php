@@ -7,8 +7,8 @@ namespace Aprelendo\Includes\Classes;
  */
 trait Curl
 {
-    private static $proxy = 'www-proxy.mrec.ar:8080';
-    // private static $proxy = '';
+    // private static $proxy = 'www-proxy.mrec.ar:8080';
+    private static $proxy = '';
 
     /**
      * Get file contents using curl
@@ -16,7 +16,7 @@ trait Curl
      */
     public static function get_url_contents ($url) {
         $ch = curl_init();
-        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'https://www.aprelendo.com';
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);

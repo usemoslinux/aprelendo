@@ -32,11 +32,13 @@ $text = new Reader($con, $user->id, $user->learning_lang_id);
 
 // for ebooks, use slower method to underline words (as input is HTML code)
 // for everything else, use faster method (as input is simple text)
-if (strpos(basename($_SERVER['HTTP_REFERER']), 'showebook.php') === 0) {
-    $result = $text->colorizeWords(html_entity_decode($_POST['txt']));
-    echo $text->addLinks($result);
-} else {
-    echo $text->colorizeWordsFast(html_entity_decode($_POST['txt']));
+if (isset($_POST['txt']) && isset($_POST['is_ebook'])) {
+    if ($_POST['is_ebook'] === true) {
+        $result = $text->colorizeWords(html_entity_decode($_POST['txt']));
+        echo $text->addLinks($result);
+    } else {
+        echo $text->colorizeWordsFast(html_entity_decode($_POST['txt']));
+    }
 }
 
 ?>

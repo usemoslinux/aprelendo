@@ -52,20 +52,20 @@ class Language
      */
     public function __construct ($con, $id, $user_id) {
         $id = $con->real_escape_string($id);
-        $result = $con->query("SELECT * FROM languages WHERE LgID='$id'");
+        $result = $con->query("SELECT * FROM `languages` WHERE `id`='$id'");
         if ($result) {
             $row = $result->fetch_assoc();
             
             $this->con = $con;
             $this->id = $id;
-            $this->user_id = $con->real_escape_string($user_id);
-            $this->name = $con->real_escape_string($row['LgName']);
-            $this->dictionary_uri = $con->real_escape_string($row['LgDict1URI']);
-            $this->translator_uri = $con->real_escape_string($row['LgTranslatorURI']);
-            $this->rss_feed_1_uri = $con->real_escape_string($row['LgRSSFeed1URI']);
-            $this->rss_feed_2_uri = $con->real_escape_string($row['LgRSSFeed2URI']);
-            $this->rss_feed_3_uri = $con->real_escape_string($row['LgRSSFeed3URI']);
-            $this->show_freq_list = $con->real_escape_string($row['LgShowFreqList']);
+            $this->user_id = $user_id;
+            $this->name = $row['name'];
+            $this->dictionary_uri = $row['dict1_uri'];
+            $this->translator_uri = $row['translator_uri'];
+            $this->rss_feed_1_uri = $row['rss_feed1_uri'];
+            $this->rss_feed_2_uri = $row['rss_feed2_uri'];
+            $this->rss_feed_3_uri = $row['rss_feed3_uri'];
+            $this->show_freq_list = $row['show_freq_words'];
         }
     }
 
@@ -79,21 +79,21 @@ class Language
         $id = $this->id;
         $user_id = $this->user_id;
         $name = $this->name;
-        $dictionary_uri = $array['dictionaryURI'];
-        $translator_uri = $array['translatorURI'];
+        $dictionary_uri = $array['dict-uri'];
+        $translator_uri = $array['translator-uri'];
         
         if ($is_premium_user) {
-            $rss_feed_1_uri = $array['rssfeedURI1'];
-            $rss_feed_2_uri = $array['rssfeedURI2'];
-            $rss_feed_3_uri = $array['rssfeedURI3'];
+            $rss_feed_1_uri = $array['rss-feed1-uri'];
+            $rss_feed_2_uri = $array['rss-feed2-uri'];
+            $rss_feed_3_uri = $array['rss-feed3-uri'];
             $show_freq_list = $array['freq-list'];
             
-            $sql_str = "UPDATE languages SET LgName='$name', LgDict1URI='$dictionary_uri',
-                LgTranslatorURI='$translator_uri', LgRSSFeed1URI='$rss_feed_1_uri', LgRSSFeed2URI='$rss_feed_2_uri', 
-                LgRSSFeed3URI='$rss_feed_3_uri', LgShowFreqList=$show_freq_list WHERE LgUserId='$user_id' AND LgID='$id'";
+            $sql_str = "UPDATE `languages` SET `name`='$name', `dict1_uri`='$dictionary_uri',
+                `translator_uri`='$translator_uri', `rss_feed1_uri`='$rss_feed_1_uri', `rss_feed2_uri`='$rss_feed_2_uri', 
+                `rss_feed3_uri`='$rss_feed_3_uri', `show_freq_words`=$show_freq_list WHERE `user_id`='$user_id' AND `id`='$id'";
         } else {
-            $sql_str = "UPDATE languages SET LgName='$name', LgDict1URI='$dictionary_uri',
-                LgTranslatorURI='$translator_uri' WHERE LgUserId='$user_id' AND LgID='$id'";
+            $sql_str = "UPDATE `languages` SET `name`='$name', `dict1_uri`='$dictionary_uri',
+                `translator_uri`='$translator_uri' WHERE `user_id`='$user_id' AND `id`='$id'";
         }
         
         return $this->con->query($sql_str);
@@ -106,13 +106,13 @@ class Language
      * @return array
      */
     public function getById($id) {
-        $result = $this->con->query("SELECT * FROM languages WHERE LgUserId='$this->user_id' AND LgID = '$id'");
+        $result = $this->con->query("SELECT * FROM `languages` WHERE `user_id`='$this->user_id' AND `id` = '$id'");
                
         return $result ? $result->fetch_all() : false;
     }
 
     /**
-     * Converts full language names to 639-1 iso codes (ie. 'English' => 'en')
+     * Converts 639-1 iso codes to full language names (ie. 'en' => 'English')
      *
      * @param string $iso_code
      * @return string

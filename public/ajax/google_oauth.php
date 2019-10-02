@@ -33,17 +33,17 @@ if(isset($_POST['Eea']) && !empty($_POST['Eea']) && !empty($_POST['U3']))
         $return_msg = "";
 
         // check if Google ID already exists
-        $sql = "SELECT * FROM users WHERE userEmail='$google_email'";
+        $sql = "SELECT * FROM `users` WHERE `email`='$google_email'";
         $result = $con->query($sql);
 
         if ($result) {
             $user = new User($con);
             $row = $result->fetch_assoc();
-            $user_name = $row['userName'];
+            $user_name = $row['name'];
 
             if($result->num_rows > 0) {
                 // user already exists
-                $sql = "UPDATE users SET userGoogleId='$google_id' WHERE userEmail='$google_email'";
+                $sql = "UPDATE `users` SET `google_id`='$google_id' WHERE `email`='$google_email'";
                 $result = $con->query($sql);
 
                 if ($result) {

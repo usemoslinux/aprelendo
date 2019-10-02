@@ -48,9 +48,9 @@ class Text
         $this->is_shared = $is_shared;
 
         if ($is_shared) {
-            $result = $con->query("SELECT stext, stextTitle, stextAuthor, stextSourceURI FROM sharedtexts WHERE stextID='$id'");
+            $result = $con->query("SELECT `text`, `title`, `author`, `source_uri` FROM shared_texts WHERE `id`='$id'");
         } else {
-            $result = $con->query("SELECT text, textTitle, textAuthor, textSourceURI FROM texts WHERE textID='$id'");
+            $result = $con->query("SELECT `text`, `title`, `author`, `source_uri` FROM `texts` WHERE `id`='$id'");
         }
         
         if ($result) {
@@ -140,19 +140,19 @@ class Reader extends Text
         $this->user_id = $user_id = $con->escape_string($user_id);
         $this->learning_lang_id =  $con->escape_string($learning_lang_id);
 
-        if ($result = $con->query("SELECT * FROM preferences WHERE prefUserId = '$user_id'")) {
+        if ($result = $con->query("SELECT * FROM `preferences` WHERE `user_id` = '$user_id'")) {
             $row = $result->fetch_assoc();
             
-            $this->font_family = isset($row['prefFontFamily']) ? $row['prefFontFamily'] : 'Helvetica';
-            $this->font_size = isset($row['prefFontSize']) ? $row['prefFontSize'] : '12px';
-            $this->line_height = isset($row['prefLineHeight']) ? $row['prefLineHeight'] : '1';
-            $this->text_align = isset($row['prefAlignment']) ? $row['prefAlignment'] : 'left';
-            $this->display_mode = isset($row['prefMode']) ? $row['prefMode'] : 'light';
-            $this->assisted_learning = isset($row['prefAssistedLearning']) ? $row['prefAssistedLearning'] : true;  
+            $this->font_family = isset($row['font_family']) ? $row['font_family'] : 'Helvetica';
+            $this->font_size = isset($row['font_size']) ? $row['font_size'] : '12px';
+            $this->line_height = isset($row['line_height']) ? $row['line_height'] : '1';
+            $this->text_align = isset($row['text_alignment']) ? $row['text_alignment'] : 'left';
+            $this->display_mode = isset($row['learning_mode']) ? $row['learning_mode'] : 'light';
+            $this->assisted_learning = isset($row['assisted_learning']) ? $row['assisted_learning'] : true;  
             
-            if ($result = $con->query("SELECT LgShowFreqList FROM languages WHERE LgId='$learning_lang_id'")) {
+            if ($result = $con->query("SELECT `show_freq_words` FROM `languages` WHERE `id`='$learning_lang_id'")) {
                 $row = $result->fetch_assoc();
-                $this->show_freq_list = $row['LgShowFreqList'];
+                $this->show_freq_list = $row['show_freq_words'];
             }
         }
     }
@@ -191,7 +191,7 @@ class Reader extends Text
         $learning_lang_id = $this->learning_lang_id;
         
         // 1. colorize phrases & words that are being reviewed
-        $result = $this->con->query("SELECT word FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND wordStatus>0 ORDER BY isPhrase ASC");
+        $result = $this->con->query("SELECT `word` FROM `words` WHERE `user_id`='$user_id' AND `lang_id`='$learning_lang_id' AND `status`>0 ORDER BY `is_phrase` ASC");
         
         if ($result) {
             while ($row = $result->fetch_assoc()) {
@@ -202,7 +202,7 @@ class Reader extends Text
             }
             
             // 2. colorize phrases & words that were already learned
-            $result = $this->con->query("SELECT word FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' AND wordStatus=0");
+            $result = $this->con->query("SELECT `word` FROM `words` WHERE `user_id`='$user_id' AND `lang_id`='$learning_lang_id' AND `status`=0");
             
             if ($result) {
                 while ($row = $result->fetch_assoc()) {
@@ -215,16 +215,16 @@ class Reader extends Text
                 if ($this->show_freq_list) {
                     $user = new User($this->con);
                     if ($user->isLoggedIn() && $user->isPremium()) {
-                        $result = $this->con->query("SELECT LgName FROM languages WHERE LgId='$this->learning_lang_id'");
+                        $result = $this->con->query("SELECT `name` FROM languages WHERE `id`='$this->learning_lang_id'");
                     
                         if ($result) {
                             $row = $result->fetch_assoc();
-                            $freq_table_name = $this->con->escape_string($row['LgName']);
-                            $result = $this->con->query('SELECT freqWord, freqWordFreq FROM frequencylist_' . $freq_table_name . ' WHERE freqWordFreq < 80');
+                            $freq_table_name = $this->con->escape_string($row['name']);
+                            $result = $this->con->query('SELECT `word`, `frequency_index` FROM frequency_list_' . $freq_table_name . ' WHERE `frequency_index` < 80');
                             
                             if ($result) {
                                 while ($row = $result->fetch_assoc()) {
-                                    $word = $row['freqWord'];
+                                    $word = $row['word'];
                                     $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
                                     "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
                                 }
@@ -267,7 +267,7 @@ class Reader extends Text
         }
         
         // get words in personal dictionary
-        $result = $this->con->query("SELECT word, wordStatus FROM words WHERE wordUserId='$user_id' AND wordLgId='$learning_lang_id' ORDER BY isPhrase ASC");
+        $result = $this->con->query("SELECT `word`, `status` FROM `words` WHERE `user_id`='$user_id' AND `lang_id`='$learning_lang_id' ORDER BY `is_phrase` ASC");
         
         if (!$result) {
             return false;
@@ -279,12 +279,12 @@ class Reader extends Text
         if ($this->show_freq_list) {
             $user = new User($this->con);
             if ($user->isLoggedIn() && $user->isPremium()) {
-                $result = $this->con->query("SELECT LgName FROM languages WHERE LgId='$this->learning_lang_id'");
+                $result = $this->con->query("SELECT `name` FROM `languages` WHERE `id`='$this->learning_lang_id'");
             
                 if ($result) {
                     $row = $result->fetch_assoc();
-                    $freq_table_name = $this->con->escape_string($row['LgName']);
-                    $result = $this->con->query('SELECT freqWord, freqWordFreq FROM frequencylist_' . $freq_table_name . ' WHERE freqWordFreq < 80');
+                    $freq_table_name = $this->con->escape_string($row['name']);
+                    $result = $this->con->query('SELECT `word`, `frequency_index` FROM frequency_list_' . $freq_table_name . ' WHERE `frequency_index` < 80');
                     
                     if ($result) {
                         $freq_words = $result->fetch_all(MYSQLI_ASSOC);
@@ -299,7 +299,7 @@ class Reader extends Text
             if ($search_in_dic === false) {
                 // if necessary, underline frequency words
                 if ($this->show_freq_list) { 
-                    $search_in_freq_dic = \array_search($word, array_column($freq_words, 'freqWord'));
+                    $search_in_freq_dic = \array_search($word, array_column($freq_words, 'word'));
                     if ($search_in_freq_dic === false) {
                         $word = "<span class='word' data-toggle='modal' data-target='#myModal'>$word</span>";
                     } else {
@@ -309,7 +309,7 @@ class Reader extends Text
                     $word = "<span class='word' data-toggle='modal' data-target='#myModal'>$word</span>";
                 }
             } else {
-                $learning_level = $dic_words[$search_in_dic]['wordStatus'] > 0 ? 'learning' : 'learned';
+                $learning_level = $dic_words[$search_in_dic]['status'] > 0 ? 'learning' : 'learned';
                 $word = "<span class='word reviewing $learning_level' data-toggle='modal' data-target='#myModal'>$word</span>";
             }
         }

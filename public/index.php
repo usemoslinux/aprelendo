@@ -42,21 +42,21 @@ require_once PUBLIC_PATH . 'head.php';
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1>Learn foreign languages<br />by reading<br /> your favorite texts</h1>
-                    <h5>Want to know more about our method? We call it
+                    <h1>Improve your language skills<br />by reading<br /> your favorite texts</h1>
+                    <h5>Want to know more about our method?<br />
+                    It&#39;s called
                         <a href="totalreading.php">
-                            <u>total reading</u>.
+                            <u>total reading</u>
                         </a></h5>
                     <br />
-                    <h4>Select the language you want to learn to create an account <br>
-                for free</h4>
+                    <h4>Select the language you want to learn...</h4>
                     <br />
                 </div>
             </div>
         </div>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-4 col-lg-2">
+                <div class="col-4 col-lg-2">
                     <a href="register.php?tolang=english">
                         <span class="flag-icon">
                             <img src="img/flags/en.svg" alt="English" class="flag-icon">
@@ -64,7 +64,7 @@ require_once PUBLIC_PATH . 'head.php';
                         </span>
                     </a>
                 </div>
-                <div class="col-sm-4 col-lg-2">
+                <div class="col-4 col-lg-2">
                     <a href="register.php?tolang=spanish">
                         <span class="flag-icon">
                             <img src="img/flags/es.svg" alt="Spanish" class="flag-icon">
@@ -72,7 +72,7 @@ require_once PUBLIC_PATH . 'head.php';
                         </span>
                     </a>
                 </div>
-                <div class="col-sm-4 col-lg-2">
+                <div class="col-4 col-lg-2">
                     <a href="register.php?tolang=portuguese">
                         <span class="flag-icon">
                             <img src="img/flags/pt.svg" alt="Portuguese" class="flag-icon">
@@ -80,7 +80,7 @@ require_once PUBLIC_PATH . 'head.php';
                         </span>
                     </a>
                 </div>
-                <div class="col-sm-4 col-lg-2">
+                <div class="col-4 col-lg-2">
                     <a href="register.php?tolang=french">
                         <span class="flag-icon">
                             <img src="img/flags/fr.svg" alt="French" class="flag-icon">
@@ -88,7 +88,7 @@ require_once PUBLIC_PATH . 'head.php';
                         </span>
                     </a>
                 </div>
-                <div class="col-sm-4 col-lg-2">
+                <div class="col-4 col-lg-2">
                     <a href="register.php?tolang=italian">
                         <span class="flag-icon">
                             <img src="img/flags/it.svg" alt="Italian" class="flag-icon">
@@ -96,7 +96,7 @@ require_once PUBLIC_PATH . 'head.php';
                         </span>
                     </a>
                 </div>
-                <div class="col-sm-4 col-lg-2">
+                <div class="col-4 col-lg-2">
                     <a href="register.php?tolang=german">
                         <span class="flag-icon">
                             <img src="img/flags/de.svg" alt="German" class="flag-icon">
@@ -114,10 +114,44 @@ require_once PUBLIC_PATH . 'head.php';
 </div>
 <!-- /headerwrap -->
 
-<!-- SERVICE -->
-<div id="service" class="service">
+<!-- HOW IT WORKS -->
+<div class="hiw pt-5">
     <div class="container">
-        <div class="row centered">
+        <div class="row text-center">
+            <h1 id="hiw" class="col-12">How it works</h1>
+            <div class="col-lg-4">
+                <h4>1. Add</h4>
+                <p>Add texts & YouTube videos to your Aprelendo library using our <a href="extensions.php"
+                            target="_blank" rel="noopener noreferrer">extensions</a>. Premium users can also upload
+                        ebooks and add texts from RSS feeds.</p>
+            </div>
+            <div class="col-lg-4">
+                <h4>2. Read</h4>
+                <p>Read your texts and video transcripts in our clutter-free reader. Look up words you don't know in your favorite dictionaries and get cues of the learning status of each word.</p>
+            </div>
+            <div class="col-lg-4">
+                <h4>3. Learn</h4>
+                <p>If you turn on assisted learning, you will practice not only your reading comprehension
+                        skills but also your listening, speaking and writing skills. For more info on this, check
+                        our <a href="totalreading.php" target="_blank" rel="noopener noreferrer">total reading</a>
+                        section.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/5HLr9uxJNDs" frameborder="0" allowfullscreen
+                        class="video"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN-FEATURES -->
+<div id="main-features" class="main-features py-5">
+    <div class="container">
+        <div class="row text-center">
             <div class="col-lg-4">
                 <i class="fab fa-osi"></i>
                 <h4>Open source</h4>
@@ -154,35 +188,6 @@ require_once PUBLIC_PATH . 'head.php';
     </div>
     <!--/container -->
 </div>
-<!--/service -->
-
-<!-- HOW IT WORKS -->
-<div class="hiw">
-    <div class="container">
-        <div class="row">
-            <h1 id="hiw" class="col-12">How it works</h1>
-            <div class="col-xl-6">
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/5HLr9uxJNDs" frameborder="0" allowfullscreen
-                        class="video"></iframe>
-                </div>
-            </div>
-            <div class="col-xl-6">
-                <ol>
-                    <li>Add texts & Youtube videos to your Aprelendo library using our <a href="extensions.php"
-                            target="_blank" rel="noopener noreferrer">extensions</a>. Premium users can also upload
-                        ebooks and add texts from RSS feeds.</li>
-                    <li>Read texts (or transcripts) and look up words you don't know.</li>
-                    <li>Whenever you encounter these words they will appear underlined in yellow, indicating you are still learning them. After a couple times without looking for their meaning, the underlining will
-                        turn green.</li>
-                    <li>If you turn on assisted learning, you will practice not only your reading comprehension
-                        skills but also your listening, speaking and writing skills. For more info on this, check
-                        our <a href="totalreading.php" target="_blank" rel="noopener noreferrer">total reading</a>
-                        section.</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</div>
+<!--/main-features -->
 
 <?php require_once 'footer.php'?>

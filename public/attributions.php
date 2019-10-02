@@ -72,12 +72,15 @@ if (!$user->isLoggedIn()) {
                         <li>Frequency lists by
                             <a href="https://github.com/hermitdave/FrequencyWords" target="_blank" rel="noopener noreferrer">Hermit Dave</a>
                         </li>
-                        <li>Logo, by
+                        <li>Logo by
                             <a href="https://www.flaticon.com/" target="_blank" rel="noopener noreferrer">Flaticon</a>
                         </li>
                         <li>Theme based on
                             <a href="https://blacktie.co/demo/solid/index.html" target="_blank" rel="noopener noreferrer">Solid</a>, by
                             <a href="https://blacktie.co/" target="_blank" rel="noopener noreferrer">Blacktie</a>
+                        </li>
+                        <li>Wallpaper by
+                            <a href="https://www.pexels.com/@suzyhazelwood?utm_content=attributionCopyText&utm_medium=referral&utm_source=pexels" target="_blank" rel="noopener noreferrer">Suzy Hazelwood</a> from <a href="https://www.pexels.com/" target="_blank" rel="noopener noreferrer">Pexels</a>
                         </li>
                     </ul>
                 </div>

@@ -30,12 +30,12 @@ use Aprelendo\Includes\Classes\Reader;
 try {
     if (isset($_GET['id']) && !empty($_GET['id'])) {
         // check if user has access to view this text
-        $table = isset($_GET['sh']) && $_GET['sh'] != 0 ? 'sharedtexts' : 'texts';
+        $table = isset($_GET['sh']) && $_GET['sh'] != 0 ? 'shared_texts' : 'texts';
         if (!$user->isAllowedToAccessElement($table, $_GET['id'])) {
             throw new Exception ('User is not authorized to access this file.');
         }
 
-        $is_shared = $table == 'sharedtexts' ? true : false;
+        $is_shared = $table == 'shared_texts' ? true : false;
         $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->learning_lang_id);
         
         switch ($reader->display_mode) {

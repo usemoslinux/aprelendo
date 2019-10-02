@@ -33,12 +33,12 @@ $is_premium_user = $user->isPremium();
         <div class="card-header">Dictionary & Translator</div>
         <div class="card-body">
             <div class="form-group">
-                <label for="dictionaryURI">Dictionary URI:</label>
-                <input type="url" id="dictionaryURI" name="dictionaryURI" class="form-control" value="<?php echo htmlspecialchars($lang->dictionary_uri); ?>">
+                <label for="dict-uri">Dictionary URI:</label>
+                <input type="url" id="dict-uri" name="dict-uri" class="form-control" value="<?php echo htmlspecialchars($lang->dictionary_uri); ?>">
             </div>
             <div class="form-group">
-                <label for="translatorURI">Translator URI:</label>
-                <input type="url" id="translatorURI" name="translatorURI" class="form-control" value="<?php echo htmlspecialchars($lang->translator_uri); ?>">
+                <label for="translator-uri">Translator URI:</label>
+                <input type="url" id="translator-uri" name="translator-uri" class="form-control" value="<?php echo htmlspecialchars($lang->translator_uri); ?>">
             </div>
             <div class="text-right">
                 <a href="javascript:;" title="Help" data-toggle="collapse" data-target="#help-dictionary"><i class="far fa-question-circle"></i></a>
@@ -64,16 +64,16 @@ $is_premium_user = $user->isPremium();
         <div class="card-header">RSS feeds <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?></div>
         <div class="card-body">
             <div class="form-group">
-                <label for="rssfeedURI1">RSS feed URI 1:</label>
-                <input type="url" id="rssfeedURI1" name="rssfeedURI1" class="form-control" value="<?php echo htmlspecialchars($lang->rss_feed_1_uri); ?>">
+                <label for="rss-feed1-uri">RSS feed URI 1:</label>
+                <input type="url" id="rss-feed1-uri" name="rss-feed1-uri" class="form-control" value="<?php echo htmlspecialchars($lang->rss_feed_1_uri); ?>">
             </div>
             <div class="form-group">
-                <label for="rssfeedURI2">RSS feed URI 2:</label>
-                <input type="url" id="rssfeedURI2" name="rssfeedURI2" class="form-control" value="<?php echo htmlspecialchars($lang->rss_feed_2_uri); ?>">
+                <label for="rss-feed2-uri">RSS feed URI 2:</label>
+                <input type="url" id="rss-feed2-uri" name="rss-feed2-uri" class="form-control" value="<?php echo htmlspecialchars($lang->rss_feed_2_uri); ?>">
             </div>
             <div class="form-group">
-                <label for="rssfeedURI3">RSS feed URI 3:</label>
-                <input type="url" id="rssfeedURI3" name="rssfeedURI3" class="form-control" value="<?php echo htmlspecialchars($lang->rss_feed_3_uri); ?>">
+                <label for="rss-feed3-uri">RSS feed URI 3:</label>
+                <input type="url" id="rss-feed3-uri" name="rss-feed3-uri" class="form-control" value="<?php echo htmlspecialchars($lang->rss_feed_3_uri); ?>">
             </div>
         </div>
     </div>

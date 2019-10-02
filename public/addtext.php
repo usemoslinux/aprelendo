@@ -38,11 +38,11 @@ require_once PUBLIC_PATH . 'header.php';
             <?php
           if (isset($_GET['id'])) { // modify text
               $id = $_GET['id'];
-              $result = $con->query("SELECT textTitle, textAuthor, text, textSourceURI FROM texts WHERE textID='$id'") or die(mysqli_error($con));
+              $result = $con->query("SELECT `title`, `author`, `text`, `source_uri` FROM `texts` WHERE `id`='$id'") or die(mysqli_error($con));
               $row = $result->fetch_assoc();
-              $art_title = $row['textTitle'];
-              $art_author = $row['textAuthor'];
-              $art_url = $row['textSourceURI'];
+              $art_title = $row['title'];
+              $art_author = $row['author'];
+              $art_url = $row['source_uri'];
               $art_content = $row['text'];
           } elseif (isset($_POST['art_title'])) { // rss
               $art_title = $_POST['art_title'];

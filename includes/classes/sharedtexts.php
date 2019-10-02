@@ -35,20 +35,7 @@ class SharedTexts extends Texts
      */
     public function __construct($con, $user_id, $learning_lang_id) {
         parent::__construct($con, $user_id, $learning_lang_id);
-        $this->table = 'sharedtexts';
-        $this->cols = array(
-            'id' => 'stextId',
-            'userid' => 'stextUserId', 
-            'lgid' => 'stextLgId', 
-            'title' => 'stextTitle', 
-            'author' => 'stextAuthor', 
-            'text' => 'stext', 
-            'sourceURI' => 'stextSourceURI', 
-            'type' => 'stextType', 
-            'nrofwords' => 'stextNrOfWords',
-            'level' => 'stextLevel',
-            'totallikes' => 'totallikes',
-            'userliked' => 'userliked');
+        $this->table = 'shared_texts';
     }
 
     /**
@@ -73,21 +60,21 @@ class SharedTexts extends Texts
 
         $lang = new Language($this->con, $this->learning_lang_id, $this->user_id);
 
-        $sql = "SELECT {$this->cols['id']}, 
-                (SELECT userName FROM users WHERE userId = {$this->cols['userid']}), 
-                {$this->cols['title']}, 
-                {$this->cols['author']}, 
-                {$this->cols['sourceURI']},
-                {$this->cols['type']}, 
-                {$this->cols['nrofwords']}, 
-                {$this->cols['level']}, 
+        $sql = "SELECT `id`, 
+                (SELECT `userName` FROM users WHERE `id` = `user_id`), 
+                `title`, 
+                `author`, 
+                `source_uri`,
+                `type`, 
+                `word_count`, 
+                `level`, 
                 languages.LgName, 
-                (SELECT COUNT(likesId) FROM likes WHERE likesTextId = {$this->cols['id']}) AS {$this->cols['totallikes']},
-                (SELECT COUNT(likesId) FROM likes WHERE likesTextId = {$this->cols['id']} AND likesUserId = $this->user_id) AS {$this->cols['userliked']}
+                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = `id`) AS `total_likes`,
+                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = `id` AND `user_id` = $this->user_id) AS `user_liked` 
                 FROM {$this->table} 
-                INNER JOIN languages ON {$this->table}.stextLgId = languages.LgID
-                WHERE LgName = '{$lang->name}' $filter_sql 
-                AND {$this->cols['title']} 
+                INNER JOIN `languages` ON {$this->table}.lang_id = languages.id
+                WHERE `name` = '{$lang->name}' $filter_sql 
+                AND `title` 
                 LIKE '%$search_text%' 
                 ORDER BY $sort_sql 
                 LIMIT $offset, $limit";
@@ -115,20 +102,20 @@ class SharedTexts extends Texts
 
         $lang = new Language($this->con, $this->learning_lang_id, $this->user_id);
 
-        $sql = "SELECT {$this->cols['id']}, 
-                (SELECT userName FROM users WHERE userId = {$this->cols['userid']}), 
-                {$this->cols['title']}, 
-                {$this->cols['author']}, 
-                {$this->cols['sourceURI']},
-                {$this->cols['type']}, 
-                {$this->cols['nrofwords']}, 
-                {$this->cols['level']}, 
-                languages.LgName,
-                (SELECT COUNT(likesId) FROM likes WHERE likesTextId = {$this->cols['id']}) AS {$this->cols['totallikes']},
-                (SELECT COUNT(likesId) FROM likes WHERE likesTextId = {$this->cols['id']} AND likesUserId = $this->user_id) AS {$this->cols['userliked']}
-                FROM {$this->table} 
-                INNER JOIN languages ON {$this->table}.stextLgId = languages.LgID
-                WHERE LgName = '{$lang->name}'
+        $sql = "SELECT t.id, 
+                (SELECT `name` FROM `users` WHERE `id` = t.user_id), 
+                t.title, 
+                t.author, 
+                t.source_uri,
+                t.type, 
+                t.word_count, 
+                t.level, 
+                l.name,
+                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
+                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = $this->user_id) AS `user_liked`
+                FROM `{$this->table}` t
+                INNER JOIN `languages` l ON t.lang_id = l.id
+                WHERE `name` = '{$lang->name}'
                 ORDER BY $sort_sql 
                 LIMIT $offset, $limit";
 
@@ -152,10 +139,10 @@ class SharedTexts extends Texts
         } else {
             switch ($sort_by) {
                 case '2': // more likes first
-                    return $this->cols['totallikes'] . ' DESC';
+                    return `total_likes` . ' DESC';
                     break;
                 case '3': // less likes first
-                    return $this->cols['totallikes'];
+                    return `total_likes`;
                     break;
                 default:
                     return '';
@@ -173,13 +160,13 @@ class SharedTexts extends Texts
      */
     public function isAlreadyinDB($source_url)
     {
-        if (empty($sourcel_url)) {
+        if (empty($source_url)) {
             return false;
         }
 
         $sql = "SELECT 1
-                FROM $this->table
-                WHERE {$this->cols['sourceURI']} = '$source_url'";
+                FROM `$this->table`
+                WHERE `source_uri` = '$source_url'";
             
         return ($result = $this->con->query($sql)) && ($result->num_rows > 0);
     }

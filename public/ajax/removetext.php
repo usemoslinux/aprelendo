@@ -30,25 +30,28 @@ use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\ArchivedTexts;
 
 try {
-    if (isset($_POST['textIDs'])) {     
+    if (isset($_POST['textIDs']) && isset($_POST['is_archived'])) {     
+        $text_ids = $_POST['textIDs'];
+        $is_archived = $_POST['is_archived'];
         $user_id = $user->id;
         $learning_lang_id = $user->learning_lang_id;
     
         // decide wether we are deleting an archived text or not
-        $query_str = basename($_SERVER['HTTP_REFERER']);
-        if (strpos($query_str, 'sa=1') !== false) {
+        if ($is_archived) {
             $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id);
         } else {
             $texts_table = new Texts($con, $user_id, $learning_lang_id);
         }
     
-        $result = $texts_table->deleteByIds($_POST['textIDs']);
+        $result = $texts_table->deleteByIds($text_ids);
 
         if (!$result) {
-            throw new Exception ('There was an unexpected error trying to remove this text');
+            throw new \Exception ('There was an unexpected error trying to remove this text');
         }
+    } else {
+        throw new \Exception ('There was an error in the parameters provided to remove this text');
     }
-} catch (Exception $e) {
+} catch (\Exception $e) {
     $error = array('error_msg' => $e->getMessage());
     header('Content-Type: application/json');
     echo json_encode($error);

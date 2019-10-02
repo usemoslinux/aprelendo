@@ -45,7 +45,7 @@ body {
     background: white;
     color: #384452;
     font-family: "Lato", sans-serif;
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 400;
     height: 100%;
     margin: 0;
@@ -99,19 +99,15 @@ a:focus {
     text-shadow: none;
 }
 
-.centered {
-    text-align: center;
-}
-
 /*	################################################################
 BOOTSTRAP MODIFICATIONS & TWEAKS
 ################################################################# */
 
 .navbar {
-    border-radius: 0;
+    /* border-radius: 0;
     margin-bottom: 0;
-    min-height: 70px;
-    padding-top: 10px;
+    min-height: 70px; */
+    padding: 15px;
 }
 
 .navbar-brand {
@@ -184,6 +180,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     color: #0275d8;
     border-radius: 98px;
     font-size: 16px;
+    text-shadow: none;
 }
 
 .navbar-light .navbar-nav .nav-link:focus,
@@ -208,6 +205,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     #login-menu {
         background-color: transparent;
         color: white;
+        padding-bottom: 0;
     }
 
     #user-menu:hover,
@@ -219,11 +217,16 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 
     #learning-lang-span {
         display: inline;
-        font-size: 18px;
+    }
+
+    #language-menu {
+        font-size: 16px;
+        margin-top: 12px;
     }
 
     #img-language-flag {
-        display: none;
+        width: 16px;
+        height: 16px;
     }
 }
 
@@ -264,6 +267,10 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 
     .navbar-light .navbar-nav .open .dropdown-menu>a {
         color: white;
+    }
+
+    .navbar-nav {
+        padding: inherit;
     }
 }
 
@@ -392,14 +399,14 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     filter: invert(100%);
 }
 
-/* Services Wrap */
+/* Main-Features Wrap */
 
-.service, .why-go-premium {
+.main-features, .why-go-premium {
     padding-top: 50px;
     padding-bottom: 50px;
 }
 
-.service i {
+.main-features i {
     color: #0275d8;
     font-size: 60px;
     padding: 15px;
@@ -445,6 +452,14 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 
 .footer i:hover {
     color: #0275d8;
+}
+
+.list-inline {
+	padding: 0;
+}
+
+.list-inline-item {
+	padding-top: 5px;
 }
 
 /*	################################################################
@@ -1191,11 +1206,12 @@ small>a:not(.btn):hover {
 /* HEADER WRAP */
 
 .headerwrap {
-    background: #fff url("../img/backgrounds/welcome-page-background.jpeg");
+    background: #fff url("../img/backgrounds/welcome-page-background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     text-align: center;
+    text-shadow: 1px 1px #333;
 }
 
 .headerwrap h1,
@@ -1227,12 +1243,12 @@ h5 {
 
 /* HOW IT WORKS */
 
-.hiw {
-    padding-bottom: 50px;
+.hiw strong {
+    font-size: 60px;
+    padding: 15px;
 }
 
 .hiw h1 {
-    text-align: center;
     padding-bottom: 25px;
 }
 

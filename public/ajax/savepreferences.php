@@ -38,8 +38,8 @@ $mode = isset($_POST['mode']) ? $_POST['mode'] : 'light';
 $assistedlearning = isset($_POST['assistedlearning']) ? $_POST['assistedlearning'] : true;
 
 try {
-    $result = $con->query("REPLACE INTO preferences (prefUserId, prefFontFamily,
-    prefFontSize, prefLineHeight, prefAlignment, prefMode, prefAssistedLearning)
+    $result = $con->query("REPLACE INTO `preferences` (`user_id`, `font_family`,
+    `font_size`, `line_height`, `text_alignment`, `learning_mode`, `assisted_learning`)
     VALUES ('$user_id', '$fontfamily', '$fontsize', '$lineheight', '$alignment', '$mode', '$assistedlearning')");
     
     if (!$result) {

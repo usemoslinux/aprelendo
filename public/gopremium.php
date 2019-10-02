@@ -32,10 +32,10 @@ if (!$user->isLoggedIn()) {
 }
 ?>
 
-<!-- SERVICE -->
+<!-- MAIN-FEATURES -->
 <div id="wgp" class="why-go-premium">
     <div class="container">
-        <div class="row centered">
+        <div class="row text-center">
             <h1 id="hiw" class="col-12">Why go premium?<br><br></h1>
             
             <div class="col-lg-3">
@@ -63,7 +63,7 @@ if (!$user->isLoggedIn()) {
     </div>
     <!--/container -->
 </div>
-<!--/service -->
+<!--/main-features -->
 
 <section class="pricing py-5">
     <div id="pricing" class="container">

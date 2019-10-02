@@ -71,13 +71,13 @@ class User
         $this->active = false;
 
         // check if user already exists
-        $result = $this->con->query("SELECT userName FROM users WHERE userName='$username'");
+        $result = $this->con->query("SELECT `name` FROM `users` WHERE `name`='$username'");
         if ($result->num_rows > 0) {
             throw new \Exception ('Username already exists. Please try again.');
         }
         
         // check if email already exists
-        $result = $this->con->query("SELECT userEmail FROM users WHERE userEmail='$email'");
+        $result = $this->con->query("SELECT `email` FROM `users` WHERE `email`='$email'");
         if ($result->num_rows > 0) {
             throw new \Exception ('Email already exists. Did you <a href="forgotpassword.php">forget</a> you username or password?');
         }
@@ -91,7 +91,7 @@ class User
 
         // save user data in db
         $user_active = !$send_email;
-        $result = $this->con->query("INSERT INTO users (userName, userPasswordHash, userEmail, userNativeLang, userLearningLang, userActivationHash, userActive) 
+        $result = $this->con->query("INSERT INTO `users` (`name`, `password_hash`, `email`, `native_lang_iso`, `learning_lang_iso`, `activation_hash`, `is_active`) 
             VALUES ('$username', '$password_hash', '$email', '$native_lang', '$learning_lang', '$activation_hash', '$user_active')"); 
         if ($result) {
             $user_id = $this->id = $this->con->insert_id;
@@ -101,12 +101,12 @@ class User
                 $translator_uri = $this->con->escape_string('https://translate.google.com/m?hl=' . $value . '&sl=' . Language::$lg_iso_codes[$native_lang] . '&&ie=UTF-8&q=%s');
                 $dict_uri = $this->con->escape_string('https://www.linguee.com/' . $value . '-' . Language::$lg_iso_codes[$native_lang] . '/search?source=auto&query=%s');
                 
-                $result = $this->con->query("INSERT INTO languages (LgUserId, LgName, LgDict1URI, LgTranslatorURI) 
+                $result = $this->con->query("INSERT INTO `languages` (`user_id`, `name`, `dict1_uri`, `translator_uri`) 
                     VALUES ('$user_id', '$key', '$dict_uri', '$translator_uri')");
             }
 
             if ($result) {
-                $result = $this->con->query("INSERT INTO preferences (prefUserId, prefFontFamily, prefFontSize, prefLineHeight, prefAlignment, prefMode, prefAssistedLearning) 
+                $result = $this->con->query("INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`, `learning_mode`, `assisted_learning`) 
                     VALUES ('$user_id', 'Helvetica', '12pt', '1.5', 'left', 'light', '1')");
                 
                 return $send_email ? $this->sendActivationEmail($email, $username, $activation_hash) : true;
@@ -174,11 +174,11 @@ class User
         $hash = $this->con->escape_string($hash);
 
         // check if user name & hash exist in db
-        $result = $this->con->query("SELECT userActive FROM users WHERE userName='$username' AND userActivationHash='$hash'");
+        $result = $this->con->query("SELECT `is_active` FROM `users` WHERE `name`='$username' AND `activation_hash`='$hash'");
         
         if ($result->num_rows > 0) {
             $yesterday = date("Y-m-d", time() - 60 * 60 * 24);
-            $result = $this->con->query("UPDATE users SET userActive=true, userPremiumUntil='$yesterday' WHERE userName='$username' AND userActivationHash='$hash'");
+            $result = $this->con->query("UPDATE `users` SET `is_active`=true, `premium_until`='$yesterday' WHERE `name`='$username' AND `activation_hash`='$hash'");
 
             if (!$result) {
                 throw new \Exception ('Oops! There was an unexpected error when trying to activate your account.');
@@ -200,7 +200,7 @@ class User
         $username = $this->con->escape_string($username);
         $password = $this->con->escape_string($password);
         
-        $result = $this->con->query("SELECT * FROM users WHERE userName='$username'");
+        $result = $this->con->query("SELECT * FROM `users` WHERE `name`='$username'");
         
         // check if username exists
         if ($result->num_rows == 0) { // wrong username
@@ -208,11 +208,11 @@ class User
         }
 
         $row = $result->fetch_assoc();
-        $user_id = $row['userId'];
-        $hashedPassword = $row['userPasswordHash'];
+        $user_id = $row['id'];
+        $hashedPassword = $row['password_hash'];
 
         // check if user account is active
-        if ($row['userActive'] == false) {
+        if ($row['is_active'] == false) {
             throw new \Exception ('You need to activate your account first. Check your email for the activation link.');
         }
         
@@ -220,12 +220,12 @@ class User
             $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : "";
 
             // first, remove old tokens from auth_tokens table
-            $result = $this->con->query("DELETE FROM auth_tokens WHERE expires < NOW()");
+            $result = $this->con->query("DELETE FROM `auth_tokens` WHERE `expires` < NOW()");
             
             // check if valid token is already in db
-            $sql = "SELECT token, expires
-                    FROM auth_tokens
-                    WHERE userid=$user_id AND expires >= NOW()
+            $sql = "SELECT `token`, `expires`
+                    FROM `auth_tokens`
+                    WHERE `user_id`=$user_id AND `expires` >= NOW()
                     LIMIT 1";
 
             $result = $this->con->query($sql);
@@ -238,11 +238,11 @@ class User
             } else {
                 // create new token, insert it in db & set cookie
                 $token = $this->token = $this->generateToken();
-                $user_id = $this->user_id = $row['userId'];
+                $user_id = $this->user_id = $row['user_id'];
                 $time_stamp = time() + 31536000; // 1 year
                 $expires = $this->token_expire_date = date('Y-m-d H:i:s', $time_stamp);
                 
-                $result = $this->con->query("INSERT INTO auth_tokens (token, userid, expires) VALUES ('$token', $user_id, '$expires')");
+                $result = $this->con->query("INSERT INTO `auth_tokens` (`token`, `user_id`, `expires`) VALUES ('$token', $user_id, '$expires')");
                 if ($result) {
                     setcookie('user_token', $token, $time_stamp, "/", $domain, true);
                 } else {
@@ -283,23 +283,23 @@ class User
             $token = $_COOKIE['user_token'];
             
             // get user id
-            if ($result = $this->con->query("SELECT userid FROM auth_tokens WHERE token='$token'")) {
+            if ($result = $this->con->query("SELECT `user_id` FROM `auth_tokens` WHERE `token`='$token'")) {
                 $row = $result->fetch_assoc();
-                $this->id = $user_id = $row['userid'];
+                $this->id = $user_id = $row['user_id'];
                 
                 // get username & other user data
-                if ($result = $this->con->query("SELECT userName, userEmail, userNativeLang, userLearningLang, userPremiumUntil FROM users WHERE userId='$user_id'")) {
+                if ($result = $this->con->query("SELECT `name`, `email`, `native_lang_iso`, `learning_lang_iso`, `premium_until` FROM `users` WHERE `id`='$user_id'")) {
                     $row = $result->fetch_assoc();
-                    $this->name = $row['userName'];
-                    $this->email = $row['userEmail'];
-                    $this->native_lang = $row['userNativeLang'];
-                    $this->learning_lang = $learning_lang = $row['userLearningLang'];
-                    $this->premium_until = $row['userPremiumUntil'];
+                    $this->name = $row['name'];
+                    $this->email = $row['email'];
+                    $this->native_lang = $row['native_lang_iso'];
+                    $this->learning_lang = $learning_lang = $row['learning_lang_iso'];
+                    $this->premium_until = $row['premium_until'];
                     
                     // get active language id (learning_lang_id)
-                    if ($result = $this->con->query("SELECT LgId FROM languages WHERE LgUserId='$user_id' AND LgName='$learning_lang'")) {
+                    if ($result = $this->con->query("SELECT `id` FROM `languages` WHERE `user_id`='$user_id' AND `name`='$learning_lang'")) {
                         $row = $result->fetch_assoc();
-                        $this->learning_lang_id = $row['LgId'];
+                        $this->learning_lang_id = $row['id'];
                         $is_logged = true;
                     }
                 }
@@ -342,7 +342,7 @@ class User
             
             // check if user already exists
             if ($this->name != $new_username) {
-                $result = $this->con->query("SELECT userName FROM users WHERE userName='$new_username'");
+                $result = $this->con->query("SELECT `name` FROM `users` WHERE `name`='$new_username'");
                 if ($result->num_rows > 0) {
                     throw new \Exception ('Username already exists. Please try again.');
                 }
@@ -350,7 +350,7 @@ class User
             
             // check if email already exists
             if ($this->email != $new_email) {
-                $result = $this->con->query("SELECT userEmail FROM users WHERE userEmail='$new_email'");
+                $result = $this->con->query("SELECT `email` FROM `users` WHERE `email`='$new_email'");
                 if ($result->num_rows > 0) {
                     throw new \Exception ('Email already exists. Please try using another one.');
                 }
@@ -358,15 +358,15 @@ class User
             
             // was a new password given? In that case, save new password and replace the old one
             if (empty($new_password)) {
-                $result = $this->con->query("UPDATE users SET userName='$new_username', 
-                userEmail='$new_email', userNativeLang='$new_native_lang', userLearningLang='$new_learning_lang' 
-                WHERE userId='$user_id'");
+                $result = $this->con->query("UPDATE `users` SET `name`='$new_username', 
+                `email`='$new_email', `native_lang_iso`='$new_native_lang', `learning_lang_iso`='$new_learning_lang' 
+                WHERE `id`='$user_id'");
             } else {
                 $new_password_hash = password_hash($new_password, PASSWORD_BCRYPT, ['cost' => 11]);
 
-                $result = $this->con->query("UPDATE users SET userName='$new_username', userPasswordHash='$new_password_hash', 
-                userEmail='$new_email', userNativeLang='$new_native_lang', userLearningLang='$new_learning_lang' 
-                WHERE userId='$user_id'");
+                $result = $this->con->query("UPDATE `users` SET `name`='$new_username', `password_hash`='$new_password_hash', 
+                `email`='$new_email', `native_lang_iso`='$new_native_lang', `learning_lang_iso`='$new_learning_lang' 
+                WHERE `id`='$user_id'");
             }
             
             if ($result) {
@@ -404,8 +404,8 @@ class User
         $table_names = array('texts', 'archivedtexts');
         
         foreach ($table_names as $table) {
-            $user_id_col_name = $table == 'texts' ? 'textUserId' : 'atextUserId';
-            $source_uri_col_name = $table == 'texts' ? 'textSourceURI' : 'atextSourceURI';
+            $user_id_col_name = $table == 'texts' ? 'user_id' : 'user_id';
+            $source_uri_col_name = $table == 'texts' ? 'source_uri' : 'source_uri';
             $result = $this->con->query("SELECT $source_uri_col_name FROM $table WHERE $user_id_col_name='{$this->id}'");
             
             if ($result->num_rows > 0) {
@@ -423,7 +423,7 @@ class User
         }
         
         // delete user from db
-        $result = $this->con->query("DELETE FROM users WHERE userId='{$this->id}'");
+        $result = $this->con->query("DELETE FROM `users` WHERE `id`='{$this->id}'");
         if (!$result) {
             throw new \Exception('Oops! There was an unexpected problem trying to delete your account. Please try again later.');
         }
@@ -451,14 +451,14 @@ class User
      * @return boolean
      */
     public function setActiveLang($lang_id) {
-        $result = $this->con->query("SELECT LgName FROM languages WHERE LgId = '$lang_id'");
+        $result = $this->con->query("SELECT `name` FROM `languages` WHERE `id` = '$lang_id'");
         
         if ($result) {
             $row = $result->fetch_assoc();
-            $lang_name = $this->con->escape_string($row['LgName']);
+            $lang_name = $this->con->escape_string($row['name']);
             $user_id = $this->id;
             
-            $result = $this->con->query("UPDATE users SET userLearningLang = '$lang_name' WHERE userId='$user_id'");
+            $result = $this->con->query("UPDATE `users` SET `learning_lang_iso` = '$lang_name' WHERE `id`='$user_id'");
             
             if ($result) {
                 $this->learning_lang_id = $lang_id;
@@ -472,10 +472,10 @@ class User
     public function isAllowedToAccessElement($table, $id)
     {
         $col_names = array(
-            array('texts', 'textID', 'textUserId'),
-            array('archivedtexts', 'atextID', 'atextUserId'),
-            array('sharedtexts', 'stextID', 'stextUserId'),
-            array('words', 'wordID', 'wordUserId')
+            array('texts', 'id', 'user_id'),
+            array('archived_texts', 'id', 'user_id'),
+            array('shared_texts', 'id', 'user_id'),
+            array('words', 'id', 'user_id')
         );
 
         foreach ($col_names as $col_name) {
@@ -515,10 +515,10 @@ class User
     private function checkPassword($password) {
         $user_id = $this->id;
 
-        $result = $this->con->query("SELECT userPasswordHash FROM users WHERE userId='$user_id'");
+        $result = $this->con->query("SELECT `password_hash` FROM `users` WHERE `id`='$user_id'");
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                $hashedPassword = $row['userPasswordHash'];
+                $hashedPassword = $row['password_hash'];
                 if (password_verify($password, $hashedPassword)) {
                     return true;
                 } else {

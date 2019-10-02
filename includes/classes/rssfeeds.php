@@ -43,13 +43,13 @@ class RSSFeeds
         $user_id = $con->real_escape_string($user_id);
         $learning_lang_id = $con->real_escape_string($learning_lang_id);
 
-        $result = $con->query("SELECT LgRSSFeed1URI, LgRSSFeed2URI, LgRSSFeed3URI FROM languages WHERE LgUserId='$user_id' AND LgID='$learning_lang_id'");
+        $result = $con->query("SELECT `rss_feed1_uri`, `rss_feed2_uri`, `rss_feed3_uri` FROM `languages` WHERE `user_id`='$user_id' AND `id`='$learning_lang_id'");
 
         if ($result) {
             $rows = $result->fetch_assoc();
-            $feed1uri = $rows['LgRSSFeed1URI'];
-            $feed2uri = $rows['LgRSSFeed2URI'];
-            $feed3uri = $rows['LgRSSFeed3URI'];
+            $feed1uri = $rows['rss_feed1_uri'];
+            $feed2uri = $rows['rss_feed2_uri'];
+            $feed3uri = $rows['rss_feed3_uri'];
 
             $this->feed1 = new RSSFeed($feed1uri);
             $this->feed2 = new RSSFeed($feed2uri);

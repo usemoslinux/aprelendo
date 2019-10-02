@@ -34,12 +34,12 @@ $learning_lang_id = $user->learning_lang_id;
 $id = $con->real_escape_string($_GET['id']);
 
 try {
-    $result = $con->query("SELECT textSourceURI FROM texts WHERE textId='$id' AND textUserId='$user_id' AND textLgId = '$learning_lang_id'") or die(mysqli_error($con));
+    $result = $con->query("SELECT `source_uri` FROM `texts` WHERE `id`='$id' AND `user_id`='$user_id' AND `lang_id` = '$learning_lang_id'") or die(mysqli_error($con));
     
     if ($result) {
         $row = $result->fetch_assoc();
         $ebook_file = new EbookFile($user->isPremium());
-        $ebook_content = $ebook_file->get($row['textSourceURI']);
+        $ebook_content = $ebook_file->get($row['source_uri']);
         if ($ebook_content != false) {
             return $ebook_content;
         } else {

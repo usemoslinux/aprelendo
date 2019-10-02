@@ -45,8 +45,9 @@ $learning_lang_full = ucfirst(Language::getLanguageName($user->learning_lang));
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img id="img-language-flag" src="/img/flags/<?php echo $user->learning_lang . '.svg';?>"
                                 alt="<?php echo $learning_lang_full; ?> flag">
-                            <span id="learning-lang-span">&nbsp;
-                                <?php echo $learning_lang_full; ?></span>
+                            <span id="learning-lang-span">
+                                <?php echo $learning_lang_full; ?>
+                            </span>
                             <b class="caret"></b>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="language-menu">

@@ -46,7 +46,7 @@ $sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
 if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searched for something, show search results
     // initialize pagination variables
     if (isset($_GET['p'])) {
-        $page = !empty($_GET['p']) ? $_GET['p'] : 1;
+        $page = isset($_GET['p']) && !empty($_GET['p']) ? $_GET['p'] : 1;
     }
     
     $search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';

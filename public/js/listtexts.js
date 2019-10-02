@@ -32,6 +32,8 @@ $(document).ready(function () {
                 ids.push($(this).attr('data-idText'));
             });
             
+            var params = getURIParameters();
+            var is_archived = params.sa == '1';
             /**
             * Deletes selected texts from the database (based on their ID).
             * When done, also removes selected rows from HTML table.
@@ -41,7 +43,8 @@ $(document).ready(function () {
                 url: 'ajax/removetext.php',
                 type: 'POST',
                 data: {
-                    textIDs: JSON.stringify(ids)
+                    textIDs: JSON.stringify(ids),
+                    is_archived: is_archived ? 1 : 0
                 }
             })
             .done(function () {
@@ -66,8 +69,8 @@ $(document).ready(function () {
         });
         
         /**
-        * Moves selected texts from the "texts" table to the "archivedtexts" table in the database (archive);
-        * or, vice-versa, moves texts from the "archivedtexts" table to the "texts" table (unarchive)
+        * Moves selected texts from the "texts" table to the "archived_texts" table in the database (archive);
+        * or, vice-versa, moves texts from the "archived_texts" table to the "texts" table (unarchive)
         * This is done based on text IDs.
         * @param {integer array} ids Ids of the selected elements in the database
         * @param {boolean} archivetxt If true, archive text; else, unarchive text
@@ -139,15 +142,7 @@ $(document).ready(function () {
      * Selects sorting
      */
     $('#dropdown-menu-sort').on('click', function(e) {
-        var url = window.location.pathname;
-
-        var filename = '';
-        if (url.indexOf('&') > -1) {
-            filename = url.substring(url.lastIndexOf('/')+1, url.indexOf('&'));    
-        } else {
-            filename = url.substring(url.lastIndexOf('/')+1);    
-        }
-        
+        var filename = getCurrentFileName();
         var params = 'f=' + $('#f').val() + '&s=' + $('#s').val() + '&sa=' + $('#sa').val() + '&o=' + $('#o').val();
         window.location.replace(filename + '?' + params);        
     });
@@ -163,6 +158,35 @@ $(document).ready(function () {
         e.preventDefault();
 
         setCookie('hide_welcome_msg', true, 365 * 10);
-    });   
+    });  
+    
+    function getCurrentFileName() {
+        var url = window.location.pathname;
+
+        var filename = '';
+        if (url.indexOf('&') > -1) {
+            filename = url.substring(url.lastIndexOf('/')+1, url.indexOf('&'));    
+        } else {
+            filename = url.substring(url.lastIndexOf('/')+1);    
+        }
+
+        return filename;
+    }
+
+  /**
+   * Returns current page GET parameters
+   */
+  function getURIParameters() {
+    var parts = window.location.search.substr(1).split("&");
+    var result = {};
+
+    if (parts != '') {
+      for (var i = 0; i < parts.length; i++) {
+        var temp = parts[i].split("=");
+        result[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
+      }
+    }
+    return result;
+  } // end getURIParameters
     
 });
