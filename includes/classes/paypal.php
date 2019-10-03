@@ -29,6 +29,20 @@ class Paypal extends DBEntity
     public function __construct($con, $user_id, $enable_sandbox) {
         parent::__construct($con, $user_id);
         $this->url = $enable_sandbox ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
+
+        // create payments table if it doesn't exist
+        $sql = "CREATE TABLE `payments` (
+            `id` int(6) NOT NULL AUTO_INCREMENT,
+            `user_id` int(10) unsigned NOT NULL,
+            `txn_id` varchar(20) NOT NULL,
+            `amount` decimal(7,2) NOT NULL,
+            `status` varchar(25) NOT NULL,
+            `item_id` varchar(25) NOT NULL,
+            `date_created` datetime NOT NULL,
+            PRIMARY KEY (`id`)
+           ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8";
+
+        $this->con->query($sql);
     }
 
     public function verifyTransaction($data) {
@@ -57,7 +71,7 @@ class Paypal extends DBEntity
             $errno = curl_errno($ch);
             $errstr = curl_error($ch);
             curl_close($ch);
-            throw new Exception("cURL error: [$errno] $errstr");
+            throw new \Exception("cURL error: [$errno] $errstr");
         }
     
         $info = curl_getinfo($ch);
@@ -65,7 +79,7 @@ class Paypal extends DBEntity
         // Check the http response
         $httpCode = $info['http_code'];
         if ($httpCode != 200) {
-            throw new Exception("PayPal responded with http code $httpCode");
+            throw new \Exception("PayPal responded with http code $httpCode");
         }
     
         curl_close($ch);

@@ -32,8 +32,8 @@ if (!$user->isLoggedIn()) {
 }
 ?>
 
-<!-- MAIN-FEATURES -->
-<div id="wgp" class="why-go-premium">
+<!-- WHY GO PREMIUM -->
+<section id="wgp" class="why-go-premium">
     <div class="container">
         <div class="row text-center">
             <h1 id="hiw" class="col-12">Why go premium?<br><br></h1>
@@ -46,7 +46,7 @@ if (!$user->isLoggedIn()) {
             <div class="col-lg-3">
                 <i class="fas fa-rss"></i>
                 <h4>RSS/Atom feeds</h4>
-                <p>Oh, old good <a href="https://en.wikipedia.org/wiki/RSS" target="_blank" rel="noopener noreferrer">RSS/Atom</a>... By going premium you will be allowed to add texts from up to 3 feeds. Each one will show its last 10 publications.</p>
+                <p>Old good <a href="https://en.wikipedia.org/wiki/RSS" target="_blank" rel="noopener noreferrer">RSS/Atom</a>... By going premium you will be allowed to add texts from up to 3 feeds. Each one will show its last 10 publications.</p>
             </div>
             <div class="col-lg-3">
                 <i class="fas fa-book-open"></i>
@@ -56,19 +56,29 @@ if (!$user->isLoggedIn()) {
             <div class="col-lg-3">
                 <i class="fas fa-cloud-download-alt"></i>
                 <h4>Export words</h4>
-                <p>If you are an <a href="https://apps.ankiweb.net/" target="_blank" rel="noopener noreferrer">Anki</a> lover you will appreciate this.</p>
+                <p>If you are an <a href="https://apps.ankiweb.net/" target="_blank" rel="noopener noreferrer">Anki</a> user or like creating flashcards to learn new vocabulary, you will appreciate this.</p>
             </div>
         </div>
-        <!--/row -->
+
+        <div class="row text-center">
+            <div class="offset-lg-3 col-lg-3">
+                <i class="fas fa-fire"></i>
+                <h4>High frequency words</h4>
+                <p>Premium users will get visual aids indicating which are the most important words to learn, i.e. those that are among the most used by native speakers.</p>
+            </div>
+            <div class="col-lg-3">
+                <i class="fab fa-osi"></i>
+                <h4>Support Open Source</h4>
+                <p>We decided to open Aprelendo's source code so that anyone -specially schools or academic institutions- can install it locally and access all premium functionalities without any cost. </p>
+            </div>
+        </div>
     </div>
-    <!--/container -->
-</div>
-<!--/main-features -->
+</section>
 
 <section class="pricing py-5">
     <div id="pricing" class="container">
         <div class="row">
-            <!-- Free Tier -->
+            <!-- Free -->
             <div class="col-lg-4">
                 <div class="card mb-5 mb-lg-0">
                     <div class="card-body">
@@ -93,10 +103,11 @@ if (!$user->isLoggedIn()) {
                             <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Export words
                                 (CSV)</li>
                         </ul>
+                        <a href="login.php" role="button" class="btn btn-block btn-primary text-uppercase">Sign In</a>
                     </div>
                 </div>
             </div>
-            <!-- Plus Tier -->
+            <!-- 1 month subscription -->
             <div class="col-lg-4">
                 <div class="card mb-5 mb-lg-0">
                     <div class="card-body">
@@ -140,7 +151,7 @@ if (!$user->isLoggedIn()) {
                     </div>
                 </div>
             </div>
-            <!-- Pro Tier -->
+            <!-- 1 year subscription -->
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-body">

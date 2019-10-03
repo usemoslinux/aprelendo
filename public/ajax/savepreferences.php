@@ -43,7 +43,7 @@ try {
     VALUES ('$user_id', '$fontfamily', '$fontsize', '$lineheight', '$alignment', '$mode', '$assistedlearning')");
     
     if (!$result) {
-        throw new Exception ('There was an unexpected error trying to save your preferences. Please, try again later.');
+        throw new \Exception ('There was an unexpected error trying to save your preferences. Please, try again later.');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

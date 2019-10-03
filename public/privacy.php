@@ -58,8 +58,8 @@ if (!$user->isLoggedIn()) {
                     <p>Unlike most websites, we won't use them to provide analytics, store your preferences, enable advertisements delivery or include behavioral advertising. We only use cookies to enable auto-login ("remember me") functionality and to remember the last reading chapter of ebooks.</p>
                     <p>Here is a detailed description of the cookies we store in your computer:</p>
                     <ul>
-                        <li>user_token: user id to enable auto-login</li>
-                        <li>accept_cookies: tells if you have accepted to use cookies</li>
+                        <li>user_token: user token to enable auto-login</li>
+                        <li>accept_cookies: tells us you have accepted to use cookies</li>
                         <li>hide_welcome_msg: hides welcome message, which introduces Aprelendo to new users</li>
                         <li>[ebook_key]-lastpos: indicates ebook's last reading position</li>
                     </ul>

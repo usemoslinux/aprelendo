@@ -37,10 +37,10 @@ try {
         $result = $words_table->createCSVFile($search_text, $order_by);
 
         if (!$result) {
-            throw new Exception ('There was an unexpected error trying to export your word list');
+            throw new \Exception ('There was an unexpected error trying to export your word list');
         }
     } else {
-        throw new Exception ('Only premium users are allowed to export word lists');
+        throw new \Exception ('Only premium users are allowed to export word lists');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

@@ -41,7 +41,7 @@ if (isset($_POST['word'])) {
         $result = $words_table->add($word, $status, $isphrase);
 
         if (!$result) {
-            throw new Exception ('Oops! There was an unexpected error trying to add this word.');
+            throw new \Exception ('Oops! There was an unexpected error trying to add this word.');
         }
     } catch (Exception $e) {
         $error = array('error_msg' => $e->getMessage());

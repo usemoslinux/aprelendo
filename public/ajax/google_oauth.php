@@ -47,12 +47,12 @@ if(isset($_POST['Eea']) && !empty($_POST['Eea']) && !empty($_POST['U3']))
                 $result = $con->query($sql);
 
                 if ($result) {
-                    $user->createRememberMeCookie($user_name, "", $google_id);
+                    $user->login($user_name, "", $google_id);
                 }
             } else {
                 // new user
                 if ($user->register($google_name, $google_email, $google_id)) {
-                    $user->createRememberMeCookie($google_name, $google_id);
+                    $user->login($google_name, $google_id);
                 }
             }
         } else {

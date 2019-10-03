@@ -28,7 +28,7 @@ try {
         }
         echo $html. '</div>';
     } else {
-        throw new Exception ('There are no RSS feeds to show. Please, add some in the <a href="languages.php">languages</a> section. You can add up to 3 feeds per language.');
+        throw new \Exception ('There are no RSS feeds to show. Please, add some in the <a href="languages.php">languages</a> section. You can add up to 3 feeds per language.');
     }
 } catch (Exception $e) {
     echo '<div class="alert alert-danger">' . $e->getMessage() . '</div>';
@@ -91,7 +91,7 @@ function printRSSFeed($feed, $groupindex) {
         }
         $html .= '</div></div></div></div>';
     } else {
-        throw new Exception ("Oops! There was an error trying to fetch this feed: $feed->url \nIt is probably due to a malformed RSS feed.");
+        throw new \Exception ("Oops! There was an error trying to fetch this feed: $feed->url \nIt is probably due to a malformed RSS feed.");
     }
     return $html;
 }

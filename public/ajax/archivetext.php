@@ -51,7 +51,7 @@ try {
         }
 
         if (!$result) {
-            throw new Exception ('There was an unexpected error trying to (un)archive this text.');
+            throw new \Exception ('There was an unexpected error trying to (un)archive this text.');
         }
     }
 } catch (Exception $e) {

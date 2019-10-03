@@ -101,7 +101,7 @@ try {
                         $msg = 'The text you are trying to add already exists in our database. ';
                         $msg .= $is_shared ? 'Look for it in the <a href="sharedtexts.php">shared texts</a> section.' : 'Look for it in your <a href="texts.php">private library</a>.';
 
-                        throw new Exception($msg);
+                        throw new \Exception($msg);
                     }
                     $result = $texts_table->add($title, $author, $text, $source_url, $target_file_name, $type);
                 }
@@ -110,11 +110,11 @@ try {
                     // if everything goes fine return HTTP code 204 (No content), as nothing is returned 
                     http_response_code(204);
                 } else { // in case of error, show message
-                    throw new Exception ('Oops! There was an unexpected error when uploading this text.');
+                    throw new \Exception ('Oops! There was an unexpected error when uploading this text.');
                 }
             } else {
                 $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
-                throw new Exception ($error_str);    
+                throw new \Exception ($error_str);    
             }
         }
         break; // end of simple text or video
@@ -138,7 +138,7 @@ try {
         
         case 'ebook':
         if(!isset($_POST['title']) || !isset($_POST['author']) || !isset($_FILES['url'])) {
-            throw new Exception('Please, complete all the required fields: name, author & epub file.');
+            throw new \Exception('Please, complete all the required fields: name, author & epub file.');
         } else {
             $title = $_POST['title'];
             $author = $_POST['author'];
@@ -149,7 +149,7 @@ try {
 
             // check if file exists
             if (!isset($_FILES['url']) || $_FILES['url']['error'] === UPLOAD_ERR_NO_FILE) {
-                throw new Exception('No file found. Please select a file to upload.');
+                throw new \Exception('No file found. Please select a file to upload.');
             }
 
             // check if user is allowed to upload file & does not exceed the daily upload limit
@@ -159,7 +159,7 @@ try {
             $premium_user = $user->isPremium();
 
             if ((!$premium_user) || ($premium_user && $nr_of_uploads_today >= 1)){
-                throw new Exception ('Sorry, you have reached your file upload limit for today.');
+                throw new \Exception ('Sorry, you have reached your file upload limit for today.');
             }
 
             // upload file
@@ -183,7 +183,7 @@ try {
                 header('Content-Type: application/json');
                 echo json_encode($filename);
             } else { // in case of error, show message
-                throw new Exception ('Oops! There was an unexpected error when uploading this text.');
+                throw new \Exception ('Oops! There was an unexpected error when uploading this text.');
             }
 
         }

@@ -61,10 +61,10 @@ try {
             
             $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
             if (!$mail_sent) {
-                throw new Exception ('There was an error trying to send you an e-mail with your new temporary password.');
+                throw new \Exception ('There was an error trying to send you an e-mail with your new temporary password.');
             }
         } else { // if email address does not exist in db
-            throw new Exception ('No user registered with that email address. Please try again.');
+            throw new \Exception ('No user registered with that email address. Please try again.');
         } 
     } else if(isset($_POST['username']) && isset($_POST['pass1']) && isset($_POST['pass2'])) {
         if ($_POST['pass1'] === $_POST['pass2']) {
@@ -77,13 +77,13 @@ try {
 
             $result = $con->query("UPDATE `users` SET `password_hash`='$password_hash' WHERE `name`='$username'");
             if (!$result) { // if password update is NOT successful
-                throw new Exception ('Oops! There was an unexpected error when trying to save your new password.');
+                throw new \Exception ('Oops! There was an unexpected error when trying to save your new password.');
             }
         } else {
-            throw new Exception ('The passwords you entered are not identical. Please try again.');
+            throw new \Exception ('The passwords you entered are not identical. Please try again.');
         }
     } else {
-        throw new Exception ('Oops! There was an unexpected error when trying to reset your password.');
+        throw new \Exception ('Oops! There was an unexpected error when trying to reset your password.');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

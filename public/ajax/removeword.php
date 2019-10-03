@@ -41,7 +41,7 @@ try{
     }
 
     if (!$result) {
-        throw new Exception ('There was an unexpected error trying to remove this word');
+        throw new \Exception ('There was an unexpected error trying to remove this word');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

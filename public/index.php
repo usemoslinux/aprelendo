@@ -104,15 +104,10 @@ require_once PUBLIC_PATH . 'head.php';
                         </span>
                     </a>
                 </div>
-                <!--/col -->
             </div>
-            <!-- /row -->
         </div>
-        <!-- /container -->
     </div>
-
 </div>
-<!-- /headerwrap -->
 
 <!-- HOW IT WORKS -->
 <div class="hiw pt-5">
@@ -143,7 +138,7 @@ require_once PUBLIC_PATH . 'head.php';
             <div class="col-12">
                 <div class="video-container">
                     <iframe src="https://www.youtube.com/embed/5HLr9uxJNDs" frameborder="0" allowfullscreen
-                        class="video"></iframe>
+                        title="How it works video" class="video"></iframe>
                 </div>
             </div>
         </div>
@@ -189,10 +184,7 @@ require_once PUBLIC_PATH . 'head.php';
                 </p>
             </div>
         </div>
-        <!--/row -->
     </div>
-    <!--/container -->
 </div>
-<!--/main-features -->
 
 <?php require_once 'footer.php'?>

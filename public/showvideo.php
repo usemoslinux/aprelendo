@@ -33,7 +33,7 @@ try {
 
         // check if user has access to view this text
         if (!$user->isAllowedToAccessElement('shared_texts', $_GET['id']) || !$is_shared) {
-            throw new Exception ('User is not authorized to access this file.');
+            throw new \Exception ('User is not authorized to access this file.');
         }
         
         $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->learning_lang_id);
@@ -61,7 +61,7 @@ try {
         
         $body_css .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
-        throw new Exception ('Oops! There was an error trying to fetch that video.');
+        throw new \Exception ('Oops! There was an error trying to fetch that video.');
     }
 } catch (Exception $e) {
     header('Location:/login.php');

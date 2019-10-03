@@ -91,7 +91,7 @@ class Reader extends Text
     public $text_align;
     public $display_mode;
     public $assisted_learning;
-    public $show_freq_list;
+    public $show_freq_words;
     protected $learning_lang_id;
     protected $user_id; 
     
@@ -152,7 +152,7 @@ class Reader extends Text
             
             if ($result = $con->query("SELECT `show_freq_words` FROM `languages` WHERE `id`='$learning_lang_id'")) {
                 $row = $result->fetch_assoc();
-                $this->show_freq_list = $row['show_freq_words'];
+                $this->show_freq_words = $row['show_freq_words'];
             }
         }
     }
@@ -212,7 +212,7 @@ class Reader extends Text
                 }
                 
                 // 3. colorize frequency list words
-                if ($this->show_freq_list) {
+                if ($this->show_freq_words) {
                     $user = new User($this->con);
                     if ($user->isLoggedIn() && $user->isPremium()) {
                         $result = $this->con->query("SELECT `name` FROM languages WHERE `id`='$this->learning_lang_id'");
@@ -276,7 +276,7 @@ class Reader extends Text
         $dic_words = $result->fetch_all(MYSQLI_ASSOC);
 
         // get high frequency words list, only if necessary
-        if ($this->show_freq_list) {
+        if ($this->show_freq_words) {
             $user = new User($this->con);
             if ($user->isLoggedIn() && $user->isPremium()) {
                 $result = $this->con->query("SELECT `name` FROM `languages` WHERE `id`='$this->learning_lang_id'");
@@ -298,7 +298,7 @@ class Reader extends Text
             $search_in_dic = \array_search($word, array_column($dic_words, 'word'));
             if ($search_in_dic === false) {
                 // if necessary, underline frequency words
-                if ($this->show_freq_list) { 
+                if ($this->show_freq_words) { 
                     $search_in_freq_dic = \array_search($word, array_column($freq_words, 'word'));
                     if ($search_in_freq_dic === false) {
                         $word = "<span class='word' data-toggle='modal' data-target='#myModal'>$word</span>";

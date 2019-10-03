@@ -34,7 +34,7 @@ try {
         $video = new Videos($con, $user->id, $user->learning_lang_id);
         echo $video->fetchVideo($user->learning_lang, $video_id);
     } else {
-        throw new Exception ('There was a problem retrieving that URL. Please check it is not empty or malformed');
+        throw new \Exception ('There was a problem retrieving that URL. Please check it is not empty or malformed');
     }
     
 } catch (Exception $e) {

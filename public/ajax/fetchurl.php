@@ -29,7 +29,7 @@ try {
         $file_contents = Texts::get_url_contents($url);
         echo $file_contents ? $file_contents : '';
     } else {
-        throw new Exception ('There was a problem retrieving that URL. Please check it is not empty or malformed.');
+        throw new \Exception ('There was a problem retrieving that URL. Please check it is not empty or malformed.');
     }    
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

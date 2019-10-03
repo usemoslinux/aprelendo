@@ -33,7 +33,7 @@ $learning_lang_full = ucfirst(Language::getLanguageName($user->learning_lang));
             </a>
 
             <!-- Toggler Button -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <button class="navbar-toggler" type="button" aria-label="toggler button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
 

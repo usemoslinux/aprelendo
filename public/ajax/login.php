@@ -30,9 +30,9 @@ use Aprelendo\Includes\Classes\User;
 try {
     if (isset($_POST['username']) && isset($_POST['password'])) {
         $user = new User($con);
-        $user->createRememberMeCookie($_POST['username'], $_POST['password']);
+        $user->login($_POST['username'], $_POST['password']);
     } else {
-        throw new Exception ('Either username, email or password were not provided. Please try again.');
+        throw new \Exception ('Either username, email or password were not provided. Please try again.');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

@@ -48,6 +48,28 @@ class Texts extends DBEntity {
         $this->learning_lang_id = $learning_lang_id;
         
         $this->table = 'texts';
+        
+        // create texts table if it doesn't exist
+        $sql = "CREATE TABLE `texts` (
+            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+            `user_id` int(10) unsigned NOT NULL,
+            `lang_id` int(11) unsigned NOT NULL,
+            `title` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+            `author` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+            `text` text COLLATE utf8_unicode_ci DEFAULT NULL,
+            `audio_uri` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+            `source_uri` varchar(400) COLLATE utf8_unicode_ci DEFAULT NULL,
+            `type` tinyint(3) unsigned NOT NULL,
+            `word_count` mediumint(8) unsigned DEFAULT NULL,
+            `level` tinyint(3) unsigned DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `LgId` (`lang_id`),
+            KEY `delTextsUserId` (`user_id`),
+            CONSTRAINT `delTextsLgId` FOREIGN KEY (`lang_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT `delTextsUserId` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+           ) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+
+        $this->con->query($sql);
         }
         
     /**
@@ -96,7 +118,8 @@ class Texts extends DBEntity {
         if ($result) {
             // add entry to popularsources
             $pop_sources = new PopularSources($this->con);
-            $lang = new Language($this->con, $this->learning_lang_id, $this->user_id);
+            $lang = new Language($this->con);
+            $lang->get($this->learning_lang_id, $this->user_id);
             
             $result = $pop_sources->add($lang->name, Url::getDomainName($source_url));
         }
@@ -176,7 +199,8 @@ class Texts extends DBEntity {
             if ($deletedfromdb) {
                 $file = new File();
                 $pop_sources = new PopularSources($this->con);
-                $lang = new Language($this->con, $this->learning_lang_id, $this->user_id);
+                $lang = new Language($this->con);
+                $lang->get($this->learning_lang_id, $this->user_id);
                 
                 // delete associated file
                 foreach ($uris as $key => $value) {

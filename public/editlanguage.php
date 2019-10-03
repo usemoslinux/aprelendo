@@ -86,8 +86,8 @@ $is_premium_user = $user->isPremium();
             <div class="form-group">
                 <label for="freq-list">Underline 5000 most used words:</label>
                 <select name="freq-list" id="freq-list" class="form-control custom-select">
-                    <option value="1" <?php echo $lang->show_freq_list==true ? 'selected' : ''; ?>>Yes</option>
-                    <option value="0" <?php echo $lang->show_freq_list==false ? 'selected' : ''; ?>>No</option>
+                    <option value="1" <?php echo $lang->show_freq_words==true ? 'selected' : ''; ?>>Yes</option>
+                    <option value="0" <?php echo $lang->show_freq_words==false ? 'selected' : ''; ?>>No</option>
                 </select>
             </div>
         </div>

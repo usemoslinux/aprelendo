@@ -32,7 +32,7 @@ class Language
     public $rss_feed_1_uri;
     public $rss_feed_2_uri;
     public $rss_feed_3_uri;
-    public $show_freq_list;
+    public $show_freq_words;
 
     public static $lg_iso_codes = array(  
         'en' => 'english',
@@ -50,23 +50,28 @@ class Language
      * @param integer $id
      * @param integer $user_id
      */
-    public function __construct ($con, $id, $user_id) {
-        $id = $con->real_escape_string($id);
-        $result = $con->query("SELECT * FROM `languages` WHERE `id`='$id'");
-        if ($result) {
-            $row = $result->fetch_assoc();
-            
-            $this->con = $con;
-            $this->id = $id;
-            $this->user_id = $user_id;
-            $this->name = $row['name'];
-            $this->dictionary_uri = $row['dict1_uri'];
-            $this->translator_uri = $row['translator_uri'];
-            $this->rss_feed_1_uri = $row['rss_feed1_uri'];
-            $this->rss_feed_2_uri = $row['rss_feed2_uri'];
-            $this->rss_feed_3_uri = $row['rss_feed3_uri'];
-            $this->show_freq_list = $row['show_freq_words'];
-        }
+    public function __construct ($con) {
+        $this->con = $con;
+
+        // create languages table if it doesn't exist
+        $sql = "CREATE TABLE `languages` (
+            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+            `user_id` int(10) unsigned NOT NULL,
+            `name` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+            `dict1_uri` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+            `dict2_uri` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+            `dict3_uri` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+            `translator_uri` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+            `rss_feed1_uri` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+            `rss_feed2_uri` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+            `rss_feed3_uri` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+            `show_freq_words` tinyint(1) NOT NULL DEFAULT 0,
+            PRIMARY KEY (`id`),
+            KEY `userDeleteLang` (`user_id`),
+            CONSTRAINT `userDeleteLang` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+           ) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+
+        $this->con->query($sql);
     }
 
     /**
@@ -86,11 +91,11 @@ class Language
             $rss_feed_1_uri = $array['rss-feed1-uri'];
             $rss_feed_2_uri = $array['rss-feed2-uri'];
             $rss_feed_3_uri = $array['rss-feed3-uri'];
-            $show_freq_list = $array['freq-list'];
+            $show_freq_words = $array['freq-list'];
             
             $sql_str = "UPDATE `languages` SET `name`='$name', `dict1_uri`='$dictionary_uri',
                 `translator_uri`='$translator_uri', `rss_feed1_uri`='$rss_feed_1_uri', `rss_feed2_uri`='$rss_feed_2_uri', 
-                `rss_feed3_uri`='$rss_feed_3_uri', `show_freq_words`=$show_freq_list WHERE `user_id`='$user_id' AND `id`='$id'";
+                `rss_feed3_uri`='$rss_feed_3_uri', `show_freq_words`=$show_freq_words WHERE `user_id`='$user_id' AND `id`='$id'";
         } else {
             $sql_str = "UPDATE `languages` SET `name`='$name', `dict1_uri`='$dictionary_uri',
                 `translator_uri`='$translator_uri' WHERE `user_id`='$user_id' AND `id`='$id'";
@@ -105,10 +110,24 @@ class Language
      * @param integer $id
      * @return array
      */
-    public function getById($id) {
-        $result = $this->con->query("SELECT * FROM `languages` WHERE `user_id`='$this->user_id' AND `id` = '$id'");
-               
-        return $result ? $result->fetch_all() : false;
+    public function get($id) {
+        $id = $this->con->real_escape_string($id);
+        $result = $this->con->query("SELECT * FROM `languages` WHERE `id` = '$id'");
+        
+        if ($result) {
+            $row = $result->fetch_assoc();
+            $this->id = $row['id'];
+            $this->user_id = $row['user_id'];
+            $this->name = $row['name'];
+            $this->dictionary_uri = $row['dict1_uri'];
+            $this->translator_uri = $row['translator_uri'];
+            $this->rss_feed_1_uri = $row['rss_feed1_uri'];
+            $this->rss_feed_2_uri = $row['rss_feed2_uri'];
+            $this->rss_feed_3_uri = $row['rss_feed3_uri'];
+            $this->show_freq_words = $row['show_freq_words'];
+        }
+
+        return $result ? true : false;
     }
 
     /**

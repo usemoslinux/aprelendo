@@ -43,10 +43,10 @@ try {
         if ($ebook_content != false) {
             return $ebook_content;
         } else {
-            throw new Exception (404);
+            throw new \Exception (404);
         }
     } else {
-        throw new Exception (404);
+        throw new \Exception (404);
     }
     
     

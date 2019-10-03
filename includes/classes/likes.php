@@ -41,6 +41,23 @@ class Likes extends DBEntity
         $this->text_id = $text_id;
         $this->learning_lang_id = $learning_lang_id;
         $this->table = 'likes';
+
+        // create likes table if it doesn't exist
+        $sql = "CREATE TABLE `likes` (
+            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+            `text_id` int(11) unsigned NOT NULL,
+            `user_id` int(11) unsigned NOT NULL,
+            `lang_id` int(10) unsigned NOT NULL,
+            PRIMARY KEY (`id`),
+            KEY `likesUserId` (`user_id`),
+            KEY `likesLgId` (`lang_id`),
+            KEY `likesTextId` (`text_id`) USING BTREE,
+            CONSTRAINT `likesLgId` FOREIGN KEY (`lang_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT `likesTextId` FOREIGN KEY (`text_id`) REFERENCES `shared_texts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT `likesUserId` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+           ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8";
+
+        $this->con->query($sql);
     }
 
     /**

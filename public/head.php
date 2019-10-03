@@ -72,7 +72,7 @@ if ($this_is_show_page) {
 <?php
 // show wallpaper on every page, except those in $show_pages array
 if (!$this_is_show_page) {
-    echo '<body class="pattern-wallpaper">';
+    echo $curpage == 'gopremium.php' ? '<body class="blue-gradient-wallpaper">' : '<body class="pattern-wallpaper">';
 }
 ?>
 

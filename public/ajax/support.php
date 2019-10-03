@@ -36,12 +36,12 @@ try {
 
         // check if email is valid
         if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception ('The email address you entered is invalid. Please try again.');
+            throw new \Exception ('The email address you entered is invalid. Please try again.');
         } 
 
         // check if fields have the allowed length
         if (strlen($name) > 100 || strlen($email) > 100 || strlen($message) > 5000) {
-            throw new Exception ('You have exceeded the allowed length for one or more of the fields. Correct this and try again.');
+            throw new \Exception ('You have exceeded the allowed length for one or more of the fields. Correct this and try again.');
         }
 
         // create & send email
@@ -59,12 +59,12 @@ try {
         
         $mail_sent = mail(SUPPORT_EMAIL, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
         if (!$mail_sent) {
-            throw new Exception ('There was an unexpected error trying to send your query. Please try again later.');
+            throw new \Exception ('There was an unexpected error trying to send your query. Please try again later.');
         } else {
-            throw new Exception ('Support email: ' . SUPPORT_EMAIL . "\r\nSubject: $subject \r\nMessage: $message \r\n Headers: $headers \r\n Sender email: " . EMAIL_SENDER);
+            throw new \Exception ('Support email: ' . SUPPORT_EMAIL . "\r\nSubject: $subject \r\nMessage: $message \r\n Headers: $headers \r\n Sender email: " . EMAIL_SENDER);
         }
     } else {
-        throw new Exception ('You need to complete all form fields in order to send your query. Please try again.');
+        throw new \Exception ('You need to complete all form fields in order to send your query. Please try again.');
     }    
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

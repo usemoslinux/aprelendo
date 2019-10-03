@@ -19,10 +19,8 @@
  */
 ?>
 
-<!-- ******
-     FOOTER
-     ****** -->
-<div id="footerwrap" class="footer">
+<!-- FOOTER -->
+<div id="footerwrap" class="footer <?php echo $curpage == 'gopremium.php' ? 'text-white' : '' ?> ">
     <div class="container">
         <div class="row text-center">
             <div class="col-sm-12">
@@ -43,12 +41,12 @@
                         <a id="support" href="support.php">Support</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="https://www.facebook.com/aprelendo" target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.facebook.com/aprelendo" aria-label="Aprelendo's Facebook Page" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-facebook"></i>
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="https://twitter.com/aprelendo" target="_blank" rel="noopener noreferrer">
+                        <a href="https://twitter.com/aprelendo" aria-label="Aprelendo's Twitter Page" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-twitter"></i>
                         </a>
                     </li>

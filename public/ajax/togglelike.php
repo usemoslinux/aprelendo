@@ -33,7 +33,7 @@ try {
         $like = new Likes($con, $_POST['id'], $user->id, $user->learning_lang_id);
         $result = $like->toggle();
         if (!$result) {
-            throw new Exception('Oops! There was a problem trying to give a like to that text.');
+            throw new \Exception('Oops! There was a problem trying to give a like to that text.');
         }
     }
 } catch (Exception $e) {

@@ -49,7 +49,7 @@ try {
     if (isset($_GET['id']) && !empty($_GET['id'])) {
         // check if user has access to view this text
         if (!$user->isAllowedToAccessElement('texts', $_GET['id'])) {
-            throw new Exception ('User is not authorized to access this file.');
+            throw new \Exception ('User is not authorized to access this file.');
         }
 
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
@@ -75,7 +75,7 @@ try {
         $styles['text-align'] = $reader->text_align;
         $styles['line-height'] = $reader->line_height;
     } else {
-        throw new Exception ('Oops! There was an error trying to fetch that ebook.');
+        throw new \Exception ('Oops! There was an error trying to fetch that ebook.');
     }
 } catch (Exception $e) {
     header('Location:/login.php');

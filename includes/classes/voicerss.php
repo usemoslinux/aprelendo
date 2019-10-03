@@ -30,10 +30,10 @@ class VoiceRSS
 	}
 
 	private function _validate($settings) {
-	    if (!isset($settings) || count($settings) == 0) throw new Exception('The settings are undefined');
-        if (!isset($settings['key']) || empty($settings['key'])) throw new Exception('The API key is undefined');
-        if (!isset($settings['src']) || empty($settings['src'])) throw new Exception('The text is undefined');
-        if (!isset($settings['hl']) || empty($settings['hl'])) throw new Exception('The language is undefined');
+	    if (!isset($settings) || count($settings) == 0) throw new \Exception('The settings are undefined');
+        if (!isset($settings['key']) || empty($settings['key'])) throw new \Exception('The API key is undefined');
+        if (!isset($settings['src']) || empty($settings['src'])) throw new \Exception('The text is undefined');
+        if (!isset($settings['hl']) || empty($settings['hl'])) throw new \Exception('The language is undefined');
 	}
 
 	private function _request($settings) {
