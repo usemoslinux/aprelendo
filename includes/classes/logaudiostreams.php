@@ -25,17 +25,5 @@ class LogAudioStreams extends Log
     public function __construct($con, $user_id) {
         parent::__construct($con, $user_id);
         $this->table = 'log_audio_streams';
-
-        // create popular_sources table if it doesn't exist
-        $sql = "CREATE TABLE `log_audio_streams` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `user_id` int(10) unsigned NOT NULL,
-            `date_created` timestamp NULL DEFAULT NULL,
-            PRIMARY KEY (`id`),
-            KEY `log_streams` (`user_id`),
-            CONSTRAINT `log_streams` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-           ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8";
-
-        $this->con->query($sql);
     }
 }

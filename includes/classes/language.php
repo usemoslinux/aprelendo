@@ -52,26 +52,6 @@ class Language
      */
     public function __construct ($con) {
         $this->con = $con;
-
-        // create languages table if it doesn't exist
-        $sql = "CREATE TABLE `languages` (
-            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-            `user_id` int(10) unsigned NOT NULL,
-            `name` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-            `dict1_uri` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-            `dict2_uri` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-            `dict3_uri` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-            `translator_uri` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-            `rss_feed1_uri` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
-            `rss_feed2_uri` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
-            `rss_feed3_uri` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
-            `show_freq_words` tinyint(1) NOT NULL DEFAULT 0,
-            PRIMARY KEY (`id`),
-            KEY `userDeleteLang` (`user_id`),
-            CONSTRAINT `userDeleteLang` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-           ) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-
-        $this->con->query($sql);
     }
 
     /**

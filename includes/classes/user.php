@@ -47,41 +47,6 @@ class User
      */
     public function __construct ($con) {
         $this->con = $con;
-
-        // create users table if it doesn't exist
-        $sql = "CREATE TABLE `users` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `name` varchar(50) NOT NULL,
-            `password_hash` varchar(255) NOT NULL DEFAULT '',
-            `email` varchar(50) NOT NULL,
-            `native_lang_iso` varchar(2) NOT NULL DEFAULT 'en',
-            `learning_lang_iso` varchar(2) NOT NULL DEFAULT 'en',
-            `premium_until` date DEFAULT NULL,
-            `activation_hash` varchar(32) NOT NULL DEFAULT '',
-            `is_active` tinyint(1) NOT NULL DEFAULT 0,
-            `google_id` varchar(255) NOT NULL DEFAULT '',
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `username` (`name`)
-           ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8";
-
-        $this->con->query($sql);
-
-        // create preferences table if it doesn't exist
-        $sql = "CREATE TABLE `preferences` (
-            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-            `user_id` int(11) unsigned NOT NULL,
-            `font_family` varchar(15) NOT NULL,
-            `font_size` varchar(4) NOT NULL,
-            `line_height` varchar(4) NOT NULL,
-            `text_alignment` varchar(7) NOT NULL,
-            `learning_mode` varchar(5) NOT NULL,
-            `assisted_learning` tinyint(1) NOT NULL DEFAULT 1,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `prefUserId` (`user_id`),
-            CONSTRAINT `userDelete` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-           ) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8";
-
-        $this->con->query($sql);
     } // end construct
     
     /**

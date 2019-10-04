@@ -36,27 +36,6 @@ class SharedTexts extends Texts
     public function __construct($con, $user_id, $learning_lang_id) {
         parent::__construct($con, $user_id, $learning_lang_id);
         $this->table = 'shared_texts';
-
-        // create shared texts table if it doesn't exist
-        $sql = "CREATE TABLE `shared_texts` (
-            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-            `user_id` int(10) unsigned NOT NULL,
-            `lang_id` int(11) unsigned NOT NULL,
-            `title` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-            `author` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-            `text` text COLLATE utf8_unicode_ci NOT NULL,
-            `audio_uri` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-            `source_uri` varchar(400) COLLATE utf8_unicode_ci DEFAULT NULL,
-            `type` tinyint(3) unsigned NOT NULL,
-            `word_count` mediumint(8) unsigned DEFAULT NULL,
-            `level` tinyint(3) unsigned DEFAULT NULL,
-            PRIMARY KEY (`id`),
-            KEY `LgId` (`lang_id`),
-            KEY `delTextsUserId` (`user_id`),
-            CONSTRAINT `delsTextUserId` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-           ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-
-        $this->con->query($sql);
     }
 
     /**

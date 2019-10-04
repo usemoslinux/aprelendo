@@ -7,8 +7,8 @@ namespace Aprelendo\Includes\Classes;
  */
 trait Curl
 {
-    // private static $proxy = 'www-proxy.mrec.ar:8080';
-    private static $proxy = '';
+    private static $proxy = 'www-proxy.mrec.ar:8080';
+    // private static $proxy = '';
 
     /**
      * Get file contents using curl

@@ -35,18 +35,6 @@ class PopularSources extends DBEntity {
      */
     public function __construct($con) {
         $this->con = $con;
-
-        // create popular_sources table if it doesn't exist
-        $sql = "CREATE TABLE `popular_sources` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `lang_iso` varchar(2) NOT NULL,
-            `times_used` int(10) unsigned NOT NULL,
-            `domain` varchar(200) NOT NULL,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `popsources_domain` (`domain`)
-           ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8";
-
-        $this->con->query($sql);
     }
 
     /**

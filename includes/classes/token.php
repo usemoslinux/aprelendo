@@ -25,19 +25,6 @@ class Token extends DBEntity {
         $this->con = $con;
         $this->user_id = $user_id;
         $this->table = 'auth_tokens';
-
-        // create auth_tokens table if it doesn't exist
-        $sql = "CREATE TABLE `auth_tokens` (
-            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-            `user_id` int(10) unsigned NOT NULL,
-            `token` varchar(40) NOT NULL,
-            `expires` datetime NOT NULL,
-            PRIMARY KEY (`id`),
-            KEY `userDeleteToken` (`user_id`),
-            CONSTRAINT `userDeleteToken` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-           ) ENGINE=InnoDB AUTO_INCREMENT=230 DEFAULT CHARSET=utf8";
-
-        $this->con->query($sql);
     }
 
     private function deleteOld() {

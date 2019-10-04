@@ -39,26 +39,6 @@ class Words extends DBEntity {
         parent::__construct($con, $user_id);
         $this->learning_lang_id = $learning_lang_id;
         $this->table = 'words';
-
-        // create words table if it doesn't exist
-        $sql = "CREATE TABLE `words` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `user_id` int(10) unsigned NOT NULL,
-            `lang_id` int(11) unsigned NOT NULL,
-            `word` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
-            `status` tinyint(4) NOT NULL,
-            `is_phrase` tinyint(1) NOT NULL DEFAULT 0,
-            `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
-            `date_modified` timestamp NULL DEFAULT NULL,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `word` (`word`),
-            KEY `delWordsUserId` (`user_id`),
-            KEY `delWordsLgId` (`lang_id`),
-            CONSTRAINT `delWordsLgId` FOREIGN KEY (`lang_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-            CONSTRAINT `delWordsUserId` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-           ) ENGINE=InnoDB AUTO_INCREMENT=1705 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-
-        $this->con->query($sql);
     }
 
     /**
