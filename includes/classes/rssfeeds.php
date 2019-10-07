@@ -40,10 +40,13 @@ class RSSFeeds
      * @param integer $learning_lang_id
      */
     public function __construct($con, $user_id, $learning_lang_id) {
-        $user_id = $con->real_escape_string($user_id);
-        $learning_lang_id = $con->real_escape_string($learning_lang_id);
-
-        $result = $con->query("SELECT `rss_feed1_uri`, `rss_feed2_uri`, `rss_feed3_uri` FROM `languages` WHERE `user_id`='$user_id' AND `id`='$learning_lang_id'");
+        $sql = "SELECT `rss_feed1_uri`, `rss_feed2_uri`, `rss_feed3_uri` 
+                FROM `languages` 
+                WHERE `user_id`=? AND `id`=?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("ss", $user_id, $learning_lang_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result) {
             $rows = $result->fetch_assoc();
@@ -57,6 +60,8 @@ class RSSFeeds
         } else {
             throw new \Exception ('Oops! There was an unexpected error trying to get your RSS feeds.');
         }
+
+        $stmt->close();
     }
 }
 

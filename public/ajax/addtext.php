@@ -155,7 +155,7 @@ try {
             // check if user is allowed to upload file & does not exceed the daily upload limit
             $file_upload_log = new LogFileUploads($con, $user->id);
             $uploads_today = $file_upload_log->getTodayRecords();
-            $nr_of_uploads_today = $uploads_today === NULL ? 0 : count($uploads_today);
+            $nr_of_uploads_today = $uploads_today === false ? 0 : count($uploads_today);
             $premium_user = $user->isPremium();
 
             if ((!$premium_user) || ($premium_user && $nr_of_uploads_today >= 1)){

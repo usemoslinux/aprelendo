@@ -24,6 +24,12 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 $user_id = $user->id;
 $learning_lang_id = $user->learning_lang_id;
 
-$result = $con->query("SELECT * FROM `languages` WHERE `user_id`='$user_id' AND `id` = '$learning_lang_id'") or die(mysqli_error($con));
+$sql = "SELECT * FROM `languages` WHERE `user_id`=? AND `id` = ?";
+$stmt = $con->prepare($sql);
+$stmt->bind_param("ss", $user_id, $learning_lang_id);
+$stmt->execute();
+$result = $stmt->get_result();
 $row = $result->fetch_assoc();
+$stmt->close();
+
 echo json_encode($row);

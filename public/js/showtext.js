@@ -160,7 +160,7 @@ $(document).ready(function () {
         type: "GET",
         dataType: "json"
     }).done(function (data) {
-        dictionaryURI = data.dict1_uri;
+        dictionaryURI = data.dict_uri;
         translatorURI = data.translator_uri;
     });
 

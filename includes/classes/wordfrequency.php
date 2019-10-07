@@ -53,8 +53,12 @@ class WordFrequency extends DBEntity {
     public function get($word = '', $lg_iso = '') {
         $this->table = 'frequency_list_' . $lg_iso;
         $word = mb_strtolower($word, "UTF-8");
-        $sql = "SELECT * FROM {$this->table} WHERE word = '$word'";
-        $result = $this->con->query($sql);
+
+        $sql = "SELECT * FROM {$this->table} WHERE word=?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("s", $word);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result && $result->num_rows > 0) {
             $row = $result->fetch_assoc();

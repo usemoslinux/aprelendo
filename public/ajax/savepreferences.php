@@ -38,10 +38,14 @@ $mode = isset($_POST['mode']) ? $_POST['mode'] : 'light';
 $assistedlearning = isset($_POST['assistedlearning']) ? $_POST['assistedlearning'] : true;
 
 try {
-    $result = $con->query("REPLACE INTO `preferences` (`user_id`, `font_family`,
-    `font_size`, `line_height`, `text_alignment`, `learning_mode`, `assisted_learning`)
-    VALUES ('$user_id', '$fontfamily', '$fontsize', '$lineheight', '$alignment', '$mode', '$assistedlearning')");
-    
+    $sql = "REPLACE INTO `preferences` (`user_id`, `font_family`,
+            `font_size`, `line_height`, `text_alignment`, `learning_mode`, `assisted_learning`)
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("sssssss", $user_id, $fontfamily, $fontsize, $lineheight, $alignment, $mode, $assistedlearning);
+    $result = $stmt->execute();
+    $stmt->close();
+            
     if (!$result) {
         throw new \Exception ('There was an unexpected error trying to save your preferences. Please, try again later.');
     }

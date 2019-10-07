@@ -82,7 +82,7 @@ class Texts extends DBEntity {
             // add entry to popularsources
             $pop_sources = new PopularSources($this->con);
             $lang = new Language($this->con);
-            $lang->get($this->learning_lang_id, $this->user_id);
+            $lang->get($this->learning_lang_id);
             
             $result = $pop_sources->add($lang->name, Url::getDomainName($source_url));
         }
@@ -145,7 +145,7 @@ class Texts extends DBEntity {
                 $file = new File();
                 $pop_sources = new PopularSources($this->con);
                 $lang = new Language($this->con);
-                $lang->get($this->learning_lang_id, $this->user_id);
+                $lang->get($this->learning_lang_id);
                 
                 // delete associated file
                 foreach ($uris as $key => $value) {

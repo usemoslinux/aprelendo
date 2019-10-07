@@ -72,16 +72,22 @@ class Language
             $rss_feed_2_uri = $array['rss-feed2-uri'];
             $rss_feed_3_uri = $array['rss-feed3-uri'];
             $show_freq_words = $array['freq-list'];
-            
-            $sql_str = "UPDATE `languages` SET `name`='$name', `dict1_uri`='$dictionary_uri',
-                `translator_uri`='$translator_uri', `rss_feed1_uri`='$rss_feed_1_uri', `rss_feed2_uri`='$rss_feed_2_uri', 
-                `rss_feed3_uri`='$rss_feed_3_uri', `show_freq_words`=$show_freq_words WHERE `user_id`='$user_id' AND `id`='$id'";
+
+            $sql = "UPDATE `languages` SET `name`=?, `dict_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?, 
+                `rss_feed3_uri`=?, `show_freq_words`=? WHERE `user_id`=? AND `id`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->bind_param("ssssssiss", $name, $dictionary_uri, $translator_uri, $rss_feed_1_uri, $rss_feed_2_uri, $rss_feed_3_uri, 
+                $show_freq_words, $user_id, $id);
         } else {
-            $sql_str = "UPDATE `languages` SET `name`='$name', `dict1_uri`='$dictionary_uri',
-                `translator_uri`='$translator_uri' WHERE `user_id`='$user_id' AND `id`='$id'";
+            $sql = "UPDATE `languages` SET `name`=?, `dict_uri`=?, `translator_uri`=? WHERE `user_id`=? AND `id`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->bind_param("sssss", $name, $dictionary_uri, $translator_uri, $user_id, $id);
         }
         
-        return $this->con->query($sql_str);
+        $result = $stmt->execute();
+        $stmt->close();
+                
+        return $result;
     }
 
     /**
@@ -91,22 +97,25 @@ class Language
      * @return array
      */
     public function get($id) {
-        $id = $this->con->real_escape_string($id);
-        $result = $this->con->query("SELECT * FROM `languages` WHERE `id` = '$id'");
-        
-        if ($result) {
-            $row = $result->fetch_assoc();
-            $this->id = $row['id'];
-            $this->user_id = $row['user_id'];
-            $this->name = $row['name'];
-            $this->dictionary_uri = $row['dict1_uri'];
-            $this->translator_uri = $row['translator_uri'];
-            $this->rss_feed_1_uri = $row['rss_feed1_uri'];
-            $this->rss_feed_2_uri = $row['rss_feed2_uri'];
-            $this->rss_feed_3_uri = $row['rss_feed3_uri'];
-            $this->show_freq_words = $row['show_freq_words'];
-        }
+        $sql = "SELECT * FROM `languages` WHERE `id` = ?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        $stmt->store_result();
+        $result = $stmt->bind_result(
+            $this->id, 
+            $this->user_id, 
+            $this->name, 
+            $this->dictionary_uri, 
+            $this->translator_uri, 
+            $this->rss_feed_1_uri, 
+            $this->rss_feed_2_uri, 
+            $this->rss_feed_3_uri, 
+            $this->show_freq_words
+        );
 
+        $stmt->fetch();
+        
         return $result ? true : false;
     }
 

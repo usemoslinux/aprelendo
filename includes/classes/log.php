@@ -41,14 +41,17 @@ class Log extends DBEntity
         $user_id = $this->con->real_escape_string($this->user_id);
         $table = $this->con->real_escape_string($this->table);
 
-        $sql_str = "SELECT `date_created` 
-                    FROM `$table` 
-                    WHERE `user_id` = '$user_id' 
-                    AND DATE(`date_created`) = CURDATE()";
+        $sql = "SELECT `date_created` 
+                FROM `$table` 
+                WHERE `user_id` = ? 
+                AND DATE(`date_created`) = CURDATE()";
 
-        $result = $this->con->query($sql_str);
-
-        return $result ? $result->fetch_all() : NULL;
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("s", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+                
+        return $result ? $result->fetch_all() : false;
     }
 
     /**
@@ -61,12 +64,14 @@ class Log extends DBEntity
         $table = $this->con->real_escape_string($this->table);
         $today = date("Y-m-d H:i:s");
 
-        $sql_str = "INSERT INTO `$table` 
-                        (`user_id`, `date_created`)
-                    VALUES
-                        ('$user_id', '$today')";
+        $sql = "INSERT INTO `$table` (`user_id`, `date_created`) 
+                VALUES (?, ?)";
 
-        return $this->con->query($sql_str);
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("ss", $user_id, $today);
+        $result = $stmt->execute();
+                
+        return $result;
     }
 
     // public function remove();

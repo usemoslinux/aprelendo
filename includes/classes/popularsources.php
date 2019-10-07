@@ -60,12 +60,12 @@ class PopularSources extends DBEntity {
             return true; // end execution
         }
 
-        // escape parameters
-        $lg_iso = $this->con->real_escape_string($lg_iso);
-        $domain = $this->con->real_escape_string($domain);
-        
-        $result = $this->con->query("INSERT INTO `popular_sources` (`lang_iso`, `times_used`, `domain`) VALUES ('$lg_iso', 1, '$domain') ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1");
-        
+        $sql = "INSERT INTO `popular_sources` (`lang_iso`, `times_used`, `domain`) VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("ss", $lg_iso, $domain);
+        $result = $stmt->execute();
+        $stmt->close();
+
         return $result;
     }
 
@@ -81,16 +81,20 @@ class PopularSources extends DBEntity {
             return true; // end execution
         }
 
-        // escape parameters
-        $lg_iso = $this->con->real_escape_string($lg_iso);
-        $domain = $this->con->real_escape_string($domain);
-        
-        $result = $this->con->query("DELETE FROM `popular_sources` WHERE `lang_iso`='$lg_iso' AND `domain`='$domain' AND `times_used` = 1");
-
-        if ($this->con->affected_rows <= 0) {
-            $result = $this->con->query("UPDATE `popular_sources` SET `times_used`=`times_used` - 1 WHERE `lang_iso`='$lg_iso' AND `domain`='$domain'");
+        $sql = "DELETE FROM `popular_sources` WHERE `lang_iso`=? AND `domain`=? AND `times_used` = 1";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("ss", $lg_iso, $domain);
+        $result = $stmt->execute();
+                
+        if ($stmt->affected_rows <= 0) {
+            $sql = "UPDATE `popular_sources` SET `times_used`=`times_used` - 1 WHERE `lang_iso`=? AND `domain`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->bind_param("ss", $lg_iso, $domain);
+            $result = $stmt->execute();
         }
         
+        $stmt->close();
+
         return $result;
     }
 
@@ -108,13 +112,13 @@ class PopularSources extends DBEntity {
             return false; // return error
         }
 
-        $result = $this->con->query("SELECT * FROM `popular_sources` WHERE `lang_iso`='$lg_iso' ORDER BY `times_used` DESC LIMIT 50");
-
-        if (!$result) {
-            return false;
-        }
-
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $sql = "SELECT * FROM `popular_sources` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT 50";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("s", $lg_iso);
+        $stmt->execute();
+        $result = $stmt->get_result();
+                
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : false;
     }
 }
 

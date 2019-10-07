@@ -33,13 +33,16 @@ class Token extends DBEntity {
 
     private function alreadyExists($user_id) {
         $sql = "SELECT `token`, `expires`
-        FROM `auth_tokens`
-        WHERE `user_id`=$user_id AND `expires` >= NOW()
-        LIMIT 1";
+                FROM `auth_tokens`
+                WHERE `user_id`=? AND `expires` >= NOW()
+                LIMIT 1";
 
-        $result = $this->con->query($sql);
-
-        return $result->num_rows > 0 ? $result : false;
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("s", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+                
+        return ($result) && ($result->num_rows > 0) ? $result : false;
     }
 
     /**
@@ -77,10 +80,16 @@ class Token extends DBEntity {
             $time_stamp = time() + 31536000; // 1 year
             $expires = date('Y-m-d H:i:s', $time_stamp);
             
-            $result = $this->con->query("INSERT INTO `auth_tokens` (`token`, `user_id`, `expires`) VALUES ('$token', $user_id, '$expires')");
+            $sql = "INSERT INTO `auth_tokens` (`token`, `user_id`, `expires`) VALUES (?, ?, ?)";
+            $stmt = $this->con->prepare($sql);
+            $stmt->bind_param("sss", $token, $user_id, $expires);
+            $result = $stmt->execute();
+                                
             if ($result) {
                 return setcookie('user_token', $token, $time_stamp, "/", $domain, true);
             } 
+
+            $stmt->close();
         }
 
         return false;

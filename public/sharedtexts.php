@@ -35,7 +35,7 @@ if (!empty($_GET)) {
 
 // set filter sql
 
-$filter_sql = !empty($filter) && $filter > -1 ? "AND stextType=$filter" : '';
+$filter_sql = !empty($filter) && $filter > -1 ? "AND `type`=$filter" : '';
 
 ?>
 

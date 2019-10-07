@@ -32,8 +32,13 @@ try {
         $email = $con->escape_string($_POST['email']);
         
         // check if email exists in db
-        $result = $con->query("SELECT `name`, `password_hash` FROM `users` WHERE `email`='$email'");
-        
+        $sql = "SELECT `name`, `password_hash` FROM `users` WHERE `email`=?";
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+                
         if ($result->num_rows > 0) {
             // get username associated to that email address
             $row = $result->fetch_array();
@@ -75,7 +80,11 @@ try {
             $username = $_POST['username'];
             $password_hash = password_hash($_POST['pass1'], PASSWORD_BCRYPT, $options);
 
-            $result = $con->query("UPDATE `users` SET `password_hash`='$password_hash' WHERE `name`='$username'");
+            $sql = "UPDATE `users` SET `password_hash`=? WHERE `name`=?";
+            $stmt = $con->prepare($sql);
+            $stmt->bind_param("ss", $password_hash, $username);
+            $result = $stmt->execute();
+            $stmt->close();
             if (!$result) { // if password update is NOT successful
                 throw new \Exception ('Oops! There was an unexpected error when trying to save your new password.');
             }

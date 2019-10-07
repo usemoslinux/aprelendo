@@ -65,7 +65,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         $table = New SharedTextTable($con, $user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
         echo $table->print($sort_by);
 
-        echo $pagination->print('texts.php', $search_text, $sort_by, $filter); // print pagination
+        echo $pagination->print('sharedtexts.php', $search_text, $sort_by, $filter); // print pagination
     } else { // if there are no texts to show, print a message
         echo '<p>No shared texts found with that criteria. Try again.</p>';
     }
@@ -87,7 +87,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         $table = New SharedTextTable($con, $user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
         echo $table->print($sort_by);
 
-        echo $pagination->print('texts.php', '', $sort_by, $filter); // print pagination
+        echo $pagination->print('sharedtexts.php', '', $sort_by, $filter); // print pagination
     } else { // if there are no texts to show, print a message
         echo '<p class="text-center">There are no shared texts yet. Be the first to add one!</p>';
     }

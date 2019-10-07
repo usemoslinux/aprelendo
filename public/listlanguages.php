@@ -24,8 +24,12 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 use Aprelendo\Includes\Classes\Language;
 
 // show list of available languages
-$result = $con->query("SELECT `id`, `name` FROM `languages` WHERE `user_id`='$user_id'");
-
+$sql = "SELECT `id`, `name` FROM `languages` WHERE `user_id`=?";
+$stmt = $con->prepare($sql);
+$stmt->bind_param("s", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+        
 if ($result) {
     $html = '<div id="accordion" class="accordion">';
 
@@ -64,6 +68,7 @@ if ($result) {
     $html .= '</div>';
 
     echo $html;
+    $stmt->close();
 }
 
 ?>

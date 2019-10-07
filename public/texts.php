@@ -41,7 +41,7 @@ if (!empty($filter)) {
     if ($filter == 10) {
         $show_archived = true;
     } elseif ($filter > -1) {
-        $filter_sql = $show_archived ? "AND atextType=$filter" : "AND textType=$filter";
+        $filter_sql = "AND `type`=$filter";
     }
 }
 

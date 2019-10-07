@@ -51,37 +51,36 @@ class SharedTexts extends Texts
      * @return array
      */
     public function getSearch($filter_sql, $search_text, $offset, $limit, $sort_by) {
-        // escape parameters
         $filter_sql = $this->con->real_escape_string($filter_sql);
-        $search_text = $this->con->real_escape_string($search_text);
-        $offset = $this->con->real_escape_string($offset);
-        $limit = $this->con->real_escape_string($limit);
-        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+        $like_str = '%' . $search_text . '%';
 
         $lang = new Language($this->con);
-        $lang->get($this->learning_lang_id, $this->user_id);
+        $lang->get($this->learning_lang_id);
 
-        $sql = "SELECT `id`, 
-                (SELECT `userName` FROM users WHERE `id` = `user_id`), 
-                `title`, 
-                `author`, 
-                `source_uri`,
-                `type`, 
-                `word_count`, 
-                `level`, 
-                languages.LgName, 
-                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = `id`) AS `total_likes`,
-                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = `id` AND `user_id` = $this->user_id) AS `user_liked` 
-                FROM {$this->table} 
-                INNER JOIN `languages` ON {$this->table}.lang_id = languages.id
-                WHERE `name` = '{$lang->name}' $filter_sql 
+        $sql = "SELECT t.id, 
+                (SELECT `name` FROM users WHERE `id` = t.user_id) AS `user_name`, 
+                t.title, 
+                t.author, 
+                t.source_uri,
+                t.type, 
+                t.word_count, 
+                t.level, 
+                l.name, 
+                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
+                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = ?) AS `user_liked` 
+                FROM `{$this->table}` t 
+                INNER JOIN `languages` l ON t.lang_id = l.id
+                WHERE `name`=? $filter_sql 
                 AND `title` 
-                LIKE '%$search_text%' 
-                ORDER BY $sort_sql 
-                LIMIT $offset, $limit";
-        
-        $result = $this->con->query($sql);
+                LIKE ? 
+                ORDER BY ? 
+                LIMIT ?, ?";
 
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("ssssss", $this->user_id, $lang->name, $like_str, $sort_sql, $offset, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
         return $result ? $result->fetch_all() : false;
     }
 
@@ -96,16 +95,11 @@ class SharedTexts extends Texts
      * @return array
      */
     public function getAll($offset, $limit, $sort_by) {
-        // escape parameters
-        $offset = $this->con->real_escape_string($offset);
-        $limit = $this->con->real_escape_string($limit);
-        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
-
         $lang = new Language($this->con);
-        $lang->get($this->learning_lang_id, $this->user_id);
+        $lang->get($this->learning_lang_id);
 
         $sql = "SELECT t.id, 
-                (SELECT `name` FROM `users` WHERE `id` = t.user_id), 
+                (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
                 t.title, 
                 t.author, 
                 t.source_uri,
@@ -114,15 +108,18 @@ class SharedTexts extends Texts
                 t.level, 
                 l.name,
                 (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
-                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = $this->user_id) AS `user_liked`
+                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = ?) AS `user_liked`
                 FROM `{$this->table}` t
                 INNER JOIN `languages` l ON t.lang_id = l.id
-                WHERE `name` = '{$lang->name}'
-                ORDER BY $sort_sql 
-                LIMIT $offset, $limit";
+                WHERE `name`=? 
+                ORDER BY ? 
+                LIMIT ?, ?";
 
-        $result = $this->con->query($sql);
-        
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("sssss", $this->user_id, $lang->name, $sort_sql, $offset, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
         return $result ? $result->fetch_all() : false;
     }
 
@@ -168,9 +165,14 @@ class SharedTexts extends Texts
 
         $sql = "SELECT 1
                 FROM `$this->table`
-                WHERE `source_uri` = '$source_url'";
+                WHERE `source_uri` = ?";
+        
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("s", $source_url);
+        $stmt->execute();
+        $result = $stmt->get_result();
             
-        return ($result = $this->con->query($sql)) && ($result->num_rows > 0);
+        return ($result) && ($result->num_rows > 0);
     }
 }
 

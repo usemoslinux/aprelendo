@@ -40,7 +40,7 @@ try {
         } 
 
         // check if fields have the allowed length
-        if (strlen($name) > 100 || strlen($email) > 100 || strlen($message) > 5000) {
+        if (strlen($name) > 100 || strlen($to) > 100 || strlen($message) > 5000) {
             throw new \Exception ('You have exceeded the allowed length for one or more of the fields. Correct this and try again.');
         }
 

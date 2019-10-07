@@ -25,17 +25,22 @@ use Aprelendo\Includes\Classes\User;
 if(isset($_POST['Eea']) && !empty($_POST['Eea']) && !empty($_POST['U3']))
 {
     try {
-        $google_id = $con->escape_string($_POST['Eea']); //Google ID
-        $google_email = $con->escape_string($_POST['U3']); //Email ID
-        $google_name = $con->escape_string($_POST['ig']); //Name
-        $google_profile_pic = $con->escape_string($_POST['Paa']); //Profile Pic URL
+        $google_id = $_POST['Eea']; //Google ID
+        $google_email = $_POST['U3']; //Email ID
+        $google_name = $_POST['ig']; //Name
+        $google_profile_pic = $_POST['Paa']; //Profile Pic URL
 
         $return_msg = "";
 
         // check if Google ID already exists
-        $sql = "SELECT * FROM `users` WHERE `email`='$google_email'";
-        $result = $con->query($sql);
-
+        $sql = "SELECT * 
+                FROM `users` 
+                WHERE `email`=?";
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param("s", $google_email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+                
         if ($result) {
             $user = new User($con);
             $row = $result->fetch_assoc();
@@ -43,9 +48,13 @@ if(isset($_POST['Eea']) && !empty($_POST['Eea']) && !empty($_POST['U3']))
 
             if($result->num_rows > 0) {
                 // user already exists
-                $sql = "UPDATE `users` SET `google_id`='$google_id' WHERE `email`='$google_email'";
-                $result = $con->query($sql);
-
+                $sql = "UPDATE `users` 
+                        SET `google_id`=? 
+                        WHERE `email`=?";
+                $stmt = $con->prepare($sql);
+                $stmt->bind_param("ss", $google_id, $google_email);
+                $result = $stmt->execute();
+                
                 if ($result) {
                     $user->login($user_name, "", $google_id);
                 }
@@ -55,6 +64,9 @@ if(isset($_POST['Eea']) && !empty($_POST['Eea']) && !empty($_POST['U3']))
                     $user->login($google_name, $google_id);
                 }
             }
+        
+        $stmt->close();
+
         } else {
             throw new \Exception ('There was an unexpected error trying to log you in using your Google ID.');
         }

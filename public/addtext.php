@@ -38,8 +38,15 @@ require_once PUBLIC_PATH . 'header.php';
             <?php
           if (isset($_GET['id'])) { // modify text
               $id = $_GET['id'];
-              $result = $con->query("SELECT `title`, `author`, `text`, `source_uri` FROM `texts` WHERE `id`='$id'") or die(mysqli_error($con));
+              
+              $sql = "SELECT `title`, `author`, `text`, `source_uri` FROM `texts` WHERE `id`=?";
+              $stmt = $con->prepare($sql);
+              $stmt->bind_param("s", $id);
+              $stmt->execute();
+              $result = $stmt->get_result();
               $row = $result->fetch_assoc();
+              $stmt->close();
+
               $art_title = $row['title'];
               $art_author = $row['author'];
               $art_url = $row['source_uri'];

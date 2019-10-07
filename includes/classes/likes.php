@@ -50,14 +50,26 @@ class Likes extends DBEntity
      */
     public function toggle()
     {
-        $result = $this->con->query("SELECT `text_id` FROM `likes` WHERE `text_id`='$this->text_id' AND `user_id`='$this->user_id'");
-
+        $sql = "SELECT `text_id` FROM `likes` WHERE `text_id`=? AND `user_id`=?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("ss", $this->text_id, $this->user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
         if ($result->num_rows > 0) {
-            return $this->con->query("DELETE FROM `likes` WHERE `text_id`='$this->text_id' AND `user_id`='$this->user_id'");
+            $sql = "DELETE FROM `likes` WHERE `text_id`=? AND `user_id`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->bind_param("ss", $this->text_id, $this->user_id);
+            $result = $stmt->execute();
         } else {
-            return $this->con->query("INSERT INTO `likes` (`text_id`, `user_id`, `lang_id`) 
-                VALUES ('$this->text_id', '$this->user_id', '$this->learning_lang_id')");
+            $sql = "INSERT INTO `likes` (`text_id`, `user_id`, `lang_id`) VALUES (?, ?, ?)";
+            $stmt = $this->con->prepare($sql);
+            $stmt->bind_param("sss", $this->text_id, $this->user_id, $this->learning_lang_id);
+            $result = $stmt->execute();
         }
+
+        $stmt->close();
+        return $result;
     }
 }
 

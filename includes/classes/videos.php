@@ -122,9 +122,14 @@ class Videos extends DBEntity {
     }
 
     public function getById($id) {
-        $result = $this->con->query("SELECT * 
-            FROM $this->table 
-            WHERE `id`='$id'");
+        $sql = "SELECT * 
+                FROM `$this->table` 
+                WHERE `id`=?";
+
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
         
         return $result ? $result->fetch_assoc() : false;
     }

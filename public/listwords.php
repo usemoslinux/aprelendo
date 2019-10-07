@@ -81,7 +81,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     $rows = $words_table->getAll($offset, $limit, $sort_by);
 
     // print table
-    if ($rows && $rows->num_rows() > 0) {
+    if ($rows && sizeof($rows) > 0) {
         $table = New WordTable($headings, $col_widths, $rows, $action_menu, $sort_menu);
         echo $table->print($sort_by);
     } else {

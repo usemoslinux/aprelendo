@@ -43,9 +43,7 @@ class DBEntity {
      * @return string in CSV format
      */
     public function JSONtoCSV($json) {
-        $json = json_decode($json);
-        $result = implode(',', $json);
-        return $this->con->real_escape_string($result);
+        return implode(',', json_decode($json));
     }
 
     /**

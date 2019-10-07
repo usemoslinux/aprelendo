@@ -120,9 +120,12 @@ class Paypal extends DBEntity
     }
 
     public function checkTxnid($txn_id) {
-        $txn_id = $this->con->real_escape_string($txn_id);
-        $result = $this->con->query("SELECT * FROM `payments` WHERE `txn_id` = '$txn_id'");
-    
+        $sql = "SELECT * FROM `payments` WHERE `txn_id`=?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("s", $txn_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
         return $result === false || $result->num_rows == 0;
     }
 }

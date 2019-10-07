@@ -48,14 +48,21 @@ class ArchivedTexts extends Texts
         $insertsql = "INSERT INTO `texts` 
                       SELECT *
                       FROM `archived_texts` 
-                      WHERE `id` IN ($textIDs)";
-                      
-        $deletesql = "DELETE FROM `archived_texts` WHERE `id` IN ($textIDs)";
+                      WHERE `id` IN (?)";
         
-        if ($result = $this->con->query($insertsql)) {
-            $result = $this->con->query($deletesql);
+        $deletesql = "DELETE FROM `archived_texts` WHERE `id` IN (?)";
+        
+        $stmt = $this->con->prepare($insertsql);
+        $stmt->bind_param("s", $textIDs);
+        $result = $stmt->execute();
+
+        if ($result) {
+            $stmt = $this->con->prepare($deletesql);
+            $stmt->bind_param("s", $textIDs);
+            $result = $stmt->execute();
         }
         
+        $stmt->close();
         return $result;
     }
 }

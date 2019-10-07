@@ -36,7 +36,7 @@ try {
 
     $stream_log = new LogAudioStreams($con, $user->id);
     $streams_today = $stream_log->getTodayRecords();
-    $nr_of_streams_today = $streams_today === NULL ? 0 : count($streams_today);
+    $nr_of_streams_today = $streams_today === false ? 0 : count($streams_today);
     $premium_user = $user->isPremium();
 
     if ((!$premium_user && $nr_of_streams_today >= 1) || ($premium_user && $nr_of_streams_today >= 3)){

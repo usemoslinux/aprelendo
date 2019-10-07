@@ -50,15 +50,16 @@ class Words extends DBEntity {
      * @return boolean
      */
     public function add($word, $status, $isphrase) {
-        // escape parameters
-        $word = $this->con->real_escape_string($word);
-        $status = $this->con->real_escape_string($status);
-        $isphrase = $this->con->real_escape_string($isphrase);
-        
-        $result = $this->con->query("INSERT INTO `words` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`)
-            VALUES ('$this->user_id', '$this->learning_lang_id', '$word', $status, $isphrase) ON DUPLICATE KEY UPDATE
-            `user_id`='$this->user_id', `lang_id`=$this->learning_lang_id, `word`='$word', `status`=$status, `is_phrase`=$isphrase, `date_modified`=NOW()");
+        $sql = "INSERT INTO `words` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`)
+                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
+                `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `is_phrase`=?, `date_modified`=NOW()";
 
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("sssiisssii", $this->user_id, $this->learning_lang_id, $word, $status, $isphrase, 
+            $this->user_id, $this->learning_lang_id, $word, $status, $isphrase);
+        $result = $stmt->execute();
+        $stmt->close();
+        
         return $result;
     }
 
@@ -70,9 +71,15 @@ class Words extends DBEntity {
      */
     public function updateByName($words) {
         $csvwords = $this->ArraytoCSV($words);
-        $result = $this->con->query("UPDATE `words` SET `status`=`status`-1, `date_modified`=NOW() 
-            WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id' AND `word` IN ($csvwords) ");
 
+        $sql = "UPDATE `words` SET `status`=`status`-1, `date_modified`=NOW() 
+                WHERE `user_id`=? AND `lang_id`=? AND `word` 
+                IN (?)";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("sss", $this->user_id, $this->learning_lang_id, $csvwords);
+        $result = $stmt->execute();
+        $stmt->close();
+                
         return $result;
     }
 
@@ -83,10 +90,11 @@ class Words extends DBEntity {
      * @return boolean
      */
     public function deleteByName($word) {
-        // escape parameters
-        $word = $this->con->real_escape_string($word);
-        
-        $result = $this->con->query("DELETE FROM `words` WHERE `word`='$word'");
+        $sql = "DELETE FROM `words` WHERE `word`=?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("s", $word);
+        $result = $stmt->execute();
+        $stmt->close();
 
         return $result;
     }
@@ -99,8 +107,13 @@ class Words extends DBEntity {
      */
     public function deleteByIds($ids) {
         $wordIDs = $this->JSONtoCSV($ids);
-        $result = $this->con->query("DELETE FROM `words` WHERE `id` IN ($wordIDs)");
 
+        $sql = "DELETE FROM `words` WHERE `id` IN (?)";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("s", $wordIDs);
+        $result = $stmt->execute();
+        $stmt->close();
+                
         return $result;
     }
 
@@ -111,11 +124,18 @@ class Words extends DBEntity {
      * @return integer|boolean
      */
     public function countRowsFromSearch($search_text) {
-        // escape parameters
         $search_text = $this->con->real_escape_string($search_text);
-
-        $result = $this->con->query("SELECT COUNT(`word`) FROM `words` WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id' AND `word` LIKE '%$search_text%'");
+        $like_str = '%' . $search_text . '%';
         
+        $sql = "SELECT COUNT(`word`) 
+                FROM `words` 
+                WHERE `user_id`=? AND `lang_id`=?  
+                AND `word` LIKE ?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("sss", $this->user_id, $this->learning_lang_id, $like_str);
+        $stmt->execute();
+        $result = $stmt->get_result();
+                
         if ($result) {
             $row = $result->fetch_array();
             $total_rows = $row[0];
@@ -132,7 +152,13 @@ class Words extends DBEntity {
      * @return integer|boolean
      */
     public function countAllRows() {
-        $result = $this->con->query("SELECT COUNT(word) FROM words WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id'");
+        $sql = "SELECT COUNT(word) 
+                FROM `words`  
+                WHERE `user_id`=? AND `lang_id`=?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("ss", $this->user_id, $this->learning_lang_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
         
         if ($result) {
             $row = $result->fetch_array();
@@ -155,17 +181,18 @@ class Words extends DBEntity {
      * @return array
      */
     public function getSearch($search_text, $offset, $limit, $sort_by) {
-        // escape parameters
-        $search_text = $this->con->real_escape_string($search_text);
-        $offset = $this->con->real_escape_string($offset);
-        $limit = $this->con->real_escape_string($limit);
+        $like_str = '%' . $search_text . '%';
         $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
 
-        $result = $this->con->query("SELECT `id`, `word`, `status` 
-            FROM `words` 
-            WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id' AND word LIKE '%$search_text%' 
-            ORDER BY $sort_sql LIMIT $offset, $limit");
-
+        $sql = "SELECT `id`, `word`, `status` 
+                FROM `words` 
+                WHERE `user_id`=? AND `lang_id`=? AND word LIKE ? 
+                ORDER BY $sort_sql LIMIT ?, ?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("sssss", $this->user_id, $this->learning_lang_id, $like_str, $offset, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
         return $result ? $result->fetch_all() : false;
     }
 
@@ -180,20 +207,17 @@ class Words extends DBEntity {
      * @return array
      */
     public function getAll($offset, $limit, $sort_by) {
-        // escape parameters
-        $offset = $this->con->real_escape_string($offset);
-        $limit = $this->con->real_escape_string($limit);
         $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
         
-        $result = $this->con->query("SELECT `id`, `word`, `status` 
-            FROM `words` 
-            WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id' 
-            ORDER BY $sort_sql LIMIT $offset, $limit");
-
         $sql = "SELECT `id`, `word`, `status` 
-        FROM `words` 
-        WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id' 
-        ORDER BY $sort_sql LIMIT $offset, $limit";
+                FROM `words` 
+                WHERE `user_id`=? AND `lang_id`=?  
+                ORDER BY $sort_sql LIMIT ?, ?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("ssss", $this->user_id, $this->learning_lang_id, $offset, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
         return $result ? $result->fetch_all() : false;
     }   
 
@@ -243,11 +267,16 @@ class Words extends DBEntity {
         $filter = !empty($search_text) ? "AND word LIKE '%$search_text%' " : '';
         $filter .= $order_by != '' ? "ORDER BY $sort_sql" : '';
 
-        $result = $this->con->query("SELECT `word` 
-            FROM `words`
-            WHERE `user_id`='$this->user_id' AND `lang_id`='$this->learning_lang_id' $filter");
+        $sql = "SELECT `word` 
+                FROM `words`
+                WHERE `user_id`=? AND `lang_id`=? $filter";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("ss", $this->user_id, $this->learning_lang_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+                
         if ($result) {
-            $num_fields = $this->con->field_count;
+            $num_fields = $stmt->field_count;
             $headers = array();
 
             for ($i = 0; $i < $num_fields; $i++) {
