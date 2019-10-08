@@ -40,7 +40,7 @@ try {
         
         $video = new Videos($con, $user->id, $user->learning_lang_id);
         $video_row = $video->getById($_GET['id']);
-        $yt_id = $video->extractYTId($video_row['stextSourceURI']);
+        $yt_id = $video->extractYTId($video_row['source_uri']);
 
         switch ($reader->display_mode) {
             case 'light':

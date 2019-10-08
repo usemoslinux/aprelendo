@@ -43,7 +43,7 @@ class RSSFeeds
         $sql = "SELECT `rss_feed1_uri`, `rss_feed2_uri`, `rss_feed3_uri` 
                 FROM `languages` 
                 WHERE `user_id`=? AND `id`=?";
-        $stmt = $this->con->prepare($sql);
+        $stmt = $con->prepare($sql);
         $stmt->bind_param("ss", $user_id, $learning_lang_id);
         $stmt->execute();
         $result = $stmt->get_result();

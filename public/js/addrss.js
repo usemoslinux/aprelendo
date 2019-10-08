@@ -55,6 +55,10 @@ $(document).ready(function () {
         });
     });
 
+    /**
+     * Escapes string
+     * @param {string} str 
+     */
     function htmlEscape(str) {
         return str
             .replace(/&/g, '&amp;')
@@ -102,37 +106,45 @@ $(document).ready(function () {
                         mode: 'rss'
                     }
                 }).done(function (data) {
-                    switch (add_mode) {
-                        case "readlater":
-                            $entry_text
-                                .siblings()
-                                .remove()
-                                .end()
-                                .after("<p class='alert alert-success'>Text was successfully added to your library</p>")
-                                .next()
-                                .show()
-                                .fadeOut(2000);
-                            break;
-                        case "readnow":
-                            location.replace("../showtext.php?id=" + data.insert_id + "&sh=1");
-                            break;
-                        default:
-                            break;
+                    if (typeof data.error_msg !== 'undefined' && data.error_msg !== null) {
+                        showMessage($entry_text, data.error_msg, 'alert-danger');
+                    } else {
+                        switch (add_mode) {
+                            case "readlater":
+                                showMessage($entry_text, 'Text was successfully added to your library', 'alert-success');
+                                break;
+                            case "readnow":
+                                location.replace("../showtext.php?id=" + data.insert_id + "&sh=1");
+                                break;
+                            default:
+                                break;
+                        }    
                     }
+                    
                 })
                 .fail(function () {
-                    $entry_text
-                        .siblings()
-                        .remove()
-                        .end()
-                        .after("<p class='alert alert-danger'>There was an error trying to add this text to your library!</p>")
-                        .next()
-                        .show()
-                        .fadeOut(2000);
+                    showMessage($entry_text, 'There was an error trying to add this text to your library!', 'alert-danger');
                 });
         }
     }
 
+    /**
+     * Shows custom message in the top section of the screen
+     * @param {Jquery object} $entry_text
+     * @param {string} html
+     * @param {string} type 
+     */
+    function showMessage($entry_text, html, type) {
+        html = '<p class="alert ' + type + '">' + html + '</p>';
+        $entry_text
+            .siblings()
+            .remove()
+            .end()
+            .after(html)
+            .next()
+            .show()
+            .fadeOut(3000);
+    } // end of showMessage
 
     $(document).on("click", ".btn-readlater", function (e) {
         e.preventDefault();

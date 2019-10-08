@@ -52,6 +52,7 @@ class SharedTexts extends Texts
      */
     public function getSearch($filter_sql, $search_text, $offset, $limit, $sort_by) {
         $filter_sql = $this->con->real_escape_string($filter_sql);
+        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
         $like_str = '%' . $search_text . '%';
 
         $lang = new Language($this->con);
@@ -73,11 +74,11 @@ class SharedTexts extends Texts
                 WHERE `name`=? $filter_sql 
                 AND `title` 
                 LIKE ? 
-                ORDER BY ? 
+                ORDER BY $sort_sql 
                 LIMIT ?, ?";
 
         $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("ssssss", $this->user_id, $lang->name, $like_str, $sort_sql, $offset, $limit);
+        $stmt->bind_param("sssss", $this->user_id, $lang->name, $like_str, $offset, $limit);
         $stmt->execute();
         $result = $stmt->get_result();
         
@@ -95,6 +96,8 @@ class SharedTexts extends Texts
      * @return array
      */
     public function getAll($offset, $limit, $sort_by) {
+        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+
         $lang = new Language($this->con);
         $lang->get($this->learning_lang_id);
 
@@ -112,11 +115,11 @@ class SharedTexts extends Texts
                 FROM `{$this->table}` t
                 INNER JOIN `languages` l ON t.lang_id = l.id
                 WHERE `name`=? 
-                ORDER BY ? 
+                ORDER BY $sort_sql 
                 LIMIT ?, ?";
 
         $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("sssss", $this->user_id, $lang->name, $sort_sql, $offset, $limit);
+        $stmt->bind_param("ssss", $this->user_id, $lang->name, $offset, $limit);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -138,10 +141,10 @@ class SharedTexts extends Texts
         } else {
             switch ($sort_by) {
                 case '2': // more likes first
-                    return `total_likes` . ' DESC';
+                    return '`total_likes` DESC';
                     break;
                 case '3': // less likes first
-                    return `total_likes`;
+                    return '`total_likes`';
                     break;
                 default:
                     return '';
@@ -164,7 +167,7 @@ class SharedTexts extends Texts
         }
 
         $sql = "SELECT 1
-                FROM `$this->table`
+                FROM `{$this->table}`
                 WHERE `source_uri` = ?";
         
         $stmt = $this->con->prepare($sql);

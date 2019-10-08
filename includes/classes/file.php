@@ -48,17 +48,15 @@ class File
         $target_dir = APP_ROOT . 'uploads' . DIRECTORY_SEPARATOR;
         $file_name = basename($files_array['name']);
         $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
-        
-        $temp_file_URI = $files_array['tmp_name'];
-        $target_file_name = uniqid() . '.' . $file_extension; // create unique filename for file
-        $target_file_URI = $target_dir . $target_file_name;
-        
         $file_size = $files_array['size'];
         
-        // Check if file exists
-        if (file_exists($target_file_URI)) {
-            $errors[] = "<li>File already exists. Please try again later.</li>";
-        }
+        $temp_file_URI = $files_array['tmp_name'];
+        
+        // Create unique filename for file
+        do {
+            $target_file_name = uniqid() . '.' . $file_extension; // create unique filename for file
+            $target_file_URI = $target_dir . $target_file_name;
+        } while (file_exists($target_file_URI));
         
         // Check file size
         if ($file_size > $this->max_size || $files_array['error'] == UPLOAD_ERR_INI_SIZE) {

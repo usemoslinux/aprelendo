@@ -43,26 +43,21 @@ class ArchivedTexts extends Texts
      * @return boolean
      */
     public function unarchiveByIds($ids) {
-        $textIDs = $this->JSONtoCSV($ids);
+        $cs_ids = $this->con->real_escape_string($this->JSONtoCSV($ids));
 
         $insertsql = "INSERT INTO `texts` 
                       SELECT *
-                      FROM `archived_texts` 
-                      WHERE `id` IN (?)";
+                      FROM `{$this->table}` 
+                      WHERE `id` IN ($cs_ids)";
         
-        $deletesql = "DELETE FROM `archived_texts` WHERE `id` IN (?)";
+        $deletesql = "DELETE FROM `{$this->table}` WHERE `id` IN ($cs_ids)";
         
-        $stmt = $this->con->prepare($insertsql);
-        $stmt->bind_param("s", $textIDs);
-        $result = $stmt->execute();
+        $result = $this->con->query($insertsql);
 
         if ($result) {
-            $stmt = $this->con->prepare($deletesql);
-            $stmt->bind_param("s", $textIDs);
-            $result = $stmt->execute();
+            $result = $this->con->query($deletesql);
         }
         
-        $stmt->close();
         return $result;
     }
 }

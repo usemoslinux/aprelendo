@@ -70,15 +70,14 @@ class Words extends DBEntity {
      * @return boolean
      */
     public function updateByName($words) {
-        $csvwords = $this->ArraytoCSV($words);
+        $csvwords = $this->con->real_escape_string($this->ArraytoCSV($words));
+        $user_id = $this->con->real_escape_string($this->user_id);
+        $lang_id = $this->con->real_escape_string($this->learning_lang_id);
 
         $sql = "UPDATE `words` SET `status`=`status`-1, `date_modified`=NOW() 
-                WHERE `user_id`=? AND `lang_id`=? AND `word` 
-                IN (?)";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("sss", $this->user_id, $this->learning_lang_id, $csvwords);
-        $result = $stmt->execute();
-        $stmt->close();
+                WHERE `user_id`=$user_id AND `lang_id`=$lang_id AND `word` 
+                IN ($csvwords)";
+        $result = $this->con->query($sql);
                 
         return $result;
     }
@@ -106,13 +105,10 @@ class Words extends DBEntity {
      * @return boolean
      */
     public function deleteByIds($ids) {
-        $wordIDs = $this->JSONtoCSV($ids);
+        $cs_ids = $this->con->real_escape_string($this->JSONtoCSV($ids));
 
-        $sql = "DELETE FROM `words` WHERE `id` IN (?)";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $wordIDs);
-        $result = $stmt->execute();
-        $stmt->close();
+        $sql = "DELETE FROM `words` WHERE `id` IN ($cs_ids)";
+        $stmt = $this->con->query($sql);
                 
         return $result;
     }

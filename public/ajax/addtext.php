@@ -125,8 +125,16 @@ try {
             $author = $_POST['author'];
             $source_url = $_POST['url'];
             $text = $_POST['text'];
-            
+
             $texts_table = new SharedTexts($con, $user_id, $learning_lang_id);
+
+            // if text is already in db, show error message
+            if ($texts_table->isAlreadyinDB($source_url)) {
+                $msg = 'The text you are trying to add already exists in our database. ';
+                $msg .= 'Look for it in the <a href="sharedtexts.php">shared texts</a> section.';
+
+                throw new \Exception($msg);
+            }
             
             // if successful, return insert_id in json format
             if ($insert_id = $texts_table->add($title, $author, $text, $source_url, '', '1')) {
@@ -161,22 +169,23 @@ try {
             if ((!$premium_user) || ($premium_user && $nr_of_uploads_today >= 1)){
                 throw new \Exception ('Sorry, you have reached your file upload limit for today.');
             }
-
-            // upload file
-            $ebook_file = new EbookFile($user->isPremium());
-            $ebook_file->put($_FILES['url']);
-            $target_file_name = $ebook_file->file_name;
+            
+            $texts_table = new Texts($con, $user_id, $learning_lang_id);
 
             // save text in db
-            $texts_table = new Texts($con, $user_id, $learning_lang_id);
             if (!empty($_POST['id'])) {
                 $id = $_POST['id'];
                 $result = $texts_table->update($id, $title, $author, $text, $target_file_name, $audio_uri, $type);
             } else {
                 $result = $texts_table->add($title, $author, $text, $target_file_name, $audio_uri, $type);
             }
+
+            // upload file
+            $ebook_file = new EbookFile($user->isPremium());
+            $upload_ebook = $ebook_file->put($_FILES['url']);
+            $target_file_name = $ebook_file->file_name;
             
-            if ($result) {
+            if ($result && $upload_ebook) {
                 // if everything goes fine log upload & return HTTP code 204 (No content), as nothing is returned 
                 $file_upload_log->addRecord();
                 $filename = array('filename' => $target_file_name);

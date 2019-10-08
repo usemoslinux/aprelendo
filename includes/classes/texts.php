@@ -44,11 +44,9 @@ class Texts extends DBEntity {
     */
     public function __construct($con, $user_id, $learning_lang_id) {
         parent::__construct($con, $user_id);
-        
         $this->learning_lang_id = $learning_lang_id;
-        
         $this->table = 'texts';
-        }
+    }
         
     /**
     * Adds a new text to the database
@@ -72,7 +70,7 @@ class Texts extends DBEntity {
                 
         // add text to table
         $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `title`, `author`, `text`, `source_uri`, `type`, `word_count`, `level`)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->con->prepare($sql);
         $stmt->bind_param('sssssssss', $this->user_id,$this->learning_lang_id, $title, $author, $text, $source_url, $type, $nr_of_words, $level);
         $result = $stmt->execute();
@@ -121,27 +119,24 @@ class Texts extends DBEntity {
     * @return boolean
     */
     public function deleteByIds($ids) {
-        $textIDs = $this->JSONtoCSV($ids);
+        $cs_ids = $this->con->real_escape_string($this->JSONtoCSV($ids));
         
         $selectsql = "SELECT `source_uri` 
             FROM `{$this->table}` 
-            WHERE `id` IN (?)";
-        $stmt = $this->con->prepare($selectsql);
-        $stmt->bind_param('s', $textIDs);
+            WHERE `id` IN ($cs_ids)";
+        $result = $this->con->query($selectsql);
         
-        if ($stmt->execute()) {
-            $result = $stmt->get_result();
+        if ($result) {
             $uris = $result->fetch_all();
             
             // delete entries from db
-            $deletesql = "DELETE FROM `$this->table` 
-                WHERE `id` IN (?)";
+            $deletesql = "DELETE FROM `{$this->table}` 
+                          WHERE `id` IN ($cs_ids)";
 
-            $stmt = $this->con->prepare($deletesql);
-            $stmt->bind_param('s', $textIDs);
+            $result = $this->con->query($deletesql);
 
             // delete audio (mp3, oggs) & source files (epubs, etc.)
-            if ($stmt->execute()) {
+            if ($result) {
                 $file = new File();
                 $pop_sources = new PopularSources($this->con);
                 $lang = new Language($this->con);
@@ -157,7 +152,6 @@ class Texts extends DBEntity {
                 }
             }
         }
-        $stmt->close();
         return $result;
     }
     
@@ -168,26 +162,20 @@ class Texts extends DBEntity {
     * @return boolean
     */
     public function archiveByIds($ids) {
-        $textIDs = $this->JSONtoCSV($ids);
+        $cs_ids = $this->con->real_escape_string($this->JSONtoCSV($ids));
         
         $insertsql = "INSERT INTO `archived_texts`
                       SELECT *
                       FROM `texts` 
-                      WHERE `id` IN (?)";
+                      WHERE `id` IN ($cs_ids)";
 
-        $stmt = $this->con->prepare($insertsql);
-        $stmt->bind_param('s', $textIDs);
-        $result = $stmt->execute();
+        $result = $this->con->query($insertsql);
         
         if ($result) {
-            $deletesql = "DELETE FROM `texts` WHERE `id` IN (?)";
-            $stmt = $this->con->prepare($deletesql);
-            $stmt->bind_param('s', $textIDs);
-            $result = $stmt->execute();
+            $deletesql = "DELETE FROM `texts` WHERE `id` IN ($cs_ids)";
+            $result = $this->con->query($deletesql);
         }
 
-        $stmt->close();
-        
         return $result;
     }
 
@@ -209,9 +197,8 @@ class Texts extends DBEntity {
                 WHERE `source_uri` = ? AND `user_id` = ?";
         $stmt = $this->con->prepare($sql);
         $stmt->bind_param('ss', $source_url, $this->user_id);
-        $exec = $stmt->execute();
-        $result = $exec ? $stmt->get_result() : false;
-        $stmt->close();
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         return ($result) && ($result->num_rows > 0);
     }
@@ -385,10 +372,10 @@ class Texts extends DBEntity {
     public function getSortSQL($sort_by) {
         switch ($sort_by) {
             case '0': // new first
-                return 'id' . ' DESC';
+                return '`id` DESC';
                 break;
             case '1': // old first
-                return 'id';
+                return '`id`';
                 break;
             default:
                 return '';
