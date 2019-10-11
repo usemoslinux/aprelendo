@@ -22,14 +22,14 @@ namespace Aprelendo\Includes\Classes;
 
 class Pagination 
 {
-  private $limit = 10;  // number of rows per page
+  private $limit = 10;    // number of rows per page
   private $adjacents = 2; // adjacent page numbers
-  private $total_rows; // total number of rows
-  private $total_pages; // total number of pages
-  private $page = 1; // current page
-  public $offset = 0; // offset used to retrieve rows
-  private $start; // beginning of range
-  private $end; // end of range
+  private $total_rows;    // total number of rows
+  private $total_pages;   // total number of pages
+  private $page = 1;      // current page
+  public  $offset = 0;    // offset used to retrieve rows
+  private $start;         // beginning of range
+  private $end;           // end of range
 
   /**
    * Constructor
@@ -68,7 +68,7 @@ class Pagination
         $this->end   = (1+($this->adjacents * 2));             
       }
     }
-  }
+  } // end __construct()
 
   /**
    * Prints pagination selector
@@ -94,45 +94,45 @@ class Pagination
     $query = "?$s$o$f$sa";
 
     if($this->total_pages > 1) { 
-      $result = "<nav aria-label='Page navigation'>
-      <div class='text-center'>
-      <ul class='pagination pagination-sm justify-content-center'>
-        <!-- Link of the first page -->
-        <li class='page-item " . ($this->page <= 1 ? ' disabled ' : ' ') . "'>
-          <a class='page-link' href='$url" . $query . "p=1'>
-          &lt;&lt;</a>
-        </li>
-        <!-- Link of the previous page -->
-        <li class='page-item " . ($this->page <= 1 ? ' disabled ' : ' ') . "'>
-          <a class='page-link' href='$url" . $query . "p=" . ($this->page>1 ? $this->page-1 : 1) . "'>
-          &lt;</a>
-        </li>
-        <!-- Links of the pages with page number -->";
+      $result = 
+      "<nav aria-label='Page navigation'>
+        <div class='text-center'>
+          <ul class='pagination pagination-sm justify-content-center'>
+            <!-- Link of the first page -->
+            <li class='page-item " . ($this->page <= 1 ? ' disabled ' : ' ') . "'>
+              <a class='page-link' href='$url" . $query . "p=1'>
+              &lt;&lt;</a>
+            </li>
+            <!-- Link of the previous page -->
+            <li class='page-item " . ($this->page <= 1 ? ' disabled ' : ' ') . "'>
+              <a class='page-link' href='$url" . $query . "p=" . ($this->page>1 ? $this->page-1 : 1) . "'>
+              &lt;</a>
+            </li>
+            <!-- Links of the pages with page number -->";
 
         for($i=$this->start; $i<=$this->end; $i++) {
-          $result .= "<li class='page-item " . ($i == $this->page ? ' active ' : ' ') . "'>
-          <a class='page-link' href='$url" . $query . "p=$i'>
-            $i
-          </a>
-        </li>";
+          $result .= 
+          "<li class='page-item " . ($i == $this->page ? ' active ' : ' ') . "'>
+            <a class='page-link' href='$url" . $query . "p=$i'>$i</a>
+          </li>";
         }
         
-        $result .= "<!-- Link of the next page -->
-        <li class='page-item " . ($this->page >= $this->total_pages ? ' disabled ' : ' ') . "'>
-          <a class='page-link' href='$url" . $query . "p=" . ($this->page < $this->total_pages ? $this->page+1 : $this->total_pages) . "'>&gt;</a>
-        </li>
-        <!-- Link of the last page -->
-        <li class='page-item " . ($this->page >= $this->total_pages ? ' disabled ' : ' ') . "'>
-          <a class='page-link' href='$url" . $query . "p=$this->total_pages'>&gt;&gt;
-          </a>
-        </li>
-      </ul>
-      </div>
+        $result .= 
+          "<!-- Link of the next page -->
+            <li class='page-item " . ($this->page >= $this->total_pages ? ' disabled ' : ' ') . "'>
+              <a class='page-link' href='$url" . $query . "p=" . ($this->page < $this->total_pages ? $this->page+1 : $this->total_pages) . "'>&gt;</a>
+            </li>
+          <!-- Link of the last page -->
+            <li class='page-item " . ($this->page >= $this->total_pages ? ' disabled ' : ' ') . "'>
+              <a class='page-link' href='$url" . $query . "p=$this->total_pages'>&gt;&gt;</a>
+            </li>
+          </ul>
+        </div>
       </nav>";
 
       return $result;
-     } // end if
-  } // end print pagination
+     }
+  } // end print()
 } // end Pagination class
 
 ?>

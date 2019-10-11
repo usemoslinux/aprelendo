@@ -71,7 +71,7 @@ try {
             }
             
             // check if text is longer than the max. number of chars allowed
-            $xml_text = $texts_table->extractTextFromXML($text);
+            $xml_text = $texts_table->extractFromXML($text);
             
             if ($xml_text != false) {
                 if (strlen($xml_text) > 20000) {
@@ -97,7 +97,7 @@ try {
                     $id = $_POST['id'];
                     $result = $texts_table->update($id, $title, $author, $text, $source_url, $target_file_name, $type);
                 } else {
-                    if ($texts_table->isAlreadyinDB($source_url)) {
+                    if ($texts_table->exists($source_url)) {
                         $msg = 'The text you are trying to add already exists in our database. ';
                         $msg .= $is_shared ? 'Look for it in the <a href="sharedtexts.php">shared texts</a> section.' : 'Look for it in your <a href="texts.php">private library</a>.';
 
@@ -129,7 +129,7 @@ try {
             $texts_table = new SharedTexts($con, $user_id, $learning_lang_id);
 
             // if text is already in db, show error message
-            if ($texts_table->isAlreadyinDB($source_url)) {
+            if ($texts_table->exists($source_url)) {
                 $msg = 'The text you are trying to add already exists in our database. ';
                 $msg .= 'Look for it in the <a href="sharedtexts.php">shared texts</a> section.';
 
@@ -169,21 +169,15 @@ try {
             if ((!$premium_user) || ($premium_user && $nr_of_uploads_today >= 1)){
                 throw new \Exception ('Sorry, you have reached your file upload limit for today.');
             }
-            
-            $texts_table = new Texts($con, $user_id, $learning_lang_id);
 
-            // save text in db
-            if (!empty($_POST['id'])) {
-                $id = $_POST['id'];
-                $result = $texts_table->update($id, $title, $author, $text, $target_file_name, $audio_uri, $type);
-            } else {
-                $result = $texts_table->add($title, $author, $text, $target_file_name, $audio_uri, $type);
-            }
-
-            // upload file
+            // upload file & create unique file name
             $ebook_file = new EbookFile($user->isPremium());
             $upload_ebook = $ebook_file->put($_FILES['url']);
             $target_file_name = $ebook_file->file_name;
+
+            // save text in db
+            $texts_table = new Texts($con, $user_id, $learning_lang_id);
+            $result = $texts_table->add($title, $author, $text, $target_file_name, $audio_uri, $type);
             
             if ($result && $upload_ebook) {
                 // if everything goes fine log upload & return HTTP code 204 (No content), as nothing is returned 

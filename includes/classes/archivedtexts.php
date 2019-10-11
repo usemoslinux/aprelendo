@@ -42,7 +42,7 @@ class ArchivedTexts extends Texts
      * @param string $ids JSON with text ids to unarchive
      * @return boolean
      */
-    public function unarchiveByIds($ids) {
+    public function unarchive($ids) {
         $cs_ids = $this->con->real_escape_string($this->JSONtoCSV($ids));
 
         $insertsql = "INSERT INTO `texts` 

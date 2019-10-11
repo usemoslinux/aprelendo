@@ -47,19 +47,19 @@ class SharedTexts extends Texts
      * @param string $search_text
      * @param integer $offset
      * @param integer $limit
-     * @param integer $sort_by Is converted to a string using getSortSQL()
+     * @param integer $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
     public function getSearch($filter_sql, $search_text, $offset, $limit, $sort_by) {
         $filter_sql = $this->con->real_escape_string($filter_sql);
-        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+        $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
         $like_str = '%' . $search_text . '%';
 
         $lang = new Language($this->con);
         $lang->get($this->learning_lang_id);
 
         $sql = "SELECT t.id, 
-                (SELECT `name` FROM users WHERE `id` = t.user_id) AS `user_name`, 
+                (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
                 t.title, 
                 t.author, 
                 t.source_uri,
@@ -92,11 +92,11 @@ class SharedTexts extends Texts
      *
      * @param integer $offset
      * @param integer $limit
-     * @param integer $sort_by Is converted to a string using getSortSQL()
+     * @param integer $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
     public function getAll($offset, $limit, $sort_by) {
-        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+        $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
 
         $lang = new Language($this->con);
         $lang->get($this->learning_lang_id);
@@ -133,8 +133,8 @@ class SharedTexts extends Texts
      * @param integer $sort_by
      * @return string
      */
-    public function getSortSQL($sort_by) {
-        $result = parent::getSortSQL($sort_by);
+    protected function buildSortSQL($sort_by) {
+        $result = parent::buildSortSQL($sort_by);
 
         if (!empty($result)) {
             return $result;
@@ -160,7 +160,7 @@ class SharedTexts extends Texts
      * @param string $source_url
      * @return boolean
      */
-    public function isAlreadyinDB($source_url)
+    public function exists($source_url)
     {
         if (empty($source_url)) {
             return false;

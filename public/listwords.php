@@ -52,7 +52,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     $search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';
     
     $words_table = new Words($con, $user_id, $learning_lang_id);
-    $total_rows = $words_table->countRowsFromSearch($search_text);
+    $total_rows = $words_table->countSearchRows($search_text);
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->offset;
 

@@ -54,7 +54,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         $texts_table = new Texts($con, $user_id, $learning_lang_id);
     }
     
-    $total_rows = $texts_table->countRowsFromSearch($filter_sql, $search_text);
+    $total_rows = $texts_table->countSearchRows($filter_sql, $search_text);
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->offset;
     

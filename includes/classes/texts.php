@@ -64,7 +64,7 @@ class Texts extends DBEntity {
         $nr_of_words = 0;
 
         if (isset($text) && !empty($text))  {
-            $level = $this->calcTextLevel($text);
+            $level = $this->calculateDifficulty($text);
             $nr_of_words = $this->nr_of_words;
         }
                 
@@ -118,7 +118,7 @@ class Texts extends DBEntity {
     * @param string $ids JSON that identifies the texts to be deleted
     * @return boolean
     */
-    public function deleteByIds($ids) {
+    public function delete($ids) {
         $cs_ids = $this->con->real_escape_string($this->JSONtoCSV($ids));
         
         $selectsql = "SELECT `source_uri` 
@@ -166,13 +166,13 @@ class Texts extends DBEntity {
         
         $insertsql = "INSERT INTO `archived_texts`
                       SELECT *
-                      FROM `texts` 
+                      FROM `{$this->table}` 
                       WHERE `id` IN ($cs_ids)";
 
         $result = $this->con->query($insertsql);
         
         if ($result) {
-            $deletesql = "DELETE FROM `texts` WHERE `id` IN ($cs_ids)";
+            $deletesql = "DELETE FROM `{$this->table}` WHERE `id` IN ($cs_ids)";
             $result = $this->con->query($deletesql);
         }
 
@@ -180,13 +180,13 @@ class Texts extends DBEntity {
     }
 
     /**
-     * Checks if text was already exists in database, to avoid duplicate entries.
+     * Checks if text already exists in database, to avoid duplicate entries.
      * It does this by checking the source url of the text to be added.
      *
      * @param string $source_url
      * @return boolean
      */
-    public function isAlreadyinDB($source_url)
+    public function exists($source_url)
     {
         if (empty($source_url)) {
             return false;
@@ -212,7 +212,7 @@ class Texts extends DBEntity {
     * @param string $search_text
     * @return integer|boolean
     */
-    public function countRowsFromSearch($filter_sql, $search_text) {
+    public function countSearchRows($filter_sql, $search_text) {
         // escape parameters
         $filter_sql = $this->con->real_escape_string($filter_sql);
         $search_text = '%' . $search_text . '%';
@@ -237,7 +237,7 @@ class Texts extends DBEntity {
     
     /**
     * Counts the number of rows (i.e. texts) for the current user & language combination
-    * It differs from countRowsFromSearch in that this function does not apply any additional filter
+    * It differs from countSearchRows in that this function does not apply any additional filter
     *
     * @return integer|boolean
     */
@@ -269,13 +269,13 @@ class Texts extends DBEntity {
     * @param string $search_text
     * @param integer $offset
     * @param integer $limit
-    * @param integer $sort_by Is converted to a string using getSortSQL()
+    * @param integer $sort_by Is converted to a string using buildSortSQL()
     * @return array
     */
     public function getSearch($filter_sql, $search_text, $offset, $limit, $sort_by) {
         // escape parameters
         $filter_sql = $this->con->real_escape_string($filter_sql);
-        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+        $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
         $search_text = '%' . $search_text . '%';
         
         $sql = "SELECT `id`, 
@@ -311,12 +311,12 @@ class Texts extends DBEntity {
     *
     * @param integer $offset
     * @param integer $limit
-    * @param integer $sort_by Is converted to a string using getSortSQL()
+    * @param integer $sort_by Is converted to a string using buildSortSQL()
     * @return array
     */
     public function getAll($offset, $limit, $sort_by) {
         // escape parameters
-        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+        $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
         
         $sql = "SELECT `id`, 
                 NULL, 
@@ -348,7 +348,7 @@ class Texts extends DBEntity {
     * @param string $xml 
     * @return string|boolean
     */
-    public function extractTextFromXML($xml) {
+    public function extractFromXML($xml) {
         // check if $text is valid XML (video transcript) or simple text
         libxml_use_internal_errors(true); // used to avoid raising Exceptions in case of error
         $xml = simplexml_load_string(html_entity_decode(stripslashes($xml)));
@@ -369,7 +369,7 @@ class Texts extends DBEntity {
     * @param integer $sort_by
     * @return string
     */
-    public function getSortSQL($sort_by) {
+    protected function buildSortSQL($sort_by) {
         switch ($sort_by) {
             case '0': // new first
                 return '`id` DESC';
@@ -416,7 +416,7 @@ class Texts extends DBEntity {
     * @param string $text
     * @return integer|boolean
     */
-    private function calcTextLevel($text = '') {
+    private function calculateDifficulty($text = '') {
         $level_thresholds = array('85', '95'); // <=80: beginner; >80 & <=95: intermediate; >95: advanced
         $frequency_list_table = ''; // frequency list table name: should be something like frequency_list_ + ISO 639-1 (2 letter language) code
         
@@ -435,7 +435,7 @@ class Texts extends DBEntity {
         $row = []; // array with all the rows from a successful SQL query
 
         // if $text is XML code (video transcript), extract text from XML string
-        $xml_text = $this->extractTextFromXML($text);
+        $xml_text = $this->extractFromXML($text);
         
         if ($xml_text != false) {
             $text = $xml_text;

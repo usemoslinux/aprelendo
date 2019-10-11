@@ -104,7 +104,7 @@ class Words extends DBEntity {
      * @param string $ids JSON that identifies the texts to be deleted
      * @return boolean
      */
-    public function deleteByIds($ids) {
+    public function delete($ids) {
         $cs_ids = $this->con->real_escape_string($this->JSONtoCSV($ids));
 
         $sql = "DELETE FROM `words` WHERE `id` IN ($cs_ids)";
@@ -119,7 +119,7 @@ class Words extends DBEntity {
      * @param string $search_text
      * @return integer|boolean
      */
-    public function countRowsFromSearch($search_text) {
+    public function countSearchRows($search_text) {
         $search_text = $this->con->real_escape_string($search_text);
         $like_str = '%' . $search_text . '%';
         
@@ -143,7 +143,7 @@ class Words extends DBEntity {
 
     /**
      * Counts the number of rows (i.e. words) for the current user & language combination
-     * It differs from countRowsFromSearch in that this function does not apply any additional filter
+     * It differs from countSearchRows in that this function does not apply any additional filter
      *
      * @return integer|boolean
      */
@@ -173,12 +173,12 @@ class Words extends DBEntity {
      * @param string $search_text
      * @param integer $offset
      * @param integer $limit
-     * @param integer $sort_by Is converted to a string using getSortSQL()
+     * @param integer $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
     public function getSearch($search_text, $offset, $limit, $sort_by) {
         $like_str = '%' . $search_text . '%';
-        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+        $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
 
         $sql = "SELECT `id`, `word`, `status` 
                 FROM `words` 
@@ -199,11 +199,11 @@ class Words extends DBEntity {
      *
      * @param integer $offset
      * @param integer $limit
-     * @param integer $sort_by Is converted to a string using getSortSQL()
+     * @param integer $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
     public function getAll($offset, $limit, $sort_by) {
-        $sort_sql = $this->con->real_escape_string($this->getSortSQL($sort_by));
+        $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
         
         $sql = "SELECT `id`, `word`, `status` 
                 FROM `words` 
@@ -224,7 +224,7 @@ class Words extends DBEntity {
      * @param integer $sort_by
      * @return string
      */
-    private function getSortSQL($sort_by) {
+    private function buildSortSQL($sort_by) {
         switch ($sort_by) {
             case '0': // new first
                 return '`id` DESC';
@@ -252,13 +252,13 @@ class Words extends DBEntity {
      * Results are ordered using $order_by.
      *
      * @param string $search_text
-     * @param integer $order_by Is converted to a string using getSortSQL()
+     * @param integer $order_by Is converted to a string using buildSortSQL()
      * @return boolean
      */
     public function createCSVFile($search_text, $order_by) {
         //escape parameters
         $search_text = $this->con->real_escape_string($search_text);
-        $sort_sql = $this->getSortSQL($order_by);
+        $sort_sql = $this->buildSortSQL($order_by);
         
         $filter = !empty($search_text) ? "AND word LIKE '%$search_text%' " : '';
         $filter .= $order_by != '' ? "ORDER BY $sort_sql" : '';

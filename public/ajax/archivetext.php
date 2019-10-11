@@ -47,7 +47,7 @@ try {
             $result = $texts_table->archiveByIds($_POST['textIDs']);
         } else { // unarchive text
             $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id);
-            $result = $texts_table->unarchiveByIds($_POST['textIDs']);
+            $result = $texts_table->unarchive($_POST['textIDs']);
         }
 
         if (!$result) {

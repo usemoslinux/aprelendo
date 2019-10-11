@@ -43,7 +43,7 @@ try {
             $texts_table = new Texts($con, $user_id, $learning_lang_id);
         }
     
-        $result = $texts_table->deleteByIds($text_ids);
+        $result = $texts_table->delete($text_ids);
 
         if (!$result) {
             throw new \Exception ('There was an unexpected error trying to remove this text');

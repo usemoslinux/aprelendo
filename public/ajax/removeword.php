@@ -37,7 +37,7 @@ try{
         $result = $words_table->deleteByName($_POST['word']);
     } elseif (isset($_POST['wordIDs'])) { // deletes word by id; used by listwords.php
         $words_table = new Words($con, $user_id, $learning_lang_id);
-        $result = $words_table->deleteByIds($_POST['wordIDs']);
+        $result = $words_table->delete($_POST['wordIDs']);
     }
 
     if (!$result) {
