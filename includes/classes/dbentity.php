@@ -35,45 +35,6 @@ class DBEntity {
         $this->con = $con;
         $this->user_id = $user_id;
     }
-
-    /**
-     * Converts JSON to CSV
-     *
-     * @param string $json in JSON format
-     * @return string in CSV format
-     */
-    public function JSONtoCSV($json) {
-        return implode(',', json_decode($json));
-    }
-
-    /**
-     * Converts Array to CSV
-     *
-     * @param array 
-     * @return string in CSV format
-     */
-    public function ArraytoCSV($array) {
-        if (is_array($array)) {
-            // escape all array elements
-            foreach ($array as $value) {
-                $value = $this->con->real_escape_string($value);
-            }
-            
-            return "'" . implode("','",$array) . "'";
-        } else {
-            return "'$array'";
-        }
-    }
-
-    public static function XMLtoArray($xmlObject)
-    {
-        $out = array ();
-        foreach ( (array)$xmlObject as $index => $node ) {
-            $out[$index] = ( is_object ( $node ) ) ? XMLtoArray ( $node ) : $node;
-        }
-        return $out;
-    }
-
 }
 
 ?>

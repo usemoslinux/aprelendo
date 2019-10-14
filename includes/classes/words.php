@@ -22,6 +22,7 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Connect;
 use Aprelendo\Includes\Classes\DBEntity;
+use Aprelendo\Includes\Classes\Conversion;
 
 class Words extends DBEntity {
     private $learning_lang_id;
@@ -70,7 +71,7 @@ class Words extends DBEntity {
      * @return boolean
      */
     public function updateByName($words) {
-        $csvwords = $this->con->real_escape_string($this->ArraytoCSV($words));
+        $csvwords = $this->con->real_escape_string(Conversion::ArraytoCSV($words));
         $user_id = $this->con->real_escape_string($this->user_id);
         $lang_id = $this->con->real_escape_string($this->learning_lang_id);
 
@@ -105,7 +106,7 @@ class Words extends DBEntity {
      * @return boolean
      */
     public function delete($ids) {
-        $cs_ids = $this->con->real_escape_string($this->JSONtoCSV($ids));
+        $cs_ids = $this->con->real_escape_string(Conversion::JSONtoCSV($ids));
 
         $sql = "DELETE FROM `words` WHERE `id` IN ($cs_ids)";
         $stmt = $this->con->query($sql);

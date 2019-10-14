@@ -20,21 +20,20 @@
 
 namespace Aprelendo\Includes\Classes;
 
-class Language
-{
-    public $con;
-    public $id;
-    public $user_id;
-    
-    public $name;
-    public $dictionary_uri;
-    public $translator_uri;
-    public $rss_feed_1_uri;
-    public $rss_feed_2_uri;
-    public $rss_feed_3_uri;
-    public $show_freq_words;
+use Aprelendo\Includes\Classes\DBEntity;
 
-    public static $lg_iso_codes = array(  
+class Language extends DBEntity
+{
+    private $id = 0;
+    private $name = '';
+    private $dictionary_uri = '';
+    private $translator_uri = '';
+    private $rss_feed_1_uri = '';
+    private $rss_feed_2_uri = '';
+    private $rss_feed_3_uri = '';
+    private $show_freq_words = false;
+
+    private static $iso_code = array(  
         'en' => 'english',
         'es' => 'spanish',
         'pt' => 'portuguese',
@@ -52,51 +51,15 @@ class Language
      */
     public function __construct ($con) {
         $this->con = $con;
-    }
+    } // end __construct()
 
     /**
-     * Updates language settings in db
-     *
-     * @param array $array
-     * @return boolean
-     */
-    public function edit($array, $is_premium_user) {
-        $id = $this->id;
-        $user_id = $this->user_id;
-        $name = $this->name;
-        $dictionary_uri = $array['dict-uri'];
-        $translator_uri = $array['translator-uri'];
-        
-        if ($is_premium_user) {
-            $rss_feed_1_uri = $array['rss-feed1-uri'];
-            $rss_feed_2_uri = $array['rss-feed2-uri'];
-            $rss_feed_3_uri = $array['rss-feed3-uri'];
-            $show_freq_words = $array['freq-list'];
-
-            $sql = "UPDATE `languages` SET `name`=?, `dict_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?, 
-                `rss_feed3_uri`=?, `show_freq_words`=? WHERE `user_id`=? AND `id`=?";
-            $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("ssssssiss", $name, $dictionary_uri, $translator_uri, $rss_feed_1_uri, $rss_feed_2_uri, $rss_feed_3_uri, 
-                $show_freq_words, $user_id, $id);
-        } else {
-            $sql = "UPDATE `languages` SET `name`=?, `dict_uri`=?, `translator_uri`=? WHERE `user_id`=? AND `id`=?";
-            $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("sssss", $name, $dictionary_uri, $translator_uri, $user_id, $id);
-        }
-        
-        $result = $stmt->execute();
-        $stmt->close();
-                
-        return $result;
-    }
-
-    /**
-     * Gets language by Id
+     * Loads language record data
      *
      * @param integer $id
      * @return array
      */
-    public function get($id) {
+    public function loadRecord($id) {
         $sql = "SELECT * FROM `languages` WHERE `id` = ?";
         $stmt = $this->con->prepare($sql);
         $stmt->bind_param("s", $id);
@@ -117,7 +80,47 @@ class Language
         $stmt->fetch();
         
         return $result ? true : false;
-    }
+    } // end loadRecord()
+
+    /**
+     * Updates language settings in db
+     *
+     * @param array $array
+     * @return boolean
+     */
+    public function editRecord($array, $is_premium_user) {
+        $id = $this->id;
+        $user_id = $this->user_id;
+        $name = $this->name;
+        $dictionary_uri = $array['dict-uri'];
+        $translator_uri = $array['translator-uri'];
+        
+        if ($is_premium_user) {
+            $rss_feed_1_uri = $array['rss-feed1-uri'];
+            $rss_feed_2_uri = $array['rss-feed2-uri'];
+            $rss_feed_3_uri = $array['rss-feed3-uri'];
+            $show_freq_words = $array['freq-list'];
+
+            $sql = "UPDATE `languages` 
+                    SET `name`=?, `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?, 
+                    `rss_feed3_uri`=?, `show_freq_words`=? 
+                    WHERE `user_id`=? AND `id`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->bind_param("ssssssiss", $name, $dictionary_uri, $translator_uri, $rss_feed_1_uri, 
+                $rss_feed_2_uri, $rss_feed_3_uri, $show_freq_words, $user_id, $id);
+        } else {
+            $sql = "UPDATE `languages` 
+                    SET `name`=?, `dictionary_uri`=?, `translator_uri`=? 
+                    WHERE `user_id`=? AND `id`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->bind_param("sssss", $name, $dictionary_uri, $translator_uri, $user_id, $id);
+        }
+        
+        $result = $stmt->execute();
+        $stmt->close();
+                
+        return $result;
+    } // end editRecord()
 
     /**
      * Converts 639-1 iso codes to full language names (ie. 'en' => 'English')
@@ -125,9 +128,107 @@ class Language
      * @param string $iso_code
      * @return string
      */
-    public static function getLanguageName($iso_code) {
-        return self::$lg_iso_codes[$iso_code];
+    public static function getNameFromIso($iso_code) {
+        return self::$iso_code[$iso_code];
+    } // end getNameFromIso()
+
+    /**
+     * Gives index of 639-1 iso codes in Language::$lg_iso_codes array
+     *
+     * @param string $lang_name
+     * @return string
+     */
+    public static function getIndex($lang_name) {
+        $keys = array_keys(self::$iso_codes);
+        $count = key_count($keys)-1;
+        for ($i=0; $i < $key_count; $i++) { 
+            if ($keys[$i] == $lang_name) {
+                return $i;
+            }
+        }
     }
+
+    /**
+     * Returns complete list of iso codes
+     *
+     * @return array
+     */
+    public static function getIsoCodeArray() {
+        return self::$iso_code;
+    } // end getIsoCodeArray()
+
+    /**
+     * Id getter
+     *
+     * @return string
+     */
+    public static function getId() {
+        return $this->id;
+    } // end getId()
+
+    /**
+     * Name getter
+     *
+     * @return string
+     */
+    public static function getName() {
+        return $this->name;
+    } // end getName()
+
+    /**
+     * Dictionary URI getter
+     *
+     * @return string
+     */
+    public static function getDictionaryUri() {
+        return $this->dictionary_uri;
+    } // end getDictionaryUri()
+
+    /**
+     * Translator URI getter
+     *
+     * @return string
+     */
+    public static function getTranslatorUri() {
+        return $this->translator_uri;
+    } // end getTranslatorUri()
+
+    /**
+     * RSS Feed 1 URI getter
+     *
+     * @return string
+     */
+    public static function getRssFeed1Uri() {
+        return $this->rss_feed_1_uri;
+    } // end getRssFeed1Uri()
+
+    /**
+     * RSS Feed 2 URI getter
+     *
+     * @return string
+     */
+    public static function getRssFeed2Uri() {
+        return $this->rss_feed_2_uri;
+    } // end getRssFeed2Uri()
+
+    /**
+     * RSS Feed 3 URI getter
+     *
+     * @return string
+     */
+    public static function getRssFeed3Uri() {
+        return $this->rss_feed_3_uri;
+    } // end getRssFeed3Uri()
+
+    /**
+     * Show Frequency Words getter
+     *
+     * @return bool
+     */
+    public static function getShowFreqWords() {
+        return $this->show_freq_words;
+    } // end getShowFreqWords()
+
 }
 
 

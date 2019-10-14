@@ -22,6 +22,9 @@ require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
+
+use Aprelendo\Includes\Classes\Language;
+
 ?>
 
 <div class="container mtb">
@@ -87,7 +90,7 @@ require_once PUBLIC_PATH . 'header.php';
                         <div class="form-group">
                             <label for="src_lang">Your native language:</label>
                             <select name="src_lang" class="form-control custom-select" id="src_lang">
-                                <?php $native_lang_index = $user->getLanguageIndex($user->native_lang); ?>
+                                <?php $native_lang_index = Language::getIndex($user->native_lang); ?>
                                 <option value="en" <?php echo $native_lang_index==0 ? ' selected ' : '' ; ?>>English</option>
                                 <option value="es" <?php echo $native_lang_index==1 ? ' selected ' : '' ; ?>>Spanish</option>
                                 <option value="pt" <?php echo $native_lang_index==2 ? ' selected ' : '' ; ?>>Portuguese</option>
@@ -99,7 +102,7 @@ require_once PUBLIC_PATH . 'header.php';
                         <div class="form-group">
                             <label for="to_lang">Active learning language:</label>
                             <select name="to_lang" class="form-control custom-select" id="to_lang">
-                                <?php $learning_lang_index = $user->getLanguageIndex($user->learning_lang); ?>
+                                <?php $learning_lang_index = Language::getIndex($user->learning_lang); ?>
                                 <option value="en" <?php echo $learning_lang_index==0 ? ' selected ' : '' ; ?>>English</option>
                                 <option value="es" <?php echo $learning_lang_index==1 ? ' selected ' : '' ; ?>>Spanish</option>
                                 <option value="pt" <?php echo $learning_lang_index==2 ? ' selected ' : '' ; ?>>Portuguese</option>

@@ -42,8 +42,9 @@ try {
     
     if ($result) {
         $row = $result->fetch_assoc();
-        $ebook_file = new EbookFile($user->isPremium());
-        $ebook_content = $ebook_file->get($row['source_uri']);
+        $file_name = $row['source_uri'];
+        $ebook_file = new EbookFile($file_name, $user->isPremium());
+        $ebook_content = $ebook_file->get();
         if ($ebook_content != false) {
             return $ebook_content;
         } else {

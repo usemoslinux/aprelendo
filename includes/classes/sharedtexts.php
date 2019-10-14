@@ -36,7 +36,7 @@ class SharedTexts extends Texts
     public function __construct($con, $user_id, $learning_lang_id) {
         parent::__construct($con, $user_id, $learning_lang_id);
         $this->table = 'shared_texts';
-    }
+    } // end __construct()
 
     /**
      * Gets texts by using a search pattern ($search_text) and a filter ($filter_sql).
@@ -56,7 +56,7 @@ class SharedTexts extends Texts
         $like_str = '%' . $search_text . '%';
 
         $lang = new Language($this->con);
-        $lang->get($this->learning_lang_id);
+        $lang->loadRecord($this->learning_lang_id);
 
         $sql = "SELECT t.id, 
                 (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
@@ -78,12 +78,12 @@ class SharedTexts extends Texts
                 LIMIT ?, ?";
 
         $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("sssss", $this->user_id, $lang->name, $like_str, $offset, $limit);
+        $stmt->bind_param("sssss", $this->user_id, $lang->getName(), $like_str, $offset, $limit);
         $stmt->execute();
         $result = $stmt->get_result();
         
         return $result ? $result->fetch_all() : false;
-    }
+    } // end getSearch()
 
     /**
      * Gets all the texts for the current user & language combination
@@ -99,7 +99,7 @@ class SharedTexts extends Texts
         $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
 
         $lang = new Language($this->con);
-        $lang->get($this->learning_lang_id);
+        $lang->loadRecord($this->learning_lang_id);
 
         $sql = "SELECT t.id, 
                 (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
@@ -119,12 +119,37 @@ class SharedTexts extends Texts
                 LIMIT ?, ?";
 
         $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("ssss", $this->user_id, $lang->name, $offset, $limit);
+        $stmt->bind_param("ssss", $this->user_id, $lang->getName(), $offset, $limit);
         $stmt->execute();
         $result = $stmt->get_result();
 
         return $result ? $result->fetch_all() : false;
-    }
+    } // end getAll()
+
+    /**
+     * Checks if text was already exists in database, to avoid duplicate entries.
+     * It does this by checking the source url of the text to be added.
+     *
+     * @param string $source_url
+     * @return boolean
+     */
+    public function exists($source_url)
+    {
+        if (empty($source_url)) {
+            return false;
+        }
+
+        $sql = "SELECT 1
+                FROM `{$this->table}`
+                WHERE `source_uri` = ?";
+        
+        $stmt = $this->con->prepare($sql);
+        $stmt->bind_param("s", $source_url);
+        $stmt->execute();
+        $result = $stmt->get_result();
+            
+        return ($result) && ($result->num_rows > 0);
+    } // end exists() 
 
     /**
      * Converts sorting patterns selected by user (expressed as an integer value in the sort menu) 
@@ -151,32 +176,8 @@ class SharedTexts extends Texts
                     break;
             }
         }
-    }
+    } // end buildSortSQL()
 
-    /**
-     * Checks if text was already exists in database, to avoid duplicate entries.
-     * It does this by checking the source url of the text to be added.
-     *
-     * @param string $source_url
-     * @return boolean
-     */
-    public function exists($source_url)
-    {
-        if (empty($source_url)) {
-            return false;
-        }
-
-        $sql = "SELECT 1
-                FROM `{$this->table}`
-                WHERE `source_uri` = ?";
-        
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $source_url);
-        $stmt->execute();
-        $result = $stmt->get_result();
-            
-        return ($result) && ($result->num_rows > 0);
-    }
 }
 
 

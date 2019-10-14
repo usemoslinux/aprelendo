@@ -34,14 +34,14 @@ $user_id = $user->id;
 
 if (isset($_POST['submit'])) {                  // check if we need to save new language data
     $lang = new Language($con);
-    $lang->get($_POST['id'], $user_id);
-    $lang->edit($_POST, $user->isPremium());
+    $lang->loadRecord($_POST['id'], $user_id);
+    $lang->editRecord($_POST, $user->isPremium());
 } elseif (isset($_GET['chg'])) {        
     $lang = new Language($con);
-    $lang->get($_GET['chg'], $user_id);
+    $lang->loadRecord($_GET['chg'], $user_id);
 } elseif(isset($_GET['act'])) { 
     $lang = new Language($con);
-    $lang->get($_GET['act'], $user_id);
+    $lang->loadRecord($_GET['act'], $user_id);
 } 
 ?>
 
@@ -57,7 +57,7 @@ if (isset($_POST['submit'])) {                  // check if we need to save new 
                     </li>
                     <?php 
                         if (isset($_GET['chg'])) {
-                            echo '<li class="breadcrumb-item active">' . ucfirst(Language::getLanguageName($lang->name)) . '</li>';    
+                            echo '<li class="breadcrumb-item active">' . ucfirst(Language::getNameFromIso($lang->getName())) . '</li>';    
                         }
                     ?>
                 </ol>

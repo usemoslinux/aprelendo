@@ -44,7 +44,7 @@ try {
     if (isset($_POST['textIDs']) && !empty($_POST['textIDs'])) {
         if ($_POST['archivetext'] === 'true') { //archive text
             $texts_table = new Texts($con, $user_id, $learning_lang_id);
-            $result = $texts_table->archiveByIds($_POST['textIDs']);
+            $result = $texts_table->archive($_POST['textIDs']);
         } else { // unarchive text
             $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id);
             $result = $texts_table->unarchive($_POST['textIDs']);

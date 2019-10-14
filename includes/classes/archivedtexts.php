@@ -21,6 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Connect;
+use Aprelendo\Includes\Classes\Conversion;
 
 class ArchivedTexts extends Texts
 {
@@ -43,7 +44,7 @@ class ArchivedTexts extends Texts
      * @return boolean
      */
     public function unarchive($ids) {
-        $cs_ids = $this->con->real_escape_string($this->JSONtoCSV($ids));
+        $cs_ids = $this->con->real_escape_string(Conversion::JSONtoCSV($ids));
 
         $insertsql = "INSERT INTO `texts` 
                       SELECT *
@@ -60,7 +61,7 @@ class ArchivedTexts extends Texts
         
         return $result;
     }
-}
+} // end unarchive()
 
 
 ?>

@@ -22,52 +22,69 @@ namespace Aprelendo\Includes\Classes;
 
 class File
 {
-    protected $allowed_extensions = array('txt');
+    protected $allowed_extensions = [];
     protected $max_size = 0;
-    public $file_name = '';
-    
-    public function __construct() {
+    protected $name = '';
+    protected $folder = '';
+    protected $path = '';
+    protected $extension = '';
+    protected $size = 0; 
 
-    }
+    /**
+     * Constructor
+     * @param string $file_name
+     */
+    public function __construct(string $file_name = '') {
+        $this->name = $file_name;
+        $this->folder = APP_ROOT . 'uploads' . DIRECTORY_SEPARATOR;
+        $this->path = realpath(APP_ROOT . 'uploads' . DIRECTORY_SEPARATOR . $file_name);
+        $this->extension = empty($file_name) ? 0 : pathinfo($file_name, PATHINFO_EXTENSION);
+        $this->size = empty($file_name) ? 0 : filesize($this->path);
+    } // end __construct()
 
-    public function delete($filename)
-    {
-        $full_filename = realpath(APP_ROOT . 'uploads' . DIRECTORY_SEPARATOR . $filename);
-        if (is_file($full_filename) && file_exists($full_filename)) {
-            unlink($full_filename);
+    /**
+     * Deletes file from system
+     * @return bool
+     */
+    public function delete(): bool {
+        if (is_file($this->path) && file_exists($this->path)) {
+            return unlink($this->path);
         } else {
-            if (!empty($filename)) {
+            if (!empty($this->name)) {
                 throw new \Exception('There was an error deleting the associated file.');
-                log_error("Error: removing file $full_filename");
             }
         }
-    }
+        return false;
+    } // end delete()
 
-    public function put($files_array)
-    {
-        $target_dir = APP_ROOT . 'uploads' . DIRECTORY_SEPARATOR;
-        $file_name = basename($files_array['name']);
-        $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
-        $file_size = $files_array['size'];
+    /**
+     * Uploads files
+     * @param array $file_array Array containing file info 
+     * @return @bool 
+     */
+    public function put(array $file_array): bool {
+        $this->name = basename($file_array['name']);
+        $this->extension = pathinfo($this->name, PATHINFO_EXTENSION);
+        $this->size = $file_array['size'];
         
-        $temp_file_URI = $files_array['tmp_name'];
+        $temp_file_path = $file_array['tmp_name'];
         
         // Create unique filename for file
         do {
-            $target_file_name = uniqid() . '.' . $file_extension; // create unique filename for file
-            $target_file_URI = $target_dir . $target_file_name;
-        } while (file_exists($target_file_URI));
+            $target_file_name = uniqid() . '.' . $this->extension; // create unique filename for file
+            $this->path = $this->folder . $target_file_name;
+        } while (file_exists($this->path));
         
         // Check file size
-        if ($file_size > $this->max_size || $files_array['error'] == UPLOAD_ERR_INI_SIZE) {
+        if ($this->size > $this->max_size || $file_array['error'] == UPLOAD_ERR_INI_SIZE) {
             $errors[] = '<li>File size should be less than ' . number_format($this->max_size) . 
-                ' bytes. Your file has ' . number_format($file_size) . ' bytes.<br>';
+                ' bytes. Your file has ' . number_format($this->size) . ' bytes.<br>';
         }
         
         // Check file extension
         $allowed_ext = false;
         for ($i=0; $i < sizeof($this->allowed_extensions); $i++) {
-            if (strcasecmp($this->allowed_extensions[$i], $file_extension) == 0) {
+            if (strcasecmp($this->allowed_extensions[$i], $this->extension) == 0) {
                 $allowed_ext = true;
             }
         }
@@ -77,51 +94,75 @@ class File
         }
         
         // upload file
-        if (empty($errors) && $files_array['error'] == UPLOAD_ERR_OK) {
-            $result = $this->move($temp_file_URI, $target_dir, $target_file_URI);
+        if (empty($errors) && $file_array['error'] == UPLOAD_ERR_OK) {
+            $result = $this->move($temp_file_path, $this->path);
             if ($result) {
-                $this->file_name = $target_file_name;
+                $this->name = $target_file_name;
                 return true;
             }
         } else {
             $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
             throw new \Exception($error_str);  
         }
-    }
+
+        return false;
+    } // end put()
     
-    
-    private function move($temp_file_URI, $target_dir, $target_file_URI)
-    {
+    /**
+     * Moves file from temporary folder to uploads folder
+     * @param string $source_path Source file path 
+     * @param string $destination_path Destination file path
+     * @return bool
+     */
+    private function move(string $source_path, string $destination_path): bool {
         // if target dir does not exist, create it
-        if (!is_dir($target_dir)) {
-            mkdir($target_dir);
+        if (!is_dir($this->folder)) {
+            mkdir($this->folder);
         }
         // try to move file to uploads folder. If this fails, show error message
-        if (!move_uploaded_file($temp_file_URI, $target_file_URI)) {
+        if (!move_uploaded_file($source_path, $destination_path)) {
             throw new \Exception("<li>Sorry, there was an error uploading your file.</li>");  
         } else {
             return true;
         }
-    }
-    
 
-    public function get($file_name) {
-        //Make sure it exists
-        $folder = APP_ROOT . 'uploads' . DIRECTORY_SEPARATOR;
-        if(!$file = realpath($folder . $file_name))
+        return false;
+    } // end move()
+    
+    /**
+     * Gets file
+     * @return int
+     */
+    public function get(): int {
+        // make sure it exists
+        if(!$file = realpath($this->folder . $this->name))
             return $this->error(404);
         if(!is_file($file))
             return $this->error(404);
 
-        //Check for cheaters
-        if(substr($file,0,strlen($folder)) !== $folder)
+        // check for cheaters
+        if(substr($file,0,strlen($this->folder)) !== $this->folder)
             return $this->error(401);
 
         // header(sprintf("Content-type: %s;",$this->getMimeType($file)));
         return readfile($file);
+    } // end get()
+
+    /**
+     * Gets file name
+     * @return string 
+     */
+    public function getName(): string {
+        return $this->name;
     }
     
-    private function error($code = 401, $msg = null) {
+    /**
+     * Creates error header
+     * @param integer $code HTML error code
+     * @param string $msg Error message
+     * @return string HTML header
+     */
+    private function error(int $code = 401, string $msg = null): string {
         $msgs = array(
             400 => 'Bad Request',
             401 => 'Unauthorized',
@@ -132,9 +173,13 @@ class File
         if(!$msg) $msg = $msgs[$code];
         header(sprintf('HTTP/1.0 %s %s',$code,$msg));
         return "<html><head><title>$code $msg</title></head><body><h1>$msg</h1></body></html>";
-    }
+    } // end error()
     
-    private function getMimeType($file_name) {
+    /**
+     * Detects file's Mime type
+     * @return string Mime string
+     */
+    private function getMimeType(): bool {
         //MIME MAP
         $mime_extension_map = array(
             '3ds'           => 'image/x-3ds',
@@ -609,16 +654,13 @@ class File
             '669'           => 'audio/x-mod'
         );
 
-        //Get Extension
-        $ext = strtolower(substr($file_name,strrpos($file_name,'.') + 1));
-        
-        if(empty($ext)) 
+        if(empty($this->extension)) 
             return 'application/octet-stream';
-        elseif(isset($mime_extension_map[$ext]))
-            return $mime_extension_map[$ext];
+        elseif(isset($mime_extension_map[$this->extension]))
+            return $mime_extension_map[$this->extension];
         
-        return 'x-extension/' . $ext;
-    }
+        return 'x-extension/' . $this->extension;
+    } // end getMimeType()
 }
 
 ?>

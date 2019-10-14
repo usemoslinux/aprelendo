@@ -90,7 +90,7 @@ try {
                 // if (isset($_FILES['audio']) && !empty($_FILES['audio']) && $_FILES['audio']['error'] !== UPLOAD_ERR_NO_FILE) {
                 //     $audio_file = new AudioFile($user->isPremium());
                 //     $file_uploaded = $audio_file->put($_FILES['audio']);
-                //     $target_file_name = $audio_file->file_name;
+                //     $target_file_name = $audio_file->getName();
                 // }
                 
                 if (!empty($_POST['id'])) {
@@ -171,9 +171,9 @@ try {
             }
 
             // upload file & create unique file name
-            $ebook_file = new EbookFile($user->isPremium());
+            $ebook_file = new EbookFile($_FILES['url']['name'], $user->isPremium());
             $upload_ebook = $ebook_file->put($_FILES['url']);
-            $target_file_name = $ebook_file->file_name;
+            $target_file_name = $ebook_file->getName();
 
             // save text in db
             $texts_table = new Texts($con, $user_id, $learning_lang_id);

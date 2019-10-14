@@ -26,19 +26,19 @@ $is_premium_user = $user->isPremium();
 
 <form class="" action="languages.php" method="post">
 
-    <input type="hidden" name="id" value="<?php echo $lang->id; ?>">
-    <input type="hidden" name="language" class="form-control" value="<?php echo $lang->name; ?>">
+    <input type="hidden" name="id" value="<?php echo $lang->getId(); ?>">
+    <input type="hidden" name="language" class="form-control" value="<?php echo $lang->getName(); ?>">
     
     <div class="card">
         <div class="card-header">Dictionary & Translator</div>
         <div class="card-body">
             <div class="form-group">
                 <label for="dict-uri">Dictionary URI:</label>
-                <input type="url" id="dict-uri" name="dict-uri" class="form-control" value="<?php echo htmlspecialchars($lang->dictionary_uri); ?>">
+                <input type="url" id="dict-uri" name="dict-uri" class="form-control" value="<?php echo htmlspecialchars($lang->getDictionaryUri()); ?>">
             </div>
             <div class="form-group">
                 <label for="translator-uri">Translator URI:</label>
-                <input type="url" id="translator-uri" name="translator-uri" class="form-control" value="<?php echo htmlspecialchars($lang->translator_uri); ?>">
+                <input type="url" id="translator-uri" name="translator-uri" class="form-control" value="<?php echo htmlspecialchars($lang->getTranslatorUri()); ?>">
             </div>
             <div class="text-right">
                 <a href="javascript:;" title="Help" data-toggle="collapse" data-target="#help-dictionary"><i class="far fa-question-circle"></i></a>
@@ -65,15 +65,15 @@ $is_premium_user = $user->isPremium();
         <div class="card-body">
             <div class="form-group">
                 <label for="rss-feed1-uri">RSS feed URI 1:</label>
-                <input type="url" id="rss-feed1-uri" name="rss-feed1-uri" class="form-control" value="<?php echo htmlspecialchars($lang->rss_feed_1_uri); ?>">
+                <input type="url" id="rss-feed1-uri" name="rss-feed1-uri" class="form-control" value="<?php echo htmlspecialchars($lang->getRssFeed1Uri()); ?>">
             </div>
             <div class="form-group">
                 <label for="rss-feed2-uri">RSS feed URI 2:</label>
-                <input type="url" id="rss-feed2-uri" name="rss-feed2-uri" class="form-control" value="<?php echo htmlspecialchars($lang->rss_feed_2_uri); ?>">
+                <input type="url" id="rss-feed2-uri" name="rss-feed2-uri" class="form-control" value="<?php echo htmlspecialchars($lang->getRssFeed2Uri()); ?>">
             </div>
             <div class="form-group">
                 <label for="rss-feed3-uri">RSS feed URI 3:</label>
-                <input type="url" id="rss-feed3-uri" name="rss-feed3-uri" class="form-control" value="<?php echo htmlspecialchars($lang->rss_feed_3_uri); ?>">
+                <input type="url" id="rss-feed3-uri" name="rss-feed3-uri" class="form-control" value="<?php echo htmlspecialchars($lang->getRssFeed3Uri()); ?>">
             </div>
         </div>
     </div>
@@ -86,8 +86,8 @@ $is_premium_user = $user->isPremium();
             <div class="form-group">
                 <label for="freq-list">Underline 5000 most used words:</label>
                 <select name="freq-list" id="freq-list" class="form-control custom-select">
-                    <option value="1" <?php echo $lang->show_freq_words==true ? 'selected' : ''; ?>>Yes</option>
-                    <option value="0" <?php echo $lang->show_freq_words==false ? 'selected' : ''; ?>>No</option>
+                    <option value="1" <?php echo $lang->getShowFreqWords()==true ? 'selected' : ''; ?>>Yes</option>
+                    <option value="0" <?php echo $lang->getShowFreqWords()==false ? 'selected' : ''; ?>>No</option>
                 </select>
             </div>
         </div>

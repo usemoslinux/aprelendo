@@ -39,7 +39,7 @@ if ($result) {
 
         $item_id = 'item-' . $lg_iso_code;
         $heading_id = 'heading-' . $lg_iso_code;
-        $lgname = ucfirst(Language::getLanguageName($lg_iso_code));
+        $lgname = ucfirst(Language::getNameFromIso($lg_iso_code));
         
         $is_active = $lg_id == $user->learning_lang_id ? 'bg-primary text-white' : '';
         $html .= "<div class='card'>

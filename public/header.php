@@ -22,7 +22,7 @@ require_once('../includes/dbinit.php'); // connect to database
 require_once(APP_ROOT . 'includes/checklogin.php'); // check if logged in and set $user
 use Aprelendo\Includes\Classes\Language;
 
-$learning_lang_full = ucfirst(Language::getLanguageName($user->learning_lang));
+$learning_lang_full = ucfirst(Language::getNameFromIso($user->learning_lang));
 ?>
 
     <nav class="navbar navbar-expand-md navbar-light">

@@ -98,7 +98,8 @@ class User
 
         // save user data in db
         $user_active = !$send_email;
-        $sql = "INSERT INTO `users` (`name`, `password_hash`, `email`, `native_lang_iso`, `learning_lang_iso`, `activation_hash`, `is_active`) 
+        $sql = "INSERT INTO `users` (`name`, `password_hash`, `email`, `native_lang_iso`, `learning_lang_iso`, 
+                `activation_hash`, `is_active`) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->con->prepare($sql);
         $stmt->bind_param("s", $username, $password_hash, $email, $native_lang, $learning_lang, $activation_hash, $user_active);
@@ -106,21 +107,24 @@ class User
 
         if ($result) {
             $user_id = $this->id = $this->con->insert_id;
+
+            $iso_codes = Language::getIsoCodeArray();
             
             // create & save default language preferences for user
-            foreach (Language::$lg_iso_codes as $key => $value) {
-                $translator_uri = 'https://translate.google.com/m?hl=' . $value . '&sl=' . Language::$lg_iso_codes[$native_lang] . '&&ie=UTF-8&q=%s';
-                $dict_uri = 'https://www.linguee.com/' . $value . '-' . Language::$lg_iso_codes[$native_lang] . '/search?source=auto&query=%s';
+            foreach ($iso_codes as $key => $value) {
+                $translator_uri = 'https://translate.google.com/m?hl=' . $value . '&sl=' . $iso_codes[$native_lang] . '&&ie=UTF-8&q=%s';
+                $dictionary_uri = 'https://www.linguee.com/' . $value . '-' . $iso_codes[$native_lang] . '/search?source=auto&query=%s';
                 
-                $sql = "INSERT INTO `languages` (`user_id`, `name`, `dict_uri`, `translator_uri`) 
+                $sql = "INSERT INTO `languages` (`user_id`, `name`, `dictionary_uri`, `translator_uri`) 
                         VALUES (?, ?, ?, ?)";
                 $stmt = $this->con->prepare($sql);
-                $stmt->bind_param("ssss", $user_id, $key, $dict_uri, $translator_uri);
+                $stmt->bind_param("ssss", $user_id, $key, $dictionary_uri, $translator_uri);
                 $result = $stmt->execute();                
             }
 
             if ($result) {
-                $sql = "INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`, `learning_mode`, `assisted_learning`) 
+                $sql = "INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`, 
+                        `learning_mode`, `assisted_learning`) 
                         VALUES (?, 'Helvetica', '12pt', '1.5', 'left', 'light', '1')";
                 $stmt = $this->con->prepare($sql);
                 $stmt->bind_param("s", $user_id);
@@ -472,14 +476,14 @@ class User
             $result = $stmt->get_result();
                         
             if ($result->num_rows > 0) {
-                $file = new File();
                 $filename = '';
                 $file_extensions = array('.epub', '.mp3', '.ogg');
 
                 while ($row = $result->fetch_assoc()) {
                     $filename = $row[$source_uri_col_name];
                     if (in_array(substr($filename, -5), $file_extensions)) {
-                        $file->delete($filename);
+                        $file = new File($filename);
+                        $file->delete();
                     }
                 }
             }
@@ -497,21 +501,6 @@ class User
             throw new \Exception('Oops! There was an unexpected problem trying to delete your account. Please try again later.');
         }
     } // end logout
-    
-    /**
-     * Gives index of 639-1 iso codes in Language::$lg_iso_codes array
-     *
-     * @param string $lang_name
-     * @return string
-     */
-    public function getLanguageIndex($lang_name) {
-        $keys = array_keys(Language::$lg_iso_codes);
-        for ($i=0; $i < count($keys)-1; $i++) { 
-            if ($keys[$i] == $lang_name) {
-                return $i;
-            }
-        }
-    }
     
     /**
      * Update active language in db

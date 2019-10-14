@@ -24,6 +24,7 @@ use Aprelendo\Includes\Classes\File;
 use Aprelendo\Includes\Classes\PopularSources;
 use Aprelendo\Includes\Classes\Url;
 use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Includes\Classes\Conversion;
 
 class Texts extends DBEntity {
     use Curl;
@@ -46,7 +47,7 @@ class Texts extends DBEntity {
         parent::__construct($con, $user_id);
         $this->learning_lang_id = $learning_lang_id;
         $this->table = 'texts';
-    }
+    } // end __construct() 
         
     /**
     * Adds a new text to the database
@@ -80,13 +81,13 @@ class Texts extends DBEntity {
             // add entry to popularsources
             $pop_sources = new PopularSources($this->con);
             $lang = new Language($this->con);
-            $lang->get($this->learning_lang_id);
+            $lang->loadRecord($this->learning_lang_id);
             
-            $result = $pop_sources->add($lang->name, Url::getDomainName($source_url));
+            $result = $pop_sources->add($lang->getName(), Url::getDomainName($source_url));
         }
         
         return $result ? $insert_id : false;
-    }
+    } // end add()
             
     /**
     * Updates existing text in database
@@ -110,7 +111,7 @@ class Texts extends DBEntity {
         $stmt->close();
         
         return $result;
-    }
+    } // end update()
     
     /**
     * Deletes texts in database using ids as a parameter to select them
@@ -119,7 +120,7 @@ class Texts extends DBEntity {
     * @return boolean
     */
     public function delete($ids) {
-        $cs_ids = $this->con->real_escape_string($this->JSONtoCSV($ids));
+        $cs_ids = $this->con->real_escape_string(Conversion::JSONtoCSV($ids));
         
         $selectsql = "SELECT `source_uri` 
             FROM `{$this->table}` 
@@ -137,23 +138,23 @@ class Texts extends DBEntity {
 
             // delete audio (mp3, oggs) & source files (epubs, etc.)
             if ($result) {
-                $file = new File();
                 $pop_sources = new PopularSources($this->con);
                 $lang = new Language($this->con);
-                $lang->get($this->learning_lang_id);
+                $lang->loadRecord($this->learning_lang_id);
                 
                 // delete associated file
                 foreach ($uris as $key => $value) {
                     if (!empty($value[0]) && (strpos($value[0], '.epub') !== false)) {
-                        $file->delete($value[0]);
+                        $file = new File($value[0]);
+                        $file->delete();
                     }
                     
-                    $result = $pop_sources->update($lang->name, Url::getDomainName($value[0]));
+                    $result = $pop_sources->update($lang->getName(), Url::getDomainName($value[0]));
                 }
             }
         }
         return $result;
-    }
+    } // end delete()
     
     /**
     * Archives texts in database using ids as a parameter to select them
@@ -161,8 +162,8 @@ class Texts extends DBEntity {
     * @param string $ids JSON that identifies the texts to be archived
     * @return boolean
     */
-    public function archiveByIds($ids) {
-        $cs_ids = $this->con->real_escape_string($this->JSONtoCSV($ids));
+    public function archive($ids) {
+        $cs_ids = $this->con->real_escape_string(Conversion::JSONtoCSV($ids));
         
         $insertsql = "INSERT INTO `archived_texts`
                       SELECT *
@@ -177,7 +178,7 @@ class Texts extends DBEntity {
         }
 
         return $result;
-    }
+    } // end archive
 
     /**
      * Checks if text already exists in database, to avoid duplicate entries.
@@ -201,7 +202,7 @@ class Texts extends DBEntity {
         $result = $stmt->get_result();
 
         return ($result) && ($result->num_rows > 0);
-    }
+    } // end exists()
     
     /**
     * Counts the number of rows (i.e. texts) for a specific search
@@ -233,7 +234,7 @@ class Texts extends DBEntity {
 
         $stmt->close();
         return $result; 
-    }
+    } // end countSearchRows()
     
     /**
     * Counts the number of rows (i.e. texts) for the current user & language combination
@@ -258,7 +259,7 @@ class Texts extends DBEntity {
 
         $stmt->close();
         return $result;
-    }
+    } // end countAllRows()
     
     /**
     * Gets texts by using a search pattern ($search_text) and a filter ($filter_sql).
@@ -302,7 +303,7 @@ class Texts extends DBEntity {
         $stmt->close();
 
         return $result;
-    }
+    } // end getSearch()
     
     /**
     * Gets all the texts for the current user & language combination
@@ -340,7 +341,7 @@ class Texts extends DBEntity {
         $stmt->close();
 
         return $result;
-    }
+    } // end getAll()
     
     /**
     * Determines if $text is valid XML code & extracts text from it
@@ -360,7 +361,7 @@ class Texts extends DBEntity {
         } else {
             return false;
         }
-    }
+    } // end extractFromXML()
     
     /**
     * Converts sorting patterns selected by user (expressed as an integer value in the sort menu) 
@@ -381,7 +382,7 @@ class Texts extends DBEntity {
                 return '';
                 break;
         }
-    }
+    } // end buildSortSQL
     
     /**
     * Calculates difficulty level of a given $text
@@ -501,6 +502,6 @@ class Texts extends DBEntity {
         $stmt->close();
         return $result;
     }
-}
+} // calculateDifficulty()
     
 ?>
