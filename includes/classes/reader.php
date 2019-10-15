@@ -43,28 +43,29 @@ class Text
      * @param integer $id
      */
     public function __construct($con, $id, $is_shared) {
-        $this->con = $con;
-        $this->is_shared = $is_shared;
+        try {
+            $this->con = $con;
+            $this->is_shared = $is_shared;
 
-        if ($is_shared) {
-            $sql = "SELECT `text`, `title`, `author`, `source_uri` FROM `shared_texts` WHERE `id`=?";
-        } else {
-            $sql = "SELECT `text`, `title`, `author`, `source_uri` FROM `texts` WHERE `id`=?";
-        }
+            if ($is_shared) {
+                $sql = "SELECT `text`, `title`, `author`, `source_uri` FROM `shared_texts` WHERE `id`=?";
+            } else {
+                $sql = "SELECT `text`, `title`, `author`, `source_uri` FROM `texts` WHERE `id`=?";
+            }
 
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result) {
-            $row = $result->fetch_array(MYSQLI_NUM);
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$id]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            $this->id = $id;
-            $this->text = $row[0];
-            $this->title = $row[1];
-            $this->author = $row[2];
-            $this->source_uri = $row[3];
+            $this->id           = $id;
+            $this->text         = $row['text'];
+            $this->title        = $row['title'];
+            $this->author       = $row['author'];
+            $this->source_uri   = $row['source_uri'];
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        } finally {
+            $stmt = null;
         }
     }
 
@@ -140,18 +141,15 @@ class Reader extends Text
      * @return void
      */
     private function createMiniReader($con, $user_id, $learning_lang_id) {
-        $this->con = $con;
-        $this->user_id = $user_id = $con->escape_string($user_id);
-        $this->learning_lang_id =  $con->escape_string($learning_lang_id);
+        try {
+            $this->con = $con;
+            $this->user_id = $user_id;
+            $this->learning_lang_id = $learning_lang_id;
 
-        $sql = "SELECT * FROM `preferences` WHERE `user_id` = ?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-                
-        if ($result) {
-            $row = $result->fetch_assoc();
+            $sql = "SELECT * FROM `preferences` WHERE `user_id` = ?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$user_id]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             
             $this->font_family = isset($row['font_family']) ? $row['font_family'] : 'Helvetica';
             $this->font_size = isset($row['font_size']) ? $row['font_size'] : '12px';
@@ -162,16 +160,14 @@ class Reader extends Text
             
             $sql = "SELECT `show_freq_words` FROM `languages` WHERE `id`=?";
             $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("s", $learning_lang_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if ($result) {
-                $row = $result->fetch_assoc();
-                $this->show_freq_words = $row['show_freq_words'];
-            }
+            $stmt->execute([$learning_lang_id]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $this->show_freq_words = $row['show_freq_words'];
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        } finally {
+            $stmt = null;
         }
-
-        $stmt->close();
     }
 
     /**
@@ -204,21 +200,19 @@ class Reader extends Text
     */
     public function colorizeWords($text)
     {
-        $user_id = $this->user_id;
-        $learning_lang_id = $this->learning_lang_id;
-        
-        // 1. colorize phrases & words that are being reviewed
-        $sql = "SELECT `word` 
-                FROM `words` 
-                WHERE `user_id`=? AND `lang_id`=? AND `status`>0 
-                ORDER BY `is_phrase` ASC";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("ss", $user_id, $learning_lang_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
+        try {
+            $user_id = $this->user_id;
+            $learning_lang_id = $this->learning_lang_id;
+            
+            // 1. colorize phrases & words that are being reviewed
+            $sql = "SELECT `word` 
+                    FROM `words` 
+                    WHERE `user_id`=? AND `lang_id`=? AND `status`>0 
+                    ORDER BY `is_phrase` ASC";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$user_id, $learning_lang_id]);
+            
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 $phrase = $row['word'];
                 
                 $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
@@ -230,55 +224,43 @@ class Reader extends Text
                     FROM `words` 
                     WHERE `user_id`=? AND `lang_id`=? AND `status`=0";
             $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("ss", $user_id, $learning_lang_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
+            $stmt->execute([$user_id, $learning_lang_id]);
 
-            if ($result) {
-                while ($row = $result->fetch_assoc()) {
-                    $phrase = $row['word'];
-                    $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
-                    "<span class='word learned' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
-                }
-                
-                // 3. colorize frequency list words
-                if ($this->show_freq_words) {
-                    $user = new User($this->con);
-                    if ($user->isLoggedIn() && $user->isPremium()) {
-                        $sql = "SELECT `name` FROM languages WHERE `id`=?";
-                        $stmt = $this->con->prepare($sql);
-                        $stmt->bind_param("s", $this->learning_lang_id);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $phrase = $row['word'];
+                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                "<span class='word learned' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
+            }
+            
+            // 3. colorize frequency list words
+            if ($this->show_freq_words) {
+                $user = new User($this->con);
+                if ($user->isLoggedIn() && $user->isPremium()) {
+                    $sql = "SELECT `name` FROM languages WHERE `id`=?";
+                    $stmt = $this->con->prepare($sql);
+                    $stmt->execute([$this->learning_lang_id]);
 
-                        if ($result) {
-                            $row = $result->fetch_assoc();
-                            $freq_table_name = $row['name'];
-                            
-                            $sql = "SELECT `word`, `frequency_index` 
-                                    FROM ? 
-                                    WHERE `frequency_index` < 80";
-                            $stmt = $this->con->prepare($sql);
-                            $stmt->bind_param("s", 'frequency_list_' . $freq_table_name);
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-
-                            if ($result) {
-                                while ($row = $result->fetch_assoc()) {
-                                    $word = $row['word'];
-                                    $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
-                                    "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
-                                }
-                            }
-                        }
+                    $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+                    $freq_table_name = $row['name'];
+                    
+                    $sql = "SELECT `word`, `frequency_index` 
+                            FROM ? 
+                            WHERE `frequency_index` < 80";
+                    $stmt = $this->con->prepare($sql);
+                    $stmt->execute(['frequency_list_' . $freq_table_name]);
+                    while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                        $word = $row['word'];
+                        $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
+                        "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
                     }
                 }
             }
-        }
-
-        $stmt->close();
-        
-        return $text;
+            return $text;
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        } finally {
+            $stmt = null;
+        }        
     }
 
     /**
@@ -309,50 +291,42 @@ class Reader extends Text
             $separator_first = false;
         }
         
-        // get words in personal dictionary
-        $sql = "SELECT `word`, `status` 
-                FROM `words` 
-                WHERE `user_id`=? AND `lang_id`=?  
-                ORDER BY `is_phrase` ASC";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("ss", $user_id, $learning_lang_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-                      
-        if (!$result) {
-            return false;
-        }
+        try {
+            // get words in personal dictionary
+            $sql = "SELECT `word`, `status` 
+                    FROM `words` 
+                    WHERE `user_id`=? AND `lang_id`=?  
+                    ORDER BY `is_phrase` ASC";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$user_id, $learning_lang_id]);
 
-        $dic_words = $result->fetch_all(MYSQLI_ASSOC);
+            $dic_words = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        // get high frequency words list, only if necessary
-        if ($this->show_freq_words) {
-            $user = new User($this->con);
-            if ($user->isLoggedIn() && $user->isPremium()) {
-                $sql = "SELECT `name` FROM `languages` WHERE `id`=?";
-                $stmt = $this->con->prepare($sql);
-                $stmt->bind_param("s", $this->learning_lang_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-            
-                if ($result) {
-                    $row = $result->fetch_assoc();
+            // get high frequency words list, only if necessary
+            if ($this->show_freq_words) {
+                $user = new User($this->con);
+                if ($user->isLoggedIn() && $user->isPremium()) {
+                    $sql = "SELECT `name` FROM `languages` WHERE `id`=?";
+                    $stmt = $this->con->prepare($sql);
+                    $stmt->execute([$this->learning_lang_id]);
+                    $row = $stmt->fetch(\PDO::FETCH_ASSOC);
                     
                     $freq_table_name = 'frequency_list_' . $row['name'];
-                    $freq_table_name = $this->con->real_escape_string($freq_table_name);
                     $sql = "SELECT `word`, `frequency_index` 
-                            FROM $freq_table_name   
+                            FROM `$freq_table_name`   
                             WHERE `frequency_index` < 80";
                     $result = $this->con->query($sql);
 
                     if ($result) {
-                        $freq_words = $result->fetch_all(MYSQLI_ASSOC);
+                        $freq_words = $result->fetchall();
                     }
                 }
             }
-        }
-
-        $stmt->close();
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        } finally {
+            $stmt = null;
+        }   
         
         // replace words & separators with corresponding html code
         foreach ($words[0] as &$word) {

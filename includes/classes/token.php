@@ -38,12 +38,11 @@ class Token extends DBEntity {
                 LIMIT 1";
 
         $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $stmt->execute([$user_id]);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
                 
-        return ($result) && ($result->num_rows > 0) ? $result : false;
-    }
+        return $result;
+    } // end alreadyExists()
 
     /**
      * Generate token to store in cookie
@@ -54,7 +53,7 @@ class Token extends DBEntity {
     private function generateToken($length = 20)
     {
         return bin2hex(random_bytes($length));
-    } // end generateToken
+    } // end generateToken()
 
     /**
      * Add token to the auth_token table
@@ -70,9 +69,8 @@ class Token extends DBEntity {
         $result = $this->alreadyExists($user_id);
         if ($result !== false) {
             // a valid token is already in the db
-            $row = $result->fetch_assoc();
-            $token = $row['token'];
-            $time_stamp = $row['expires'];
+            $token = $result['token'];
+            $time_stamp = $result['expires'];
             return setcookie('user_token', $token, strtotime($time_stamp), "/", $domain, true);
         } else {
             // create new token, insert it in db & set cookie
@@ -80,20 +78,21 @@ class Token extends DBEntity {
             $time_stamp = time() + 31536000; // 1 year
             $expires = date('Y-m-d H:i:s', $time_stamp);
             
-            $sql = "INSERT INTO `auth_tokens` (`token`, `user_id`, `expires`) VALUES (?, ?, ?)";
-            $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("sss", $token, $user_id, $expires);
-            $result = $stmt->execute();
-                                
-            if ($result) {
-                return setcookie('user_token', $token, $time_stamp, "/", $domain, true);
-            } 
+            try {
+                $sql = "INSERT INTO `auth_tokens` (`token`, `user_id`, `expires`) VALUES (?, ?, ?)";
+                $stmt = $this->con->prepare($sql);
+                $result = $stmt->execute([$token, $user_id, $expires]);
 
-            $stmt->close();
+                if ($result) {
+                    return setcookie('user_token', $token, $time_stamp, "/", $domain, true);
+                } 
+            } catch (\Exception $e) {
+                return false;
+            } finally {
+                $stmt = null;
+            }
         }
-
-        return false;
-    }
+    } // end add()
 }
 
 ?>

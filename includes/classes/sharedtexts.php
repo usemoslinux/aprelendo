@@ -55,7 +55,7 @@ class SharedTexts extends Texts
         $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
         $like_str = '%' . $search_text . '%';
 
-        $lang = new Language($this->con);
+        $lang = new Language($this->con, $this->user_id);
         $lang->loadRecord($this->learning_lang_id);
 
         $sql = "SELECT t.id, 
@@ -98,7 +98,7 @@ class SharedTexts extends Texts
     public function getAll($offset, $limit, $sort_by) {
         $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
 
-        $lang = new Language($this->con);
+        $lang = new Language($this->con, $this->user_id);
         $lang->loadRecord($this->learning_lang_id);
 
         $sql = "SELECT t.id, 

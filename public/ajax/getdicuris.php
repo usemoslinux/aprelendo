@@ -21,15 +21,10 @@
 require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
-$user_id = $user->id;
-$learning_lang_id = $user->learning_lang_id;
+$lang = new Language($con, $user->id);
+$result = $lang->loadRecord($user->learning_lang_id);
 
-$sql = "SELECT * FROM `languages` WHERE `user_id`=? AND `id` = ?";
-$stmt = $con->prepare($sql);
-$stmt->bind_param("ss", $user_id, $learning_lang_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$row = $result->fetch_assoc();
-$stmt->close();
+$filtered_result['dictionary_uri'] = $result['dictionary_uri']; 
+$filtered_result['translator_uri'] = $result['translator_uri'];
 
-echo json_encode($row);
+echo json_encode($filtered_result);

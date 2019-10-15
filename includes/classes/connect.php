@@ -20,11 +20,11 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use mysqli;
+use PDO;
 
 class Connect 
 {
-    private $host, $user, $password, $db, $charset;
+    private $type, $host, $user, $password, $db, $charset;
     
     /**
      * Constructor
@@ -33,11 +33,18 @@ class Connect
      * 
      */
     public function __construct() {
+        $this->driver = DB_DRIVER;
         $this->host = DB_SERVER;
         $this->user = DB_USER;
         $this->password = DB_PASSWORD;
         $this->db = DB_NAME;
         $this->charset = DB_CHARSET;
+
+        $this->options = [
+            PDO::ATTR_EMULATE_PREPARES   => false, // turn off emulation mode for "real" prepared statements
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, //turn on errors in the form of exceptions
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, //make the default fetch be an associative array
+        ];
     }
 
     /**
@@ -46,14 +53,13 @@ class Connect
      * @return mysqli_connect
      */
     public function connect() {
-        $con = new mysqli($this->host, $this->user, $this->password, $this->db);
         
-        if ($con->connect_errno) {
-            // error_log('MySQL Error: ' . $con->connect_error, 3, PUBLIC_PATH . 'errors.log');
-            throw new \Exception('Unable to connect to database!');
-        } 
-
-        $con->set_charset($this->charset);
+        try {
+            $dsn = $this->driver . ':host=' . $this->host . ';dbname=' . $this->db . ';charset=' . $this->charset;
+            $con = new \PDO($dsn, $this->user, $this->password, $this->options);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+        }
 
         return $con;
     }

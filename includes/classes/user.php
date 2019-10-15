@@ -47,7 +47,7 @@ class User
      */
     public function __construct ($con) {
         $this->con = $con;
-    } // end construct
+    } // end __construct()
     
     /**
      * Creates new user & associated languages and reader preferences
@@ -60,90 +60,67 @@ class User
      * @return boolean
      */
     public function register($username, $email, $password, $native_lang = 'en', $learning_lang = 'en', $send_email = false) {
-        $username = $this->name = $this->con->escape_string($username);
-        $email = $this->email = $this->con->escape_string($email);
-        $password = $this->con->escape_string($password);
-        $native_lang = $this->native_lang = $this->con->escape_string($native_lang);
-        $learning_lang = $this->learning_lang = $this->con->escape_string($learning_lang);
+        $this->name = $username;
+        $this->email = $email;
+        $this->native_lang = $native_lang;
+        $this->learning_lang = $learning_lang;
         $this->active = false;
 
-        // check if user already exists
-        $sql = "SELECT `name` FROM `users` WHERE `name`=?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
-                
-        if ($result->num_rows > 0) {
-            throw new \Exception ('Username already exists. Please try again.');
-        }
-        
-        // check if email already exists
-        $sql = "SELECT `email` FROM `users` WHERE `email`=?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            throw new \Exception ('Email already exists. Did you <a href="forgotpassword.php">forget</a> you username or password?');
-        }
-        
-        // create password hash
-        $options = ['cost' => 11];
-        $password_hash = password_hash($password, PASSWORD_BCRYPT, $options);
-
-        // create account activation hash
-        $activation_hash = $this->activation_hash = md5(rand(0,1000));
-
-        // save user data in db
-        $user_active = !$send_email;
-        $sql = "INSERT INTO `users` (`name`, `password_hash`, `email`, `native_lang_iso`, `learning_lang_iso`, 
-                `activation_hash`, `is_active`) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $username, $password_hash, $email, $native_lang, $learning_lang, $activation_hash, $user_active);
-        $result = $stmt->execute();
-
-        if ($result) {
-            $user_id = $this->id = $this->con->insert_id;
-
-            $iso_codes = Language::getIsoCodeArray();
+        try {
+            // check if user already exists
+            $sql = "SELECT COUNT(*) FROM `users` WHERE `name`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$username]);
+            $num_rows = $stmt->fetchColumn();
+                    
+            if ($num_rows > 0) {
+                throw new \Exception ('Username already exists. Please try again.');
+            }
             
+            // check if email already exists
+            $sql = "SELECT COUNT(*) FROM `users` WHERE `email`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$email]);
+            $num_rows = $stmt->fetchColumn();
+
+            if ($num_rows > 0) {
+                throw new \Exception ('Email already exists. Did you <a href="forgotpassword.php">forget</a> you username or password?');
+            }
+            
+            // create password hash
+            $options = ['cost' => 11];
+            $password_hash = password_hash($password, PASSWORD_BCRYPT, $options);
+
+            // create account activation hash
+            $activation_hash = $this->activation_hash = md5(rand(0,1000));
+
+            // save user data in db
+            $user_active = !$send_email;
+            $sql = "INSERT INTO `users` (`name`, `password_hash`, `email`, `native_lang_iso`, `learning_lang_iso`, 
+                    `activation_hash`, `is_active`) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$username, $password_hash, $email, $native_lang, $learning_lang, $activation_hash, $user_active]);
+
+            $user_id = $this->id = $this->con->lastInsertId();
+
             // create & save default language preferences for user
-            foreach ($iso_codes as $key => $value) {
-                $translator_uri = 'https://translate.google.com/m?hl=' . $value . '&sl=' . $iso_codes[$native_lang] . '&&ie=UTF-8&q=%s';
-                $dictionary_uri = 'https://www.linguee.com/' . $value . '-' . $iso_codes[$native_lang] . '/search?source=auto&query=%s';
-                
-                $sql = "INSERT INTO `languages` (`user_id`, `name`, `dictionary_uri`, `translator_uri`) 
-                        VALUES (?, ?, ?, ?)";
-                $stmt = $this->con->prepare($sql);
-                $stmt->bind_param("ssss", $user_id, $key, $dictionary_uri, $translator_uri);
-                $result = $stmt->execute();                
-            }
+            $lang = new Language($this->con, $user_id);
+            $result = $lang->createInitialRecordsForUser();
 
-            if ($result) {
-                $sql = "INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`, 
-                        `learning_mode`, `assisted_learning`) 
-                        VALUES (?, 'Helvetica', '12pt', '1.5', 'left', 'light', '1')";
-                $stmt = $this->con->prepare($sql);
-                $stmt->bind_param("s", $user_id);
-                $result = $stmt->execute();
-                
-                return $send_email ? $this->sendActivationEmail($email, $username, $activation_hash) : true;
-                
-                if (!$result) {
-                    throw new \Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
-                }
-            } else {
-                throw new \Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
-            }
-        } else {
-            throw new \Exception ('There was an unexpected error trying to create your user profile. Please try again later.');
+            $sql = "INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`, 
+                    `learning_mode`, `assisted_learning`) 
+                    VALUES (?, 'Helvetica', '12pt', '1.5', 'left', 'light', '1')";
+            $stmt = $this->con->prepare($sql);
+            $result = $stmt->execute([$user_id]);
+            
+            return $send_email ? $this->sendActivationEmail($email, $username, $activation_hash) : true;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
         }
-
-        $stmt->close();
-    } // end register
+    } // end register()
     
     /**
      * Send activation email to user.
@@ -182,7 +159,7 @@ class User
             throw new \Exception ('Oops! There was an unexpected error trying to send you an e-mail to activate your account. Please try again later.');
         }
         return true;
-    } // end sendActivationEmail
+    } // end sendActivationEmail()
 
     /**
      * Activates user
@@ -193,39 +170,35 @@ class User
      */
     public function activate($username, $hash)
     {
-        $username = $this->con->escape_string($username);
-        $hash = $this->con->escape_string($hash);
+        try {
+            $username = $this->con->escape_string($username);
+            $hash = $this->con->escape_string($hash);
 
-        // check if user name & hash exist in db
-        $sql = "SELECT `is_active` 
-                FROM `users` 
-                WHERE `name`=? AND `activation_hash`=?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("ss", $username, $hash);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows > 0) {
-            $yesterday = date("Y-m-d", time() - 60 * 60 * 24);
-            $sql = "UPDATE `users` 
-                    SET `is_active`=true, `premium_until`=? 
+            // check if user name & hash exist in db
+            $sql = "SELECT COUNT(*) 
+                    FROM `users` 
                     WHERE `name`=? AND `activation_hash`=?";
             $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("dss", $yesterday, $username, $hash);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if (!$result) {
-                throw new \Exception ('Oops! There was an unexpected error when trying to activate your account.');
-            }            
-        } else { // if no user is registered with that name & hash
-            throw new \Exception ('The activation link seems to be malformed. Please try again using the one provided in the email we\'ve sent you.');
-        } 
-
-        $stmt->close();
-
-        return true;
-    }
+            $stmt->execute([$username, $hash]);
+            $num_rows = $stmt->fetchColumn();
+            
+            if ($num_rows > 0) {
+                $yesterday = date("Y-m-d", time() - 60 * 60 * 24);
+                $sql = "UPDATE `users` 
+                        SET `is_active`=true, `premium_until`=? 
+                        WHERE `name`=? AND `activation_hash`=?";
+                $stmt = $this->con->prepare($sql);
+                $stmt->execute([$yesterday, $username, $hash]);
+                $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+                
+                return $row ? true : false;
+            }
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // activate()
 
     /**
      * Creates "remember me" cookie
@@ -235,43 +208,42 @@ class User
      * @return boolean
      */
     public function login($username = "", $password = "", $google_id = "") {
-        $username = $this->con->escape_string($username);
-        $password = $this->con->escape_string($password);
-        
-        $sql = "SELECT * 
-                FROM `users` 
-                WHERE `name`=?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
-               
-        // check if username exists
-        if ($result->num_rows == 0) { // wrong username
-            throw new \Exception ('Username and password combination is incorrect. Please try again.');
-        }
-
-        $row = $result->fetch_assoc();
-        $user_id = $row['id'];
-        $hashedPassword = $row['password_hash'];
-
-        // check if user account is active
-        if ($row['is_active'] == false) {
-            throw new \Exception ('You need to activate your account first. Check your email for the activation link.');
-        }
-        
-        if (password_verify($password, $hashedPassword) || $google_id !== "") { // login successful, remember me
-            $token = new Token($this->con, $user_id);
-            if (!$token->add()) {
-                throw new \Exception ('There was a problem trying to create the authentication cookie. Please try again.');
+        try {
+            $sql = "SELECT * 
+                    FROM `users` 
+                    WHERE `name`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$username]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $exists = !empty($row);
+                
+            // check if username exists
+            if (!$exists) { // wrong username
+                throw new \Exception ('Username and password combination is incorrect. Please try again.');
             }
-        } else { // wrong password
-            throw new \Exception ('Username and password combination is incorrect. Please try again.');
-        }
 
-        $stmt->close();
-        return true;
-    } // end login
+            $user_id = $row['id'];
+            $hashedPassword = $row['password_hash'];
+
+            // check if user account is active
+            if ($row['is_active'] == false) {
+                throw new \Exception ('You need to activate your account first. Check your email for the activation link.');
+            }
+            
+            if (password_verify($password, $hashedPassword) || $google_id !== "") { // login successful, remember me
+                $token = new Token($this->con, $user_id);
+                if (!$token->add()) {
+                    throw new \Exception ('There was a problem trying to create the authentication cookie. Please try again.');
+                }
+            } else { // wrong password
+                throw new \Exception ('Username and password combination is incorrect. Please try again.');
+            }
+        } catch (\Exception $e) {
+            throw new \Exception ($e->getMessage());
+        } finally {
+            $stmt = null;
+        }
+    } // end login()
     
     /**
      * Logout user
@@ -288,7 +260,7 @@ class User
         
         header('Location:/index.php');
         exit;
-    } // end logout
+    } // end logout()
         
     /**
      * Checks if user is logged
@@ -305,49 +277,33 @@ class User
                     FROM `auth_tokens` 
                     WHERE `token`=?";
             $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("s", $token);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result) {
-                $row = $result->fetch_assoc();
-                $this->id = $user_id = $row['user_id'];
+            $stmt->execute([$token]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $this->id = $user_id = $row['user_id'];
+            
+            // get username & other user data
+            $sql = "SELECT `name`, `email`, `native_lang_iso`, `learning_lang_iso`, `premium_until` 
+                    FROM `users` 
+                    WHERE `id`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$user_id]);
                 
-                // get username & other user data
-                $sql = "SELECT `name`, `email`, `native_lang_iso`, `learning_lang_iso`, `premium_until` 
-                        FROM `users` 
-                        WHERE `id`=?";
-                $stmt = $this->con->prepare($sql);
-                $stmt->bind_param("s", $user_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                if ($result) {
-                    $row = $result->fetch_assoc();
-                    $this->name = $row['name'];
-                    $this->email = $row['email'];
-                    $this->native_lang = $row['native_lang_iso'];
-                    $this->learning_lang = $learning_lang = $row['learning_lang_iso'];
-                    $this->premium_until = $row['premium_until'];
-                    
-                    // get active language id (learning_lang_id)
-                    $sql = "SELECT `id` 
-                            FROM `languages` 
-                            WHERE `user_id`=? AND `name`=?";
-                    $stmt = $this->con->prepare($sql);
-                    $stmt->bind_param("ss", $user_id, $learning_lang);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    if ($result) {
-                        $row = $result->fetch_assoc();
-                        $this->learning_lang_id = $row['id'];
-                        $is_logged = true;
-                    }
-                }
-            }
-            $stmt->close();
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $this->name = $row['name'];
+            $this->email = $row['email'];
+            $this->native_lang = $row['native_lang_iso'];
+            $this->learning_lang = $learning_lang = $row['learning_lang_iso'];
+            $this->premium_until = $row['premium_until'];
+            
+            // get active language id (learning_lang_id)
+            $lang = new Language($this->con, $this->id);
+            $is_logged = $lang->loadRecordByName($learning_lang);
+            $this->learning_lang_id = $lang->getId();
+
+            $stmt = null;
         }
         return $is_logged;
-    } // end isLoggedIn
+    } // end isLoggedIn()
     
     /**
      * Checks if user has access to premium features
@@ -356,7 +312,7 @@ class User
      */
     public function isPremium() {
         return $this->premium_until > date('Y-m-d');
-    } // end isPremium
+    } // end isPremium()
 
     /**
      * Updates user profile in db
@@ -370,85 +326,82 @@ class User
      * @return boolean
      */
     public function updateUserProfile($new_username, $new_email, $password, $new_password, $new_native_lang, $new_learning_lang) {
-        // check if $password is correct, without it user would not have the right priviliges to update his profile
-        $authorized = $this->checkPassword($password);
+        try {
+            // check if $password is correct, without it user would not have the right priviliges to update his profile
+            $authorized = $this->checkPassword($password);
 
-        if ($authorized) {
-            $user_id = $this->con->escape_string($this->id);
-            $new_username = $this->con->escape_string($new_username);
-            $new_email = $this->con->escape_string($new_email);
-            $new_password = $this->con->escape_string($new_password);
-            $new_native_lang = $this->con->escape_string($new_native_lang);
-            $new_learning_lang = $this->con->escape_string($new_learning_lang);
-            
-            // check if user already exists
-            if ($this->name != $new_username) {
-                $sql = "SELECT `name` FROM `users` WHERE `name`=''";
-                $stmt = $this->con->prepare($sql);
-                $stmt->bind_param("s", $new_username);
-                $result = $stmt->execute();
-                $result = $stmt->get_result();
+            if ($authorized) {
+                $user_id            = $this->id;
+                $new_username       = $new_username;
+                $new_email          = $new_email;
+                $new_password       = $new_password;
+                $new_native_lang    = $new_native_lang;
+                $new_learning_lang  = $new_learning_lang;
+                
+                // check if user already exists
+                if ($this->name != $new_username) {
+                    $sql = "SELECT COUNT(*) FROM `users` WHERE `name`=''";
+                    $stmt = $this->con->prepare($sql);
+                    $stmt->execute([$new_username]);
+                    $num_rows = $stmt->fetchColumn();
 
-                if ($result->num_rows > 0) {
-                    throw new \Exception ('Username already exists. Please try again.');
-                }
-            }
-            
-            // check if email already exists
-            if ($this->email != $new_email) {
-                $sql = "SELECT `email` 
-                        FROM `users` 
-                        WHERE `email`=?";
-                $stmt = $this->con->prepare($sql);
-                $stmt->bind_param("s", $new_email);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                
-                if ($result->num_rows > 0) {
-                    throw new \Exception ('Email already exists. Please try using another one.');
-                }
-            }
-            
-            // was a new password given? In that case, save new password and replace the old one
-            if (empty($new_password)) {
-                $sql = "UPDATE `users` 
-                        SET `name`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=? 
-                        WHERE `id`=?";
-                $stmt = $this->con->prepare($sql);
-                $stmt->bind_param("sssss", $new_username, $new_email, $new_native_lang, $new_learning_lang, $user_id);
-                $result = $stmt->execute();
-            } else {
-                $new_password_hash = password_hash($new_password, PASSWORD_BCRYPT, ['cost' => 11]);
-                $sql = "UPDATE `users` 
-                        SET `name`=?, `password_hash`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?  
-                        WHERE `id`=?";
-                $stmt = $this->con->prepare($sql);
-                $stmt->bind_param("ssssss", $new_username, $new_password_hash, $new_email, $new_native_lang, $new_learning_lang, $user_id);
-                $result = $stmt->execute();
-            }
-            
-            if ($result) {
-                $this->name = $new_username;
-                $this->email = $new_email;
-                $this->native_lang = $new_native_lang;
-                $this->learning_lang = $new_learning_lang;
-                
-                // if new password was set, then create new rememberme cookie
-                if (empty($new_password)) {
-                    return true;
-                } else {
-                    if ($this->login($new_username, $new_password)) {
-                        return true;
+                    if ($num_rows > 0) {
+                        throw new \Exception ('Username already exists. Please try again.');
                     }
                 }
-            } else {
-                throw new \Exception ('There was an unknown problem trying to update your profile. Please try again later.');
+                
+                // check if email already exists
+                if ($this->email != $new_email) {
+                    $sql = "SELECT `email` 
+                            FROM `users` 
+                            WHERE `email`=?";
+                    $stmt = $this->con->prepare($sql);
+                    $stmt->execute([$new_email]);
+                    $num_rows = $stmt->fetchColumn();
+                    
+                    if ($num_rows > 0) {
+                        throw new \Exception ('Email already exists. Please try using another one.');
+                    }
+                }
+                
+                // was a new password given? In that case, save new password and replace the old one
+                if (empty($new_password)) {
+                    $sql = "UPDATE `users` 
+                            SET `name`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=? 
+                            WHERE `id`=?";
+                    $stmt = $this->con->prepare($sql);
+                    $result = $stmt->execute([$new_username, $new_email, $new_native_lang, $new_learning_lang, $user_id]);
+                } else {
+                    $new_password_hash = password_hash($new_password, PASSWORD_BCRYPT, ['cost' => 11]);
+                    $sql = "UPDATE `users` 
+                            SET `name`=?, `password_hash`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?  
+                            WHERE `id`=?";
+                    $stmt = $this->con->prepare($sql);
+                    $result = $stmt->execute([$new_username, $new_password_hash, $new_email, $new_native_lang, $new_learning_lang, $user_id]);
+                }
+                
+                if ($result) {
+                    $this->name = $new_username;
+                    $this->email = $new_email;
+                    $this->native_lang = $new_native_lang;
+                    $this->learning_lang = $new_learning_lang;
+                    
+                    // if new password was set, then create new rememberme cookie
+                    if (empty($new_password)) {
+                        return true;
+                    } else {
+                        if ($this->login($new_username, $new_password)) {
+                            return true;
+                        }
+                    }
+                } 
             }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        } finally {
+            $stmt = null;
         }
-
-        $stmt->close();
-        return true;
-    }
+    } // updateUserProfile()
 
     /**
      * Delete user account
@@ -460,26 +413,24 @@ class User
             $this->logout(true);
         }
 
-        // delete files uploaded by user
-        $table_names = array('texts', 'archivedtexts');
-        
-        foreach ($table_names as $table) {
-            $user_id_col_name = $table == 'texts' ? 'user_id' : 'user_id';
-            $source_uri_col_name = $table == 'texts' ? 'source_uri' : 'source_uri';
+        try {
+            // delete files uploaded by user
+            $table_names = array('texts', 'archivedtexts');
             
-            $sql = "SELECT $source_uri_col_name 
-                    FROM $table 
-                    WHERE $user_id_col_name=?";
-            $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("s", $this->id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-                        
-            if ($result->num_rows > 0) {
+            foreach ($table_names as $table) {
+                $user_id_col_name = $table == 'texts' ? 'user_id' : 'user_id';
+                $source_uri_col_name = $table == 'texts' ? 'source_uri' : 'source_uri';
+                
+                $sql = "SELECT $source_uri_col_name 
+                        FROM $table 
+                        WHERE $user_id_col_name=?";
+                $stmt = $this->con->prepare($sql);
+                $stmt->execute([$this->id]);
+                            
                 $filename = '';
                 $file_extensions = array('.epub', '.mp3', '.ogg');
 
-                while ($row = $result->fetch_assoc()) {
+                while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                     $filename = $row[$source_uri_col_name];
                     if (in_array(substr($filename, -5), $file_extensions)) {
                         $file = new File($filename);
@@ -487,20 +438,23 @@ class User
                     }
                 }
             }
-        }
-        
-        // delete user from db
-        $sql = "DELETE FROM `users` 
-                WHERE `id`=?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $this->id);
-        $result = $stmt->execute();
-        $stmt->close();
+            
+            // delete user from db
+            $sql = "DELETE FROM `users` 
+                    WHERE `id`=?";
+            $stmt = $this->con->prepare($sql);
+            $result = $stmt->execute([$this->id]);
 
-        if (!$result) {
-            throw new \Exception('Oops! There was an unexpected problem trying to delete your account. Please try again later.');
+            if ($stmt->rowCount() == 0) {
+                throw new \Exception('Oops! There was an unexpected problem trying to delete your account. Please try again later.');
+            }
+            return true;
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        } finally {
+            $stmt = null;
         }
-    } // end logout
+    } // end delete()
     
     /**
      * Update active language in db
@@ -509,35 +463,34 @@ class User
      * @return boolean
      */
     public function setActiveLang($lang_id) {
-        $sql = "SELECT `name` 
-                FROM `languages` 
-                WHERE `id`=?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $lang_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result) {
-            $row = $result->fetch_assoc();
-            $lang_name = $this->con->escape_string($row['name']);
+        try {
+            $sql = "SELECT `name` 
+                    FROM `languages` 
+                    WHERE `id`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$lang_id]);
+            $row = $result->fetch(\PDO::FETCH_ASSOC);
+            $lang_name = $row['name'];
             $user_id = $this->id;
             
             $sql = "UPDATE `users` 
                     SET `learning_lang_iso`=? 
                     WHERE `id`=?";
             $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("ss", $lang_name, $user_id);
-            $result = $stmt->execute();
+            $stmt->execute([$lang_name, $user_id]);
             
-            if ($result) {
+            if ($stmt->rowCount() > 0) {
                 $this->learning_lang_id = $lang_id;
                 $this->learning_lang = $lang_name;
             }
+            
+            return true;  
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
         }
-
-        $stmt->close();
-        return $result ? true : false;  
-    }
+    } // end setActiveLang()
 
     public function isAllowedToAccessElement($table, $id)
     {
@@ -556,20 +509,21 @@ class User
             }
         }
 
-        $sql = "SELECT * 
-                FROM `$table` 
-                WHERE `$id_col_name`=? AND `$user_id_col_name`=?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("ss", $id, $this->id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-                
-        if ($result && $result->num_rows > 0) {
-            return true;
-        } else {
+        try {
+            $sql = "SELECT COUNT(*) 
+                    FROM `$table` 
+                    WHERE `$id_col_name`=? AND `$user_id_col_name`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$id, $this->id]);
+            $num_rows = $stmt->fetchColumn();
+            
+            return $num_rows > 0;
+        } catch (\Exception $e) {
             return false;
+        } finally {
+            $stmt = null;
         }
-    }
+    } // end isAllowedToAccessElement()
     
     /**
      * Check if $password = user password
@@ -578,28 +532,27 @@ class User
      * @return boolean
      */
     private function checkPassword($password) {
-        $user_id = $this->id;
+        try {
+            $user_id = $this->id;
 
-        $sql = "SELECT `password_hash` 
-                FROM `users` 
-                WHERE `id`=?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
+            $sql = "SELECT `password_hash` 
+                    FROM `users` 
+                    WHERE `id`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$user_id]);
+            $row = $result->fetch(\PDO::FETCH_ASSOC);
             $hashedPassword = $row['password_hash'];
             if (password_verify($password, $hashedPassword)) {
                 return true;
             } else {
                 throw new \Exception ('Username and password combination are incorrect. Please try again.');
             }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        } finally {
+            $stmt = null;
         }
-
-        $stmt->close();
-    }
+    } // end checkPassword()
 }
 
 

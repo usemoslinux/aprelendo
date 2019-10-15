@@ -49,8 +49,9 @@ class Language extends DBEntity
      * @param integer $id
      * @param integer $user_id
      */
-    public function __construct ($con) {
-        $this->con = $con;
+    public function __construct (\PDO $con, int $user_id) {
+        parent::__construct($con, $user_id);
+        $this->table = 'languages';
     } // end __construct()
 
     /**
@@ -59,68 +60,113 @@ class Language extends DBEntity
      * @param integer $id
      * @return array
      */
-    public function loadRecord($id) {
-        $sql = "SELECT * FROM `languages` WHERE `id` = ?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $id);
-        $stmt->execute();
-        $stmt->store_result();
-        $result = $stmt->bind_result(
-            $this->id, 
-            $this->user_id, 
-            $this->name, 
-            $this->dictionary_uri, 
-            $this->translator_uri, 
-            $this->rss_feed_1_uri, 
-            $this->rss_feed_2_uri, 
-            $this->rss_feed_3_uri, 
-            $this->show_freq_words
-        );
+    public function loadRecord(int $id): bool {
+        try {
+            $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ? AND `user_id` = ?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$id, $this->user_id]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $stmt->fetch();
-        
-        return $result ? true : false;
+            $this->id               = $row['id']; 
+            $this->user_id          = $row['user_id']; 
+            $this->name             = $row['name'];
+            $this->dictionary_uri   = $row['dictionary_uri']; 
+            $this->translator_uri   = $row['translator_uri']; 
+            $this->rss_feed_1_uri   = $row['rss_feed1_uri'];
+            $this->rss_feed_2_uri   = $row['rss_feed2_uri'];
+            $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
+            $this->show_freq_words  = $row['show_freq_words'];
+            
+            return $row ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
     } // end loadRecord()
 
     /**
      * Updates language settings in db
      *
      * @param array $array
-     * @return boolean
+     * @return bool
      */
-    public function editRecord($array, $is_premium_user) {
-        $id = $this->id;
-        $user_id = $this->user_id;
-        $name = $this->name;
-        $dictionary_uri = $array['dict-uri'];
-        $translator_uri = $array['translator-uri'];
-        
-        if ($is_premium_user) {
-            $rss_feed_1_uri = $array['rss-feed1-uri'];
-            $rss_feed_2_uri = $array['rss-feed2-uri'];
-            $rss_feed_3_uri = $array['rss-feed3-uri'];
-            $show_freq_words = $array['freq-list'];
+    public function editRecord(array $new_record, bool $is_premium_user): bool {
+        try {
+            $this->dictionary_uri = $new_record['dict-uri'];
+            $this->translator_uri = $new_record['translator-uri'];
+            
+            if ($is_premium_user) {
+                $this->rss_feed_1_uri = $new_record['rss-feed1-uri'];
+                $this->rss_feed_2_uri = $new_record['rss-feed2-uri'];
+                $this->rss_feed_3_uri = $new_record['rss-feed3-uri'];
+                $this->show_freq_words = $new_record['freq-list'];
+            }
 
-            $sql = "UPDATE `languages` 
-                    SET `name`=?, `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?, 
-                    `rss_feed3_uri`=?, `show_freq_words`=? 
+            $sql = "UPDATE `{$this->table}` 
+                    SET `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?, `rss_feed3_uri`=?, `show_freq_words`=? 
                     WHERE `user_id`=? AND `id`=?";
             $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("ssssssiss", $name, $dictionary_uri, $translator_uri, $rss_feed_1_uri, 
-                $rss_feed_2_uri, $rss_feed_3_uri, $show_freq_words, $user_id, $id);
-        } else {
-            $sql = "UPDATE `languages` 
-                    SET `name`=?, `dictionary_uri`=?, `translator_uri`=? 
-                    WHERE `user_id`=? AND `id`=?";
-            $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("sssss", $name, $dictionary_uri, $translator_uri, $user_id, $id);
+            $result = $stmt->execute([$this->dictionary_uri, $this->translator_uri, $this->rss_feed_1_uri, 
+                                      $this->rss_feed_2_uri, $this->rss_feed_3_uri, $this->show_freq_words, $this->user_id, $this->id]);
+            return $result;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
         }
-        
-        $result = $stmt->execute();
-        $stmt->close();
-                
-        return $result;
     } // end editRecord()
+
+    /**
+     * Creates & saves default preferences for user
+     *
+     * @return bool
+     */
+    public function createInitialRecordsForUser(): bool {
+        try {
+            // create & save default language preferences for user
+            foreach (self::$iso_code as $key => $value) {
+                $translator_uri = 'https://translate.google.com/m?hl=' . $value . '&sl=' . self::$iso_code[$native_lang] . '&&ie=UTF-8&q=%s';
+                $dictionary_uri = 'https://www.linguee.com/' . $value . '-' . self::$iso_code[$native_lang] . '/search?source=auto&query=%s';
+                
+                $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`, `translator_uri`) 
+                        VALUES (?, ?, ?, ?)";
+                $stmt = $this->con->prepare($sql);
+                $stmt->execute([$this->user_id, $key, $dictionary_uri, $translator_uri]);
+            }
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end createInitialRecordsForUser()
+
+    public function loadRecordByName(string $learning_lang): bool {
+        try {
+            $sql = "SELECT * FROM `{$this->table}` WHERE `user_id`=? AND `name`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$this->user_id, $learning_lang]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            $this->id               = $row['id']; 
+            $this->user_id          = $row['user_id']; 
+            $this->name             = $row['name'];
+            $this->dictionary_uri   = $row['dictionary_uri']; 
+            $this->translator_uri   = $row['translator_uri']; 
+            $this->rss_feed_1_uri   = $row['rss_feed1_uri'];
+            $this->rss_feed_2_uri   = $row['rss_feed2_uri'];
+            $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
+            $this->show_freq_words  = $row['show_freq_words'];
+            
+            return $row ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end loadRecordByName()
+
 
     /**
      * Converts 639-1 iso codes to full language names (ie. 'en' => 'English')
@@ -162,7 +208,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public static function getId() {
+    public function getId() {
         return $this->id;
     } // end getId()
 
@@ -171,7 +217,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public static function getName() {
+    public function getName() {
         return $this->name;
     } // end getName()
 
@@ -180,7 +226,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public static function getDictionaryUri() {
+    public function getDictionaryUri() {
         return $this->dictionary_uri;
     } // end getDictionaryUri()
 
@@ -189,7 +235,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public static function getTranslatorUri() {
+    public function getTranslatorUri() {
         return $this->translator_uri;
     } // end getTranslatorUri()
 
@@ -198,7 +244,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public static function getRssFeed1Uri() {
+    public function getRssFeed1Uri() {
         return $this->rss_feed_1_uri;
     } // end getRssFeed1Uri()
 
@@ -207,7 +253,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public static function getRssFeed2Uri() {
+    public function getRssFeed2Uri() {
         return $this->rss_feed_2_uri;
     } // end getRssFeed2Uri()
 
@@ -216,7 +262,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public static function getRssFeed3Uri() {
+    public function getRssFeed3Uri() {
         return $this->rss_feed_3_uri;
     } // end getRssFeed3Uri()
 
@@ -225,7 +271,7 @@ class Language extends DBEntity
      *
      * @return bool
      */
-    public static function getShowFreqWords() {
+    public function getShowFreqWords() {
         return $this->show_freq_words;
     } // end getShowFreqWords()
 

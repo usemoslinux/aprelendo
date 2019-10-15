@@ -39,11 +39,6 @@ class Conversion {
      */
     public static function ArraytoCSV($array) {
         if (is_array($array)) {
-            // escape all array elements
-            foreach ($array as $value) {
-                $value = $this->con->real_escape_string($value);
-            }
-            
             return "'" . implode("','",$array) . "'";
         } else {
             return "'$array'";

@@ -68,25 +68,30 @@ class Texts extends DBEntity {
             $level = $this->calculateDifficulty($text);
             $nr_of_words = $this->nr_of_words;
         }
+        
+        try {
+            // add text to table
+            $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `title`, `author`, `text`, `source_uri`, `type`, `word_count`, `level`)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $this->con->prepare($sql);
+            $result = $stmt->execute([$this->user_id,$this->learning_lang_id, $title, $author, $text, $source_url, $type, $nr_of_words, $level]);
+            $insert_id = $this->con->lastInsertId();
+
+            if ($result && $insert_id > 0) {
+                // add entry to popularsources
+                $pop_sources = new PopularSources($this->con);
+                $lang = new Language($this->con, $this->user_id);
+                $lang->loadRecord($this->learning_lang_id);
                 
-        // add text to table
-        $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `title`, `author`, `text`, `source_uri`, `type`, `word_count`, `level`)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param('sssssssss', $this->user_id,$this->learning_lang_id, $title, $author, $text, $source_url, $type, $nr_of_words, $level);
-        $result = $stmt->execute();
-        $insert_id = $this->con->insert_id;
-        
-        if ($result) {
-            // add entry to popularsources
-            $pop_sources = new PopularSources($this->con);
-            $lang = new Language($this->con);
-            $lang->loadRecord($this->learning_lang_id);
-            
-            $result = $pop_sources->add($lang->getName(), Url::getDomainName($source_url));
+                $result = $pop_sources->add($lang->getName(), Url::getDomainName($source_url));
+            }
+
+            return $result ? $insert_id : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
         }
-        
-        return $result ? $insert_id : false;
     } // end add()
             
     /**
@@ -102,15 +107,19 @@ class Texts extends DBEntity {
     * @return boolean
     */
     public function update($id, $title, $author, $text, $source_url, $audio_url, $type) {
-        $sql = "UPDATE `{$this->table}` 
+        try {
+            $sql = "UPDATE `{$this->table}` 
                 SET `user_id`=?, `lang_id`=?, `title`=?, `author`=?, `text`=?, `source_uri`=?, `type`=? 
                 WHERE `id`=?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("ssssssss", $this->user_id, $this->learning_lang_id, $title, $author, $text, $source_url, $type, $id);
-        $result = $stmt->execute();
-        $stmt->close();
-        
-        return $result;
+            $stmt = $this->con->prepare($sql);
+            $result = $stmt->execute([$this->user_id, $this->learning_lang_id, $title, $author, $text, $source_url, $type, $id]);
+            
+            return $result;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
     } // end update()
     
     /**
@@ -120,40 +129,43 @@ class Texts extends DBEntity {
     * @return boolean
     */
     public function delete($ids) {
-        $cs_ids = $this->con->real_escape_string(Conversion::JSONtoCSV($ids));
+        try {
+            $cs_ids = Conversion::JSONtoCSV($ids);
         
-        $selectsql = "SELECT `source_uri` 
-            FROM `{$this->table}` 
-            WHERE `id` IN ($cs_ids)";
-        $result = $this->con->query($selectsql);
-        
-        if ($result) {
-            $uris = $result->fetch_all();
+            $select_sql =  "SELECT `source_uri` 
+                            FROM `{$this->table}` 
+                            WHERE `id` IN ($cs_ids)";
+            $stmt = $this->con->prepare($select_sql);
+            $stmt->execute([array($cs_ids)]);
+            $uris = $stmt->fetchall();
             
             // delete entries from db
-            $deletesql = "DELETE FROM `{$this->table}` 
-                          WHERE `id` IN ($cs_ids)";
-
-            $result = $this->con->query($deletesql);
+            $delete_sql =  "DELETE FROM `{$this->table}` 
+                            WHERE `id` IN ($cs_ids)";
+            $stmt = $this->con->prepare($delete_sql);
+            $stmt->execute([array($cs_ids)]);
 
             // delete audio (mp3, oggs) & source files (epubs, etc.)
-            if ($result) {
-                $pop_sources = new PopularSources($this->con);
-                $lang = new Language($this->con);
-                $lang->loadRecord($this->learning_lang_id);
-                
-                // delete associated file
-                foreach ($uris as $key => $value) {
-                    if (!empty($value[0]) && (strpos($value[0], '.epub') !== false)) {
-                        $file = new File($value[0]);
-                        $file->delete();
-                    }
-                    
-                    $result = $pop_sources->update($lang->getName(), Url::getDomainName($value[0]));
+            $pop_sources = new PopularSources($this->con);
+            $lang = new Language($this->con, $this->user_id);
+            $lang->loadRecord($this->learning_lang_id);
+            
+            // delete associated file
+            foreach ($uris as $key => $value) {
+                if (!empty($value[0]) && (strpos($value[0], '.epub') !== false)) {
+                    $file = new File($value[0]);
+                    $file->delete();
                 }
+                
+                $result = $pop_sources->update($lang->getName(), Url::getDomainName($value[0]));
             }
+            
+            return $result;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
         }
-        return $result;
     } // end delete()
     
     /**
@@ -163,22 +175,30 @@ class Texts extends DBEntity {
     * @return boolean
     */
     public function archive($ids) {
-        $cs_ids = $this->con->real_escape_string(Conversion::JSONtoCSV($ids));
+        try {
+            $cs_ids = Conversion::JSONtoCSV($ids);
         
-        $insertsql = "INSERT INTO `archived_texts`
-                      SELECT *
-                      FROM `{$this->table}` 
-                      WHERE `id` IN ($cs_ids)";
+            $insert_sql =  "INSERT INTO `archived_texts`
+                            SELECT *
+                            FROM `{$this->table}` 
+                            WHERE `id` IN (?)";
 
-        $result = $this->con->query($insertsql);
-        
-        if ($result) {
-            $deletesql = "DELETE FROM `{$this->table}` WHERE `id` IN ($cs_ids)";
-            $result = $this->con->query($deletesql);
+            $stmt = $this->con->prepare($insert_sql);
+            $result = $stmt->execute([array($cs_ids)]);
+            
+            if ($result) {
+                $delete_sql = "DELETE FROM `{$this->table}` WHERE `id` IN (?)";
+                $stmt = $this->con->prepare($delete_sql);
+                $result = $stmt->execute([array($cs_ids)]);
+            }            
+
+            return $result;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
         }
-
-        return $result;
-    } // end archive
+    } // end archive()
 
     /**
      * Checks if text already exists in database, to avoid duplicate entries.
@@ -189,19 +209,24 @@ class Texts extends DBEntity {
      */
     public function exists($source_url)
     {
-        if (empty($source_url)) {
+        try {
+            if (empty($source_url)) {
+                return false;
+            }
+    
+            $sql = "SELECT COUNT(*)
+                    FROM `{$this->table}`
+                    WHERE `user_id` = ? AND `source_uri` = ?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$this->user_id, $source_url]);
+            $num_rows = $stmt->fetchColumn(); 
+    
+            return $num_rows > 0;
+        } catch (\Exception $e) {
             return false;
+        } finally {
+            $stmt = null;
         }
-
-        $sql = "SELECT 1
-                FROM `{$this->table}`
-                WHERE `source_uri` = ? AND `user_id` = ?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param('ss', $source_url, $this->user_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return ($result) && ($result->num_rows > 0);
     } // end exists()
     
     /**
@@ -214,26 +239,25 @@ class Texts extends DBEntity {
     * @return integer|boolean
     */
     public function countSearchRows($filter_sql, $search_text) {
-        // escape parameters
-        $filter_sql = $this->con->real_escape_string($filter_sql);
-        $search_text = '%' . $search_text . '%';
         
-        $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
-                WHERE `user_id`=? 
-                AND `lang_id`=? $filter_sql AND `title` LIKE ?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param('sss', $this->user_id, $this->learning_lang_id, $search_text);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        try {
+            // escape parameters
+            $filter_sql = $this->con->quote($filter_sql);
+            $search_text = '%' . $search_text . '%';
+            
+            $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
+                    WHERE `user_id`=? 
+                    AND `lang_id`=? $filter_sql AND `title` LIKE ?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$this->user_id, $this->learning_lang_id, $search_text]);
+            $total_rows = $stmt->fetchColumn();
 
-        if ($result) {
-            $row = $result->fetch_array(MYSQLI_NUM);
-            $total_rows = $row[0];
-            $result = $total_rows;
-        } 
-
-        $stmt->close();
-        return $result; 
+            return $total_rows ? $total_rows : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
     } // end countSearchRows()
     
     /**
@@ -242,23 +266,21 @@ class Texts extends DBEntity {
     *
     * @return integer|boolean
     */
-    public function countAllRows() {        
-        $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
-                WHERE `user_id`=? AND `lang_id`=?";
+    public function countAllRows() {
+        try {
+            $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
+                    WHERE `user_id`=? AND `lang_id`=?";
 
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param('ss', $this->user_id, $this->learning_lang_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$this->user_id, $this->learning_lang_id]);
+            $total_rows = $stmt->fetchColumn();
 
-        if ($result) {
-            $row = $result->fetch_array();
-            $total_rows = $row[0];
-            $result = $total_rows;
-        } 
-
-        $stmt->close();
-        return $result;
+            return $total_rows ? $total_rows : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }     
     } // end countAllRows()
     
     /**
@@ -274,35 +296,37 @@ class Texts extends DBEntity {
     * @return array
     */
     public function getSearch($filter_sql, $search_text, $offset, $limit, $sort_by) {
-        // escape parameters
-        $filter_sql = $this->con->real_escape_string($filter_sql);
-        $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
-        $search_text = '%' . $search_text . '%';
-        
-        $sql = "SELECT `id`, 
-                NULL, 
-                `title`, 
-                `author`, 
-                `source_uri`, 
-                `type`, 
-                `word_count`, 
-                `level`  
-                FROM `{$this->table}` 
-                WHERE `user_id`=? 
-                AND `lang_id`=? $filter_sql 
-                AND `title` LIKE ? 
-                ORDER BY $sort_sql 
-                LIMIT ?, ?";
+        try {
+            // escape parameters
+            $filter_sql = $this->con->quote($filter_sql);
+            $sort_sql = $this->buildSortSQL($sort_by);
+            $search_text = '%' . $search_text . '%';
+            
+            $sql = "SELECT `id`, 
+                    NULL, 
+                    `title`, 
+                    `author`, 
+                    `source_uri`, 
+                    `type`, 
+                    `word_count`, 
+                    `level`  
+                    FROM `{$this->table}` 
+                    WHERE `user_id`=? 
+                    AND `lang_id`=? $filter_sql 
+                    AND `title` LIKE ? 
+                    ORDER BY $sort_sql 
+                    LIMIT ?, ?";
 
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param('sssss', $this->user_id, $this->learning_lang_id, $search_text, $offset, $limit);
-        $stmt->execute();
-        $result = $stmt->get_result();
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$this->user_id, $this->learning_lang_id, $search_text, $offset, $limit]);
+            $result = $stmt->fetchall();
 
-        $result = $result ? $result->fetch_all() : false;
-        $stmt->close();
-
-        return $result;
+            return $result && !empty($result) ? $result : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
     } // end getSearch()
     
     /**
@@ -316,31 +340,34 @@ class Texts extends DBEntity {
     * @return array
     */
     public function getAll($offset, $limit, $sort_by) {
-        // escape parameters
-        $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
-        
-        $sql = "SELECT `id`, 
-                NULL, 
-                `title`, 
-                `author`, 
-                `source_uri`, 
-                `type`, 
-                `word_count`, 
-                `level`  
-                FROM `{$this->table}` 
-                WHERE `user_id`=?  
-                AND `lang_id`=? 
-                ORDER BY $sort_sql 
-                LIMIT ?, ?";
+        try {
+            // escape parameters
+            $sort_sql = $this->buildSortSQL($sort_by);
+            
+            $sql = "SELECT `id`, 
+                    NULL, 
+                    `title`, 
+                    `author`, 
+                    `source_uri`, 
+                    `type`, 
+                    `word_count`, 
+                    `level`  
+                    FROM `{$this->table}` 
+                    WHERE `user_id`=?  
+                    AND `lang_id`=? 
+                    ORDER BY $sort_sql 
+                    LIMIT ?, ?";
 
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param('ssss', $this->user_id, $this->learning_lang_id, $offset, $limit);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $result = $result ? $result->fetch_all() : false;
-        $stmt->close();
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$this->user_id, $this->learning_lang_id, $offset, $limit]);
+            $result = $stmt->fetchall();
 
-        return $result;
+            return $result && !empty($result) ? $result : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
     } // end getAll()
     
     /**
@@ -448,18 +475,16 @@ class Texts extends DBEntity {
         $accented_chars = 'àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ';
         $this->nr_of_words = preg_match_all('/[A-Za-z' . $accented_chars . ']+/u', $text, $words_in_text);
 
-        // get learning language ISO name
-        $sql = "SELECT `name` 
-                FROM `languages` 
-                WHERE `id`=?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param('s', $this->learning_lang_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result) {
+        try {
+            // get learning language ISO name
+            $sql = "SELECT `name` 
+            FROM `languages` 
+            WHERE `id`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$this->learning_lang_id]);
+
             // build frequency list table name based on learning language name
-            $row = $result->fetch_array();
+            $row = $stmt->fetch(\PDO::FETCH_NUM);
             $frequency_list_table = 'frequency_list_' . $row[0];
             
             foreach ($level_thresholds as $threshold) {
@@ -468,39 +493,38 @@ class Texts extends DBEntity {
                         FROM `$frequency_list_table` WHERE `frequency_index` <= ?";
 
                 $stmt = $this->con->prepare($sql);
-                $stmt->bind_param('d', $threshold);
-                $stmt->execute();
-                $result = $stmt->get_result();
+                $stmt->execute([$threshold]);
 
-                if ($result) {
-                    while($row = $result->fetch_array()){
-                        $frequency_list[] = $row[0];
-                    }
-                    
-                    // get total amount of words & how many words in the text don't appear in the frequency list
-                    //$diff = array_diff(array_map('strtolower', $words_in_text[0]), array_map('strtolower', $frequency_list));
-                    $diff = array_udiff($words_in_text[0], $frequency_list, 'strcasecmp');
-                    
-                    $total_words = sizeof($words_in_text[0]);
-                    $unknown_words = sizeof($diff);
-                    
-                    // $index is calculated as the relation between $unknown_words and $total_words
-                    // there's no need to remove duplicates from $diff 
-                    // because they won't be removed from $words_in_text either
-                    $index = $unknown_words / $total_words;
-                    if ($threshold === '85' && $index < 0.25) {
-                        return 1; // beginner
-                    } elseif ($threshold === '95' && $index < 0.25) {
-                        return 2; // intermediate
-                    } elseif ($threshold === '95' && $index > 0.24) {
-                        return 3; // advanced
-                    }
-                } 
-            }
-        } 
+                while($row = $stmt->fetch(\PDO::FETCH_NUM)){
+                    $frequency_list[] = $row[0];
+                }
+                
+                // get total amount of words & how many words in the text don't appear in the frequency list
+                //$diff = array_diff(array_map('strtolower', $words_in_text[0]), array_map('strtolower', $frequency_list));
+                $diff = array_udiff($words_in_text[0], $frequency_list, 'strcasecmp');
+                
+                $total_words = sizeof($words_in_text[0]);
+                $unknown_words = sizeof($diff);
+                
+                // $index is calculated as the relation between $unknown_words and $total_words
+                // there's no need to remove duplicates from $diff 
+                // because they won't be removed from $words_in_text either
+                $index = $unknown_words / $total_words;
+                if ($threshold === '85' && $index < 0.25) {
+                    return 1; // beginner
+                } elseif ($threshold === '95' && $index < 0.25) {
+                    return 2; // intermediate
+                } elseif ($threshold === '95' && $index > 0.24) {
+                    return 3; // advanced
+                }
+            } 
 
-        $stmt->close();
-        return $result;
+            return $result;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
     }
 } // calculateDifficulty()
     

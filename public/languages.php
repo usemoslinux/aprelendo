@@ -33,15 +33,15 @@ use Aprelendo\Includes\Classes\Language;
 $user_id = $user->id;
 
 if (isset($_POST['submit'])) {                  // check if we need to save new language data
-    $lang = new Language($con);
-    $lang->loadRecord($_POST['id'], $user_id);
+    $lang = new Language($con, $user_id);
+    $lang->loadRecord($_POST['id']);
     $lang->editRecord($_POST, $user->isPremium());
 } elseif (isset($_GET['chg'])) {        
-    $lang = new Language($con);
-    $lang->loadRecord($_GET['chg'], $user_id);
+    $lang = new Language($con, $user_id);
+    $lang->loadRecord($_GET['chg']);
 } elseif(isset($_GET['act'])) { 
-    $lang = new Language($con);
-    $lang->loadRecord($_GET['act'], $user_id);
+    $lang = new Language($con, $user_id);
+    $lang->loadRecord($_GET['act']);
 } 
 ?>
 

@@ -40,19 +40,13 @@ class RSSFeeds
      * @param integer $learning_lang_id
      */
     public function __construct($con, $user_id, $learning_lang_id) {
-        $sql = "SELECT `rss_feed1_uri`, `rss_feed2_uri`, `rss_feed3_uri` 
-                FROM `languages` 
-                WHERE `user_id`=? AND `id`=?";
-        $stmt = $con->prepare($sql);
-        $stmt->bind_param("ss", $user_id, $learning_lang_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $lang = new Language($con, $user_id);
+        $result = $lang->loadRecord($learning_lang_id);
 
         if ($result) {
-            $rows = $result->fetch_assoc();
-            $feed1uri = $rows['rss_feed1_uri'];
-            $feed2uri = $rows['rss_feed2_uri'];
-            $feed3uri = $rows['rss_feed3_uri'];
+            $feed1uri = $lang->getRssFeed1Uri();
+            $feed2uri = $lang->getRssFeed2Uri();
+            $feed3uri = $lang->getRssFeed3Uri();
 
             $this->feed1 = new RSSFeed($feed1uri);
             $this->feed2 = new RSSFeed($feed2uri);
