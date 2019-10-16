@@ -39,10 +39,9 @@ class Log extends DBEntity
      */
     public function getTodayRecords() {
         $user_id = $this->con->real_escape_string($this->user_id);
-        $table = $this->con->real_escape_string($this->table);
 
         $sql = "SELECT `date_created` 
-                FROM `$table` 
+                FROM `{$this->table}` 
                 WHERE `user_id` = ? 
                 AND DATE(`date_created`) = CURDATE()";
 

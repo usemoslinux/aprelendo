@@ -28,12 +28,12 @@ class Token extends DBEntity {
     }
 
     private function deleteOld() {
-        return $this->con->query("DELETE FROM `auth_tokens` WHERE `expires` < NOW()");
+        return $this->con->query("DELETE FROM `{$this->table}` WHERE `expires` < NOW()");
     }
 
     private function alreadyExists($user_id) {
         $sql = "SELECT `token`, `expires`
-                FROM `auth_tokens`
+                FROM `{$this->table}`
                 WHERE `user_id`=? AND `expires` >= NOW()
                 LIMIT 1";
 
@@ -79,7 +79,7 @@ class Token extends DBEntity {
             $expires = date('Y-m-d H:i:s', $time_stamp);
             
             try {
-                $sql = "INSERT INTO `auth_tokens` (`token`, `user_id`, `expires`) VALUES (?, ?, ?)";
+                $sql = "INSERT INTO `{$this->table}` (`token`, `user_id`, `expires`) VALUES (?, ?, ?)";
                 $stmt = $this->con->prepare($sql);
                 $result = $stmt->execute([$token, $user_id, $expires]);
 

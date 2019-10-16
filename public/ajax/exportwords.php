@@ -30,7 +30,7 @@ try {
     if ($user->isPremium()) {
         // set search criteria, if any
         $search_text = isset($_GET['s']) ? $_GET['s'] : '';
-        $order_by = isset($_GET['o']) ? $_GET['o'] : '';
+        $order_by = isset($_GET['o']) ? $_GET['o'] : -1;
 
         // export to csv
         $words_table = new Words($con, $user_id, $learning_lang_id);

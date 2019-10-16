@@ -51,38 +51,41 @@ class SharedTexts extends Texts
      * @return array
      */
     public function getSearch($filter_sql, $search_text, $offset, $limit, $sort_by) {
-        $filter_sql = $this->con->real_escape_string($filter_sql);
-        $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
-        $like_str = '%' . $search_text . '%';
+        try {
+            $sort_sql = $this->buildSortSQL($sort_by);
+            $like_str = '%' . $search_text . '%';
 
-        $lang = new Language($this->con, $this->user_id);
-        $lang->loadRecord($this->learning_lang_id);
+            $lang = new Language($this->con, $this->user_id);
+            $lang->loadRecord($this->learning_lang_id);
 
-        $sql = "SELECT t.id, 
-                (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
-                t.title, 
-                t.author, 
-                t.source_uri,
-                t.type, 
-                t.word_count, 
-                t.level, 
-                l.name, 
-                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
-                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = ?) AS `user_liked` 
-                FROM `{$this->table}` t 
-                INNER JOIN `languages` l ON t.lang_id = l.id
-                WHERE `name`=? $filter_sql 
-                AND `title` 
-                LIKE ? 
-                ORDER BY $sort_sql 
-                LIMIT ?, ?";
+            $sql = "SELECT t.id, 
+                    (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
+                    t.title, 
+                    t.author, 
+                    t.source_uri,
+                    t.type, 
+                    t.word_count, 
+                    t.level, 
+                    l.name, 
+                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
+                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = ?) AS `user_liked` 
+                    FROM `{$this->table}` t 
+                    INNER JOIN `languages` l ON t.lang_id = l.id
+                    WHERE `name`=? $filter_sql 
+                    AND `title` 
+                    LIKE ? 
+                    ORDER BY $sort_sql 
+                    LIMIT ?, ?";
 
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("sssss", $this->user_id, $lang->getName(), $like_str, $offset, $limit);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        return $result ? $result->fetch_all() : false;
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$this->user_id, $lang->getName(), $like_str, $offset, $limit]);
+            
+            return $stmt->fetchAll();
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
     } // end getSearch()
 
     /**

@@ -167,7 +167,6 @@ class Language extends DBEntity
         }
     } // end loadRecordByName()
 
-
     /**
      * Converts 639-1 iso codes to full language names (ie. 'en' => 'English')
      *
@@ -202,6 +201,24 @@ class Language extends DBEntity
     public static function getIsoCodeArray() {
         return self::$iso_code;
     } // end getIsoCodeArray()
+
+    /**
+     * Returns list of available languages for active user
+     *
+     * @return array|bool
+     */
+    public function getAvailableLangs() {
+        try {
+            $sql = "SELECT `id`, `name` FROM `{$this->table}` WHERE `user_id`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$this->user_id]);
+            return $stmt->fetchAll();
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end getAvailableLangs()
 
     /**
      * Id getter

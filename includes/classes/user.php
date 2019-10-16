@@ -47,6 +47,7 @@ class User
      */
     public function __construct ($con) {
         $this->con = $con;
+        $this->table = 'users';
     } // end __construct()
     
     /**
@@ -68,7 +69,7 @@ class User
 
         try {
             // check if user already exists
-            $sql = "SELECT COUNT(*) FROM `users` WHERE `name`=?";
+            $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `name`=?";
             $stmt = $this->con->prepare($sql);
             $stmt->execute([$username]);
             $num_rows = $stmt->fetchColumn();
@@ -78,7 +79,7 @@ class User
             }
             
             // check if email already exists
-            $sql = "SELECT COUNT(*) FROM `users` WHERE `email`=?";
+            $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `email`=?";
             $stmt = $this->con->prepare($sql);
             $stmt->execute([$email]);
             $num_rows = $stmt->fetchColumn();
@@ -96,7 +97,7 @@ class User
 
             // save user data in db
             $user_active = !$send_email;
-            $sql = "INSERT INTO `users` (`name`, `password_hash`, `email`, `native_lang_iso`, `learning_lang_iso`, 
+            $sql = "INSERT INTO `{$this->table}` (`name`, `password_hash`, `email`, `native_lang_iso`, `learning_lang_iso`, 
                     `activation_hash`, `is_active`) 
                     VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->con->prepare($sql);
@@ -176,7 +177,7 @@ class User
 
             // check if user name & hash exist in db
             $sql = "SELECT COUNT(*) 
-                    FROM `users` 
+                    FROM `{$this->table}` 
                     WHERE `name`=? AND `activation_hash`=?";
             $stmt = $this->con->prepare($sql);
             $stmt->execute([$username, $hash]);
@@ -184,7 +185,7 @@ class User
             
             if ($num_rows > 0) {
                 $yesterday = date("Y-m-d", time() - 60 * 60 * 24);
-                $sql = "UPDATE `users` 
+                $sql = "UPDATE `{$this->table}` 
                         SET `is_active`=true, `premium_until`=? 
                         WHERE `name`=? AND `activation_hash`=?";
                 $stmt = $this->con->prepare($sql);
@@ -210,7 +211,7 @@ class User
     public function login($username = "", $password = "", $google_id = "") {
         try {
             $sql = "SELECT * 
-                    FROM `users` 
+                    FROM `{$this->table}` 
                     WHERE `name`=?";
             $stmt = $this->con->prepare($sql);
             $stmt->execute([$username]);
@@ -283,7 +284,7 @@ class User
             
             // get username & other user data
             $sql = "SELECT `name`, `email`, `native_lang_iso`, `learning_lang_iso`, `premium_until` 
-                    FROM `users` 
+                    FROM `{$this->table}` 
                     WHERE `id`=?";
             $stmt = $this->con->prepare($sql);
             $stmt->execute([$user_id]);
@@ -340,7 +341,7 @@ class User
                 
                 // check if user already exists
                 if ($this->name != $new_username) {
-                    $sql = "SELECT COUNT(*) FROM `users` WHERE `name`=''";
+                    $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `name`=''";
                     $stmt = $this->con->prepare($sql);
                     $stmt->execute([$new_username]);
                     $num_rows = $stmt->fetchColumn();
@@ -353,7 +354,7 @@ class User
                 // check if email already exists
                 if ($this->email != $new_email) {
                     $sql = "SELECT `email` 
-                            FROM `users` 
+                            FROM `{$this->table}` 
                             WHERE `email`=?";
                     $stmt = $this->con->prepare($sql);
                     $stmt->execute([$new_email]);
@@ -366,14 +367,14 @@ class User
                 
                 // was a new password given? In that case, save new password and replace the old one
                 if (empty($new_password)) {
-                    $sql = "UPDATE `users` 
+                    $sql = "UPDATE `{$this->table}` 
                             SET `name`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=? 
                             WHERE `id`=?";
                     $stmt = $this->con->prepare($sql);
                     $result = $stmt->execute([$new_username, $new_email, $new_native_lang, $new_learning_lang, $user_id]);
                 } else {
                     $new_password_hash = password_hash($new_password, PASSWORD_BCRYPT, ['cost' => 11]);
-                    $sql = "UPDATE `users` 
+                    $sql = "UPDATE `{$this->table}` 
                             SET `name`=?, `password_hash`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?  
                             WHERE `id`=?";
                     $stmt = $this->con->prepare($sql);
@@ -440,7 +441,7 @@ class User
             }
             
             // delete user from db
-            $sql = "DELETE FROM `users` 
+            $sql = "DELETE FROM `{$this->table}` 
                     WHERE `id`=?";
             $stmt = $this->con->prepare($sql);
             $result = $stmt->execute([$this->id]);
@@ -473,7 +474,7 @@ class User
             $lang_name = $row['name'];
             $user_id = $this->id;
             
-            $sql = "UPDATE `users` 
+            $sql = "UPDATE `{$this->table}` 
                     SET `learning_lang_iso`=? 
                     WHERE `id`=?";
             $stmt = $this->con->prepare($sql);
@@ -536,7 +537,7 @@ class User
             $user_id = $this->id;
 
             $sql = "SELECT `password_hash` 
-                    FROM `users` 
+                    FROM `{$this->table}` 
                     WHERE `id`=?";
             $stmt = $this->con->prepare($sql);
             $stmt->execute([$user_id]);

@@ -21,34 +21,17 @@
 require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
+use Aprelendo\Includes\Classes\Preferences;
+
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
     exit;
 }
 
-$user_id = $user->id;
-$learning_lang_id = $user->learning_lang_id;
-
 // save preferences to database
-$fontfamily = isset($_POST['fontfamily']) ? $_POST['fontfamily'] : "Helvetica";
-$fontsize = isset($_POST['fontsize']) ? $_POST['fontsize'] : '12pt';
-$lineheight = isset($_POST['lineheight']) ? $_POST['lineheight'] : '1.5';
-$alignment = isset($_POST['alignment']) ? $_POST['alignment'] : 'left';
-$mode = isset($_POST['mode']) ? $_POST['mode'] : 'light';
-$assistedlearning = isset($_POST['assistedlearning']) ? $_POST['assistedlearning'] : true;
-
 try {
-    $sql = "REPLACE INTO `preferences` (`user_id`, `font_family`,
-            `font_size`, `line_height`, `text_alignment`, `learning_mode`, `assisted_learning`)
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param("sssssss", $user_id, $fontfamily, $fontsize, $lineheight, $alignment, $mode, $assistedlearning);
-    $result = $stmt->execute();
-    $stmt->close();
-            
-    if (!$result) {
-        throw new \Exception ('There was an unexpected error trying to save your preferences. Please, try again later.');
-    }
+    $pref = new Preferences($con, $user->id);
+    $pref->edit($_POST['fontfamily'], $_POST['fontsize'], $_POST['lineheight'], $_POST['alignment'], $_POST['mode'], $_POST['assistedlearning']);
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());
     header('Content-Type: application/json');

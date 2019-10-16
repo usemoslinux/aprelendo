@@ -21,53 +21,9 @@
 require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check if user is logged in
 
-$user_id = $user->id;
-$learning_lang_id = $user->learning_lang_id;
+use Aprelendo\Includes\Classes\Statistics;
 
-// get how many words were created in each of the last 7 days
-for ($i=6; $i >= 0; $i--) {
-    $sql = "SELECT COUNT(word) FROM `words` WHERE `user_id`=? AND `lang_id`=? AND `date_created` < CURDATE() - INTERVAL ?-1 DAY AND `date_created` > CURDATE() - INTERVAL ? DAY";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param("ssii", $user_id, $learning_lang_id, $i, $i);
-    $result = $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_array();
-    $array['created'][] = $row[0];
-}
+$stats = new Statistics($con, $user->id, $user->learning_lang_id);
+$result = $stats->get(7); // get statistics for last 7 days
 
-// get how many words' status were modified in each of the last 7 days
-for ($i=6; $i >= 0; $i--) { 
-    $sql = "SELECT COUNT(word) FROM `words` WHERE `user_id`=? AND `lang_id`=? AND `status`>0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param("ssii", $user_id, $learning_lang_id, $i, $i);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_array();
-    $array['modified'][] = $row[0];
-}
-
-// get how many words were learned in each of the last 7 days
-for ($i=6; $i >= 0; $i--) { 
-    $sql = "SELECT COUNT(word) FROM `words` WHERE `user_id`=? AND `lang_id`=? AND `status`=0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param("ssii", $user_id, $learning_lang_id, $i, $i);
-    $result = $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_array();
-    $array['learned'][] = $row[0];
-}
-
-// get how many learned words were forgotten in each of the last 7 days
-for ($i=6; $i >= 0; $i--) { 
-    $sql = "SELECT COUNT(word) FROM `words` WHERE `user_id`=? AND `lang_id`=? AND `status`=2 AND `date_modified`>`date_created` AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param("ssii", $user_id, $learning_lang_id, $i, $i);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_array();
-    $array['forgotten'][] = $row[0];
-}
-
-$stmt->close();
-
-echo json_encode($array);
+echo json_encode($result);

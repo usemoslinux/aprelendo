@@ -37,44 +37,33 @@ if(isset($_POST['Eea']) && !empty($_POST['Eea']) && !empty($_POST['U3']))
                 FROM `users` 
                 WHERE `email`=?";
         $stmt = $con->prepare($sql);
-        $stmt->bind_param("s", $google_email);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $stmt->execute([$google_email]);
                 
-        if ($result) {
-            $user = new User($con);
-            $row = $result->fetch_assoc();
-            $user_name = $row['name'];
+        $user = new User($con);
+        $row = $result->fetch(\PDO::FETCH_ASSOC);
+        $user_name = $row['name'];
 
-            if($result->num_rows > 0) {
-                // user already exists
-                $sql = "UPDATE `users` 
-                        SET `google_id`=? 
-                        WHERE `email`=?";
-                $stmt = $con->prepare($sql);
-                $stmt->bind_param("ss", $google_id, $google_email);
-                $result = $stmt->execute();
-                
-                if ($result) {
-                    $user->login($user_name, "", $google_id);
-                }
-            } else {
-                // new user
-                if ($user->register($google_name, $google_email, $google_id)) {
-                    $user->login($google_name, $google_id);
-                }
-            }
-        
-        $stmt->close();
-
+        if($user_name !== NULL) {
+            // user already exists
+            $sql = "UPDATE `users` 
+                    SET `google_id`=? 
+                    WHERE `email`=?";
+            $stmt = $con->prepare($sql);
+            $result = $stmt->execute([$google_id, $google_email]);
+            
+            $user->login($user_name, "", $google_id);
         } else {
-            throw new \Exception ('There was an unexpected error trying to log you in using your Google ID.');
+            // new user
+            if ($user->register($google_name, $google_email, $google_id)) {
+                $user->login($google_name, $google_id);
+            }
         }
     } catch (Exception $e) {
-        $error = array('error_msg' => $e->getMessage());
+        $error = array('error_msg' => 'There was an unexpected error trying to log you in using your Google ID.');
         echo json_encode($error);
+    } finally {
+        $stmt = null;
     }
-    
 }
 
 ?>

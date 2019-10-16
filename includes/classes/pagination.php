@@ -133,6 +133,6 @@ class Pagination
       return $result;
      }
   } // end print()
-} // end Pagination class
+}
 
 ?>

@@ -47,7 +47,7 @@ class Videos extends DBEntity {
         
         $this->learning_lang_id = $learning_lang_id;
         $this->table = 'shared_texts';
-    }
+    } // end __construct()
 
     /**
      * Fetches video from youtube
@@ -87,7 +87,7 @@ class Videos extends DBEntity {
         }
         
         return json_encode($result);
-    }
+    } // end fetchVideo()
 
     /**
      * Extract YouTube Id from a given URL
@@ -119,20 +119,30 @@ class Videos extends DBEntity {
                 }
             }
         }
-    }
+    } // end extractYTId()
 
-    public function getById($id) {
-        $sql = "SELECT * 
-                FROM `$this->table` 
+    /**
+     * Returns record by Id
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function getById(int $id) {
+        try {
+            $sql = "SELECT * 
+                FROM `{$this->table}` 
                 WHERE `id`=?";
 
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        return $result ? $result->fetch_assoc() : false;
-    }
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$id]);
+            
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end getById()
 
 }
 

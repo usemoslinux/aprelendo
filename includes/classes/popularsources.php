@@ -35,6 +35,7 @@ class PopularSources extends DBEntity {
      */
     public function __construct($con) {
         $this->con = $con;
+        $this->table = 'popular_sources';
     }
 
     /**
@@ -60,7 +61,7 @@ class PopularSources extends DBEntity {
             return true; // end execution
         }
 
-        $sql = "INSERT INTO `popular_sources` (`lang_iso`, `times_used`, `domain`) VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1";
+        $sql = "INSERT INTO `{$this->table}` (`lang_iso`, `times_used`, `domain`) VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1";
         $stmt = $this->con->prepare($sql);
         $stmt->bind_param("ss", $lg_iso, $domain);
         $result = $stmt->execute();
@@ -81,13 +82,13 @@ class PopularSources extends DBEntity {
             return true; // end execution
         }
 
-        $sql = "DELETE FROM `popular_sources` WHERE `lang_iso`=? AND `domain`=? AND `times_used` = 1";
+        $sql = "DELETE FROM `{$this->table}` WHERE `lang_iso`=? AND `domain`=? AND `times_used` = 1";
         $stmt = $this->con->prepare($sql);
         $stmt->bind_param("ss", $lg_iso, $domain);
         $result = $stmt->execute();
                 
         if ($stmt->affected_rows <= 0) {
-            $sql = "UPDATE `popular_sources` SET `times_used`=`times_used` - 1 WHERE `lang_iso`=? AND `domain`=?";
+            $sql = "UPDATE `{$this->table}` SET `times_used`=`times_used` - 1 WHERE `lang_iso`=? AND `domain`=?";
             $stmt = $this->con->prepare($sql);
             $stmt->bind_param("ss", $lg_iso, $domain);
             $result = $stmt->execute();
@@ -112,7 +113,7 @@ class PopularSources extends DBEntity {
             return false; // return error
         }
 
-        $sql = "SELECT * FROM `popular_sources` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT 50";
+        $sql = "SELECT * FROM `{$this->table}` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT 50";
         $stmt = $this->con->prepare($sql);
         $stmt->bind_param("s", $lg_iso);
         $stmt->execute();

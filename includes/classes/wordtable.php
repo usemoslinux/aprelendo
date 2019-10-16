@@ -46,9 +46,9 @@ class WordTable extends Table {
         $html = '';
             
         for ($i=0; $i < sizeof($this->rows); $i++) { 
-            $word_id = $this->rows[$i][0];
-            $word = $this->rows[$i][1];
-            $word_status = $this->rows[$i][2];
+            $word_id = $this->rows[$i]['id'];
+            $word = $this->rows[$i]['word'];
+            $word_status = $this->rows[$i]['status'];
             $status = array('fa-hourglass-end status_learned', 'fa-hourglass-half status_learning', 'fa-hourglass-start status_new');
             $status_text = array('Learned', 'Learning', 'New');
 

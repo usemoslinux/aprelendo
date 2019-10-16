@@ -23,19 +23,15 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 
 use Aprelendo\Includes\Classes\Language;
 
-// show list of available languages
-$sql = "SELECT `id`, `name` FROM `languages` WHERE `user_id`=?";
-$stmt = $con->prepare($sql);
-$stmt->bind_param("s", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
+$lang = new Language($con, $user->id);
+$available_langs = $lang->getAvailableLangs();
         
-if ($result) {
+if ($available_langs) {
     $html = '<div id="accordion" class="accordion">';
 
-    while ($row = $result->fetch_assoc()) {
-        $lg_id = $row['id'];  
-        $lg_iso_code = $row['name'];
+    foreach ($available_langs as $lang_record) {
+        $lg_id = $lang_record['id'];  
+        $lg_iso_code = $lang_record['name'];
 
         $item_id = 'item-' . $lg_iso_code;
         $heading_id = 'heading-' . $lg_iso_code;
@@ -68,7 +64,6 @@ if ($result) {
     $html .= '</div>';
 
     echo $html;
-    $stmt->close();
 }
 
 ?>

@@ -29,6 +29,7 @@ class Paypal extends DBEntity
     public function __construct($con, $user_id, $enable_sandbox) {
         parent::__construct($con, $user_id);
         $this->url = $enable_sandbox ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
+        $this->table = 'payments';
     }
 
     public function verifyTransaction($data) {
@@ -83,7 +84,7 @@ class Paypal extends DBEntity
         }
 
         // falta payment_item_id : agregar ? al final tb
-        $stmt = $this->con->prepare('INSERT INTO `payments` (`user_id`, `txn_id`, `amount`, `status`, `item_id`, `date_created`) VALUES(?, ?, ?, ?, ?, ?)');
+        $stmt = $this->con->prepare('INSERT INTO `{$this->table}` (`user_id`, `txn_id`, `amount`, `status`, `item_id`, `date_created`) VALUES(?, ?, ?, ?, ?, ?)');
         if (!$stmt) {
             $error = $this->con->error;
         }
@@ -120,7 +121,7 @@ class Paypal extends DBEntity
     }
 
     public function checkTxnid($txn_id) {
-        $sql = "SELECT * FROM `payments` WHERE `txn_id`=?";
+        $sql = "SELECT * FROM `{$this->table}` WHERE `txn_id`=?";
         $stmt = $this->con->prepare($sql);
         $stmt->bind_param("s", $txn_id);
         $stmt->execute();
