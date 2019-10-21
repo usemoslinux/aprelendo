@@ -29,21 +29,14 @@ if (!isset($_POST) || empty($_POST)) {
 
 try {
     if (isset($_POST['email'])) {
-        $email = $con->escape_string($_POST['email']);
-        
         // check if email exists in db
-        $sql = "SELECT `name`, `password_hash` FROM `users` WHERE `email`=?";
-        $stmt = $con->prepare($sql);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $stmt->close();
+        $user = new User($con);
+        $user->existsByEmail($email);
                 
-        if ($result->num_rows > 0) {
+        if ($user->loadRecordByEmail($email)) {
             // get username associated to that email address
-            $row = $result->fetch_array();
-            $username = $row['name'];
-            $password_hash = $row['password_hash'];
+            $username = $text->getName();
+            $password_hash = $text->getPasswordHash();
             
             // create reset link & send email
             $reset_link = "https://www.aprelendo.com/forgotpassword.php?username=$username&reset=$password_hash";
@@ -80,12 +73,10 @@ try {
             $username = $_POST['username'];
             $password_hash = password_hash($_POST['pass1'], PASSWORD_BCRYPT, $options);
 
-            $sql = "UPDATE `users` SET `password_hash`=? WHERE `name`=?";
-            $stmt = $con->prepare($sql);
-            $stmt->bind_param("ss", $password_hash, $username);
-            $result = $stmt->execute();
-            $stmt->close();
-            if (!$result) { // if password update is NOT successful
+            $user = new User($con);
+            
+            if (!$user->updatePasswordHash($password_hash, $username)) { 
+                // if password update is NOT successful
                 throw new \Exception ('Oops! There was an unexpected error when trying to save your new password.');
             }
         } else {

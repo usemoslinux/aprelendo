@@ -29,56 +29,60 @@ class SharedTexts extends Texts
     /**
      * Constructor
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $user_id
-     * @param integer $learning_lang_id
+     * @param integer $lang_id
      */
-    public function __construct($con, $user_id, $learning_lang_id) {
-        parent::__construct($con, $user_id, $learning_lang_id);
+    public function __construct(\PDO $con, int $user_id, int $lang_id) {
+        parent::__construct($con, $user_id, $lang_id);
         $this->table = 'shared_texts';
     } // end __construct()
 
     /**
-     * Gets texts by using a search pattern ($search_text) and a filter ($filter_sql).
+     * Gets texts by using a search pattern ($search_text) and a filter ($search_filter).
      * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
      * Values are returned using a sort pattern ($sort_by)
      *
-     * @param string $filter_sql SQL statement specifying the filter to be used
+     * @param string $search_filter SQL statement specifying the filter to be used
      * @param string $search_text
      * @param integer $offset
      * @param integer $limit
      * @param integer $sort_by Is converted to a string using buildSortSQL()
-     * @return array
+     * @return array|bool
      */
-    public function getSearch($filter_sql, $search_text, $offset, $limit, $sort_by) {
+    public function getSearch(string $search_filter, string $search_text, int $offset, int $limit, int $sort_by) {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
+            $filter_sql = empty($search_filter) ? '' : 'AND `type`=?';
             $like_str = '%' . $search_text . '%';
 
             $lang = new Language($this->con, $this->user_id);
-            $lang->loadRecord($this->learning_lang_id);
+            $lang->loadRecord($this->lang_id);
 
-            $sql = "SELECT t.id, 
-                    (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
-                    t.title, 
-                    t.author, 
-                    t.source_uri,
-                    t.type, 
-                    t.word_count, 
-                    t.level, 
-                    l.name, 
-                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
-                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = ?) AS `user_liked` 
-                    FROM `{$this->table}` t 
-                    INNER JOIN `languages` l ON t.lang_id = l.id
-                    WHERE `name`=? $filter_sql 
-                    AND `title` 
-                    LIKE ? 
-                    ORDER BY $sort_sql 
-                    LIMIT ?, ?";
+            $sql = sprintf("SELECT t.id, 
+                           (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
+                           t.title, 
+                           t.author, 
+                           t.source_uri,
+                           t.type, 
+                           t.word_count, 
+                           t.level, 
+                           l.name, 
+                           (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
+                           (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = ?) AS `user_liked` 
+                           FROM `%s` t 
+                           INNER JOIN `languages` l ON t.lang_id = l.id
+                           WHERE `name`=? 
+                           AND `title` LIKE ? %s 
+                           ORDER BY %s 
+                           LIMIT ?, ?", $this->table, $filter_sql, $sort_sql);
 
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$this->user_id, $lang->getName(), $like_str, $offset, $limit]);
+            if (empty($search_filter)) {
+                $stmt->execute([$this->user_id, $lang->getName(), $like_str, $offset, $limit]);
+            } else {
+                $stmt->execute([$this->user_id, $lang->getName(), $like_str, $search_filter, $offset, $limit]);
+            }
             
             return $stmt->fetchAll();
         } catch (\Exception $e) {
@@ -96,37 +100,41 @@ class SharedTexts extends Texts
      * @param integer $offset
      * @param integer $limit
      * @param integer $sort_by Is converted to a string using buildSortSQL()
-     * @return array
+     * @return array|bool
      */
-    public function getAll($offset, $limit, $sort_by) {
-        $sort_sql = $this->con->real_escape_string($this->buildSortSQL($sort_by));
+    public function getAll(int $offset, int $limit, int $sort_by) {
+        try {
+            $sort_sql = $this->buildSortSQL($sort_by);
 
-        $lang = new Language($this->con, $this->user_id);
-        $lang->loadRecord($this->learning_lang_id);
+            $lang = new Language($this->con, $this->user_id);
+            $lang->loadRecord($this->lang_id);
 
-        $sql = "SELECT t.id, 
-                (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
-                t.title, 
-                t.author, 
-                t.source_uri,
-                t.type, 
-                t.word_count, 
-                t.level, 
-                l.name,
-                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
-                (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = ?) AS `user_liked`
-                FROM `{$this->table}` t
-                INNER JOIN `languages` l ON t.lang_id = l.id
-                WHERE `name`=? 
-                ORDER BY $sort_sql 
-                LIMIT ?, ?";
+            $sql = "SELECT t.id, 
+                    (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
+                    t.title, 
+                    t.author, 
+                    t.source_uri,
+                    t.type, 
+                    t.word_count, 
+                    t.level, 
+                    l.name,
+                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
+                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = ?) AS `user_liked`
+                    FROM `{$this->table}` t
+                    INNER JOIN `languages` l ON t.lang_id = l.id
+                    WHERE `name`=? 
+                    ORDER BY $sort_sql 
+                    LIMIT ?, ?";
 
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("ssss", $this->user_id, $lang->getName(), $offset, $limit);
-        $stmt->execute();
-        $result = $stmt->get_result();
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$this->user_id, $lang->getName(), $offset, $limit]);
 
-        return $result ? $result->fetch_all() : false;
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
     } // end getAll()
 
     /**
@@ -134,24 +142,28 @@ class SharedTexts extends Texts
      * It does this by checking the source url of the text to be added.
      *
      * @param string $source_url
-     * @return boolean
+     * @return bool
      */
-    public function exists($source_url)
-    {
-        if (empty($source_url)) {
-            return false;
-        }
-
-        $sql = "SELECT 1
-                FROM `{$this->table}`
-                WHERE `source_uri` = ?";
-        
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $source_url);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    public function exists(string $source_url): bool {
+        try {
+            if (empty($source_url)) {
+                return false;
+            }
+    
+            $sql = "SELECT COUNT(*) AS `exists`
+                    FROM `{$this->table}`
+                    WHERE `source_uri` = ?";
             
-        return ($result) && ($result->num_rows > 0);
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$source_url]);
+            $row = $stmt->fetch();
+                
+            return ($row) && ($row['exists'] > 0);
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
     } // end exists() 
 
     /**
@@ -161,7 +173,7 @@ class SharedTexts extends Texts
      * @param integer $sort_by
      * @return string
      */
-    protected function buildSortSQL($sort_by) {
+    protected function buildSortSQL(int $sort_by): string {
         $result = parent::buildSortSQL($sort_by);
 
         if (!empty($result)) {
@@ -180,7 +192,6 @@ class SharedTexts extends Texts
             }
         }
     } // end buildSortSQL()
-
 }
 
 

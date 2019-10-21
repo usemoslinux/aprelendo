@@ -24,7 +24,7 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 use Aprelendo\Includes\Classes\PopularSources;
 
 $pop_sources = new PopularSources($con);
-$sources = $pop_sources->getAllByLang($user->learning_lang);
+$sources = $pop_sources->getAllByLang($user->lang);
 
 echo printSources($sources);
 

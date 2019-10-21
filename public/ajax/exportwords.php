@@ -24,7 +24,7 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 use Aprelendo\Includes\Classes\Words;
 
 $user_id = $user->id;
-$learning_lang_id = $user->learning_lang_id;
+$lang_id = $user->lang_id;
 
 try {
     if ($user->isPremium()) {
@@ -33,7 +33,7 @@ try {
         $order_by = isset($_GET['o']) ? $_GET['o'] : -1;
 
         // export to csv
-        $words_table = new Words($con, $user_id, $learning_lang_id);
+        $words_table = new Words($con, $user_id, $lang_id);
         $result = $words_table->createCSVFile($search_text, $order_by);
 
         if (!$result) {

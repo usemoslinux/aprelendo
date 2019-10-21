@@ -24,19 +24,37 @@ class VoiceRSS
 {
 	use Curl;
 
-	public function speech($settings) {
+	/**
+	 * Converts text to speech
+	 *
+	 * @param array $settings
+	 * @return array
+	 */
+	public function speech(array $settings): array {
 	    $this->_validate($settings);
 	    return $this->_request($settings);
-	}
+	} // end speech()
 
-	private function _validate($settings) {
+	/**
+	 * Validates request before sending it to VoiceRSS server
+	 *
+	 * @param array $settings
+	 * @return void
+	 */
+	private function _validate($settings): void {
 	    if (!isset($settings) || count($settings) == 0) throw new \Exception('The settings are undefined');
         if (!isset($settings['key']) || empty($settings['key'])) throw new \Exception('The API key is undefined');
         if (!isset($settings['src']) || empty($settings['src'])) throw new \Exception('The text is undefined');
         if (!isset($settings['hl']) || empty($settings['hl'])) throw new \Exception('The language is undefined');
-	}
+	} // end _validate()
 
-	private function _request($settings) {
+	/**
+	 * Requests TTS conversion to VoiceRSS server
+	 *
+	 * @param array $settings
+	 * @return array
+	 */
+	private function _request(array $settings): array {
     	$url = ((isset($settings['ssl']) && $settings['ssl']) ? 'https' : 'http') . '://api.voicerss.org/';
 		
 		$ch = curl_init($url);
@@ -57,9 +75,15 @@ class VoiceRSS
     	return array(
     		'error' => ($is_error) ? $resp : null,
     		'response' => (!$is_error) ? $resp: null);
-	}
+	} // end _request()
 
-	private function _buildRequest($settings) {
+	/**
+	 * Builds CURL request based on $settings array
+	 *
+	 * @param array $settings
+	 * @return string
+	 */
+	private function _buildRequest(array $settings): string {
 	    return http_build_query(array(
 	        'key' => isset($settings['key']) ? $settings['key'] : '',
 	        'src' => isset($settings['src']) ? $settings['src'] : '',
@@ -70,6 +94,6 @@ class VoiceRSS
 	        'ssml' => isset($settings['ssml']) ? $settings['ssml'] : '',
 	        'b64' => isset($settings['b64']) ? $settings['b64'] : ''
 	    ));
-	}
+	} // end _buildRequest()
 }
 ?>

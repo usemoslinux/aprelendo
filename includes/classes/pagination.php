@@ -39,7 +39,7 @@ class Pagination
    * @param integer $total_rows Total amount of rows
    * @param integer $adjacents How many adjacent pages to show in pagination
    */
-  public function __construct($page = 1, $limit = 10, $total_rows, $adjacents = 2) {
+  public function __construct(int $page = 1, int $limit = 10, int $total_rows, int $adjacents = 2) {
     $this->limit = $limit;
     $this->adjacents = $adjacents;
     $this->total_rows = $total_rows;
@@ -80,17 +80,20 @@ class Pagination
    * @param integer $show_archived
    * @return string HTML of pagination
    */
-  public function print($url, $search_text, $sort_by, $filter = NULL, $show_archived = NULL) {
+  public function print(string $url, string $search_text, int $sort_by, 
+                        int $filter = -1, int $show_archived = -1): string {
+    
+    $result = '';
     $search_text = urlencode($search_text);
-    if (!is_null($show_archived)) {
+    if (-1 !== $show_archived) {
         $show_archived = $show_archived ? 1 : 0;
     }
     
     // build query string
     $s = !empty($search_text) ? "s=$search_text&" : '';
     $o = !empty($sort_by) ? "o=$sort_by&" : '';
-    $f = !is_null($filter) ? "f=$filter&" : '';
-    $sa = !is_null($show_archived) ? "sa=$show_archived&" : '';
+    $f = (-1 !== $filter) ? "f=$filter&" : '';
+    $sa = (-1 !== $show_archived) ? "sa=$show_archived&" : '';
     $query = "?$s$o$f$sa";
 
     if($this->total_pages > 1) { 
@@ -129,9 +132,8 @@ class Pagination
           </ul>
         </div>
       </nav>";
-
-      return $result;
      }
+     return $result;
   } // end print()
 }
 

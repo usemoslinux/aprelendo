@@ -23,20 +23,20 @@ namespace Aprelendo\Includes\Classes;
 use Aprelendo\Includes\Classes\DBEntity;
 
 class Statistics extends DBEntity {
-    private $learning_lang_id = 0;
+    private $lang_id = 0;
 
     /**
      * Constructor
      *
      * @param PDO $con 
      * @param int $user_id
-     * @param int $learning_lang_id
+     * @param int $lang_id
      */
-    public function __construct(\PDO $con, int $user_id, int $learning_lang_id) {
+    public function __construct(\PDO $con, int $user_id, int $lang_id) {
         parent::__construct($con, $user_id);
-        $this->learning_lang_id = $learning_lang_id;
+        $this->lang_id = $lang_id;
         $this->table = 'words';
-    }
+    } // end __construct()
 
     /**
      * Returns array with 
@@ -51,7 +51,7 @@ class Statistics extends DBEntity {
         for ($i=$days; $i >= 0; $i--) {
             $sql = "SELECT COUNT(word) AS `created` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `date_created` < CURDATE() - INTERVAL ?-1 DAY AND `date_created` > CURDATE() - INTERVAL ? DAY";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$this->user_id, $this->learning_lang_id, $i, $i]);
+            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
             $row = $stmt->fetch();
             $stats['created'][] = $row['created'];
         }
@@ -60,7 +60,7 @@ class Statistics extends DBEntity {
         for ($i=$days; $i >= 0; $i--) { 
             $sql = "SELECT COUNT(word) AS `modified` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`>0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$this->user_id, $this->learning_lang_id, $i, $i]);
+            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
             $row = $stmt->fetch();
             $stats['modified'][] = $row['modified'];
         }
@@ -69,7 +69,7 @@ class Statistics extends DBEntity {
         for ($i=$days; $i >= 0; $i--) { 
             $sql = "SELECT COUNT(word) AS `learned` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$this->user_id, $this->learning_lang_id, $i, $i]);
+            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
             $row = $stmt->fetch();
             $stats['learned'][] = $row['learned'];
         }
@@ -78,14 +78,13 @@ class Statistics extends DBEntity {
         for ($i=$days; $i >= 0; $i--) { 
             $sql = "SELECT COUNT(word) AS `forgotten` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=2 AND `date_modified`>`date_created` AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$this->user_id, $this->learning_lang_id, $i, $i]);
+            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
             $row = $stmt->fetch();
             $stats['forgotten'][] = $row['forgotten'];
         }
         
         return $stats;
-    }
-
+    } // end get()
 }
 
 ?>

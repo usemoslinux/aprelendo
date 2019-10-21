@@ -33,13 +33,13 @@ class Likes extends DBEntity
      * 
      * Sets 3 basic variables used to identify any text: $con, $user_id & lang_id
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $text_id
      * @param integer $user_id
      * @param integer $lang_id
      * 
      */
-    public function __construct($con, $text_id, $user_id, $lang_id) {
+    public function __construct(\PDO $con, int $text_id, int $user_id, int $lang_id) {
         parent::__construct($con, $user_id);
         $this->text_id = $text_id;
         $this->lang_id = $lang_id;
@@ -49,7 +49,7 @@ class Likes extends DBEntity
     /**
      * Toggles like for a specific text
      *
-     * @return mysqli|boolean
+     * @return boolean
      */
     public function toggle(): bool {
         try {
@@ -61,11 +61,11 @@ class Likes extends DBEntity
             if (count($result) > 0) {
                 $sql = "DELETE FROM `{$this->table}` WHERE `text_id`=? AND `user_id`=?";
                 $stmt = $this->con->prepare($sql);
-                $result = $stmt->execute([$this->text_id, $this->user_id]);
+                $stmt->execute([$this->text_id, $this->user_id]);
             } else {
                 $sql = "INSERT INTO `{$this->table}` (`text_id`, `user_id`, `lang_id`) VALUES (?, ?, ?)";
                 $stmt = $this->con->prepare($sql);
-                $result = $stmt->execute([$this->text_id, $this->user_id, $this->lang_id]);
+                $stmt->execute([$this->text_id, $this->user_id, $this->lang_id]);
             }
 
             return true;

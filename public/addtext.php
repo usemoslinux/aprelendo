@@ -22,6 +22,9 @@ require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
+
+use Aprelendo\Includes\Classes\Texts;
+
 ?>
 
 <div class="container mtb">
@@ -36,35 +39,34 @@ require_once PUBLIC_PATH . 'header.php';
                 </li>
             </ol>
             <?php
-          if (isset($_GET['id'])) { // modify text
-              $id = $_GET['id'];
-              
-              $sql = "SELECT `title`, `author`, `text`, `source_uri` FROM `texts` WHERE `id`=?";
-              $stmt = $con->prepare($sql);
-              $stmt->bind_param("s", $id);
-              $stmt->execute();
-              $result = $stmt->get_result();
-              $row = $result->fetch_assoc();
-              $stmt->close();
-
-              $art_title = $row['title'];
-              $art_author = $row['author'];
-              $art_url = $row['source_uri'];
-              $art_content = $row['text'];
-          } elseif (isset($_POST['art_title'])) { // rss
-              $art_title = $_POST['art_title'];
-              $art_author = $_POST['art_author'];
-              $art_url = $_POST['art_url'];
-              $art_content = $_POST['art_content'];
-              $art_is_shared = $_POST['art_is_shared'];
-          } elseif (isset($_GET['sh'])) { // shared text
-              $art_is_shared = true;  
-          } 
-          elseif (isset($_GET['url'])) { // external call (bookmarklet, addon)
-              $art_url = $_GET['url'];
-              $external_call = true;
-          }
-        ?>
+            if (isset($_GET['id'])) { 
+                // modify text
+                $id = $_GET['id'];
+                
+                $text = new Texts($con, $user->id, $user->lang_id);
+                $row = $text->loadRecord($id);
+                
+                $art_title = $row['title'];
+                $art_author = $row['author'];
+                $art_url = $row['source_uri'];
+                $art_content = $row['text'];
+            } elseif (isset($_POST['art_title'])) { 
+                // rss
+                $art_title = $_POST['art_title'];
+                $art_author = $_POST['art_author'];
+                $art_url = $_POST['art_url'];
+                $art_content = $_POST['art_content'];
+                $art_is_shared = $_POST['art_is_shared'];
+            } elseif (isset($_GET['sh'])) { 
+                // shared text
+                $art_is_shared = true;  
+            } 
+            elseif (isset($_GET['url'])) { 
+                // external call (bookmarklet, addon)
+                $art_url = $_GET['url'];
+                $external_call = true;
+            }
+            ?>
             <div id="alert-msg" class="d-none"></div>
             <form id="form-addtext" data-premium="<?php echo $user->isPremium() ? 1 : 0; ?>" class="add-form"
                 method="post" enctype="multipart/form-data">

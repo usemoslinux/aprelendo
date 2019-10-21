@@ -26,6 +26,7 @@ $(document).ready(function () {
     var translatorURI = "";
     var phase = 1; // first phase of the learning cycle
     var playingaudio = false;
+    var show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
 
     // $doc & $pagereader are used to make this JS code work when showing simple texts & 
     // ebooks (which are displayed inside an iframe)
@@ -253,7 +254,8 @@ $(document).ready(function () {
         $("#gt-link").attr("href", buildTranslateParagraphLink());
 
         // show dictionary
-        var url = dictionaryURI.replace("%s", encodeURIComponent($selword.text()));
+        var search_text = $selword.text().replace(/\r?\n|\r/gm, " ");
+        var url = dictionaryURI.replace("%s", encodeURIComponent(search_text));
 
         $(parent.document).find("#dicFrame")
             .get(0)
@@ -535,7 +537,7 @@ $(document).ready(function () {
         var id = [];
         var word = "";
         var archive_text = true;
-        var is_shared = $("#is_shared").length > 0
+        var is_shared = $("#is_shared").length > 0;
 
         $(".learning").each(function () {
             word = $(this)
@@ -562,6 +564,7 @@ $(document).ready(function () {
                     archivetext: archive_text
                 }
             }).done(function (data) {
+                show_confirmation_dialog = false;
                 var url = '/textstats.php';
                 var total_words = Number($('.word').length) + Number($('.phrase').length);
                 var form = $('<form action="' + url + '" method="post">' +
@@ -791,8 +794,13 @@ $(document).ready(function () {
         }
     });
 
+    /**
+     * Shows confirmation message before closing/unloading tab/window
+     */
     $(window).on("beforeunload", function() {        
-        return "To save your progress, please click the Save button before you go. Otherwise, your changes will be lost. Are you sure you want to exit this page?";
+        if (show_confirmation_dialog) {
+            return "To save your progress, please click the Save button before you go. Otherwise, your changes will be lost. Are you sure you want to exit this page?";    
+        }
     });
 
 });

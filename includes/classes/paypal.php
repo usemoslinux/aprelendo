@@ -26,13 +26,20 @@ class Paypal extends DBEntity
 
     public $url;
 
-    public function __construct($con, $user_id, $enable_sandbox) {
+    /**
+     * Constructor
+     *
+     * @param PDO $con
+     * @param int $user_id
+     * @param boolean $enable_sandbox Paypal sandbox for testing purposes
+     */
+    public function __construct(\PDO $con, int $user_id, bool $enable_sandbox) {
         parent::__construct($con, $user_id);
         $this->url = $enable_sandbox ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
         $this->table = 'payments';
-    }
+    } // end __construct()
 
-    public function verifyTransaction($data) {
+    public function verifyTransaction(array $data): bool {
         $req = 'cmd=_notify-validate';
         foreach ($data as $key => $value) {
             $value = urlencode(stripslashes($value));
@@ -72,63 +79,61 @@ class Paypal extends DBEntity
         curl_close($ch);
     
         return $res === 'VERIFIED';
-    }
+    } // end verifyTransaction()
 
-    public function addPayment($data) {
-        $today = date('Y-m-d H:i:s');
-        // TODO: adjust date interval: 30 days for monthly subscriptions / 365 days for yearly subscriptions
-        $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 30 days'));
+    /**
+     * Adds payment to payment table
+     *
+     * @param array $data Paypal Payment data
+     * @return boolean
+     */
+    public function addPayment(array $data): bool {
+        try {
+            $today = date('Y-m-d H:i:s');
+            // TODO: adjust date interval: 30 days for monthly subscriptions / 365 days for yearly subscriptions
+            $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 30 days'));
 
-        if (!is_array($data)) {
+            if (!is_array($data)) {
+                return false;
+            }
+
+            $sql = "INSERT INTO `{$this->table}` (`user_id`, `txn_id`, `amount`, `status`, `item_id`, `date_created`) 
+                    VALUES(?, ?, ?, ?, ?, ?)";
+            // falta payment_item_id : agregar ? al final tb
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$this->user_id,
+                            $data['txn_id'],
+                            $data['payment_amount'],
+                            $data['payment_status'],
+                            $data['item_number'],
+                            $today]);
+
+            $sql = "UPDATE `users` SET `premium_until`= ? WHERE `user_id` = ?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$premium_until, $this->user_id]);
+                        
+            return true;
+        } catch (\Exception $e) {
             return false;
+        } finally {
+            $stmt = null;
         }
+    } // end addPayment()
 
-        // falta payment_item_id : agregar ? al final tb
-        $stmt = $this->con->prepare('INSERT INTO `{$this->table}` (`user_id`, `txn_id`, `amount`, `status`, `item_id`, `date_created`) VALUES(?, ?, ?, ?, ?, ?)');
-        if (!$stmt) {
-            $error = $this->con->error;
-        }
-        $stmt->bind_param(
-            'ssdsis',
-            $this->user_id,
-            $data['txn_id'],
-            $data['payment_amount'],
-            $data['payment_status'],
-            $data['item_number'],
-            $today
-        );
-
-        if (!$stmt->execute()) {
-            $stmt->close();
-            return false;
-        }
-
-        $stmt = $this->con->prepare('UPDATE `users` SET `premium_until`= ? WHERE `user_id` = ?');
-        $stmt->bind_param(
-            'ss',
-            $premium_until,
-            $this->user_id
-        );
-        $stmt->execute();
-        
-        if (!$stmt->execute()) {
-            $stmt->close();
-            return false;
-        }
-
-        $stmt->close();
-        return true;
-    }
-
-    public function checkTxnid($txn_id) {
-        $sql = "SELECT * FROM `{$this->table}` WHERE `txn_id`=?";
+    /**
+     * Checks if transaction was already added to payments table
+     *
+     * @param int $txn_id Paypal transaction id
+     * @return boolean
+     */
+    public function checkTxnid(int $txn_id): bool {
+        $sql = "SELECT COUNT(*) AS `exists` FROM `{$this->table}` WHERE `txn_id`=?";
         $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $txn_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $stmt->execute([$txn_id]);
+        $row = $stmt->fetch();
         
-        return $result === false || $result->num_rows == 0;
-    }
+        return $row['exists'] == 0;
+    } // end checkTxnid()
 }
 
 

@@ -25,7 +25,7 @@ require_once PUBLIC_PATH . 'header.php';
 
 $search_text = '';
 $filter = -1;
-$filter_sql = '';
+$search_filter = '';
 $show_archived = false;
 $sort_by = 0;
 
@@ -41,7 +41,7 @@ if (!empty($filter)) {
     if ($filter == 10) {
         $show_archived = true;
     } elseif ($filter > -1) {
-        $filter_sql = "AND `type`=$filter";
+        $search_filter = $filter;
     }
 }
 

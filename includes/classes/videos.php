@@ -26,7 +26,7 @@ use Aprelendo\Includes\Classes\DBEntity;
 class Videos extends DBEntity {
     use Curl;
 
-    protected $learning_lang_id;
+    protected $lang_id;
     protected $title;
     protected $author;
     protected $youtube_id;
@@ -36,33 +36,33 @@ class Videos extends DBEntity {
     /**
      * Constructor
      * 
-     * Sets 3 basic variables used to identify videos: $con, $user_id & learning_lang_id
+     * Sets 3 basic variables used to identify videos: $con, $user_id & lang_id
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $user_id
-     * @param integer $learning_lang_id
+     * @param integer $lang_id
      */
-    public function __construct($con, $user_id, $learning_lang_id) {
+    public function __construct(\PDO $con, int $user_id, int $lang_id) {
         parent::__construct($con, $user_id);
         
-        $this->learning_lang_id = $learning_lang_id;
+        $this->lang_id = $lang_id;
         $this->table = 'shared_texts';
     } // end __construct()
 
     /**
      * Fetches video from youtube
      *
-     * @param string $learning_lang ISO representation of the video's language
+     * @param string $lang ISO representation of the video's language
      * @param string $youtube_id YouTube video ID
      * @return string JSON string representation of video's $title, $author and subtitles ($transcript_xml)
      *  
      */
-    public function fetchVideo($learning_lang, $youtube_id) {
+    public function fetchVideo(string $lang, string $youtube_id): string {
         header('Content-Type: application/json');
-        $learning_lang = urlencode($learning_lang);
+        $lang = urlencode($lang);
         $youtube_id = urlencode($youtube_id);
         
-        $transcript_xml = $this->get_url_contents("https://video.google.com/timedtext?lang=$learning_lang&v=$youtube_id");
+        $transcript_xml = $this->get_url_contents("https://video.google.com/timedtext?lang=$lang&v=$youtube_id");
 
         if (!$transcript_xml) {
             throw new \Exception("Oops! There was a problem trying to fetch this video's subtitles.");
@@ -93,12 +93,18 @@ class Videos extends DBEntity {
      * Extract YouTube Id from a given URL
      *
      * @param string $url
-     * @return string|boolean string representation of YT Id or false if $url has wrong format
+     * @return string string representation of YT Id or false if $url has wrong format
      */
-    public function extractYTId($url) {
+    public function extractYTId(string $url): string {
         // check if user copied the url by right-clicking the video (Google's recommended method)
+        $result = '';
+
         if (strpos($url, 'https://youtu.be/') === 0) {
-            return substr($url, 17);
+            $result = substr($url, 17);
+            if ($result === false) {
+                throw new \Exception('Malformed YouTube link');
+            }
+            return $result;
         } else {
             // check if user copied the url directly from the url bar (alternative method)
             $yt_urls = array('https://www.youtube.com/watch',
@@ -114,8 +120,12 @@ class Videos extends DBEntity {
                     foreach ($url_params as $url_param) {
                         if(strpos($url_param, 'v=') === 0) {
                             return substr($url_param, 2);
+                        } else {
+                            throw new \Exception('Malformed YouTube link');
                         }
                     }
+                } else {
+                    throw new \Exception('Malformed YouTube link');
                 }
             }
         }
@@ -125,7 +135,7 @@ class Videos extends DBEntity {
      * Returns record by Id
      *
      * @param integer $id
-     * @return void
+     * @return array|bool
      */
     public function getById(int $id) {
         try {

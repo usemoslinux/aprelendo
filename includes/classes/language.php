@@ -45,7 +45,7 @@ class Language extends DBEntity
      * Constructor
      * Initializes class variables (id, name, etc.)
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $id
      * @param integer $user_id
      */
@@ -55,7 +55,7 @@ class Language extends DBEntity
     } // end __construct()
 
     /**
-     * Loads language record data
+     * Loads Record data in object properties (looks record in db by id)
      *
      * @param integer $id
      * @return array
@@ -107,9 +107,9 @@ class Language extends DBEntity
                     SET `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?, `rss_feed3_uri`=?, `show_freq_words`=? 
                     WHERE `user_id`=? AND `id`=?";
             $stmt = $this->con->prepare($sql);
-            $result = $stmt->execute([$this->dictionary_uri, $this->translator_uri, $this->rss_feed_1_uri, 
-                                      $this->rss_feed_2_uri, $this->rss_feed_3_uri, $this->show_freq_words, $this->user_id, $this->id]);
-            return $result;
+            $stmt->execute([$this->dictionary_uri, $this->translator_uri, $this->rss_feed_1_uri, 
+                            $this->rss_feed_2_uri, $this->rss_feed_3_uri, $this->show_freq_words, $this->user_id, $this->id]);
+            return true;
         } catch (\Exception $e) {
             return false;
         } finally {
@@ -142,11 +142,17 @@ class Language extends DBEntity
         }
     } // end createInitialRecordsForUser()
 
-    public function loadRecordByName(string $learning_lang): bool {
+    /**
+     * Loads Record data in object properties (looks record in db by name)
+     *
+     * @param string $lang
+     * @return boolean
+     */
+    public function loadRecordByName(string $lang): bool {
         try {
             $sql = "SELECT * FROM `{$this->table}` WHERE `user_id`=? AND `name`=?";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$this->user_id, $learning_lang]);
+            $stmt->execute([$this->user_id, $lang]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             $this->id               = $row['id']; 
@@ -173,7 +179,7 @@ class Language extends DBEntity
      * @param string $iso_code
      * @return string
      */
-    public static function getNameFromIso($iso_code) {
+    public static function getNameFromIso(string $iso_code): string {
         return self::$iso_code[$iso_code];
     } // end getNameFromIso()
 
@@ -181,24 +187,24 @@ class Language extends DBEntity
      * Gives index of 639-1 iso codes in Language::$lg_iso_codes array
      *
      * @param string $lang_name
-     * @return string
+     * @return integer
      */
-    public static function getIndex($lang_name) {
-        $keys = array_keys(self::$iso_codes);
-        $count = key_count($keys)-1;
-        for ($i=0; $i < $key_count; $i++) { 
+    public static function getIndex(string $lang_name): int {
+        $keys = array_keys(self::$iso_code);
+        $keys_count = count($keys)-1;
+        for ($i=0; $i < $keys_count; $i++) { 
             if ($keys[$i] == $lang_name) {
                 return $i;
             }
         }
-    }
+    } // end getIndex()
 
     /**
      * Returns complete list of iso codes
      *
      * @return array
      */
-    public static function getIsoCodeArray() {
+    public static function getIsoCodeArray(): array {
         return self::$iso_code;
     } // end getIsoCodeArray()
 
@@ -223,9 +229,9 @@ class Language extends DBEntity
     /**
      * Id getter
      *
-     * @return string
+     * @return integer
      */
-    public function getId() {
+    public function getId(): int {
         return $this->id;
     } // end getId()
 
@@ -234,7 +240,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getName() {
+    public function getName(): string {
         return $this->name;
     } // end getName()
 
@@ -243,7 +249,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getDictionaryUri() {
+    public function getDictionaryUri(): string {
         return $this->dictionary_uri;
     } // end getDictionaryUri()
 
@@ -252,7 +258,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getTranslatorUri() {
+    public function getTranslatorUri(): string {
         return $this->translator_uri;
     } // end getTranslatorUri()
 
@@ -261,7 +267,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getRssFeed1Uri() {
+    public function getRssFeed1Uri(): string {
         return $this->rss_feed_1_uri;
     } // end getRssFeed1Uri()
 
@@ -270,7 +276,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getRssFeed2Uri() {
+    public function getRssFeed2Uri(): string {
         return $this->rss_feed_2_uri;
     } // end getRssFeed2Uri()
 
@@ -279,7 +285,7 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getRssFeed3Uri() {
+    public function getRssFeed3Uri(): string {
         return $this->rss_feed_3_uri;
     } // end getRssFeed3Uri()
 
@@ -288,7 +294,7 @@ class Language extends DBEntity
      *
      * @return bool
      */
-    public function getShowFreqWords() {
+    public function getShowFreqWords(): bool {
         return $this->show_freq_words;
     } // end getShowFreqWords()
 

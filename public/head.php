@@ -25,7 +25,7 @@ $show_pages = array('showtext.php', 'showvideo.php', 'showebook.php');
 $this_is_show_page = in_array($curpage, $show_pages);
 
 if ($this_is_show_page) {
-    $doclang = isset($user->learning_lang) && !empty($user->learning_lang) ? $user->learning_lang : 'en';
+    $doclang = isset($user->lang) && !empty($user->lang) ? $user->lang : 'en';
 } else {
     $doclang = 'en';
 }

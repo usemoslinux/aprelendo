@@ -37,7 +37,7 @@ if ($available_langs) {
         $heading_id = 'heading-' . $lg_iso_code;
         $lgname = ucfirst(Language::getNameFromIso($lg_iso_code));
         
-        $is_active = $lg_id == $user->learning_lang_id ? 'bg-primary text-white' : '';
+        $is_active = $lg_id == $user->lang_id ? 'bg-primary text-white' : '';
         $html .= "<div class='card'>
                     <div class='card-header $is_active' id='$heading_id'>
                         <button class='btn btn-link collapsed' data-toggle='collapse' data-target='#$item_id' aria-expanded='false' aria-controls='$item_id'>
@@ -49,7 +49,7 @@ if ($available_langs) {
         $html .= "<div id='$item_id' class='collapse' aria-labelledby='$lgname' data-parent='#accordion'>
                     <div class='card-body'>";
 
-        if ($lg_id == $user->learning_lang_id) {
+        if ($lg_id == $user->lang_id) {
             $html .= "<button type='button' onclick='location.href=\"languages.php?act=$lg_id\"' class='btn btn-primary disabled'>Set as active</button>
                       <button type='button' onclick='location.href=\"languages.php?chg=$lg_id\"' class='btn btn-secondary'>Edit</button>
                          <span class='message'></span>

@@ -22,7 +22,7 @@ require_once('../includes/dbinit.php'); // connect to database
 require_once(APP_ROOT . 'includes/checklogin.php'); // check if logged in and set $user
 use Aprelendo\Includes\Classes\Language;
 
-$learning_lang_full = ucfirst(Language::getNameFromIso($user->learning_lang));
+$lang_full = ucfirst(Language::getNameFromIso($user->lang));
 ?>
 
     <nav class="navbar navbar-expand-md navbar-light">
@@ -43,16 +43,16 @@ $learning_lang_full = ucfirst(Language::getNameFromIso($user->learning_lang));
                     <li id="language-dropdown" class="nav-item dropdown">
                         <a href="javascript:;" id="language-menu" class="nav-link dropdown-toggle" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img id="img-language-flag" src="/img/flags/<?php echo $user->learning_lang . '.svg';?>"
-                                alt="<?php echo $learning_lang_full; ?> flag">
+                            <img id="img-language-flag" src="/img/flags/<?php echo $user->lang . '.svg';?>"
+                                alt="<?php echo $lang_full; ?> flag">
                             <span id="learning-lang-span">
-                                <?php echo $learning_lang_full; ?>
+                                <?php echo $lang_full; ?>
                             </span>
                             <b class="caret"></b>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="language-menu">
-                            <a class="dropdown-item" href="<?php echo 'languages.php?chg=' . $user->learning_lang_id; ?>">
-                                <?php echo $learning_lang_full; ?> settings</a>
+                            <a class="dropdown-item" href="<?php echo 'languages.php?chg=' . $user->lang_id; ?>">
+                                <?php echo $lang_full; ?> settings</a>
                             <a class="dropdown-item" href="languages.php">Change current language</a>
                         </div>
                     </li>

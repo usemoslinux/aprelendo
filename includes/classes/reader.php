@@ -22,6 +22,7 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Url;
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\WordFrequency;
 use SimpleXMLElement;
 
 class Text 
@@ -39,10 +40,11 @@ class Text
      * Constructor
      * Initializes class variables (id, title, author, etc.)
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $id
+     * @param bool $is_shared
      */
-    public function __construct($con, $id, $is_shared) {
+    public function __construct(\PDO $con, int $id, bool $is_shared) {
         try {
             $this->con = $con;
             $this->is_shared = $is_shared;
@@ -67,17 +69,15 @@ class Text
         } finally {
             $stmt = null;
         }
-    }
+    } // end __construct()
 
     /**
      * Calculates how much time it would take to read $text to a native speaker
      * Returns that estimation
      *
-     * @param string $text
      * @return integer
      */
-    protected function estimatedReadingTime()
-    {
+    protected function estimatedReadingTime(): int {
         $word_count = str_word_count($this->text);
         $reading_time = $word_count / 200;
         $mins = floor($reading_time);
@@ -85,7 +85,7 @@ class Text
         $reading_time = $mins + (($secs < 30) ? 0 : 1);
 
         return $reading_time;
-    }
+    } // end estimatedReadingTime()
 }
 
 class Reader extends Text
@@ -97,7 +97,7 @@ class Reader extends Text
     public $display_mode;
     public $assisted_learning;
     public $show_freq_words;
-    protected $learning_lang_id;
+    protected $lang_id;
     protected $user_id; 
     
     /**
@@ -114,37 +114,37 @@ class Reader extends Text
                 self::createFullReader($argv[0], $argv[1], $argv[2], $argv[3], $argv[4]);
                 break;
          }
-    }
+    } // end __construct()
 
     /**
      * Constructor
      * Used for full reader (whole text document). Used by showtext.php
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $text_id
      * @param integer $user_id
-     * @param integer $learning_lang_id
+     * @param integer $lang_id
      * @return void
      */
-    private function createFullReader($con, $is_shared, $text_id, $user_id, $learning_lang_id) {
+    private function createFullReader($con, $is_shared, $text_id, $user_id, $lang_id) {
         parent::__construct($con, $text_id, $is_shared);
-        $this->createMiniReader($con, $user_id, $learning_lang_id);
-    }
+        $this->createMiniReader($con, $user_id, $lang_id);
+    } // end createFullReader()
 
     /**
      * Constructor
      * Used for mini reader (word/phrase). Used by underlinewords.php
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $user_id
-     * @param integer $learning_lang_id
+     * @param integer $lang_id
      * @return void
      */
-    private function createMiniReader($con, $user_id, $learning_lang_id) {
+    private function createMiniReader(\PDO $con, int $user_id, int $lang_id): void {
         try {
             $this->con = $con;
             $this->user_id = $user_id;
-            $this->learning_lang_id = $learning_lang_id;
+            $this->lang_id = $lang_id;
 
             $sql = "SELECT * FROM `preferences` WHERE `user_id` = ?";
             $stmt = $this->con->prepare($sql);
@@ -160,7 +160,7 @@ class Reader extends Text
             
             $sql = "SELECT `show_freq_words` FROM `languages` WHERE `id`=?";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$learning_lang_id]);
+            $stmt->execute([$lang_id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             $this->show_freq_words = $row['show_freq_words'];
         } catch (\Exception $e) {
@@ -168,7 +168,7 @@ class Reader extends Text
         } finally {
             $stmt = null;
         }
-    }
+    } // end createMiniReader()
 
     /**
     * Makes all words clickable by wrapping them in SPAN tags
@@ -177,15 +177,14 @@ class Reader extends Text
     * @param string $text
     * @return string
     */
-    public function addLinks($text)
+    public function addLinks(string $text): string
     {
         $find = array('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|<[^>]*>(*SKIP)(*F)|(\w+)/iu', '/<[^>]*>(*SKIP)(*F)|[^\w<]+/u');
         
         $replace = array("<span class='word' data-toggle='modal' data-target='#myModal'>$0</span>", "<span>$0</span>");
         
         return preg_replace($find, $replace, $text);
-        // return $text;
-    }
+    } // end addLinks()
     
     /**
     * Underlines words with different colors depending on their status
@@ -195,14 +194,13 @@ class Reader extends Text
     * Also, span creation for the rest of the words and separators is done by AddLinks()
     *
     * @param string $text
-    * @param mysqli_connect $con
+    * @param \PDO $con
     * @return string
     */
-    public function colorizeWords($text)
-    {
+    public function colorizeWords(string $text): string {
         try {
             $user_id = $this->user_id;
-            $learning_lang_id = $this->learning_lang_id;
+            $lang_id = $this->lang_id;
             
             // 1. colorize phrases & words that are being reviewed
             $sql = "SELECT `word` 
@@ -210,7 +208,7 @@ class Reader extends Text
                     WHERE `user_id`=? AND `lang_id`=? AND `status`>0 
                     ORDER BY `is_phrase` ASC";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$user_id, $learning_lang_id]);
+            $stmt->execute([$user_id, $lang_id]);
             
             while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 $phrase = $row['word'];
@@ -224,7 +222,7 @@ class Reader extends Text
                     FROM `words` 
                     WHERE `user_id`=? AND `lang_id`=? AND `status`=0";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$user_id, $learning_lang_id]);
+            $stmt->execute([$user_id, $lang_id]);
 
             while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 $phrase = $row['word'];
@@ -238,7 +236,7 @@ class Reader extends Text
                 if ($user->isLoggedIn() && $user->isPremium()) {
                     $sql = "SELECT `name` FROM languages WHERE `id`=?";
                     $stmt = $this->con->prepare($sql);
-                    $stmt->execute([$this->learning_lang_id]);
+                    $stmt->execute([$this->lang_id]);
 
                     $row = $stmt->fetch(\PDO::FETCH_ASSOC);
                     $freq_table_name = $row['name'];
@@ -272,13 +270,11 @@ class Reader extends Text
     * much more (it's like doing colorizeWords + AddLinks).
     *
     * @param string $text
-    * @param mysqli_connect $con
     * @return string
     */
-    public function colorizeWordsFast($text)
-    {
+    public function colorizeWordsFast(string $text): string {
         $user_id = $this->user_id;
-        $learning_lang_id = $this->learning_lang_id;
+        $lang_id = $this->lang_id;
         
         // divide text in two arrays: words & word separators
         \preg_match_all("/(\w+)/u", $text, $words);
@@ -298,7 +294,7 @@ class Reader extends Text
                     WHERE `user_id`=? AND `lang_id`=?  
                     ORDER BY `is_phrase` ASC";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$user_id, $learning_lang_id]);
+            $stmt->execute([$user_id, $lang_id]);
 
             $dic_words = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -308,18 +304,10 @@ class Reader extends Text
                 if ($user->isLoggedIn() && $user->isPremium()) {
                     $sql = "SELECT `name` FROM `languages` WHERE `id`=?";
                     $stmt = $this->con->prepare($sql);
-                    $stmt->execute([$this->learning_lang_id]);
+                    $stmt->execute([$this->lang_id]);
                     $row = $stmt->fetch(\PDO::FETCH_ASSOC);
                     
-                    $freq_table_name = 'frequency_list_' . $row['name'];
-                    $sql = "SELECT `word`, `frequency_index` 
-                            FROM `$freq_table_name`   
-                            WHERE `frequency_index` < 80";
-                    $result = $this->con->query($sql);
-
-                    if ($result) {
-                        $freq_words = $result->fetchall();
-                    }
+                    $freq_words = WordFrequency::getHighFrequencyList($this->con, $row['name']);
                 }
             }
         } catch (\Exception $e) {
@@ -362,14 +350,14 @@ class Reader extends Text
         }
         
         return implode($html);
-    }
+    } // end colorizeWordsFast()
     
     /**
      * Constructs HTML code to show text in reader
      *
      * @return string
      */
-    public function showText() {
+    public function showText(): string {
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
         // $time_start = microtime(true);
         $html = "<div id='text-container' data-textID='" . $this->id . "'>";
@@ -453,15 +441,16 @@ class Reader extends Text
         
         $html .= '<p></p></div>';
         return $html;
-    }
+    } // end showText()
 
 
     /**
      * Constructs HTML code to show text in reader
      *
+     * @param string $yt_id YouTube Id
      * @return string
      */
-    public function showVideo($yt_id) {
+    public function showVideo(string $yt_id): string {
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
         // $time_start = microtime(true);
 
@@ -496,7 +485,7 @@ class Reader extends Text
         // $html .= '<b>Total Execution Time:</b> ' . $execution_time . ' Secs';
 
         return $html.'<br></div>';
-    }
+    } // end showVideo()
 }
 
 ?>

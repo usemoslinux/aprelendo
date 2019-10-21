@@ -37,12 +37,12 @@ if(isset($_POST['Eea']) && !empty($_POST['Eea']) && !empty($_POST['U3']))
                 FROM `users` 
                 WHERE `email`=?";
         $stmt = $con->prepare($sql);
-        $result = $stmt->execute([$google_email]);
-                
-        $user = new User($con);
-        $row = $result->fetch(\PDO::FETCH_ASSOC);
+        $stmt->execute([$google_email]);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         $user_name = $row['name'];
 
+        $user = new User($con);
+        
         if($user_name !== NULL) {
             // user already exists
             $sql = "UPDATE `users` 

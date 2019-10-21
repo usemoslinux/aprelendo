@@ -37,19 +37,20 @@ class TextTable extends Table {
     * @param string $action_menu HTML to create action menu
     * @param string $sort_menu HTML to create sort menu
     */
-    public function __construct($headings, $col_widths, $rows, $show_archived, $action_menu, $sort_menu) {
+    public function __construct(array $headings, array $col_widths, array $rows, bool $show_archived, 
+                                array $action_menu, array $sort_menu) {
         parent::__construct($headings, $col_widths, $rows, $action_menu, $sort_menu);
         $this->has_chkbox = true;
         $this->is_shared = false;
         $this->show_archived = $show_archived;
-    }
+    } // end __construct()
     
     /**
     * Prints table content (only for Texts table)
     *
     * @return string HTML for table content
     */
-    protected function print_content() {
+    protected function print_content(): string {
         $html = '';
         $type_array = array(
             array('Article',        '<i title="Article" class="far fa-newspaper"></i>'),
@@ -101,8 +102,8 @@ class TextTable extends Table {
             if ($this->has_chkbox) {
                 $html .= "<tr><td class='col-checkbox'><div class='custom-control custom-checkbox'><input id='row-$text_id' class='custom-control-input chkbox-selrow' type='checkbox' data-idText='$text_id'><label class='custom-control-label' for='row-$text_id'></label></div></td>";
             } else {
-                $total_likes = isset($this->rows[$i][9]) ? $this->rows[$i][9] : 0; // get total user likes for this post
-                $user_liked = $this->rows[$i][10] ? 'fas' : 'far'; // check if user liked this post
+                $total_likes = isset($this->rows[$i]['total_likes']) ? $this->rows[$i]['total_likes'] : 0; // get total user likes for this post
+                $user_liked = $this->rows[$i]['user_liked'] ? 'fas' : 'far'; // check if user liked this post
 
                 $html .= "<tr><td class='text-center'><span title='Like'><i class='$user_liked fa-heart' data-idText='$text_id'></i><br><small>$total_likes</small></span></td>";
             }
@@ -111,7 +112,7 @@ class TextTable extends Table {
             $text_title . '</a><br><small>' . $text_author . $shared_by . $text_level . $nr_of_words . '</small></td></tr>';
         }
         return $html;
-    }
+    } // end print_content()
 }
 
 ?>

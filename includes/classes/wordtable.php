@@ -23,6 +23,7 @@ namespace Aprelendo\Includes\Classes;
 use Aprelendo\Includes\Classes\Table;
 
 class WordTable extends Table {
+    
     /**
      * Constructor
      *
@@ -32,7 +33,8 @@ class WordTable extends Table {
      * @param string $action_menu HTML to create action menu
      * @param string $sort_menu HTML to create sort menu
      */
-    public function __construct($headings, $col_widths, $rows, $action_menu, $sort_menu) {
+    public function __construct(array $headings, array $col_widths, array $rows, 
+                                array $action_menu, array $sort_menu) {
         parent::__construct($headings, $col_widths, $rows, $action_menu, $sort_menu);
         $this->has_chkbox = true;
     }
@@ -42,7 +44,7 @@ class WordTable extends Table {
      *
      * @return string HTML for table content
      */
-    protected function print_content() {
+    protected function print_content(): string {
         $html = '';
             
         for ($i=0; $i < sizeof($this->rows); $i++) { 

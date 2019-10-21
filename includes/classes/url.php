@@ -28,7 +28,7 @@ class Url {
      * @param string $url
      * @return string
      */
-    public static function getDomainName($url) { 
+    public static function getDomainName(string $url): string { 
         if (!isset($url) || empty($url)) {
             return '';
         }
@@ -40,7 +40,7 @@ class Url {
         } 
 
         return trim($parseUrl['host'] ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2))); 
-    }
+    } // end getDomainName()
 }
 
 ?>

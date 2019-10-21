@@ -30,13 +30,13 @@ class PopularSources extends DBEntity {
      * 
      * Sets basic variables
      *
-     * @param mysqli_connect $con
+     * @param PDO $con
      * @return void
      */
-    public function __construct($con) {
+    public function __construct(\PDO $con) {
         $this->con = $con;
         $this->table = 'popular_sources';
-    }
+    } // end __construct()
 
     /**
      * Adds a new domain to the database
@@ -45,30 +45,34 @@ class PopularSources extends DBEntity {
      * @param string $domain
      * @return boolean
      */
-    public function add($lg_iso, $domain) {
-        $invalid_sources = array('feedproxy.google.com',
-                                 'www.youtube.com',
-                                 'm.youtube.com',
-                                 'youtu.be');
+    public function add(string $lg_iso, string $domain): bool {
+        try {
+            $invalid_sources = array('feedproxy.google.com',
+                                     'www.youtube.com',
+                                     'm.youtube.com',
+                                     'youtu.be');
 
-        if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain))  {
-            return true; // end execution
+            if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain))  {
+                return true; // end execution
+            }
+
+            $domain = strtolower($domain);
+            // if text belongs to an invalid source or is an ebook, avoid adding it to popular_sources table
+            if (in_array($domain, $invalid_sources) || pathinfo($domain, PATHINFO_EXTENSION) === '.epub') {
+                return true; // end execution
+            }
+
+            $sql = "INSERT INTO `{$this->table}` (`lang_iso`, `times_used`, `domain`) VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$lg_iso, $domain]);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
         }
-
-        $domain = strtolower($domain);
-        // if text belongs to an invalid source or is an ebook, avoid adding it to popular_sources table
-        if (in_array($domain, $invalid_sources) || pathinfo($domain, PATHINFO_EXTENSION) === '.epub') {
-            return true; // end execution
-        }
-
-        $sql = "INSERT INTO `{$this->table}` (`lang_iso`, `times_used`, `domain`) VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("ss", $lg_iso, $domain);
-        $result = $stmt->execute();
-        $stmt->close();
-
-        return $result;
-    }
+    } // end add()
 
     /**
      * Updates existing domain in database
@@ -77,50 +81,53 @@ class PopularSources extends DBEntity {
      * @param string $domain
      * @return boolean
      */
-    public function update($lg_iso, $domain) {
-        if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain))  {
-            return true; // end execution
-        }
-
-        $sql = "DELETE FROM `{$this->table}` WHERE `lang_iso`=? AND `domain`=? AND `times_used` = 1";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("ss", $lg_iso, $domain);
-        $result = $stmt->execute();
-                
-        if ($stmt->affected_rows <= 0) {
-            $sql = "UPDATE `{$this->table}` SET `times_used`=`times_used` - 1 WHERE `lang_iso`=? AND `domain`=?";
+    public function update(string $lg_iso, string $domain): bool {
+        try {
+            if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain))  {
+                return true; // end execution
+            }
+    
+            $sql = "DELETE FROM `{$this->table}` WHERE `lang_iso`=? AND `domain`=? AND `times_used` = 1";
             $stmt = $this->con->prepare($sql);
-            $stmt->bind_param("ss", $lg_iso, $domain);
-            $result = $stmt->execute();
-        }
-        
-        $stmt->close();
+            $stmt->execute([$lg_iso, $domain]);
+                    
+            if ($stmt->rowCount() <= 0) {
+                $sql = "UPDATE `{$this->table}` SET `times_used`=`times_used` - 1 WHERE `lang_iso`=? AND `domain`=?";
+                $stmt = $this->con->prepare($sql);
+                $stmt->execute([$lg_iso, $domain]);
+            }
 
-        return $result;
-    }
+            return true;        
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end update()
 
     /**
      * Get all rows for a given language
      *
      * @param string $lg_iso
-     * @return array
+     * @return array|bool
      */
-    public function getAllByLang($lg_iso) {
-        // escape parameters
-        $lg_iso = $this->con->real_escape_string($lg_iso);
-        
-        if (!isset($lg_iso) || empty($lg_iso))  {
-            return false; // return error
-        }
+    public function getAllByLang(string $lg_iso) {
+        try {
+            if (!isset($lg_iso) || empty($lg_iso))  {
+                return false; // return error
+            }
 
-        $sql = "SELECT * FROM `{$this->table}` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT 50";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $lg_iso);
-        $stmt->execute();
-        $result = $stmt->get_result();
-                
-        return $result ? $result->fetch_all(MYSQLI_ASSOC) : false;
-    }
+            $sql = "SELECT * FROM `{$this->table}` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT 50";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$lg_iso]);
+                    
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end getAllByLang()
 }
 
 ?>

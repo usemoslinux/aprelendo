@@ -5,10 +5,10 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 use Aprelendo\Includes\Classes\RSSFeeds;
 
 $user_id = $user->id;
-$learning_lang_id = $user->learning_lang_id;
+$lang_id = $user->lang_id;
 
 try {
-    $rssfeeds = new RSSFeeds($con, $user_id, $learning_lang_id);
+    $rssfeeds = new RSSFeeds($con, $user_id, $lang_id);
 
     $RSS1notempty = !empty($rssfeeds->feed1->url);
     $RSS2notempty = !empty($rssfeeds->feed2->url);

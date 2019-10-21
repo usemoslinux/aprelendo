@@ -39,34 +39,35 @@ abstract class Table
      * @param string $action_menu HTML to create action menu
      * @param string $sort_menu HTML to create sort menu
      */
-    public function __construct($headings, $col_widths, $rows, $action_menu, $sort_menu) {
+    public function __construct(array $headings, array $col_widths, array $rows, 
+                                array $action_menu, array $sort_menu) {
         $this->headings = $headings;
         $this->col_count = sizeof($headings);
         $this->col_widths = $col_widths;
         $this->rows = $rows;
         $this->action_menu = $action_menu;
         $this->sort_menu = $sort_menu;
-    }
+    } // end __construct()
 
     /**
      * Prints table
      *
      * @param integer $sort_by
-     * @return void
+     * @return string 
      */
-    public function print($sort_by) {
+    public function print(int $sort_by): string {
         $html = $this->print_header();
         $html .= $this->print_content();
         $html .= $this->print_footer($sort_by);
         return $html;
-    }
+    } // end print()
 
     /**
      * Prints table header
      *
      * @return string HTML for table header
      */
-    protected function print_header() {
+    protected function print_header(): string {
         $html = '<div class="row">
             <div class="col-sm-12">
             <table id="textstable" class="table table-hover">
@@ -95,7 +96,7 @@ abstract class Table
         $html .= '</tr></thead><tbody>';
 
         return $html;
-    }
+    } // end print_header()
 
     /**
      * Prints table footer
@@ -103,7 +104,7 @@ abstract class Table
      * @param integer $sort_by
      * @return string HTML for table footer
      */
-    protected function print_footer($sort_by) {
+    protected function print_footer(int $sort_by): string {
         $html = '</tbody></table><div class="row"><div class="col-sm-12">';
 
         if (!empty($this->action_menu)) {
@@ -133,7 +134,7 @@ abstract class Table
         $html .= '</div></div></div></div></div></div>';
 
         return $html;
-    }
+    } // end print_footer()
 
     abstract protected function print_content();
 }

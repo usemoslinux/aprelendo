@@ -102,13 +102,13 @@ use Aprelendo\Includes\Classes\Language;
                         <div class="form-group">
                             <label for="to_lang">Active learning language:</label>
                             <select name="to_lang" class="form-control custom-select" id="to_lang">
-                                <?php $learning_lang_index = Language::getIndex($user->learning_lang); ?>
-                                <option value="en" <?php echo $learning_lang_index==0 ? ' selected ' : '' ; ?>>English</option>
-                                <option value="es" <?php echo $learning_lang_index==1 ? ' selected ' : '' ; ?>>Spanish</option>
-                                <option value="pt" <?php echo $learning_lang_index==2 ? ' selected ' : '' ; ?>>Portuguese</option>
-                                <option value="fr" <?php echo $learning_lang_index==3 ? ' selected ' : '' ; ?>>French</option>
-                                <option value="it" <?php echo $learning_lang_index==4 ? ' selected ' : '' ; ?>>Italian</option>
-                                <option value="de" <?php echo $learning_lang_index==5 ? ' selected ' : '' ; ?>>German</option>
+                                <?php $lang_index = Language::getIndex($user->lang); ?>
+                                <option value="en" <?php echo $lang_index==0 ? ' selected ' : '' ; ?>>English</option>
+                                <option value="es" <?php echo $lang_index==1 ? ' selected ' : '' ; ?>>Spanish</option>
+                                <option value="pt" <?php echo $lang_index==2 ? ' selected ' : '' ; ?>>Portuguese</option>
+                                <option value="fr" <?php echo $lang_index==3 ? ' selected ' : '' ; ?>>French</option>
+                                <option value="it" <?php echo $lang_index==4 ? ' selected ' : '' ; ?>>Italian</option>
+                                <option value="de" <?php echo $lang_index==5 ? ' selected ' : '' ; ?>>German</option>
                             </select>
                         </div>
                     </div>

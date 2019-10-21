@@ -39,7 +39,7 @@ class Preferences extends DBEntity {
     public function __construct(\PDO $con, int $user_id) {
         parent::__construct($con, $user_id);
         $this->table = 'preferences';
-    }
+    } // end __construct()
 
     /**
      * Saves user preferences
@@ -72,7 +72,7 @@ class Preferences extends DBEntity {
         } finally {
             $stmt = null;
         }
-    }
+    } // end edit()
 }
 
 ?>

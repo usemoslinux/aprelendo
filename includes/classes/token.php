@@ -21,17 +21,34 @@
 namespace Aprelendo\Includes\Classes;
 
 class Token extends DBEntity {
-    public function __construct($con, $user_id) {
+    /**
+     * Constructor
+     *
+     * @param \PDO $con
+     * @param integer $user_id
+     */
+    public function __construct(\PDO $con, int $user_id) {
         $this->con = $con;
         $this->user_id = $user_id;
         $this->table = 'auth_tokens';
-    }
+    } // end __construct()
 
-    private function deleteOld() {
-        return $this->con->query("DELETE FROM `{$this->table}` WHERE `expires` < NOW()");
-    }
+    /**
+     * Deletes old tokens from db
+     *
+     * @return \PDO
+     */
+    private function deleteOld(): void {
+        $this->con->query("DELETE FROM `{$this->table}` WHERE `expires` < NOW()");
+    } // end deleteOld()
 
-    private function alreadyExists($user_id) {
+    /**
+     * Checks if token already exists in db
+     *
+     * @param integer $user_id
+     * @return array
+     */
+    private function alreadyExists(int $user_id): array {
         $sql = "SELECT `token`, `expires`
                 FROM `{$this->table}`
                 WHERE `user_id`=? AND `expires` >= NOW()
@@ -56,9 +73,11 @@ class Token extends DBEntity {
     } // end generateToken()
 
     /**
-     * Add token to the auth_token table
+     * Adds token to db
+     *
+     * @return boolean
      */
-    public function add() {
+    public function add(): bool {
         $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : "";
         $user_id = $this->user_id;
 

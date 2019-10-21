@@ -131,9 +131,9 @@ class File
     
     /**
      * Gets file
-     * @return int
+     * @return string
      */
-    public function get(): int {
+    public function get(): string {
         // make sure it exists
         if(!$file = realpath($this->folder . $this->name))
             return $this->error(404);

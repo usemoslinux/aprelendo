@@ -24,7 +24,13 @@ use PDO;
 
 class Connect 
 {
-    private $type, $host, $user, $password, $db, $charset;
+    private $type;
+    private $host;
+    private $user;
+    private $password;
+    private $db;
+    private $charset;
+    private $options;
     
     /**
      * Constructor
@@ -45,14 +51,14 @@ class Connect
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, //turn on errors in the form of exceptions
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, //make the default fetch be an associative array
         ];
-    }
+    } // end __construct()
 
     /**
      * Connects to database using parameters passed to the constructor
      *
-     * @return mysqli_connect
+     * @return PDO
      */
-    public function connect() {
+    public function connect(): \PDO {
         
         try {
             $dsn = $this->driver . ':host=' . $this->host . ';dbname=' . $this->db . ';charset=' . $this->charset;

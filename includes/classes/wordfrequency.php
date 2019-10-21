@@ -23,20 +23,8 @@ namespace Aprelendo\Includes\Classes;
 use Aprelendo\Includes\Classes\Connect;
 use Aprelendo\Includes\Classes\DBEntity;
 
-class WordFrequency extends DBEntity {
+class WordFrequency {
     
-    /**
-     * Constructor
-     * 
-     * Sets 3 basic variables used to identify any text: $con, $user_id & learning_lang_id
-     *
-     * @param mysqli_connect $con
-     * @param integer $user_id
-     */
-    public function __construct($con, $user_id) {
-        parent::__construct($con, $user_id);
-    }
-
     /** 
      * Gets word frequency
      * The number stored in frequency_index column is the result of processing all the subtitles available in opensubtitles (2018)
@@ -49,25 +37,56 @@ class WordFrequency extends DBEntity {
      * 
      * @param string $word
      * @param string $lg_iso
+     * @return int|bool
      */
-    public function get($word = '', $lg_iso = '') {
-        $this->table = 'frequency_list_' . $lg_iso;
-        $word = mb_strtolower($word, "UTF-8");
+    public static function get(\PDO $con, string $word, string $lg_iso) {
+        try {
+            $table = 'frequency_list_' . $lg_iso;
+            $word = mb_strtolower($word, "UTF-8");
 
-        $sql = "SELECT * FROM {$this->table} WHERE word=?";
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $word);
-        $stmt->execute();
-        $result = $stmt->get_result();
+            $sql = "SELECT COUNT(*) AS `exists` FROM {$table} WHERE word=?";
+            $stmt = $con->prepare($sql);
+            $stmt->execute([$word]);
+            $row = $stmt->fetch();
 
-        if ($result && $result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            $word_freq = $row['frequency_index'];
-            return $word_freq;
-        } else {
-            return 0;
+            if ($row && $row['exists'] > 0) {
+                $sql = "SELECT * FROM {$table} WHERE word=?";
+                $stmt = $con->prepare($sql);
+                $stmt->execute([$word]);
+                $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+                $word_freq = $row['frequency_index'];
+                return $word_freq;
+            } else {
+                return 0;
+            }
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
         }
-    }
+    } // end get()
+
+    /**
+     * Gets High Frequency List for language
+     *
+     * @param string $lg_iso
+     * @return array|bool
+     */
+    public static function getHighFrequencyList(\PDO $con, string $lg_iso) {
+        try {
+            $table = 'frequency_list_' . $lg_iso;
+            $sql = "SELECT `word`, `frequency_index` 
+                    FROM `$table`   
+                    WHERE `frequency_index` < 80";
+            $stmt = $con->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end getHighFrequencyList()
 }
 
 

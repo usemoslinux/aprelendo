@@ -26,10 +26,11 @@ trait Curl
     // private static $proxy = '';
 
     /**
-     * Get file contents using curl
+     * Gets file contents using curl
      * @param string $url
+     * @return string
      */
-    public static function get_url_contents ($url) {
+    public static function get_url_contents(string $url): string {
         $ch = curl_init();
         $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'https://www.aprelendo.com';
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -46,5 +47,5 @@ trait Curl
         curl_close($ch); 
 
         return $result ? $result : '';
-    }
+    } // end get_url_contents()
 }

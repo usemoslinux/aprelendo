@@ -21,6 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\RSSFeed;
+use Aprelendo\Includes\Classes\Language;
 
 class RSSFeeds
 {
@@ -31,17 +32,17 @@ class RSSFeeds
     /**
      * Constructor
      * 
-     * Sets 3 basic variables used to identify feeds: $con, $user_id & learning_lang_id
+     * Sets 3 basic variables used to identify feeds: $con, $user_id & lang_id
      * 
      * Gets up to 3 rss feeds for that user & language combination
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $user_id
-     * @param integer $learning_lang_id
+     * @param integer $lang_id
      */
-    public function __construct($con, $user_id, $learning_lang_id) {
+    public function __construct(\PDO $con, int $user_id, int $lang_id) {
         $lang = new Language($con, $user_id);
-        $result = $lang->loadRecord($learning_lang_id);
+        $result = $lang->loadRecord($lang_id);
 
         if ($result) {
             $feed1uri = $lang->getRssFeed1Uri();
@@ -54,9 +55,7 @@ class RSSFeeds
         } else {
             throw new \Exception ('Oops! There was an unexpected error trying to get your RSS feeds.');
         }
-
-        $stmt->close();
-    }
+    } // end __construct()
 }
 
 

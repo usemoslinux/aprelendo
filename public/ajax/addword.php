@@ -30,14 +30,14 @@ use Aprelendo\Includes\Classes\Words;
 
 if (isset($_POST['word'])) {    
     $user_id = $user->id;
-    $learning_lang_id = $user->learning_lang_id;
+    $lang_id = $user->lang_id;
     
     $word = $_POST['word'];
     $status = 2;
     $isphrase = $_POST['isphrase'];
     
     try {
-        $words_table = new Words($con, $user_id, $learning_lang_id);
+        $words_table = new Words($con, $user_id, $lang_id);
         $result = $words_table->add($word, $status, $isphrase);
 
         if (!$result) {

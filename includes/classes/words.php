@@ -38,7 +38,7 @@ class Words extends DBEntity {
      * 
      * Sets 3 basic variables used to identify any text: $con, $user_id & lang_id
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $user_id
      * @param integer $lang_id
      */
@@ -125,13 +125,14 @@ class Words extends DBEntity {
      * @param string $ids JSON that identifies the texts to be deleted
      * @return boolean
      */
-    public function delete(string $ids) {
+    public function delete(string $ids): bool {
         try {
-            $cs_ids = Conversion::JSONtoCSV($ids);
+            $ids_array = json_decode($ids);
+            $id_params = str_repeat("?,", count($ids_array)-1) . "?";
 
-            $sql = "DELETE FROM `{$this->table}` WHERE `id` IN (?)";
+            $sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute(array($cs_ids));
+            $stmt->execute($ids_array);
             return true;
         } catch (\Exception $e) {
             return false;

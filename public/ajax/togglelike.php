@@ -30,7 +30,7 @@ use Aprelendo\Includes\Classes\Likes;
 
 try {
     if ($_POST['id']) {
-        $like = new Likes($con, $_POST['id'], $user->id, $user->learning_lang_id);
+        $like = new Likes($con, $_POST['id'], $user->id, $user->lang_id);
         $result = $like->toggle();
         if (!$result) {
             throw new \Exception('Oops! There was a problem trying to give a like to that text.');

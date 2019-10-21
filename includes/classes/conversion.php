@@ -27,9 +27,9 @@ class Conversion {
      * @param string $json in JSON format
      * @return string in CSV format
      */
-    public static function JSONtoCSV($json) {
+    public static function JSONtoCSV(string $json) {
         return implode(',', json_decode($json));
-    }
+    } // end JSONtoCSV()
 
     /**
      * Converts Array to CSV
@@ -37,22 +37,28 @@ class Conversion {
      * @param array 
      * @return string in CSV format
      */
-    public static function ArraytoCSV($array) {
+    public static function ArraytoCSV(array $array): string {
         if (is_array($array)) {
             return "'" . implode("','",$array) . "'";
         } else {
             return "'$array'";
         }
-    }
+    } // end ArraytoCSV()
 
-    public static function XMLtoArray($xmlObject)
+    /**
+     * Converts XML string to Array
+     *
+     * @param string $xmlObject
+     * @return array
+     */
+    public static function XMLtoArray(string $xmlObject): array
     {
         $out = array ();
         foreach ( (array)$xmlObject as $index => $node ) {
             $out[$index] = ( is_object ( $node ) ) ? XMLtoArray ( $node ) : $node;
         }
         return $out;
-    }
+    } // end XMLtoArray()
 
 }
 

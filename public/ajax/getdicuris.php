@@ -21,10 +21,12 @@
 require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
-$lang = new Language($con, $user->id);
-$result = $lang->loadRecord($user->learning_lang_id);
+use Aprelendo\Includes\Classes\Language;
 
-$filtered_result['dictionary_uri'] = $result['dictionary_uri']; 
-$filtered_result['translator_uri'] = $result['translator_uri'];
+$lang = new Language($con, $user->id);
+$result = $lang->loadRecord($user->lang_id);
+
+$filtered_result['dictionary_uri'] = $lang->getDictionaryUri();
+$filtered_result['translator_uri'] = $lang->getTranslatorUri();
 
 echo json_encode($filtered_result);

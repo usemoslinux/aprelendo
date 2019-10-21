@@ -34,13 +34,13 @@ try {
         $text_ids = $_POST['textIDs'];
         $is_archived = $_POST['is_archived'];
         $user_id = $user->id;
-        $learning_lang_id = $user->learning_lang_id;
+        $lang_id = $user->lang_id;
     
         // decide wether we are deleting an archived text or not
         if ($is_archived) {
-            $texts_table = new ArchivedTexts($con, $user_id, $learning_lang_id);
+            $texts_table = new ArchivedTexts($con, $user_id, $lang_id);
         } else {
-            $texts_table = new Texts($con, $user_id, $learning_lang_id);
+            $texts_table = new Texts($con, $user_id, $lang_id);
         }
     
         $result = $texts_table->delete($text_ids);

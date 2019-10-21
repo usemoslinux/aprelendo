@@ -28,14 +28,14 @@ class ArchivedTexts extends Texts
     /**
      * Constructor
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $user_id
-     * @param integer $learning_lang_id
+     * @param integer $lang_id
      */
-    public function __construct($con, $user_id, $learning_lang_id) {
-        parent::__construct($con, $user_id, $learning_lang_id);
+    public function __construct(\PDO $con, int $user_id, int $lang_id) {
+        parent::__construct($con, $user_id, $lang_id);
         $this->table = 'archived_texts';
-    }
+    } // end __construct()
 
     /**
      * Unarchives text by using their $ids
@@ -43,23 +43,29 @@ class ArchivedTexts extends Texts
      * @param string $ids JSON with text ids to unarchive
      * @return boolean
      */
-    public function unarchive($ids) {
-        $cs_ids = $this->con->real_escape_string(Conversion::JSONtoCSV($ids));
+    public function unarchive(string $ids): bool {
+        try {
+            $ids_array = json_decode($ids);
+            $id_params = str_repeat("?,", count($ids_array)-1) . "?";
 
-        $insertsql = "INSERT INTO `texts` 
-                      SELECT *
-                      FROM `{$this->table}` 
-                      WHERE `id` IN ($cs_ids)";
-        
-        $deletesql = "DELETE FROM `{$this->table}` WHERE `id` IN ($cs_ids)";
-        
-        $result = $this->con->query($insertsql);
-
-        if ($result) {
-            $result = $this->con->query($deletesql);
+            $insert_sql = "INSERT INTO `texts` 
+                           SELECT *
+                           FROM `{$this->table}` 
+                           WHERE `id` IN ($id_params)";
+            
+            $stmt = $this->con->prepare($insert_sql);
+            $stmt->execute($ids_array);
+            
+            $delete_sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
+            $stmt = $this->con->prepare($delete_sql);
+            $stmt->execute($ids_array);
+            
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
         }
-        
-        return $result;
     }
 } // end unarchive()
 

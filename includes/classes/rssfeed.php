@@ -34,12 +34,12 @@ class RSSFeed
      *
      * @param string $url
      */
-    public function __construct($url) {
+    public function __construct(string $url) {
         if (!empty($url)) {
             $this->url = $url;
             $this->fetchXMLFeed($url);
         }
-    }
+    } // end __construct()
 
     /**
     * Get RSS feed elements and initialize class variables
@@ -47,7 +47,7 @@ class RSSFeed
     * @param string $url Url of the feed to parse
     * @return string
     */
-    public function fetchXMLFeed($url) {
+    public function fetchXMLFeed(string $url): string {
         $this->xmlfeed = $this->get_url_contents($url);
         
         if ($this->xmlfeed) {
@@ -89,7 +89,7 @@ class RSSFeed
         }
             
         return true;
-    }
+    } // end fetchXMLFeed()
 }
 
 ?>

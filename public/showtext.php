@@ -31,12 +31,12 @@ try {
     if (isset($_GET['id']) && !empty($_GET['id'])) {
         // check if user has access to view this text
         $table = isset($_GET['sh']) && $_GET['sh'] != 0 ? 'shared_texts' : 'texts';
-        if (!$user->isAllowedToAccessElement($table, $_GET['id'])) {
+        if (!$user->isAllowedToAccessElement($table, (int)$_GET['id'])) {
             throw new \Exception ('User is not authorized to access this file.');
         }
 
         $is_shared = $table == 'shared_texts' ? true : false;
-        $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->learning_lang_id);
+        $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->lang_id);
         
         switch ($reader->display_mode) {
             case 'light':
@@ -57,7 +57,7 @@ try {
         
         echo " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
-        throw new \Exception ('>Oops! There was an error trying to fetch that text.');
+        throw new \Exception ('Oops! There was an error trying to fetch that text.');
     }
 } catch (Exception $e) {
     header('Location:/login.php');

@@ -25,53 +25,52 @@ class Log extends DBEntity
     /**
      * Constructor
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $user_id
      */
-    public function __construct($con, $user_id) {
+    public function __construct(\PDO $con, int $user_id) {
         parent::__construct($con, $user_id);
-    }
+    } // end __construct()
 
     /**
      * Gets today's records for the current user in the log table
      *
-     * @return array if successful or NULL if unsuccessful
+     * @return array|bool
      */
     public function getTodayRecords() {
-        $user_id = $this->con->real_escape_string($this->user_id);
-
         $sql = "SELECT `date_created` 
                 FROM `{$this->table}` 
                 WHERE `user_id` = ? 
                 AND DATE(`date_created`) = CURDATE()";
 
         $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("s", $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $stmt->execute([$user_id]);
                 
-        return $result ? $result->fetch_all() : false;
-    }
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    } // end getTodayRecords()
 
     /**
      * Adds log record for current user
      *
-     * @return mysqli_result if successful, FALSE if unsuccessful
+     * @return bool
      */
-    public function addRecord() {
-        $user_id = $this->con->real_escape_string($this->user_id);
-        $table = $this->con->real_escape_string($this->table);
-        $today = date("Y-m-d H:i:s");
+    public function addRecord(): bool {
+        try {
+            $today = date("Y-m-d H:i:s");
 
-        $sql = "INSERT INTO `$table` (`user_id`, `date_created`) 
-                VALUES (?, ?)";
+            $sql = "INSERT INTO `{$this->table}` (`user_id`, `date_created`) 
+                    VALUES (?, ?)";
 
-        $stmt = $this->con->prepare($sql);
-        $stmt->bind_param("ss", $user_id, $today);
-        $result = $stmt->execute();
-                
-        return $result;
-    }
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$user_id, $today]);
+                    
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end addRecord()
 
     // public function remove();
     // public function purge_old();

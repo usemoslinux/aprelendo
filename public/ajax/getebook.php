@@ -22,6 +22,7 @@ require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\EbookFile;
 
 // only premium users are allowed to visit this page
@@ -30,18 +31,13 @@ if (!$user->isPremium()) {
 }
 
 $user_id = $user->id;
-$learning_lang_id = $user->learning_lang_id;
-$id = $con->real_escape_string($_GET['id']);
+$lang_id = $user->lang_id;
+$id = $_GET['id'];
 
 try {
-    $sql = "SELECT `source_uri` FROM `texts` WHERE `id`=? AND `user_id`=? AND `lang_id` = ?";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param("sss", $id, $user_id, $learning_lang_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $text = new Texts($con, $user_id, $lang_id);
     
-    if ($result) {
-        $row = $result->fetch_assoc();
+    if ($row = $text->loadRecord($id)) {
         $file_name = $row['source_uri'];
         $ebook_file = new EbookFile($file_name, $user->isPremium());
         $ebook_content = $ebook_file->get();
@@ -53,8 +49,6 @@ try {
     } else {
         throw new \Exception (404);
     }
-    
-    $stmt->close();
 } catch (Exception $e) {
     http_response_code($e->getMessage());
 }

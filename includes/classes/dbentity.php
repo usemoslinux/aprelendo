@@ -28,13 +28,13 @@ class DBEntity {
     /**
      * Constructor
      *
-     * @param mysqli_connect $con
+     * @param \PDO $con
      * @param integer $user_id
      */
-    public function __construct($con, $user_id) {
+    public function __construct(\PDO $con, int $user_id) {
         $this->con = $con;
         $this->user_id = $user_id;
-    }
+    } // end __construct()
 }
 
 ?>

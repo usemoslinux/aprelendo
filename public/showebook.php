@@ -48,12 +48,12 @@ $styles = [];
 try {
     if (isset($_GET['id']) && !empty($_GET['id'])) {
         // check if user has access to view this text
-        if (!$user->isAllowedToAccessElement('texts', $_GET['id'])) {
+        if (!$user->isAllowedToAccessElement('texts', (int)$_GET['id'])) {
             throw new \Exception ('User is not authorized to access this file.');
         }
 
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
-        $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->learning_lang_id);
+        $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->lang_id);
         $result = '';
         
         switch ($reader->display_mode) {

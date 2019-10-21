@@ -21,34 +21,164 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\File;
-use Aprelendo\Includes\Classes\Languages;
+use Aprelendo\Includes\Classes\Language;
 
 class User 
 {
     use Curl;
 
-    public $id;
-    public $name;
-    public $email;
-    public $learning_lang;
-    public $learning_lang_id;
-    public $native_lang;
+    public $id = 0;
+    public $name = '';
+    public $password_hash = '';
+    public $email = '';
+    public $lang = '';
+    public $lang_id = 0;
+    public $native_lang = '';
     public $premium_until;
-    public $activation_hash;
-    public $active;
-    public $error_msg;
+    public $activation_hash = '';
+    public $active = false;
     
-    private $con;   
+    public $error_msg = '';
+    
+    private $con;
     
     /**
      * Constructor
      * 
-     * @param mysqli_connect $con
+     * @param \PDO $con
      */
-    public function __construct ($con) {
+    public function __construct (\PDO $con) {
         $this->con = $con;
         $this->table = 'users';
     } // end __construct()
+
+    /**
+     * Loads user record data
+     *
+     * @param integer $id
+     * @return array|bool
+     */
+    public function loadRecord(int $id): bool {
+        try {
+            $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$id]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            $this->id              = $row['id']; 
+            $this->name            = $row['name']; 
+            $this->password_hash   = $row['password_hash']; 
+            $this->email           = $row['email'];
+            $this->native_lang     = $row['native_lang_iso']; 
+            $this->lang            = $row['learning_lang_iso']; 
+            $this->premium_until   = $row['premium_until'];
+            $this->activation_hash = $row['activation_hash'];
+            $this->is_active       = $row['is_active'];
+            $this->google_id       = $row['google_id'];
+            
+            return $row ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end loadRecord()
+
+    /**
+     * Loads user record data by email
+     *
+     * @param string $email
+     * @return array|bool
+     */
+    public function loadRecordByEmail(string $email): bool {
+        try {
+            $sql = "SELECT * FROM `{$this->table}` WHERE `email`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$email]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            $this->id              = $row['id']; 
+            $this->name            = $row['name']; 
+            $this->password_hash   = $row['password_hash']; 
+            $this->email           = $row['email'];
+            $this->native_lang     = $row['native_lang_iso']; 
+            $this->lang            = $row['learning_lang_iso']; 
+            $this->premium_until   = $row['premium_until'];
+            $this->activation_hash = $row['activation_hash'];
+            $this->is_active       = $row['is_active'];
+            $this->google_id       = $row['google_id'];
+            
+            return $row ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end loadRecordByEmail()
+
+    /**
+     * Checks if user exists
+     *
+     * @param string $name
+     * @return array|bool
+     */
+    public function existsByName(string $name): bool {
+        try {
+            $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `name`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$username]);
+            $num_rows = $stmt->fetchColumn();
+           
+            return ($num_rows) && ($num_rows > 0) ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end existsByName()
+
+    /**
+     * Checks if email exists
+     *
+     * @param string $email
+     * @return array|bool
+     */
+    public function existsByEmail(string $email): bool {
+        try {
+            $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `email`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$email]);
+            $num_rows = $stmt->fetchColumn();
+           
+            return ($num_rows) && ($num_rows > 0) ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end existsByEmail()
+
+    /**
+     * Checks if user exists, by name and password
+     *
+     * @param string $name
+     * @param string $password_hash
+     * @return array|bool
+     */
+    public function existsByNameAndPasswordHash(string $name, string $password_hash): bool {
+        try {
+            $sql = "SELECT COUNT(*) AS `exists` FROM `users` WHERE `name`=? AND `password_hash`=?";
+            $stmt = $con->prepare($sql);
+            $stmt->execute([$name, $password_hash]);
+            $num_rows = $stmt->fetchColumn();
+           
+            return ($num_rows) && ($num_rows > 0) ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end existsByName()
     
     /**
      * Creates new user & associated languages and reader preferences
@@ -57,34 +187,24 @@ class User
      * @param string $email
      * @param string $password
      * @param string $native_lang
-     * @param string $learning_lang
+     * @param string $lang
      * @return boolean
      */
-    public function register($username, $email, $password, $native_lang = 'en', $learning_lang = 'en', $send_email = false) {
+    public function register($username, $email, $password, $native_lang = 'en', $lang = 'en', $send_email = false) {
         $this->name = $username;
         $this->email = $email;
         $this->native_lang = $native_lang;
-        $this->learning_lang = $learning_lang;
+        $this->lang = $lang;
         $this->active = false;
 
         try {
             // check if user already exists
-            $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `name`=?";
-            $stmt = $this->con->prepare($sql);
-            $stmt->execute([$username]);
-            $num_rows = $stmt->fetchColumn();
-                    
-            if ($num_rows > 0) {
+            if ($this->existsByName($username)) {
                 throw new \Exception ('Username already exists. Please try again.');
             }
             
             // check if email already exists
-            $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `email`=?";
-            $stmt = $this->con->prepare($sql);
-            $stmt->execute([$email]);
-            $num_rows = $stmt->fetchColumn();
-
-            if ($num_rows > 0) {
+            if ($this->existsByEmail($email)) {
                 throw new \Exception ('Email already exists. Did you <a href="forgotpassword.php">forget</a> you username or password?');
             }
             
@@ -101,7 +221,7 @@ class User
                     `activation_hash`, `is_active`) 
                     VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$username, $password_hash, $email, $native_lang, $learning_lang, $activation_hash, $user_active]);
+            $stmt->execute([$username, $password_hash, $email, $native_lang, $lang, $activation_hash, $user_active]);
 
             $user_id = $this->id = $this->con->lastInsertId();
 
@@ -132,7 +252,7 @@ class User
      * @param string $hash
      * @return boolean
      */
-    public function sendActivationEmail($email, $username, $hash)
+    public function sendActivationEmail(string $email, string $username, string $hash): bool
     {
         // create activation link
         $reset_link = "https://www.aprelendo.com/accountactivation.php?username=$username&hash=$hash";
@@ -167,14 +287,11 @@ class User
      *
      * @param string $username
      * @param string $hash
-     * @return void
+     * @return bool
      */
-    public function activate($username, $hash)
+    public function activate(string $username, string $hash): bool
     {
         try {
-            $username = $this->con->escape_string($username);
-            $hash = $this->con->escape_string($hash);
-
             // check if user name & hash exist in db
             $sql = "SELECT COUNT(*) 
                     FROM `{$this->table}` 
@@ -208,7 +325,7 @@ class User
      * @param string $password
      * @return boolean
      */
-    public function login($username = "", $password = "", $google_id = "") {
+    public function login($username = "", $password = "", $google_id = ""): bool {
         try {
             $sql = "SELECT * 
                     FROM `{$this->table}` 
@@ -239,6 +356,8 @@ class User
             } else { // wrong password
                 throw new \Exception ('Username and password combination is incorrect. Please try again.');
             }
+
+            return true;
         } catch (\Exception $e) {
             throw new \Exception ($e->getMessage());
         } finally {
@@ -252,7 +371,7 @@ class User
      * @param boolean $deleted_account
      * @return void
      */
-    public function logout($deleted_account) {
+    public function logout($deleted_account): void {
         $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;
 
         if ($deleted_account || $this->isLoggedIn()) {
@@ -268,7 +387,7 @@ class User
      *
      * @return boolean
      */
-    public function isLoggedIn() {
+    public function isLoggedIn(): bool {
         $is_logged = false;
         if (isset($_COOKIE['user_token'])) {
             $token = $_COOKIE['user_token'];
@@ -293,13 +412,13 @@ class User
             $this->name = $row['name'];
             $this->email = $row['email'];
             $this->native_lang = $row['native_lang_iso'];
-            $this->learning_lang = $learning_lang = $row['learning_lang_iso'];
+            $this->lang = $row['learning_lang_iso'];
             $this->premium_until = $row['premium_until'];
             
-            // get active language id (learning_lang_id)
+            // get active language id (lang_id)
             $lang = new Language($this->con, $this->id);
-            $is_logged = $lang->loadRecordByName($learning_lang);
-            $this->learning_lang_id = $lang->getId();
+            $is_logged = $lang->loadRecordByName($this->lang);
+            $this->lang_id = $lang->getId();
 
             $stmt = null;
         }
@@ -311,7 +430,7 @@ class User
      *
      * @return boolean
      */
-    public function isPremium() {
+    public function isPremium(): bool {
         return $this->premium_until > date('Y-m-d');
     } // end isPremium()
 
@@ -323,10 +442,11 @@ class User
      * @param string $password
      * @param string $new_password
      * @param string $new_native_lang
-     * @param string $new_learning_lang
+     * @param string $new_lang
      * @return boolean
      */
-    public function updateUserProfile($new_username, $new_email, $password, $new_password, $new_native_lang, $new_learning_lang) {
+    public function updateUserProfile(string $new_username, string $new_email, string $password, 
+                                      string $new_password, string $new_native_lang, string $new_lang): bool {
         try {
             // check if $password is correct, without it user would not have the right priviliges to update his profile
             $authorized = $this->checkPassword($password);
@@ -337,30 +457,18 @@ class User
                 $new_email          = $new_email;
                 $new_password       = $new_password;
                 $new_native_lang    = $new_native_lang;
-                $new_learning_lang  = $new_learning_lang;
+                $new_lang  = $new_lang;
                 
                 // check if user already exists
                 if ($this->name != $new_username) {
-                    $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `name`=''";
-                    $stmt = $this->con->prepare($sql);
-                    $stmt->execute([$new_username]);
-                    $num_rows = $stmt->fetchColumn();
-
-                    if ($num_rows > 0) {
+                    if ($this->existsByName($new_username)) {
                         throw new \Exception ('Username already exists. Please try again.');
                     }
                 }
                 
                 // check if email already exists
                 if ($this->email != $new_email) {
-                    $sql = "SELECT `email` 
-                            FROM `{$this->table}` 
-                            WHERE `email`=?";
-                    $stmt = $this->con->prepare($sql);
-                    $stmt->execute([$new_email]);
-                    $num_rows = $stmt->fetchColumn();
-                    
-                    if ($num_rows > 0) {
+                    if ($this->existsByEmail($new_email)) {
                         throw new \Exception ('Email already exists. Please try using another one.');
                     }
                 }
@@ -371,31 +479,29 @@ class User
                             SET `name`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=? 
                             WHERE `id`=?";
                     $stmt = $this->con->prepare($sql);
-                    $result = $stmt->execute([$new_username, $new_email, $new_native_lang, $new_learning_lang, $user_id]);
+                    $stmt->execute([$new_username, $new_email, $new_native_lang, $new_lang, $user_id]);
                 } else {
                     $new_password_hash = password_hash($new_password, PASSWORD_BCRYPT, ['cost' => 11]);
                     $sql = "UPDATE `{$this->table}` 
                             SET `name`=?, `password_hash`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?  
                             WHERE `id`=?";
                     $stmt = $this->con->prepare($sql);
-                    $result = $stmt->execute([$new_username, $new_password_hash, $new_email, $new_native_lang, $new_learning_lang, $user_id]);
+                    $stmt->execute([$new_username, $new_password_hash, $new_email, $new_native_lang, $new_lang, $user_id]);
                 }
                 
-                if ($result) {
-                    $this->name = $new_username;
-                    $this->email = $new_email;
-                    $this->native_lang = $new_native_lang;
-                    $this->learning_lang = $new_learning_lang;
-                    
-                    // if new password was set, then create new rememberme cookie
-                    if (empty($new_password)) {
+                $this->name = $new_username;
+                $this->email = $new_email;
+                $this->native_lang = $new_native_lang;
+                $this->lang = $new_lang;
+                
+                // if new password was set, then create new rememberme cookie
+                if (empty($new_password)) {
+                    return true;
+                } else {
+                    if ($this->login($new_username, $new_password)) {
                         return true;
-                    } else {
-                        if ($this->login($new_username, $new_password)) {
-                            return true;
-                        }
                     }
-                } 
+                }
             }
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
@@ -405,11 +511,31 @@ class User
     } // updateUserProfile()
 
     /**
+     * Updates password hash in db
+     *
+     * @param string $password_hash
+     * @param string $name
+     * @return boolean
+     */
+    public function updatePasswordHash(string $password_hash, string $name): bool {
+        try {
+            $sql = "UPDATE `users` SET `password_hash`=? WHERE `name`=?";
+            $stmt = $con->prepare($sql);
+            $stmt->execute([$password_hash, $username]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end updatePasswordHash()
+
+    /**
      * Delete user account
      *
-     * @return void
+     * @return boolean
      */
-    public function delete() {
+    public function delete(): bool {
         if ($this->isLoggedIn()) {
             $this->logout(true);
         }
@@ -463,14 +589,14 @@ class User
      * @param integer $lang_id
      * @return boolean
      */
-    public function setActiveLang($lang_id) {
+    public function setActiveLang(int $lang_id): bool {
         try {
             $sql = "SELECT `name` 
                     FROM `languages` 
                     WHERE `id`=?";
             $stmt = $this->con->prepare($sql);
             $stmt->execute([$lang_id]);
-            $row = $result->fetch(\PDO::FETCH_ASSOC);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             $lang_name = $row['name'];
             $user_id = $this->id;
             
@@ -481,8 +607,8 @@ class User
             $stmt->execute([$lang_name, $user_id]);
             
             if ($stmt->rowCount() > 0) {
-                $this->learning_lang_id = $lang_id;
-                $this->learning_lang = $lang_name;
+                $this->lang_id = $lang_id;
+                $this->lang = $lang_name;
             }
             
             return true;  
@@ -493,7 +619,14 @@ class User
         }
     } // end setActiveLang()
 
-    public function isAllowedToAccessElement($table, $id)
+    /**
+     * Checks if user is allowed to access element in db
+     *
+     * @param string $table
+     * @param integer $id
+     * @return boolean
+     */
+    public function isAllowedToAccessElement(string $table, int $id): bool
     {
         $col_names = array(
             array('texts', 'id', 'user_id'),
@@ -532,7 +665,7 @@ class User
      * @param string $password
      * @return boolean
      */
-    private function checkPassword($password) {
+    private function checkPassword(string $password): bool {
         try {
             $user_id = $this->id;
 
@@ -541,7 +674,7 @@ class User
                     WHERE `id`=?";
             $stmt = $this->con->prepare($sql);
             $stmt->execute([$user_id]);
-            $row = $result->fetch(\PDO::FETCH_ASSOC);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             $hashedPassword = $row['password_hash'];
             if (password_verify($password, $hashedPassword)) {
                 return true;
@@ -554,6 +687,24 @@ class User
             $stmt = null;
         }
     } // end checkPassword()
+
+    /**
+     * Get the value of name
+     * @return string
+     */ 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get the value of password_hash
+     * @return string
+     */ 
+    public function getPasswordHash(): string
+    {
+        return $this->password_hash;
+    }
 }
 
 

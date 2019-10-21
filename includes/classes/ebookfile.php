@@ -37,7 +37,7 @@ class EbookFile extends File {
         } else {
             $this->max_size = 0; // ebook uploading is not allowed for non-premium users
         }
-    }
+    } // end __construct()
 }
 
 

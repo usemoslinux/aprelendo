@@ -29,14 +29,14 @@ if (!isset($_POST) || empty($_POST)) {
 use Aprelendo\Includes\Classes\Words;
 
 $user_id = $user->id;
-$learning_lang_id = $user->learning_lang_id;
+$lang_id = $user->lang_id;
 
 try{
     if (isset($_POST['word'])) { // deletes word by 'name'; used by showtext.php
-        $words_table = new Words($con, $user_id, $learning_lang_id);
+        $words_table = new Words($con, $user_id, $lang_id);
         $result = $words_table->deleteByName($_POST['word']);
     } elseif (isset($_POST['wordIDs'])) { // deletes word by id; used by listwords.php
-        $words_table = new Words($con, $user_id, $learning_lang_id);
+        $words_table = new Words($con, $user_id, $lang_id);
         $result = $words_table->delete($_POST['wordIDs']);
     }
 

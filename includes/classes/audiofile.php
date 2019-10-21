@@ -38,7 +38,7 @@ class AudioFile extends File
         } else {
             $this->max_size = 0; // audio uploading is not allowed for non-premium users
         }
-    }
+    } // end __construct()
 }
 
 ?>

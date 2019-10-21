@@ -25,7 +25,7 @@ require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Includes\Classes\Reader;
 
-$reader = new Reader($con, $user->id, $user->learning_lang_id);
+$reader = new Reader($con, $user->id, $user->lang_id);
 ?>
 
     <div class="container mtb">

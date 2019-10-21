@@ -22,8 +22,14 @@ namespace Aprelendo\Includes\Classes;
 
 class LogAudioStreams extends Log
 {
-    public function __construct($con, $user_id) {
+    /**
+     * Constructor
+     *
+     * @param \PDO $con
+     * @param integer $user_id
+     */
+    public function __construct(\PDO $con, int $user_id) {
         parent::__construct($con, $user_id);
         $this->table = 'log_audio_streams';
-    }
+    } // end __construct()
 }

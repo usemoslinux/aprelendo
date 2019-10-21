@@ -32,7 +32,7 @@ use Aprelendo\Includes\Classes\EbookFile;
 use Aprelendo\Includes\Classes\LogFileUploads;
 
 $user_id = $user->id;
-$learning_lang_id = $user->learning_lang_id;
+$lang_id = $user->lang_id;
 
 try {
     switch ($_POST['mode']) {
@@ -50,9 +50,9 @@ try {
             
             // initialize text table
             if ($is_shared) {
-                $texts_table = new SharedTexts($con, $user_id, $learning_lang_id);
+                $texts_table = new SharedTexts($con, $user_id, $lang_id);
             } else {
-                $texts_table = new Texts($con, $user_id, $learning_lang_id);
+                $texts_table = new Texts($con, $user_id, $lang_id);
             }
             
             // check if required fields are set
@@ -126,7 +126,7 @@ try {
             $source_url = $_POST['url'];
             $text = $_POST['text'];
 
-            $texts_table = new SharedTexts($con, $user_id, $learning_lang_id);
+            $texts_table = new SharedTexts($con, $user_id, $lang_id);
 
             // if text is already in db, show error message
             if ($texts_table->exists($source_url)) {
@@ -176,7 +176,7 @@ try {
             $target_file_name = $ebook_file->getName();
 
             // save text in db
-            $texts_table = new Texts($con, $user_id, $learning_lang_id);
+            $texts_table = new Texts($con, $user_id, $lang_id);
             $result = $texts_table->add($title, $author, $text, $target_file_name, $audio_uri, $type);
             
             if ($result && $upload_ebook) {

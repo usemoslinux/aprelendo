@@ -28,7 +28,7 @@ use Aprelendo\Includes\Classes\SharedTextTable;
 use Aprelendo\Includes\Classes\Pagination;
 
 $user_id = $user->id;
-$learning_lang_id = $user->learning_lang_id;
+$lang_id = $user->lang_id;
 
 // set variables used for pagination
 $page = 1;
@@ -51,14 +51,14 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         $page = isset($_GET['p']) && $_GET['p'] != '' ? $_GET['p'] : 1;
     }
     
-    $texts_table = new SharedTexts($con, $user_id, $learning_lang_id);
+    $texts_table = new SharedTexts($con, $user_id, $lang_id);
     
-    $total_rows = $texts_table->countSearchRows($filter_sql, $search_text);
+    $total_rows = $texts_table->countSearchRows($search_filter, $search_text);
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->offset;
     
     // get search result
-    $rows = $texts_table->getSearch($filter_sql, $search_text, $offset, $limit, $sort_by);
+    $rows = $texts_table->getSearch($search_filter, $search_text, $offset, $limit, $sort_by);
 
     // print table
     if ($rows != false) { // if there are any results, show them
@@ -73,7 +73,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     // initialize pagination variables
     $page = isset($_GET['p']) && $_GET['p'] != '' ? $_GET['p'] : 1;
     
-    $texts_table = new SharedTexts($con, $user_id, $learning_lang_id);
+    $texts_table = new SharedTexts($con, $user_id, $lang_id);
 
     $total_rows = $texts_table->countAllRows();
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
