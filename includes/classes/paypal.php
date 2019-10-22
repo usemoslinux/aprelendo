@@ -24,7 +24,7 @@ class Paypal extends DBEntity
 {
     use Curl;
 
-    public $url;
+    private $url = '';
 
     /**
      * Constructor
@@ -134,6 +134,15 @@ class Paypal extends DBEntity
         
         return $row['exists'] == 0;
     } // end checkTxnid()
+
+    /**
+     * Get the value of url
+     * @return string
+     */ 
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
 }
 
 

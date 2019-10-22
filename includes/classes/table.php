@@ -22,13 +22,13 @@ namespace Aprelendo\Includes\Classes;
 
 abstract class Table 
 {
-    protected $headings;
-    protected $col_count;
-    protected $col_widths;
-    protected $rows;
-    protected $action_menu;
-    protected $sort_menu;
-    protected $has_chkbox;
+    protected $headings     = [];
+    protected $col_count    = 0;
+    protected $col_widths   = [];
+    protected $rows         = [];
+    protected $action_menu  = [];
+    protected $sort_menu    = [];
+    protected $has_chkbox   = false;
 
     /**
      * Constructor

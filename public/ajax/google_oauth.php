@@ -30,28 +30,13 @@ if(isset($_POST['Eea']) && !empty($_POST['Eea']) && !empty($_POST['U3']))
         $google_name = $_POST['ig']; //Name
         $google_profile_pic = $_POST['Paa']; //Profile Pic URL
 
-        $return_msg = "";
-
-        // check if Google ID already exists
-        $sql = "SELECT * 
-                FROM `users` 
-                WHERE `email`=?";
-        $stmt = $con->prepare($sql);
-        $stmt->execute([$google_email]);
-        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-        $user_name = $row['name'];
-
         $user = new User($con);
-        
-        if($user_name !== NULL) {
+
+        // check if google email is already in db
+        if($user->loadRecordByEmail($google_email)) {
             // user already exists
-            $sql = "UPDATE `users` 
-                    SET `google_id`=? 
-                    WHERE `email`=?";
-            $stmt = $con->prepare($sql);
-            $result = $stmt->execute([$google_id, $google_email]);
-            
-            $user->login($user_name, "", $google_id);
+            $user->updateGoogleId($google_id, $google_email);
+            $user->login($user->getName(), '', $google_id);
         } else {
             // new user
             if ($user->register($google_name, $google_email, $google_id)) {

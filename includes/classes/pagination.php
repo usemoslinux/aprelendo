@@ -22,14 +22,14 @@ namespace Aprelendo\Includes\Classes;
 
 class Pagination 
 {
-  private $limit = 10;    // number of rows per page
-  private $adjacents = 2; // adjacent page numbers
-  private $total_rows;    // total number of rows
-  private $total_pages;   // total number of pages
-  private $page = 1;      // current page
-  public  $offset = 0;    // offset used to retrieve rows
-  private $start;         // beginning of range
-  private $end;           // end of range
+  private $limit        = 0; // number of rows per page
+  private $adjacents    = 0; // adjacent page numbers
+  private $total_rows   = 0; // total number of rows
+  private $total_pages  = 0; // total number of pages
+  private $page         = 0; // current page
+  private $offset       = 0; // offset used to retrieve rows
+  private $start        = 0; // beginning of range
+  private $end          = 0; // end of range
 
   /**
    * Constructor
@@ -135,6 +135,15 @@ class Pagination
      }
      return $result;
   } // end print()
+
+  /**
+   * Get the value of offset
+   * @return int
+   */ 
+  public function getOffset(): int
+  {
+    return $this->offset;
+  }
 }
 
 ?>

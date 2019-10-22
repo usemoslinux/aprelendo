@@ -26,7 +26,7 @@ if (!isset($_POST) || empty($_POST)) {
     exit;
 }
 
-$user_id = $user->id;
+$user_id = $user->getId();
 
 // save user profile information
 $username = isset($_POST['username']) ? $_POST['username'] : '';
@@ -43,14 +43,14 @@ try {
             throw new \Exception ('Please enter your current password and try again.');
         } else {
             if (!$user->updateUserProfile($username, $email, $password, $new_password1, $src_lang, $to_lang)) {
-                throw new \Exception ($user->error_msg);
+                throw new \Exception ($user->getErrorMsg());
             }
         }
     } else {
         if ($new_password1 === $new_password2) {
             if (strlen($new_password1) >= 8)  {
                 if (!$user->updateUserProfile($username, $email, $password, $new_password1, $src_lang, $to_lang)) {
-                    throw new \Exception ($user->error_msg);
+                    throw new \Exception ($user->getErrorMsg());
                 }
             } else {
                 throw new \Exception ('New password should be at least 8 characters long. Please, try again.');

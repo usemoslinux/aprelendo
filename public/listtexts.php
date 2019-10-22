@@ -26,8 +26,8 @@ use Aprelendo\Includes\Classes\TextTable;
 use Aprelendo\Includes\Classes\ArchivedTexts;
 use Aprelendo\Includes\Classes\Pagination;
 
-$user_id = $user->id;
-$lang_id = $user->lang_id;
+$user_id = $user->getId();
+$lang_id = $user->getLangId();
 
 // set variables used for pagination
 $page = 1;
@@ -56,7 +56,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     
     $total_rows = $texts_table->countSearchRows($search_filter, $search_text);
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
-    $offset = $pagination->offset;
+    $offset = $pagination->getOffset();
     
     // get search result
     $rows = $texts_table->getSearch($search_filter, $search_text, $offset, $limit, $sort_by);
@@ -82,7 +82,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 
     $total_rows = $texts_table->countAllRows();
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
-    $offset = $pagination->offset;
+    $offset = $pagination->getOffset();
     
     // get text list
     $rows = $texts_table->getAll($offset, $limit, $sort_by);

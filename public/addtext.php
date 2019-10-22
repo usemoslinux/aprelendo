@@ -43,7 +43,7 @@ use Aprelendo\Includes\Classes\Texts;
                 // modify text
                 $id = $_GET['id'];
                 
-                $text = new Texts($con, $user->id, $user->lang_id);
+                $text = new Texts($con, $user->getId(), $user->getLangId());
                 $row = $text->loadRecord($id);
                 
                 $art_title = $row['title'];

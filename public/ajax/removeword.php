@@ -28,8 +28,8 @@ if (!isset($_POST) || empty($_POST)) {
 
 use Aprelendo\Includes\Classes\Words;
 
-$user_id = $user->id;
-$lang_id = $user->lang_id;
+$user_id = $user->getId();
+$lang_id = $user->getLangId();
 
 try{
     if (isset($_POST['word'])) { // deletes word by 'name'; used by showtext.php

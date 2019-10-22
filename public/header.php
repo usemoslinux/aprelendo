@@ -22,7 +22,7 @@ require_once('../includes/dbinit.php'); // connect to database
 require_once(APP_ROOT . 'includes/checklogin.php'); // check if logged in and set $user
 use Aprelendo\Includes\Classes\Language;
 
-$lang_full = ucfirst(Language::getNameFromIso($user->lang));
+$lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
 ?>
 
     <nav class="navbar navbar-expand-md navbar-light">
@@ -43,7 +43,7 @@ $lang_full = ucfirst(Language::getNameFromIso($user->lang));
                     <li id="language-dropdown" class="nav-item dropdown">
                         <a href="javascript:;" id="language-menu" class="nav-link dropdown-toggle" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img id="img-language-flag" src="/img/flags/<?php echo $user->lang . '.svg';?>"
+                            <img id="img-language-flag" src="/img/flags/<?php echo $user->getLang() . '.svg';?>"
                                 alt="<?php echo $lang_full; ?> flag">
                             <span id="learning-lang-span">
                                 <?php echo $lang_full; ?>
@@ -51,7 +51,7 @@ $lang_full = ucfirst(Language::getNameFromIso($user->lang));
                             <b class="caret"></b>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="language-menu">
-                            <a class="dropdown-item" href="<?php echo 'languages.php?chg=' . $user->lang_id; ?>">
+                            <a class="dropdown-item" href="<?php echo 'languages.php?chg=' . $user->getLangId(); ?>">
                                 <?php echo $lang_full; ?> settings</a>
                             <a class="dropdown-item" href="languages.php">Change current language</a>
                         </div>
@@ -61,7 +61,7 @@ $lang_full = ucfirst(Language::getNameFromIso($user->lang));
                         <a id="user-menu" href="javascript:;" class="nav-link dropdown-toggle" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-user-circle"></i>
-                            <?php echo ucfirst($user->name); ?>
+                            <?php echo ucfirst($user->getName()); ?>
                             <b class="caret"></b>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu">

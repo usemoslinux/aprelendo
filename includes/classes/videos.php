@@ -26,12 +26,12 @@ use Aprelendo\Includes\Classes\DBEntity;
 class Videos extends DBEntity {
     use Curl;
 
-    protected $lang_id;
-    protected $title;
-    protected $author;
-    protected $youtube_id;
-    protected $source_url;
-    protected $transcript_xml;
+    private $lang_id        = 0;
+    private $title          = '';
+    private $author         = '';
+    private $youtube_id     = '';
+    private $source_url     = '';
+    private $transcript_xml = '';
 
     /**
      * Constructor

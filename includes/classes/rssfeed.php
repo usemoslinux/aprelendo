@@ -24,10 +24,10 @@ class RSSFeed
 {
     use Curl;
 
-    public $title;
-    public $url;
-    public $xmlfeed;
-    public $articles = array();
+    private $title    = '';
+    private $url      = '';
+    private $xmlfeed  = '';
+    private $articles = array();
 
     /**
      * Constructor
@@ -90,6 +90,15 @@ class RSSFeed
             
         return true;
     } // end fetchXMLFeed()
+
+    /**
+     * Get the value of url
+     * @return string
+     */ 
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
 }
 
 ?>

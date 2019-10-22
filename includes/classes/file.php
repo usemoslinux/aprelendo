@@ -23,12 +23,12 @@ namespace Aprelendo\Includes\Classes;
 class File
 {
     protected $allowed_extensions = [];
-    protected $max_size = 0;
-    protected $name = '';
-    protected $folder = '';
-    protected $path = '';
-    protected $extension = '';
-    protected $size = 0; 
+    protected $max_size           = 0;
+    protected $name               = '';
+    protected $folder             = '';
+    protected $path               = '';
+    protected $extension          = '';
+    protected $size               = 0; 
 
     /**
      * Constructor

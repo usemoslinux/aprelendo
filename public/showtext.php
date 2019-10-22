@@ -36,9 +36,9 @@ try {
         }
 
         $is_shared = $table == 'shared_texts' ? true : false;
-        $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->lang_id);
+        $reader = new Reader($con, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
         
-        switch ($reader->display_mode) {
+        switch ($reader->getDisplayMode()) {
             case 'light':
             echo "class='lightmode'";
             break;
@@ -51,9 +51,9 @@ try {
             default:
             break;
         }
-        $font_family = $reader->font_family;
-        $font_size = $reader->font_size;
-        $text_align = $reader->text_align;
+        $font_family = $reader->getFontFamily();
+        $font_size = $reader->getFontSize();
+        $text_align = $reader->getTextAlign();
         
         echo " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {

@@ -29,8 +29,8 @@ if (!isset($_POST) || empty($_POST)) {
 use Aprelendo\Includes\Classes\Words;
 
 if (isset($_POST['word'])) {    
-    $user_id = $user->id;
-    $lang_id = $user->lang_id;
+    $user_id = $user->getId();
+    $lang_id = $user->getLangId();
     
     $word = $_POST['word'];
     $status = 2;

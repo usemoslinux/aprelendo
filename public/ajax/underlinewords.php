@@ -28,16 +28,16 @@ if (!isset($_POST) || empty($_POST)) {
 
 use Aprelendo\Includes\Classes\Reader;
 
-$text = new Reader($con, $user->id, $user->lang_id);
+$reader = new Reader($con, $user->getId(), $user->getLangId());
 
 // for ebooks, use slower method to underline words (as input is HTML code)
 // for everything else, use faster method (as input is simple text)
 if (isset($_POST['txt']) && isset($_POST['is_ebook'])) {
     if ($_POST['is_ebook'] === true) {
-        $result = $text->colorizeWords(html_entity_decode($_POST['txt']));
-        echo $text->addLinks($result);
+        $result = $reader->colorizeWords(html_entity_decode($_POST['txt']));
+        echo $reader->addLinks($result);
     } else {
-        echo $text->colorizeWordsFast(html_entity_decode($_POST['txt']));
+        echo $reader->colorizeWordsFast(html_entity_decode($_POST['txt']));
     }
 }
 

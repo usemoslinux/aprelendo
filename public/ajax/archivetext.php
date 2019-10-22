@@ -30,8 +30,8 @@ use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\ArchivedTexts;
 use Aprelendo\Includes\Classes\Words;
 
-$user_id = $user->id;
-$lang_id = $user->lang_id;
+$user_id = $user->getId();
+$lang_id = $user->getLangId();
 
 try {
     // if text is archived using green button at the end, update learning status of words first

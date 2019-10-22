@@ -22,8 +22,8 @@ namespace Aprelendo\Includes\Classes;
 
 class DBEntity {
     protected $con;
-    protected $user_id;
-    protected $table;
+    protected $user_id = 0;
+    protected $table   = '';
     
     /**
      * Constructor

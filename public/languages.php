@@ -30,7 +30,7 @@ require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Includes\Classes\Language;
 
-$user_id = $user->id;
+$user_id = $user->getId();
 
 if (isset($_POST['submit'])) {                  // check if we need to save new language data
     $lang = new Language($con, $user_id);

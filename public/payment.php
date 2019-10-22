@@ -36,7 +36,7 @@ $paypalConfig = [
     'notify_url' => 'https://www.aprelendo.com/payment.php'
 ];
 
-$paypal = new Paypal($con, $user->id, $enableSandbox);
+$paypal = new Paypal($con, $user->getId(), $enableSandbox);
 
 // Check if paypal request or response
 if (!isset($_POST["txn_id"]) && !isset($_POST["txn_type"])) {
@@ -70,7 +70,7 @@ if (!isset($_POST["txn_id"]) && !isset($_POST["txn_type"])) {
     $queryString = http_build_query($data);
 
     // Redirect to paypal IPN
-    header('location:' . $paypal->url . '?' . $queryString);
+    header('location:' . $paypal->getUrl() . '?' . $queryString);
     exit;
 
 } else {

@@ -69,7 +69,7 @@ CSS;
 $reader = new Reader($con, false, 55, 5, 1);
 
 $time_start = microtime(true);
-$text = $reader->colorizeWords($reader->text);
+$text = $reader->colorizeWords($user->getText());
 $time_end = microtime(true);
 $execution_time = ($time_end - $time_start);
 $time_str = '<b>ColorizeWords:</b> ' . $execution_time . ' Secs'. '<br>';
@@ -79,7 +79,7 @@ echo $html, $text, '<br><br>', $time_str;
 // optimized
 
 $time_start = microtime(true);
-$text = $reader->colorizeWordsFast($reader->text);
+$text = $reader->colorizeWordsFast($user->getText());
 $time_end = microtime(true);
 $execution_time = ($time_end - $time_start);
 $time_str = '<b>colorizeWordsFast:</b> ' . $execution_time . ' Secs'. '<br>';

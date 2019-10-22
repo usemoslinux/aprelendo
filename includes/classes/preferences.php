@@ -23,12 +23,12 @@ namespace Aprelendo\Includes\Classes;
 use Aprelendo\Includes\Classes\DBEntity;
 
 class Preferences extends DBEntity {
-    private $font_family = 'Helvetica';
-    private $font_size = '12pt';
-    private $line_height = '1.5';
-    private $alignment = 'left';
-    private $mode = 'light';
-    private $assisted_learning = true;
+    private $font_family        = 'Helvetica';
+    private $font_size          = '12pt';
+    private $line_height        = '1.5';
+    private $alignment          = 'left';
+    private $mode               = 'light';
+    private $assisted_learning  = true;
 
     /**
      * Constructor

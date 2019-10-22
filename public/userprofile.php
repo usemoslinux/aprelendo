@@ -45,12 +45,12 @@ use Aprelendo\Includes\Classes\Language;
                     <div class="card-body">
                         <div class="form-group">
                             <label for="username">Username:</label>
-                            <input type="text" id="username" name="username" class="form-control" value="<?php echo $user->name;?>"
+                            <input type="text" id="username" name="username" class="form-control" value="<?php echo $user->getName();?>"
                                 maxlength="20" required>
                         </div>
                         <div class="form-group">
                             <label for="email">E-mail address:</label>
-                            <input type="email" id="email" name="email" class="form-control" value="<?php echo $user->email;?>"
+                            <input type="email" id="email" name="email" class="form-control" value="<?php echo $user->getEmail();?>"
                                 maxlength="50" required>
                         </div>
                     </div>
@@ -90,7 +90,7 @@ use Aprelendo\Includes\Classes\Language;
                         <div class="form-group">
                             <label for="src_lang">Your native language:</label>
                             <select name="src_lang" class="form-control custom-select" id="src_lang">
-                                <?php $native_lang_index = Language::getIndex($user->native_lang); ?>
+                                <?php $native_lang_index = Language::getIndex($user->getNativeLang()); ?>
                                 <option value="en" <?php echo $native_lang_index==0 ? ' selected ' : '' ; ?>>English</option>
                                 <option value="es" <?php echo $native_lang_index==1 ? ' selected ' : '' ; ?>>Spanish</option>
                                 <option value="pt" <?php echo $native_lang_index==2 ? ' selected ' : '' ; ?>>Portuguese</option>
@@ -102,7 +102,7 @@ use Aprelendo\Includes\Classes\Language;
                         <div class="form-group">
                             <label for="to_lang">Active learning language:</label>
                             <select name="to_lang" class="form-control custom-select" id="to_lang">
-                                <?php $lang_index = Language::getIndex($user->lang); ?>
+                                <?php $lang_index = Language::getIndex($user->getLang()); ?>
                                 <option value="en" <?php echo $lang_index==0 ? ' selected ' : '' ; ?>>English</option>
                                 <option value="es" <?php echo $lang_index==1 ? ' selected ' : '' ; ?>>Spanish</option>
                                 <option value="pt" <?php echo $lang_index==2 ? ' selected ' : '' ; ?>>Portuguese</option>

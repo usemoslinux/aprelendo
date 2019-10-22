@@ -24,13 +24,13 @@ use PDO;
 
 class Connect 
 {
-    private $type;
-    private $host;
-    private $user;
-    private $password;
-    private $db;
-    private $charset;
-    private $options;
+    private $driver    = '';
+    private $host      = '';
+    private $user      = '';
+    private $password  = '';
+    private $db        = '';
+    private $charset   = '';
+    private $options   = [];
     
     /**
      * Constructor
@@ -39,12 +39,12 @@ class Connect
      * 
      */
     public function __construct() {
-        $this->driver = DB_DRIVER;
-        $this->host = DB_SERVER;
-        $this->user = DB_USER;
+        $this->driver   = DB_DRIVER;
+        $this->host     = DB_SERVER;
+        $this->user     = DB_USER;
         $this->password = DB_PASSWORD;
-        $this->db = DB_NAME;
-        $this->charset = DB_CHARSET;
+        $this->db       = DB_NAME;
+        $this->charset  = DB_CHARSET;
 
         $this->options = [
             PDO::ATTR_EMULATE_PREPARES   => false, // turn off emulation mode for "real" prepared statements

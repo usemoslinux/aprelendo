@@ -25,12 +25,12 @@ use Aprelendo\Includes\Classes\DBEntity;
 use Aprelendo\Includes\Classes\Conversion;
 
 class Words extends DBEntity {
-    private $id = 0;
-    private $lang_id = 0;
-    private $word = '';
-    private $status = 0;
-    private $is_phrase = false;
-    private $date_created = '';
+    private $id            = 0;
+    private $lang_id       = 0;
+    private $word          = '';
+    private $status        = 0;
+    private $is_phrase     = false;
+    private $date_created  = '';
     private $date_modified = '';
 
     /**

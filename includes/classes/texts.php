@@ -29,20 +29,17 @@ use Aprelendo\Includes\Classes\Conversion;
 class Texts extends DBEntity {
     use Curl;
 
-    protected $id = 0;
-    protected $lang_id = 0;
-    protected $title = '';
-    protected $author = '';
-    protected $text = '';
-    protected $audio_uri = '';
-    protected $source_uri = '';
-    protected $type = 0;
+    protected $id          = 0;
+    protected $lang_id     = 0;
+    protected $title       = '';
+    protected $author      = '';
+    protected $text        = '';
+    protected $audio_uri   = '';
+    protected $source_uri  = '';
+    protected $type        = 0;
     protected $nr_of_words = 0;
-    protected $level = 0;
+    protected $level       = 0;
     
-    protected $cols;
-    protected $order_col;
-
     /**
     * Constructor
     * 

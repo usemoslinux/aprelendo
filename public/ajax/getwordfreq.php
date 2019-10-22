@@ -28,10 +28,10 @@ if (!isset($_GET) || empty($_GET)) {
 
 use Aprelendo\Includes\Classes\WordFrequency;
 
-$user_id = $user->id;
+$user_id = $user->getId();
 
 if ($user->isPremium()) {
-    echo WordFrequency::get($con, $_GET['word'], $user->lang);
+    echo WordFrequency::get($con, $_GET['word'], $user->getLang());
 }
 
 ?>

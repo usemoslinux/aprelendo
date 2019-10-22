@@ -24,13 +24,13 @@ use Aprelendo\Includes\Classes\DBEntity;
 
 class Language extends DBEntity
 {
-    private $id = 0;
-    private $name = '';
-    private $dictionary_uri = '';
-    private $translator_uri = '';
-    private $rss_feed_1_uri = '';
-    private $rss_feed_2_uri = '';
-    private $rss_feed_3_uri = '';
+    private $id              = 0;
+    private $name            = '';
+    private $dictionary_uri  = '';
+    private $translator_uri  = '';
+    private $rss_feed_1_uri  = '';
+    private $rss_feed_2_uri  = '';
+    private $rss_feed_3_uri  = '';
     private $show_freq_words = false;
 
     private static $iso_code = array(  
@@ -120,9 +120,10 @@ class Language extends DBEntity
     /**
      * Creates & saves default preferences for user
      *
+     * @param string $lang
      * @return bool
      */
-    public function createInitialRecordsForUser(): bool {
+    public function createInitialRecordsForUser(string $native_lang): bool {
         try {
             // create & save default language preferences for user
             foreach (self::$iso_code as $key => $value) {

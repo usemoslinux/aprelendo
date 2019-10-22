@@ -36,13 +36,13 @@ try {
             throw new \Exception ('User is not authorized to access this file.');
         }
         
-        $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->lang_id);
+        $reader = new Reader($con, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
         
-        $video = new Videos($con, $user->id, $user->lang_id);
+        $video = new Videos($con, $user->getId(), $user->getLangId());
         $video_row = $video->getById($_GET['id']);
         $yt_id = $video->extractYTId($video_row['source_uri']);
 
-        switch ($reader->display_mode) {
+        switch ($reader->getDisplayMode()) {
             case 'light':
             $body_css = "class='lightmode'";
             break;
@@ -55,9 +55,9 @@ try {
             default:
             break;
         }
-        $font_family = $reader->font_family;
-        $font_size = $reader->font_size;
-        $text_align = $reader->text_align;
+        $font_family = $reader->getFontFamily();
+        $font_size = $reader->getFontSize();
+        $text_align = $reader->getTextAlign();
         
         $body_css .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {

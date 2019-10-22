@@ -23,12 +23,9 @@ namespace Aprelendo\Includes\Classes;
 use Aprelendo\Includes\Classes\TextTable;
 
 class SharedTextTable extends TextTable {
-    protected $con;
-
     /**
      * Constructor
      *
-     * @param \PDO $con
      * @param integer $user_id
      * @param string $headings
      * @param string $col_widths
@@ -36,10 +33,9 @@ class SharedTextTable extends TextTable {
      * @param string $action_menu HTML to create action menu
      * @param string $sort_menu HTML to create sort menu
      */
-    public function __construct(\PDO $con, int $user_id, array $headings, array $col_widths, 
+    public function __construct(int $user_id, array $headings, array $col_widths, 
                                 array $rows, array $action_menu, array $sort_menu) {
         parent::__construct($headings, $col_widths, $rows, false, $action_menu, $sort_menu);
-        $this->con = $con;
         $this->is_shared = true;
         $this->has_chkbox = false;
     } // end __construct()

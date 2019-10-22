@@ -30,8 +30,8 @@ if (!$user->isPremium()) {
     exit;
 }
 
-$user_id = $user->id;
-$lang_id = $user->lang_id;
+$user_id = $user->getId();
+$lang_id = $user->getLangId();
 $id = $_GET['id'];
 
 try {

@@ -31,8 +31,8 @@ use Aprelendo\Includes\Classes\SharedTexts;
 use Aprelendo\Includes\Classes\EbookFile;
 use Aprelendo\Includes\Classes\LogFileUploads;
 
-$user_id = $user->id;
-$lang_id = $user->lang_id;
+$user_id = $user->getId();
+$lang_id = $user->getLangId();
 
 try {
     switch ($_POST['mode']) {
@@ -161,7 +161,7 @@ try {
             }
 
             // check if user is allowed to upload file & does not exceed the daily upload limit
-            $file_upload_log = new LogFileUploads($con, $user->id);
+            $file_upload_log = new LogFileUploads($con, $user->getId());
             $uploads_today = $file_upload_log->getTodayRecords();
             $nr_of_uploads_today = $uploads_today === false ? 0 : count($uploads_today);
             $premium_user = $user->isPremium();

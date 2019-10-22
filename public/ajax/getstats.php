@@ -23,7 +23,7 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check i
 
 use Aprelendo\Includes\Classes\Statistics;
 
-$stats = new Statistics($con, $user->id, $user->lang_id);
+$stats = new Statistics($con, $user->getId(), $user->getLangId());
 $result = $stats->get(7); // get statistics for last 7 days
 
 echo json_encode($result);

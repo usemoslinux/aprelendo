@@ -21,6 +21,11 @@
 namespace Aprelendo\Includes\Classes;
 
 class Token extends DBEntity {
+    
+    private $id      = 0;
+    private $token   = '';
+    private $expires = '';
+    
     /**
      * Constructor
      *
@@ -43,23 +48,32 @@ class Token extends DBEntity {
     } // end deleteOld()
 
     /**
-     * Checks if token already exists in db
+     * Loads Record data in object properties (looks record in db by id)
      *
-     * @param integer $user_id
+     * @param integer $id
      * @return array
      */
-    private function alreadyExists(int $user_id): array {
-        $sql = "SELECT `token`, `expires`
-                FROM `{$this->table}`
-                WHERE `user_id`=? AND `expires` >= NOW()
-                LIMIT 1";
+    public function loadRecord(int $id): bool {
+        try {
+            $sql = "SELECT *
+                    FROM `{$this->table}`
+                    WHERE `user_id`=? AND `expires` >= NOW()";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$id]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $stmt = $this->con->prepare($sql);
-        $stmt->execute([$user_id]);
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-                
-        return $result;
-    } // end alreadyExists()
+            $this->id       = $row['id']; 
+            $this->user_id  = $row['user_id']; 
+            $this->token    = $row['token'];
+            $this->expires  = $row['expires']; 
+            
+            return $row ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end loadRecord()
 
     /**
      * Generate token to store in cookie
@@ -67,10 +81,10 @@ class Token extends DBEntity {
      * @param integer $length
      * @return string
      */
-    private function generateToken($length = 20)
+    private function generate($length = 20)
     {
         return bin2hex(random_bytes($length));
-    } // end generateToken()
+    } // end generate()
 
     /**
      * Adds token to db
@@ -85,15 +99,12 @@ class Token extends DBEntity {
         $this->deleteOld();
             
         // check if valid token is already in db
-        $result = $this->alreadyExists($user_id);
-        if ($result !== false) {
+        if ($this->loadRecord($user_id) !== false) {
             // a valid token is already in the db
-            $token = $result['token'];
-            $time_stamp = $result['expires'];
-            return setcookie('user_token', $token, strtotime($time_stamp), "/", $domain, true);
+            return setcookie('user_token', $this->token, strtotime($this->expires), "/", $domain, true);
         } else {
             // create new token, insert it in db & set cookie
-            $token = $this->generateToken();
+            $token = $this->generate();
             $time_stamp = time() + 31536000; // 1 year
             $expires = date('Y-m-d H:i:s', $time_stamp);
             

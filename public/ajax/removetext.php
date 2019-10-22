@@ -33,8 +33,8 @@ try {
     if (isset($_POST['textIDs']) && isset($_POST['is_archived'])) {     
         $text_ids = $_POST['textIDs'];
         $is_archived = $_POST['is_archived'];
-        $user_id = $user->id;
-        $lang_id = $user->lang_id;
+        $user_id = $user->getId();
+        $lang_id = $user->getLangId();
     
         // decide wether we are deleting an archived text or not
         if ($is_archived) {

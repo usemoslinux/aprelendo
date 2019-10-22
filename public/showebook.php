@@ -53,10 +53,10 @@ try {
         }
 
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
-        $reader = new Reader($con, $is_shared, $_GET['id'], $user->id, $user->lang_id);
+        $reader = new Reader($con, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
         $result = '';
         
-        switch ($reader->display_mode) {
+        switch ($reader->getDisplayMode()) {
             case 'light':
                 $class = 'lightmode';
                 break;
@@ -70,10 +70,10 @@ try {
                 break;
         }
 
-        $styles['font-family'] = $reader->font_family;
-        $styles['font-size'] = $reader->font_size;
-        $styles['text-align'] = $reader->text_align;
-        $styles['line-height'] = $reader->line_height;
+        $styles['font-family'] = $reader->getFontFamily();
+        $styles['font-size'] = $reader->getFontSize();
+        $styles['text-align'] = $reader->getTextAlign();
+        $styles['line-height'] = $reader->getLineHeight();
     } else {
         throw new \Exception ('Oops! There was an error trying to fetch that ebook.');
     }

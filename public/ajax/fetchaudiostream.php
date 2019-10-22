@@ -34,7 +34,7 @@ try {
         throw new \Exception (404);
     }
 
-    $stream_log = new LogAudioStreams($con, $user->id);
+    $stream_log = new LogAudioStreams($con, $user->getId());
     $streams_today = $stream_log->getTodayRecords();
     $nr_of_streams_today = $streams_today === false ? 0 : count($streams_today);
     $premium_user = $user->isPremium();

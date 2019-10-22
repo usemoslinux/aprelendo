@@ -20,12 +20,12 @@
 ?>
 
 <?php 
-$curpage = basename($_SERVER['PHP_SELF']); /* Returns The Current PHP File Name */
+$curpage = basename($_SERVER['PHP_SELF']); // returns the current file Name
 $show_pages = array('showtext.php', 'showvideo.php', 'showebook.php');
 $this_is_show_page = in_array($curpage, $show_pages);
 
 if ($this_is_show_page) {
-    $doclang = isset($user->lang) && !empty($user->lang) ? $user->lang : 'en';
+    $doclang = $user->getLang();
 } else {
     $doclang = 'en';
 }

@@ -25,9 +25,9 @@ use Aprelendo\Includes\Classes\Language;
 
 class RSSFeeds
 {
-    public $feed1;
-    public $feed2;
-    public $feed3;
+    private $feed1;
+    private $feed2;
+    private $feed3;
 
     /**
      * Constructor
@@ -56,6 +56,33 @@ class RSSFeeds
             throw new \Exception ('Oops! There was an unexpected error trying to get your RSS feeds.');
         }
     } // end __construct()
+
+    /**
+     * Get the value of feed1
+     * @return RSSFeed
+     */ 
+    public function getFeed1(): RSSFeed
+    {
+        return $this->feed1;
+    }
+
+    /**
+     * Get the value of feed2
+     * @return RSSFeed
+     */ 
+    public function getFeed2(): RSSFeed
+    {
+        return $this->feed2;
+    }
+
+    /**
+     * Get the value of feed3
+     * @return RSSFeed
+     */ 
+    public function getFeed3(): RSSFeed
+    {
+        return $this->feed3;
+    }
 }
 
 

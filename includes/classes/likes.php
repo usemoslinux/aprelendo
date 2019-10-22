@@ -24,7 +24,7 @@ use Aprelendo\Includes\Classes\DBEntity;
 
 class Likes extends DBEntity
 {
-    private $id = 0;
+    private $id      = 0;
     private $text_id = 0;
     private $lang_id = 0;
     

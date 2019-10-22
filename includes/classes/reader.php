@@ -28,13 +28,13 @@ use SimpleXMLElement;
 class Text 
 {
     protected $con;
-    protected $id;
-    protected $title;
-    protected $author;
-    protected $source_uri;
-    protected $audio_uri;
-    public $text;
-    protected $is_shared;
+    protected $id         = 0;
+    protected $title      = '';
+    protected $author     = '';
+    protected $source_uri = '';
+    protected $audio_uri  = '';
+    protected $text       = '';
+    protected $is_shared  = false;
     
     /**
      * Constructor
@@ -86,19 +86,28 @@ class Text
 
         return $reading_time;
     } // end estimatedReadingTime()
+    
+    /**
+     * Get the value of text
+     * @return string
+     */ 
+    public function getText(): string
+    {
+        return $this->text;
+    }
 }
 
 class Reader extends Text
 {
-    public $font_family;
-    public $font_size;
-    public $line_height;
-    public $text_align;
-    public $display_mode;
-    public $assisted_learning;
-    public $show_freq_words;
-    protected $lang_id;
-    protected $user_id; 
+    private $font_family       = '';
+    private $font_size         = '';
+    private $line_height       = '';
+    private $text_align        = '';
+    private $display_mode      = '';
+    private $assisted_learning = '';
+    private $show_freq_words   = '';
+    private $lang_id           = 0;
+    private $user_id           = 0; 
     
     /**
      * Constructor
@@ -486,6 +495,60 @@ class Reader extends Text
 
         return $html.'<br></div>';
     } // end showVideo()
+
+    /**
+     * Get the value of font_family
+     * @return string
+     */ 
+    public function getFontFamily(): string
+    {
+        return $this->font_family;
+    }
+
+    /**
+     * Get the value of font_size
+     * @return string
+     */ 
+    public function getFontSize(): string
+    {
+        return $this->font_size;
+    }
+
+    /**
+     * Get the value of line_height
+     * @return string
+     */ 
+    public function getLineHeight(): string
+    {
+        return $this->line_height;
+    }
+
+    /**
+     * Get the value of text_align
+     * @return string
+     */ 
+    public function getTextAlign(): string
+    {
+        return $this->text_align;
+    }
+
+    /**
+     * Get the value of display_mode
+     * @return string
+     */ 
+    public function getDisplayMode(): string
+    {
+        return $this->display_mode;
+    }
+
+    /**
+     * Get the value of assisted_learning
+     * @return string
+     */ 
+    public function getAssistedLearning(): string
+    {
+        return $this->assisted_learning;
+    }
 }
 
 ?>

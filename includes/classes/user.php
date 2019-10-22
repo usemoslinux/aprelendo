@@ -27,18 +27,18 @@ class User
 {
     use Curl;
 
-    public $id = 0;
-    public $name = '';
-    public $password_hash = '';
-    public $email = '';
-    public $lang = '';
-    public $lang_id = 0;
-    public $native_lang = '';
-    public $premium_until;
-    public $activation_hash = '';
-    public $active = false;
+    private $id              = 0;
+    private $name            = '';
+    private $password_hash   = '';
+    private $email           = '';
+    private $lang            = '';
+    private $lang_id         = 0;
+    private $native_lang     = '';
+    private $premium_until   = '';
+    private $activation_hash = '';
+    private $active          = false;
     
-    public $error_msg = '';
+    private $error_msg = '';
     
     private $con;
     
@@ -126,7 +126,7 @@ class User
         try {
             $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `name`=?";
             $stmt = $this->con->prepare($sql);
-            $stmt->execute([$username]);
+            $stmt->execute([$name]);
             $num_rows = $stmt->fetchColumn();
            
             return ($num_rows) && ($num_rows > 0) ? true : false;
@@ -227,7 +227,7 @@ class User
 
             // create & save default language preferences for user
             $lang = new Language($this->con, $user_id);
-            $result = $lang->createInitialRecordsForUser();
+            $result = $lang->createInitialRecordsForUser($native_lang);
 
             $sql = "INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`, 
                     `learning_mode`, `assisted_learning`) 
@@ -531,6 +531,28 @@ class User
     } // end updatePasswordHash()
 
     /**
+     * Updates User's Google Id
+     *
+     * @param string $google_id
+     * @param string $google_email
+     * @return boolean
+     */
+    public function updateGoogleId(string $google_id, string $google_email): bool {
+        try {
+            $sql = "UPDATE `users` 
+                    SET `google_id`=? 
+                    WHERE `email`=?";
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute([$google_id, $google_email]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end updateGoogleId()
+
+    /**
      * Delete user account
      *
      * @return boolean
@@ -688,6 +710,16 @@ class User
         }
     } // end checkPassword()
 
+
+    /**
+     * Get the value of id
+     * @return int
+     */ 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
     /**
      * Get the value of name
      * @return string
@@ -704,6 +736,78 @@ class User
     public function getPasswordHash(): string
     {
         return $this->password_hash;
+    }
+
+    /**
+     * Get the value of email
+     * @return string
+     */ 
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * Get the value of lang
+     * @return string
+     */ 
+    public function getLang(): string
+    {
+        return $this->lang;
+    }
+
+    /**
+     * Get the value of lang_id
+     * @return int
+     */ 
+    public function getLangId(): int
+    {
+        return $this->lang_id;
+    }
+
+    /**
+     * Get the value of native_lang
+     * @return string
+     */ 
+    public function getNativeLang(): string
+    {
+        return $this->native_lang;
+    }
+
+    /**
+     * Get the value of premium_until
+     * @return string
+     */ 
+    public function getPremiumUntil(): string
+    {
+        return $this->premium_until;
+    }
+
+    /**
+     * Get the value of activation_hash
+     * @return string
+     */ 
+    public function getActivationHash(): string
+    {
+        return $this->activation_hash;
+    }
+
+    /**
+     * Get the value of active
+     * @return bool
+     */ 
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * Get the value of error_msg
+     * @return string
+     */ 
+    public function getErrorMsg(): string
+    {
+        return $this->error_msg;
     }
 }
 

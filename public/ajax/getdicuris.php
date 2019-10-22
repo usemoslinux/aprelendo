@@ -23,8 +23,8 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 
 use Aprelendo\Includes\Classes\Language;
 
-$lang = new Language($con, $user->id);
-$result = $lang->loadRecord($user->lang_id);
+$lang = new Language($con, $user->getId());
+$result = $lang->loadRecord($user->getLangId());
 
 $filtered_result['dictionary_uri'] = $lang->getDictionaryUri();
 $filtered_result['translator_uri'] = $lang->getTranslatorUri();

@@ -4,27 +4,27 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 
 use Aprelendo\Includes\Classes\RSSFeeds;
 
-$user_id = $user->id;
-$lang_id = $user->lang_id;
+$user_id = $user->getId();
+$lang_id = $user->getLangId();
 
 try {
     $rssfeeds = new RSSFeeds($con, $user_id, $lang_id);
 
-    $RSS1notempty = !empty($rssfeeds->feed1->url);
-    $RSS2notempty = !empty($rssfeeds->feed2->url);
-    $RSS3notempty = !empty($rssfeeds->feed3->url);
+    $RSS1notempty = !empty($rssfeeds->getFeed1()->getUrl());
+    $RSS2notempty = !empty($rssfeeds->getFeed2()->getUrl());
+    $RSS3notempty = !empty($rssfeeds->getFeed3()->getUrl());
 
     if ($RSS1notempty || $RSS2notempty || $RSS3notempty) {
         $html = '<div id="accordion" class="accordion">';
 
         if ($RSS1notempty) {
-            $html .= printRSSFeed($rssfeeds->feed1, 1);
+            $html .= printRSSFeed($rssfeeds->getFeed1(), 1);
         }
         if ($RSS2notempty) {
-            $html .= printRSSFeed($rssfeeds->feed2, 2);
+            $html .= printRSSFeed($rssfeeds->getFeed2(), 2);
         }
         if ($RSS3notempty) {
-            $html .= printRSSFeed($rssfeeds->feed3, 3);
+            $html .= printRSSFeed($rssfeeds->getFeed3(), 3);
         }
         echo $html. '</div>';
     } else {
@@ -91,7 +91,8 @@ function printRSSFeed($feed, $groupindex) {
         }
         $html .= '</div></div></div></div>';
     } else {
-        throw new \Exception ("Oops! There was an error trying to fetch this feed: $feed->url \nIt is probably due to a malformed RSS feed.");
+        throw new \Exception ("Oops! There was an error trying to fetch this feed:" .
+            $feed->getUrl() . "\nIt is probably due to a malformed RSS feed.");
     }
     return $html;
 }
