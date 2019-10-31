@@ -32,16 +32,14 @@ $user_id = $user->getId();
 $lang_id = $user->getLangId();
 
 try{
-    if (isset($_POST['word'])) { // deletes word by 'name'; used by showtext.php
-        $words_table = new Words($con, $user_id, $lang_id);
-        $result = $words_table->deleteByName($_POST['word']);
-    } elseif (isset($_POST['wordIDs'])) { // deletes word by id; used by listwords.php
-        $words_table = new Words($con, $user_id, $lang_id);
-        $result = $words_table->delete($_POST['wordIDs']);
-    }
-
-    if (!$result) {
-        throw new \Exception ('There was an unexpected error trying to remove this word');
+    if (isset($_POST['word'])) { 
+        // deletes word by 'name'; used by showtext.php
+        $words_table = new Words($pdo, $user_id, $lang_id);
+        $words_table->deleteByName($_POST['word']);
+    } elseif (isset($_POST['wordIDs'])) { 
+        // deletes word by id; used by listwords.php
+        $words_table = new Words($pdo, $user_id, $lang_id);
+        $words_table->delete($_POST['wordIDs']);
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

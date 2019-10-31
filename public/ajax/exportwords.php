@@ -33,14 +33,14 @@ try {
         $order_by = isset($_GET['o']) ? $_GET['o'] : -1;
 
         // export to csv
-        $words_table = new Words($con, $user_id, $lang_id);
+        $words_table = new Words($pdo, $user_id, $lang_id);
         $result = $words_table->createCSVFile($search_text, $order_by);
 
         if (!$result) {
-            throw new \Exception ('There was an unexpected error trying to export your word list');
+            throw new \Exception('There was an unexpected error trying to export your word list');
         }
     } else {
-        throw new \Exception ('Only premium users are allowed to export word lists');
+        throw new \Exception('Only premium users are allowed to export word lists');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

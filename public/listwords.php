@@ -51,7 +51,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     
     $search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';
     
-    $words_table = new Words($con, $user_id, $lang_id);
+    $words_table = new Words($pdo, $user_id, $lang_id);
     $total_rows = $words_table->countSearchRows($search_text);
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->getOffset();
@@ -72,7 +72,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 } else { // if page is loaded at startup, just show word list
     // initialize pagination variables
     $page = isset($_GET['page']) && $_GET['page'] != '' ? $_GET['page'] : 1;
-    $words_table = new Words($con, $user_id, $lang_id);
+    $words_table = new Words($pdo, $user_id, $lang_id);
     $total_rows = $words_table->countAllRows(); 
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->getOffset();

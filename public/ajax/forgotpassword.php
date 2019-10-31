@@ -30,10 +30,12 @@ if (!isset($_POST) || empty($_POST)) {
 try {
     if (isset($_POST['email'])) {
         // check if email exists in db
-        $user = new User($con);
+        $user = new User($pdo);
         $user->existsByEmail($email);
-                
-        if ($user->loadRecordByEmail($email)) {
+        
+        $user->loadRecordByEmail($email);
+
+        if (!empty($user->getEmail)) {
             // get username associated to that email address
             $username = $text->getName();
             $password_hash = $text->getPasswordHash();
@@ -59,10 +61,10 @@ try {
             
             $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
             if (!$mail_sent) {
-                throw new \Exception ('There was an error trying to send you an e-mail with your new temporary password.');
+                throw new \Exception('There was an error trying to send you an e-mail with your new temporary password.');
             }
         } else { // if email address does not exist in db
-            throw new \Exception ('No user registered with that email address. Please try again.');
+            throw new \Exception('No user registered with that email address. Please try again.');
         } 
     } else if(isset($_POST['username']) && isset($_POST['pass1']) && isset($_POST['pass2'])) {
         if ($_POST['pass1'] === $_POST['pass2']) {
@@ -73,17 +75,13 @@ try {
             $username = $_POST['username'];
             $password_hash = password_hash($_POST['pass1'], PASSWORD_BCRYPT, $options);
 
-            $user = new User($con);
-            
-            if (!$user->updatePasswordHash($password_hash, $username)) { 
-                // if password update is NOT successful
-                throw new \Exception ('Oops! There was an unexpected error when trying to save your new password.');
-            }
+            $user = new User($pdo);
+            $user->updatePasswordHash($password_hash, $username);
         } else {
-            throw new \Exception ('The passwords you entered are not identical. Please try again.');
+            throw new \Exception('The passwords you entered are not identical. Please try again.');
         }
     } else {
-        throw new \Exception ('Oops! There was an unexpected error when trying to reset your password.');
+        throw new \Exception('Oops! There was an unexpected error when trying to reset your password.');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

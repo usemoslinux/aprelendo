@@ -34,10 +34,10 @@ class Pagination
   /**
    * Constructor
    *
-   * @param integer $page Current page number
-   * @param integer $limit How many rows to show
-   * @param integer $total_rows Total amount of rows
-   * @param integer $adjacents How many adjacent pages to show in pagination
+   * @param int $page Current page number
+   * @param int $limit How many rows to show
+   * @param int $total_rows Total amount of rows
+   * @param int $adjacents How many adjacent pages to show in pagination
    */
   public function __construct(int $page = 1, int $limit = 10, int $total_rows, int $adjacents = 2) {
     $this->limit = $limit;
@@ -75,9 +75,9 @@ class Pagination
    *
    * @param string $url
    * @param string $search_text
-   * @param integer $sort_by
-   * @param integer $filter
-   * @param integer $show_archived
+   * @param int $sort_by
+   * @param int $filter
+   * @param int $show_archived
    * @return string HTML of pagination
    */
   public function print(string $url, string $search_text, int $sort_by, 

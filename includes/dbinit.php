@@ -30,7 +30,7 @@ use Aprelendo\Includes\Classes\Connect;
 
 try {
     $db_connection = new Connect;
-    $con = $db_connection->connect();
+    $pdo = $db_connection->connect();
 } catch (Exception $e) {
     header('Location:error.php');
     exit;

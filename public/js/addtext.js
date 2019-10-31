@@ -147,7 +147,7 @@ $(document).ready(function() {
                 //dataType: "html"
             })
             .done(function(data) {
-                if (typeof data.error_msg !== 'undefined' && data.error_msg.length != 0) {
+                if (data.error_msg != null) {
                     showMessage(data.error_msg, 'alert-danger');
                 } else {
                     if (typeof data !== 'undefined' && data.length != 0) {

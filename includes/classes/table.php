@@ -52,7 +52,7 @@ abstract class Table
     /**
      * Prints table
      *
-     * @param integer $sort_by
+     * @param int $sort_by
      * @return string 
      */
     public function print(int $sort_by): string {
@@ -101,7 +101,7 @@ abstract class Table
     /**
      * Prints table footer
      *
-     * @param integer $sort_by
+     * @param int $sort_by
      * @return string HTML for table footer
      */
     protected function print_footer(int $sort_by): string {

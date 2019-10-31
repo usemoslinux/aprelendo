@@ -30,8 +30,9 @@ if (!isset($_POST) || empty($_POST)) {
 
 // save preferences to database
 try {
-    $pref = new Preferences($con, $user->getId());
-    $pref->edit($_POST['fontfamily'], $_POST['fontsize'], $_POST['lineheight'], $_POST['alignment'], $_POST['mode'], $_POST['assistedlearning']);
+    $pref = new Preferences($pdo, $user->getId());
+    $pref->edit($_POST['fontfamily'], $_POST['fontsize'], $_POST['lineheight'], $_POST['alignment'], 
+                $_POST['mode'], $_POST['assistedlearning']);
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());
     header('Content-Type: application/json');

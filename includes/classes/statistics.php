@@ -28,12 +28,12 @@ class Statistics extends DBEntity {
     /**
      * Constructor
      *
-     * @param PDO $con 
+     * @param PDO $pdo 
      * @param int $user_id
      * @param int $lang_id
      */
-    public function __construct(\PDO $con, int $user_id, int $lang_id) {
-        parent::__construct($con, $user_id);
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id) {
+        parent::__construct($pdo, $user_id);
         $this->lang_id = $lang_id;
         $this->table = 'words';
     } // end __construct()
@@ -41,7 +41,7 @@ class Statistics extends DBEntity {
     /**
      * Returns array with 
      *
-     * @param integer $days
+     * @param int $days
      * @return array
      */
     public function get(int $days): array {        
@@ -50,7 +50,7 @@ class Statistics extends DBEntity {
         // get how many words were created in each of the last 7 days
         for ($i=$days; $i >= 0; $i--) {
             $sql = "SELECT COUNT(word) AS `created` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `date_created` < CURDATE() - INTERVAL ?-1 DAY AND `date_created` > CURDATE() - INTERVAL ? DAY";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
             $row = $stmt->fetch();
             $stats['created'][] = $row['created'];
@@ -59,7 +59,7 @@ class Statistics extends DBEntity {
         // get how many words' status were modified in each of the last 7 days
         for ($i=$days; $i >= 0; $i--) { 
             $sql = "SELECT COUNT(word) AS `modified` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`>0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
             $row = $stmt->fetch();
             $stats['modified'][] = $row['modified'];
@@ -68,7 +68,7 @@ class Statistics extends DBEntity {
         // get how many words were learned in each of the last 7 days
         for ($i=$days; $i >= 0; $i--) { 
             $sql = "SELECT COUNT(word) AS `learned` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
             $row = $stmt->fetch();
             $stats['learned'][] = $row['learned'];
@@ -77,7 +77,7 @@ class Statistics extends DBEntity {
         // get how many learned words were forgotten in each of the last 7 days
         for ($i=$days; $i >= 0; $i--) { 
             $sql = "SELECT COUNT(word) AS `forgotten` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=2 AND `date_modified`>`date_created` AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
             $row = $stmt->fetch();
             $stats['forgotten'][] = $row['forgotten'];

@@ -49,11 +49,12 @@ try {
     if (isset($_GET['id']) && !empty($_GET['id'])) {
         // check if user has access to view this text
         if (!$user->isAllowedToAccessElement('texts', (int)$_GET['id'])) {
-            throw new \Exception ('User is not authorized to access this file.');
+            header("HTTP/1.1 401 Unauthorized");
+            exit;
         }
 
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
-        $reader = new Reader($con, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
+        $reader = new Reader($pdo, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
         $result = '';
         
         switch ($reader->getDisplayMode()) {
@@ -75,7 +76,7 @@ try {
         $styles['text-align'] = $reader->getTextAlign();
         $styles['line-height'] = $reader->getLineHeight();
     } else {
-        throw new \Exception ('Oops! There was an error trying to fetch that ebook.');
+        throw new \Exception('Oops! There was an error trying to fetch that ebook.');
     }
 } catch (Exception $e) {
     header('Location:/login.php');

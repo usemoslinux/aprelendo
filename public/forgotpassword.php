@@ -42,7 +42,7 @@ use Aprelendo\Includes\Classes\User;
                 // 1. check if username & password values passed by the reset link are set
                 if(isset($_GET['username']) && isset($_GET['reset'])) {
                     // check if username & password exist in db
-                    $user = new User($con);
+                    $user = new User($pdo);
                             
                     // 1.1. if username & password values passed by the reset link are found in db, then...
                     if ($user->existsByNameAndPasswordHash($username, $password_hash)) { // 

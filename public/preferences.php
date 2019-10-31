@@ -25,7 +25,7 @@ require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Includes\Classes\Reader;
 
-$reader = new Reader($con, $user->getId(), $user->getLangId());
+$reader = new Reader($pdo, $user->getId(), $user->getLangId());
 ?>
 
     <div class="container mtb">

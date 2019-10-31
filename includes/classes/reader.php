@@ -27,7 +27,7 @@ use SimpleXMLElement;
 
 class Text 
 {
-    protected $con;
+    protected $pdo;
     protected $id         = 0;
     protected $title      = '';
     protected $author     = '';
@@ -40,13 +40,13 @@ class Text
      * Constructor
      * Initializes class variables (id, title, author, etc.)
      *
-     * @param \PDO $con
-     * @param integer $id
+     * @param \PDO $pdo
+     * @param int $id
      * @param bool $is_shared
      */
-    public function __construct(\PDO $con, int $id, bool $is_shared) {
+    public function __construct(\PDO $pdo, int $id, bool $is_shared) {
         try {
-            $this->con = $con;
+            $this->pdo = $pdo;
             $this->is_shared = $is_shared;
 
             if ($is_shared) {
@@ -55,7 +55,7 @@ class Text
                 $sql = "SELECT `text`, `title`, `author`, `source_uri` FROM `texts` WHERE `id`=?";
             }
 
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -75,7 +75,7 @@ class Text
      * Calculates how much time it would take to read $text to a native speaker
      * Returns that estimation
      *
-     * @return integer
+     * @return int
      */
     protected function estimatedReadingTime(): int {
         $word_count = str_word_count($this->text);
@@ -129,37 +129,37 @@ class Reader extends Text
      * Constructor
      * Used for full reader (whole text document). Used by showtext.php
      *
-     * @param \PDO $con
-     * @param integer $text_id
-     * @param integer $user_id
-     * @param integer $lang_id
+     * @param \PDO $pdo
+     * @param int $text_id
+     * @param int $user_id
+     * @param int $lang_id
      * @return void
      */
-    private function createFullReader($con, $is_shared, $text_id, $user_id, $lang_id) {
-        parent::__construct($con, $text_id, $is_shared);
-        $this->createMiniReader($con, $user_id, $lang_id);
+    private function createFullReader($pdo, $is_shared, $text_id, $user_id, $lang_id) {
+        parent::__construct($pdo, $text_id, $is_shared);
+        $this->createMiniReader($pdo, $user_id, $lang_id);
     } // end createFullReader()
 
     /**
      * Constructor
      * Used for mini reader (word/phrase). Used by underlinewords.php
      *
-     * @param \PDO $con
-     * @param integer $user_id
-     * @param integer $lang_id
+     * @param \PDO $pdo
+     * @param int $user_id
+     * @param int $lang_id
      * @return void
      */
-    private function createMiniReader(\PDO $con, int $user_id, int $lang_id): void {
+    private function createMiniReader(\PDO $pdo, int $user_id, int $lang_id): void {
         try {
-            $this->con = $con;
+            $this->pdo = $pdo;
             $this->user_id = $user_id;
             $this->lang_id = $lang_id;
 
             $sql = "SELECT * FROM `preferences` WHERE `user_id` = ?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$user_id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-            
+
             $this->font_family = isset($row['font_family']) ? $row['font_family'] : 'Helvetica';
             $this->font_size = isset($row['font_size']) ? $row['font_size'] : '12px';
             $this->line_height = isset($row['line_height']) ? $row['line_height'] : '1';
@@ -168,12 +168,12 @@ class Reader extends Text
             $this->assisted_learning = isset($row['assisted_learning']) ? $row['assisted_learning'] : true;  
             
             $sql = "SELECT `show_freq_words` FROM `languages` WHERE `id`=?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$lang_id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             $this->show_freq_words = $row['show_freq_words'];
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected problem fetching user reading preferences.');
         } finally {
             $stmt = null;
         }
@@ -203,7 +203,7 @@ class Reader extends Text
     * Also, span creation for the rest of the words and separators is done by AddLinks()
     *
     * @param string $text
-    * @param \PDO $con
+    * @param \PDO $pdo
     * @return string
     */
     public function colorizeWords(string $text): string {
@@ -216,7 +216,7 @@ class Reader extends Text
                     FROM `words` 
                     WHERE `user_id`=? AND `lang_id`=? AND `status`>0 
                     ORDER BY `is_phrase` ASC";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$user_id, $lang_id]);
             
             while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
@@ -230,7 +230,7 @@ class Reader extends Text
             $sql = "SELECT `word` 
                     FROM `words` 
                     WHERE `user_id`=? AND `lang_id`=? AND `status`=0";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$user_id, $lang_id]);
 
             while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
@@ -241,10 +241,10 @@ class Reader extends Text
             
             // 3. colorize frequency list words
             if ($this->show_freq_words) {
-                $user = new User($this->con);
+                $user = new User($this->pdo);
                 if ($user->isLoggedIn() && $user->isPremium()) {
                     $sql = "SELECT `name` FROM languages WHERE `id`=?";
-                    $stmt = $this->con->prepare($sql);
+                    $stmt = $this->pdo->prepare($sql);
                     $stmt->execute([$this->lang_id]);
 
                     $row = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -253,7 +253,7 @@ class Reader extends Text
                     $sql = "SELECT `word`, `frequency_index` 
                             FROM ? 
                             WHERE `frequency_index` < 80";
-                    $stmt = $this->con->prepare($sql);
+                    $stmt = $this->pdo->prepare($sql);
                     $stmt->execute(['frequency_list_' . $freq_table_name]);
                     while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                         $word = $row['word'];
@@ -263,8 +263,8 @@ class Reader extends Text
                 }
             }
             return $text;
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected problem loading the private list of words for this user.');
         } finally {
             $stmt = null;
         }        
@@ -302,25 +302,25 @@ class Reader extends Text
                     FROM `words` 
                     WHERE `user_id`=? AND `lang_id`=?  
                     ORDER BY `is_phrase` ASC";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$user_id, $lang_id]);
-
             $dic_words = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $dic_words = $dic_words === false ? [] : $dic_words;
 
             // get high frequency words list, only if necessary
             if ($this->show_freq_words) {
-                $user = new User($this->con);
+                $user = new User($this->pdo);
                 if ($user->isLoggedIn() && $user->isPremium()) {
                     $sql = "SELECT `name` FROM `languages` WHERE `id`=?";
-                    $stmt = $this->con->prepare($sql);
+                    $stmt = $this->pdo->prepare($sql);
                     $stmt->execute([$this->lang_id]);
                     $row = $stmt->fetch(\PDO::FETCH_ASSOC);
                     
-                    $freq_words = WordFrequency::getHighFrequencyList($this->con, $row['name']);
+                    $freq_words = WordFrequency::getHighFrequencyList($this->pdo, $row['name']);
                 }
             }
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected problem loading the private list of words for this user.');
         } finally {
             $stmt = null;
         }   

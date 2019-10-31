@@ -43,14 +43,14 @@ class Texts extends DBEntity {
     /**
     * Constructor
     * 
-    * Sets 3 basic variables used to identify any text: $con, $user_id & lang_id
+    * Sets 3 basic variables used to identify any text: $pdo, $user_id & lang_id
     *
-    * @param \PDO $con
-    * @param integer $user_id
-    * @param integer $lang_id
+    * @param \PDO $pdo
+    * @param int $user_id
+    * @param int $lang_id
     */
-    public function __construct(\PDO $con, int $user_id, int $lang_id) {
-        parent::__construct($con, $user_id);
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id) {
+        parent::__construct($pdo, $user_id);
         $this->lang_id = $lang_id;
         $this->table = 'texts';
     } // end __construct() 
@@ -58,15 +58,19 @@ class Texts extends DBEntity {
     /**
      * Loads text record data
      *
-     * @param integer $id
-     * @return bool
+     * @param int $id
+     * @return void
      */
-    public function loadRecord(int $id): bool {
+    public function loadRecord(int $id): void {
         try {
             $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ? AND `user_id` = ?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$id, $this->user_id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            
+            if (!$row) {
+                throw new \Exception('There was an unexpected error trying to load record from texts table.');
+            }
 
             $this->id         = $row['id']; 
             $this->user_id    = $row['user_id']; 
@@ -79,10 +83,8 @@ class Texts extends DBEntity {
             $this->type       = $row['type'];
             $this->word_count = $row['word_count'];
             $this->level      = $row['level'];
-            
-            return $row ? true : false;
-        } catch (\Exception $e) {
-            return false;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to load record from texts table.');
         } finally {
             $stmt = null;
         }
@@ -96,11 +98,11 @@ class Texts extends DBEntity {
     * @param string $text
     * @param string $source_url
     * @param string $audio_url
-    * @param integer $type
-    * @return boolean
+    * @param int $type
+    * @return int
     */
     public function add(string $title, string $author, string $text, string $source_url, 
-                        string $audio_url, int $type) {
+                        string $audio_url, int $type): int {
         $level = 0;
         $nr_of_words = 0;
 
@@ -114,23 +116,25 @@ class Texts extends DBEntity {
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `title`, `author`, 
                         `text`, `source_uri`, `type`, `word_count`, `level`)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $this->con->prepare($sql);
-            $result = $stmt->execute([$this->user_id,$this->lang_id, $title, $author, $text, 
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->user_id,$this->lang_id, $title, $author, $text, 
                                       $source_url, $type, $nr_of_words, $level]);
-            $insert_id = $this->con->lastInsertId();
+            $insert_id = $this->pdo->lastInsertId();
 
-            if ($result && $insert_id > 0) {
-                // add entry to popularsources
-                $pop_sources = new PopularSources($this->con);
-                $lang = new Language($this->con, $this->user_id);
-                $lang->loadRecord($this->lang_id);
-                
-                $result = $pop_sources->add($lang->getName(), Url::getDomainName($source_url));
+            if ($stmt->rowCount() == 0 || $insert_id == 0) {
+                throw new \Exception('There was an unexpected error trying to add record to texts table.');
             }
 
-            return $result ? $insert_id : false;
-        } catch (\Exception $e) {
-            return false;
+            // add entry to popularsources
+            $pop_sources = new PopularSources($this->pdo);
+            $lang = new Language($this->pdo, $this->user_id);
+            $lang->loadRecord($this->lang_id);
+            
+            $pop_sources->add($lang->getName(), Url::getDomainName($source_url));
+
+            return $insert_id;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to add record to texts table.');
         } finally {
             $stmt = null;
         }
@@ -139,28 +143,25 @@ class Texts extends DBEntity {
     /**
     * Updates existing text in database
     *
-    * @param integer $id
+    * @param int $id
     * @param string $title
     * @param string $author
     * @param string $text
     * @param string $source_url
     * @param string $audio_url
-    * @param integer $type
-    * @return boolean
+    * @param int $type
+    * @return void
     */
     public function update(int $id, string $title, string $author, string $text, string $source_url, 
-                           string $audio_url, int $type): bool {
+                           string $audio_url, int $type): void {
         try {
             $sql = "UPDATE `{$this->table}` 
-                SET `user_id`=?, `lang_id`=?, `title`=?, `author`=?, `text`=?, `source_uri`=?, `type`=? 
-                WHERE `id`=?";
-            $stmt = $this->con->prepare($sql);
-            $result = $stmt->execute([$this->user_id, $this->lang_id, $title, $author, 
-                                      $text, $source_url, $type, $id]);
-            
-            return $result;
-        } catch (\Exception $e) {
-            return false;
+                    SET `user_id`=?, `lang_id`=?, `title`=?, `author`=?, `text`=?, `source_uri`=?, `type`=? 
+                    WHERE `id`=?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->user_id, $this->lang_id, $title, $author, $text, $source_url, $type, $id]);
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to update record from texts table.');
         } finally {
             $stmt = null;
         }
@@ -170,9 +171,9 @@ class Texts extends DBEntity {
     * Deletes texts in database using ids as a parameter to select them
     *
     * @param string $ids JSON that identifies the texts to be deleted
-    * @return boolean
+    * @return void
     */
-    public function delete(string $ids): bool {
+    public function delete(string $ids): void {
         try {
             $ids_array = json_decode($ids);
             $id_params = str_repeat("?,", count($ids_array)-1) . "?";
@@ -180,19 +181,23 @@ class Texts extends DBEntity {
             $select_sql =  "SELECT `source_uri` 
                             FROM `{$this->table}` 
                             WHERE `id` IN ($id_params)";
-            $stmt = $this->con->prepare($select_sql);
+            $stmt = $this->pdo->prepare($select_sql);
             $stmt->execute($ids_array);
             $uris = $stmt->fetchall();
             
             // delete entries from db
             $delete_sql =  "DELETE FROM `{$this->table}` 
                             WHERE `id` IN ($id_params)";
-            $stmt = $this->con->prepare($delete_sql);
+            $stmt = $this->pdo->prepare($delete_sql);
             $stmt->execute($ids_array);
 
+            if ($stmt->rowCount() == 0) {
+                throw new \Exception('There was an unexpected error trying to delete record from texts table.');
+            }
+
             // delete audio (mp3, oggs) & source files (epubs, etc.)
-            $pop_sources = new PopularSources($this->con);
-            $lang = new Language($this->con, $this->user_id);
+            $pop_sources = new PopularSources($this->pdo);
+            $lang = new Language($this->pdo, $this->user_id);
             $lang->loadRecord($this->lang_id);
             
             // delete associated file
@@ -204,10 +209,8 @@ class Texts extends DBEntity {
                 
                 $result = $pop_sources->update($lang->getName(), Url::getDomainName($value['source_uri']));
             }
-            
-            return true;
-        } catch (\Exception $e) {
-            return false;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to delete record from texts table.');
         } finally {
             $stmt = null;
         }
@@ -217,9 +220,9 @@ class Texts extends DBEntity {
     * Archives texts in database using ids as a parameter to select them
     *
     * @param string $ids JSON that identifies the texts to be archived
-    * @return boolean
+    * @return void
     */
-    public function archive(string $ids): bool {
+    public function archive(string $ids): void {
         try {
             $ids_array = json_decode($ids);
             $id_params = str_repeat("?,", count($ids_array)-1) . "?";
@@ -229,16 +232,22 @@ class Texts extends DBEntity {
                             FROM `{$this->table}` 
                             WHERE `id` IN ($id_params)";
 
-            $stmt = $this->con->prepare($insert_sql);
+            $stmt = $this->pdo->prepare($insert_sql);
             $stmt->execute($ids_array);
             
+            if ($stmt->rowCount() == 0) {
+                throw new \Exception('There was an unexpected error trying to insert record into texts table.');
+            }
+
             $delete_sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
-            $stmt = $this->con->prepare($delete_sql);
+            $stmt = $this->pdo->prepare($delete_sql);
             $stmt->execute($ids_array);
 
-            return true;
-        } catch (\Exception $e) {
-            return false;
+            if ($stmt->rowCount() == 0) {
+                throw new \Exception('There was an unexpected error trying to delete record from archived texts table.');
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to archive text.');
         } finally {
             $stmt = null;
         }
@@ -260,7 +269,7 @@ class Texts extends DBEntity {
             $sql = "SELECT COUNT(*)
                     FROM `{$this->table}`
                     WHERE `user_id` = ? AND `source_uri` = ?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $source_url]);
             $num_rows = $stmt->fetchColumn(); 
     
@@ -279,9 +288,9 @@ class Texts extends DBEntity {
     *
     * @param string $search_filter A string with the SQL statement to be used as a filter for the search
     * @param string $search_text
-    * @return integer|boolean
+    * @return int
     */
-    public function countSearchRows(string $search_filter, string $search_text) {
+    public function countSearchRows(string $search_filter, string $search_text): int {
         try {
             $search_text = '%' . $search_text . '%';
             
@@ -289,21 +298,21 @@ class Texts extends DBEntity {
                 $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
                         WHERE `user_id`=? 
                         AND `lang_id`=? AND `title` LIKE ?";
-                $stmt = $this->con->prepare($sql);
+                $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([$this->user_id, $this->lang_id, $search_text]);
             } else {
                 $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
                         WHERE `user_id`=? 
                         AND `lang_id`=? AND `type`=? AND `title` LIKE ?";
-                $stmt = $this->con->prepare($sql);
+                $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([$this->user_id, $this->lang_id, $search_filter, $search_text]);
             }
             
             $total_rows = $stmt->fetchColumn();
 
-            return $total_rows ? $total_rows : false;
-        } catch (\Exception $e) {
-            return false;
+            return (int)$total_rows;
+        } catch (\PDOException $e) {
+            return 0;
         } finally {
             $stmt = null;
         }
@@ -313,20 +322,20 @@ class Texts extends DBEntity {
     * Counts the number of rows (i.e. texts) for the current user & language combination
     * It differs from countSearchRows in that this function does not apply any additional filter
     *
-    * @return integer|boolean
+    * @return int
     */
-    public function countAllRows() {
+    public function countAllRows(): int {
         try {
             $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
                     WHERE `user_id`=? AND `lang_id`=?";
 
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id]);
             $total_rows = $stmt->fetchColumn();
 
-            return $total_rows ? $total_rows : false;
-        } catch (\Exception $e) {
-            return false;
+            return (int)$total_rows;
+        } catch (\PDOException $e) {
+            return 0;
         } finally {
             $stmt = null;
         }     
@@ -339,18 +348,18 @@ class Texts extends DBEntity {
     *
     * @param string $search_filter SQL statement specifying the filter to be used
     * @param string $search_text
-    * @param integer $offset
-    * @param integer $limit
-    * @param integer $sort_by Is converted to a string using buildSortSQL()
+    * @param int $offset
+    * @param int $limit
+    * @param int $sort_by Is converted to a string using buildSortSQL()
     * @return array
     */
-    public function getSearch(string $search_filter, string $search_text, int $offset, int $limit, int $sort_by) {
+    public function getSearch(string $search_filter, string $search_text, int $offset, 
+                              int $limit, int $sort_by): array {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
-            $filter_sql = empty($search_filter) ? '' : 'AND `type`=?';
-            $search_text = '%' . $search_text . '%';
+            $filter_sql = empty($search_filter) ? '' : 'AND `type` = :filter';
             
-            $sql = sprintf("SELECT `id`, 
+            $sql = "SELECT `id`, 
                             NULL, 
                             `title`, 
                             `author`, 
@@ -358,25 +367,34 @@ class Texts extends DBEntity {
                             `type`, 
                             `word_count`, 
                             `level`  
-                            FROM `%s` 
-                            WHERE `user_id`=? 
-                            AND `lang_id`=? 
-                            AND `title` LIKE ? %s 
-                            ORDER BY %s 
-                            LIMIT ?, ?", $this->table, $filter_sql, $sort_sql);
-            $stmt = $this->con->prepare($sql);
+                    FROM `{$this->table}` 
+                    WHERE `user_id` = :user_id 
+                    AND `lang_id` = :lang_id 
+                    AND `title` LIKE :search_str $filter_sql 
+                    ORDER BY $sort_sql 
+                    LIMIT :offset, :limit";
+            $stmt = $this->pdo->prepare($sql);
 
-            if (empty($search_filter)) {
-                $stmt->execute([$this->user_id, $this->lang_id, $search_text, $offset, $limit]);
-            } else {
-                $stmt->execute([$this->user_id, $this->lang_id, $search_text, $search_filter, $offset, $limit]);
+            $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':lang_id', $this->lang_id, \PDO::PARAM_INT);
+            $stmt->bindValue(':search_str', "%$search_text%");
+            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+
+            if (!empty($filter_sql)) {
+                $stmt->bindParam(':filter', $search_filter);
             }
-            
+
+            $stmt->execute();
             $result = $stmt->fetchall();
 
-            return $result && !empty($result) ? $result : false;
-        } catch (\Exception $e) {
-            return false;
+            if (!$result || empty($result)) {
+                throw new \Exception('Oops! There are no texts meeting your search criteria.');
+            }
+
+            return $result;
+        } catch (\PDOException $e) {
+            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }
@@ -387,16 +405,14 @@ class Texts extends DBEntity {
     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
     * Values are returned using a sort pattern ($sort_by)
     *
-    * @param integer $offset
-    * @param integer $limit
-    * @param integer $sort_by Is converted to a string using buildSortSQL()
+    * @param int $offset
+    * @param int $limit
+    * @param int $sort_by Is converted to a string using buildSortSQL()
     * @return array
     */
-    public function getAll(int $offset, int $limit, int $sort_by) {
+    public function getAll(int $offset, int $limit, int $sort_by): array  {
         try {
-            // escape parameters
             $sort_sql = $this->buildSortSQL($sort_by);
-            
             $sql = "SELECT `id`, 
                     NULL, 
                     `title`, 
@@ -406,18 +422,28 @@ class Texts extends DBEntity {
                     `word_count`, 
                     `level`  
                     FROM `{$this->table}` 
-                    WHERE `user_id`=?  
-                    AND `lang_id`=? 
+                    WHERE `user_id` = :user_id  
+                    AND `lang_id` = :lang_id 
                     ORDER BY $sort_sql 
-                    LIMIT ?, ?";
+                    LIMIT :offset, :limit";
 
-            $stmt = $this->con->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $offset, $limit]);
+            $stmt = $this->pdo->prepare($sql);
+            
+            $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':lang_id', $this->lang_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+
+            $stmt->execute();
             $result = $stmt->fetchall();
 
-            return $result && !empty($result) ? $result : false;
-        } catch (\Exception $e) {
-            return false;
+            if (!$result || empty($result)) {
+                throw new \Exception('Oops! There are no texts meeting your search criteria.');
+            }
+
+            return $result;
+        } catch (\PDOException $e) {
+            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }
@@ -447,7 +473,7 @@ class Texts extends DBEntity {
     * Converts sorting patterns selected by user (expressed as an integer value in the sort menu) 
     * to valid SQL strings
     *
-    * @param integer $sort_by
+    * @param int $sort_by
     * @return string
     */
     protected function buildSortSQL(int $sort_by): string {
@@ -495,9 +521,9 @@ class Texts extends DBEntity {
     * unknow words index is < 25%, tag the text as "intermediate", otherwise, tag it as "advanced".
     * 
     * @param string $text
-    * @return integer|boolean
+    * @return int
     */
-    private function calculateDifficulty(string $text = '') {
+    private function calculateDifficulty(string $text = ''): int {
         $level_thresholds = array('85', '95'); // <=80: beginner; >80 & <=95: intermediate; >95: advanced
         $frequency_list_table = ''; // frequency list table name: should be something like frequency_list_ + ISO 639-1 (2 letter language) code
         
@@ -512,7 +538,7 @@ class Texts extends DBEntity {
         $xml_text = ''; // used to check if $text parameter is XML code
         $accented_chars = ''; // holds list of accented characters that should be considered legal when counting words in a text
         
-        $result = false; // values returned by SQL queries
+        $result = 0; // function return value
         $row = []; // array with all the rows from a successful SQL query
 
         // if $text is XML code (video transcript), extract text from XML string
@@ -531,9 +557,9 @@ class Texts extends DBEntity {
         try {
             // get learning language ISO name
             $sql = "SELECT `name` 
-            FROM `languages` 
-            WHERE `id`=?";
-            $stmt = $this->con->prepare($sql);
+                    FROM `languages` 
+                    WHERE `id`=?";
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->lang_id]);
 
             // build frequency list table name based on learning language name
@@ -545,7 +571,7 @@ class Texts extends DBEntity {
                 $sql = "SELECT `word` 
                         FROM `$frequency_list_table` WHERE `frequency_index` <= ?";
 
-                $stmt = $this->con->prepare($sql);
+                $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([$threshold]);
 
                 while($row = $stmt->fetch(\PDO::FETCH_NUM)){
@@ -564,21 +590,102 @@ class Texts extends DBEntity {
                 // because they won't be removed from $words_in_text either
                 $index = $unknown_words / $total_words;
                 if ($threshold === '85' && $index < 0.25) {
-                    return 1; // beginner
+                    $result = 1; // beginner
                 } elseif ($threshold === '95' && $index < 0.25) {
-                    return 2; // intermediate
+                    $result = 2; // intermediate
                 } elseif ($threshold === '95' && $index > 0.24) {
-                    return 3; // advanced
+                    $result = 3; // advanced
                 }
             } 
 
             return $result;
-        } catch (\Exception $e) {
-            return false;
+        } catch (\PDOException $e) {
+            throw new \Exception('Oops! There was an unexpected error trying to calculate text difficulty level.');
         } finally {
             $stmt = null;
         }
+    } // calculateDifficulty()
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId(): int
+    {
+        return $this->id;
     }
-} // calculateDifficulty()
+
+    /**
+     * Get the value of lang_id
+     */ 
+    public function getLangId(): int
+    {
+        return $this->lang_id;
+    }
+
+    /**
+     * Get the value of title
+     */ 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+
+    /**
+     * Get the value of author
+     */ 
+    public function getAuthor(): string
+    {
+        return $this->author;
+    }
+
+    /**
+     * Get the value of text
+     */ 
+    public function getText(): string
+    {
+        return $this->text;
+    }
+
+    /**
+     * Get the value of audio_uri
+     */ 
+    public function getAudioUri(): string
+    {
+        return $this->audio_uri;
+    }
+
+    /**
+     * Get the value of source_uri
+     */ 
+    public function getSourceUri(): string
+    {
+        return $this->source_uri;
+    }
+
+    /**
+     * Get the value of type
+     */ 
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    /**
+     * Get the value of nr_of_words
+     */ 
+    public function getNrOfWords(): int
+    {
+        return $this->nr_of_words;
+    }
+
+    /**
+     * Get the value of level
+     */ 
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+} 
     
 ?>

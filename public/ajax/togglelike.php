@@ -30,11 +30,8 @@ use Aprelendo\Includes\Classes\Likes;
 
 try {
     if ($_POST['id']) {
-        $like = new Likes($con, $_POST['id'], $user->getId(), $user->getLangId());
-        $result = $like->toggle();
-        if (!$result) {
-            throw new \Exception('Oops! There was a problem trying to give a like to that text.');
-        }
+        $like = new Likes($pdo, $_POST['id'], $user->getId(), $user->getLangId());
+        $like->toggle();
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

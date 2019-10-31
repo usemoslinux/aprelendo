@@ -28,12 +28,12 @@ class ArchivedTexts extends Texts
     /**
      * Constructor
      *
-     * @param \PDO $con
-     * @param integer $user_id
-     * @param integer $lang_id
+     * @param \PDO $pdo
+     * @param int $user_id
+     * @param int $lang_id
      */
-    public function __construct(\PDO $con, int $user_id, int $lang_id) {
-        parent::__construct($con, $user_id, $lang_id);
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id) {
+        parent::__construct($pdo, $user_id, $lang_id);
         $this->table = 'archived_texts';
     } // end __construct()
 
@@ -41,9 +41,9 @@ class ArchivedTexts extends Texts
      * Unarchives text by using their $ids
      *
      * @param string $ids JSON with text ids to unarchive
-     * @return boolean
+     * @return void
      */
-    public function unarchive(string $ids): bool {
+    public function unarchive(string $ids): void {
         try {
             $ids_array = json_decode($ids);
             $id_params = str_repeat("?,", count($ids_array)-1) . "?";
@@ -53,16 +53,22 @@ class ArchivedTexts extends Texts
                            FROM `{$this->table}` 
                            WHERE `id` IN ($id_params)";
             
-            $stmt = $this->con->prepare($insert_sql);
+            $stmt = $this->pdo->prepare($insert_sql);
             $stmt->execute($ids_array);
             
+            if (!$stmt->rowCount()) {
+                throw new \Exception('There was an unexpected error trying to insert record into the texts table.');    
+            }
+
             $delete_sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
-            $stmt = $this->con->prepare($delete_sql);
+            $stmt = $this->pdo->prepare($delete_sql);
             $stmt->execute($ids_array);
-            
-            return true;
-        } catch (\Exception $e) {
-            return false;
+
+            if (!$stmt->rowCount()) {
+                throw new \Exception('There was an unexpected error trying to delete record from the archived texts table.');    
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to unarchive this text.');
         } finally {
             $stmt = null;
         }

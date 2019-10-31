@@ -20,7 +20,6 @@
 
 require_once '../includes/dbinit.php';  // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in and set $user object
-require_once PUBLIC_PATH . 'head.php';
 
 use Aprelendo\Includes\Classes\Reader;
 use Aprelendo\Includes\Classes\Videos;
@@ -32,15 +31,17 @@ try {
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
 
         // check if user has access to view this text
-        if (!$user->isAllowedToAccessElement('shared_texts', (int)$_GET['id']) || !$is_shared) {
-            throw new \Exception ('User is not authorized to access this file.');
+        if (!$user->isAllowedToAccessElement('shared_texts', (int)$_GET['id'])) {
+            header("HTTP/1.1 401 Unauthorized");
+            exit;
         }
         
-        $reader = new Reader($con, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
+        $reader = new Reader($pdo, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
         
-        $video = new Videos($con, $user->getId(), $user->getLangId());
-        $video_row = $video->getById($_GET['id']);
-        $yt_id = $video->extractYTId($video_row['source_uri']);
+        $video = new Videos($pdo, $user->getId(), $user->getLangId());
+        $video->loadRecord($_GET['id']);
+
+        $yt_id = $video->getYoutubeId();
 
         switch ($reader->getDisplayMode()) {
             case 'light':
@@ -61,12 +62,15 @@ try {
         
         $body_css .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
-        throw new \Exception ('Oops! There was an error trying to fetch that video.');
+        throw new \Exception('Oops! There was an error trying to fetch that video.');
     }
 } catch (Exception $e) {
     header('Location:/login.php');
     exit;
 }
+
+require_once PUBLIC_PATH . 'head.php';
+
 ?>
 
     <body id="readerpage" <?php echo $body_css; ?> >

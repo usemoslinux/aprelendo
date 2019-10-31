@@ -31,10 +31,10 @@ use Aprelendo\Includes\Classes\Videos;
 try {
     if (isset($_POST['video_id']) && !empty($_POST['video_id'])) {
         $video_id = $_POST['video_id'];
-        $video = new Videos($con, $user->getId(), $user->getLangId());
+        $video = new Videos($pdo, $user->getId(), $user->getLangId());
         echo $video->fetchVideo($user->getLang(), $video_id);
     } else {
-        throw new \Exception ('There was a problem retrieving that URL. Please check it is not empty or malformed');
+        throw new \Exception('There was a problem retrieving that URL. Please check it is not empty or malformed');
     }
     
 } catch (Exception $e) {

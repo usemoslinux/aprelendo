@@ -36,14 +36,14 @@ class Videos extends DBEntity {
     /**
      * Constructor
      * 
-     * Sets 3 basic variables used to identify videos: $con, $user_id & lang_id
+     * Sets 3 basic variables used to identify videos: $pdo, $user_id & lang_id
      *
-     * @param \PDO $con
-     * @param integer $user_id
-     * @param integer $lang_id
+     * @param \PDO $pdo
+     * @param int $user_id
+     * @param int $lang_id
      */
-    public function __construct(\PDO $con, int $user_id, int $lang_id) {
-        parent::__construct($con, $user_id);
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id) {
+        parent::__construct($pdo, $user_id);
         
         $this->lang_id = $lang_id;
         $this->table = 'shared_texts';
@@ -132,28 +132,84 @@ class Videos extends DBEntity {
     } // end extractYTId()
 
     /**
-     * Returns record by Id
+     * Loads video record data by Id
      *
-     * @param integer $id
-     * @return array|bool
+     * @param int $id
+     * @return void
      */
-    public function getById(int $id) {
+    public function loadRecord(int $id): void {
         try {
             $sql = "SELECT * 
-                FROM `{$this->table}` 
-                WHERE `id`=?";
+                    FROM `{$this->table}` 
+                    WHERE `id`=?";
 
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$id]);
-            
-            return $stmt->fetch(\PDO::FETCH_ASSOC);
-        } catch (\Exception $e) {
-            return false;
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($row) {
+                $this->id             = $row['id']; 
+                $this->lang_id        = $row['lang_id']; 
+                $this->author         = $row['author']; 
+                $this->author         = $row['author']; 
+                $this->source_url     = $row['source_uri']; 
+                $this->transcript_xml = $row['text']; 
+                $this->youtube_id     = $this->extractYTId($this->source_url);
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to load record from texts table.');
         } finally {
             $stmt = null;
         }
-    } // end getById()
+    } // end loadRecord()
 
+    /**
+     * Get the value of lang_id
+     */ 
+    public function getLangId(): int
+    {
+        return $this->lang_id;
+    }
+
+    /**
+     * Get the value of title
+     */ 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * Get the value of author
+     */ 
+    public function getAuthor(): string
+    {
+        return $this->author;
+    }
+
+    /**
+     * Get the value of youtube_id
+     */ 
+    public function getYoutubeId(): string
+    {
+        return $this->youtube_id;
+    }
+
+    /**
+     * Get the value of source_url
+     */ 
+    public function getSourceUrl(): string
+    {
+        return $this->source_url;
+    }
+
+    /**
+     * Get the value of transcript_xml
+     */ 
+    public function getTranscriptXml(): string
+    {
+        return $this->transcript_xml;
+    }
 }
 
 ?>

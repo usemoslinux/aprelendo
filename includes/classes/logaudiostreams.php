@@ -25,11 +25,11 @@ class LogAudioStreams extends Log
     /**
      * Constructor
      *
-     * @param \PDO $con
-     * @param integer $user_id
+     * @param \PDO $pdo
+     * @param int $user_id
      */
-    public function __construct(\PDO $con, int $user_id) {
-        parent::__construct($con, $user_id);
+    public function __construct(\PDO $pdo, int $user_id) {
+        parent::__construct($pdo, $user_id);
         $this->table = 'log_audio_streams';
     } // end __construct()
 }

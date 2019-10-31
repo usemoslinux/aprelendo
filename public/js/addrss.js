@@ -106,7 +106,7 @@ $(document).ready(function () {
                         mode: 'rss'
                     }
                 }).done(function (data) {
-                    if (typeof data.error_msg !== 'undefined' && data.error_msg !== null) {
+                    if (data.error_msg != null) {
                         showMessage($entry_text, data.error_msg, 'alert-danger');
                     } else {
                         switch (add_mode) {

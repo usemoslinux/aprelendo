@@ -45,12 +45,6 @@ class Connect
         $this->password = DB_PASSWORD;
         $this->db       = DB_NAME;
         $this->charset  = DB_CHARSET;
-
-        $this->options = [
-            PDO::ATTR_EMULATE_PREPARES   => false, // turn off emulation mode for "real" prepared statements
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, //turn on errors in the form of exceptions
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, //make the default fetch be an associative array
-        ];
     } // end __construct()
 
     /**
@@ -62,12 +56,13 @@ class Connect
         
         try {
             $dsn = $this->driver . ':host=' . $this->host . ';dbname=' . $this->db . ';charset=' . $this->charset;
-            $con = new \PDO($dsn, $this->user, $this->password, $this->options);
+            $pdo = new \PDO($dsn, $this->user, $this->password);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (\Exception $e) {
             error_log($e->getMessage());
         }
 
-        return $con;
+        return $pdo;
     }
 }
 

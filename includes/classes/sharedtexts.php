@@ -29,12 +29,12 @@ class SharedTexts extends Texts
     /**
      * Constructor
      *
-     * @param \PDO $con
-     * @param integer $user_id
-     * @param integer $lang_id
+     * @param \PDO $pdo
+     * @param int $user_id
+     * @param int $lang_id
      */
-    public function __construct(\PDO $con, int $user_id, int $lang_id) {
-        parent::__construct($con, $user_id, $lang_id);
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id) {
+        parent::__construct($pdo, $user_id, $lang_id);
         $this->table = 'shared_texts';
     } // end __construct()
 
@@ -45,48 +45,60 @@ class SharedTexts extends Texts
      *
      * @param string $search_filter SQL statement specifying the filter to be used
      * @param string $search_text
-     * @param integer $offset
-     * @param integer $limit
-     * @param integer $sort_by Is converted to a string using buildSortSQL()
-     * @return array|bool
+     * @param int $offset
+     * @param int $limit
+     * @param int $sort_by Is converted to a string using buildSortSQL()
+     * @return array
      */
-    public function getSearch(string $search_filter, string $search_text, int $offset, int $limit, int $sort_by) {
+    public function getSearch(string $search_filter, string $search_text, int $offset, 
+                              int $limit, int $sort_by): array {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
-            $filter_sql = empty($search_filter) ? '' : 'AND `type`=?';
-            $like_str = '%' . $search_text . '%';
+            $filter_sql = empty($search_filter) ? '' : 'AND `type` = :filter';
 
-            $lang = new Language($this->con, $this->user_id);
+            $lang = new Language($this->pdo, $this->user_id);
             $lang->loadRecord($this->lang_id);
 
-            $sql = sprintf("SELECT t.id, 
-                           (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
-                           t.title, 
-                           t.author, 
-                           t.source_uri,
-                           t.type, 
-                           t.word_count, 
-                           t.level, 
-                           l.name, 
-                           (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
-                           (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = ?) AS `user_liked` 
-                           FROM `%s` t 
-                           INNER JOIN `languages` l ON t.lang_id = l.id
-                           WHERE `name`=? 
-                           AND `title` LIKE ? %s 
-                           ORDER BY %s 
-                           LIMIT ?, ?", $this->table, $filter_sql, $sort_sql);
+            $sql = "SELECT t.id, 
+                        (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
+                        t.title, 
+                        t.author, 
+                        t.source_uri,
+                        t.type, 
+                        t.word_count, 
+                        t.level, 
+                        l.name, 
+                        (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
+                        (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = :user_id) AS `user_liked` 
+                    FROM `{$this->table}` t 
+                    INNER JOIN `languages` l ON t.lang_id = l.id
+                    WHERE `name`= :name 
+                    AND `title` LIKE :search_str $filter_sql  
+                    ORDER BY $sort_sql 
+                    LIMIT :offset, :limit";
 
-            $stmt = $this->con->prepare($sql);
-            if (empty($search_filter)) {
-                $stmt->execute([$this->user_id, $lang->getName(), $like_str, $offset, $limit]);
-            } else {
-                $stmt->execute([$this->user_id, $lang->getName(), $like_str, $search_filter, $offset, $limit]);
+            $stmt = $this->pdo->prepare($sql);
+
+            $stmt->bindParam(':user_id', $this->user_id);
+            $stmt->bindValue(':name', $lang->getName());
+            $stmt->bindValue(':search_str', "%$search_text%");
+            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+
+            if (!empty($filter_sql)) {
+                $stmt->bindParam(':filter', $search_filter);
             }
-            
-            return $stmt->fetchAll();
-        } catch (\Exception $e) {
-            return false;
+
+            $stmt->execute();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            if (!$result || empty($result)) {
+                throw new \Exception('Oops! There are no texts meeting your search criteria.');
+            }
+
+            return $result;
+        } catch (\PDOException $e) {
+            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }
@@ -94,19 +106,20 @@ class SharedTexts extends Texts
 
     /**
      * Gets all the texts for the current user & language combination
-     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
+     * It returns only specific ranges by using an $offset (specifies where to start) 
+     * and a $limit (how many rows to get)
      * Values are returned using a sort pattern ($sort_by)
      *
-     * @param integer $offset
-     * @param integer $limit
-     * @param integer $sort_by Is converted to a string using buildSortSQL()
-     * @return array|bool
+     * @param int $offset
+     * @param int $limit
+     * @param int $sort_by Is converted to a string using buildSortSQL()
+     * @return array
      */
-    public function getAll(int $offset, int $limit, int $sort_by) {
+    public function getAll(int $offset, int $limit, int $sort_by): array {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
 
-            $lang = new Language($this->con, $this->user_id);
+            $lang = new Language($this->pdo, $this->user_id);
             $lang->loadRecord($this->lang_id);
 
             $sql = "SELECT t.id, 
@@ -119,19 +132,30 @@ class SharedTexts extends Texts
                     t.level, 
                     l.name,
                     (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
-                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = ?) AS `user_liked`
+                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = :user_id) AS `user_liked`
                     FROM `{$this->table}` t
                     INNER JOIN `languages` l ON t.lang_id = l.id
-                    WHERE `name`=? 
+                    WHERE `name` = :lang 
                     ORDER BY $sort_sql 
-                    LIMIT ?, ?";
+                    LIMIT :offset, :limit";
 
-            $stmt = $this->con->prepare($sql);
-            $stmt->execute([$this->user_id, $lang->getName(), $offset, $limit]);
+            $stmt = $this->pdo->prepare($sql);
 
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\Exception $e) {
-            return false;
+            $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
+            $stmt->bindValue(':lang', $lang->getName());
+            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+
+            $stmt->execute();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            if (!$result || empty($result)) {
+                throw new \Exception('Oops! There are no texts meeting your search criteria.');
+            }
+
+            return $result;
+        } catch (\PDOException $e) {
+            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }
@@ -154,12 +178,12 @@ class SharedTexts extends Texts
                     FROM `{$this->table}`
                     WHERE `source_uri` = ?";
             
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$source_url]);
             $row = $stmt->fetch();
                 
             return ($row) && ($row['exists'] > 0);
-        } catch (\Exception $e) {
+        } catch (\PDOException $e) {
             return false;
         } finally {
             $stmt = null;
@@ -170,7 +194,7 @@ class SharedTexts extends Texts
      * Converts sorting patterns selected by user (expressed as an integer value in the sort menu) 
      * to valid SQL strings
      *
-     * @param integer $sort_by
+     * @param int $sort_by
      * @return string
      */
     protected function buildSortSQL(int $sort_by): string {

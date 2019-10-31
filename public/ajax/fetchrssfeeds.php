@@ -8,7 +8,7 @@ $user_id = $user->getId();
 $lang_id = $user->getLangId();
 
 try {
-    $rssfeeds = new RSSFeeds($con, $user_id, $lang_id);
+    $rssfeeds = new RSSFeeds($pdo, $user_id, $lang_id);
 
     $RSS1notempty = !empty($rssfeeds->getFeed1()->getUrl());
     $RSS2notempty = !empty($rssfeeds->getFeed2()->getUrl());
@@ -28,7 +28,7 @@ try {
         }
         echo $html. '</div>';
     } else {
-        throw new \Exception ('There are no RSS feeds to show. Please, add some in the <a href="languages.php">languages</a> section. You can add up to 3 feeds per language.');
+        throw new \Exception('There are no RSS feeds to show. Please, add some in the <a href="languages.php">languages</a> section. You can add up to 3 feeds per language.');
     }
 } catch (Exception $e) {
     echo '<div class="alert alert-danger">' . $e->getMessage() . '</div>';
@@ -36,7 +36,10 @@ try {
 
 
 function printRSSFeed($feed, $groupindex) {
-    if(isset($feed->title)) {
+    $feed_title = $feed->getTitle();
+    $feed_articles = $feed->getArticles();
+
+    if(isset($feed_title) && !empty($feed_title)) {
         $accordion_id = 'accordion-' . $groupindex;
         $heading_id = 'heading-' . $groupindex;
         $item_id = 'item-' . $groupindex;
@@ -47,15 +50,15 @@ function printRSSFeed($feed, $groupindex) {
                         <div class='card-header' id='$heading_id'>
                             <button id='$label_id' class='btn btn-link collapsed' data-toggle='collapse' data-target='#$item_id' aria-expanded='false' aria-controls='$item_id'>
                                 <i class='fas fa-chevron-right'></i>
-                                $feed->title</a>
+                                $feed_title</a>
                             </button>
                         </div>
                         <div id='$item_id' class='collapse' aria-labelledby='$label_id' data-parent='#accordion'>
                             <div class='card-body'>";
 
-        if (isset($feed->articles)) {
+        if (isset($feed_articles) && !empty($feed_articles)) {
             $itemindex = 1;
-            foreach ($feed->articles as $article) {
+            foreach ($feed_articles as $article) {
                 $art_title = $article['title'];
                 $art_date = $article['date'];
                 $art_author = $article['author'];
@@ -91,7 +94,7 @@ function printRSSFeed($feed, $groupindex) {
         }
         $html .= '</div></div></div></div>';
     } else {
-        throw new \Exception ("Oops! There was an error trying to fetch this feed:" .
+        throw new \Exception("Oops! There was an error trying to fetch this feed:" .
             $feed->getUrl() . "\nIt is probably due to a malformed RSS feed.");
     }
     return $html;

@@ -31,16 +31,15 @@ use Aprelendo\Includes\Classes\LogAudioStreams;
 
 try {
     if (!isset($_POST['text']) || empty($_POST['text'] || !isset($_POST['langiso']) || empty($_POST['langiso']))){
-        throw new \Exception (404);
+        throw new \Exception(404);
     }
 
-    $stream_log = new LogAudioStreams($con, $user->getId());
-    $streams_today = $stream_log->getTodayRecords();
-    $nr_of_streams_today = $streams_today === false ? 0 : count($streams_today);
+    $stream_log = new LogAudioStreams($pdo, $user->getId());
+    $nr_of_streams_today = $stream_log->countTodayRecords();
     $premium_user = $user->isPremium();
 
     if ((!$premium_user && $nr_of_streams_today >= 1) || ($premium_user && $nr_of_streams_today >= 3)){
-        throw new \Exception (403);
+        throw new \Exception(403);
     }
 
     $audiolang = array( 'en' => 'en-gb', 

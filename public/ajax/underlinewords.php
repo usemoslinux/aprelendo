@@ -28,7 +28,7 @@ if (!isset($_POST) || empty($_POST)) {
 
 use Aprelendo\Includes\Classes\Reader;
 
-$reader = new Reader($con, $user->getId(), $user->getLangId());
+$reader = new Reader($pdo, $user->getId(), $user->getLangId());
 
 // for ebooks, use slower method to underline words (as input is HTML code)
 // for everything else, use faster method (as input is simple text)

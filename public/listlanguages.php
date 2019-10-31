@@ -23,7 +23,7 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 
 use Aprelendo\Includes\Classes\Language;
 
-$lang = new Language($con, $user->getId());
+$lang = new Language($pdo, $user->getId());
 $available_langs = $lang->getAvailableLangs();
         
 if ($available_langs) {

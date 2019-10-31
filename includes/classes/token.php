@@ -29,11 +29,11 @@ class Token extends DBEntity {
     /**
      * Constructor
      *
-     * @param \PDO $con
-     * @param integer $user_id
+     * @param \PDO $pdo
+     * @param int $user_id
      */
-    public function __construct(\PDO $con, int $user_id) {
-        $this->con = $con;
+    public function __construct(\PDO $pdo, int $user_id) {
+        $this->pdo = $pdo;
         $this->user_id = $user_id;
         $this->table = 'auth_tokens';
     } // end __construct()
@@ -44,32 +44,36 @@ class Token extends DBEntity {
      * @return \PDO
      */
     private function deleteOld(): void {
-        $this->con->query("DELETE FROM `{$this->table}` WHERE `expires` < NOW()");
+        try {
+            $this->pdo->query("DELETE FROM `{$this->table}` WHERE `expires` < NOW()");
+        } catch (\Exception $e) {
+            throw new \Exception('There was an unexpected error trying to delete old token records.');
+        }
     } // end deleteOld()
 
     /**
      * Loads Record data in object properties (looks record in db by id)
      *
-     * @param integer $id
-     * @return array
+     * @param int $id
+     * @return void
      */
-    public function loadRecord(int $id): bool {
+    public function loadRecord(int $id): void {
         try {
             $sql = "SELECT *
                     FROM `{$this->table}`
                     WHERE `user_id`=? AND `expires` >= NOW()";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            $this->id       = $row['id']; 
-            $this->user_id  = $row['user_id']; 
-            $this->token    = $row['token'];
-            $this->expires  = $row['expires']; 
             
-            return $row ? true : false;
-        } catch (\Exception $e) {
-            return false;
+            if ($row) {
+                $this->id       = $row['id']; 
+                $this->user_id  = $row['user_id']; 
+                $this->token    = $row['token'];
+                $this->expires  = $row['expires']; 
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to load token record.');
         } finally {
             $stmt = null;
         }
@@ -78,7 +82,7 @@ class Token extends DBEntity {
     /**
      * Generate token to store in cookie
      *
-     * @param integer $length
+     * @param int $length
      * @return string
      */
     private function generate($length = 20)
@@ -89,19 +93,22 @@ class Token extends DBEntity {
     /**
      * Adds token to db
      *
-     * @return boolean
+     * @return void
      */
-    public function add(): bool {
+    public function add(): void {
         $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : "";
         $user_id = $this->user_id;
 
         // first, remove old tokens from auth_tokens table
         $this->deleteOld();
+        $this->loadRecord($user_id);
             
         // check if valid token is already in db
-        if ($this->loadRecord($user_id) !== false) {
+        if (!empty($this->token)) {
             // a valid token is already in the db
-            return setcookie('user_token', $this->token, strtotime($this->expires), "/", $domain, true);
+            if (!setcookie('user_token', $this->token, strtotime($this->expires), "/", $domain, true)) {
+                throw new \Exception('There was an unexpected error trying to create token cookie.');
+            } 
         } else {
             // create new token, insert it in db & set cookie
             $token = $this->generate();
@@ -110,14 +117,14 @@ class Token extends DBEntity {
             
             try {
                 $sql = "INSERT INTO `{$this->table}` (`token`, `user_id`, `expires`) VALUES (?, ?, ?)";
-                $stmt = $this->con->prepare($sql);
-                $result = $stmt->execute([$token, $user_id, $expires]);
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([$token, $user_id, $expires]);
 
-                if ($result) {
-                    return setcookie('user_token', $token, $time_stamp, "/", $domain, true);
+                if (!setcookie('user_token', $token, $time_stamp, "/", $domain, true)) {
+                    throw new \Exception('There was an unexpected error trying to create token cookie.');
                 } 
-            } catch (\Exception $e) {
-                return false;
+            } catch (\PDOException $e) {
+                throw new \Exception('There was an unexpected error trying to add token record.');
             } finally {
                 $stmt = null;
             }

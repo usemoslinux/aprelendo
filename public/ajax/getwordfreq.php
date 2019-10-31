@@ -31,7 +31,7 @@ use Aprelendo\Includes\Classes\WordFrequency;
 $user_id = $user->getId();
 
 if ($user->isPremium()) {
-    echo WordFrequency::get($con, $_GET['word'], $user->getLang());
+    echo WordFrequency::get($pdo, $_GET['word'], $user->getLang());
 }
 
 ?>

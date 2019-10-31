@@ -32,19 +32,19 @@ class RSSFeeds
     /**
      * Constructor
      * 
-     * Sets 3 basic variables used to identify feeds: $con, $user_id & lang_id
+     * Sets 3 basic variables used to identify feeds: $pdo, $user_id & lang_id
      * 
      * Gets up to 3 rss feeds for that user & language combination
      *
-     * @param \PDO $con
-     * @param integer $user_id
-     * @param integer $lang_id
+     * @param \PDO $pdo
+     * @param int $user_id
+     * @param int $lang_id
      */
-    public function __construct(\PDO $con, int $user_id, int $lang_id) {
-        $lang = new Language($con, $user_id);
-        $result = $lang->loadRecord($lang_id);
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id) {
+        try {
+            $lang = new Language($pdo, $user_id);
+            $lang->loadRecord($lang_id);
 
-        if ($result) {
             $feed1uri = $lang->getRssFeed1Uri();
             $feed2uri = $lang->getRssFeed2Uri();
             $feed3uri = $lang->getRssFeed3Uri();
@@ -52,9 +52,9 @@ class RSSFeeds
             $this->feed1 = new RSSFeed($feed1uri);
             $this->feed2 = new RSSFeed($feed2uri);
             $this->feed3 = new RSSFeed($feed3uri);
-        } else {
-            throw new \Exception ('Oops! There was an unexpected error trying to get your RSS feeds.');
-        }
+        } catch (\Exception $e) {
+            throw new \Exception('Oops! There was an unexpected error trying to get your RSS feeds.');
+        }        
     } // end __construct()
 
     /**

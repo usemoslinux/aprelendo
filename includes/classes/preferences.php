@@ -33,11 +33,11 @@ class Preferences extends DBEntity {
     /**
      * Constructor
      *
-     * @param PDO $con
+     * @param PDO $pdo
      * @param int $user_id
      */
-    public function __construct(\PDO $con, int $user_id) {
-        parent::__construct($con, $user_id);
+    public function __construct(\PDO $pdo, int $user_id) {
+        parent::__construct($pdo, $user_id);
         $this->table = 'preferences';
     } // end __construct()
 
@@ -52,23 +52,27 @@ class Preferences extends DBEntity {
      * @param bool $assisted_learning
      * @return void
      */
-    public function edit(string $font_family, string $font_size, string $line_height, string $alignment, string $mode, bool $assisted_learning): bool {
-        $this->font_family       = isset($font_family) && !empty($font_family)             ? $font_family       : $this->font_family;
-        $this->font_size         = isset($font_size) && !empty($font_size)                 ? $font_size         : $this->font_size;
-        $this->line_height       = isset($line_height) && !empty($line_height)             ? $line_height       : $this->line_height;
-        $this->alignment         = isset($alignment) && !empty($alignment)                 ? $alignment         : $this->alignment;
-        $this->mode              = isset($mode) && !empty($mode)                           ? $mode              : $this->mode;
+    public function edit(string $font_family, string $font_size, string $line_height, string $alignment, 
+                         string $mode, bool $assisted_learning): void {
+        $this->font_family       = isset($font_family)       && !empty($font_family)       ? $font_family       : $this->font_family;
+        $this->font_size         = isset($font_size)         && !empty($font_size)         ? $font_size         : $this->font_size;
+        $this->line_height       = isset($line_height)       && !empty($line_height)       ? $line_height       : $this->line_height;
+        $this->alignment         = isset($alignment)         && !empty($alignment)         ? $alignment         : $this->alignment;
+        $this->mode              = isset($mode)              && !empty($mode)              ? $mode              : $this->mode;
         $this->assisted_learning = isset($assisted_learning) && !empty($assisted_learning) ? $assisted_learning : $this->assisted_learning;
 
         try {
             $sql = "REPLACE INTO `{$this->table}` (`user_id`, `font_family`,
                     `font_size`, `line_height`, `text_alignment`, `learning_mode`, `assisted_learning`)
                     VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $this->con->prepare($sql);
-            $stmt->execute([$this->user_id, $this->font_family, $this->font_size, $this->line_height, $this->alignment, $this->mode, $this->assisted_learning]);
-            return true;
-        } catch (\Exception $e) {
-            throw new \Exception ('There was an unexpected error trying to save your preferences. Please, try again later.');
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->user_id, $this->font_family, $this->font_size, $this->line_height, $this->alignment, 
+                            $this->mode, $this->assisted_learning]);
+            if ($stmt->rowCount() == 0) {
+                throw new \Exception('There was an unexpected error trying to save your preferences. Please, try again later.');
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to save your preferences. Please, try again later.');
         } finally {
             $stmt = null;
         }

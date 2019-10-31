@@ -22,7 +22,7 @@ require_once '../includes/dbinit.php'; // connect to database
 
 use Aprelendo\Includes\Classes\User;
 
-$user = new User($con);
+$user = new User($pdo);
 
 // if user is already logged in, go to "My Texts" section
 if ($user->isLoggedIn()) {

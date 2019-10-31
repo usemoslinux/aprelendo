@@ -66,7 +66,7 @@ cursor: pointer;
 </style>
 CSS;
 
-$reader = new Reader($con, false, 55, 5, 1);
+$reader = new Reader($pdo, false, 55, 5, 1);
 
 $time_start = microtime(true);
 $text = $reader->colorizeWords($user->getText());

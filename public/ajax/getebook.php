@@ -35,19 +35,20 @@ $lang_id = $user->getLangId();
 $id = $_GET['id'];
 
 try {
-    $text = new Texts($con, $user_id, $lang_id);
-    
-    if ($row = $text->loadRecord($id)) {
-        $file_name = $row['source_uri'];
+    $text = new Texts($pdo, $user_id, $lang_id);
+    $text->loadRecord($id);
+    $file_name = $text->getSourceUri();
+
+    if (!empty($file_name)) {
         $ebook_file = new EbookFile($file_name, $user->isPremium());
         $ebook_content = $ebook_file->get();
         if ($ebook_content != false) {
             return $ebook_content;
         } else {
-            throw new \Exception (404);
+            throw new \Exception(404);
         }
     } else {
-        throw new \Exception (404);
+        throw new \Exception(404);
     }
 } catch (Exception $e) {
     http_response_code($e->getMessage());

@@ -24,8 +24,8 @@ use Aprelendo\Includes\Classes\Table;
 use Aprelendo\Includes\Classes\Url;
 
 class TextTable extends Table {
-    private $is_shared      = false;
-    private $show_archived  = false;
+    protected $is_shared      = false;
+    protected $show_archived  = false;
     
     /**
     * Constructor

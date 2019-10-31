@@ -30,20 +30,20 @@ if(isset($_POST['Eea']) && !empty($_POST['Eea']) && !empty($_POST['U3']))
         $google_name = $_POST['ig']; //Name
         $google_profile_pic = $_POST['Paa']; //Profile Pic URL
 
-        $user = new User($con);
+        $user = new User($pdo);
 
         // check if google email is already in db
-        if($user->loadRecordByEmail($google_email)) {
+        $user->loadRecordByEmail($google_email);
+        if(!empty($user->getEmail())) {
             // user already exists
             $user->updateGoogleId($google_id, $google_email);
             $user->login($user->getName(), '', $google_id);
         } else {
             // new user
-            if ($user->register($google_name, $google_email, $google_id)) {
-                $user->login($google_name, $google_id);
-            }
+            $user->register($google_name, $google_email, $google_id);
+            $user->login($google_name, $google_id);
         }
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         $error = array('error_msg' => 'There was an unexpected error trying to log you in using your Google ID.');
         echo json_encode($error);
     } finally {

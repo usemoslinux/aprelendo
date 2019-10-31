@@ -45,9 +45,9 @@ class RSSFeed
     * Get RSS feed elements and initialize class variables
     * 
     * @param string $url Url of the feed to parse
-    * @return string
+    * @return void
     */
-    public function fetchXMLFeed(string $url): string {
+    public function fetchXMLFeed(string $url): void {
         $this->xmlfeed = $this->get_url_contents($url);
         
         if ($this->xmlfeed) {
@@ -70,7 +70,7 @@ class RSSFeed
                                 $this->articles[$itemindex]['date'] = date("d/m/Y - H:i", strtotime($artdate));
                                 $this->articles[$itemindex]['author'] = $article->author; // ATOM: feed>entry>author; RSS: rss>channel>item>author
                                 $this->articles[$itemindex]['src'] = $isatom ? $article->link->attributes()->href : $article->link;  // ATOM: feed>entry>link>href attr; RSS: rss>channel>item>link
-                                $this->articles[$itemindex]['content'] = $isatom ? $article->content : $article->description; // ATOM: feed>entry>content; rss>channel>item>description
+                                $this->articles[$itemindex]['content'] = $isatom ? $article->pdotent : $article->description; // ATOM: feed>entry>content; rss>channel>item>description
                                 
                                 if ($itemindex >= 5) {
                                     break;
@@ -82,22 +82,47 @@ class RSSFeed
                     }
                 }
             } else {
-                throw new \Exception ('Oops! There was a problem trying to get this feed: ' . $url);
+                throw new \Exception('Oops! There was a problem trying to get this feed: ' . $url);
             }
         } else {
-            throw new \Exception ('Oops! There was a problem trying to get this feed: ' . $url);
+            throw new \Exception('Oops! There was a problem trying to get this feed: ' . $url);
         }
-            
-        return true;
     } // end fetchXMLFeed()
 
     /**
-     * Get the value of url
+     * Get the value of title
      * @return string
+     */ 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * Get the value of url
+     * @return string 
      */ 
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    /**
+     * Get the value of xmlfeed
+     * @return string
+     */ 
+    public function getXmlfeed(): string
+    {
+        return $this->xmlfeed;
+    }
+
+    /**
+     * Get the value of articles
+     * @return string
+     */ 
+    public function getArticles(): array
+    {
+        return $this->articles;
     }
 }
 

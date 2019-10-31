@@ -21,18 +21,18 @@
 namespace Aprelendo\Includes\Classes;
 
 class DBEntity {
-    protected $con;
+    protected $pdo;
     protected $user_id = 0;
     protected $table   = '';
     
     /**
      * Constructor
      *
-     * @param \PDO $con
-     * @param integer $user_id
+     * @param \PDO $pdo
+     * @param int $user_id
      */
-    public function __construct(\PDO $con, int $user_id) {
-        $this->con = $con;
+    public function __construct(\PDO $pdo, int $user_id) {
+        $this->pdo = $pdo;
         $this->user_id = $user_id;
     } // end __construct()
 }

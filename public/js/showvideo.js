@@ -33,8 +33,10 @@ $(document).ready(function () {
         type: "GET",
         dataType: "json"
     }).done(function (data) {
-        dictionaryURI = data.dictionary_uri;
-        translatorURI = data.translator_uri;
+        if (data.error_msg == null) {
+            dictionaryURI = data.dictionary_uri;
+            translatorURI = data.translator_uri;    
+        } 
     });
 
      /**

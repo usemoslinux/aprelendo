@@ -23,7 +23,7 @@ use Aprelendo\Includes\Classes\User;
 if (!isset($user)) {
     require_once 'dbinit.php'; // connect to database
 
-    $user = new User($con);
+    $user = new User($pdo);
 
     if (!$user->isLoggedIn()) {
         header('Location:/login.php');

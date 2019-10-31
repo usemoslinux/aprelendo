@@ -23,13 +23,15 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 
 use Aprelendo\Includes\Classes\PopularSources;
 
-$pop_sources = new PopularSources($con);
-$sources = $pop_sources->getAllByLang($user->getLang());
-
-echo printSources($sources);
+try {
+    $pop_sources = new PopularSources($pdo);
+    $sources = $pop_sources->getAllByLang($user->getLang());
+    echo printSources($sources);
+} catch (\Exception $e) {
+    //throw $e;
+}
 
 function printSources($sources) {
-
     if (!isset($sources) || empty($sources)) {
         echo "<div class='simple-text'>Hmm, that's weird. We couldn't find any texts in the selected language.</div>";    
     }

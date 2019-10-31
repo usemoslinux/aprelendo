@@ -40,23 +40,23 @@ $to_lang = isset($_POST['to_lang']) ? $_POST['to_lang'] : '';
 try {
     if (empty($new_password1) && empty($new_password2)) {
         if (empty($password)) {
-            throw new \Exception ('Please enter your current password and try again.');
+            throw new \Exception('Please enter your current password and try again.');
         } else {
             if (!$user->updateUserProfile($username, $email, $password, $new_password1, $src_lang, $to_lang)) {
-                throw new \Exception ($user->getErrorMsg());
+                throw new \Exception($user->getErrorMsg());
             }
         }
     } else {
         if ($new_password1 === $new_password2) {
             if (strlen($new_password1) >= 8)  {
                 if (!$user->updateUserProfile($username, $email, $password, $new_password1, $src_lang, $to_lang)) {
-                    throw new \Exception ($user->getErrorMsg());
+                    throw new \Exception($user->getErrorMsg());
                 }
             } else {
-                throw new \Exception ('New password should be at least 8 characters long. Please, try again.');
+                throw new \Exception('New password should be at least 8 characters long. Please, try again.');
             }
         } else {
-            throw new \Exception ('Both new passwords should be identical. Please, try again.');
+            throw new \Exception('Both new passwords should be identical. Please, try again.');
         }
     }
 } catch (Exception $e) {

@@ -20,51 +20,53 @@
 
 require_once '../includes/dbinit.php';  // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in and set $user object
-require_once PUBLIC_PATH . 'head.php';
-?>
 
-<body id="readerpage"
-<?php
 use Aprelendo\Includes\Classes\Reader;
 
 try {
+    $html = '';
     if (isset($_GET['id']) && !empty($_GET['id'])) {
+        $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
+
         // check if user has access to view this text
-        $table = isset($_GET['sh']) && $_GET['sh'] != 0 ? 'shared_texts' : 'texts';
-        if (!$user->isAllowedToAccessElement($table, (int)$_GET['id'])) {
-            throw new \Exception ('User is not authorized to access this file.');
+        if (!$user->isAllowedToAccessElement('shared_texts', (int)$_GET['id'])) {
+            header("HTTP/1.1 401 Unauthorized");
+            exit;
         }
 
-        $is_shared = $table == 'shared_texts' ? true : false;
-        $reader = new Reader($con, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
+        $reader = new Reader($pdo, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
         
         switch ($reader->getDisplayMode()) {
             case 'light':
-            echo "class='lightmode'";
-            break;
+                $html = "class='lightmode'";
+                break;
             case 'sepia':
-            echo "class='sepiamode'";
-            break;
+                $html = "class='sepiamode'";
+                break;
             case 'dark':
-            echo "class='darkmode'";
-            break;
+                $html = "class='darkmode'";
+                break;
             default:
-            break;
+                break;
         }
         $font_family = $reader->getFontFamily();
         $font_size = $reader->getFontSize();
         $text_align = $reader->getTextAlign();
         
-        echo " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
+        $html .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
-        throw new \Exception ('Oops! There was an error trying to fetch that text.');
+        throw new \Exception('Oops! There was an error trying to fetch that text.');
     }
 } catch (Exception $e) {
     header('Location:/login.php');
     exit;
 }
+
+require_once PUBLIC_PATH . 'head.php';
+
 ?>
->
+
+<body id="readerpage" <?php echo $html; ?> >
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12 col-lg-6 offset-lg-3">

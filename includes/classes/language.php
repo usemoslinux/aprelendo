@@ -45,41 +45,41 @@ class Language extends DBEntity
      * Constructor
      * Initializes class variables (id, name, etc.)
      *
-     * @param \PDO $con
-     * @param integer $id
-     * @param integer $user_id
+     * @param \PDO $pdo
+     * @param int $id
+     * @param int $user_id
      */
-    public function __construct (\PDO $con, int $user_id) {
-        parent::__construct($con, $user_id);
+    public function __construct (\PDO $pdo, int $user_id) {
+        parent::__construct($pdo, $user_id);
         $this->table = 'languages';
     } // end __construct()
 
     /**
      * Loads Record data in object properties (looks record in db by id)
      *
-     * @param integer $id
-     * @return array
+     * @param int $id
+     * @return void
      */
-    public function loadRecord(int $id): bool {
+    public function loadRecord(int $id): void {
         try {
             $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ? AND `user_id` = ?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$id, $this->user_id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            $this->id               = $row['id']; 
-            $this->user_id          = $row['user_id']; 
-            $this->name             = $row['name'];
-            $this->dictionary_uri   = $row['dictionary_uri']; 
-            $this->translator_uri   = $row['translator_uri']; 
-            $this->rss_feed_1_uri   = $row['rss_feed1_uri'];
-            $this->rss_feed_2_uri   = $row['rss_feed2_uri'];
-            $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
-            $this->show_freq_words  = $row['show_freq_words'];
             
-            return $row ? true : false;
-        } catch (\Exception $e) {
-            return false;
+            if ($row) {
+                $this->id               = $row['id']; 
+                $this->user_id          = $row['user_id']; 
+                $this->name             = $row['name'];
+                $this->dictionary_uri   = $row['dictionary_uri']; 
+                $this->translator_uri   = $row['translator_uri']; 
+                $this->rss_feed_1_uri   = $row['rss_feed1_uri'];
+                $this->rss_feed_2_uri   = $row['rss_feed2_uri'];
+                $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
+                $this->show_freq_words  = $row['show_freq_words'];
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to load this record.');
         } finally {
             $stmt = null;
         }
@@ -89,9 +89,9 @@ class Language extends DBEntity
      * Updates language settings in db
      *
      * @param array $array
-     * @return bool
+     * @return void
      */
-    public function editRecord(array $new_record, bool $is_premium_user): bool {
+    public function editRecord(array $new_record, bool $is_premium_user): void {
         try {
             $this->dictionary_uri = $new_record['dict-uri'];
             $this->translator_uri = $new_record['translator-uri'];
@@ -106,12 +106,11 @@ class Language extends DBEntity
             $sql = "UPDATE `{$this->table}` 
                     SET `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?, `rss_feed3_uri`=?, `show_freq_words`=? 
                     WHERE `user_id`=? AND `id`=?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->dictionary_uri, $this->translator_uri, $this->rss_feed_1_uri, 
                             $this->rss_feed_2_uri, $this->rss_feed_3_uri, $this->show_freq_words, $this->user_id, $this->id]);
-            return true;
-        } catch (\Exception $e) {
-            return false;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to edit this record.');
         } finally {
             $stmt = null;
         }
@@ -121,9 +120,9 @@ class Language extends DBEntity
      * Creates & saves default preferences for user
      *
      * @param string $lang
-     * @return bool
+     * @return void
      */
-    public function createInitialRecordsForUser(string $native_lang): bool {
+    public function createInitialRecordsForUser(string $native_lang): void {
         try {
             // create & save default language preferences for user
             foreach (self::$iso_code as $key => $value) {
@@ -132,12 +131,14 @@ class Language extends DBEntity
                 
                 $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`, `translator_uri`) 
                         VALUES (?, ?, ?, ?)";
-                $stmt = $this->con->prepare($sql);
+                $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([$this->user_id, $key, $dictionary_uri, $translator_uri]);
             }
-            return true;
-        } catch (\Exception $e) {
-            return false;
+            if ($stmt->rowCount() == 0) {
+                throw new \Exception('There was an unexpected error trying to create initial record for this user.');
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to create initial record for this user.');
         } finally {
             $stmt = null;
         }
@@ -147,12 +148,12 @@ class Language extends DBEntity
      * Loads Record data in object properties (looks record in db by name)
      *
      * @param string $lang
-     * @return boolean
+     * @return void
      */
-    public function loadRecordByName(string $lang): bool {
+    public function loadRecordByName(string $lang): void {
         try {
             $sql = "SELECT * FROM `{$this->table}` WHERE `user_id`=? AND `name`=?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $lang]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -166,9 +167,11 @@ class Language extends DBEntity
             $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
             $this->show_freq_words  = $row['show_freq_words'];
             
-            return $row ? true : false;
+            if (!$row) {
+                throw new \Exception('The record does not exist.');
+            }
         } catch (\Exception $e) {
-            return false;
+            throw new \Exception('There was an unexpected error trying to load this record.');
         } finally {
             $stmt = null;
         }
@@ -188,7 +191,7 @@ class Language extends DBEntity
      * Gives index of 639-1 iso codes in Language::$lg_iso_codes array
      *
      * @param string $lang_name
-     * @return integer
+     * @return int
      */
     public static function getIndex(string $lang_name): int {
         $keys = array_keys(self::$iso_code);
@@ -212,16 +215,20 @@ class Language extends DBEntity
     /**
      * Returns list of available languages for active user
      *
-     * @return array|bool
+     * @return array
      */
-    public function getAvailableLangs() {
+    public function getAvailableLangs(): array {
         try {
             $sql = "SELECT `id`, `name` FROM `{$this->table}` WHERE `user_id`=?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id]);
-            return $stmt->fetchAll();
-        } catch (\Exception $e) {
-            return false;
+            $result = $stmt->fetchAll();
+            if (!$result || empty($result)) {
+                throw new \Exception('There was an unexpected error trying to get available languages for user.');
+            }
+            return $result;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to get available languages for user.');
         } finally {
             $stmt = null;
         }
@@ -230,7 +237,7 @@ class Language extends DBEntity
     /**
      * Id getter
      *
-     * @return integer
+     * @return int
      */
     public function getId(): int {
         return $this->id;

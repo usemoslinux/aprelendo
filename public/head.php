@@ -17,15 +17,25 @@
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
-?>
 
-<?php 
+require_once '../includes/dbinit.php';  // connect to database
+require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in and set $user object
+
 $curpage = basename($_SERVER['PHP_SELF']); // returns the current file Name
 $show_pages = array('showtext.php', 'showvideo.php', 'showebook.php');
 $this_is_show_page = in_array($curpage, $show_pages);
 
 if ($this_is_show_page) {
     $doclang = $user->getLang();
+
+    // check if user has access to view this text
+    $table = isset($_GET['sh']) && $_GET['sh'] != 0 ? 'shared_texts' : 'texts';
+    if (!$user->isAllowedToAccessElement($table, (int)$_GET['id'])) {
+        header("HTTP/1.1 401 Unauthorized");
+        exit;
+    }
+
+    $is_shared = $table == 'shared_texts' ? true : false;
 } else {
     $doclang = 'en';
 }

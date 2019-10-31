@@ -38,18 +38,14 @@ try {
     
         // decide wether we are deleting an archived text or not
         if ($is_archived) {
-            $texts_table = new ArchivedTexts($con, $user_id, $lang_id);
+            $texts_table = new ArchivedTexts($pdo, $user_id, $lang_id);
         } else {
-            $texts_table = new Texts($con, $user_id, $lang_id);
+            $texts_table = new Texts($pdo, $user_id, $lang_id);
         }
     
-        $result = $texts_table->delete($text_ids);
-
-        if (!$result) {
-            throw new \Exception ('There was an unexpected error trying to remove this text');
-        }
+        $texts_table->delete($text_ids);
     } else {
-        throw new \Exception ('There was an error in the parameters provided to remove this text');
+        throw new \Exception('There was an error in the parameters provided to remove this text');
     }
 } catch (\Exception $e) {
     $error = array('error_msg' => $e->getMessage());

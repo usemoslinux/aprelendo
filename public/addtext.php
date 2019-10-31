@@ -43,13 +43,13 @@ use Aprelendo\Includes\Classes\Texts;
                 // modify text
                 $id = $_GET['id'];
                 
-                $text = new Texts($con, $user->getId(), $user->getLangId());
-                $row = $text->loadRecord($id);
+                $text = new Texts($pdo, $user->getId(), $user->getLangId());
+                $text->loadRecord($id);
                 
-                $art_title = $row['title'];
-                $art_author = $row['author'];
-                $art_url = $row['source_uri'];
-                $art_content = $row['text'];
+                $art_title = $text->getTitle();
+                $art_author = $text->getAuthor();
+                $art_url = $text->getSourceUri();
+                $art_content = $text->getText();
             } elseif (isset($_POST['art_title'])) { 
                 // rss
                 $art_title = $_POST['art_title'];

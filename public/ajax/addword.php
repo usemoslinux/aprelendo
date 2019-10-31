@@ -37,12 +37,8 @@ if (isset($_POST['word'])) {
     $isphrase = $_POST['isphrase'];
     
     try {
-        $words_table = new Words($con, $user_id, $lang_id);
-        $result = $words_table->add($word, $status, $isphrase);
-
-        if (!$result) {
-            throw new \Exception ('Oops! There was an unexpected error trying to add this word.');
-        }
+        $words_table = new Words($pdo, $user_id, $lang_id);
+        $words_table->add($word, $status, $isphrase);
     } catch (Exception $e) {
         $error = array('error_msg' => $e->getMessage());
         header('Content-Type: application/json');

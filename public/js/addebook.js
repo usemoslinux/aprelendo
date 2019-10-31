@@ -73,7 +73,7 @@ $(document).ready(function () {
             })
             .done(function (data) {
                 // in case of error while trying to upload, show error message
-                if (typeof data.error_msg !== 'undefined' && data.error_msg.length != 0) {
+                if (data.error_msg != null) {
                     showMessage(data.error_msg, 'alert-danger');
                     resetControls(false);
                 } 
@@ -90,7 +90,7 @@ $(document).ready(function () {
                         // validate epub
                         .done(function (data) {
                             // if epub file fails integrity checks, show error message
-                            if (typeof data.error_msg !== 'undefined' && data.error_msg.length != 0) {
+                            if (data.error_msg != null) {
                                 $progressbar.width('100%');
                                 $progressbar.removeClass('progress-bar-success').addClass('progress-bar-danger');
                                 $progressbar.text(data.error_msg);

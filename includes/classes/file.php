@@ -60,9 +60,9 @@ class File
     /**
      * Uploads files
      * @param array $file_array Array containing file info 
-     * @return @bool 
+     * @return void
      */
-    public function put(array $file_array): bool {
+    public function put(array $file_array): void {
         $this->name = basename($file_array['name']);
         $this->extension = pathinfo($this->name, PATHINFO_EXTENSION);
         $this->size = $file_array['size'];
@@ -95,26 +95,26 @@ class File
         
         // upload file
         if (empty($errors) && $file_array['error'] == UPLOAD_ERR_OK) {
-            $result = $this->move($temp_file_path, $this->path);
-            if ($result) {
-                $this->name = $target_file_name;
-                return true;
+            try {
+                $this->move($temp_file_path, $this->path);
+            } catch (\Exception $th) {
+                throw new \Exception('There was an unexpected error trying to move this file from the temporary folder'); 
             }
+
+            $this->name = $target_file_name;
         } else {
             $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
             throw new \Exception($error_str);  
         }
-
-        return false;
     } // end put()
     
     /**
      * Moves file from temporary folder to uploads folder
      * @param string $source_path Source file path 
      * @param string $destination_path Destination file path
-     * @return bool
+     * @return void
      */
-    private function move(string $source_path, string $destination_path): bool {
+    private function move(string $source_path, string $destination_path): void {
         // if target dir does not exist, create it
         if (!is_dir($this->folder)) {
             mkdir($this->folder);
@@ -122,11 +122,7 @@ class File
         // try to move file to uploads folder. If this fails, show error message
         if (!move_uploaded_file($source_path, $destination_path)) {
             throw new \Exception("<li>Sorry, there was an error uploading your file.</li>");  
-        } else {
-            return true;
         }
-
-        return false;
     } // end move()
     
     /**
@@ -158,7 +154,7 @@ class File
     
     /**
      * Creates error header
-     * @param integer $code HTML error code
+     * @param int $code HTML error code
      * @param string $msg Error message
      * @return string HTML header
      */
@@ -179,7 +175,7 @@ class File
      * Detects file's Mime type
      * @return string Mime string
      */
-    private function getMimeType(): bool {
+    private function getMimeType(): string {
         //MIME MAP
         $mime_extension_map = array(
             '3ds'           => 'image/x-3ds',

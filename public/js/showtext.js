@@ -34,7 +34,7 @@ $(document).ready(function () {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $('html');
 
-    // loadAudio();
+    loadAudio();
     
     /**
      * Sets keyboard shortcuts for media player
@@ -161,8 +161,10 @@ $(document).ready(function () {
         type: "GET",
         dataType: "json"
     }).done(function (data) {
-        dictionaryURI = data.dictionary_uri;
-        translatorURI = data.translator_uri;
+        if (data.error_msg == null) {
+            dictionaryURI = data.dictionary_uri;
+            translatorURI = data.translator_uri;    
+        }
     });
 
     /**

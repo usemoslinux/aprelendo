@@ -37,30 +37,35 @@ class WordFrequency {
      * 
      * @param string $word
      * @param string $lg_iso
-     * @return int|bool
+     * @return int
      */
-    public static function get(\PDO $con, string $word, string $lg_iso) {
+    public static function get(\PDO $pdo, string $word, string $lg_iso) {
         try {
             $table = 'frequency_list_' . $lg_iso;
             $word = mb_strtolower($word, "UTF-8");
 
             $sql = "SELECT COUNT(*) AS `exists` FROM {$table} WHERE word=?";
-            $stmt = $con->prepare($sql);
+            $stmt = $pdo->prepare($sql);
             $stmt->execute([$word]);
             $row = $stmt->fetch();
 
-            if ($row && $row['exists'] > 0) {
-                $sql = "SELECT * FROM {$table} WHERE word=?";
-                $stmt = $con->prepare($sql);
-                $stmt->execute([$word]);
-                $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-                $word_freq = $row['frequency_index'];
-                return $word_freq;
-            } else {
+            if (!$row || $row['exists'] == 0) {
                 return 0;
             }
-        } catch (\Exception $e) {
-            return false;
+
+            $sql = "SELECT * FROM {$table} WHERE word=?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$word]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$row) {
+                throw new \Exception('There was an unexpected error trying to load record from frequency list table.');
+            }
+
+            $word_freq = $row['frequency_index'];
+            return $word_freq;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to load record from frequency list table.');
         } finally {
             $stmt = null;
         }
@@ -70,19 +75,25 @@ class WordFrequency {
      * Gets High Frequency List for language
      *
      * @param string $lg_iso
-     * @return array|bool
+     * @return array
      */
-    public static function getHighFrequencyList(\PDO $con, string $lg_iso) {
+    public static function getHighFrequencyList(\PDO $pdo, string $lg_iso): array {
         try {
             $table = 'frequency_list_' . $lg_iso;
             $sql = "SELECT `word`, `frequency_index` 
                     FROM `$table`   
                     WHERE `frequency_index` < 80";
-            $stmt = $con->prepare($sql);
+            $stmt = $pdo->prepare($sql);
             $stmt->execute();
-            return $stmt->fetchAll();
-        } catch (\Exception $e) {
-            return false;
+            $result = $stmt->fetchAll();
+
+            if (!$result || empty($result)) {
+                throw new \Exception('There was an unexpected error trying to load records from frequency list table.');
+            }
+
+            return $result;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to load records from frequency list table.');
         } finally {
             $stmt = null;
         }

@@ -36,14 +36,14 @@ class Words extends DBEntity {
     /**
      * Constructor
      * 
-     * Sets 3 basic variables used to identify any text: $con, $user_id & lang_id
+     * Sets 3 basic variables used to identify any text: $pdo, $user_id & lang_id
      *
-     * @param \PDO $con
-     * @param integer $user_id
-     * @param integer $lang_id
+     * @param \PDO $pdo
+     * @param int $user_id
+     * @param int $lang_id
      */
-    public function __construct(\PDO $con, int $user_id, int $lang_id) {
-        parent::__construct($con, $user_id);
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id) {
+        parent::__construct($pdo, $user_id);
         $this->lang_id = $lang_id;
         $this->table = 'words';
     } // end __construct()
@@ -52,23 +52,25 @@ class Words extends DBEntity {
      * Adds a new wod to the database
      *
      * @param string $word
-     * @param integer $status
-     * @param integer $isphrase It's an integer but it acts like a boolean (only uses 0 & 1)
-     * @return boolean
+     * @param int $status
+     * @param int $isphrase It's an integer but it acts like a boolean (only uses 0 & 1)
+     * @return void
      */
-    public function add(string $word, int $status, bool $isphrase): bool {
+    public function add(string $word, int $status, bool $isphrase): void {
         try {
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`)
                     VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
                     `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `is_phrase`=?, `date_modified`=NOW()";
 
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $word, $status, $isphrase, 
                             $this->user_id, $this->lang_id, $word, $status, $isphrase]);
             
-            return true;
-        } catch (\Exception $e) {
-            return false;
+            if ($stmt->rowCount() == 0) {
+                throw new \Exception('There was an unexpected error trying to add record to words table.');
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to add record to words table.');
         } finally {
             $stmt = null;
         }
@@ -78,9 +80,9 @@ class Words extends DBEntity {
      * Updates status of existing words in database
      * 
      * @param string $words array containing all the words to update
-     * @return boolean
+     * @return void
      */
-    public function updateByName(array $words): bool {
+    public function updateByName(array $words): void {
         try {
             // $csvwords = Conversion::ArraytoCSV($words);
             $user_id = $this->user_id;
@@ -89,12 +91,10 @@ class Words extends DBEntity {
             $sql = "UPDATE `{$this->table}` SET `status`=`status`-1, `date_modified`=NOW() 
                     WHERE `user_id`=? AND `lang_id`=? AND `word` 
                     IN (?)";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $words]);
-                    
-            return true;
-        } catch (\Exception $e) {
-            return false;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to update record from words table.');
         } finally {
             $stmt = null;
         }
@@ -104,16 +104,19 @@ class Words extends DBEntity {
      * Deletes 1 word in database using word (not the id, the actual word) as a parameter to select it
      *
      * @param string $word
-     * @return boolean
+     * @return void
      */
-    public function deleteByName(string $word): bool {
+    public function deleteByName(string $word): void {
         try {
             $sql = "DELETE FROM `{$this->table}` WHERE `word`=?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$word]);
-            return true;
+            
+            if ($stmt->rowCount() == 0) {
+                throw new \Exception('There was an unexpected error trying to delete record from words table.');
+            }
         } catch (\Exception $e) {
-            return false;
+            throw new \Exception('There was an unexpected error trying to delete record from words table.');
         } finally {
             $stmt = null;
         }
@@ -123,19 +126,21 @@ class Words extends DBEntity {
      * Deletes words in database using ids as a parameter to select them
      *
      * @param string $ids JSON that identifies the texts to be deleted
-     * @return boolean
+     * @return void
      */
-    public function delete(string $ids): bool {
+    public function delete(string $ids): void {
         try {
             $ids_array = json_decode($ids);
             $id_params = str_repeat("?,", count($ids_array)-1) . "?";
 
             $sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute($ids_array);
-            return true;
+            if ($stmt->rowCount() == 0) {
+                throw new \Exception('There was an unexpected error trying to delete record from words table.');
+            }
         } catch (\Exception $e) {
-            return false;
+            throw new \Exception('There was an unexpected error trying to delete record from words table.');
         } finally {
             $stmt = null;
         }
@@ -145,9 +150,9 @@ class Words extends DBEntity {
      * Counts the number of rows (i.e. words) for a specific search
      *
      * @param string $search_text
-     * @return integer|boolean
+     * @return int
      */
-    public function countSearchRows(string $search_text) {
+    public function countSearchRows(string $search_text): int {
         try {
             $like_str = '%' . $search_text . '%';
             
@@ -155,13 +160,13 @@ class Words extends DBEntity {
                     FROM `{$this->table}` 
                     WHERE `user_id`=? AND `lang_id`=?  
                     AND `word` LIKE ?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $like_str]);
             $row = $stmt->fetch();
             $total_rows = $row['count_search'];
             return $total_rows;
-        } catch (\Exception $e) {
-            return false;
+        } catch (\PDOException $e) {
+            return 0;
         } finally {
             $stmt = null;
         }
@@ -171,20 +176,20 @@ class Words extends DBEntity {
      * Counts the number of rows (i.e. words) for the current user & language combination
      * It differs from countSearchRows in that this function does not apply any additional filter
      *
-     * @return integer|boolean
+     * @return int
      */
-    public function countAllRows() {
+    public function countAllRows(): int {
         try {
             $sql = "SELECT COUNT(word) AS `count_all`
                     FROM `{$this->table}`  
                     WHERE `user_id`=? AND `lang_id`=?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id]);
             $row = $stmt->fetch();
             $total_rows = $row['count_all'];
             return $total_rows;
-        } catch (\Exception $e) {
-            return false;
+        } catch (\PDOException $e) {
+            return 0;
         } finally {
             $stmt = null;
         }
@@ -196,12 +201,12 @@ class Words extends DBEntity {
      * Values are returned using a sort pattern ($sort_by)
      *
      * @param string $search_text
-     * @param integer $offset
-     * @param integer $limit
-     * @param integer $sort_by Is converted to a string using buildSortSQL()
+     * @param int $offset
+     * @param int $limit
+     * @param int $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
-    public function getSearch(string $search_text, int $offset, int $limit, int $sort_by) {
+    public function getSearch(string $search_text, int $offset, int $limit, int $sort_by): array {
         try {
             $like_str = '%' . $search_text . '%';
             $sort_sql = $this->buildSortSQL($sort_by);
@@ -210,12 +215,17 @@ class Words extends DBEntity {
                     FROM `{$this->table}` 
                     WHERE `user_id`=? AND `lang_id`=? AND word LIKE ? 
                     ORDER BY $sort_sql LIMIT ?, ?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $like_str, $offset, $limit]);
+            $result = $stmt->fetchAll();
             
-            return $stmt->fetchAll();
-        } catch (\Exception $e) {
-            return false;
+            if (!$result || empty($result)) {
+                throw new \Exception('Oops! There are no texts meeting your search criteria.');
+            }
+
+            return $result;
+        } catch (\PDOException $e) {
+            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }        
@@ -226,12 +236,12 @@ class Words extends DBEntity {
      * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
      * Values are returned using a sort pattern ($sort_by)
      *
-     * @param integer $offset
-     * @param integer $limit
-     * @param integer $sort_by Is converted to a string using buildSortSQL()
+     * @param int $offset
+     * @param int $limit
+     * @param int $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
-    public function getAll(int $offset, int $limit, int $sort_by) {
+    public function getAll(int $offset, int $limit, int $sort_by): array {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
             
@@ -239,12 +249,17 @@ class Words extends DBEntity {
                     FROM `{$this->table}` 
                     WHERE `user_id`=? AND `lang_id`=?  
                     ORDER BY $sort_sql LIMIT ?, ?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $offset, $limit]);
+            $result = $stmt->fetchAll();
             
-            return $stmt->fetchAll();
-        } catch (\Exception $e) {
-            return false;
+            if (!$result || empty($result)) {
+                throw new \Exception('Oops! There are no texts meeting your search criteria.');
+            }
+
+            return $result;
+        } catch (\PDOException $e) {
+            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }
@@ -254,7 +269,7 @@ class Words extends DBEntity {
      * Converts sorting patterns selected by user (expressed as an integer value in the sort menu) 
      * to valid SQL strings
      *
-     * @param integer $sort_by
+     * @param int $sort_by
      * @return string
      */
     private function buildSortSQL(int $sort_by): string {
@@ -285,7 +300,7 @@ class Words extends DBEntity {
      * Results are ordered using $order_by.
      *
      * @param string $search_text
-     * @param integer $order_by Is converted to a string using buildSortSQL()
+     * @param int $order_by Is converted to a string using buildSortSQL()
      * @return boolean
      */
     public function createCSVFile(string $search_text, int $order_by): bool {
@@ -298,7 +313,7 @@ class Words extends DBEntity {
             $sql = "SELECT `word` 
                     FROM `{$this->table}`
                     WHERE `user_id`=? AND `lang_id`=? $filter";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id]);
 
             $num_fields = $stmt->columnCount();
@@ -331,6 +346,62 @@ class Words extends DBEntity {
             $stmt = null;
         }
     } // end createCSVFile()
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get the value of lang_id
+     */ 
+    public function getLangId(): int
+    {
+        return $this->lang_id;
+    }
+
+    /**
+     * Get the value of word
+     */ 
+    public function getWord(): string
+    {
+        return $this->word;
+    }
+
+    /**
+     * Get the value of status
+     */ 
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * Get the value of is_phrase
+     */ 
+    public function getIsPhrase(): bool
+    {
+        return $this->is_phrase;
+    }
+
+    /**
+     * Get the value of date_created
+     */ 
+    public function getDateCreated(): string
+    {
+        return $this->date_created;
+    }
+
+    /**
+     * Get the value of date_modified
+     */ 
+    public function getDateModified(): string
+    {
+        return $this->date_modified;
+    }
 }
 
 ?>

@@ -30,11 +30,11 @@ class PopularSources extends DBEntity {
      * 
      * Sets basic variables
      *
-     * @param PDO $con
+     * @param PDO $pdo
      * @return void
      */
-    public function __construct(\PDO $con) {
-        $this->con = $con;
+    public function __construct(\PDO $pdo) {
+        $this->pdo = $pdo;
         $this->table = 'popular_sources';
     } // end __construct()
 
@@ -43,9 +43,9 @@ class PopularSources extends DBEntity {
      *
      * @param string $lg_iso
      * @param string $domain
-     * @return boolean
+     * @return void
      */
-    public function add(string $lg_iso, string $domain): bool {
+    public function add(string $lg_iso, string $domain): void {
         try {
             $invalid_sources = array('feedproxy.google.com',
                                      'www.youtube.com',
@@ -53,22 +53,21 @@ class PopularSources extends DBEntity {
                                      'youtu.be');
 
             if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain))  {
-                return true; // end execution
+                return;
             }
 
             $domain = strtolower($domain);
             // if text belongs to an invalid source or is an ebook, avoid adding it to popular_sources table
             if (in_array($domain, $invalid_sources) || pathinfo($domain, PATHINFO_EXTENSION) === '.epub') {
-                return true; // end execution
+                return;
             }
 
-            $sql = "INSERT INTO `{$this->table}` (`lang_iso`, `times_used`, `domain`) VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1";
-            $stmt = $this->con->prepare($sql);
+            $sql = "INSERT INTO `{$this->table}` (`lang_iso`, `times_used`, `domain`) 
+                    VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1";
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$lg_iso, $domain]);
-
-            return true;
-        } catch (\Exception $e) {
-            return false;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to add record to the popular sources list.');
         } finally {
             $stmt = null;
         }
@@ -79,27 +78,25 @@ class PopularSources extends DBEntity {
      *
      * @param string $lg_iso
      * @param string $domain
-     * @return boolean
+     * @return void
      */
-    public function update(string $lg_iso, string $domain): bool {
+    public function update(string $lg_iso, string $domain): void {
         try {
             if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain))  {
-                return true; // end execution
+                throw new \Exception('Wrong parameters provided to update record from the popular sources list.');
             }
     
             $sql = "DELETE FROM `{$this->table}` WHERE `lang_iso`=? AND `domain`=? AND `times_used` = 1";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$lg_iso, $domain]);
                     
             if ($stmt->rowCount() <= 0) {
                 $sql = "UPDATE `{$this->table}` SET `times_used`=`times_used` - 1 WHERE `lang_iso`=? AND `domain`=?";
-                $stmt = $this->con->prepare($sql);
+                $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([$lg_iso, $domain]);
             }
-
-            return true;        
-        } catch (\Exception $e) {
-            return false;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to update record from the popular sources list.');
         } finally {
             $stmt = null;
         }
@@ -109,21 +106,27 @@ class PopularSources extends DBEntity {
      * Get all rows for a given language
      *
      * @param string $lg_iso
-     * @return array|bool
+     * @return array
      */
-    public function getAllByLang(string $lg_iso) {
+    public function getAllByLang(string $lg_iso): array {
         try {
             if (!isset($lg_iso) || empty($lg_iso))  {
-                return false; // return error
+                throw new \Exception('Wrong parameters provided to update record from the popular sources list.');
             }
 
             $sql = "SELECT * FROM `{$this->table}` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT 50";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$lg_iso]);
                     
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\Exception $e) {
-            return false;
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            if (!$result || empty($result)) {
+                throw new \Exception('There was an unexpected error trying to get record from popular sources list.');
+            }
+
+            return $result;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to get record from popular sources list.');
         } finally {
             $stmt = null;
         }

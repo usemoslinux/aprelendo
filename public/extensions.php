@@ -23,7 +23,7 @@ require_once PUBLIC_PATH . 'head.php';
 
 use Aprelendo\Includes\Classes\User;
 
-$user = new User($con);
+$user = new User($pdo);
 
 if (!$user->isLoggedIn()) {
     require_once PUBLIC_PATH . 'simpleheader.php';

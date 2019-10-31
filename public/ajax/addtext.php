@@ -50,9 +50,9 @@ try {
             
             // initialize text table
             if ($is_shared) {
-                $texts_table = new SharedTexts($con, $user_id, $lang_id);
+                $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
             } else {
-                $texts_table = new Texts($con, $user_id, $lang_id);
+                $texts_table = new Texts($pdo, $user_id, $lang_id);
             }
             
             // check if required fields are set
@@ -95,7 +95,7 @@ try {
                 
                 if (!empty($_POST['id'])) {
                     $id = $_POST['id'];
-                    $result = $texts_table->update($id, $title, $author, $text, $source_url, $target_file_name, $type);
+                    $texts_table->update($id, $title, $author, $text, $source_url, $target_file_name, $type);
                 } else {
                     if ($texts_table->exists($source_url)) {
                         $msg = 'The text you are trying to add already exists in our database. ';
@@ -103,18 +103,14 @@ try {
 
                         throw new \Exception($msg);
                     }
-                    $result = $texts_table->add($title, $author, $text, $source_url, $target_file_name, $type);
+                    $texts_table->add($title, $author, $text, $source_url, $target_file_name, $type);
                 }
                 
-                if ($result) {
-                    // if everything goes fine return HTTP code 204 (No content), as nothing is returned 
-                    http_response_code(204);
-                } else { // in case of error, show message
-                    throw new \Exception ('Oops! There was an unexpected error when uploading this text.');
-                }
+                // if everything goes fine return HTTP code 204 (No content), as nothing is returned 
+                http_response_code(204);
             } else {
                 $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
-                throw new \Exception ($error_str);    
+                throw new \Exception($error_str);    
             }
         }
         break; // end of simple text or video
@@ -126,7 +122,7 @@ try {
             $source_url = $_POST['url'];
             $text = $_POST['text'];
 
-            $texts_table = new SharedTexts($con, $user_id, $lang_id);
+            $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
 
             // if text is already in db, show error message
             if ($texts_table->exists($source_url)) {
@@ -137,7 +133,8 @@ try {
             }
             
             // if successful, return insert_id in json format
-            if ($insert_id = $texts_table->add($title, $author, $text, $source_url, '', '1')) {
+            $insert_id = $texts_table->add($title, $author, $text, $source_url, '', '1');
+            if ($insert_id > 0) {
                 $arr = array('insert_id' => $insert_id);
                 echo json_encode($arr);
             }
@@ -153,7 +150,7 @@ try {
             $type = 6; // 6 = ebook
             $audio_uri = '';
             $target_file_name = '';
-            $text = null;
+            $text = '';
 
             // check if file exists
             if (!isset($_FILES['url']) || $_FILES['url']['error'] === UPLOAD_ERR_NO_FILE) {
@@ -161,38 +158,35 @@ try {
             }
 
             // check if user is allowed to upload file & does not exceed the daily upload limit
-            $file_upload_log = new LogFileUploads($con, $user->getId());
-            $uploads_today = $file_upload_log->getTodayRecords();
-            $nr_of_uploads_today = $uploads_today === false ? 0 : count($uploads_today);
+            $file_upload_log = new LogFileUploads($pdo, $user->getId());
+            $nr_of_uploads_today = $file_upload_log->countTodayRecords();
             $premium_user = $user->isPremium();
 
             if ((!$premium_user) || ($premium_user && $nr_of_uploads_today >= 1)){
-                throw new \Exception ('Sorry, you have reached your file upload limit for today.');
+                throw new \Exception('Sorry, you have reached your file upload limit for today.');
             }
 
             // upload file & create unique file name
             $ebook_file = new EbookFile($_FILES['url']['name'], $user->isPremium());
-            $upload_ebook = $ebook_file->put($_FILES['url']);
+            $ebook_file->put($_FILES['url']);
             $target_file_name = $ebook_file->getName();
 
             // save text in db
-            $texts_table = new Texts($con, $user_id, $lang_id);
-            $result = $texts_table->add($title, $author, $text, $target_file_name, $audio_uri, $type);
+            $texts_table = new Texts($pdo, $user_id, $lang_id);
+            $insert_id = $texts_table->add($title, $author, $text, $target_file_name, $audio_uri, $type);
             
-            if ($result && $upload_ebook) {
+            if ($insert_id > 0) {
                 // if everything goes fine log upload & return HTTP code 204 (No content), as nothing is returned 
                 $file_upload_log->addRecord();
                 $filename = array('filename' => $target_file_name);
                 header('Content-Type: application/json');
                 echo json_encode($filename);
             } else { // in case of error, show message
-                throw new \Exception ('Oops! There was an unexpected error when uploading this text.');
+                throw new \Exception('Oops! There was an unexpected error when uploading this text.');
             }
-
         }
-        
         default:
-        break;
+            break;
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

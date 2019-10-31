@@ -36,22 +36,18 @@ $lang_id = $user->getLangId();
 try {
     // if text is archived using green button at the end, update learning status of words first
     if (isset($_POST['words'])) {
-        $words_table = new Words($con, $user_id, $lang_id);
+        $words_table = new Words($pdo, $user_id, $lang_id);
         $words_table->updateByName($_POST['words']);    
     }  
 
     // if text is not shared, then archive or unarchive text accordingly
     if (isset($_POST['textIDs']) && !empty($_POST['textIDs'])) {
         if ($_POST['archivetext'] === 'true') { //archive text
-            $texts_table = new Texts($con, $user_id, $lang_id);
-            $result = $texts_table->archive($_POST['textIDs']);
+            $texts_table = new Texts($pdo, $user_id, $lang_id);
+            $texts_table->archive($_POST['textIDs']);
         } else { // unarchive text
-            $texts_table = new ArchivedTexts($con, $user_id, $lang_id);
-            $result = $texts_table->unarchive($_POST['textIDs']);
-        }
-
-        if (!$result) {
-            throw new \Exception ('There was an unexpected error trying to (un)archive this text.');
+            $texts_table = new ArchivedTexts($pdo, $user_id, $lang_id);
+            $texts_table->unarchive($_POST['textIDs']);
         }
     }
 } catch (Exception $e) {

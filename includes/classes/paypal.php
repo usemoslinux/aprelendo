@@ -29,12 +29,12 @@ class Paypal extends DBEntity
     /**
      * Constructor
      *
-     * @param PDO $con
+     * @param PDO $pdo
      * @param int $user_id
      * @param boolean $enable_sandbox Paypal sandbox for testing purposes
      */
-    public function __construct(\PDO $con, int $user_id, bool $enable_sandbox) {
-        parent::__construct($con, $user_id);
+    public function __construct(\PDO $pdo, int $user_id, bool $enable_sandbox) {
+        parent::__construct($pdo, $user_id);
         $this->url = $enable_sandbox ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
         $this->table = 'payments';
     } // end __construct()
@@ -85,22 +85,22 @@ class Paypal extends DBEntity
      * Adds payment to payment table
      *
      * @param array $data Paypal Payment data
-     * @return boolean
+     * @return void
      */
-    public function addPayment(array $data): bool {
+    public function addPayment(array $data): void {
         try {
             $today = date('Y-m-d H:i:s');
             // TODO: adjust date interval: 30 days for monthly subscriptions / 365 days for yearly subscriptions
             $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 30 days'));
 
             if (!is_array($data)) {
-                return false;
+                throw new \Exception('There was an unexpected error in the payment information provided.');
             }
 
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `txn_id`, `amount`, `status`, `item_id`, `date_created`) 
                     VALUES(?, ?, ?, ?, ?, ?)";
             // falta payment_item_id : agregar ? al final tb
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id,
                             $data['txn_id'],
                             $data['payment_amount'],
@@ -108,13 +108,15 @@ class Paypal extends DBEntity
                             $data['item_number'],
                             $today]);
 
+            if ($stmt->rowCount() == 0) {
+                throw new \Exception('There was an unexpected error trying to add payment record.');
+            }
+
             $sql = "UPDATE `users` SET `premium_until`= ? WHERE `user_id` = ?";
-            $stmt = $this->con->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$premium_until, $this->user_id]);
-                        
-            return true;
-        } catch (\Exception $e) {
-            return false;
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to add payment record.');
         } finally {
             $stmt = null;
         }
@@ -128,7 +130,7 @@ class Paypal extends DBEntity
      */
     public function checkTxnid(int $txn_id): bool {
         $sql = "SELECT COUNT(*) AS `exists` FROM `{$this->table}` WHERE `txn_id`=?";
-        $stmt = $this->con->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$txn_id]);
         $row = $stmt->fetch();
         

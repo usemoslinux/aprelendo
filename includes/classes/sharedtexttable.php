@@ -26,7 +26,7 @@ class SharedTextTable extends TextTable {
     /**
      * Constructor
      *
-     * @param integer $user_id
+     * @param int $user_id
      * @param string $headings
      * @param string $col_widths
      * @param array $rows
