@@ -438,7 +438,7 @@ class Texts extends DBEntity {
             $result = $stmt->fetchall();
 
             if (!$result || empty($result)) {
-                throw new \Exception('Oops! There are no texts meeting your search criteria.');
+                throw new \Exception('Oops! There are no texts in your private library yet. Feel free to add one or access the shared texts section.');
             }
 
             return $result;

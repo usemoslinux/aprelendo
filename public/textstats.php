@@ -56,10 +56,12 @@ $array_table2 = array(
 function print_table_rows($array_table_rows) {
     $html = '';
 
-    for ($i=0; $i < count($array_table_rows)-1; $i++) { 
+    $total_rows = count($array_table_rows)-1;
+    for ($i=0; $i < $total_rows; $i++) { 
         $html .= "<tr>";
 
-        for ($j=0; $j < count($array_table_rows[$i]); $j++) { 
+        $total_cols = count($array_table_rows[$i]);
+        for ($j=0; $j < $total_cols; $j++) { 
             $html .= $j == 0 ? '<td>' : '<td class="text-center">';
             $html .= $array_table_rows[$i][$j] . '</td>';
         }
@@ -74,8 +76,9 @@ function print_table_footer($array_table_rows) {
     $html = "<tr>";
 
     $last_row = count($array_table_rows)-1;
+    $total_cols = count($array_table_rows[$last_row]);
 
-    for ($i=0; $i < count($array_table_rows[$last_row]) ; $i++) { 
+    for ($i=0; $i < $total_cols; $i++) { 
         $html .= $i == 0 ? '<th>' : '<th class="text-center">';
         $html .= $array_table_rows[$last_row][$i] . '</th>';
     }

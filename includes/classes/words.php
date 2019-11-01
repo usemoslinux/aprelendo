@@ -220,7 +220,7 @@ class Words extends DBEntity {
             $result = $stmt->fetchAll();
             
             if (!$result || empty($result)) {
-                throw new \Exception('Oops! There are no texts meeting your search criteria.');
+                throw new \Exception('Oops! There are no words meeting your search criteria.');
             }
 
             return $result;
@@ -254,7 +254,7 @@ class Words extends DBEntity {
             $result = $stmt->fetchAll();
             
             if (!$result || empty($result)) {
-                throw new \Exception('Oops! There are no texts meeting your search criteria.');
+                throw new \Exception('Oops! There are no words in your library yet.');
             }
 
             return $result;

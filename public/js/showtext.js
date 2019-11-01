@@ -34,7 +34,7 @@ $(document).ready(function () {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $('html');
 
-    loadAudio();
+    // loadAudio();
     
     /**
      * Sets keyboard shortcuts for media player
