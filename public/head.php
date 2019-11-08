@@ -1,6 +1,6 @@
 <?php 
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -19,16 +19,27 @@
  */
 
 require_once '../includes/dbinit.php';  // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in and set $user object
 
 $curpage = basename($_SERVER['PHP_SELF']); // returns the current file Name
 $show_pages = array('showtext.php', 'showvideo.php', 'showebook.php');
+
+// these are the same pages that use simpleheader.php instead of header.php
+$no_login_required_pages = array('index.php', 'register.php', 'login.php', 'accountactivation.php', 
+                                 'aboutus.php', 'privacy.php', 'attributions.php', 'extensions.php', 'support.php', 
+                                 'totalreading.php', 'compatibledics.php', 'error.php', 'forgotpassword.php', 
+                                 'gopremium.php');
+
+// check if login is required to access page
+if (!in_array($curpage, $no_login_required_pages)) {
+    require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in and set $user object
+}                                 
+
+// check if user is allowed to view this page
 $this_is_show_page = in_array($curpage, $show_pages);
 
 if ($this_is_show_page) {
     $doclang = $user->getLang();
 
-    // check if user has access to view this text
     $table = isset($_GET['sh']) && $_GET['sh'] != 0 ? 'shared_texts' : 'texts';
     if (!$user->isAllowedToAccessElement($table, (int)$_GET['id'])) {
         header("HTTP/1.1 401 Unauthorized");

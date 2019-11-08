@@ -1,6 +1,6 @@
 <?php 
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -239,7 +239,7 @@ class User
             $result = $lang->createInitialRecordsForUser($native_lang);
 
             $sql = "INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`, 
-                    `learning_mode`, `assisted_learning`) 
+                    `display_mode`, `assisted_learning`) 
                     VALUES (?, 'Helvetica', '12pt', '1.5', 'left', 'light', '1')";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$user_id]);

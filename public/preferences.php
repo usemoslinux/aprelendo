@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -26,6 +26,15 @@ require_once PUBLIC_PATH . 'header.php';
 use Aprelendo\Includes\Classes\Reader;
 
 $reader = new Reader($pdo, $user->getId(), $user->getLangId());
+$prefs = $reader->getPrefs();
+
+$font_family       = $prefs->getFontFamily();
+$font_size         = $prefs->getFontSize();
+$line_height       = $prefs->getLineHeight();
+$text_align        = $prefs->getTextAlignment();
+$display_mode      = $prefs->getDisplayMode();
+$assisted_learning = $prefs->getAssistedLearning()
+
 ?>
 
     <div class="container mtb">
@@ -50,11 +59,11 @@ $reader = new Reader($pdo, $user->getId(), $user->getLangId());
                                         <label for="fontfamily">Font Family:</label>
                                         <div>
                                             <select name="fontfamily" id="fontfamily" class="form-control custom-select">
-                                                <option value="Helvetica" <?php echo $reader->getFontFamily()=='Helvetica' ? ' selected ' : ''; ?>>Helvetica</option>
-                                                <option value="Open Sans" <?php echo $reader->getFontFamily()=='Open Sans' ? ' selected ' : ''; ?>>Open Sans</option>
-                                                <option value="Times New Roman" <?php echo $reader->getFontFamily()=='Times New Roman' ? ' selected ' : ''; ?>>Times New Roman</option>
-                                                <option value="Georgia" <?php echo $reader->getFontFamily()=='Georgia' ? ' selected ' : ''; ?>>Georgia</option>
-                                                <option value="Lato" <?php echo $reader->getFontFamily()=='Lato' ? ' selected ' : ''; ?>>Lato</option>
+                                                <option value="Helvetica" <?php echo $font_family=='Helvetica' ? ' selected ' : ''; ?>>Helvetica</option>
+                                                <option value="Open Sans" <?php echo $font_family=='Open Sans' ? ' selected ' : ''; ?>>Open Sans</option>
+                                                <option value="Times New Roman" <?php echo $font_family=='Times New Roman' ? ' selected ' : ''; ?>>Times New Roman</option>
+                                                <option value="Georgia" <?php echo $font_family=='Georgia' ? ' selected ' : ''; ?>>Georgia</option>
+                                                <option value="Lato" <?php echo $font_family=='Lato' ? ' selected ' : ''; ?>>Lato</option>
                                             </select>
                                         </div>
                                     </div>
@@ -62,10 +71,10 @@ $reader = new Reader($pdo, $user->getId(), $user->getLangId());
                                         <label for="fontsize">Font Size:</label>
                                         <div>
                                             <select name="fontsize" id="fontsize" class="form-control custom-select">
-                                                <option value="12pt" <?php echo $reader->getFontSize()=='12pt' ? ' selected ' : ''; ?>>12 pt</option>
-                                                <option value="14pt" <?php echo $reader->getFontSize()=='14pt' ? ' selected ' : ''; ?>>14 pt</option>
-                                                <option value="16pt" <?php echo $reader->getFontSize()=='16pt' ? ' selected ' : ''; ?>>16 pt</option>
-                                                <option value="18pt" <?php echo $reader->getFontSize()=='18pt' ? ' selected ' : ''; ?>>18 pt</option>
+                                                <option value="14pt" <?php echo $font_size=='14pt' ? ' selected ' : ''; ?>>14 pt</option>
+                                                <option value="12pt" <?php echo $font_size=='12pt' ? ' selected ' : ''; ?>>12 pt</option>
+                                                <option value="16pt" <?php echo $font_size=='16pt' ? ' selected ' : ''; ?>>16 pt</option>
+                                                <option value="18pt" <?php echo $font_size=='18pt' ? ' selected ' : ''; ?>>18 pt</option>
                                             </select>
                                         </div>
                                     </div>
@@ -73,10 +82,10 @@ $reader = new Reader($pdo, $user->getId(), $user->getLangId());
                                         <label for="lineheight">Line height:</label>
                                         <div>
                                             <select name="lineheight" id="lineheight" class="form-control custom-select">
-                                                <option value="1.5" <?php echo $reader->getLineHeight()=='1.5' ? ' selected ' : ''; ?>>1.5 Lines</option>
-                                                <option value="2" <?php echo $reader->getLineHeight()=='2' ? ' selected ' : ''; ?>>2</option>
-                                                <option value="2.5" <?php echo $reader->getLineHeight()=='2.5' ? ' selected ' : ''; ?>>2.5</option>
-                                                <option value="3" <?php echo $reader->getLineHeight()=='3' ? ' selected ' : ''; ?>>3</option>
+                                                <option value="1.5" <?php echo $line_height=='1.5' ? ' selected ' : ''; ?>>1.5 Lines</option>
+                                                <option value="2" <?php echo $line_height=='2' ? ' selected ' : ''; ?>>2</option>
+                                                <option value="2.5" <?php echo $line_height=='2.5' ? ' selected ' : ''; ?>>2.5</option>
+                                                <option value="3" <?php echo $line_height=='3' ? ' selected ' : ''; ?>>3</option>
                                             </select>
                                         </div>
                                     </div>
@@ -84,10 +93,10 @@ $reader = new Reader($pdo, $user->getId(), $user->getLangId());
                                         <label for="alignment">Text alignment:</label>
                                         <div>
                                             <select name="alignment" id="alignment" class="form-control custom-select">
-                                                <option value="left" <?php echo $reader->getTextAlign()=='left' ? ' selected ' : ''; ?>>Left</option>
-                                                <option value="center" <?php echo $reader->getTextAlign()=='center' ? ' selected ' : ''; ?>>Center</option>
-                                                <option value="right" <?php echo $reader->getTextAlign()=='right' ? ' selected ' : ''; ?>>Right</option>
-                                                <option value="justify" <?php echo $reader->getTextAlign()=='justify' ? ' selected ' : ''; ?>>Justify</option>
+                                                <option value="left" <?php echo $text_align=='left' ? ' selected ' : ''; ?>>Left</option>
+                                                <option value="center" <?php echo $text_align=='center' ? ' selected ' : ''; ?>>Center</option>
+                                                <option value="right" <?php echo $text_align=='right' ? ' selected ' : ''; ?>>Right</option>
+                                                <option value="justify" <?php echo $text_align=='justify' ? ' selected ' : ''; ?>>Justify</option>
                                             </select>
                                         </div>
                                     </div>
@@ -95,9 +104,9 @@ $reader = new Reader($pdo, $user->getId(), $user->getLangId());
                                         <label for="mode">Display mode:</label>
                                         <div>
                                             <select name="mode" id="mode" class="form-control custom-select">
-                                                <option value="light" <?php echo $reader->getDisplayMode()=='light' ? ' selected ' : ''; ?>>Light</option>
-                                                <option value="sepia" <?php echo $reader->getDisplayMode()=='sepia' ? ' selected ' : ''; ?>>Sepia</option>
-                                                <option value="dark" <?php echo $reader->getDisplayMode()=='dark' ? ' selected ' : ''; ?>>Dark</option>
+                                                <option value="light" <?php echo $display_mode=='light' ? ' selected ' : ''; ?>>Light</option>
+                                                <option value="sepia" <?php echo $display_mode=='sepia' ? ' selected ' : ''; ?>>Sepia</option>
+                                                <option value="dark" <?php echo $display_mode=='dark' ? ' selected ' : ''; ?>>Dark</option>
                                             </select>
                                         </div>
                                     </div>
@@ -113,8 +122,8 @@ $reader = new Reader($pdo, $user->getId(), $user->getLangId());
                                         <label for="assistedlearning">Mode:</label>
                                         <div>
                                             <select name="assistedlearning" id="assistedlearning" class="form-control custom-select">
-                                                <option value="1" <?php echo $reader->getAssistedLearning()==true ? ' selected ' : ''; ?>>Assisted</option>
-                                                <option value="0" <?php echo $reader->getAssistedLearning()==false ? ' selected ' : ''; ?>>Free</option>
+                                                <option value="1" <?php echo $assisted_learning==true ? ' selected ' : ''; ?>>Assisted</option>
+                                                <option value="0" <?php echo $assisted_learning==false ? ' selected ' : ''; ?>>Free</option>
                                             </select>
                                         </div>
                                     </div>

@@ -1,6 +1,6 @@
 <?php 
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -19,7 +19,6 @@
  */
 
 require_once('../includes/dbinit.php'); // connect to database
-require_once(APP_ROOT . 'includes/checklogin.php'); // check if logged in and set $user
 use Aprelendo\Includes\Classes\Language;
 
 $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));

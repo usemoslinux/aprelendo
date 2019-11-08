@@ -1,6 +1,6 @@
 <?php 
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -90,7 +90,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                     <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
                                 </small>
                                 <div class="input-group">
-                                    <input type="password" id="password" name="password" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required>
+                                    <input type="password" id="newpassword" name="newpassword" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required>
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
                                     </div>
@@ -100,7 +100,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             <div class="form-group">
                                 <label for="password">Confirm password:</label>
                                 <div class="input-group">
-                                    <input type="password" id="password-confirmation" name="password-confirmation" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required >
+                                    <input type="password" id="newpassword-confirmation" name="newpassword-confirmation" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required >
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
                                     </div>
@@ -125,5 +125,6 @@ require_once PUBLIC_PATH . 'simpleheader.php';
 </div>
 
 <script defer src="js/register.js"></script>
+<script defer src="js/password.js"></script>
 
 <?php require_once 'footer.php'; ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -56,8 +56,9 @@ try {
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
         $reader = new Reader($pdo, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
         $result = '';
-        
-        switch ($reader->getDisplayMode()) {
+        $prefs = $reader->getPrefs();
+
+        switch ($prefs->getDisplayMode()) {
             case 'light':
                 $class = 'lightmode';
                 break;
@@ -71,10 +72,10 @@ try {
                 break;
         }
 
-        $styles['font-family'] = $reader->getFontFamily();
-        $styles['font-size'] = $reader->getFontSize();
-        $styles['text-align'] = $reader->getTextAlign();
-        $styles['line-height'] = $reader->getLineHeight();
+        $styles['font-family'] = $prefs->getFontFamily();
+        $styles['font-size'] = $prefs->getFontSize();
+        $styles['text-align'] = $prefs->getTextAlignment();
+        $styles['line-height'] = $prefs->getLineHeight();
     } else {
         throw new \Exception('Oops! There was an error trying to fetch that ebook.');
     }

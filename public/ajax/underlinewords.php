@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -33,7 +33,7 @@ $reader = new Reader($pdo, $user->getId(), $user->getLangId());
 // for ebooks, use slower method to underline words (as input is HTML code)
 // for everything else, use faster method (as input is simple text)
 if (isset($_POST['txt']) && isset($_POST['is_ebook'])) {
-    if ($_POST['is_ebook'] === true) {
+    if ($_POST['is_ebook'] == true) {
         $result = $reader->colorizeWords(html_entity_decode($_POST['txt']));
         echo $reader->addLinks($result);
     } else {

@@ -1,6 +1,6 @@
 <?php 
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -37,13 +37,14 @@ try {
         }
         
         $reader = new Reader($pdo, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
-        
+        $prefs = $reader->getPrefs();
+
         $video = new Videos($pdo, $user->getId(), $user->getLangId());
         $video->loadRecord($_GET['id']);
 
         $yt_id = $video->getYoutubeId();
 
-        switch ($reader->getDisplayMode()) {
+        switch ($prefs->getDisplayMode()) {
             case 'light':
             $body_css = "class='lightmode'";
             break;
@@ -56,9 +57,9 @@ try {
             default:
             break;
         }
-        $font_family = $reader->getFontFamily();
-        $font_size = $reader->getFontSize();
-        $text_align = $reader->getTextAlign();
+        $font_family = $prefs->getFontFamily();
+        $font_size = $prefs->getFontSize();
+        $text_align = $prefs->getTextAlignment();
         
         $body_css .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {

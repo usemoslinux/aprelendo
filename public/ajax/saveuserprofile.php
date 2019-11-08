@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -32,8 +32,8 @@ $user_id = $user->getId();
 $username = isset($_POST['username']) ? $_POST['username'] : '';
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 $password = isset($_POST['password']) ? $_POST['password'] : '';
-$new_password1 = isset($_POST['newpassword1']) ? $_POST['newpassword1'] : '';
-$new_password2 = isset($_POST['newpassword2']) ? $_POST['newpassword2'] : '';
+$new_password1 = isset($_POST['newpassword']) ? $_POST['newpassword'] : '';
+$new_password2 = isset($_POST['newpassword-confirmation']) ? $_POST['newpassword-confirmation'] : '';
 $src_lang = isset($_POST['src_lang']) ? $_POST['src_lang'] : '';
 $to_lang = isset($_POST['to_lang']) ? $_POST['to_lang'] : '';
 

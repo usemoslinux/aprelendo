@@ -1,6 +1,6 @@
 <?php 
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -22,6 +22,7 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Url;
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\Preferences;
 use Aprelendo\Includes\Classes\WordFrequency;
 use SimpleXMLElement;
 
@@ -99,15 +100,10 @@ class Text
 
 class Reader extends Text
 {
-    private $font_family       = '';
-    private $font_size         = '';
-    private $line_height       = '';
-    private $text_align        = '';
-    private $display_mode      = '';
-    private $assisted_learning = '';
-    private $show_freq_words   = '';
+    private $prefs; // Preferences object
+    private $show_freq_words   = false;
     private $lang_id           = 0;
-    private $user_id           = 0; 
+    private $user_id           = 0;
     
     /**
      * Constructor
@@ -150,33 +146,16 @@ class Reader extends Text
      * @return void
      */
     private function createMiniReader(\PDO $pdo, int $user_id, int $lang_id): void {
-        try {
-            $this->pdo = $pdo;
-            $this->user_id = $user_id;
-            $this->lang_id = $lang_id;
+        $this->pdo               = $pdo;
+        $this->user_id           = $user_id;
+        $this->lang_id           = $lang_id;
 
-            $sql = "SELECT * FROM `preferences` WHERE `user_id` = ?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$user_id]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            $this->font_family = isset($row['font_family']) ? $row['font_family'] : 'Helvetica';
-            $this->font_size = isset($row['font_size']) ? $row['font_size'] : '12px';
-            $this->line_height = isset($row['line_height']) ? $row['line_height'] : '1';
-            $this->text_align = isset($row['text_alignment']) ? $row['text_alignment'] : 'left';
-            $this->display_mode = isset($row['learning_mode']) ? $row['learning_mode'] : 'light';
-            $this->assisted_learning = isset($row['assisted_learning']) ? $row['assisted_learning'] : true;  
-            
-            $sql = "SELECT `show_freq_words` FROM `languages` WHERE `id`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$lang_id]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-            $this->show_freq_words = $row['show_freq_words'];
-        } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected problem fetching user reading preferences.');
-        } finally {
-            $stmt = null;
-        }
+        $this->prefs = new Preferences($pdo, $user_id);
+        $this->prefs->loadRecord();
+        
+        $lang = new Language($pdo, $user_id);
+        $lang->loadRecord($lang_id);
+        $this->show_freq_words   = $lang->getShowFreqWords();
     } // end createMiniReader()
 
     /**
@@ -210,7 +189,7 @@ class Reader extends Text
         try {
             $user_id = $this->user_id;
             $lang_id = $this->lang_id;
-            
+            error_log($text);
             // 1. colorize phrases & words that are being reviewed
             $sql = "SELECT `word` 
                     FROM `words` 
@@ -221,8 +200,8 @@ class Reader extends Text
             
             while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 $phrase = $row['word'];
-                
-                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                 "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
             }
             
@@ -235,7 +214,8 @@ class Reader extends Text
 
             while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 $phrase = $row['word'];
-                $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
+                // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                 "<span class='word learned' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
             }
             
@@ -250,14 +230,11 @@ class Reader extends Text
                     $row = $stmt->fetch(\PDO::FETCH_ASSOC);
                     $freq_table_name = $row['name'];
                     
-                    $sql = "SELECT `word`, `frequency_index` 
-                            FROM ? 
-                            WHERE `frequency_index` < 80";
-                    $stmt = $this->pdo->prepare($sql);
-                    $stmt->execute(['frequency_list_' . $freq_table_name]);
-                    while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-                        $word = $row['word'];
-                        $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $word . "\b/iu",
+                    $freq_words = WordFrequency::getHighFrequencyList($this->pdo, $freq_table_name);
+                    $freq_words = \array_column($freq_words, 'word');
+                    foreach ($freq_words as $freq_word) {
+                        // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $freq_word . "\b/iu",
+                        $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $freq_word . "\b/iu",
                         "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
                     }
                 }
@@ -304,8 +281,8 @@ class Reader extends Text
                     ORDER BY `is_phrase` ASC";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$user_id, $lang_id]);
-            $dic_words = $stmt->fetch(\PDO::FETCH_ASSOC);
-            $dic_words = $dic_words === false ? [] : $dic_words;
+            $dic_words = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $dic_words = !$dic_words || empty($dic_words) ? [] : $dic_words;
 
             // get high frequency words list, only if necessary
             if ($this->show_freq_words) {
@@ -407,7 +384,7 @@ class Reader extends Text
         $html .= '<hr>';
         
         // display assisted learning message
-        if ($this->assisted_learning) {
+        if ($this->prefs->getAssistedLearning()) {
             $html .=   '<div id="alert-msg-phase" data-phase="1" class="alert alert-info alert-dismissible show" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -419,7 +396,7 @@ class Reader extends Text
         }
         
         // display text
-        $html .= '<div id="text" style="line-height:' . $this->line_height . ';">';
+        $html .= '<div id="text" style="line-height:' . $this->prefs->getLineHeight() . ';">';
         
         $text = $this->colorizeWordsFast($this->text);
         $text = nl2br($text);
@@ -433,7 +410,7 @@ class Reader extends Text
         
         $html .= '<p></p>';
         
-        if ($this->assisted_learning) {
+        if ($this->prefs->getAssistedLearning()) {
             $html .= '<button type="button" id="btn-next-phase" class="basic btn btn-lg btn-primary btn-block">Go to phase 2
                       <br>
                       <span class="small">Listening</span>
@@ -497,57 +474,19 @@ class Reader extends Text
     } // end showVideo()
 
     /**
-     * Get the value of font_family
-     * @return string
+     * Get the value of prefs
      */ 
-    public function getFontFamily(): string
+    public function getPrefs(): Preferences
     {
-        return $this->font_family;
+        return $this->prefs;
     }
 
     /**
-     * Get the value of font_size
-     * @return string
+     * Get the value of show_freq_words
      */ 
-    public function getFontSize(): string
+    public function getShowFreqWords(): bool
     {
-        return $this->font_size;
-    }
-
-    /**
-     * Get the value of line_height
-     * @return string
-     */ 
-    public function getLineHeight(): string
-    {
-        return $this->line_height;
-    }
-
-    /**
-     * Get the value of text_align
-     * @return string
-     */ 
-    public function getTextAlign(): string
-    {
-        return $this->text_align;
-    }
-
-    /**
-     * Get the value of display_mode
-     * @return string
-     */ 
-    public function getDisplayMode(): string
-    {
-        return $this->display_mode;
-    }
-
-    /**
-     * Get the value of assisted_learning
-     * @return string
-     */ 
-    public function getAssistedLearning(): string
-    {
-        return $this->assisted_learning;
+        return $this->show_freq_words;
     }
 }
 

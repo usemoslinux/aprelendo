@@ -1,6 +1,6 @@
 <?php 
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -88,11 +88,13 @@ class Words extends DBEntity {
             $user_id = $this->user_id;
             $lang_id = $this->lang_id;
 
+            $in  = str_repeat('?,', count($words) - 1) . '?';
+
             $sql = "UPDATE `{$this->table}` SET `status`=`status`-1, `date_modified`=NOW() 
                     WHERE `user_id`=? AND `lang_id`=? AND `word` 
-                    IN (?)";
+                    IN ($in)";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $words]);
+            $stmt->execute(array_merge([$this->user_id, $this->lang_id], $words));
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to update record from words table.');
         } finally {

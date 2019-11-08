@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2018 VoiceRSS (http://www.voicerss.org/sdk)
+ * Copyright (C) 2019 VoiceRSS (http://www.voicerss.org/sdk)
  * 
  * This file is part of aprelendo.
  * 

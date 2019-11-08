@@ -1,6 +1,6 @@
 <?php 
 /**
-* Copyright (C) 2018 Pablo Castagnino
+* Copyright (C) 2019 Pablo Castagnino
 * 
 * This file is part of aprelendo.
 * 
@@ -551,9 +551,11 @@ class Texts extends DBEntity {
         // build array with words in text
         $text = stripcslashes(str_replace('\r\n', ' ', $text));
         // list of special characters in the supported languages (english, spanish, portuguese, french, german & italian)
-        $accented_chars = 'àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ';
-        $this->nr_of_words = preg_match_all('/[A-Za-z' . $accented_chars . ']+/u', $text, $words_in_text);
+        // $accented_chars = 'àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ';
+        // $this->nr_of_words = preg_match_all('/[A-Za-z' . $accented_chars . ']+/u', $text, $words_in_text);
 
+        $this->nr_of_words = preg_match_all('/(\w+)/u', $text, $words_in_text);
+        
         try {
             // get learning language ISO name
             $sql = "SELECT `name` 

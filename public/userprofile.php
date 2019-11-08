@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2018 Pablo Castagnino
+ * Copyright (C) 2019 Pablo Castagnino
  * 
  * This file is part of aprelendo.
  * 
@@ -62,24 +62,40 @@ use Aprelendo\Includes\Classes\Language;
                         <div class="form-group">
                             <label for="password">Current password:</label>
                             <small>
-                                <i>at least 8 characters long</i>
+                                <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
                             </small>
-                            <input type="password" id="password" name="password" class="form-control" pattern=".{8,}"
-                                required>
+                            <div class="input-group">
+                                <input type="password" id="password" name="password" class="form-control"  title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="password">New password:</label>
                             <small>
-                                <i>at least 8 characters long</i>
+                                <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
                             </small>
-                            <input type="password" id="newpassword1" name="newpassword1" class="form-control" pattern=".{8,}">
+                            <div class="input-group">
+                                <input type="password" id="newpassword" name="newpassword" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                            <small id="password-strength-text"></small>
                         </div>
                         <div class="form-group">
                             <label for="password">Repeat new password:</label>
                             <small>
-                                <i>at least 8 characters long</i>
+                                <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
                             </small>
-                            <input type="password" id="newpassword2" name="newpassword2" class="form-control" pattern=".{8,}">
+                            <div class="input-group">
+                                <input type="password" id="newpassword-confirmation" name="newpassword-confirmation" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off">
+                                <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                            <small id="passwords-match-text"></small>
                         </div>
                     </div>
                 </div>
@@ -148,5 +164,6 @@ use Aprelendo\Includes\Classes\Language;
 </div>
 
 <script defer src="js/userprofile.js"></script>
+<script defer src="js/password.js"></script>
 
 <?php require_once 'footer.php'; ?>

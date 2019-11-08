@@ -1,23 +1,23 @@
 /**
- * Copyright (C) 2018 Pablo Castagnino
- * 
+ * Copyright (C) 2019 Pablo Castagnino
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(document).ready(function () {
+$(document).ready(function() {
     // get data to feed chart
     var created = [],
         reviewed = [],
@@ -25,21 +25,19 @@ $(document).ready(function () {
         forgotten = [];
 
     $.ajax({
-            type: "GET",
-            url: "ajax/getstats.php",
-            async: false,
-            dataType: "json"
-        })
-        .done(function (data) {
+        type: "GET",
+        url: "ajax/getstats.php",
+        async: false,
+        dataType: "json"
+    })
+        .done(function(data) {
             //alert(data);
-            created = data['created'];
-            reviewed = data['modified'];
-            learned = data['learned'];
-            forgotten = data['forgotten'];
+            created = data["created"];
+            reviewed = data["modified"];
+            learned = data["learned"];
+            forgotten = data["forgotten"];
         })
-        .fail(function () {
-
-        });
+        .fail(function() {});
 
     // build chart
     // color scheme: { blue: new; green: learned; yellow: learning; red: forgotten }
@@ -47,8 +45,17 @@ $(document).ready(function () {
     var myChart = new Chart(ctx, {
         type: "line",
         data: {
-            labels: ["6 days ago", "5 days ago", "4 days ago", "3 days ago", "2 days ago", "Yesterday", "Today"],
-            datasets: [{
+            labels: [
+                "6 days ago",
+                "5 days ago",
+                "4 days ago",
+                "3 days ago",
+                "2 days ago",
+                "Yesterday",
+                "Today"
+            ],
+            datasets: [
+                {
                     label: "New",
                     data: created,
                     backgroundColor: "#1e90ff", //"rgba(33,150,243,0.4)" // blue
@@ -81,25 +88,26 @@ $(document).ready(function () {
         options: {
             title: {
                 display: true,
-                text: 'Your progress this week'
+                text: "Your progress this week"
             },
             scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        userCallback: function (label, index, labels) {
-                            // when the floored value is the same as the value we have a whole number
-                            if (Math.floor(label) === label) {
-                                return label;
+                yAxes: [
+                    {
+                        ticks: {
+                            beginAtZero: true,
+                            userCallback: function(label, index, labels) {
+                                // when the floored value is the same as the value we have a whole number
+                                if (Math.floor(label) === label) {
+                                    return label;
+                                }
                             }
-
                         },
-                    },
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Number of words',
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Number of words"
+                        }
                     }
-                }]
+                ]
             },
             maintainAspectRatio: false // Add to prevent default behaviour of full-width/height
         }

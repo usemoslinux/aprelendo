@@ -1,0 +1,644 @@
+<span class='word' data-toggle='modal' data-target='#myModal'>epa07958512</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>A</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>handout</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>photo</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>made</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>available</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>by</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>the</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>UK</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Parliament</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>shows</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>the</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>British</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Prime</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Minister</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Boris</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Johnson</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>speaking</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>during</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>a</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>debate</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>of</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>the</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Early</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Parliamentary</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>General</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Election</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Bill</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>in</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>during</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>an</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>election</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>debate</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>in</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>the</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>House</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>of</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Commons</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>in</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>London</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Britain</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>29</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>October</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>2019</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>EPA</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>EFE</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>JESSICA</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>TAYLOR</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>UK</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>PARLIAMENT</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>HANDOUT</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>MANDATORY</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>CREDIT</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>UK</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>PARLIAMENT</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>JESSICA</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>TAYLOR</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>HANDOUT</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>EDITORIAL</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>USE</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>ONLY</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>NO</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>SALES</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>députés</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>britanniques</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ont</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>plébiscité</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>projet</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>du</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Premier</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>ministre</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Boris</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Johnson</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>tenir</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>des</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>élections</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>législatives</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>anticipées</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>12</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>décembre</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>afin</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>sortir</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>impasse</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>du</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Brexit</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Quel</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>est</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>agenda</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>désormais</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Un</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>article</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>notre</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>partenaire</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Ouest</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>France</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Certes</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Britanniques</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>vont</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>voter</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>pour</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>élire</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>membres</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>leur</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Parlement</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>mais</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>campagne</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>électorale</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>qui</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>s</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>annonce</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>sera</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>dominée</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>par</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>fameuse</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>sortie</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Union</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>européenne</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Omniprésent</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Brexit</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ne</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>doit</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>faire</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>oublier</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ni</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>étapes</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>du</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>processus</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>électoral</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ni</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>popularité</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>des</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>grands</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>partis</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Petite</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>revue</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>détails</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>avant</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>coup</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>d</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>envoi</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>officiel</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>du</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>6</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>novembre</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Un</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>scrutin</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>12</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>décembre</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Il</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>s</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>agira</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>pour</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>46</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>millions</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>d</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>électeurs</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>plus</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>18</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ans</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>d</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>élire</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>650</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>membres</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>du</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Parlement</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>En</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>2017</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>conservateurs</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ont</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>obtenu</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>318</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>sièges</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>majorité</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>étant</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>à</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>326</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>devant</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>travaillistes</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>avec</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>262</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>sièges</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>inscriptions</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>sur</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>listes</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>électorales</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ont</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>connu</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>depuis</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ce</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>mercredi</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>matin</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>une</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>hausse</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>très</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>sensible</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>surtout</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>celles</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>des</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>moins</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>35</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ans</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Ces</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>nouvelles</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>inscriptions</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ont</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>été</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>effectuées</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>majoritairement</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>sur</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>net</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>conservateurs</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>en</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>tête</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Un</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>sondage</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>du</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>25</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>octobre</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>pour</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>BBC</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>donne</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>actuellement</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>conservateurs</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>en</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>tête</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>des</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>intentions</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>vote</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>avec</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>36</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>travaillistes</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>suivant</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>avec</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>24</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Viennent</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>après</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>libéraux</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>démocrates</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>avec</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>18</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Brexit</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Party</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>avec</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>11</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Verts</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>et</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Écossais</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>du</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>SNP</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>avec</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>4</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>chacun</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>calendrier</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>projet</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>pour</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>des</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>législatives</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>anticipées</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>va</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>recevoir</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ce</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>mercredi</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>aval</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>des</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Lords</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Puis</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>parlementaires</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>vont</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>voter</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>un</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>projet</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>loi</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Early</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Parliamentary</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>General</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Election</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Bill</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>qui</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>déclenche</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>processus</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>électoral</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Ensuite</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>reine</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>qui</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ne</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>vote</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>jamais</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>devra</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>formellement</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>donner</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>son</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>accord</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>et</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>texte</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>deviendra</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>une</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>loi</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>6</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>novembre</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>au</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>plus</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>tard</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>mais</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>date</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>pourrait</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>être</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>avancée</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>au</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>31</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>octobre</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>actuel</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Parlement</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>sera</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>dissous</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>scrutin</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>doit</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>se</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>tenir</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>5</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>semaines</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>plus</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>tard</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>25</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>jours</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>ouvrables</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>en</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>fait</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>soit</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>12</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>décembre</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Ce</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>sera</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>première</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>fois</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>depuis</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>1923</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>que</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Britanniques</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>iront</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>aux</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>urnes</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>en</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>décembre</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>thèmes</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>campagne</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Actuellement</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Brexit</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>caracole</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>en</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>tête</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>des</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>sujets</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>campagne</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>repartant</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>même</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>à</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>hausse</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>thèmes</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>du</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>NHS</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>système</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>santé</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>et</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>immigration</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>en</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>tête</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>des</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>préoccupations</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>populaires</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>respectivement</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>en</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>2017</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>et</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>en</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>2015</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>sont</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>en</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>baisse</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>notable</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>tout</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>comme</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>sujets</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>liés</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>à</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>économie</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>et</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>à</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>criminalité</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Johnson</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>joue</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>gros</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Le</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>chef</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>gouvernement</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>espère</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>conquérir</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>une</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>majorité</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>absolue</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>au</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Parlement</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>dont</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>son</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>gouvernement</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>est</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>actuellement</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>dépourvu</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>En</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>cas</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>large</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>victoire</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>il</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>aurait</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>mains</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>libres</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>pour</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>faire</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>adopter</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>accord</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>divorce</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>conclu</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>avec</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Union</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>européenne</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>mi</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>octobre</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>dont</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>ratification</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>a</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>échoué</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>au</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Parlement</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>et</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>honorer</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>enfin</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>sa</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>promesse</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>faire</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>sortir</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Royaume</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Uni</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Union</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Mais</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ce</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>scrutin</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>s</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>annonce</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>aussi</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>comme</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>un</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>pari</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>risqué</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>pour</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Boris</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Johnson</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Il</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>risque</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>en</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>effet</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>perdre</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>des</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>voix</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>aussi</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>bien</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>au</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>sein</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>partie</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>europhile</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>son</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>électorat</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>que</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>parmi</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Brexiters</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>plus</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>durs</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>qui</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>pourraient</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>être</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>tentés</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>rejoindre</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>nouveau</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>parti</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>du</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Brexit</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Nigel</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Farage</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Et</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>31</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>janvier</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>C</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>est</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>date</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>limite</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>qu</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ont</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>fixée</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Européens</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>comme</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>date</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>sortie</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>ultime</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>mais</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Brexit</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>peut</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>intervenir</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>avant</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>si</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>les</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Britanniques</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>arrivent</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>enfin</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>à</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>se</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>mettre</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>d</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>accord</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Ce</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>report</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>prévoit</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>la</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>possibilité</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>pour</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>le</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Royaume</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Uni</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>quitter</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>Union</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>européenne</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>au</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>30</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>novembre</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ou</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>au</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>31</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>décembre</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>en</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>cas</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>ratification</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>l</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>accord</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>de</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>sortie</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>avant</span>
+<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>ces</span>
+<span class='word' data-toggle='modal' data-target='#myModal'>échéances</span>
