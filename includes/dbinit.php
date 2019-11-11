@@ -29,7 +29,7 @@ require_once dirname(__DIR__) . '/includes/autoload.php';
 use Aprelendo\Includes\Classes\Connect;
 
 try {
-    $db_connection = new Connect;
+    $db_connection = new Connect(DB_DRIVER, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_CHARSET);
     $pdo = $db_connection->connect();
 } catch (Exception $e) {
     header('Location:error.php');

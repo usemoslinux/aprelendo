@@ -38,13 +38,14 @@ class Connect
      * Sets basic variables for all database connections
      * 
      */
-    public function __construct() {
-        $this->driver   = DB_DRIVER;
-        $this->host     = DB_SERVER;
-        $this->user     = DB_USER;
-        $this->password = DB_PASSWORD;
-        $this->db       = DB_NAME;
-        $this->charset  = DB_CHARSET;
+    public function __construct(string $driver, string $host, string $user, string $password, 
+                                string $db_name, string $charset) {
+        $this->driver   = $driver;
+        $this->host     = $host;
+        $this->user     = $user;
+        $this->password = $password;
+        $this->db       = $db_name;
+        $this->charset  = $charset;
     } // end __construct()
 
     /**
