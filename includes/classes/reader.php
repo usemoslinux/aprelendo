@@ -22,6 +22,7 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Url;
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\Language;
 use Aprelendo\Includes\Classes\Preferences;
 use Aprelendo\Includes\Classes\WordFrequency;
 use SimpleXMLElement;
@@ -189,49 +190,35 @@ class Reader extends Text
         try {
             $user_id = $this->user_id;
             $lang_id = $this->lang_id;
-            error_log($text);
-            // 1. colorize phrases & words that are being reviewed
-            $sql = "SELECT `word` 
-                    FROM `words` 
-                    WHERE `user_id`=? AND `lang_id`=? AND `status`>0 
-                    ORDER BY `is_phrase` ASC";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$user_id, $lang_id]);
             
-            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-                $phrase = $row['word'];
+            // 1. colorize phrases & words that are being reviewed
+            $words_table = new Words($this->pdo, $user_id, $lang_id);
+            $words = $words_table->getLearning();
+
+            foreach ($words as $word) {
+                $phrase = $word['word'];
                 $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
-                // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                 "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
             }
             
             // 2. colorize phrases & words that were already learned
-            $sql = "SELECT `word` 
-                    FROM `words` 
-                    WHERE `user_id`=? AND `lang_id`=? AND `status`=0";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$user_id, $lang_id]);
+            $words = $words_table->getLearned();
 
-            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-                $phrase = $row['word'];
+            foreach ($words as $word) {
+                $phrase = $word['word'];
                 $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
-                // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
                 "<span class='word learned' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
             }
-            
+
             // 3. colorize frequency list words
             if ($this->show_freq_words) {
                 $user = new User($this->pdo);
                 if ($user->isLoggedIn() && $user->isPremium()) {
-                    $sql = "SELECT `name` FROM languages WHERE `id`=?";
-                    $stmt = $this->pdo->prepare($sql);
-                    $stmt->execute([$this->lang_id]);
-
-                    $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-                    $freq_table_name = $row['name'];
-                    
-                    $freq_words = WordFrequency::getHighFrequencyList($this->pdo, $freq_table_name);
+                    $lang = new Language($this->pdo, $user_id);
+                    $lang->loadRecord($lang_id);
+                    $freq_words = WordFrequency::getHighFrequencyList($this->pdo, $lang->getName());
                     $freq_words = \array_column($freq_words, 'word');
+
                     foreach ($freq_words as $freq_word) {
                         // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $freq_word . "\b/iu",
                         $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $freq_word . "\b/iu",
@@ -245,7 +232,7 @@ class Reader extends Text
         } finally {
             $stmt = null;
         }        
-    }
+    } // end colorizeWords()
 
     /**
     * Underlines words with different colors depending on their status and creates spans
@@ -275,25 +262,18 @@ class Reader extends Text
         
         try {
             // get words in personal dictionary
-            $sql = "SELECT `word`, `status` 
-                    FROM `words` 
-                    WHERE `user_id`=? AND `lang_id`=?  
-                    ORDER BY `is_phrase` ASC";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$user_id, $lang_id]);
-            $dic_words = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $words_table = new Words($this->pdo, $user_id, $lang_id);
+            $dic_words = $words_table->getAll(0, 1000000, 5);
+
             $dic_words = !$dic_words || empty($dic_words) ? [] : $dic_words;
 
             // get high frequency words list, only if necessary
             if ($this->show_freq_words) {
                 $user = new User($this->pdo);
                 if ($user->isLoggedIn() && $user->isPremium()) {
-                    $sql = "SELECT `name` FROM `languages` WHERE `id`=?";
-                    $stmt = $this->pdo->prepare($sql);
-                    $stmt->execute([$this->lang_id]);
-                    $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-                    
-                    $freq_words = WordFrequency::getHighFrequencyList($this->pdo, $row['name']);
+                    $lang = new Language($this->pdo, $user_id);
+                    $lang->loadRecord($lang_id);                   
+                    $freq_words = WordFrequency::getHighFrequencyList($this->pdo, $lang->getName());
                 }
             }
         } catch (\PDOException $e) {

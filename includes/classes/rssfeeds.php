@@ -53,7 +53,7 @@ class RSSFeeds
             $this->feed2 = new RSSFeed($feed2uri);
             $this->feed3 = new RSSFeed($feed3uri);
         } catch (\Exception $e) {
-            throw new \Exception('Oops! There was an unexpected error trying to get your RSS feeds.');
+            throw new \Exception($e->getMessage());
         }        
     } // end __construct()
 

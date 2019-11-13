@@ -117,8 +117,12 @@ $(document).ready(function() {
             // if left mouse button / touch...
             highlighting = false;
             if ($sel_start === $sel_end) {
-                $selword =  $(this).is('.frequency-list') ? $(this).parent() : $(this);
-                // $selword = $(this);
+                $closest = $(this).closest('.learning, .learned, .forgotten');
+                if ($closest.length) {
+                    $selword = $closest;
+                } else {
+                    $selword = $(this);
+                }
             }
             showModal();
         }

@@ -22,11 +22,12 @@ require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
 use Aprelendo\Includes\Classes\Texts;
+use Aprelendo\Includes\Classes\Curl;
 
 try {
     if (isset($_GET['url']) && !empty($_GET['url'])) {
         $url = $_GET['url'];
-        $file_contents = Texts::get_url_contents($url);
+        $file_contents = Curl::getUrlContents($url);
         echo $file_contents ? $file_contents : '';
     } else {
         throw new \Exception('There was a problem retrieving that URL. Please check it is not empty or malformed.');

@@ -20,14 +20,14 @@
 
 namespace Aprelendo\Includes\Classes;
 
+use Aprelendo\Includes\Classes\Curl;
+
 class RSSFeed
 {
-    use Curl;
-
     private $title    = '';
     private $url      = '';
     private $xmlfeed  = '';
-    private $articles = array();
+    private $articles = [];
 
     /**
      * Constructor
@@ -48,7 +48,7 @@ class RSSFeed
     * @return void
     */
     public function fetchXMLFeed(string $url): void {
-        $this->xmlfeed = $this->get_url_contents($url);
+        $this->xmlfeed = Curl::getUrlContents($url);
         
         if ($this->xmlfeed) {
             $this->xmlfeed = simplexml_load_string($this->xmlfeed);

@@ -24,6 +24,12 @@ select {
     cursor: pointer;
 }
 
+.learning  .word:hover,
+.learned   .word:hover,
+.forgotten .word:hover {
+    background-color: inherit;
+}
+
 .word:hover {
     background-color: #e8e8e8;
 }

@@ -21,6 +21,7 @@
 require_once '../../includes/dbinit.php'; // connect to database
 
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\Curl;
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -46,7 +47,7 @@ try {
             $subject = 'Aprelendo - Password reset';
             
             // get template
-            $message = User::get_url_contents(APP_ROOT . 'templates/password_reset.html');
+            $message = Curl::getUrlContents(APP_ROOT . 'templates/password_reset.html');
 
             // edit template
             $message = str_replace('{{action_url}}', $reset_link, $message);

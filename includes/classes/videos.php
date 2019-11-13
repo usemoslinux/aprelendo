@@ -22,10 +22,9 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Connect;
 use Aprelendo\Includes\Classes\DBEntity;
+use Aprelendo\Includes\Classes\Curl;
 
 class Videos extends DBEntity {
-    use Curl;
-
     private $lang_id        = 0;
     private $title          = '';
     private $author         = '';
@@ -62,14 +61,14 @@ class Videos extends DBEntity {
         $lang = urlencode($lang);
         $youtube_id = urlencode($youtube_id);
         
-        $transcript_xml = $this->get_url_contents("https://video.google.com/timedtext?lang=$lang&v=$youtube_id");
+        $transcript_xml = Curl::getUrlContents("https://video.google.com/timedtext?lang=$lang&v=$youtube_id");
 
-        if (!$transcript_xml) {
+        if (empty($transcript_xml)) {
             throw new \Exception("Oops! There was a problem trying to fetch this video's subtitles.");
         } else {
             $transcript_xml = array ('text' => $transcript_xml);
         
-            $file = $this->get_url_contents("https://www.googleapis.com/youtube/v3/videos?id=$youtube_id&key=" . YOUTUBE_API_KEY . "&part=snippet");
+            $file = Curl::getUrlContents("https://www.googleapis.com/youtube/v3/videos?id=$youtube_id&key=" . YOUTUBE_API_KEY . "&part=snippet");
             $file = json_decode($file, true);
 
             if (isset($file['error']) && !empty($file['error'])) {

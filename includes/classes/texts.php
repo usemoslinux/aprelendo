@@ -25,10 +25,9 @@ use Aprelendo\Includes\Classes\PopularSources;
 use Aprelendo\Includes\Classes\Url;
 use Aprelendo\Includes\Classes\Language;
 use Aprelendo\Includes\Classes\Conversion;
+use Aprelendo\Includes\Classes\Curl;
 
 class Texts extends DBEntity {
-    use Curl;
-
     protected $id          = 0;
     protected $lang_id     = 0;
     protected $title       = '';
@@ -386,7 +385,7 @@ class Texts extends DBEntity {
             }
 
             $stmt->execute();
-            $result = $stmt->fetchall();
+            $result = $stmt->fetchAll();
 
             if (!$result || empty($result)) {
                 throw new \Exception('Oops! There are no texts meeting your search criteria.');
@@ -435,7 +434,7 @@ class Texts extends DBEntity {
             $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
 
             $stmt->execute();
-            $result = $stmt->fetchall();
+            $result = $stmt->fetchAll();
 
             if (!$result || empty($result)) {
                 throw new \Exception('Oops! There are no texts in your private library yet. Feel free to add one or access the shared texts section.');

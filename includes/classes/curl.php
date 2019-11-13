@@ -20,32 +20,49 @@
 
 namespace Aprelendo\Includes\Classes;
 
-trait Curl
-{
-    private static $proxy = 'www-proxy.mrec.ar:8080';
-    // private static $proxy = '';
+require_once '../../config/config.php';
 
+class Curl
+{
     /**
      * Gets file contents using curl
      * @param string $url
      * @return string
      */
-    public static function get_url_contents(string $url): string {
+    public static function getUrlContents(string $url, array $options = []): string {
         $ch = curl_init();
-        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'https://www.aprelendo.com';
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_REFERER, $referer);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); 
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // follow 301 redirects
-        curl_setopt($ch, CURLOPT_PROXY, self::$proxy);
-        // $httpCode = curl_getinfo($ch , CURLINFO_HTTP_CODE); // used to check possible errors
+        
+        if (!isset($options) || empty($options)) {
+            $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'https://www.aprelendo.com';
+            $options = array(CURLOPT_RETURNTRANSFER => 1,
+                             CURLOPT_CONNECTTIMEOUT => 5,
+                             CURLOPT_REFERER => $referer,
+                             CURLOPT_SSL_VERIFYPEER => false,
+                             CURLOPT_SSL_VERIFYHOST => false,
+                             CURLOPT_FOLLOWLOCATION => true
+                            );
+        }
+
+        $options[CURLOPT_URL] = $url;
+        
+        if (!empty(PROXY)) {
+            $options[CURLOPT_PROXY] = PROXY;
+        }
+
+        curl_setopt_array($ch, $options);
+
         $result = curl_exec($ch);
+        $info = curl_getinfo($ch);
+    
+        // Check the http response
+        $httpCode = $info['http_code'];
+        if ($httpCode != 200) {
+            throw new \Exception("Oops! The URL $url returned HTTP error $httpCode");
+        }
 
         curl_close($ch); 
 
         return $result ? $result : '';
-    } // end get_url_contents()
+    } // end getUrlContents()
+
 }

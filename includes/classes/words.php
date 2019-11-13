@@ -210,17 +210,23 @@ class Words extends DBEntity {
      */
     public function getSearch(string $search_text, int $offset, int $limit, int $sort_by): array {
         try {
-            $like_str = '%' . $search_text . '%';
             $sort_sql = $this->buildSortSQL($sort_by);
 
             $sql = "SELECT `id`, `word`, `status` 
                     FROM `{$this->table}` 
-                    WHERE `user_id`=? AND `lang_id`=? AND word LIKE ? 
-                    ORDER BY $sort_sql LIMIT ?, ?";
+                    WHERE `user_id`=:user_id AND `lang_id`=:lang_id AND word LIKE :search_str 
+                    ORDER BY $sort_sql LIMIT :offset, :limit";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $like_str, $offset, $limit]);
+
+            $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':lang_id', $this->lang_id, \PDO::PARAM_INT);
+            $stmt->bindValue(':search_str', "%$search_text%");
+            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+
+            $stmt->execute();
             $result = $stmt->fetchAll();
-            
+
             if (!$result || empty($result)) {
                 throw new \Exception('Oops! There are no words meeting your search criteria.');
             }
@@ -249,12 +255,18 @@ class Words extends DBEntity {
             
             $sql = "SELECT `id`, `word`, `status` 
                     FROM `{$this->table}` 
-                    WHERE `user_id`=? AND `lang_id`=?  
-                    ORDER BY $sort_sql LIMIT ?, ?";
+                    WHERE `user_id`=:user_id AND `lang_id`=:lang_id  
+                    ORDER BY $sort_sql LIMIT :offset, :limit";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $offset, $limit]);
+
+            $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':lang_id', $this->lang_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+
+            $stmt->execute();
             $result = $stmt->fetchAll();
-            
+
             if (!$result || empty($result)) {
                 throw new \Exception('Oops! There are no words in your library yet.');
             }
@@ -266,6 +278,60 @@ class Words extends DBEntity {
             $stmt = null;
         }
     } // end getAll()  
+
+    /**
+     * Gets words user is still learning
+     *
+     * @return array
+     */
+    public function getLearning(): array {
+        try {
+            $sql = "SELECT `word` 
+                    FROM `words` 
+                    WHERE `user_id`=? AND `lang_id`=? AND `status`>0 
+                    ORDER BY `is_phrase` ASC";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->user_id, $this->lang_id]);
+            $result = $stmt->fetchAll();
+
+            if (!$result || empty($result)) {
+                throw new \Exception('Oops! There are no words in your library yet.');
+            }
+
+            return $result;
+        } catch (\PDOException $e) {
+            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
+        } finally {
+            $stmt = null;
+        }
+    } // end getLearned()
+
+    /**
+     * Gets words already learned by user
+     *
+     * @return array
+     */
+    public function getLearned(): array {
+        try {
+            $sql = "SELECT `word` 
+                    FROM `words` 
+                    WHERE `user_id`=? AND `lang_id`=? AND `status`=0 
+                    ORDER BY `is_phrase` ASC";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->user_id, $this->lang_id]);
+            $result = $stmt->fetchAll();
+
+            if (!$result || empty($result)) {
+                throw new \Exception('Oops! There are no words in your library yet.');
+            }
+
+            return $result;
+        } catch (\PDOException $e) {
+            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
+        } finally {
+            $stmt = null;
+        }
+    } // end getLearned()
 
     /**
      * Converts sorting patterns selected by user (expressed as an integer value in the sort menu) 
@@ -287,6 +353,12 @@ class Words extends DBEntity {
                 break;
             case '3': // learning first
                 return '`status` DESC';
+                break;
+            case '4': // words first
+                return '`is_phrase` DESC';
+                break;
+            case '5': // phrases first
+                return '`is_phrase`';
                 break;
             default:
                 return '';

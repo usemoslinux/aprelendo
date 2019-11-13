@@ -20,10 +20,10 @@
 
 namespace Aprelendo\Includes\Classes;
 
+use Aprelendo\Includes\Classes\Curl;
+
 class Paypal extends DBEntity
 {
-    use Curl;
-
     private $url = '';
 
     /**
@@ -47,36 +47,56 @@ class Paypal extends DBEntity
             $req .= "&$key=$value";
         }
     
-        $ch = curl_init($this->url);
-        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
-        curl_setopt($ch, CURLOPT_SSLVERSION, 6);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
-        curl_setopt($ch, CURLOPT_PROXY, self::$proxy);
-        $res = curl_exec($ch);
+        $curl_options = array(
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_POST => 1,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POSTFIELDS => $req,
+            CURLOPT_SSLVERSION => 6,
+            CURLOPT_SSL_VERIFYPEER => 1,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_FORBID_REUSE => 1,
+            CURLOPT_CONNECTTIMEOUT => 30,
+            CURLOPT_HTTPHEADER => array('Connection: Close')
+        );
 
-        if (!$res) {
-            $errno = curl_errno($ch);
-            $errstr = curl_error($ch);
-            curl_close($ch);
-            throw new \Exception("cURL error: [$errno] $errstr");
+        try {
+            $res = Curl::getUrlContents($this->url, $curl_options);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
         }
+        
+
+        // $ch = curl_init($this->url);
+        // curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        // curl_setopt($ch, CURLOPT_POST, 1);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
+        // curl_setopt($ch, CURLOPT_SSLVERSION, 6);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        // curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
+        // curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
+        // curl_setopt($ch, CURLOPT_PROXY, self::$proxy);
+        // $res = curl_exec($ch);
+
+        // if (!$res) {
+        //     $errno = curl_errno($ch);
+        //     $errstr = curl_error($ch);
+        //     curl_close($ch);
+        //     throw new \Exception("cURL error: [$errno] $errstr");
+        // }
     
-        $info = curl_getinfo($ch);
+        // $info = curl_getinfo($ch);
     
-        // Check the http response
-        $httpCode = $info['http_code'];
-        if ($httpCode != 200) {
-            throw new \Exception("PayPal responded with http code $httpCode");
-        }
+        // // Check the http response
+        // $httpCode = $info['http_code'];
+        // if ($httpCode != 200) {
+        //     throw new \Exception("PayPal responded with http code $httpCode");
+        // }
     
-        curl_close($ch);
+        // curl_close($ch);
     
         return $res === 'VERIFIED';
     } // end verifyTransaction()

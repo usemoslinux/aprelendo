@@ -22,11 +22,10 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\File;
 use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Includes\Classes\Curl;
 
 class User 
 {
-    use Curl;
-
     private $id              = 0;
     private $name            = '';
     private $password_hash   = '';
@@ -277,7 +276,7 @@ class User
         $subject = 'Aprelendo - Account activation';
         
         // get template
-        $message = $this->get_url_contents(APP_ROOT . 'templates/welcome.html');
+        $message = Curl::getUrlContents(APP_ROOT . 'templates/welcome.html');
         
         // edit template
         $message = str_replace('{{action_url}}', $reset_link, $message);
