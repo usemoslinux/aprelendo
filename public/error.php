@@ -30,14 +30,19 @@ if (!$user->isLoggedIn()) {
 } else {
     require_once PUBLIC_PATH . 'header.php';
 }
+
+$error_title = isset($_GET['error']) ? $_GET['error'] : '';
+$error_msg = isset($_GET['error_msg']) ? $_GET['error_msg'] : '';
+
+// Hmm... that's weird!
+// There was a fatal error trying to connect to the database. Please try again later.
 ?>
     <div class="container mtb">
         <div class="row">
             <div class="col-sm-12">
-                <h1>Hmm... that's weird!</h1>
-                <h5>There was a fatal error trying to connect to the database. Please try again later.</h5>
+                <h1><?php echo $error_title; ?></h1>
+                <h5><?php echo $error_msg; ?></h5>
                 <br>
-                <button type="button" class="btn btn-lg btn-success" onclick="window.location.href='index.php'">Go Home</button>
                 <br>
                 <br>
                 <br>

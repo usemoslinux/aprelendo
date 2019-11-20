@@ -332,6 +332,41 @@ class User
     } // activate()
 
     /**
+     * Upgrades user to premium
+     *
+     * @param string $subscription_type
+     * @return void
+     */
+    public function upgradeToPremium(string $subscription_type): void
+    {
+        try {
+            switch ($subscription_type) {
+                case 'Aprelendo - Monthly Subscription':
+                    $date_until = date("Y-m-d", time() + 60 * 60 * 24 * 30);
+                    break;
+                case 'Aprelendo - Yearly Subscription':
+                    $date_until = date("Y-m-d", time() + 60 * 60 * 24 * 365);
+                    break;
+                default:
+            }
+
+            if (!isset($date_until)) {
+                throw new \Exception('There was an unexpected error trying to activate user.');
+            }
+            
+            $sql = "UPDATE `{$this->table}` 
+                    SET `premium_until`=? 
+                    WHERE `id`=?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$date_until, $this->id]);
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to activate user.');
+        } finally {
+            $stmt = null;
+        }
+    } // upgradeToPremium()
+
+    /**
      * Creates "remember me" cookie
      *
      * @param string $username

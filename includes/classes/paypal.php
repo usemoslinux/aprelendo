@@ -110,10 +110,15 @@ class Paypal extends DBEntity
     public function addPayment(array $data): void {
         try {
             $today = date('Y-m-d H:i:s');
-            // TODO: adjust date interval: 30 days for monthly subscriptions / 365 days for yearly subscriptions
-            $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 30 days'));
 
-            if (!is_array($data)) {
+            // adjust date interval: 30 days for monthly subscriptions / 365 days for yearly subscriptions
+            if ($data['payment_amount'] === '99.00' && $data['payment_currency'] === 'USD') {
+                $premium_until = date('Y-m-d H:i:s', $today . ' + 365 days');
+            } elseif($data['payment_amount'] === '10.00' && $data['payment_currency'] === 'USD') {
+                $premium_until = date('Y-m-d H:i:s', $today . ' + 30 days');
+            }
+                        
+            if (!is_array($data) || !isset($premium_until)) {
                 throw new \Exception('There was an unexpected error in the payment information provided.');
             }
 

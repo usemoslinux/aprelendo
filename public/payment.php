@@ -86,8 +86,7 @@ try {
             'payment_currency'  =>  $_POST['mc_currency'],
             'txn_id'            =>  $_POST['txn_id'],
             'receiver_email'    =>  $_POST['receiver_email'],
-            'payer_email'       =>  $_POST['payer_email'],
-            'custom'            =>  $_POST['custom'],
+            'payer_email'       =>  $_POST['payer_email']
         ];
 
         // We need to verify the transaction comes from PayPal and check we've not
@@ -95,6 +94,7 @@ try {
         // database.
         if (!$paypal->verifyTransaction($_POST) && $paypal->checkTxnid($data['txn_id'])) {
             $paypal->addPayment($data);
+            $user->upgradeToPremium($data['item_name']);
         }
     }
 } catch (\Exception $e) {
