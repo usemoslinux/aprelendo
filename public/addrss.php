@@ -33,7 +33,7 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 ?>
 
-    <div class="container mtb">
+    <div class="container mtb d-flex flex-grow-1 flex-column">
         <div class="row">
             <div class="col-12">
                 <ol class="breadcrumb">

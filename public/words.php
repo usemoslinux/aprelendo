@@ -39,7 +39,7 @@ $query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/fontawesome.css" integrity="sha384-GVa9GOgVQgOk+TNYXu7S/InPTfSDTtBalSgkgqQ7sCik56N9ztlkoTr2f/T44oKV"
     crossorigin="anonymous">
 
-<div class="container mtb">
+<div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
         <div class="col-sm-12">
             <ol class="breadcrumb">

@@ -39,6 +39,7 @@ URL: http://alvarez.is
 
 html {
     background-color: inherit;
+    height: 100%;
 }
 
 body {
@@ -140,6 +141,10 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 
 .navbar-collapse {
     box-shadow: none;
+}
+
+.navbar-toggler {
+    margin-right: 20px;
 }
 
 .navbar-light .navbar-collapse,

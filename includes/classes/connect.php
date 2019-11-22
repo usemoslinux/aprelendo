@@ -59,8 +59,8 @@ class Connect
             $dsn = $this->driver . ':host=' . $this->host . ';dbname=' . $this->db . ';charset=' . $this->charset;
             $pdo = new \PDO($dsn, $this->user, $this->password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
+        } catch (\PDOException $e) {
+            throw new \Exception($e->getMessage());
         }
 
         return $pdo;

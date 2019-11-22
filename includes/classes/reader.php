@@ -268,8 +268,10 @@ class Reader extends Text
             $dic_words = !$dic_words || empty($dic_words) ? [] : $dic_words;
 
             // get high frequency words list, only if necessary
+            
             if ($this->show_freq_words) {
                 $user = new User($this->pdo);
+                $user_is_logged_and_premium = $user->isLoggedIn() && $user->isPremium();
                 if ($user->isLoggedIn() && $user->isPremium()) {
                     $lang = new Language($this->pdo, $user_id);
                     $lang->loadRecord($lang_id);                   
@@ -287,8 +289,8 @@ class Reader extends Text
             $search_in_dic = \array_search($word, array_column($dic_words, 'word'));
             if ($search_in_dic === false) {
                 // if necessary, underline frequency words
-                if ($this->show_freq_words) { 
-                    $search_in_freq_dic = \array_search($word, array_column($freq_words, 'word'));
+                if ($this->show_freq_words && $user_is_logged_and_premium) { 
+                    $search_in_freq_dic = \array_search($word, \array_column($freq_words, 'word'));
                     if ($search_in_freq_dic === false) {
                         $word = "<span class='word' data-toggle='modal' data-target='#myModal'>$word</span>";
                     } else {

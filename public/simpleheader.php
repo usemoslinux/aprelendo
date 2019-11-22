@@ -18,6 +18,7 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 ?>
+<div class="d-flex h-100 flex-column">
     <nav class="navbar navbar-expand-md navbar-light">
         <div class="container">
             <!-- Brand -->

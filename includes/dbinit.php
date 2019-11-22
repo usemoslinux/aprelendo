@@ -31,8 +31,12 @@ use Aprelendo\Includes\Classes\Connect;
 try {
     $db_connection = new Connect(DB_DRIVER, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_CHARSET);
     $pdo = $db_connection->connect();
-} catch (Exception $e) {
-    header('Location:error.php');
+} catch (\Exception $e) {
+    $error = array('error' => 'Hmm... that\'s weird!',
+                   'message' => 'There was a fatal error trying to connect to the database. Please try again later.');
+    $error_query = http_build_query($error);
+
+    header('Location:error.php?' . $error_query);
     exit;
 }
 

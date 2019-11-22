@@ -32,7 +32,7 @@ if (!$user->isLoggedIn()) {
 }
 ?>
 
-<div class="container mtb">
+<div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
         <div class="col-sm-12">
             <ol class="breadcrumb">
@@ -48,7 +48,7 @@ if (!$user->isLoggedIn()) {
                     <h4>Our privacy policy</h4>
                     <i>Last updated: May 2019</i>
                     <p>Protecting the privacy of Aprelendo website users is important to us. Our Online Privacy Policy is designed to inform you about our collection and use of personal information on this website. From time to time, we may make changes to this Privacy Policy, so we encourage you to check back and review it regularly to ensure you are aware of current practices.</p>
-                    <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us through email at <a href="mailto:aprelendo@gmail.com">aprelendo@gmail.com</a></p>
+                    <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to <a href="support.php">contact us</a>.</p>
                     <br>
                     <h6>Personal information</h6>
                     <p>We collect some minimal information about you on this website. This information includes only your user name and email address, which you provide directly when you register to our service. Additionally, we may log the IP address and web browser details of the computer or device you use to connect with us. You provide this indirectly, by using our service.</p>

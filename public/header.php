@@ -23,7 +23,7 @@ use Aprelendo\Includes\Classes\Language;
 
 $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
 ?>
-
+<div class="d-flex h-100 flex-column">
     <nav class="navbar navbar-expand-md navbar-light">
         <div class="container">
             <!-- Brand -->
@@ -79,6 +79,15 @@ $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
                             <a href="userprofile.php" class="dropdown-item">My profile</a>
                             <a href="preferences.php" class="dropdown-item">Preferences</a>
                             <div class="dropdown-divider"></div>
+
+                            <?php if (!$user->isPremium()): ?>
+                            <div class="dropdown-header text-primary" >
+                                Premium
+                            </div>
+                            <a href="gopremium.php" class="dropdown-item">Upgrade account</a>
+                            <div class="dropdown-divider"></div>
+                            <?php endif; ?>
+
                             <a href="logout.php" class="dropdown-item">Logout</a>
                         </div>
                     </li>

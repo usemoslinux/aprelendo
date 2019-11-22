@@ -34,7 +34,7 @@ $(document).ready(function() {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
 
-    // loadAudio();
+    loadAudio();
 
     /**
      * Sets keyboard shortcuts for media player
@@ -914,7 +914,7 @@ $(document).ready(function() {
                     if (xhr.status == 403) {
                         // TODO: implement "upgrade" page
                         $("#audioplayer-loader").replaceWith(
-                            '<div id="alert-msg-audio" class="alert alert-danger">You have reached your audio streaming limit for today. Although it is possible to continue with the revision of the text, we do not recommend it. Alternatively, you can try again tomorrow or you can consider supporting us and improving your plan to increase the daily audio streaming limit.</div>'
+                            '<div id="alert-msg-audio" class="alert alert-danger">You have reached your audio streaming limit for today. Although it is possible to continue with the revision of the text, we do not recommend it. Alternatively, you can try again tomorrow or you can consider supporting us and <a href="gopremium.php">improving your plan</a> to increase the daily audio streaming limit.</div>'
                         );
                     } else {
                         $("#audioplayer-loader").replaceWith(

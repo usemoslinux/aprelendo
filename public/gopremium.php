@@ -100,6 +100,8 @@ if (!$user->isLoggedIn()) {
                                 feeds</li>
                             <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Ebook support
                                 (&lt;2 MB)</li>
+                            <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Show
+                                high frequency words</li>
                             <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Export words
                                 (CSV)</li>
                         </ul>
@@ -129,6 +131,7 @@ if (!$user->isLoggedIn()) {
                             </li>
                             <li><span class="fa-li"><i class="fas fa-check"></i></span>Ebook support
                                 (&lt;2 MB)</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Show high frequency words</li>
                             <li><span class="fa-li"><i class="fas fa-check"></i></span>Export words
                                 (CSV)</li>
                         </ul>
@@ -173,6 +176,7 @@ if (!$user->isLoggedIn()) {
                             </li>
                             <li><span class="fa-li"><i class="fas fa-check"></i></span>Ebook support
                                 (&lt;2 MB)</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Show high frequency words</li>
                             <li><span class="fa-li"><i class="fas fa-check"></i></span>Export words
                                 (CSV)</li>
                         </ul>

@@ -26,7 +26,7 @@ require_once PUBLIC_PATH . 'header.php';
 
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 
-<div class="container mtb">
+<div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
         <div class="col-sm-12">
             <ol class="breadcrumb">

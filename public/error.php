@@ -18,42 +18,40 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once PUBLIC_PATH . 'head.php';
+$error = isset($_GET['error']) ? $_GET['error'] : '';
+$error_msg = isset($_GET['message']) ? $_GET['message'] : '';
 
-use Aprelendo\Includes\Classes\User;
-
-$user = new User($pdo);
-
-if (!$user->isLoggedIn()) {
-    require_once PUBLIC_PATH . 'simpleheader.php';
-} else {
-    require_once PUBLIC_PATH . 'header.php';
-}
-
-$error_title = isset($_GET['error']) ? $_GET['error'] : '';
-$error_msg = isset($_GET['error_msg']) ? $_GET['error_msg'] : '';
-
-// Hmm... that's weird!
-// There was a fatal error trying to connect to the database. Please try again later.
 ?>
-    <div class="container mtb">
-        <div class="row">
-            <div class="col-sm-12">
-                <h1><?php echo $error_title; ?></h1>
-                <h5><?php echo $error_msg; ?></h5>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-            </div>
-            
-        </div>
-        <!-- /row -->
-    </div>
-    <!-- /container -->
 
-    <?php require_once 'footer.php'?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="Language learning platform designed to boost your reading, listening, speaking and writing skills.">
+    <meta name="keywords"
+        content="language, learning, language learning, flashcards, total reading, reading, news, ebooks, books, videos">
+    <meta name="author" content="Aprelendo">
+    <meta name="google-signin-client_id"
+        content="1031628353503-jauslklbhvifr2iv7rr0mglmmp496081.apps.googleusercontent.com">
+    <link rel='shortcut icon' type='image/x-icon' href='img/logo.svg' />
+
+    <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
+
+    <link rel="stylesheet" type="text/css" href="css/500.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato">
+</head>
+
+<body>
+    <div class="page-wrap">
+        <h1>Oops!</h1>
+        <h2><?php echo $error; ?></h2>
+        <p><?php echo $error_msg; ?></p>
+        <p><a href="/">Home</a></p>
+    </div>
+</body>
+
+</html>

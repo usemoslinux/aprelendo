@@ -25,6 +25,12 @@ use Aprelendo\Includes\Classes\Curl;
 class Paypal extends DBEntity
 {
     private $url = '';
+    private $id = 0;
+    private $transaction_id = 0;
+    private $amount = 0;
+    private $status = '';
+    private $item_id = 0;
+    private $date_created = '';
 
     /**
      * Constructor
@@ -38,6 +44,33 @@ class Paypal extends DBEntity
         $this->url = $enable_sandbox ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
         $this->table = 'payments';
     } // end __construct()
+
+    /**
+     * Loads user record data
+     *
+     * @return void
+     */
+    public function loadRecordByUserId(): void {
+        try {
+            $sql = "SELECT * FROM `{$this->table}` WHERE `user_id` = ? ORDER BY date_created DESC LIMIT 1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->user_id]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+           
+            if ($row) {
+                $this->id              = $row['id']; 
+                $this->transaction_id  = $row['txn_id']; 
+                $this->amount          = $row['amount'];
+                $this->status          = $row['status']; 
+                $this->item_id         = $row['item_id']; 
+                $this->date_created    = $row['date_created'];
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to load payment record.');
+        } finally {
+            $stmt = null;
+        }
+    } // end loadRecordByUserId()
 
     public function verifyTransaction(array $data): bool {
         $req = 'cmd=_notify-validate';
@@ -64,40 +97,7 @@ class Paypal extends DBEntity
             $res = Curl::getUrlContents($this->url, $curl_options);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
-        }
-        
-
-        // $ch = curl_init($this->url);
-        // curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        // curl_setopt($ch, CURLOPT_POST, 1);
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
-        // curl_setopt($ch, CURLOPT_SSLVERSION, 6);
-        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-        // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        // curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
-        // curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
-        // curl_setopt($ch, CURLOPT_PROXY, self::$proxy);
-        // $res = curl_exec($ch);
-
-        // if (!$res) {
-        //     $errno = curl_errno($ch);
-        //     $errstr = curl_error($ch);
-        //     curl_close($ch);
-        //     throw new \Exception("cURL error: [$errno] $errstr");
-        // }
-    
-        // $info = curl_getinfo($ch);
-    
-        // // Check the http response
-        // $httpCode = $info['http_code'];
-        // if ($httpCode != 200) {
-        //     throw new \Exception("PayPal responded with http code $httpCode");
-        // }
-    
-        // curl_close($ch);
-    
+        }    
         return $res === 'VERIFIED';
     } // end verifyTransaction()
 

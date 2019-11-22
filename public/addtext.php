@@ -27,7 +27,7 @@ use Aprelendo\Includes\Classes\Texts;
 
 ?>
 
-<div class="container mtb">
+<div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
         <div class="col-xl-12">
             <ol class="breadcrumb">

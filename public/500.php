@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-  <meta charset="UTF-8">
-  <title>500 (INTERNAL SERVER ERROR)</title>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Language learning platform designed to boost your reading, listening, speaking and writing skills.">
+  <meta name="keywords"
+    content="language, learning, language learning, flashcards, total reading, reading, news, ebooks, books, videos">
+  <meta name="author" content="Aprelendo">
+  <meta name="google-signin-client_id"
+    content="1031628353503-jauslklbhvifr2iv7rr0mglmmp496081.apps.googleusercontent.com">
+  <link rel='shortcut icon' type='image/x-icon' href='img/logo.svg' />
+
+  <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
+
   <link rel="stylesheet" type="text/css" href="css/500.css">
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato">
 </head>
+
 <body>
   <div class="page-wrap">
     <h1>500</h1>
@@ -14,4 +28,5 @@
     <p><a href="/">home</a></p>
   </div>
 </body>
+
 </html>
