@@ -37,15 +37,20 @@ $status = isset($payment->status) ? $payment->status : '';
     <div class="container mtb d-flex flex-grow-1 flex-column">
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="text-success"><i class="far fa-check-circle"></i> Paypal payment successful</h1>
-                <h5>Thank you for your purchase</h5>
+                <div class="d-flex flex-row justify-content-center">
+                    <img class="img-fluid" style="max-width: 150px;" src="img/logo.svg" alt="Aprelendo logo">
+                </div>
+                <br>
+
+                <h1 class="text-success text-center"><i class="far fa-check-circle"></i> Paypal payment successful</h1>
+                <h5 class="text-center">Thank you for your purchase</h5>
                 <hr>
                 <p>Below you will find your purchase details:</p>
                 <ul>
-                    <li>Transaction Id: <?php echo $transaction_id; ?></li>
-                    <li>Item Id: <?php echo $item_id; ?></li>
-                    <li>Amount: <?php echo $amount; ?></li>
-                    <li>Status: <?php echo $status; ?></li>
+                    <li>Transaction Id: <?php echo $_GET['tx']; ?></li>
+                    <li>Item Id: <?php echo $_GET['item_number']; ?> <?php echo $item_id; ?></li>
+                    <li>Amount: <?php echo $_GET['cc'] . ' ' . $_GET['amt'];  ?></li>
+                    <li>Status: <?php echo $_GET['st']; ?></li>
                 </ul>
 
                 <div class="text-center">
