@@ -116,7 +116,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     background-repeat: no-repeat;
     background-size: contain;
     font-family: "Raleway", sans-serif;
-    font-size: 22px;
+    font-size: 1.5rem;
     font-weight: 900;
     margin-left: 0 !important;
     padding-left: 64px;
@@ -175,7 +175,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 
 .dropdown-menu>a {
     color: #262626;
-    font-size: 12px;
+    font-size: 0.9rem;
     font-weight: 700;
 }
 
@@ -184,7 +184,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     background-color: white;
     color: #0275d8;
     border-radius: 98px;
-    font-size: 16px;
+    font-size: 1rem;
     text-shadow: none;
 }
 
@@ -225,7 +225,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     }
 
     #language-menu {
-        font-size: 16px;
+        font-size: 1rem;
         margin-top: 12px;
     }
 
@@ -237,7 +237,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 
 .navbar-light .navbar-nav .nav-link {
     color: white;
-    font-size: 12px;
+    font-size: 1rem;
     font-weight: 700;
 }
 
@@ -396,6 +396,12 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     padding-right: 10%;
 }
 
+@media (min-width: 1201px) {
+    .container {
+        max-width: 75%;
+    }
+}
+
 .small.collapse a {
     color: #0275d8;
 }
@@ -437,12 +443,12 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     /* background-color: inherit; */
     padding-bottom: 20px;
     padding-top: 20px;
-    font-size: 13px;
+    font-size: 0.9rem;
 }
 
 .footer i {
     color: inherit;
-    font-size: 18px;
+    font-size: 1.5rem;
     padding-right: initial;
 }
 
@@ -1149,8 +1155,22 @@ span.flag-icon>p {
 }
 
 div.blurry-background {
-    background: rgba(37, 43, 47, 0.15);
+    background: rgba(37, 43, 47, 0.15) url("../img/backgrounds/welcome-page-background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    text-align: center;
+    text-shadow: 1px 1px #333;
     color: white;
+}
+
+.blurry-background a:hover,
+.blurry-background a:focus {
+    color: inherit;
+}
+
+.blurry-background h1 {
+    margin: 3rem auto;
 }
 
 /* CREATE ACCOUNT */
@@ -1229,72 +1249,10 @@ small>a:not(.btn):hover {
     text-align: center;
 }
 
-/* HEADER WRAP */
-
-.headerwrap {
-    background: #fff url("../img/backgrounds/welcome-page-background.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    text-align: center;
-    text-shadow: 1px 1px #333;
-}
-
-.headerwrap h1,
-.headerwrap h2,
-.headerwrap h3,
-.headerwrap h4,
-.headerwrap h5 {
-    color: white;
-}
-
-.headerwrap h3,
-h5 {
-    font-weight: 400;
-}
-
-.headerwrap h1 {
-    margin-top: 50px;
-    margin-bottom: 25px;
-}
-
-.headerwrap .img-fluid {
-    margin: 0 auto;
-}
-
-.headerwrap a:hover,
-.headerwrap a:focus {
-    color: inherit;
-}
-
 /* HOW IT WORKS */
-
-.hiw strong {
-    font-size: 60px;
-    padding: 15px;
-}
 
 .hiw h1 {
     padding-bottom: 25px;
-}
-
-.hiw ol {
-    margin-top: -15px;
-}
-
-.hiw li {
-    padding-top: 15px;
-    font-weight: 400;
-    font-size: 14px;
-}
-
-.hiw a {
-	text-decoration: underline;
-}
-
-.hiw a:hover {
-    text-decoration: none;
-    color: inherit;
 }
 
 .hiw .video-container {

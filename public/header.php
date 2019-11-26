@@ -88,7 +88,15 @@ $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
                             <div class="dropdown-divider"></div>
                             <?php endif; ?>
 
-                            <a href="logout.php" class="dropdown-item">Logout</a>
+                            <a href="logout.php" onclick="signOut();" class="dropdown-item">Logout</a>
+                            <script>
+                                function signOut() {
+                                    var auth2 = gapi.auth2.getAuthInstance();
+                                    auth2.signOut().then(function () {
+                                    console.log('User signed out.');
+                                    });
+                                }
+                            </script>
                         </div>
                     </li>
                 </ul>

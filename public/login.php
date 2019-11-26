@@ -34,7 +34,6 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'simpleheader.php';
 ?>
 
-<div>
     <div class="container mtb d-flex flex-grow-1 flex-column">
         <div class="row">
             <div class="col-sm-12 col-md-10 offset-md-1 col-lg-6 offset-lg-3">
@@ -71,15 +70,17 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <p class="text-muted text-center">
                             <a href="forgotpassword.php">Forgot password</a>?
                         </p>
-                        <p class="text-muted text-center">Not registered? <a href="register.php">Create an account</a></p>
+                        <p class="text-muted text-center">Not registered? <a href="register.php">Create an account</a>
+                            <br>
+                            <small>If you like Aprelendo, you can later upgrade to <a href="gopremium.php">Premium</a></small>
+                        </p>
+                        
                     </footer>
                 </section>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script defer src="js/login.js"></script>
 
 <?php require_once 'footer.php'?>
