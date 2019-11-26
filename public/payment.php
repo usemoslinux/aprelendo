@@ -31,8 +31,8 @@ $enableSandbox = true;
 // for your site.
 $paypalConfig = [
     'email' => 'sb-fikun215027@business.example.com',
-    'return_url' => 'https://www.aprelendo.com/payment-successful.html',
-    'cancel_url' => 'https://www.aprelendo.com/payment-cancelled.html',
+    'return_url' => 'https://www.aprelendo.com/paymentsuccessful.php',
+    'cancel_url' => 'https://www.aprelendo.com/paymentcancelled.php',
     'notify_url' => 'https://www.aprelendo.com/payment.php'
 ];
 
