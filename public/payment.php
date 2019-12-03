@@ -21,6 +21,9 @@
 namespace Aprelendo\Includes\Classes;
 
 require_once '../includes/dbinit.php'; // connect to database
+
+$no_redirect = TRUE; // used by checklogin.php; otherwise, would redirect to login page
+
 require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
 
 // For test payments we want to enable the sandbox mode. If you want to put live
@@ -36,7 +39,14 @@ $paypalConfig = [
     'notify_url' => 'https://www.aprelendo.com/payment.php'
 ];
 
+file_put_contents("log.txt", print_r( $_POST, true ) );
+
 try {
+
+    if (empty($_POST)) {
+        throw new \Exception ("No post information");
+    }
+
     $paypal = new Paypal($pdo, $user->getId(), $enableSandbox);
 
     // Check if paypal request or response
@@ -76,11 +86,11 @@ try {
 
     } else {
         // Handle the PayPal response.
-
+        
         // Assign posted variables to local data array.
         $data = [
-            'item_name'         =>  $_POST['item_name'],
-            'item_number'       =>  $_POST['item_number'],
+            'item_name'         =>  $_POST['item_name1'],
+            'item_number'       =>  $_POST['item_number1'],
             'payment_status'    =>  $_POST['payment_status'],
             'payment_amount'    =>  $_POST['mc_gross'],
             'payment_currency'  =>  $_POST['mc_currency'],
@@ -89,16 +99,20 @@ try {
             'payer_email'       =>  $_POST['payer_email']
         ];
 
+        file_put_contents("log.txt", "---PAYPAL_RESPONSE: " . print_r( $data, true ), FILE_APPEND );
+
         // We need to verify the transaction comes from PayPal and check we've not
         // already processed the transaction before adding the payment to our
         // database.
-        if (!$paypal->verifyTransaction($_POST) && $paypal->checkTxnid($data['txn_id'])) {
+        if ($paypal->verifyTransaction($_POST) && $paypal->checkTxnid($data['txn_id'])) {
             $paypal->addPayment($data);
-            $user->upgradeToPremium($data['item_name']);
+            $user->upgradeToPremium($data);
+        } else {
+            throw new \Exception ('Transaction could not be verified. Payment Id might be wrong.');
         }
     }
 } catch (\Exception $e) {
-    //throw $e;
+    file_put_contents("paypal.log", $e->getMessage(), FILE_APPEND );
 }
 
 ?>

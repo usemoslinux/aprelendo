@@ -22,16 +22,6 @@ require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 require_once PUBLIC_PATH . 'head.php';
 
-use Aprelendo\Includes\Classes\Paypal;
-
-$payment = new Paypal($pdo, $user->getId(), true);
-$payment->loadRecordByUserId();
-
-$transaction_id = isset($payment->transaction_id) ? $payment->transaction_id : '';
-$item_id = isset($payment->item_id) ? $payment->item_id : '';
-$amount = isset($payment->amount) ? $payment->amount : '';
-$status = isset($payment->status) ? $payment->status : '';
-
 ?>
 
     <div class="container mtb d-flex flex-grow-1 flex-column">
@@ -48,7 +38,7 @@ $status = isset($payment->status) ? $payment->status : '';
                 <p>Below you will find your purchase details:</p>
                 <ul>
                     <li>Transaction Id: <?php echo $_GET['tx']; ?></li>
-                    <li>Item Id: <?php echo $_GET['item_number']; ?> <?php echo $item_id; ?></li>
+                    <li>Item Id: <?php echo $_GET['item_number']; ?></li>
                     <li>Amount: <?php echo $_GET['cc'] . ' ' . $_GET['amt'];  ?></li>
                     <li>Status: <?php echo $_GET['st']; ?></li>
                 </ul>

@@ -27,7 +27,7 @@ IPN testing
 <form name="form-monthly-subscription" action="/payment.php" method="post" target="_top">
     <input type="hidden" name="cmd" value="_xclick-subscriptions">
     <input type="hidden" name="lc" value="US">
-    <input type="hidden" name = "item_name" value = "Monthly Subscription">
+    <input type="hidden" name = "item_name" value = "Aprelendo - Monthly Subscription">
     <input type="hidden" name = "item_number" value = "1">
     <input type="hidden" name="no_note" value="1">
     <input type="hidden" name="src" value="1">
@@ -56,7 +56,7 @@ IPN response testing
 
 <form name="form-monthly-subscription-response" action="/payment.php" method="post" target="_top">
         <input type="hidden" name="item_number" value="1">
-        <input type="hidden" name="item_name" value="Monthly Subscription">
+        <input type="hidden" name="item_name" value="Aprelendo - Monthly Subscription">
         <input type="hidden" name="payment_status" value="Completed">
         <input type="hidden" name="mc_gross" value="10.00">
         <input type="hidden" name="mc_currency" value="USD">

@@ -337,20 +337,18 @@ class User
      * @param string $subscription_type
      * @return void
      */
-    public function upgradeToPremium(string $subscription_type): void
+    public function upgradeToPremium(array $data): void
     {
         try {
-            switch ($subscription_type) {
-                case 'Aprelendo - Monthly Subscription':
-                    $date_until = date("Y-m-d", time() + 60 * 60 * 24 * 30);
-                    break;
-                case 'Aprelendo - Yearly Subscription':
-                    $date_until = date("Y-m-d", time() + 60 * 60 * 24 * 365);
-                    break;
-                default:
+            $today = date('Y-m-d H:i:s');
+
+            if ($data['payment_amount'] === '99.00' && $data['payment_currency'] === 'USD') {
+                $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 year'));
+            } elseif ($data['payment_amount'] === '10.00' && $data['payment_currency'] === 'USD') {
+                $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 month'));
             }
 
-            if (!isset($date_until)) {
+            if (!isset($premium_until)) {
                 throw new \Exception('There was an unexpected error trying to activate user.');
             }
             
@@ -358,7 +356,7 @@ class User
                     SET `premium_until`=? 
                     WHERE `id`=?";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$date_until, $this->id]);
+            $stmt->execute([$premium_until, $this->id]);
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to activate user.');
         } finally {

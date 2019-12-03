@@ -25,7 +25,7 @@ if (!isset($user)) {
 
     $user = new User($pdo);
 
-    if (!$user->isLoggedIn()) {
+    if (!$user->isLoggedIn() && !isset($no_redirect)) {
         header('Location:/login.php');
         exit;
     }

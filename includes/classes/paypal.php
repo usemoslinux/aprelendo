@@ -111,11 +111,10 @@ class Paypal extends DBEntity
         try {
             $today = date('Y-m-d H:i:s');
 
-            // adjust date interval: 30 days for monthly subscriptions / 365 days for yearly subscriptions
             if ($data['payment_amount'] === '99.00' && $data['payment_currency'] === 'USD') {
-                $premium_until = date('Y-m-d H:i:s', $today . ' + 365 days');
-            } elseif($data['payment_amount'] === '10.00' && $data['payment_currency'] === 'USD') {
-                $premium_until = date('Y-m-d H:i:s', $today . ' + 30 days');
+                $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 year'));
+            } elseif ($data['payment_amount'] === '10.00' && $data['payment_currency'] === 'USD') {
+                $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 month'));
             }
                         
             if (!is_array($data) || !isset($premium_until)) {
@@ -136,10 +135,6 @@ class Paypal extends DBEntity
             if ($stmt->rowCount() == 0) {
                 throw new \Exception('There was an unexpected error trying to add payment record.');
             }
-
-            $sql = "UPDATE `users` SET `premium_until`= ? WHERE `user_id` = ?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$premium_until, $this->user_id]);
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to add payment record.');
         } finally {
@@ -153,7 +148,7 @@ class Paypal extends DBEntity
      * @param int $txn_id Paypal transaction id
      * @return boolean
      */
-    public function checkTxnid(int $txn_id): bool {
+    public function checkTxnid(string $txn_id): bool {
         $sql = "SELECT COUNT(*) AS `exists` FROM `{$this->table}` WHERE `txn_id`=?";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$txn_id]);
