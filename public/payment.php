@@ -87,26 +87,25 @@ try {
     } else {
         // Handle the PayPal response.
         
-        // Assign posted variables to local data array.
-        $data = [
-            'item_name'         =>  $_POST['item_name1'],
-            'item_number'       =>  $_POST['item_number1'],
-            'payment_status'    =>  $_POST['payment_status'],
-            'payment_amount'    =>  $_POST['mc_gross'],
-            'payment_currency'  =>  $_POST['mc_currency'],
-            'txn_id'            =>  $_POST['txn_id'],
-            'receiver_email'    =>  $_POST['receiver_email'],
-            'payer_email'       =>  $_POST['payer_email']
-        ];
+        // Reading POSTed data directly from $_POST causes serialization issues with array data in the POST.
+        // Instead, read raw POST data from the input stream.
+        $raw_post_data = file_get_contents('php://input');
+        $raw_post_array = explode('&', $raw_post_data);
+        $myPost = [];
+        foreach ($raw_post_array as $keyval) {
+            $keyval = explode ('=', $keyval);
+            if (count($keyval) == 2)
+            $myPost[$keyval[0]] = urldecode($keyval[1]);
+        }
 
-        file_put_contents("log.txt", "---PAYPAL_RESPONSE: " . print_r( $data, true ), FILE_APPEND );
+        file_put_contents("log.txt", "---PAYPAL_RESPONSE-myPOST: " . print_r( $myPost, true ), FILE_APPEND );
 
         // We need to verify the transaction comes from PayPal and check we've not
         // already processed the transaction before adding the payment to our
         // database.
-        if ($paypal->verifyTransaction($_POST) && $paypal->checkTxnid($data['txn_id'])) {
-            $paypal->addPayment($data);
-            $user->upgradeToPremium($data);
+        if ($paypal->verifyTransaction($myPost) && $paypal->checkIpnId($myPost['ipn_track_id'])) {
+            $paypal->addPayment($myPost);
+            $user->upgradeToPremium($myPost);
         } else {
             throw new \Exception ('Transaction could not be verified. Payment Id might be wrong.');
         }

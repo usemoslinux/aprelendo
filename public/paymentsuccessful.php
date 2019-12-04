@@ -38,7 +38,6 @@ require_once PUBLIC_PATH . 'head.php';
                 <p>Below you will find your purchase details:</p>
                 <ul>
                     <li>Transaction Id: <?php echo $_GET['tx']; ?></li>
-                    <li>Item Id: <?php echo $_GET['item_number']; ?></li>
                     <li>Amount: <?php echo $_GET['cc'] . ' ' . $_GET['amt'];  ?></li>
                     <li>Status: <?php echo $_GET['st']; ?></li>
                 </ul>

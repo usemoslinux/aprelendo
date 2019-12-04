@@ -26,10 +26,11 @@ class Paypal extends DBEntity
 {
     private $url = '';
     private $id = 0;
-    private $transaction_id = 0;
+    private $ipn_id = '';
+    private $payer_id = '';
+    private $subscription_id = '';
     private $amount = 0;
     private $status = '';
-    private $item_id = 0;
     private $date_created = '';
 
     /**
@@ -59,10 +60,11 @@ class Paypal extends DBEntity
            
             if ($row) {
                 $this->id              = $row['id']; 
-                $this->transaction_id  = $row['txn_id']; 
+                $this->ipn_id          = $row['ipn_id']; 
+                $this->ipn_id          = $row['payer_id']; 
+                $this->ipn_id          = $row['subscription_id']; 
                 $this->amount          = $row['amount'];
                 $this->status          = $row['status']; 
-                $this->item_id         = $row['item_id']; 
                 $this->date_created    = $row['date_created'];
             }
         } catch (\PDOException $e) {
@@ -111,9 +113,9 @@ class Paypal extends DBEntity
         try {
             $today = date('Y-m-d H:i:s');
 
-            if ($data['payment_amount'] === '99.00' && $data['payment_currency'] === 'USD') {
+            if ($data['amount3'] === '99.00' && $data['mc_currency'] === 'USD') {
                 $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 year'));
-            } elseif ($data['payment_amount'] === '10.00' && $data['payment_currency'] === 'USD') {
+            } elseif ($data['amount3'] === '10.00' && $data['mc_currency'] === 'USD') {
                 $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 month'));
             }
                         
@@ -121,17 +123,27 @@ class Paypal extends DBEntity
                 throw new \Exception('There was an unexpected error in the payment information provided.');
             }
 
-            $sql = "INSERT INTO `{$this->table}` (`user_id`, `txn_id`, `amount`, `status`, `item_id`, `date_created`) 
-                    VALUES(?, ?, ?, ?, ?, ?)";
-            // falta payment_item_id : agregar ? al final tb
+            $sql = "INSERT INTO `{$this->table}` (`user_id`, `ipn_id`, `payer_id`, `subscription_id`, `amount`, `status`, `date_created`) 
+                    VALUES(?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id,
-                            $data['txn_id'],
-                            $data['payment_amount'],
-                            $data['payment_status'],
-                            $data['item_number'],
+                            $data['ipn_track_id'],
+                            $data['payer_id'],
+                            $data['subscr_id'],
+                            $data['amount3'],
+                            $data['payer_status'],
                             $today]);
 
+            file_put_contents("log.txt", "---ADD_PAYMENT: " . print_r( 
+                [$this->user_id,
+                $data['ipn_track_id'],
+                $data['payer_id'],
+                $data['subscr_id'],
+                $data['amount3'],
+                $data['payer_status'],
+                $today], true ), 
+            FILE_APPEND );
+            
             if ($stmt->rowCount() == 0) {
                 throw new \Exception('There was an unexpected error trying to add payment record.');
             }
@@ -145,17 +157,17 @@ class Paypal extends DBEntity
     /**
      * Checks if transaction was already added to payments table
      *
-     * @param int $txn_id Paypal transaction id
+     * @param int $ipn_id Paypal transaction id
      * @return boolean
      */
-    public function checkTxnid(string $txn_id): bool {
-        $sql = "SELECT COUNT(*) AS `exists` FROM `{$this->table}` WHERE `txn_id`=?";
+    public function checkIpnId(string $ipn_id): bool {
+        $sql = "SELECT COUNT(*) AS `exists` FROM `{$this->table}` WHERE `ipn_id`=?";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$txn_id]);
+        $stmt->execute([$ipn_id]);
         $row = $stmt->fetch();
         
         return $row['exists'] == 0;
-    } // end checkTxnid()
+    } // end checkIpnId()
 
     /**
      * Get the value of url

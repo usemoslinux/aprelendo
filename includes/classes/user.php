@@ -342,9 +342,9 @@ class User
         try {
             $today = date('Y-m-d H:i:s');
 
-            if ($data['payment_amount'] === '99.00' && $data['payment_currency'] === 'USD') {
+            if ($data['amount3'] === '99.00' && $data['mc_currency'] === 'USD') {
                 $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 year'));
-            } elseif ($data['payment_amount'] === '10.00' && $data['payment_currency'] === 'USD') {
+            } elseif ($data['amount3'] === '10.00' && $data['mc_currency'] === 'USD') {
                 $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 month'));
             }
 
