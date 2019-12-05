@@ -39,15 +39,11 @@ $paypalConfig = [
     'notify_url' => 'https://www.aprelendo.com/payment.php'
 ];
 
-file_put_contents("log.txt", print_r( $_POST, true ) );
-
 try {
 
     if (empty($_POST)) {
-        throw new \Exception ("No post information");
+        throw new \Exception ("No IPN post information");
     }
-
-    $paypal = new Paypal($pdo, $user->getId(), $enableSandbox);
 
     // Check if paypal request or response
     if (!isset($_POST["txn_id"]) && !isset($_POST["txn_type"])) {
@@ -74,13 +70,16 @@ try {
         $data['a3'] = $_POST["t3"] === 'Y' ? '99' : '10'; // amount
         $data['currency_code'] = 'USD'; // currency
 
-        // Add any custom fields for the query string.
-        //$data['custom'] = USERID;
+        // Add user id
+        $data['custom'] = $user->getId();
 
         // Build the query string from the data.
         $queryString = http_build_query($data);
 
+        file_put_contents("log.txt", "---REQUEST-data: " . print_r( $data, true ) );
+
         // Redirect to paypal IPN
+        $paypal = new Paypal($pdo, $user->getId(), $enableSandbox);
         header('location:' . $paypal->getUrl() . '?' . $queryString);
         exit;
 
@@ -98,12 +97,14 @@ try {
             $myPost[$keyval[0]] = urldecode($keyval[1]);
         }
 
-        file_put_contents("log.txt", "---PAYPAL_RESPONSE-myPOST: " . print_r( $myPost, true ), FILE_APPEND );
+        file_put_contents("log.txt", "---RESPONSE-myPOST: " . print_r( $myPost, true ), FILE_APPEND );
 
         // We need to verify the transaction comes from PayPal and check we've not
         // already processed the transaction before adding the payment to our
         // database.
-        if ($paypal->verifyTransaction($myPost) && $paypal->checkIpnId($myPost['ipn_track_id'])) {
+        $paypal = new Paypal($pdo, $myPost['custom'], $enableSandbox);
+
+        if ($paypal->verifyTransaction($myPost) && $paypal->checkTxnId($myPost['txn_id'])) {
             $paypal->addPayment($myPost);
             $user->upgradeToPremium($myPost);
         } else {

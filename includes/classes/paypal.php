@@ -26,7 +26,7 @@ class Paypal extends DBEntity
 {
     private $url = '';
     private $id = 0;
-    private $ipn_id = '';
+    private $txn_id = '';
     private $payer_id = '';
     private $subscription_id = '';
     private $amount = 0;
@@ -60,9 +60,9 @@ class Paypal extends DBEntity
            
             if ($row) {
                 $this->id              = $row['id']; 
-                $this->ipn_id          = $row['ipn_id']; 
-                $this->ipn_id          = $row['payer_id']; 
-                $this->ipn_id          = $row['subscription_id']; 
+                $this->txn_id          = $row['txn_id']; 
+                $this->txn_id          = $row['payer_id']; 
+                $this->txn_id          = $row['subscription_id']; 
                 $this->amount          = $row['amount'];
                 $this->status          = $row['status']; 
                 $this->date_created    = $row['date_created'];
@@ -113,39 +113,39 @@ class Paypal extends DBEntity
         try {
             $today = date('Y-m-d H:i:s');
 
-            if ($data['amount3'] === '99.00' && $data['mc_currency'] === 'USD') {
+            if ($data['mc_gross'] === '99.00' && $data['mc_currency'] === 'USD') {
                 $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 year'));
-            } elseif ($data['amount3'] === '10.00' && $data['mc_currency'] === 'USD') {
+            } elseif ($data['mc_gross'] === '10.00' && $data['mc_currency'] === 'USD') {
                 $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 month'));
             }
-                        
+                    
+            file_put_contents("log.txt", "---ADD_PAYMENT: " . print_r( 
+                [$this->user_id,
+                $data['txn_id'],
+                $data['payer_id'],
+                $data['subscr_id'],
+                $data['mc_gross'],
+                $data['payer_status'],
+                $today], true ), 
+            FILE_APPEND );
+
             if (!is_array($data) || !isset($premium_until)) {
                 throw new \Exception('There was an unexpected error in the payment information provided.');
             }
 
-            $sql = "INSERT INTO `{$this->table}` (`user_id`, `ipn_id`, `payer_id`, `subscription_id`, `amount`, `status`, `date_created`) 
+            $sql = "INSERT INTO `{$this->table}` (`user_id`, `txn_id`, `payer_id`, `subscription_id`, `amount`, `status`, `date_created`) 
                     VALUES(?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id,
-                            $data['ipn_track_id'],
+                            $data['txn_id'],
                             $data['payer_id'],
                             $data['subscr_id'],
-                            $data['amount3'],
+                            $data['mc_gross'],
                             $data['payer_status'],
                             $today]);
 
-            file_put_contents("log.txt", "---ADD_PAYMENT: " . print_r( 
-                [$this->user_id,
-                $data['ipn_track_id'],
-                $data['payer_id'],
-                $data['subscr_id'],
-                $data['amount3'],
-                $data['payer_status'],
-                $today], true ), 
-            FILE_APPEND );
-            
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to add payment record.');
+                throw new \Exception('There was an unexpected error trying to add payment record. No rows added.');
             }
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to add payment record.');
@@ -157,17 +157,17 @@ class Paypal extends DBEntity
     /**
      * Checks if transaction was already added to payments table
      *
-     * @param int $ipn_id Paypal transaction id
+     * @param int $txn_id Paypal transaction id
      * @return boolean
      */
-    public function checkIpnId(string $ipn_id): bool {
-        $sql = "SELECT COUNT(*) AS `exists` FROM `{$this->table}` WHERE `ipn_id`=?";
+    public function checkTxnId(string $txn_id): bool {
+        $sql = "SELECT COUNT(*) AS `exists` FROM `{$this->table}` WHERE `txn_id`=?";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$ipn_id]);
+        $stmt->execute([$txn_id]);
         $row = $stmt->fetch();
         
         return $row['exists'] == 0;
-    } // end checkIpnId()
+    } // end checkTxnId()
 
     /**
      * Get the value of url
