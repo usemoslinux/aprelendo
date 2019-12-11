@@ -22,6 +22,17 @@ require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 require_once PUBLIC_PATH . 'head.php';
 
+use Aprelendo\Includes\Classes\Paypal; 
+
+if(isset($_GET['tx']) && ($_GET['tx'])!=null && ($_GET['tx'])!= "") {
+    $tx = $_GET['tx'];
+    $paypal = new Paypal($pdo, $user->getId(), PAYPAL_SANDBOX);
+    $paypal->verifyTransactionPDT($tx);
+}
+else {
+    exitCode();
+}
+
 ?>
 
     <div class="container mtb d-flex flex-grow-1 flex-column">

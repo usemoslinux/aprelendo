@@ -22,6 +22,8 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Curl;
 
+require_once '../config/config.php';
+
 class Paypal extends DBEntity
 {
     private $url = '';
@@ -74,7 +76,7 @@ class Paypal extends DBEntity
         }
     } // end loadRecordByUserId()
 
-    public function verifyTransaction(array $data): bool {
+    public function verifyTransactionIPN(array $data): bool {
         $req = 'cmd=_notify-validate';
         foreach ($data as $key => $value) {
             $value = urlencode(stripslashes($value));
@@ -101,7 +103,78 @@ class Paypal extends DBEntity
             throw new \Exception($e->getMessage());
         }    
         return $res === 'VERIFIED';
-    } // end verifyTransaction()
+    } // end verifyTransactionIPN()
+
+    public function verifyTransactionPDT($tx) {
+        $req = 'cmd=_notify-synch';
+        $tx_token = $tx;
+        $auth_token = "siw1VZH10S_RgptHvNvJXJ6bhjbd8sdbfjhsbj43jju9lF7d1sKSclIC";
+        $req .= '&tx=' . $tx_token . '&at=' . PAYPAL_AUTH_TOKEN;
+        
+        // post back to PayPal system to validate
+        $header = "POST /cgi-bin/webscr HTTP/1.0\r\n";
+        $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
+        $header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
+        
+        // url for paypal sandbox
+        $fp = fsockopen ('ssl://www.sandbox.paypal.com', 443, $errno, $errstr, 30);    
+        
+        // url for payal
+        // $fp = fsockopen ('www.paypal.com', 80, $errno, $errstr, 30);
+        
+        // If possible, securely post back to paypal using HTTPS
+        
+        // PHP server needs to be SSL enabled
+        if ($fp) {
+            fputs ($fp, $header . $req);
+            
+            // read the body data
+            $res = '';
+            $headerdone = false;
+            
+            while (!feof($fp)) {
+                $line = fgets ($fp, 1024);
+                if (strcmp($line, "\r\n") == 0) {
+                    // read the header
+                    $headerdone = true;
+                }
+                else if ($headerdone) {
+                    // header has been read. now read the contents
+                    $res .= $line;
+                }
+            }
+            
+            // parse the data
+            $lines = explode("\n", $res);
+            $response = array();
+            
+            if (strcmp ($lines[0], "SUCCESS") == 0) {
+                for ($i=1; $i<count($lines);$i++){
+                    list($key,$val) = explode("=", $lines[$i]);
+                    $response[urldecode($key)] = urldecode($val);
+                }
+                
+                $itemName = $response["item_name"];
+                $amount = $response["payment_gross"];
+                $paymentStatus = $response["payment_status"];
+                $paypalTxId = $response["txn_id"];
+                $currency = $response["mc_currency"];
+                
+                // check the payment_status is Completed
+                if($paymentStatus!="Completed") {
+                    throw new \Exception('Payment not completed.');
+                }
+                // check that txn_id has not been previously processed
+                checkIfTransactionHasAlreadyBeenProcessed($paypalTxId);
+                
+                // process the order
+                processOrder();
+            } else {
+                throw new \Exception('Oops! There was an unexpected error trying to verify your transaction.');
+            }
+        }
+        fclose ($fp);
+    }
 
     /**
      * Adds payment to payment table
@@ -113,12 +186,6 @@ class Paypal extends DBEntity
         try {
             $today = date('Y-m-d H:i:s');
 
-            if ($data['mc_gross'] === '99.00' && $data['mc_currency'] === 'USD') {
-                $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 year'));
-            } elseif ($data['mc_gross'] === '10.00' && $data['mc_currency'] === 'USD') {
-                $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 month'));
-            }
-                    
             file_put_contents("log.txt", "---ADD_PAYMENT: " . print_r( 
                 [$this->user_id,
                 $data['txn_id'],
@@ -128,10 +195,6 @@ class Paypal extends DBEntity
                 $data['payer_status'],
                 $today], true ), 
             FILE_APPEND );
-
-            if (!is_array($data) || !isset($premium_until)) {
-                throw new \Exception('There was an unexpected error in the payment information provided.');
-            }
 
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `txn_id`, `payer_id`, `subscription_id`, `amount`, `status`, `date_created`) 
                     VALUES(?, ?, ?, ?, ?, ?, ?)";

@@ -351,14 +351,18 @@ class User
             if (!isset($premium_until)) {
                 throw new \Exception('There was an unexpected error trying to activate user.');
             }
+
+            file_put_contents("log.txt", "---ADD_PAYMENT: " . print_r( 
+                [$premium_until, $data['custom']], true ), 
+            FILE_APPEND );
             
             $sql = "UPDATE `{$this->table}` 
                     SET `premium_until`=? 
                     WHERE `id`=?";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$premium_until, $this->id]);
+            $stmt->execute([$premium_until, $data['custom']]);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to activate user.');
+            throw new \Exception('There was an unexpected error trying to upgrade user.');
         } finally {
             $stmt = null;
         }

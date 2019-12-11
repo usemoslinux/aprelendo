@@ -40,13 +40,12 @@ $paypalConfig = [
 ];
 
 try {
-
     if (empty($_POST)) {
         throw new \Exception ("No IPN post information");
     }
 
     // Check if paypal request or response
-    if (!isset($_POST["txn_id"]) && !isset($_POST["txn_type"])) {
+    if (isset($_POST["cmd"]) && $_POST["cmd"] === '_xclick-subscriptions') {
         // It's a request
 
         // Grab the post data so that we can set up the query string for PayPal.
@@ -79,7 +78,7 @@ try {
         file_put_contents("log.txt", "---REQUEST-data: " . print_r( $data, true ) );
 
         // Redirect to paypal IPN
-        $paypal = new Paypal($pdo, $user->getId(), $enableSandbox);
+        $paypal = new Paypal($pdo, $user->getId(), PAYPAL_SANDBOX);
         header('location:' . $paypal->getUrl() . '?' . $queryString);
         exit;
 
@@ -90,29 +89,36 @@ try {
         // Instead, read raw POST data from the input stream.
         $raw_post_data = file_get_contents('php://input');
         $raw_post_array = explode('&', $raw_post_data);
-        $myPost = [];
+        $post_array = [];
         foreach ($raw_post_array as $keyval) {
             $keyval = explode ('=', $keyval);
             if (count($keyval) == 2)
-            $myPost[$keyval[0]] = urldecode($keyval[1]);
+            $post_array[$keyval[0]] = urldecode($keyval[1]);
         }
 
-        file_put_contents("log.txt", "---RESPONSE-myPOST: " . print_r( $myPost, true ), FILE_APPEND );
+        if (!is_array($post_array) || empty($post_array)) {
+            throw new \Exception('There was an unexpected error in the payment information provided.');
+        }
+
+        file_put_contents("log.txt", "---RESPONSE-post_array: " . print_r( $post_array, true ), FILE_APPEND );
 
         // We need to verify the transaction comes from PayPal and check we've not
         // already processed the transaction before adding the payment to our
         // database.
-        $paypal = new Paypal($pdo, $myPost['custom'], $enableSandbox);
+        $paypal = new Paypal($pdo, $post_array['custom'], PAYPAL_SANDBOX);
 
-        if ($paypal->verifyTransaction($myPost) && $paypal->checkTxnId($myPost['txn_id'])) {
-            $paypal->addPayment($myPost);
-            $user->upgradeToPremium($myPost);
+        
+        if (isset($post_array['txn_id']) && $paypal->verifyTransactionIPN($post_array) && $paypal->checkTxnId($post_array['txn_id'])) {
+            $paypal->addPayment($post_array);
+            $user->upgradeToPremium($post_array);
         } else {
-            throw new \Exception ('Transaction could not be verified. Payment Id might be wrong.');
+            if (!isset($post_array['amount3'])) {
+                throw new \Exception ('Transaction could not be verified. Payment Id might be wrong.');
+            }
         }
     }
 } catch (\Exception $e) {
-    file_put_contents("paypal.log", $e->getMessage(), FILE_APPEND );
+    file_put_contents("paypal.log", $e->getMessage() . "\n\n----post_array: " . print_r( $post_array, true ), FILE_APPEND );
 }
 
 ?>
