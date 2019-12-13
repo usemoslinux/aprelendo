@@ -105,75 +105,56 @@ class Paypal extends DBEntity
         return $res === 'VERIFIED';
     } // end verifyTransactionIPN()
 
-    public function verifyTransactionPDT($tx) {
+    public function verifyTransactionPDT(string $tx): array {
         $req = 'cmd=_notify-synch';
-        $tx_token = $tx;
         $auth_token = "siw1VZH10S_RgptHvNvJXJ6bhjbd8sdbfjhsbj43jju9lF7d1sKSclIC";
-        $req .= '&tx=' . $tx_token . '&at=' . PAYPAL_AUTH_TOKEN;
-        
-        // post back to PayPal system to validate
-        $header = "POST /cgi-bin/webscr HTTP/1.0\r\n";
-        $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-        $header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
-        
-        // url for paypal sandbox
-        $fp = fsockopen ('ssl://www.sandbox.paypal.com', 443, $errno, $errstr, 30);    
-        
-        // url for payal
-        // $fp = fsockopen ('www.paypal.com', 80, $errno, $errstr, 30);
-        
-        // If possible, securely post back to paypal using HTTPS
-        
-        // PHP server needs to be SSL enabled
-        if ($fp) {
-            fputs ($fp, $header . $req);
-            
-            // read the body data
-            $res = '';
-            $headerdone = false;
-            
-            while (!feof($fp)) {
-                $line = fgets ($fp, 1024);
-                if (strcmp($line, "\r\n") == 0) {
-                    // read the header
-                    $headerdone = true;
-                }
-                else if ($headerdone) {
-                    // header has been read. now read the contents
-                    $res .= $line;
-                }
-            }
-            
+        $req .= '&tx=' . $tx . '&at=' . PAYPAL_AUTH_TOKEN;
+
+        $curl_options = array(
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_POST => 1,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POSTFIELDS => $req,
+            CURLOPT_SSLVERSION => 6,
+            CURLOPT_SSL_VERIFYPEER => 1,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_FORBID_REUSE => 1,
+            CURLOPT_CONNECTTIMEOUT => 30,
+            CURLOPT_HTTPHEADER => array('Connection: Close')
+        );
+
+        try {
+            $res = Curl::getUrlContents($this->url, $curl_options);
             // parse the data
             $lines = explode("\n", $res);
-            $response = array();
+            $response = [];
             
             if (strcmp ($lines[0], "SUCCESS") == 0) {
                 for ($i=1; $i<count($lines);$i++){
-                    list($key,$val) = explode("=", $lines[$i]);
-                    $response[urldecode($key)] = urldecode($val);
+                    if (!empty($lines[$i])) {
+                        list($key,$val) = explode("=", $lines[$i]);
+                        $response[\urldecode($key)] = \urldecode($val); 
+                    }
                 }
-                
-                $itemName = $response["item_name"];
-                $amount = $response["payment_gross"];
-                $paymentStatus = $response["payment_status"];
-                $paypalTxId = $response["txn_id"];
-                $currency = $response["mc_currency"];
-                
+                                
                 // check the payment_status is Completed
-                if($paymentStatus!="Completed") {
+                if( $response["payment_status"]!="Completed") {
                     throw new \Exception('Payment not completed.');
                 }
                 // check that txn_id has not been previously processed
-                checkIfTransactionHasAlreadyBeenProcessed($paypalTxId);
+                // checkIfTransactionHasAlreadyBeenProcessed($paypalTxId);
                 
                 // process the order
-                processOrder();
+                // processOrder();
             } else {
-                throw new \Exception('Oops! There was an unexpected error trying to verify your transaction.');
+                throw new \Exception('Oops! Your transaction could not be verified.');
             }
+
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
         }
-        fclose ($fp);
+
+        return $response;
     }
 
     /**

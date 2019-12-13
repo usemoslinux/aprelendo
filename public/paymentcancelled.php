@@ -22,17 +22,6 @@ require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 require_once PUBLIC_PATH . 'head.php';
 
-use Aprelendo\Includes\Classes\Paypal; 
-
-if(isset($_GET['tx']) && ($_GET['tx'])!=null && ($_GET['tx'])!= "") {
-    $tx = $_GET['tx'];
-    $paypal = new Paypal($pdo, $user->getId(), PAYPAL_SANDBOX);
-    $paypal->verifyTransactionPDT($tx);
-}
-else {
-    exitCode();
-}
-
 ?>
 
     <div class="container mtb d-flex flex-grow-1 flex-column">
@@ -43,16 +32,9 @@ else {
                 </div>
                 <br>
 
-                <h1 class="text-success text-center"><i class="far fa-check-circle"></i> Paypal payment successful</h1>
-                <h5 class="text-center">Thank you for your purchase</h5>
+                <h1 class="text-danger text-center"><i class="far fa-check-circle"></i> Paypal payment cancelled</h1>
+                <h5 class="text-center">Your susbscription to Aprelendo was cancelled</h5>
                 <hr>
-                <p>Below you will find your purchase details:</p>
-                <ul>
-                    <li>Transaction Id: <?php echo $_GET['tx']; ?></li>
-                    <li>Amount: <?php echo $_GET['cc'] . ' ' . $_GET['amt'];  ?></li>
-                    <li>Status: <?php echo $_GET['st']; ?></li>
-                </ul>
-
                 <div class="text-center">
                     <a href="/" class="btn btn-primary btn-lg" role="button">Go back to Home page</a>
                 </div>

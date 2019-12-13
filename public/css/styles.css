@@ -953,6 +953,10 @@ input {
     vertical-align: middle;
 }
 
+.borderless td, .borderless th {
+    border: none;
+}
+
 /* FORM STYLES */
 
 @media screen and (min-width: 992px) {
