@@ -900,7 +900,7 @@ input {
 
 #gt-icon {
     font-size: 34px;
-    padding-top: 5px;
+    margin-top: -3px;
 }
 
 @media screen and (min-width: 768px) {

@@ -65,7 +65,7 @@ try {
 
     // if no errors, log audio stream 
     if ($voice['error'] === NULL && $voice['response'] !== false) {
-        // $stream_log->addRecord();
+        $stream_log->addRecord();
     }
     
 } catch (\Exception $e) {

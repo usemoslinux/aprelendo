@@ -24,6 +24,7 @@ $(document).ready(function() {
     var time_handler = null;
     var dictionaryURI = "";
     var translatorURI = "";
+    var translate_paragraph_link = "";
     var phase = 1; // first phase of the learning cycle
     var playingaudio = false;
     window.parent.show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
@@ -213,7 +214,7 @@ $(document).ready(function() {
             .addBack();
         var sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ");
 
-        return translatorURI.replace("%s", encodeURIComponent(sentence));
+        return translatorURI.replace("%s", encodeURI(sentence));
     } // end buildTranslateParagraphLink
 
     /**
@@ -298,7 +299,7 @@ $(document).ready(function() {
         setAddDeleteButtons();
 
         // build translate sentence url
-        $("#gt-link").attr("href", buildTranslateParagraphLink());
+        translate_paragraph_link = buildTranslateParagraphLink();
 
         // show dictionary
         var search_text = $selword.text().replace(/\r?\n|\r/gm, " ");
@@ -316,6 +317,10 @@ $(document).ready(function() {
             .find("#myModal")
             .modal("show");
     } // end showModal
+
+    $doc.on("click", "#btn-translate", function() {
+        window.open(translate_paragraph_link);
+    }); // end #btn-translate.on.click()
 
     /**
      * Adds word to user db
@@ -854,9 +859,9 @@ $(document).ready(function() {
      * When audio fails to load, an error message is shown with a link to reload audio
      * This event is triggered when the user clicks this link
      */
-    $(document).on("click", "#retry-audio-load", function(e) {
+    $doc.on("click", "#retry-audio-load", function(e) {
         e.preventDefault();
-        $("#alert-msg-audio").remove;
+        $("#alert-msg-audio").addClass("d-none");
         $("#audioplayer-loader").removeClass("d-none");
         loadAudio();
     }); // end #retry-audio-load.on.click
@@ -865,11 +870,11 @@ $(document).ready(function() {
      * Helper function to skip audio phases
      */
     function skipAudioPhases() {
-        $("#audioplayer-loader")
-            .nextAll()
-            .addBack()
-            .slice(0, 3)
-            .remove();
+        // $("#audioplayer-loader")
+        //     .nextAll()
+        //     .addBack()
+        //     .slice(0, 3)
+        //     .remove();
 
         $("#btn-next-phase").html(
             'Finish & Save<br><span class="small">Skipped phases 2, 3 & 4: no audio detected</span>'
@@ -907,19 +912,18 @@ $(document).ready(function() {
                 })
                 .fail(function(xhr, ajaxOptions, thrownError) {
                     // FIXME: audio streaming sometimes fails with no reason... need to investigate more.
+                    consl
                     console.log(xhr.statusText);
                     console.log(ajaxOptions);
-                    console.log(thrownError);
+                    console.log(thrownError.message);
 
                     if (xhr.status == 403) {
                         // TODO: implement "upgrade" page
-                        $("#audioplayer-loader").replaceWith(
-                            '<div id="alert-msg-audio" class="alert alert-danger">You have reached your audio streaming limit for today. Although it is possible to continue with the revision of the text, we do not recommend it. Alternatively, you can try again tomorrow or you can consider supporting us and <a href="gopremium.php">improving your plan</a> to increase the daily audio streaming limit.</div>'
-                        );
+                        $("#audioplayer-loader").addClass("d-none");
+                        $("#alert-msg-audio").removeClass("d-none").empty().append('You have reached your audio streaming limit for today. Although it is possible to continue with the revision of the text, we do not recommend it. Alternatively, you can try again tomorrow or you can consider supporting us and <a href="gopremium.php">improving your plan</a> to increase the daily audio streaming limit.');
                     } else {
-                        $("#audioplayer-loader").replaceWith(
-                            '<div id="alert-msg-audio" class="alert alert-danger">There was an unexpected error trying to create audio from this text. <a href="#" id="retry-audio-load">Try again</a> later.</div>'
-                        );
+                        $("#audioplayer-loader").addClass("d-none");
+                        $("#alert-msg-audio").removeClass("d-none").empty().append('There was an unexpected error trying to create audio from this text. <a href="#" id="retry-audio-load">Try again</a> later.');
                     }
 
                     skipAudioPhases();

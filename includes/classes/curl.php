@@ -20,7 +20,7 @@
 
 namespace Aprelendo\Includes\Classes;
 
-require_once '../config/config.php';
+require_once '../../config/config.php';
 
 class Curl
 {

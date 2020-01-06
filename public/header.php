@@ -23,6 +23,15 @@ use Aprelendo\Includes\Classes\Language;
 
 $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
 ?>
+
+<script>
+    function init() {
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
+        });
+    }
+</script>
+
 <div class="d-flex h-100 flex-column">
     <nav class="navbar navbar-expand-md navbar-light">
         <div class="container">

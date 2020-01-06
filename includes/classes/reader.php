@@ -345,6 +345,8 @@ class Reader extends Text
         // display audio player
         $html .= '<hr>';
 
+        $html .=   '<div id="alert-msg-audio" class="alert alert-danger d-none"></div>';
+
         $html .=   '<div id="audioplayer-loader" class="lds-facebook mx-auto">
                         <div></div>
                         <div></div>
