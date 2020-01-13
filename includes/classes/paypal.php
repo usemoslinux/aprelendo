@@ -158,24 +158,14 @@ class Paypal extends DBEntity
     }
 
     /**
-     * Adds payment to payment table
+     * Adds IPN payment to payment table
      *
      * @param array $data Paypal Payment data
      * @return void
      */
-    public function addPayment(array $data): void {
+    public function addIPNPayment(array $data): void {
         try {
             $today = date('Y-m-d H:i:s');
-
-            file_put_contents("log.txt", "---ADD_PAYMENT: " . print_r( 
-                [$this->user_id,
-                $data['txn_id'],
-                $data['payer_id'],
-                $data['subscr_id'],
-                $data['mc_gross'],
-                $data['payer_status'],
-                $today], true ), 
-            FILE_APPEND );
 
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `txn_id`, `payer_id`, `subscription_id`, `amount`, `status`, `date_created`) 
                     VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -186,6 +176,36 @@ class Paypal extends DBEntity
                             $data['subscr_id'],
                             $data['mc_gross'],
                             $data['payer_status'],
+                            $today]);
+
+            if ($stmt->rowCount() == 0) {
+                throw new \Exception('There was an unexpected error trying to add payment record. No rows added.');
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to add payment record.');
+        } finally {
+            $stmt = null;
+        }
+    } // end addPayment()
+
+    /**
+     * Adds PDT payment to payment table
+     *
+     * @param array $data Paypal Payment data
+     * @return void
+     */
+    public function addPDTPayment(array $data): void {
+        try {
+            $today = date('Y-m-d H:i:s');
+
+            $sql = "INSERT INTO `{$this->table}` (`user_id`, `txn_id`, `amount`, `status`, `item_id`, `date_created`) 
+                    VALUES(?, ?, ?, ?, ?, ?)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$data['cm'],
+                            $data['tx'],
+                            $data['amt'],
+                            $data['st'],
+                            $data['item_number'],
                             $today]);
 
             if ($stmt->rowCount() == 0) {

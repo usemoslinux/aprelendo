@@ -45,7 +45,7 @@ try {
     }
 
     // Check if paypal request or response
-    if (isset($_POST["cmd"]) && $_POST["cmd"] === '_xclick-subscriptions') {
+    if (isset($_POST["cmd"]) && $_POST["cmd"] === '_xclick') {
         // It's a request
 
         // Grab the post data so that we can set up the query string for PayPal.
@@ -65,9 +65,28 @@ try {
         $data['notify_url'] = stripslashes($paypalConfig['notify_url']);
 
         // Set the details about the product being purchased, including the amount
-        // and currency so that these aren't overridden by the form data.
-        $data['a3'] = $_POST["t3"] === 'Y' ? '99' : '10'; // amount
+        // and currency so that these override form data.
+        switch ($data['item_number']) {
+            case 1:
+                // 1 month pass
+                $data['item_name'] = 'Aprelendo - 1 Month Pass';
+                $data['amount'] = '10.00';
+                break;
+            case 2:
+                $data['item_name'] = 'Aprelendo - 6 Months Pass';
+                $data['amount'] = '50.00';
+                break;
+            case 3:
+                $data['item_name'] = 'Aprelendo - 1 Year Pass';
+                $data['amount'] = '99.00';
+                break;
+            default:
+        }
+        
         $data['currency_code'] = 'USD'; // currency
+        $data['no_shipping'] = '2';
+        $data['no_note'] = '1';
+        $data['tax'] = '0';
 
         // Add user id
         $data['custom'] = $user->getId();
@@ -75,15 +94,13 @@ try {
         // Build the query string from the data.
         $queryString = http_build_query($data);
 
-        file_put_contents("log.txt", "---REQUEST-data: " . print_r( $data, true ) );
-
         // Redirect to paypal IPN
         $paypal = new Paypal($pdo, $user->getId(), PAYPAL_SANDBOX);
         header('location:' . $paypal->getUrl() . '?' . $queryString);
         exit;
 
     } else {
-        // Handle the PayPal response.
+        // Handle the PayPal IPN response.
         
         // Reading POSTed data directly from $_POST causes serialization issues with array data in the POST.
         // Instead, read raw POST data from the input stream.
@@ -100,17 +117,14 @@ try {
             throw new \Exception('There was an unexpected error in the payment information provided.');
         }
 
-        file_put_contents("log.txt", "---RESPONSE-post_array: " . print_r( $post_array, true ), FILE_APPEND );
-
         // We need to verify the transaction comes from PayPal and check we've not
         // already processed the transaction before adding the payment to our
         // database.
         $paypal = new Paypal($pdo, $post_array['custom'], PAYPAL_SANDBOX);
-
         
         if (isset($post_array['txn_id']) && $paypal->verifyTransactionIPN($post_array) && $paypal->checkTxnId($post_array['txn_id'])) {
-            $paypal->addPayment($post_array);
-            $user->upgradeToPremium($post_array);
+            $paypal->addIPNPayment($post_array);
+            $user->upgradeToPremiumIPN($post_array);
         } else {
             if (!isset($post_array['amount3'])) {
                 throw new \Exception ('Transaction could not be verified. Payment Id might be wrong.');

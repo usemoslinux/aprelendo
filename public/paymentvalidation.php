@@ -33,7 +33,6 @@ try {
     }
 
     $tx = $_GET['tx'];
-    // $tx = '10T288818U361431J';
     $paypal = new Paypal($pdo, $user->getId(), PAYPAL_SANDBOX);
     $res = $paypal->verifyTransactionPDT($tx);
 
@@ -41,7 +40,15 @@ try {
                     'h1_msg'   => 'Paypal payment successful',
                     'h1_class' => 'text-success',
                     'h5_msg'   => 'Thank you for your purchase'];
+    
+    if ($paypal->checkTxnId($tx)) {
+        $paypal->addPDTPayment($_GET);
+        $user->upgradeToPremiumPDT($_GET);
+    } else {
+        throw new \Exception ('Transaction was already processed.');
+    }
 } catch (\Exception $e) {
+    $error = true;
     $html_array = [ 'h1_img_class' => 'fas fa-exclamation-circle',
                     'h1_msg'   => 'Paypal payment error',
                     'h1_class' => 'text-danger',

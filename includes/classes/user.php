@@ -332,12 +332,12 @@ class User
     } // activate()
 
     /**
-     * Upgrades user to premium
+     * Upgrades user to premium with IPN input
      *
-     * @param string $subscription_type
+     * @param array $data
      * @return void
      */
-    public function upgradeToPremium(array $data): void
+    public function upgradeToPremiumIPN(array $data): void
     {
         try {
             $today = date('Y-m-d H:i:s');
@@ -351,16 +351,45 @@ class User
             if (!isset($premium_until)) {
                 throw new \Exception('There was an unexpected error trying to activate user.');
             }
-
-            file_put_contents("log.txt", "---ADD_PAYMENT: " . print_r( 
-                [$premium_until, $data['custom']], true ), 
-            FILE_APPEND );
             
             $sql = "UPDATE `{$this->table}` 
                     SET `premium_until`=? 
                     WHERE `id`=?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$premium_until, $data['custom']]);
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to upgrade user.');
+        } finally {
+            $stmt = null;
+        }
+    } // upgradeToPremium()
+
+    /**
+     * Upgrades user to premium with PDT input
+     *
+     * @param array $data
+     * @return void
+     */
+    public function upgradeToPremiumPDT(array $data): void
+    {
+        try {
+            $today = date('Y-m-d H:i:s');
+
+            if ($data['amt'] === '99.00' && $data['cc'] === 'USD') {
+                $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 year'));
+            } elseif ($data['amt'] === '10.00' && $data['cc'] === 'USD') {
+                $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 month'));
+            }
+
+            if (!isset($premium_until)) {
+                throw new \Exception('There was an unexpected error trying to activate user.');
+            }
+            
+            $sql = "UPDATE `{$this->table}` 
+                    SET `premium_until`=? 
+                    WHERE `id`=?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$premium_until, $data['cm']]);
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to upgrade user.');
         } finally {
