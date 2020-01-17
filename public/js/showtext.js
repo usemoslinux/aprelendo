@@ -52,7 +52,6 @@ $(document).ready(function() {
                         $audioplayer.trigger("pause");
                     }
 
-                    playingaudio = !playingaudio;
                     break;
             }
         }
@@ -912,7 +911,6 @@ $(document).ready(function() {
                 })
                 .fail(function(xhr, ajaxOptions, thrownError) {
                     // FIXME: audio streaming sometimes fails with no reason... need to investigate more.
-                    consl
                     console.log(xhr.statusText);
                     console.log(ajaxOptions);
                     console.log(thrownError.message);
@@ -939,7 +937,6 @@ $(document).ready(function() {
      */
     $(document).on("click", $pagereader, function(e) {
         if ($(e.target).is(".word") === false) {
-            e.preventDefault();
             e.stopPropagation();
 
             $text_container = $("#text-container").length

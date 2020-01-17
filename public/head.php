@@ -90,8 +90,6 @@ if ($this_is_show_page) {
 
     <!-- Google API -->
     <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
-
-
 </head>
 
 <?php

@@ -22,7 +22,7 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Curl;
 
-require_once '../config/config.php';
+require_once dirname(__DIR__) . '../../config/config.php';
 
 class Paypal extends DBEntity
 {
