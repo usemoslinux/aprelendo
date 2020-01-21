@@ -160,14 +160,14 @@ $(document).ready(function() {
      */
     $("#btnadd").on("click", function() {
         var sel_text = $selword.text();
-        var is_phrase = $selword.length > 1;
+        var is_phrase = $selword.length > 1 ? 1: 0;
         // add selection to "words" table
         $.ajax({
             type: "POST",
             url: "ajax/addword.php",
             data: {
                 word: sel_text.toLowerCase(),
-                isphrase: is_phrase
+                is_phrase: is_phrase
             }
         })
             .done(function() {

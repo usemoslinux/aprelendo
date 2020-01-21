@@ -34,11 +34,11 @@ if (isset($_POST['word'])) {
     
     $word = $_POST['word'];
     $status = 2;
-    $isphrase = $_POST['isphrase'];
+    $is_phrase = $_POST['is_phrase'];
     
     try {
         $words_table = new Words($pdo, $user_id, $lang_id);
-        $words_table->add($word, $status, $isphrase);
+        $words_table->add($word, $status, $is_phrase);
     } catch (Exception $e) {
         $error = array('error_msg' => $e->getMessage());
         header('Content-Type: application/json');

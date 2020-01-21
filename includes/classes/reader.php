@@ -286,11 +286,11 @@ class Reader extends Text
         
         // replace words & separators with corresponding html code
         foreach ($words[0] as &$word) {
-            $search_in_dic = \array_search($word, array_column($dic_words, 'word'));
+            $search_in_dic = \array_search(strtolower($word), array_column($dic_words, 'word'));
             if ($search_in_dic === false) {
                 // if necessary, underline frequency words
                 if ($this->show_freq_words && $user_is_logged_and_premium) { 
-                    $search_in_freq_dic = \array_search($word, \array_column($freq_words, 'word'));
+                    $search_in_freq_dic = \array_search(strtolower($word), \array_column($freq_words, 'word'));
                     if ($search_in_freq_dic === false) {
                         $word = "<span class='word' data-toggle='modal' data-target='#myModal'>$word</span>";
                     } else {

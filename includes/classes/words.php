@@ -53,18 +53,19 @@ class Words extends DBEntity {
      *
      * @param string $word
      * @param int $status
-     * @param int $isphrase It's an integer but it acts like a boolean (only uses 0 & 1)
+     * @param int $is_phrase It's an integer but it acts like a boolean (only uses 0 & 1)
      * @return void
      */
-    public function add(string $word, int $status, bool $isphrase): void {
+    public function add(string $word, int $status, bool $is_phrase): void {
         try {
+            $word = strtolower($word);
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`)
                     VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
                     `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `is_phrase`=?, `date_modified`=NOW()";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $word, $status, $isphrase, 
-                            $this->user_id, $this->lang_id, $word, $status, $isphrase]);
+            $stmt->execute([$this->user_id, $this->lang_id, $word, $status, $is_phrase, 
+                            $this->user_id, $this->lang_id, $word, $status, $is_phrase]);
             
             if ($stmt->rowCount() == 0) {
                 throw new \Exception('There was an unexpected error trying to add record to words table.');

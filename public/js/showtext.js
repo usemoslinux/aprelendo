@@ -326,7 +326,7 @@ $(document).ready(function() {
      * Triggered when user clicks the "Add" button in the dictionary modal window
      */
     $doc.on("click", "#btnadd", function() {
-        var is_phrase = $selword.length > 1;
+        var is_phrase = $selword.length > 1 ? 1: 0;
         var sel_text = $selword.text();
 
         // add selection to "words" table
@@ -335,7 +335,7 @@ $(document).ready(function() {
             url: "/ajax/addword.php",
             data: {
                 word: sel_text,
-                isphrase: is_phrase
+                is_phrase: is_phrase
             }
         })
             .done(function() {

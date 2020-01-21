@@ -49,7 +49,8 @@ class Statistics extends DBEntity {
 
         // get how many words were created in each of the last 7 days
         for ($i=$days; $i >= 0; $i--) {
-            $sql = "SELECT COUNT(word) AS `created` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `date_created` < CURDATE() - INTERVAL ?-1 DAY AND `date_created` > CURDATE() - INTERVAL ? DAY";
+            $sql = "SELECT COUNT(word) AS `created` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `date_created` > DATE_SUB(NOW(), INTERVAL ? DAY)";
+            // $sql = "SELECT COUNT(word) AS `created` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `date_created` < CURDATE() - INTERVAL ?-1 DAY AND `date_created` > CURDATE() - INTERVAL ? DAY";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
             $row = $stmt->fetch();
@@ -58,27 +59,30 @@ class Statistics extends DBEntity {
 
         // get how many words' status were modified in each of the last 7 days
         for ($i=$days; $i >= 0; $i--) { 
-            $sql = "SELECT COUNT(word) AS `modified` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`>0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
+            $sql = "SELECT COUNT(word) AS `modified` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=1 AND `date_modified` > DATE_SUB(NOW(), INTERVAL ? DAY)";
+            // $sql = "SELECT COUNT(word) AS `modified` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`>0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
+            $stmt->execute([$this->user_id, $this->lang_id, $i]);
             $row = $stmt->fetch();
             $stats['modified'][] = $row['modified'];
         }
 
         // get how many words were learned in each of the last 7 days
         for ($i=$days; $i >= 0; $i--) { 
-            $sql = "SELECT COUNT(word) AS `learned` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
+            $sql = "SELECT COUNT(word) AS `learned` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=0 AND `date_modified` > DATE_SUB(NOW(), INTERVAL ? DAY)";
+            // $sql = "SELECT COUNT(word) AS `learned` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
+            $stmt->execute([$this->user_id, $this->lang_id, $i]);
             $row = $stmt->fetch();
             $stats['learned'][] = $row['learned'];
         }
 
         // get how many learned words were forgotten in each of the last 7 days
         for ($i=$days; $i >= 0; $i--) { 
-            $sql = "SELECT COUNT(word) AS `forgotten` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=2 AND `date_modified`>`date_created` AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
+            $sql = "SELECT COUNT(word) AS `forgotten` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=2 AND `date_modified`>`date_created` AND `date_modified` > DATE_SUB(NOW(), INTERVAL ? DAY)";
+            // $sql = "SELECT COUNT(word) AS `forgotten` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=2 AND `date_modified`>`date_created` AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
+            $stmt->execute([$this->user_id, $this->lang_id, $i]);
             $row = $stmt->fetch();
             $stats['forgotten'][] = $row['forgotten'];
         }
