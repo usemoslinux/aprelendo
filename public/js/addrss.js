@@ -148,7 +148,7 @@ $(document).ready(function() {
                             case "readlater":
                                 showMessage(
                                     $entry_text,
-                                    "Text was successfully added to your library",
+                                    "Text was successfully added to the shared texts library",
                                     "alert-success"
                                 );
                                 break;

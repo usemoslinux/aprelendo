@@ -120,25 +120,23 @@ function print_table_footer($array_table_rows) {
     </div>
     <div class="row">
         <div class="col-12">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th style="width: 50%">Category</th>
-                            <th class="text-center" style="width: 25%">Words/Phrases</th>
-                            <th class="text-center" style="width: 25%">%</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php echo print_table_rows($array_table1); ?>
-                    </tbody>
-                    <tfoot>
-                        <?php echo print_table_footer($array_table1); ?>
-                    </tfoot>
-                </table>
-            </div>
+            <table class="table table-borderless">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 50%">Category</th>
+                        <th class="text-center" style="width: 25%">Words/Phrases</th>
+                        <th class="text-center" style="width: 25%">%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php echo print_table_rows($array_table1); ?>
+                </tbody>
+                <tfoot>
+                    <?php echo print_table_footer($array_table1); ?>
+                </tfoot>
+            </table>
 
-            <table class="table table-light">
+            <table class="table table-borderless">
                 <thead class="thead-light">
                     <tr>
                         <th style="width: 50%">Group</th>
@@ -164,6 +162,7 @@ function print_table_footer($array_table_rows) {
                 and you marked for learning once again.</p>
             <p><strong class="word frequency-list">Other</strong>: words that you never marked for learning and you seem
                 to understand well.</p>
+            <p><small>This chart shows only words or phrases.</small></p>
         </div>
     </div>
 </div>

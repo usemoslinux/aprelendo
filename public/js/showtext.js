@@ -79,7 +79,7 @@ $(document).ready(function() {
         var currentTime = new Date().getTime();
         var $audioplayer = $("#audioplayer");
 
-        if (currentTime - lastkeypress > 1000) {
+        if ((currentTime - lastkeypress > 1000) && !$audioplayer.prop("ended")) {
             $audioplayer.trigger("play");
         } else {
             var playing = !$audioplayer.prop("paused");

@@ -31,7 +31,6 @@ $(document).ready(function() {
         dataType: "json"
     })
         .done(function(data) {
-            //alert(data);
             created = data["created"];
             reviewed = data["modified"];
             learned = data["learned"];

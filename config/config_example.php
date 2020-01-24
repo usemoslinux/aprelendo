@@ -23,7 +23,7 @@ defined('DB_HOST')                ? null : define('DB_HOST', 'localhost');
 defined('DB_NAME')                ? null : define('DB_NAME', 'aprelendo');
 defined('DB_USER')                ? null : define('DB_USER', 'username');
 defined('DB_PASSWORD')            ? null : define('DB_PASSWORD', 'password');
-defined('DB_CHARSET')             ? null : define('DB_CHARSET', 'utf8');
+defined('DB_CHARSET')             ? null : define('DB_CHARSET', 'utf8mb4');
 
 defined('YOUTUBE_API_KEY')        ? null : define('YOUTUBE_API_KEY', 'your_youtube_api_key');
 defined('VOICERSS_API_KEY')       ? null : define('VOICERSS_API_KEY', 'your_voicerss_api_key');

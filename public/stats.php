@@ -51,6 +51,7 @@ require_once PUBLIC_PATH . 'header.php';
                 system thinks you have already reviewed enough times.</p>
             <p><strong style="background-color:Tomato">Forgotten</strong>: words you reviewed or learned in the past,
                 but that you marked for learning once again.</p>
+            <p><small>This chart shows only "unique" words or phrases.</small></p>
         </div>
     </div>
 </div>
