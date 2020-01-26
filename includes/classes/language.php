@@ -267,7 +267,7 @@ class Language extends DBEntity
      * @return string
      */
     public function getTranslatorUri(): string {
-        return $this->translator_uri;
+        return is_null($this->translator_uri) ? '' : $this->translator_uri;
     } // end getTranslatorUri()
 
     /**
@@ -276,7 +276,7 @@ class Language extends DBEntity
      * @return string
      */
     public function getRssFeed1Uri(): string {
-        return $this->rss_feed_1_uri;
+        return is_null($this->rss_feed_1_uri) ? '' : $this->rss_feed_1_uri;
     } // end getRssFeed1Uri()
 
     /**
@@ -285,7 +285,7 @@ class Language extends DBEntity
      * @return string
      */
     public function getRssFeed2Uri(): string {
-        return $this->rss_feed_2_uri;
+        return is_null($this->rss_feed_2_uri) ? '' : $this->rss_feed_2_uri;
     } // end getRssFeed2Uri()
 
     /**
@@ -294,7 +294,7 @@ class Language extends DBEntity
      * @return string
      */
     public function getRssFeed3Uri(): string {
-        return $this->rss_feed_3_uri;
+        return is_null($this->rss_feed_3_uri) ? '' :  $this->rss_feed_3_uri;
     } // end getRssFeed3Uri()
 
     /**

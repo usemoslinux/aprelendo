@@ -64,8 +64,8 @@ class Words extends DBEntity {
                     `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `is_phrase`=?, `date_modified`=NOW()";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $word, $status, $is_phrase, 
-                            $this->user_id, $this->lang_id, $word, $status, $is_phrase]);
+            $stmt->execute([$this->user_id, $this->lang_id, $word, $status, (int)$is_phrase, 
+                            $this->user_id, $this->lang_id, $word, $status, (int)$is_phrase]);
             
             if ($stmt->rowCount() == 0) {
                 throw new \Exception('There was an unexpected error trying to add record to words table.');
@@ -428,7 +428,7 @@ class Words extends DBEntity {
     public function getId(): int
     {
         return $this->id;
-    }
+    } // end getId()
 
     /**
      * Get the value of lang_id
@@ -436,7 +436,7 @@ class Words extends DBEntity {
     public function getLangId(): int
     {
         return $this->lang_id;
-    }
+    } // end getLangId()
 
     /**
      * Get the value of word
@@ -444,7 +444,7 @@ class Words extends DBEntity {
     public function getWord(): string
     {
         return $this->word;
-    }
+    } // end getWord()
 
     /**
      * Get the value of status
@@ -452,7 +452,7 @@ class Words extends DBEntity {
     public function getStatus(): int
     {
         return $this->status;
-    }
+    } // end getStatus()
 
     /**
      * Get the value of is_phrase
@@ -460,7 +460,7 @@ class Words extends DBEntity {
     public function getIsPhrase(): bool
     {
         return $this->is_phrase;
-    }
+    } // end getIsPhrase()
 
     /**
      * Get the value of date_created
@@ -468,15 +468,15 @@ class Words extends DBEntity {
     public function getDateCreated(): string
     {
         return $this->date_created;
-    }
+    } // end getDateCreated()
 
     /**
      * Get the value of date_modified
      */ 
     public function getDateModified(): string
     {
-        return $this->date_modified;
-    }
+        return is_null($this->date_modified) ? '' : $this->date_modified;
+    } // end getDateModified()
 }
 
 ?>

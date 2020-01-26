@@ -36,6 +36,9 @@ class Text
     protected $source_uri = '';
     protected $audio_uri  = '';
     protected $text       = '';
+    protected $type       = 0;
+    protected $word_count = 0;
+    protected $level      = 0;
     protected $is_shared  = false;
     
     /**
@@ -88,15 +91,76 @@ class Text
 
         return $reading_time;
     } // end estimatedReadingTime()
-    
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId(): int {
+        return $this->id;
+    } // end getId()
+
+    /**
+     * Get the value of title
+     */ 
+    public function getTitle(): string {
+        return $this->title;
+    } // end getTitle()
+
+    /**
+     * Get the value of author
+     */ 
+    public function getAuthor(): string {
+        return $this->author;
+    } // end getAuthor()
+
+    /**
+     * Get the value of source_uri
+     */ 
+    public function getSourceUri(): string {
+        return is_null($this->source_uri) ? '' : $this->source_uri;
+    } // end getSourceUri()
+
+    /**
+     * Get the value of audio_uri
+     */ 
+    public function getAudioUri(): string {
+        return is_null($this->audio_uri) ? '' : $this->audio_uri;
+    } // end getAudioUri()
+
     /**
      * Get the value of text
-     * @return string
      */ 
-    public function getText(): string
-    {
+    public function getText(): string {
         return $this->text;
-    }
+    } // end getText()
+
+    /**
+     * Get the value of type
+     */ 
+    public function getType(): int {
+        return $this->type;
+    } // end getType()
+
+    /**
+     * Get the value of word_count
+     */ 
+    public function getWordCount(): int {
+        return is_null($this->word_count) ? 0 : $this->word_count;
+    } // end getWordCount()
+
+    /**
+     * Get the value of level
+     */ 
+    public function getLevel(): int {
+        return is_null($this->level) ? 0 : $this->level;
+    } // end getLevel()
+
+    /**
+     * Get the value of is_shared
+     */ 
+    public function getIsShared(): bool {
+        return $this->is_shared;
+    } // end getIsShared()
 }
 
 class Reader extends Text

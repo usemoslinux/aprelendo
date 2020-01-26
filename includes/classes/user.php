@@ -838,7 +838,7 @@ class User
      */ 
     public function getPremiumUntil(): string
     {
-        return $this->premium_until;
+        return is_null($this->premium_until) ? '' : $this->premium_until;
     }
 
     /**

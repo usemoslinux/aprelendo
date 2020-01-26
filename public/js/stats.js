@@ -42,7 +42,7 @@ $(document).ready(function() {
     // color scheme: { blue: new; green: learned; yellow: learning; red: forgotten }
     var ctx = document.getElementById("myChart").getContext("2d");
     var myChart = new Chart(ctx, {
-        type: "line",
+        type: "bar",
         data: {
             labels: [
                 "6 days ago",
@@ -94,6 +94,7 @@ $(document).ready(function() {
                     {
                         ticks: {
                             beginAtZero: true,
+                            suggestedMax: 10,
                             userCallback: function(label, index, labels) {
                                 // when the floored value is the same as the value we have a whole number
                                 if (Math.floor(label) === label) {

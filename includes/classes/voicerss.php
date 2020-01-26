@@ -57,19 +57,6 @@ class VoiceRSS
 	private function _request(array $settings): array {
     	$url = ((isset($settings['ssl']) && $settings['ssl']) ? 'https' : 'http') . '://api.voicerss.org/';
 		
-		// $ch = curl_init($url);
-		
-		// curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		// curl_setopt($ch, CURLOPT_BINARYTRANSFER, (isset($settings['b64']) && $settings['b64']) ? 0 : 1);
-		// curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded; charset=UTF-8'));
-		// curl_setopt($ch, CURLOPT_POST, 1);
-		// curl_setopt($ch, CURLOPT_PROXY, self::$proxy);
-		// curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_buildRequest($settings));
-
-		// $resp = curl_exec($ch);
-
-		// curl_close($ch);
-		
 		$curl_options = array(CURLOPT_RETURNTRANSFER => 1,
 		   					  CURLOPT_BINARYTRANSFER => (isset($settings['b64']) && $settings['b64']) ? 0 : 1,
 							  CURLOPT_HTTPHEADER => array('Content-Type: application/x-www-form-urlencoded; charset=UTF-8'),

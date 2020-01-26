@@ -430,8 +430,7 @@ $(document).ready(function() {
             url: "ajax/archivetext.php",
             data: {
                 words: oldwords,
-                textIDs: JSON.stringify(ids),
-                archivetext: true
+                textIDs: JSON.stringify(ids)
             }
         })
             .done(function(data) {

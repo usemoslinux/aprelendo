@@ -41,7 +41,8 @@ try {
     }  
 
     // if text is not shared, then archive or unarchive text accordingly
-    if (isset($_POST['textIDs']) && !empty($_POST['textIDs'])) {
+    if (isset($_POST['textIDs']) && !empty($_POST['textIDs']) && 
+        isset($_POST['archivetext']) && !empty($_POST['archivetext'])) {
         if ($_POST['archivetext'] === 'true') { //archive text
             $texts_table = new Texts($pdo, $user_id, $lang_id);
             $texts_table->archive($_POST['textIDs']);
