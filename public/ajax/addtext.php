@@ -74,11 +74,11 @@ try {
             $xml_text = $texts_table->extractFromXML($text);
             
             if ($xml_text != false) {
-                if (strlen($xml_text) > 20000) {
+                if (mb_strlen($xml_text) > 20000) {
                     $errors[] = "<li>Maximum supported text length is 20.000 characters.</li>";
                 }    
             } else {
-                if (strlen($text) > 20000) {
+                if (mb_strlen($text) > 20000) {
                     $errors[] = "<li>Maximum supported text length is 20.000 characters.</li>";
                 }
             }

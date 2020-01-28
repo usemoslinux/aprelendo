@@ -58,7 +58,7 @@ class Words extends DBEntity {
      */
     public function add(string $word, int $status, bool $is_phrase): void {
         try {
-            $word = strtolower($word);
+            $word = mb_strtolower($word);
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`)
                     VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
                     `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `is_phrase`=?, `date_modified`=NOW()";

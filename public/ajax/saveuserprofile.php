@@ -48,7 +48,7 @@ try {
         }
     } else {
         if ($new_password1 === $new_password2) {
-            if (strlen($new_password1) >= 8)  {
+            if (mb_strlen($new_password1) >= 8)  {
                 if (!$user->updateUserProfile($username, $email, $password, $new_password1, $src_lang, $to_lang)) {
                     throw new \Exception($user->getErrorMsg());
                 }
