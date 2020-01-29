@@ -42,7 +42,7 @@ class WordFrequency {
     public static function get(\PDO $pdo, string $word, string $lg_iso) {
         try {
             $table = 'frequency_list_' . $lg_iso;
-            $word = strtolower($word);
+            $word = mb_strtolower($word);
 
             $sql = "SELECT COUNT(*) AS `exists` FROM {$table} WHERE word=?";
             $stmt = $pdo->prepare($sql);

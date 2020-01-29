@@ -56,7 +56,7 @@ class PopularSources extends DBEntity {
                 return;
             }
 
-            $domain = strtolower($domain);
+            $domain = mb_strtolower($domain);
             // if text belongs to an invalid source or is an ebook, avoid adding it to popular_sources table
             if (in_array($domain, $invalid_sources) || pathinfo($domain, PATHINFO_EXTENSION) === '.epub') {
                 return;
