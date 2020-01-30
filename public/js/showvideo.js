@@ -371,26 +371,8 @@ $(document).ready(function() {
                     }
                 }).done(function(result) {
                     // if everything went fine, remove the underlining
-                    // also, the case of the word/phrase in the text has to be respected
-                    // for phrases, we need to make sure that new underlining is added for each word (call to underlinewords.php)
-
-                    var $result = $(result);
-                    var $cur_filter = {};
-                    var cur_word = /""/;
-
-                    $filter.each(function() {
-                        $cur_filter = $(this);
-
-                        $result.filter(".word").each(function(key) {
-                            cur_word = new RegExp(
-                                "\\b" + $(this).text() + "\\b",
-                                "iu"
-                            ).exec($cur_filter.text());
-                            $(this).text(cur_word);
-                        });
-
-                        $cur_filter.replaceWith($result.clone());
-                    });
+                    $filter.removeClass();
+                    $filter.addClass('word');
                 });
             })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
