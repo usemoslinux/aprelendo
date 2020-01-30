@@ -127,7 +127,7 @@ class Language extends DBEntity
             // create & save default language preferences for user
             foreach (self::$iso_code as $key => $value) {
                 $translator_uri = 'https://translate.google.com/m?hl=' . $value . '&sl=' . self::$iso_code[$native_lang] . '&&ie=UTF-8&q=%s';
-                $dictionary_uri = 'https://www.linguee.com/' . $value . '-' . self::$iso_code[$native_lang] . '/search?source=auto&query=%s';
+                $dictionary_uri = 'https://mobile.linguee.com/' . $value . '-' . self::$iso_code[$native_lang] . '/search?source=auto&query=%s';
                 
                 $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`, `translator_uri`) 
                         VALUES (?, ?, ?, ?)";
@@ -196,7 +196,7 @@ class Language extends DBEntity
     public static function getIndex(string $lang_name): int {
         $keys = array_keys(self::$iso_code);
         $keys_count = count($keys)-1;
-        for ($i=0; $i < $keys_count; $i++) { 
+        for ($i=0; $i <= $keys_count; $i++) { 
             if ($keys[$i] == $lang_name) {
                 return $i;
             }

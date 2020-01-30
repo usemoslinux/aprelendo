@@ -84,7 +84,7 @@ $is_premium_user = $user->isPremium();
         <div class="card-header">Frequency list <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?></div>
         <div class="card-body">
             <div class="form-group">
-                <label for="freq-list">Underline 5000 most used words:</label>
+                <label for="freq-list">Underline high frequency words:</label>
                 <select name="freq-list" id="freq-list" class="form-control custom-select">
                     <option value="1" <?php echo $lang->getShowFreqWords()==true ? 'selected' : ''; ?>>Yes</option>
                     <option value="0" <?php echo $lang->getShowFreqWords()==false ? 'selected' : ''; ?>>No</option>

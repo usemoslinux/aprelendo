@@ -36,9 +36,7 @@ $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
     <nav class="navbar navbar-expand-md navbar-light">
         <div class="container">
             <!-- Brand -->
-            <a class="navbar-brand" href="index.php">Aprelendo
-                <small> Beta</small>
-            </a>
+            <a class="navbar-brand" href="index.php">Aprelendo</a>
 
             <!-- Toggler Button -->
             <button class="navbar-toggler" type="button" aria-label="toggler button" data-toggle="collapse" data-target="#collapsibleNavbar">
