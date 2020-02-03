@@ -8,9 +8,10 @@ Blue
 =================================== */
 
 body {
-    background: #2196F3;
+    background: linear-gradient(to right, #ffd89b, #fff29b);
+
     font-family: 'Lato', serif;
-    color: #fff;
+    color: #333;
     margin: 0;
     padding: 0;
   }
@@ -30,7 +31,7 @@ body {
   }
   
   a {
-    color: #fff;
+    color: #333;
     text-decoration: none;
     font-weight: bold;
     display: inline-block;
@@ -38,13 +39,14 @@ body {
     height: 44px;
     line-height: 44px;
     border-radius: 5px;
-    border: 2px solid #fff;
+    border: 2px solid #333333;
     transition: all .5s ease;
   }
   
   a:hover {
-    background: #64B5F6;
-    border: 2px solid #64B5F6;
+    color: #ffd89b;
+    background: #333;
+    border: 2px solid #333;
     width: 132px;
   }
   

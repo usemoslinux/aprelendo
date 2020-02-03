@@ -8,7 +8,7 @@ Red
 =================================== */
 
 body {
-    background: #F44336;
+    background: linear-gradient(to right, #CB2D3E, #EF473A);
     font-family: 'Lato', serif;
     color: #fff;
     margin: 0;
@@ -43,8 +43,9 @@ body {
   }
   
   a:hover {
-    background: #E57373;
-    border: 2px solid #E57373;
+    color: #CB2D3E;
+    background: #fff;
+    border: 2px solid #fff;
     width: 132px;
   }
   

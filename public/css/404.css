@@ -8,7 +8,7 @@ Blue Grey
 =================================== */
 
 body {
-    background: #607D8B;
+    background: linear-gradient(to right, #0062E6, #33AEFF);
     font-family: 'Lato', serif;
     color: #fff;
     margin: 0;
@@ -43,8 +43,9 @@ body {
   }
   
   a:hover {
-    background: #90A4AE;
-    border: 2px solid #90A4AE;
+    color: #0062E6;
+    background: #fff;
+    border: 2px solid #fff;
     width: 132px;
   }
   

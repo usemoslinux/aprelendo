@@ -16,7 +16,7 @@
 
   <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
 
-  <link rel="stylesheet" type="text/css" href="css/401.css">
+  <link rel="stylesheet" type="text/css" href="/css/401.css">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato">
 </head>
 

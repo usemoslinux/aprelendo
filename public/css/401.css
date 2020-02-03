@@ -8,7 +8,7 @@ Brown
 =================================== */
 
 body {
-    background: #795548;
+    background: linear-gradient(to right, #F37335, #da865b);;
     font-family: 'Lato', serif;
     color: #fff;
     margin: 0;
@@ -43,8 +43,9 @@ body {
   }
   
   a:hover {
-    background: #A1887F;
-    border: 2px solid #A1887F;
+    color: #F37335;
+    background: #fff;
+    border: 2px solid #fff;
     width: 132px;
   }
   
