@@ -220,12 +220,11 @@ class User
             $activation_hash = $this->activation_hash = md5(rand(0,1000));
 
             // save user data in db
-            // $user_active = !$send_email;
-            $user_active = $send_email ? 0 : 1;
+            $user_active = !$send_email;
             $sql = "INSERT INTO `{$this->table}` (`name`, `password_hash`, `email`, `native_lang_iso`,          `learning_lang_iso`, `activation_hash`, `is_active`) 
                     VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$username, $password_hash, $email, $native_lang, $lang, $activation_hash, $user_active]);
+            $stmt->execute([$username, $password_hash, $email, $native_lang, $lang, $activation_hash, (int)$user_active]);
 
             if ($stmt->rowCount() == 0) {
                 throw new \Exception('There was an unexpected error trying to create user record.');
@@ -324,7 +323,7 @@ class User
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$yesterday, $username, $hash]);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to activate user.' . $e->getMessage());
+            throw new \Exception('There was an unexpected error trying to activate user.');
         } finally {
             $stmt = null;
         }
