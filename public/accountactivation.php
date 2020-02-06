@@ -30,27 +30,16 @@ use Aprelendo\Includes\Classes\User;
             <div class="col-sm-0 col-sm-1 col-lg-3"></div>
             <div class="col-sm-12 col-sm-10 col-lg-6">
                 <section>
-                    <header>
-                        <h1 class="text-center">Account activation</h1>
-                    </header>
-                    <br>
-                    <div id="alert_msg" class="d-none"></div>
-
                     <?php 
                     if (isset($_GET['username']) && !empty($_GET['username']) && isset($_GET['hash']) && !empty($_GET['hash'])) {
                         // check if username & hash values passed by the reset link are set
                         $user = new User($pdo);
                         try {
                             $user->activate($_GET['username'], $_GET['hash']);
-                            echo "<div id='alert_msg_2' class='alert alert-success'>Congratulations! Your account is now active.</div>
-                                <p>You can now login with the username and password you provided when you signed up.</p>
-                                <div class='text-center'>
-                                    <a href='login.php' class='btn btn-lg btn-success'>Login now</a>
-                                </div>
-                                <br>
-                                <br>";
+                            echo '<div class="text-success text-center"><div class="display-1"><i class="far fa-check-circle"></i></div><div id="alert_msg_2">Congratulations! Your account is now active.</div></div><div class="text-center">You can now login with the username and password you provided when you signed up.</div><br><div class="text-center"><a href="login.php" class="btn btn-lg btn-success">Login now</a></div><br>';
                         } catch (\Exception $e) {
-                            echo "<div id='alert_msg_2' class='alert alert-danger'>Your account activation failed.</div>";
+                            echo '<div class="text-danger text-center"><div class="display-1"><i class="fas fa-times-circle"></i></div><div id="alert_msg_2">Oh no! Your account activation failed.</div></div><br><div class="text-center">Try again later or <a
+                            href="https://www.aprelendo.com/support.php">contact support</a> for help.</div><br>';
                         }
                     } else { // $_GET parameters not set or empty
                         echo "<div id='alert_msg_2' class='alert alert-danger'>The activation link seems to be malformed. Please

@@ -220,9 +220,9 @@ class User
             $activation_hash = $this->activation_hash = md5(rand(0,1000));
 
             // save user data in db
-            $user_active = !$send_email;
-            $sql = "INSERT INTO `{$this->table}` (`name`, `password_hash`, `email`, `native_lang_iso`, `learning_lang_iso`, 
-                    `activation_hash`, `is_active`) 
+            // $user_active = !$send_email;
+            $user_active = $send_email ? 0 : 1;
+            $sql = "INSERT INTO `{$this->table}` (`name`, `password_hash`, `email`, `native_lang_iso`,          `learning_lang_iso`, `activation_hash`, `is_active`) 
                     VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$username, $password_hash, $email, $native_lang, $lang, $activation_hash, $user_active]);
@@ -276,7 +276,7 @@ class User
         $subject = 'Aprelendo - Account activation';
         
         // get template
-        $message = Curl::getUrlContents(APP_ROOT . 'templates/welcome.html');
+        $message = file_get_contents(APP_ROOT . 'templates/welcome.html');
         
         // edit template
         $message = str_replace('{{action_url}}', $reset_link, $message);
@@ -323,9 +323,8 @@ class User
                     WHERE `name`=? AND `activation_hash`=?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$yesterday, $username, $hash]);
-            $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to activate user.');
+            throw new \Exception('There was an unexpected error trying to activate user.' . $e->getMessage());
         } finally {
             $stmt = null;
         }
@@ -623,7 +622,7 @@ class User
 
         try {
             // delete files uploaded by user
-            $table_names = array('texts', 'archivedtexts');
+            $table_names = array('texts', 'archived_texts');
             
             foreach ($table_names as $table) {
                 $user_id_col_name = $table == 'texts' ? 'user_id' : 'user_id';

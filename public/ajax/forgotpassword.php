@@ -47,7 +47,7 @@ try {
             $subject = 'Aprelendo - Password reset';
             
             // get template
-            $message = Curl::getUrlContents(APP_ROOT . 'templates/password_reset.html');
+            $message = file_get_contents(APP_ROOT . 'templates/password_reset.html');
 
             // edit template
             $message = str_replace('{{action_url}}', $reset_link, $message);
