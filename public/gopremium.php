@@ -113,8 +113,45 @@ if (!$user->isLoggedIn()) {
             <div class="col-lg-4">
                 <div class="card mb-5 mb-lg-0">
                     <div class="card-body">
-                        <h5 class="card-title text-muted text-uppercase text-center">Premium</h5>
-                        <h6 class="card-price text-center">$10<span class="period">/1 month pass</span></h6>
+                        <h5 class="card-title text-muted text-uppercase text-center">Premium<span class="period">/1 month pass</span></h5>
+                        <h6 class="card-price text-center">$10</h6>
+                        <hr>
+                        <ul class="fa-ul">
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts
+                            </li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited videos
+                            </li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited words
+                            </li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Web browser
+                                extensions</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>TTS support (3
+                                texts p/day)</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Up to 3 RSS feeds
+                            </li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Ebook support
+                                (&lt;2 MB)</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Show high frequency words</li>
+                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Export words
+                                (CSV)</li>
+                        </ul>
+                        
+                        <form name="form-monthly-subscription" action="/payment.php" method="post" target="_top">
+                            <input type="hidden" name="cmd" value="_xclick">
+                            <input type="hidden" name="lc" value="US">
+                            <input type="hidden" name = "item_number" value = "1">
+                            <input type="hidden" name="bn" value="PP-BuyNowBF">
+                            <input type="submit" name="submit" class="btn btn-block btn-primary text-uppercase" value="Buy Now"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- 1 month pass -->
+            <div class="col-lg-4">
+                <div class="card mb-5 mb-lg-0">
+                    <div class="card-body">
+                        <h5 class="card-title text-muted text-uppercase text-center">Premium<span class="period">/1 month pass</span></h5>
+                        <h6 class="card-price text-center">$10</h6>
                         <hr>
                         <ul class="fa-ul">
                             <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts

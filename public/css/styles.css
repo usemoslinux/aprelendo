@@ -425,6 +425,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 
 .why-go-premium {
     color: white;
+    font-size: 0.90rem;
 }
 
 .why-go-premium i {
@@ -1279,6 +1280,7 @@ small>a:not(.btn):hover {
 .pricing .card {
     border: none;
     border-radius: 1rem;
+    font-size: 0.85rem;
     transition: all 0.2s;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
 }
