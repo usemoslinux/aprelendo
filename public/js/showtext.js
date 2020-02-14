@@ -95,7 +95,7 @@ $(document).ready(function() {
     } // end toggleAudio
 
     /**
-     * AB Loop
+     * AB Loop button click
      */
     $("body").on("click", "#btn-abloop", function(e) {
         e.preventDefault();
