@@ -418,13 +418,15 @@ class Reader extends Text
                     </div>';
 
         $html .=   '<audio controls id="audioplayer" class="d-none">
-                        <source type="audio/mpeg">
+                        <source src="" type="audio/mpeg">
                         Your browser does not support the audio element.
                     </audio>
                     <form id="audioplayer-speedbar" class="d-none">
                         <div class="form-group flex-pbr-form">
                             <label id="label-speed" class="basic" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
                             <input id="pbr" type="range" class="custom-range flex-pbr" value="1" min="0.5" max="2" step="0.1">
+                            <label id="label-abloop" class="px-1 basic">A-B Loop:</label>
+                            <button id="btn-abloop" class="btn btn-outline-secondary btn-sm">A</button>
                         </div>
                     </form>
                     ';

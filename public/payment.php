@@ -73,10 +73,14 @@ try {
                 $data['amount'] = '10.00';
                 break;
             case 2:
+                $data['item_name'] = 'Aprelendo - 3 Months Pass';
+                $data['amount'] = '25.00';
+                break;
+            case 3:
                 $data['item_name'] = 'Aprelendo - 6 Months Pass';
                 $data['amount'] = '50.00';
                 break;
-            case 3:
+            case 4:
                 $data['item_name'] = 'Aprelendo - 1 Year Pass';
                 $data['amount'] = '99.00';
                 break;

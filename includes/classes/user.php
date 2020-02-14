@@ -375,6 +375,10 @@ class User
 
             if ($data['amt'] === '99.00' && $data['cc'] === 'USD') {
                 $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 year'));
+            } elseif ($data['amt'] === '50.00' && $data['cc'] === 'USD') {
+                $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 6 months'));
+            } elseif ($data['amt'] === '25.00' && $data['cc'] === 'USD') {
+                $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 3 months'));
             } elseif ($data['amt'] === '10.00' && $data['cc'] === 'USD') {
                 $premium_until = date('Y-m-d H:i:s', strtotime($today . ' + 1 month'));
             }

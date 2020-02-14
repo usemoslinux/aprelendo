@@ -46,7 +46,6 @@ body {
     background: white;
     color: #384452;
     font-family: "Lato", sans-serif;
-    font-size: 1rem;
     font-weight: 400;
     height: 100%;
     margin: 0;
@@ -787,12 +786,17 @@ video {
 }
 
 .basic {
-    font: 14px 'Lato';
+    font: 0.85rem 'Lato';
     white-space: normal;
 }
 
-#label-speed {
-    margin-top: 2px;
+#label-speed, #label-abloop {
+    margin-top: 4px;
+}
+
+#btn-abloop {
+    font: 0.85rem 'Lato';
+    padding: .0 0.5rem;
 }
 
 #alert-msg-phase {
@@ -884,6 +888,7 @@ input {
     display: flex;
     flex: 1;
     margin-left: 10px;
+    margin-top: 3px;
 }
 
 .btn-add {
@@ -1315,11 +1320,9 @@ small>a:not(.btn):hover {
 
 .pricing .btn {
     font-size: 80%;
-    border-radius: 5rem;
     letter-spacing: .1rem;
     font-weight: bold;
     padding: 1rem;
-    opacity: 0.7;
     transition: all 0.2s;
 }
 

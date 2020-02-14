@@ -27,6 +27,8 @@ $(document).ready(function() {
     var translate_paragraph_link = "";
     var phase = 1; // first phase of the learning cycle
     var playingaudio = false;
+    var abloop_start = 0;
+    var abloop_end = 0;
     window.parent.show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
 
     // $doc & $pagereader are used to make this JS code work when showing simple texts &
@@ -35,7 +37,7 @@ $(document).ready(function() {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
 
-    // loadAudio();
+    loadAudio();
 
     /**
      * Sets keyboard shortcuts for media player
@@ -91,6 +93,35 @@ $(document).ready(function() {
             }, 1000);
         }
     } // end toggleAudio
+
+    /**
+     * AB Loop
+     */
+    $("body").on("click", "#btn-abloop", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (abloop_start == 0 && abloop_end == 0) {
+            abloop_start = $("#audioplayer").prop("currentTime");
+            $(this).text("B");
+        } else if (abloop_start > 0 && abloop_end == 0) {
+            abloop_end = $("#audioplayer").prop("currentTime");
+            $(this).text("C");
+        } else {
+            abloop_start = abloop_end = 0;
+            $(this).text("A");
+        }
+    }); // end #btn-abloop.click
+
+    /**
+     * AB Loop
+     */
+    $("#audioplayer").on("timeupdate", function() {
+        if (abloop_end > 0) {
+            if($(this).prop("currentTime") >= abloop_end) {
+                $(this).prop("currentTime", abloop_start);
+            }    
+        }
+    }); // end #audioplayer.timeupdate
 
     /**
      * Word/Phrase selection start

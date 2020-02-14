@@ -141,11 +141,6 @@ class Paypal extends DBEntity
                 if( $response["payment_status"]!="Completed") {
                     throw new \Exception('Payment not completed.');
                 }
-                // check that txn_id has not been previously processed
-                // checkIfTransactionHasAlreadyBeenProcessed($paypalTxId);
-                
-                // process the order
-                // processOrder();
             } else {
                 throw new \Exception('Oops! Your transaction could not be verified.');
             }

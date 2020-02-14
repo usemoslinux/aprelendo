@@ -1,22 +1,22 @@
 <?php 
 /**
- * Copyright (C) 2019 Pablo Castagnino
- * 
- * This file is part of aprelendo.
- * 
- * aprelendo is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * aprelendo is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 Pablo Castagnino
+* 
+* This file is part of aprelendo.
+* 
+* aprelendo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* 
+* aprelendo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 require_once '../includes/dbinit.php'; // connect to database
 require_once PUBLIC_PATH . 'head.php';
@@ -37,26 +37,32 @@ if (!$user->isLoggedIn()) {
     <div class="container">
         <div class="row text-center">
             <h1 id="hiw" class="col-12">Why go premium?<br><br></h1>
-            
+
             <div class="col-lg-3">
                 <i class="fas fa-assistive-listening-systems"></i>
                 <h4>Text-to-Speech</h4>
-                <p>Text-to-Speech (TTS) conversion is an inherent part of <a href="totalreading.php" target="_blank" rel="noopener noreferrer">total reading</a>. Premium users are able to listen up to 3 texts per day, instead of 1.</p>
+                <p>Text-to-Speech (TTS) conversion is an inherent part of <a href="totalreading.php" target="_blank"
+                        rel="noopener noreferrer">total reading</a>. Premium users are able to listen up to 3 texts per
+                    day, instead of 1.</p>
             </div>
             <div class="col-lg-3">
                 <i class="fas fa-rss"></i>
                 <h4>RSS/Atom feeds</h4>
-                <p>Old good <a href="https://en.wikipedia.org/wiki/RSS" target="_blank" rel="noopener noreferrer">RSS/Atom</a>... By going premium you will be allowed to add texts from up to 3 feeds. Each one will show its last 10 publications.</p>
+                <p>Old good <a href="https://en.wikipedia.org/wiki/RSS" target="_blank"
+                        rel="noopener noreferrer">RSS/Atom</a>... By going premium you will be allowed to add texts from
+                    up to 3 feeds. Each one will show its last 10 publications.</p>
             </div>
             <div class="col-lg-3">
                 <i class="fas fa-book-open"></i>
                 <h4>Epub support</h4>
-                <p>Are you a book lover? As a premium user you will be able to upload 1 epub file per day (&lt;2MB in size) and read as many ebooks as you like.</p>
+                <p>Are you a book lover? As a premium user you will be able to upload 1 epub file per day (&lt;2MB in
+                    size) and read as many ebooks as you like.</p>
             </div>
             <div class="col-lg-3">
                 <i class="fas fa-cloud-download-alt"></i>
                 <h4>Export words</h4>
-                <p>If you are an <a href="https://apps.ankiweb.net/" target="_blank" rel="noopener noreferrer">Anki</a> user or like creating flashcards to learn new vocabulary, you will appreciate this.</p>
+                <p>If you are an <a href="https://apps.ankiweb.net/" target="_blank" rel="noopener noreferrer">Anki</a>
+                    user or like creating flashcards to learn new vocabulary, you will appreciate this.</p>
             </div>
         </div>
 
@@ -64,12 +70,14 @@ if (!$user->isLoggedIn()) {
             <div class="offset-lg-3 col-lg-3">
                 <i class="fas fa-fire"></i>
                 <h4>High frequency words</h4>
-                <p>Premium users will get visual aids indicating which are the most important words to learn, i.e. those that are among the most used by native speakers.</p>
+                <p>Premium users will get visual aids indicating which are the most important words to learn, i.e. those
+                    that are among the most used by native speakers.</p>
             </div>
             <div class="col-lg-3">
                 <i class="fab fa-osi"></i>
                 <h4>Support Open Source</h4>
-                <p>We decided to open Aprelendo's source code so that anyone -specially schools or academic institutions- can install it locally and access all premium functionalities without any cost. </p>
+                <p>We decided to open Aprelendo's source code so that anyone -specially schools or academic
+                    institutions- can install it locally and access all premium functionalities without any cost. </p>
             </div>
         </div>
     </div>
@@ -79,11 +87,11 @@ if (!$user->isLoggedIn()) {
     <div id="pricing" class="container">
         <div class="row">
             <!-- Free -->
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <div class="card mb-5 mb-lg-0">
                     <div class="card-body">
-                        <h5 class="card-title text-muted text-uppercase text-center">Free</h5>
-                        <h6 class="card-price text-center">$0<span class="period">/month</span></h6>
+                        <h6 class="card-price text-center">Free as<br>in <br>beer <small><i class="fas fa-beer text-warning"></i></small><span class="period"></span></h6>
+                        <div style="height:15px"></div>
                         <hr>
                         <ul class="fa-ul">
                             <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts
@@ -100,7 +108,7 @@ if (!$user->isLoggedIn()) {
                                 feeds</li>
                             <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Ebook support
                                 (&lt;2 MB)</li>
-                            <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Show
+                            <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Underline
                                 high frequency words</li>
                             <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Export words
                                 (CSV)</li>
@@ -109,86 +117,22 @@ if (!$user->isLoggedIn()) {
                     </div>
                 </div>
             </div>
-            <!-- 1 month pass -->
-            <div class="col-lg-4">
+
+            <!-- Premium -->
+            <div class="col-lg-6">
                 <div class="card mb-5 mb-lg-0">
-                    <div class="card-body">
-                        <h5 class="card-title text-muted text-uppercase text-center">Premium<span class="period">/1 month pass</span></h5>
-                        <h6 class="card-price text-center">$10</h6>
-                        <hr>
-                        <ul class="fa-ul">
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts
-                            </li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited videos
-                            </li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited words
-                            </li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Web browser
-                                extensions</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>TTS support (3
-                                texts p/day)</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Up to 3 RSS feeds
-                            </li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Ebook support
-                                (&lt;2 MB)</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Show high frequency words</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Export words
-                                (CSV)</li>
-                        </ul>
-                        
-                        <form name="form-monthly-subscription" action="/payment.php" method="post" target="_top">
-                            <input type="hidden" name="cmd" value="_xclick">
-                            <input type="hidden" name="lc" value="US">
-                            <input type="hidden" name = "item_number" value = "1">
-                            <input type="hidden" name="bn" value="PP-BuyNowBF">
-                            <input type="submit" name="submit" class="btn btn-block btn-primary text-uppercase" value="Buy Now"/>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- 1 month pass -->
-            <div class="col-lg-4">
-                <div class="card mb-5 mb-lg-0">
-                    <div class="card-body">
-                        <h5 class="card-title text-muted text-uppercase text-center">Premium<span class="period">/1 month pass</span></h5>
-                        <h6 class="card-price text-center">$10</h6>
-                        <hr>
-                        <ul class="fa-ul">
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts
-                            </li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited videos
-                            </li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited words
-                            </li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Web browser
-                                extensions</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>TTS support (3
-                                texts p/day)</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Up to 3 RSS feeds
-                            </li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Ebook support
-                                (&lt;2 MB)</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Show high frequency words</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Export words
-                                (CSV)</li>
-                        </ul>
-                        
-                        <form name="form-monthly-subscription" action="/payment.php" method="post" target="_top">
-                            <input type="hidden" name="cmd" value="_xclick">
-                            <input type="hidden" name="lc" value="US">
-                            <input type="hidden" name = "item_number" value = "1">
-                            <input type="hidden" name="bn" value="PP-BuyNowBF">
-                            <input type="submit" name="submit" class="btn btn-block btn-primary text-uppercase" value="Buy Now"/>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- 1 year pass -->
-            <div class="col-lg-4">
-                <div class="card">
                     <div class="card-body">
                         <h5 class="card-title text-muted text-uppercase text-center">Premium</h5>
-                        <h6 class="card-price text-center">$99<span class="period">/1 year pass</span></h6>
+                        <h6 id="lbl-premium-price" class="card-price text-center">$10<span id="lbl-premium-period" class="period">/1 month pass</span></h6>
+                        <hr>
+                        <div class="text-center">
+                            <div class="btn-group text-center" role="group" aria-label="Premium">
+                                <button id="btn-premium-1m" type="button" data-item-nbr="1" data-price="10" class="btn btn-secondary active">1 month</button>
+                                <button id="btn-premium-3m" type="button" data-item-nbr="2" data-price="25" class="btn btn-secondary">3 months</button>
+                                <button id="btn-premium-6m" type="button" data-item-nbr="3" data-price="50" class="btn btn-secondary">6 months</button>
+                                <button id="btn-premium-1y" type="button" data-item-nbr="4" data-price="99" class="btn btn-secondary">1 year</button>
+                            </div>
+                        </div>
                         <hr>
                         <ul class="fa-ul">
                             <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts
@@ -199,29 +143,31 @@ if (!$user->isLoggedIn()) {
                             </li>
                             <li><span class="fa-li"><i class="fas fa-check"></i></span>Web browser
                                 extensions</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>TTS support (3
-                                texts p/day)</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Up to 3 RSS feeds
-                            </li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Ebook support
+                            <li class="text-success"><span class="fa-li"><i class="fas fa-check"></i></span>TTS support
+                                (3 texts p/day)</li>
+                            <li class="text-success"><span class="fa-li"><i class="fas fa-check"></i></span>Up to 3 RSS
+                                feeds</li>
+                            <li class="text-success"><span class="fa-li"><i class="fas fa-check"></i></span>Ebook support
                                 (&lt;2 MB)</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Show high frequency words</li>
-                            <li><span class="fa-li"><i class="fas fa-check"></i></span>Export words
+                            <li class="text-success"><span class="fa-li"><i class="fas fa-check"></i></span>Underline
+                                high frequency words</li>
+                            <li class="text-success"><span class="fa-li"><i class="fas fa-check"></i></span>Export words
                                 (CSV)</li>
                         </ul>
-                        
-                        <form name="form-monthly-subscription" action="/payment.php" method="post" target="_top">
+
+                        <form name="form-subscription" action="/payment.php" method="post" target="_top">
                             <input type="hidden" name="cmd" value="_xclick">
                             <input type="hidden" name="lc" value="US">
-                            <input type="hidden" name = "item_number" value = "3">
+                            <input id="inp-item-nbr" type="hidden" name="item_number" value="1">
                             <input type="hidden" name="bn" value="PP-BuyNowBF">
-                            <input type="submit" name="submit" class="btn btn-block btn-primary text-uppercase" value="Buy Now"/>
+                            <input type="submit" name="submit" class="btn btn-block btn-primary text-uppercase" value="Buy Now" />
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
+    </div>        
     </div>
 </section>
 
+<script defer src="js/gopremium.js"></script>
 <?php require_once 'footer.php'?>
