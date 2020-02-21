@@ -27,6 +27,7 @@ $(document).ready(function() {
     $.ajax({
         type: "GET",
         url: "ajax/getstats.php",
+        data: { days: 7 },
         async: false,
         dataType: "json"
     })

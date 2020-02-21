@@ -76,12 +76,13 @@ class Pagination
    * @param string $url
    * @param string $search_text
    * @param int $sort_by
-   * @param int $filter
+   * @param int $filter_type
+   * @param int $filter_level
    * @param int $show_archived
    * @return string HTML of pagination
    */
   public function print(string $url, string $search_text, int $sort_by, 
-                        int $filter = -1, int $show_archived = -1): string {
+                        int $filter_type = 0, int $filter_level = 0, int $show_archived = -1): string {
     
     $result = '';
     $search_text = urlencode($search_text);
@@ -90,11 +91,12 @@ class Pagination
     }
     
     // build query string
-    $s = !empty($search_text) ? "s=$search_text&" : '';
-    $o = !empty($sort_by) ? "o=$sort_by&" : '';
-    $f = (-1 !== $filter) ? "f=$filter&" : '';
-    $sa = (-1 !== $show_archived) ? "sa=$show_archived&" : '';
-    $query = "?$s$o$f$sa";
+    $s  = !empty($search_text)     ? "s=$search_text&"    : '';
+    $o  = !empty($sort_by)         ? "o=$sort_by&"        : '';
+    $ft = ($filter_type !== 0)     ? "ft=$filter_type&"   : '';
+    $fl = ($filter_level !== 0)    ? "fl=$filter_level&"  : '';
+    $sa = ($show_archived !== -1)  ? "sa=$show_archived&" : '';
+    $query = "?$s$o$ft$fl$sa";
 
     if($this->total_pages > 1) { 
       $result = 

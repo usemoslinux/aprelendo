@@ -32,6 +32,7 @@ class Language extends DBEntity
     private $rss_feed_2_uri  = '';
     private $rss_feed_3_uri  = '';
     private $show_freq_words = false;
+    private $level           = 0;
 
     private static $iso_code = array(  
         'en' => 'english',
@@ -77,6 +78,7 @@ class Language extends DBEntity
                 $this->rss_feed_2_uri   = $row['rss_feed2_uri'];
                 $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
                 $this->show_freq_words  = $row['show_freq_words'];
+                $this->level            = $row['level'];
             }
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to load this record.');
@@ -95,6 +97,7 @@ class Language extends DBEntity
         try {
             $this->dictionary_uri = $new_record['dict-uri'];
             $this->translator_uri = $new_record['translator-uri'];
+            $this->level          = $new_record['level'];
             
             if ($is_premium_user) {
                 $this->rss_feed_1_uri = $new_record['rss-feed1-uri'];
@@ -104,11 +107,13 @@ class Language extends DBEntity
             }
 
             $sql = "UPDATE `{$this->table}` 
-                    SET `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?, `rss_feed3_uri`=?, `show_freq_words`=? 
+                    SET `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?, `rss_feed3_uri`=?, 
+                        `show_freq_words`=?, `level`=?  
                     WHERE `user_id`=? AND `id`=?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->dictionary_uri, $this->translator_uri, $this->rss_feed_1_uri, 
-                            $this->rss_feed_2_uri, $this->rss_feed_3_uri, $this->show_freq_words, $this->user_id, $this->id]);
+                            $this->rss_feed_2_uri, $this->rss_feed_3_uri, $this->show_freq_words, 
+                            $this->level, $this->user_id, $this->id]);
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to edit this record.');
         } finally {
@@ -166,6 +171,7 @@ class Language extends DBEntity
             $this->rss_feed_2_uri   = $row['rss_feed2_uri'];
             $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
             $this->show_freq_words  = $row['show_freq_words'];
+            $this->level            = $row['level'];
             
             if (!$row) {
                 throw new \Exception('The record does not exist.');
@@ -304,6 +310,15 @@ class Language extends DBEntity
      */
     public function getShowFreqWords(): bool {
         return $this->show_freq_words;
+    } // end getShowFreqWords()
+
+    /**
+     * Language learning level getter
+     *
+     * @return bool
+     */
+    public function getLevel(): int {
+        return $this->level;
     } // end getShowFreqWords()
 
 }

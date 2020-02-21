@@ -23,19 +23,27 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
-$search_text = '';
-$filter = -1;
-$sort_by = 0;
+use Aprelendo\Includes\Classes\Language;
+
+$search_text    = '';
+$filter_type    = 0;
+$filter_level   = 0;
+$sort_by        = 0;
+
+$user_id = $user->getId();
+$lang_id = $user->getLangId();
 
 if (!empty($_GET)) {
-    $search_text = isset($_GET['s']) ? $_GET['s'] : '';
-    $filter = isset($_GET['f']) ? $_GET['f'] : -1;  
-    $sort_by = isset($_GET['o']) ? $_GET['o'] : 0;  
+    $search_text    = isset($_GET['s'])     ? $_GET['s']    : '';
+    $filter_type    = isset($_GET['ft'])    ? $_GET['ft']   : 0;  
+    $filter_level   = isset($_GET['fl'])    ? $_GET['fl']   : 0;  
+    $sort_by        = isset($_GET['o'])     ? $_GET['o']    : 0;  
+} else {
+    // set default language level
+    $lang = new Language($pdo, $user_id);
+    $lang->loadRecord($lang_id);
+    $filter_level = $lang->getLevel();
 }
-
-// set filter sql
-
-$search_filter = !empty($filter) && $filter > -1 ? $filter : '';
 
 ?>
 
@@ -53,7 +61,8 @@ $search_filter = !empty($filter) && $filter > -1 ? $filter : '';
             <div class="row flex">
                 <div class="col-sm-12">
                     <form class="form-flex-row" method="get">
-                        <input id="f" name="f" value="<?php echo $filter; ?>" type="hidden">
+                        <input id="ft" name="ft" value="<?php echo $filter_type; ?>" type="hidden">
+                        <input id="fl" name="fl" value="<?php echo $filter_level; ?>" type="hidden">
                         <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
                         <div id="search-wrapper-div" class="input-group my-2">
                             <div id="filter-wrapper-div" class="input-group-prepend">
@@ -62,33 +71,52 @@ $search_filter = !empty($filter) && $filter > -1 ? $filter : '';
                                     <span class="caret"></span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a onclick="$('#f').val(-1);" <?php echo $filter==-1 ?
-                                        ' class="dropdown-item active" ' : 'class="dropdown-item"' ; ?> >
+                                    <h6 class="dropdown-header">Type</h6>
+                                    <a onclick="$('#ft').val(0);" <?php echo $filter_type==0 ?
+                                        ' class="dropdown-item ft active" ' : 'class="dropdown-item ft"' ; ?> >
                                         All
                                     </a>
-                                    <a onclick="$('#f').val(1);" <?php echo $filter==1 ?
-                                        ' class="dropdown-item active" ' : 'class="dropdown-item"' ; ?> >
+                                    <a onclick="$('#ft').val(1);" <?php echo $filter_type==1 ?
+                                        ' class="dropdown-item ft active" ' : 'class="dropdown-item ft"' ; ?> >
                                         Articles
                                     </a>
-                                    <a onclick="$('#f').val(2);" <?php echo $filter==2 ?
-                                        ' class="dropdown-item active" ' : 'class="dropdown-item"' ; ?> >
+                                    <a onclick="$('#ft').val(2);" <?php echo $filter_type==2 ?
+                                        ' class="dropdown-item ft active" ' : 'class="dropdown-item ft"' ; ?> >
                                         Conversations
                                     </a>
-                                    <a onclick="$('#f').val(3);" <?php echo $filter==3 ?
-                                        ' class="dropdown-item active" ' : 'class="dropdown-item"' ; ?> >
+                                    <a onclick="$('#ft').val(3);" <?php echo $filter_type==3 ?
+                                        ' class="dropdown-item ft active" ' : 'class="dropdown-item ft"' ; ?> >
                                         Letters
                                     </a>
-                                    <a onclick="$('#f').val(4);" <?php echo $filter==4 ?
-                                        ' class="dropdown-item active" ' : 'class="dropdown-item"' ; ?> >
+                                    <a onclick="$('#ft').val(4);" <?php echo $filter_type==4 ?
+                                        ' class="dropdown-item ft active" ' : 'class="dropdown-item ft"' ; ?> >
                                         Lyrics
                                     </a>
-                                    <a onclick="$('#f').val(5);" <?php echo $filter==5 ?
-                                        ' class="dropdown-item active" ' : 'class="dropdown-item"' ; ?> >
+                                    <a onclick="$('#ft').val(5);" <?php echo $filter_type==5 ?
+                                        ' class="dropdown-item ft active" ' : 'class="dropdown-item ft"' ; ?> >
                                         Videos
                                     </a>
-                                    <a onclick="$('#f').val(6);" <?php echo $filter==6 ?
-                                        ' class="dropdown-item active" ' : 'class="dropdown-item"' ; ?> >
+                                    <a onclick="$('#ft').val(7);" <?php echo $filter_type==7 ?
+                                        ' class="dropdown-item ft active" ' : 'class="dropdown-item ft"' ; ?> >
                                         Others
+                                    </a>
+                                    <div role="separator" class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header">Level</h6>
+                                    <a onclick="$('#fl').val(0);" <?php echo $filter_level==0 ?
+                                        ' class="dropdown-item fl active" ' : 'class="dropdown-item fl"' ; ?>>
+                                        All
+                                    </a>
+                                    <a onclick="$('#fl').val(1);" <?php echo $filter_level==1 ?
+                                        ' class="dropdown-item fl active" ' : 'class="dropdown-item fl"' ; ?>>
+                                        Beginner
+                                    </a>
+                                    <a onclick="$('#fl').val(2);" <?php echo $filter_level==2 ?
+                                        ' class="dropdown-item fl active" ' : 'class="dropdown-item fl"' ; ?>>
+                                        Intermediate
+                                    </a>
+                                    <a onclick="$('#fl').val(3);" <?php echo $filter_level==3 ?
+                                        ' class="dropdown-item fl active" ' : 'class="dropdown-item fl"' ; ?>>
+                                        Advanced
                                     </a>
                                 </div>
                             </div>

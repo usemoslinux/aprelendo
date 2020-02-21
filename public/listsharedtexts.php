@@ -27,9 +27,6 @@ use Aprelendo\Includes\Classes\SharedTexts;
 use Aprelendo\Includes\Classes\SharedTextTable;
 use Aprelendo\Includes\Classes\Pagination;
 
-$user_id = $user->getId();
-$lang_id = $user->getLangId();
-
 // set variables used for pagination
 $page = 1;
 $limit = 10; // number of rows per page
@@ -55,20 +52,20 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     
     $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
     
-    $total_rows = $texts_table->countSearchRows($search_filter, $search_text);
+    $total_rows = $texts_table->countSearchRows($filter_type, $filter_level, $search_text);
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->getOffset();
     
     try {
         // get search result
-        $rows = $texts_table->getSearch($search_filter, $search_text, $offset, $limit, $sort_by);
+        $rows = $texts_table->getSearch($filter_type, $filter_level, $search_text, $offset, $limit, $sort_by);
 
         // print table
         if ($rows) { 
             // if there are any results, show them
             $table = New SharedTextTable($user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
             $html = $table->print($sort_by);
-            $html .= $pagination->print('sharedtexts.php', $search_text, $sort_by, $filter); // print pagination
+            $html .= $pagination->print('sharedtexts.php', $search_text, $sort_by, $filter_type, $filter_level); // print pagination
         } 
     } catch (\Exception $e) {
         // if there are no texts to show, print a message
@@ -91,7 +88,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         if ($rows) {
             $table = New SharedTextTable($user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
             $html = $table->print($sort_by);
-            $html .= $pagination->print('sharedtexts.php', '', $sort_by, $filter); // print pagination
+            $html .= $pagination->print('sharedtexts.php', '', $sort_by, $filter_type, $filter_level); // print pagination
         } 
     } catch (\Exception $e) {
         // if there are no texts to show, print a message

@@ -285,28 +285,22 @@ class Texts extends DBEntity {
     * 
     * Used for pagination
     *
-    * @param string $search_filter A string with the SQL statement to be used as a filter for the search
+    * @param string $filter_type A string with the SQL statement to be used as a filter for the search
     * @param string $search_text
     * @return int
     */
-    public function countSearchRows(string $search_filter, string $search_text): int {
+    public function countSearchRows(int $filter_type, int $filter_level, string $search_text): int {
         try {
             $search_text = '%' . $search_text . '%';
+            $filter_type_sql = $filter_type == 0 ? 'AND `type`>?' : 'AND `type`=?';
+            $filter_level_sql = $filter_level == 0 ? 'AND `level`>?' : 'AND `level`=?';
             
-            if (empty($search_filter)) {
-                $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
-                        WHERE `user_id`=? 
-                        AND `lang_id`=? AND `title` LIKE ?";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([$this->user_id, $this->lang_id, $search_text]);
-            } else {
-                $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
-                        WHERE `user_id`=? 
-                        AND `lang_id`=? AND `type`=? AND `title` LIKE ?";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([$this->user_id, $this->lang_id, $search_filter, $search_text]);
-            }
-            
+            $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
+                    WHERE `user_id`=? 
+                    AND `lang_id`=? $filter_level_sql $filter_type_sql AND `title` LIKE ?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->user_id, $this->lang_id, $filter_level, $filter_type, $search_text]);
+        
             $total_rows = $stmt->fetchColumn();
 
             return (int)$total_rows;
@@ -341,22 +335,24 @@ class Texts extends DBEntity {
     } // end countAllRows()
     
     /**
-    * Gets texts by using a search pattern ($search_text) and a filter ($search_filter).
+    * Gets texts by using a search pattern ($search_text) and a filter ($filter_type + $filter_level).
     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
     * Values are returned using a sort pattern ($sort_by)
     *
-    * @param string $search_filter SQL statement specifying the filter to be used
+    * @param int $filter_type: 0 = All; 1 = Articles; 2 = Conversations; 3 = Letters; 4 = Lyrics; 6 = Ebooks; 7 = Others
+    * @param int $filter_level: 0 = All; 1 = Beginner; 2 = Intermediate; 3 = Advanced 
     * @param string $search_text
     * @param int $offset
     * @param int $limit
     * @param int $sort_by Is converted to a string using buildSortSQL()
     * @return array
     */
-    public function getSearch(string $search_filter, string $search_text, int $offset, 
+    public function getSearch(int $filter_type, int $filter_level, string $search_text, int $offset, 
                               int $limit, int $sort_by): array {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
-            $filter_sql = empty($search_filter) ? '' : 'AND `type` = :filter';
+            $filter_type_sql = $filter_type == 0 ? 'AND `type` > :filter_type' : 'AND `type` = :filter_type';
+            $filter_level_sql = $filter_level == 0 ? 'AND `level` > :filter_level' : 'AND `level` = :filter_level';
             
             $sql = "SELECT `id`, 
                             NULL, 
@@ -369,20 +365,20 @@ class Texts extends DBEntity {
                     FROM `{$this->table}` 
                     WHERE `user_id` = :user_id 
                     AND `lang_id` = :lang_id 
-                    AND `title` LIKE :search_str $filter_sql 
+                    $filter_level_sql 
+                    $filter_type_sql 
+                    AND `title` LIKE :search_str  
                     ORDER BY $sort_sql 
                     LIMIT :offset, :limit";
             $stmt = $this->pdo->prepare($sql);
 
             $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
             $stmt->bindParam(':lang_id', $this->lang_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':filter_level', $filter_level, \PDO::PARAM_INT);
+            $stmt->bindParam(':filter_type', $filter_type, \PDO::PARAM_INT);
             $stmt->bindValue(':search_str', "%$search_text%");
             $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
             $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
-
-            if (!empty($filter_sql)) {
-                $stmt->bindParam(':filter', $search_filter);
-            }
 
             $stmt->execute();
             $result = $stmt->fetchAll();
@@ -488,7 +484,7 @@ class Texts extends DBEntity {
                 break;
         }
     } // end buildSortSQL
-    
+
     /**
     * Calculates difficulty level of a given $text
     * 
@@ -497,49 +493,40 @@ class Texts extends DBEntity {
     * LibreOffice (hunspell) spellcheckers, and entries with strange characters, numbers, names, etc. were all removed. 
     * From that filtered list, the % of use of each word was calculated. By adding them, it was possible to determine what 
     * percentage of a text a person can understand if he or she knows that word and all the words that appear before in the list. 
-    * In other words, a frequency_index of 85 means that if a person knows that word and the previous ones, he or she will understand 
-    * around 85% of any text. Each freqlist table includes words with a WordFreq index of up to 95. This was done to reduce table size
+    * In other words, a frequency_index of 80 means that if a person knows that word and the previous ones, he or she will understand 
+    * around 80% of any text. Each freqlist table includes words with a WordFreq index of up to 95. This was done to reduce table size
     * and increase speed.
     *
-    * So, the higher the WordFreq index, the rarer the word will be. We arbitrarily determined that an index of >95 will mean that the 
-    * word will only be known by advanced users. A word with an index between 85 and 95 will be known by intermediate users and a 
-    * word with an index lower than 85 will be known by novice users.
+    * So, the higher the WordFreq index, the rarer the word will be. We arbitrarily determined that beginner users should know
+    * words with an index < 80. 
     *
-    * With this in mind, the algorithm goes as follows:
+    * The algorithm used to calculate the readability index is the Dale-Chall formula:
+    * https://readabilityformulas.com/new-dale-chall-readability-formula.php
     * 
-    * 1. Filter the corresponding freqlist table with words having an index <=85 (this will give all the words a beginner would know)
-    * 
-    * 2. Compare this with all the words in $text. The difference will be the total amount of $unknown_words.
-    * 
-    * 3. Divide that by the total amount of words in $text ($unknown_words / $total_words)
-    * 
-    * 4. This will give us an index representing the % of unknow words. If it's < 25%, meaning a beginner would understand at least 75% of 
-    * the text, we can say the text has a "beginner" difficulty.
-    * 
-    * 5. Otherwise, re-test points 1-4, but this time with an unfiltered freqlist table (i.e. with words having a WordFreq <=95). In case
-    * unknow words index is < 25%, tag the text as "intermediate", otherwise, tag it as "advanced".
+    * Raw Score = 0.1579 * (PDW) + 0.0496 * ASL
+    * PDW = Percentage of Difficult Words
+    * ASL = Average Sentence Length in words
+    * If (PDW) is greater than 25%: 100% - 80% (wordfreq for beginners) + 5% (additional threshold that accounts for names, numbers, etc.), then:
+    * Adjusted Score = Raw Score + 3.6365, otherwise Adjusted Score = Raw Score
+    * If Adjusted Score < 5, text difficulty is set to "beginner".
+    * If Adjusted Score < 9, text difficulty is set to "intermediate".
+    * Else, text difficulty is set to "advanced".
     * 
     * @param string $text
     * @return int
     */
     private function calculateDifficulty(string $text = ''): int {
-        $level_thresholds = array('85', '95'); // <=80: beginner; >80 & <=95: intermediate; >95: advanced
         $frequency_list_table = ''; // frequency list table name: should be something like frequency_list_ + ISO 639-1 (2 letter language) code
-        
         $frequency_list = []; // array with all the words in the corresponding frequency list table 
-        $words_in_text = []; // array with all the valid words in $text 
-        $diff = []; // array with elements in the $words_in_text array not present in the $frequency_list array
-        
-        $total_words = 0; // number of valid words in $text
-        $unknown_words = 0; // number of words in $diff
-        $index = 0; // $unknown_words / $total_words
-        
+        $words_in_text = []; // array with all the valid words in $text
+        $sentences_in_text = []; // array with all sentences in $text (only used to calculate $nr_of_words)
+        $nr_of_words = 0; // number of words in $text
+        $nr_of_sentences = 0; // number of sentences in $text
+        $nr_of_difficult_words = 0; // number of words in $words_in_text that don't appear in $frequency_list
+        $per_difficult_words = 0; // percentage of words in $text that are difficult
+        $score = 0; // Dale-Chall readability score of $text
         $xml_text = ''; // used to check if $text parameter is XML code
-        $accented_chars = ''; // holds list of accented characters that should be considered legal when counting words in a text
         
-        $result = 0; // function return value
-        $row = []; // array with all the rows from a successful SQL query
-
         // if $text is XML code (video transcript), extract text from XML string
         $xml_text = $this->extractFromXML($text);
         
@@ -547,13 +534,8 @@ class Texts extends DBEntity {
             $text = $xml_text;
         }
 
-        // build array with words in text
-        $text = stripcslashes(str_replace('\r\n', ' ', $text));
-        // list of special characters in the supported languages (english, spanish, portuguese, french, german & italian)
-        // $accented_chars = 'àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ';
-        // $this->nr_of_words = preg_match_all('/[A-Za-z' . $accented_chars . ']+/u', $text, $words_in_text);
-
-        $this->nr_of_words = preg_match_all('/(\w+)/u', $text, $words_in_text);
+        $nr_of_words = $this->nr_of_words = preg_match_all('/(\w+)/u', $text, $words_in_text);
+        $nr_of_sentences = preg_match_all('/[^?!.]{3,}[?!.][^?!.]/u', $text . ' ', $sentences_in_text);
         
         try {
             // get learning language ISO name
@@ -567,38 +549,32 @@ class Texts extends DBEntity {
             $row = $stmt->fetch(\PDO::FETCH_NUM);
             $frequency_list_table = 'frequency_list_' . $row[0];
             
-            foreach ($level_thresholds as $threshold) {
-                // build frequency list array for "beginner" level words (80%)
-                $sql = "SELECT `word` 
-                        FROM `$frequency_list_table` WHERE `frequency_index` <= ?";
+            // build frequency list array for "beginner" level words (80%)
+            $sql = "SELECT `word` 
+                    FROM `$frequency_list_table` WHERE `frequency_index` <= 90";
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([$threshold]);
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
 
-                while($row = $stmt->fetch(\PDO::FETCH_NUM)){
-                    $frequency_list[] = $row[0];
-                }
-                
-                // get total amount of words & how many words in the text don't appear in the frequency list
-                //$diff = array_diff(array_map('strtolower', $words_in_text[0]), array_map('strtolower', $frequency_list));
-                $diff = array_udiff($words_in_text[0], $frequency_list, 'strcasecmp');
-                
-                $total_words = sizeof($words_in_text[0]);
-                $unknown_words = sizeof($diff);
-                
-                // $index is calculated as the relation between $unknown_words and $total_words
-                // there's no need to remove duplicates from $diff 
-                // because they won't be removed from $words_in_text either
-                $index = $unknown_words / $total_words;
-                if ($threshold === '85' && $index < 0.25) {
-                    $result = 1; // beginner
-                } elseif ($threshold === '95' && $index < 0.25) {
-                    $result = 2; // intermediate
-                } elseif ($threshold === '95' && $index > 0.24) {
-                    $result = 3; // advanced
-                }
-            } 
+            while($row = $stmt->fetch(\PDO::FETCH_NUM)){
+                $frequency_list[] = $row[0];
+            }    
+            
+            // get how many words in the text don't appear in the frequency list
+            $nr_of_difficult_words = sizeof(array_udiff($words_in_text[0], $frequency_list, 'strcasecmp'));
+            $per_difficult_words = $nr_of_difficult_words / $nr_of_words * 100;
 
+            $score = (0.1579 * $per_difficult_words) + (0.0496 * ($nr_of_words / $nr_of_sentences));    
+            $score = $per_difficult_words > 25 ? $score + 3.6365 : $score;
+
+            if ($score < 5) {
+                $result = 1; // beginner
+            } elseif ($score < 9) {
+                $result = 2; // intermediate
+            } else {
+                $result = 3; // advanced
+            }
+            
             return $result;
         } catch (\PDOException $e) {
             throw new \Exception('Oops! There was an unexpected error trying to calculate text difficulty level.');

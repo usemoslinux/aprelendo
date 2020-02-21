@@ -83,7 +83,7 @@ class PopularSources extends DBEntity {
     public function update(string $lg_iso, string $domain): void {
         try {
             if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain))  {
-                throw new \Exception('Wrong parameters provided to update record from the popular sources list.');
+                return;
             }
     
             $sql = "DELETE FROM `{$this->table}` WHERE `lang_iso`=? AND `domain`=? AND `times_used` = 1";

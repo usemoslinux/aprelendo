@@ -26,9 +26,6 @@ use Aprelendo\Includes\Classes\TextTable;
 use Aprelendo\Includes\Classes\ArchivedTexts;
 use Aprelendo\Includes\Classes\Pagination;
 
-$user_id = $user->getId();
-$lang_id = $user->getLangId();
-
 // set variables used for pagination
 $page = 1;
 $limit = 10; // number of rows per page
@@ -56,19 +53,19 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         $texts_table = new Texts($pdo, $user_id, $lang_id);
     }
     
-    $total_rows = $texts_table->countSearchRows($search_filter, $search_text);
+    $total_rows = $texts_table->countSearchRows($filter_type, $filter_level, $search_text);
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->getOffset();
     
     // get search result
     try {
-        $rows = $texts_table->getSearch($search_filter, $search_text, $offset, $limit, $sort_by);
+        $rows = $texts_table->getSearch($filter_type, $filter_level, $search_text, $offset, $limit, $sort_by);
 
         // print table
         if ($rows) { // if there are any results, show them
             $table = New TextTable($headings, $col_widths, $rows, $show_archived, $action_menu, $sort_menu);
             $html = $table->print($sort_by);
-            $html .= $pagination->print('texts.php', $search_text, $sort_by, $filter, $show_archived); // print pagination
+            $html .= $pagination->print('texts.php', $search_text, $sort_by, $filter_type, $filter_level, $show_archived); // print pagination
         }
     } catch (\Exception $e) {
         $html = '<p>' . $e->getMessage() . '</p>';
@@ -95,7 +92,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         if ($rows) {
             $table = New TextTable($headings, $col_widths, $rows, $show_archived, $action_menu, $sort_menu);
             $html = $table->print($sort_by);
-            $html .= $pagination->print('texts.php', '', $sort_by, $filter, $show_archived); // print pagination
+            $html .= $pagination->print('texts.php', '', $sort_by, $filter_type, $filter_level, $show_archived); // print pagination
         } else { // if there are no texts to show, print a message
             if (!isset($_COOKIE['hide_welcome_msg'])) {
                 

@@ -43,18 +43,20 @@ class SharedTexts extends Texts
      * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
      * Values are returned using a sort pattern ($sort_by)
      *
-     * @param string $search_filter SQL statement specifying the filter to be used
+     * @param int $filter_type: 0 = All; 1 = Articles; 2 = Conversations; 3 = Letters; 4 = Lyrics; 6 = Ebooks; 7 = Others
+     * @param int $filter_level: 0 = All; 1 = Beginner; 2 = Intermediate; 3 = Advanced 
      * @param string $search_text
      * @param int $offset
      * @param int $limit
      * @param int $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
-    public function getSearch(string $search_filter, string $search_text, int $offset, 
+    public function getSearch(int $filter_type, int $filter_level, string $search_text, int $offset, 
                               int $limit, int $sort_by): array {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
-            $filter_sql = empty($search_filter) ? '' : 'AND `type` = :filter';
+            $filter_type_sql = $filter_type == 0 ? 'AND t.type > :filter_type' : 'AND t.type = :filter_type';
+            $filter_level_sql = $filter_level == 0 ? 'AND t.level > :filter_level' : 'AND t.level = :filter_level';
 
             $lang = new Language($this->pdo, $this->user_id);
             $lang->loadRecord($this->lang_id);
@@ -73,7 +75,9 @@ class SharedTexts extends Texts
                     FROM `{$this->table}` t 
                     INNER JOIN `languages` l ON t.lang_id = l.id
                     WHERE `name`= :name 
-                    AND `title` LIKE :search_str $filter_sql  
+                    AND `title` LIKE :search_str 
+                    $filter_level_sql 
+                    $filter_type_sql 
                     ORDER BY $sort_sql 
                     LIMIT :offset, :limit";
 
@@ -81,13 +85,11 @@ class SharedTexts extends Texts
 
             $stmt->bindParam(':user_id', $this->user_id);
             $stmt->bindValue(':name', $lang->getName());
+            $stmt->bindParam(':filter_level', $filter_level, \PDO::PARAM_INT);
+            $stmt->bindParam(':filter_type', $filter_type, \PDO::PARAM_INT);
             $stmt->bindValue(':search_str', "%$search_text%");
             $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
             $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
-
-            if (!empty($filter_sql)) {
-                $stmt->bindParam(':filter', $search_filter);
-            }
 
             $stmt->execute();
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -122,6 +124,9 @@ class SharedTexts extends Texts
             $lang = new Language($this->pdo, $this->user_id);
             $lang->loadRecord($this->lang_id);
 
+            $filter_level = $lang->getLevel();
+            $filter_level_sql = $filter_level == 0 ? 'AND t.level > :filter_level' : 'AND t.level = :filter_level';
+
             $sql = "SELECT t.id, 
                     (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
                     t.title, 
@@ -136,6 +141,7 @@ class SharedTexts extends Texts
                     FROM `{$this->table}` t
                     INNER JOIN `languages` l ON t.lang_id = l.id
                     WHERE `name` = :lang 
+                    $filter_level_sql 
                     ORDER BY $sort_sql 
                     LIMIT :offset, :limit";
 
@@ -143,6 +149,7 @@ class SharedTexts extends Texts
 
             $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
             $stmt->bindValue(':lang', $lang->getName());
+            $stmt->bindParam(':filter_level', $filter_level, \PDO::PARAM_INT);
             $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
             $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
 

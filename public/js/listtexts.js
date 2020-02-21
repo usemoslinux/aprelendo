@@ -145,19 +145,21 @@ $(document).ready(function() {
      */
     $("#btn-filter + div > a").on("click", function() {
         var $item = $(this);
-        if ($item.is(":last-child") && $item.text().trim() == "Archived") {
+
+        if ($item.is('.sa')) {
             $item.toggleClass("active");
         } else {
             $item.addClass("active");
 
-            $item.siblings(".active").each(function(index, element) {
-                if (
-                    $(this)
-                        .text()
-                        .trim() !== "Archived"
-                ) {
-                    $(this).toggleClass("active");
-                }
+            var filter = '';
+            if ($item.is('.ft')) {
+                filter = '.ft';
+            } else if ($item.is('.fl')) {
+                filter = '.fl';
+            }
+
+            $item.siblings(".active" + filter).each(function() {
+                $(this).toggleClass("active");
             });
         }
     }); // end #btn-filter + div > a.on.click
