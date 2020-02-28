@@ -209,7 +209,7 @@ class User
             
             // check if email already exists
             if ($this->existsByEmail($email)) {
-                throw new \Exception('Email already exists. Did you <a href="forgotpassword.php">forget</a> you username or password?');
+                throw new \Exception('Email already exists. Did you <a class="alert-link" href="forgotpassword.php">forget</a> you username or password?');
             }
             
             // create password hash

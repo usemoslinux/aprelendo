@@ -99,7 +99,7 @@ try {
                 } else {
                     if ($texts_table->exists($source_url)) {
                         $msg = 'The text you are trying to add already exists in our database. ';
-                        $msg .= $is_shared ? 'Look for it in the <a href="sharedtexts.php">shared texts</a> section.' : 'Look for it in your <a href="texts.php">private library</a>.';
+                        $msg .= $is_shared ? 'Look for it in the <a class="alert-link" href="sharedtexts.php">shared texts</a> section.' : 'Look for it in your <a class="alert-link" href="texts.php">private library</a>.';
 
                         throw new \Exception($msg);
                     }
@@ -127,7 +127,7 @@ try {
             // if text is already in db, show error message
             if ($texts_table->exists($source_url)) {
                 $msg = 'The text you are trying to add already exists in our database. ';
-                $msg .= 'Look for it in the <a href="sharedtexts.php">shared texts</a> section.';
+                $msg .= 'Look for it in the <a class="alert-link" href="sharedtexts.php">shared texts</a> section.';
 
                 throw new \Exception($msg);
             }

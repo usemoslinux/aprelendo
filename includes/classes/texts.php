@@ -317,13 +317,14 @@ class Texts extends DBEntity {
     *
     * @return int
     */
-    public function countAllRows(): int {
+    public function countAllRows(int $filter_level = 0): int {
         try {
+            $filter_level_sql = $filter_level == 0 ? 'AND `level`>?' : 'AND `level`=?';
             $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
-                    WHERE `user_id`=? AND `lang_id`=?";
+                    WHERE `user_id`=? AND `lang_id`=? $filter_level_sql";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id]);
+            $stmt->execute([$this->user_id, $this->lang_id, $filter_level]);
             $total_rows = $stmt->fetchColumn();
 
             return (int)$total_rows;
@@ -405,9 +406,10 @@ class Texts extends DBEntity {
     * @param int $sort_by Is converted to a string using buildSortSQL()
     * @return array
     */
-    public function getAll(int $offset, int $limit, int $sort_by): array  {
+    public function getAll(int $filter_level, int $offset, int $limit, int $sort_by): array  {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
+            $filter_level_sql = $filter_level == 0 ? 'AND `level`>:level' : 'AND `level`=:level';
             $sql = "SELECT `id`, 
                     NULL, 
                     `title`, 
@@ -419,6 +421,7 @@ class Texts extends DBEntity {
                     FROM `{$this->table}` 
                     WHERE `user_id` = :user_id  
                     AND `lang_id` = :lang_id 
+                    $filter_level_sql
                     ORDER BY $sort_sql 
                     LIMIT :offset, :limit";
 
@@ -428,12 +431,13 @@ class Texts extends DBEntity {
             $stmt->bindParam(':lang_id', $this->lang_id, \PDO::PARAM_INT);
             $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
             $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+            $stmt->bindParam(':level', $filter_level, \PDO::PARAM_INT);
 
             $stmt->execute();
             $result = $stmt->fetchAll();
 
             if (!$result || empty($result)) {
-                throw new \Exception('Oops! There are no texts in your private library yet. Feel free to add one or access the shared texts section.');
+                throw new \Exception('Oops! There are no texts in your private library yet. Feel free to add one or access the <a href="sharedtexts.php">shared texts</a> section.');
             }
 
             return $result;

@@ -47,7 +47,7 @@ try {
         }
         echo $html. '</div>';
     } else {
-        throw new \Exception('There are no RSS feeds to show. Please, add some in the <a href="languages.php">languages</a> section. You can add up to 3 feeds per language.');
+        throw new \Exception('There are no RSS feeds to show. Please, add some in the <a class="alert-link" href="languages.php">languages</a> section. You can add up to 3 feeds per language.');
     }
 } catch (Exception $e) {
     echo '<div class="alert alert-danger">' . $e->getMessage() . '</div>';

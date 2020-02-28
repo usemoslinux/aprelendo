@@ -44,7 +44,7 @@ require_once PUBLIC_PATH . 'header.php';
                         <a class="active">Add RSS article</a>
                     </li>
                 </ol>
-                <div class="alert alert-info"><i class="fas fa-info-circle"></i> All RSS texts you add to Aprelendo will be shared with the rest of our community. You will find them in the "<a href="sharedtexts.php">shared texts</a>" section.</div>
+                <div class="alert alert-info"><i class="fas fa-info-circle"></i> All RSS texts you add to Aprelendo will be shared with the rest of our community. You will find them in the "<a class="alert-link" href="sharedtexts.php">shared texts</a>" section.</div>
             </div>
             <div class="col-12">
                 <div class="row flex">

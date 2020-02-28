@@ -157,7 +157,7 @@ class SharedTexts extends Texts
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if (!$result || empty($result)) {
-                throw new \Exception('Oops! There are no texts in your private library yet. Feel free to add one or access the shared texts section.');
+                throw new \Exception('Oops! That\'s weird. It appears there are no shared texts for this language yet.');
             }
 
             return $result;

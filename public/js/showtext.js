@@ -931,10 +931,10 @@ $(document).ready(function() {
                     if (xhr.status == 403) {
                         // TODO: implement "upgrade" page
                         $("#audioplayer-loader").addClass("d-none");
-                        $("#alert-msg-audio").removeClass("d-none").empty().append('You have reached your audio streaming limit for today. Although it is possible to continue with the revision of the text, we do not recommend it. Alternatively, you can try again tomorrow or you can consider supporting us and <a href="gopremium.php">improving your plan</a> to increase the daily audio streaming limit.');
+                        $("#alert-msg-audio").removeClass("d-none").empty().append('You have reached your audio streaming limit for today. Although it is possible to continue with the revision of the text, we do not recommend it. Alternatively, you can try again tomorrow or you can consider supporting us and <a class="alert-link" href="gopremium.php">improving your plan</a> to increase the daily audio streaming limit.');
                     } else {
                         $("#audioplayer-loader").addClass("d-none");
-                        $("#alert-msg-audio").removeClass("d-none").empty().append('There was an unexpected error trying to create audio from this text. <a href="#" id="retry-audio-load">Try again</a> later.');
+                        $("#alert-msg-audio").removeClass("d-none").empty().append('There was an unexpected error trying to create audio from this text. <a class="alert-link" href="#" id="retry-audio-load">Try again</a> later.');
                     }
 
                     skipAudioPhases();

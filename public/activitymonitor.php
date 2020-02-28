@@ -24,7 +24,7 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check i
 use Aprelendo\Includes\Classes\Statistics;
 
 $stats = new Statistics($pdo, $user->getId(), $user->getLangId());
-$week_stats = $stats->get(7); // get today's statistics
+$week_stats = $stats->get(7); // get weekly statistics
 
 $streak_days = 0;
 
@@ -34,7 +34,7 @@ for ($i=6; $i >= 0; $i--) {
     }
 }
 
-$message_html = '<p class="card-text text-center"><i style="color:Tomato" class="fas fa-fire"></i> ';
+$message_html = '<span class="font-italic text-muted">';
 
 if ($streak_days > 0) {
     $message_html .= $streak_days . ' day streak. Keep it up!';
@@ -42,7 +42,13 @@ if ($streak_days > 0) {
     $message_html .= "You've been lazy lately.";
 }
 
-$message_html .= '</p>';
+$message_html .= '</span>';
+
+$today_stats = $stats->get(1); // get today's statistics
+$nr_of_words_learned_today = $today_stats['created'][0] + $today_stats['modified'][0] + $today_stats['learned'][0];
+$per_of_words_leardned_today = round($nr_of_words_learned_today * 100 / 10);
+$msg_progress_bar = "$nr_of_words_learned_today / 10";
+
 
 ?>
 
@@ -51,10 +57,9 @@ $message_html .= '</p>';
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title">Keep motivated - Today's goal</h6>
-                
-                <div class="progress my-4">
-                    <div class="progress-bar bg-success" style="width:170%">14 / 10</div>
+                <h6 class="card-title">Today's goal: Practice 10 words</h6>
+                <div class="progress my-2" style="height: 10px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="min-width: 5%; width: <?php echo strval($per_of_words_leardned_today) . '%'; ?>"><?php echo $msg_progress_bar; ?></div>
                 </div> 
                 <?php echo $message_html; ?>
                 <a href="stats.php" class="btn btn-primary btn-sm float-right">See more stats</a>

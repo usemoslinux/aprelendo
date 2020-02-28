@@ -77,12 +77,12 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     
     $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
 
-    $total_rows = $texts_table->countAllRows();
+    $total_rows = $texts_table->countAllRows($filter_level);
     $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
     $offset = $pagination->getOffset();
     
     try {
-        $rows = $texts_table->getAll($offset, $limit, $sort_by);
+        $rows = $texts_table->getAll($filter_level, $offset, $limit, $sort_by);
     
         // print table
         if ($rows) {
