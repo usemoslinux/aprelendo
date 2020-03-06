@@ -20,6 +20,8 @@
 $(document).ready(function() {
     var highlighting = false;
     var $sel_start, $sel_end;
+    var $start_sel_time, $end_sel_time;
+    var $swiping = false;
     var $selword = null; // jQuery object of the selected word/phrase
     var time_handler = null;
     var dictionaryURI = "";
@@ -37,7 +39,7 @@ $(document).ready(function() {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
 
-    loadAudio();
+    // loadAudio();
 
     /**
      * Sets keyboard shortcuts for media player
@@ -134,6 +136,8 @@ $(document).ready(function() {
             // if left mouse button / touch...
             highlighting = true;
             $sel_start = $sel_end = $(this);
+            // $start_sel_time = new Date();
+            // $swiping = false;
         }
     }); // end .word.on.mousedown/touchstart
 
@@ -144,7 +148,11 @@ $(document).ready(function() {
     $(document).on("mouseup touchend", ".word", function(e) {
         e.preventDefault();
         e.stopPropagation();
-        if (e.which < 2) {
+        // $end_sel_time = new Date();
+
+        // $swiping = ($sel_start !== $sel_end) && ($end_sel_time - $start_sel_time < 500);
+
+        if (e.which < 2 && !$swiping) {
             // if left mouse button / touch...
             highlighting = false;
             if ($sel_start === $sel_end) {
@@ -157,7 +165,13 @@ $(document).ready(function() {
             }
             showModal();
         }
+
+        $swiping = false;
     }); // end .word.mouseup/touchend
+
+    $(window).on("scroll", function() {
+        $swiping = true;
+    });
 
     /**
      * Determines if an element is after another one
@@ -178,7 +192,7 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopPropagation();
 
-        if (highlighting) {
+        if (highlighting && !$swiping) {
             $(".word").removeClass("highlighted");
 
             $sel_end =
