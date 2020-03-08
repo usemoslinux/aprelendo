@@ -22,13 +22,13 @@ require_once '../../includes/dbinit.php'; // connect to database
 
 use Aprelendo\Includes\Classes\User;
 
-if(isset($_POST['Eea']) && !empty($_POST['Eea']) && !empty($_POST['U3']))
+if(isset($_POST['id']) && !empty($_POST['id']) && !empty($_POST['email']))
 {
     try {
-        $google_id = $_POST['Eea']; //Google ID
-        $google_email = $_POST['U3']; //Email ID
-        $google_name = $_POST['ig']; //Name
-        $google_profile_pic = $_POST['Paa']; //Profile Pic URL
+        $google_id = $_POST['id']; //Google ID
+        $google_email = $_POST['email']; //Email ID
+        $google_name = $_POST['name']; //Name
+        // $google_profile_pic = $_POST['pic']; //Profile Pic URL
 
         $user = new User($pdo);
 

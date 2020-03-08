@@ -136,8 +136,9 @@ $(document).ready(function() {
             // if left mouse button / touch...
             highlighting = true;
             $sel_start = $sel_end = $(this);
-            // $start_sel_time = new Date();
-            // $swiping = false;
+            if (e.type == "touchstart") {
+                $start_sel_time = new Date();
+            }
         }
     }); // end .word.on.mousedown/touchstart
 
@@ -148,11 +149,14 @@ $(document).ready(function() {
     $(document).on("mouseup touchend", ".word", function(e) {
         e.preventDefault();
         e.stopPropagation();
-        // $end_sel_time = new Date();
 
-        // $swiping = ($sel_start !== $sel_end) && ($end_sel_time - $start_sel_time < 500);
+        $end_sel_time = new Date();
 
-        if (e.which < 2 && !$swiping) {
+        if (e.type == "touchend" && ($end_sel_time - $start_sel_time < 500) ) {
+            return;
+        }
+        
+        if (e.which < 2) {
             // if left mouse button / touch...
             highlighting = false;
             if ($sel_start === $sel_end) {
@@ -166,12 +170,8 @@ $(document).ready(function() {
             showModal();
         }
 
-        $swiping = false;
+        $start_sel_time = $end_sel_time = new Date();
     }); // end .word.mouseup/touchend
-
-    $(window).on("scroll", function() {
-        $swiping = true;
-    });
 
     /**
      * Determines if an element is after another one
@@ -192,7 +192,13 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopPropagation();
 
-        if (highlighting && !$swiping) {
+        $end_sel_time = new Date();
+
+        if (e.type == "touchmove" && ($end_sel_time - $start_sel_time < 500) ) {
+            return;
+        }
+
+        if (highlighting) {
             $(".word").removeClass("highlighted");
 
             $sel_end =

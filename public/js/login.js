@@ -60,7 +60,9 @@ function googleSignIn(googleUser) {
     //pass information to server to insert or update the user record
     $.ajax({
         type: "POST",
-        data: profile,
+        data: {"id" : profile.getId(),
+               "name" : profile.getName(),
+               "email" : profile.getEmail() },
         url: "ajax/google_oauth.php"
     })
         .done(function(data) {
