@@ -143,6 +143,13 @@ $(document).ready(function() {
     }); // end .word.on.mousedown/touchstart
 
     /**
+     * Disables word selection when scrolling/swiping
+     */
+    $(window).on("scroll", function() {
+        $start_sel_time = new Date();
+    }); // end window.on.scroll
+
+    /**
      * Word/Phrase selection end
      * @param {event object} e
      */
@@ -348,6 +355,9 @@ $(document).ready(function() {
         getWordFrequency($selword.text(), doclang);
         setAddDeleteButtons();
 
+        $("#iframe-loader").attr('class','lds-ripple m-auto');
+        $("#dicFrame").attr('class','d-none');
+
         // build translate sentence url
         translate_paragraph_link = buildTranslateParagraphLink();
 
@@ -367,6 +377,14 @@ $(document).ready(function() {
             .find("#myModal")
             .modal("show");
     } // end showModal
+
+    /**
+     * Hides loader spinner when dictionary iframe finished loading
+     */
+    $("#dicFrame").on("load", function() {
+        $("#iframe-loader").attr('class','d-none');
+        $(this).removeClass();
+    }); // end #dicFrame.on.load()
 
     $doc.on("click", "#btn-translate", function() {
         window.open(translate_paragraph_link);

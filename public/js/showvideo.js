@@ -20,6 +20,7 @@
 $(document).ready(function() {
     var highlighting = false;
     var $sel_start, $sel_end;
+    var $start_sel_time, $end_sel_time;
     var $selword = null; // jQuery object of the selected word/phrase
     dictionaryURI = "";
     translatorURI = "";
@@ -58,8 +59,18 @@ $(document).ready(function() {
             // if left mouse button / touch...
             highlighting = true;
             $sel_start = $sel_end = $(this);
+            if (e.type == "touchstart") {
+                $start_sel_time = new Date();
+            }
         }
     }); // end .word.on.mousedown/touchstart
+
+    /**
+     * Disables word selection when scrolling/swiping
+     */
+    $(window).on("scroll", function() {
+        $start_sel_time = new Date();
+    }); // end window.on.scroll
 
     /**
      * Word/Phrase selection end
@@ -68,6 +79,13 @@ $(document).ready(function() {
     $(document).on("mouseup touchend", ".word", function(e) {
         e.preventDefault();
         e.stopPropagation();
+
+        $end_sel_time = new Date();
+
+        if (e.type == "touchend" && ($end_sel_time - $start_sel_time < 500) ) {
+            return;
+        }
+
         if (e.which < 2) {
             // if left mouse button / touch...
             highlighting = false;
@@ -96,6 +114,12 @@ $(document).ready(function() {
     $(document).on("mouseover touchmove", ".word", function(e) {
         e.preventDefault();
         e.stopPropagation();
+
+        $end_sel_time = new Date();
+
+        if (e.type == "touchmove" && ($end_sel_time - $start_sel_time < 500) ) {
+            return;
+        }
 
         if (highlighting) {
             $(".word").removeClass("highlighted");
