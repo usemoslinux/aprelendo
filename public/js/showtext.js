@@ -39,7 +39,7 @@ $(document).ready(function() {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
 
-    // loadAudio();
+    loadAudio();
 
     /**
      * Sets keyboard shortcuts for media player
@@ -141,13 +141,6 @@ $(document).ready(function() {
             }
         }
     }); // end .word.on.mousedown/touchstart
-
-    /**
-     * Disables word selection when scrolling/swiping
-     */
-    $(window).on("scroll", function() {
-        $start_sel_time = new Date();
-    }); // end window.on.scroll
 
     /**
      * Word/Phrase selection end

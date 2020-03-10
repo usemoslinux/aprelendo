@@ -20,7 +20,7 @@
 $(document).ready(function() {
     var highlighting = false;
     var $sel_start, $sel_end;
-    var $start_sel_time, $end_sel_time;
+    var start_sel_time, end_sel_time;
     var $selword = null; // jQuery object of the selected word/phrase
     dictionaryURI = "";
     translatorURI = "";
@@ -60,7 +60,7 @@ $(document).ready(function() {
             highlighting = true;
             $sel_start = $sel_end = $(this);
             if (e.type == "touchstart") {
-                $start_sel_time = new Date();
+                start_sel_time = new Date();
             }
         }
     }); // end .word.on.mousedown/touchstart
@@ -69,7 +69,7 @@ $(document).ready(function() {
      * Disables word selection when scrolling/swiping
      */
     $(window).on("scroll", function() {
-        $start_sel_time = new Date();
+        start_sel_time = new Date();
     }); // end window.on.scroll
 
     /**
@@ -80,9 +80,9 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopPropagation();
 
-        $end_sel_time = new Date();
+        end_sel_time = new Date();
 
-        if (e.type == "touchend" && ($end_sel_time - $start_sel_time < 500) ) {
+        if (e.type == "touchend" && (end_sel_time - start_sel_time < 500) ) {
             return;
         }
 
@@ -115,9 +115,9 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopPropagation();
 
-        $end_sel_time = new Date();
+        end_sel_time = new Date();
 
-        if (e.type == "touchmove" && ($end_sel_time - $start_sel_time < 500) ) {
+        if (e.type == "touchmove" && (end_sel_time - start_sel_time < 500) ) {
             return;
         }
 
