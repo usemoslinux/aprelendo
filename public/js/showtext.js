@@ -39,7 +39,7 @@ $(document).ready(function() {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
 
-    loadAudio();
+    // loadAudio();
 
     /**
      * Sets keyboard shortcuts for media player
@@ -152,7 +152,7 @@ $(document).ready(function() {
 
         $end_sel_time = new Date();
 
-        if (e.type == "touchend" && ($end_sel_time - $start_sel_time < 500) ) {
+        if (e.type == "touchend" && ($end_sel_time - $start_sel_time < 1000) ) {
             return;
         }
         
@@ -194,7 +194,7 @@ $(document).ready(function() {
 
         $end_sel_time = new Date();
 
-        if (e.type == "touchmove" && ($end_sel_time - $start_sel_time < 500) ) {
+        if (e.type == "touchmove" && ($end_sel_time - $start_sel_time < 1000) ) {
             return;
         }
 

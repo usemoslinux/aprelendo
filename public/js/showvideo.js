@@ -66,13 +66,6 @@ $(document).ready(function() {
     }); // end .word.on.mousedown/touchstart
 
     /**
-     * Disables word selection when scrolling/swiping
-     */
-    $(window).on("scroll", function() {
-        start_sel_time = new Date();
-    }); // end window.on.scroll
-
-    /**
      * Word/Phrase selection end
      * @param {event object} e
      */
@@ -82,7 +75,7 @@ $(document).ready(function() {
 
         end_sel_time = new Date();
 
-        if (e.type == "touchend" && (end_sel_time - start_sel_time < 500) ) {
+        if (e.type == "touchend" && (end_sel_time - start_sel_time < 1000) ) {
             return;
         }
 
@@ -117,7 +110,7 @@ $(document).ready(function() {
 
         end_sel_time = new Date();
 
-        if (e.type == "touchmove" && (end_sel_time - start_sel_time < 500) ) {
+        if (e.type == "touchmove" && (end_sel_time - start_sel_time < 1000) ) {
             return;
         }
 
