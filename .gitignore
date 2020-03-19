@@ -2,7 +2,7 @@
 addons/
 vendor/
 config/config.php
-public/tests/
+public/test/
 temp/
 uploads/
 php-info.php

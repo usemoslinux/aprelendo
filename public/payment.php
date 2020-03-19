@@ -33,10 +33,11 @@ $enableSandbox = true;
 // PayPal settings. Change these to your account details and the relevant URLs
 // for your site.
 $paypalConfig = [
-    'email' => 'sb-fikun215027@business.example.com',
-    'return_url' => 'https://www.aprelendo.com/paymentvalidation.php',
-    'cancel_url' => 'https://www.aprelendo.com/paymentcancelled.php',
-    'notify_url' => 'https://www.aprelendo.com/payment.php'
+    'email'       => SUPPORT_EMAIL,
+    'business_id' => PAYPAL_BUSINESS_ID,
+    'return_url'  => 'https://www.aprelendo.com/paymentvalidation.php',
+    'cancel_url'  => 'https://www.aprelendo.com/paymentcancelled.php',
+    'notify_url'  => 'https://www.aprelendo.com/payment.php'
 ];
 
 try {
@@ -57,7 +58,7 @@ try {
         }
 
         // Set the PayPal account.
-        $data['business'] = $paypalConfig['email'];
+        $data['business'] = $paypalConfig['business_id'];
 
         // Set the PayPal return addresses.
         $data['return'] = stripslashes($paypalConfig['return_url']);

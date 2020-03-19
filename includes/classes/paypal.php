@@ -29,8 +29,7 @@ class Paypal extends DBEntity
     private $url = '';
     private $id = 0;
     private $txn_id = '';
-    private $payer_id = '';
-    private $subscription_id = '';
+    private $item_id = '';
     private $amount = 0;
     private $status = '';
     private $date_created = '';
@@ -63,8 +62,7 @@ class Paypal extends DBEntity
             if ($row) {
                 $this->id              = $row['id']; 
                 $this->txn_id          = $row['txn_id']; 
-                $this->txn_id          = $row['payer_id']; 
-                $this->txn_id          = $row['subscription_id']; 
+                $this->item_id         = $row['item_id']; 
                 $this->amount          = $row['amount'];
                 $this->status          = $row['status']; 
                 $this->date_created    = $row['date_created'];
@@ -76,38 +74,8 @@ class Paypal extends DBEntity
         }
     } // end loadRecordByUserId()
 
-    public function verifyTransactionIPN(array $data): bool {
-        $req = 'cmd=_notify-validate';
-        foreach ($data as $key => $value) {
-            $value = urlencode(stripslashes($value));
-            $value = preg_replace('/(.*[^%^0^D])(%0A)(.*)/i', '${1}%0D%0A${3}', $value); // IPN fix
-            $req .= "&$key=$value";
-        }
-    
-        $curl_options = array(
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_POST => 1,
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_POSTFIELDS => $req,
-            CURLOPT_SSLVERSION => 6,
-            CURLOPT_SSL_VERIFYPEER => 1,
-            CURLOPT_SSL_VERIFYHOST => 2,
-            CURLOPT_FORBID_REUSE => 1,
-            CURLOPT_CONNECTTIMEOUT => 30,
-            CURLOPT_HTTPHEADER => array('Connection: Close')
-        );
-
-        try {
-            $res = Curl::getUrlContents($this->url, $curl_options);
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }    
-        return $res === 'VERIFIED';
-    } // end verifyTransactionIPN()
-
     public function verifyTransactionPDT(string $tx): array {
         $req = 'cmd=_notify-synch';
-        $auth_token = "siw1VZH10S_RgptHvNvJXJ6bhjbd8sdbfjhsbj43jju9lF7d1sKSclIC";
         $req .= '&tx=' . $tx . '&at=' . PAYPAL_AUTH_TOKEN;
 
         $curl_options = array(
@@ -151,37 +119,6 @@ class Paypal extends DBEntity
 
         return $response;
     }
-
-    /**
-     * Adds IPN payment to payment table
-     *
-     * @param array $data Paypal Payment data
-     * @return void
-     */
-    public function addIPNPayment(array $data): void {
-        try {
-            $today = date('Y-m-d H:i:s');
-
-            $sql = "INSERT INTO `{$this->table}` (`user_id`, `txn_id`, `payer_id`, `subscription_id`, `amount`, `status`, `date_created`) 
-                    VALUES(?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id,
-                            $data['txn_id'],
-                            $data['payer_id'],
-                            $data['subscr_id'],
-                            $data['mc_gross'],
-                            $data['payer_status'],
-                            $today]);
-
-            if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to add payment record. No rows added.');
-            }
-        } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to add payment record.');
-        } finally {
-            $stmt = null;
-        }
-    } // end addPayment()
 
     /**
      * Adds PDT payment to payment table
