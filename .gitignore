@@ -9,4 +9,5 @@ php-info.php
 jsconfig.json
 .stylelintrc
 todo.md
+sitemap.xml
 **/*.log
