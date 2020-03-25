@@ -46,12 +46,12 @@ if (!$user->isLoggedIn()) {
             <div class="row flex simple-text">
                 <div class="col-sm-12">
                     <h4 id="extensions">Extensions</h4>
-                    <p>Simply download the corresponding extension file and install it in your favorite Web browser.</p>
+                    <p>Install the extension that corresponds to your favorite Web browser by clicking on the matching button below.</p>
                     <div class="btn-group">
-                        <a href="https://chrome.google.com/webstore/detail/aprelendo/aocicejjgilfkeeklfcomejgphjhjonj/related?hl=en-US" target="_blank" rel="noopener noreferrer" class="btn btn-primary"><i class="fab fa-chrome"></i> Download Chrome extension</a>
-                        <a href="https://addons.mozilla.org/en-US/firefox/addon/aprelendo/" target="_blank" rel="noopener noreferrer" class="btn btn-danger"><i class="fab fa-firefox"></i> Download Firefox extension</a>
+                        <a href="https://chrome.google.com/webstore/detail/aprelendo/aocicejjgilfkeeklfcomejgphjhjonj/related?hl=en-US" target="_blank" rel="noopener noreferrer" class="btn btn-primary"><i class="fab fa-chrome"></i> Install Chrome extension</a>
+                        <a href="https://addons.mozilla.org/en-US/firefox/addon/aprelendo/" target="_blank" rel="noopener noreferrer" class="btn btn-danger"><i class="fab fa-firefox"></i> Install Firefox extension</a>
                     </div>
-                    <p>Once installed, click the Aprelendo button to import the content of the page being displayed in the active tab.</p>
+                    <p>Once installed, click the Aprelendo button (which should have been added to your browser's main toolbar) to import the content of the page being displayed in the active tab.</p>
                     <br>
                     <h4 id="bookmarklets">Bookmarklets</h4>
                     <p>Bookmarklets are a "one-click" tool which add functionality to the browser. From a user perspective, they work very much like regular bookmarks.</p>
