@@ -54,7 +54,7 @@ if (!$user->isLoggedIn()) {
                         <li>
                             <a href="https://www.apache.org/" target="_blank" rel="noopener noreferrer">Apache</a>, by the Apache Software Foundation</li>
                         <li>
-                            <a href="https://getbootstrap.com/" target="_blank" rel="noopener noreferrer">Bootstrap 4.1</a>, by Bootstrap Core Team</li>
+                            <a href="https://getbootstrap.com/" target="_blank" rel="noopener noreferrer">Bootstrap 4.3.1</a>, by Bootstrap Core Team</li>
                         <li>
                             <a href="https://github.com/mozilla/readability" target="_blank" rel="noopener noreferrer">Readability</a>, by Mozilla (used to fetch texts from web sources)</li>
                         <li>

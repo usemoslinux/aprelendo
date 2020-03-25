@@ -46,7 +46,7 @@ By using Aprelendo you will be practicing all four dimensions of the language yo
   * Ajax
   * HTML/CSS
 
-# Installing
+# Installation
 
 1. Install and configure an Apache/Nginx server with MySQL support
 

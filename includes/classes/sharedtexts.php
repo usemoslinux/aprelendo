@@ -117,7 +117,7 @@ class SharedTexts extends Texts
      * @param int $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
-    public function getAll(int $offset, int $limit, int $sort_by): array {
+    public function getAll(int $filter_level, int $offset, int $limit, int $sort_by): array {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
 

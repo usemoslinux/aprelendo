@@ -66,13 +66,13 @@ if (!$user->isLoggedIn()) {
                             <p class="pt-3"><strong>Flash cards are not fun!</strong></p>
                         </blockquote>
                     </figure>
-                    <p>Also, most of these programs are not specifically designed for language learning. If they are used correctly, they might help achieving that goal and give users the impression they are advancing their language skills. However, the overall results will be suboptimal, at the least. One of the reasons for this is that they are very easy to misuse. There is nothing in them oblying you to add context or visual and phonetic aids to your cards. Dealing with different verb conjugations or words with more than one meaning is also usually a problem. Of course, there are ways to handle these cases, but they are often convoluted and the average user misses them entirely.</p>
+                    <p>Also, most of these programs are not specifically designed for language learning. If they are used correctly, they might help achieving that goal and give users the impression they are advancing their language skills. However, the overall results will be suboptimal, to say the least. One of the reasons for this is that they are very easy to misuse. There is nothing in them encouraging you to add context or visual and phonetic cues to your cards. Dealing with different verb conjugations or words with more than one meaning is also usually a problem. Of course, there are ways to handle these cases, but they are often convoluted and the average user misses them entirely.</p>
                     <br>
 
                     <h4>Let's try an alternative: total reading</h4>
-                    <p>Reading alone has some nice benefits. It allows us to acquire vocabulary in context, by presenting words and phrases as they are used, including grammar, spelling, inflections, etc. Also, the importance of commonly used words or phrases is more evident while reading them.<p>
-                    <p>These benefits are enhaced if we are interested in the subject of the text. In that case, the context of the words or phrases we are trying to learn becomes more relevant and memorable, therefore facilitating vocabulary acquisition. It can also help us learn vocabulary that we know we will often want to use ourselves, therefore creating a hidden need to incorporate it.</p>
-                    <p>Reading has one final advantage: we already do it a lot as we surf the Web. We only need to take advantage of this to learn new languages. However, the biggest limitation of this strategy is that it would only cover one of the four dimensions mentioned above. To become "total", the reading process has to meet certain criteria (which usually does not):</p>
+                    <p>Reading alone has some nice benefits. It allows us to acquire vocabulary in context, by presenting words and phrases as they are used, including grammar, spelling, inflections, etc. Also, the importance of commonly used words or phrases is more evident while we read them.<p>
+                    <p>These benefits are enhaced whenever we are interested in the topic of the text. In that case, the context of the words or phrases we are trying to learn becomes more relevant and memorable, therefore facilitating vocabulary acquisition. Learning vocabulary that we know we will often want to use ourselves creates a hidden need to incorporate it in our long term memory.</p>
+                    <p>Reading has one final advantage: we already do it a lot every day as we surf the Web. We only need to take advantage of this to learn new languages. However, the biggest limitation of this strategy is that it would only cover one of the four dimensions mentioned above. In order to become "total", the reading process has to meet certain criteria (which usually does not):</p>
                     <figure>
                         <blockquote class="blockquote float-right">
                             <p class="pt-3"><strong>Reading is nice and fun, but total reading is a more complete learning experience</strong></p>
@@ -80,13 +80,13 @@ if (!$user->isLoggedIn()) {
                     </figure>
                     <ol>
                         <li>Texts should be short (the length of a newspaper article or a short story, not a book)</li>
-                        <li>Users should be compelled to read the same text a couple of times.</li>
-                        <li>Users should start focusing on understanding the general meaning of the text, then its parts (paragraphs, phrases and specific words)</li>
-                        <li>Users should be allowed to easily search the meaning of words and phrases and add them to their learning stack</li>
-                        <li>Words and phrases that are being learned should be highlighted, as a way to let users check if they understand their meaning in each particular context</li>
-                        <li>Texts should include audio, allowing users to learn the pronunciation of words</li>
-                        <li>Users should be encouraged to read the text out loud, trying to imitate the recording that is being played. Training mouth muscles is key to achieving a good accent. A natural and stress-free way of improving speaking skills is by repeating someone else's words without thinking what is the correct way to say this or that, or how the phrase should be constructed. Eventually, it will become second nature.</li>
-                        <li>There should be a dictation phase in which users have to write down the words they are learning as they hear them.</li>
+                        <li>You should be compelled to read the same text a couple of times.</li>
+                        <li>You should start focusing on understanding the general meaning of the text, then its parts (paragraphs, phrases and specific words)</li>
+                        <li>You should be allowed to easily search the meaning of words and phrases and add them to their learning stack</li>
+                        <li>Words and phrases that are being learned should be highlighted, as a way to let you check if you understand their meaning in each particular context</li>
+                        <li>Texts should include audio, allowing you to learn the pronunciation of words</li>
+                        <li>You should be encouraged to read the text out loud, trying to imitate the recording that is being played. Training mouth muscles is key to achieving a good accent. A natural and stress-free way of improving speaking skills is by repeating someone else's words without thinking what is the correct way to say this or that, or how the phrase should be constructed. Eventually, it will become second nature.</li>
+                        <li>There should be a dictation phase in which you have to write down the words you are learning as you hear them.</li>
                     </ol>
                     <br>
                     <h4>How does Aprelendo implement total reading?</h4>
@@ -100,7 +100,7 @@ if (!$user->isLoggedIn()) {
                     <p>As you see, by using Aprelendo you will be practicing all four dimensions of the language you want to learn at the same time, in a systematic and integrated way.</p>
                     <br>
                     <h4>Is total reading a good method for complete beginners?</h4>
-                    <p>Our method has proven to be very beneficial for those who are on a learning "plateau" or anyone seeking to improve their language skills. Having said that, complete beginners may encounter some difficulties, as their initial vocabulary is very limited and also due to the fact that there are not many curated texts adapted to their level freely available online.</p>
+                    <p>Our method has proven to be very beneficial, particularly for those who are on a learning "plateau" or anyone seeking to improve their language skills. It is true that complete beginners may encounter some difficulties with this system, as their initial vocabulary is very limited and due to the fact that there are not many curated texts adapted to their level freely available online.</p>
                     <p>In any case, a good recommendation to keep in mind is to practice using texts that are at your level (or slightly above it). Thus, if you are a beginner you should try to use very short texts, with very basic vocabulary. Intermediate and advanced users, on the other hand, can try using longer and more complex texts.
                     <p>To alleviate the lack of curated texts, we created the "shared texts" section, which allows our community to add and share texts that fit different levels of learning.</p>
                 </div>
