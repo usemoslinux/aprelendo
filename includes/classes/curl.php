@@ -60,9 +60,10 @@ class Curl
             throw new \Exception("Oops! The URL $url returned HTTP error $httpCode");
         }
 
-        curl_close($ch); 
+        curl_close($ch);
 
-        return $result ? $result : '';
+        // convert result to utf-8 in case it is encoded in Windows-1252 (ISO 8859-1)
+        return $result ? iconv(mb_detect_encoding($result, 'UTF-8, ISO-8859-1', true), "UTF-8", $result) : '';
     } // end getUrlContents()
 
 }
