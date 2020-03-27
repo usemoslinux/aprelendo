@@ -24,6 +24,7 @@ $(document).ready(function() {
     var $selword = null; // jQuery object of the selected word/phrase
     dictionaryURI = "";
     translatorURI = "";
+    var translate_paragraph_link = "";
     prevsel = 0; // previous selection index in #selPhrase
     resume_video = false;
     video_paused = true;
@@ -339,8 +340,11 @@ $(document).ready(function() {
         getWordFrequency($selword.text(), doclang);
         setAddDeleteButtons();
 
+        $("#iframe-loader").attr('class','lds-ripple m-auto');
+        $("#dicFrame").attr('class','d-none');
+
         // build translate sentence url
-        $("#gt-link").attr("href", buildTranslateParagraphLink());
+        translate_paragraph_link = buildTranslateParagraphLink();
 
         // show dictionary
         var selword_text = $selword.text().replace(/(\r\n|\n|\r)/gm, " ");
@@ -453,6 +457,18 @@ $(document).ready(function() {
         // removes word selection
         $selword.removeClass("highlighted");
     }); // end #myModal.on.hidden.bs.modal
+
+    /**
+     * Hides loader spinner when dictionary iframe finished loading
+     */
+    $("#dicFrame").on("load", function() {
+        $("#iframe-loader").attr('class','d-none');
+        $(this).removeClass();
+    }); // end #dicFrame.on.load()
+
+    $("#btn-translate").on("click", function() {
+        window.open(translate_paragraph_link);
+    }); // end #btn-translate.on.click()
 
     /**
      * Removes word highlighting when user opens dictionary for word
