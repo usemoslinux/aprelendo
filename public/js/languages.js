@@ -72,38 +72,38 @@ $(document).ready(function() {
      * Triggers when user clicks the Save button
      */
     $('#savebtn').on('click', function(e) {
-        // var dict_uri = $('#dict-uri').val();
-        // var translator_uri = $('#translator-uri').val();
-        // var error = false;
+        var dict_uri = $('#dict-uri').val();
+        var translator_uri = $('#translator-uri').val();
+        var error = false;
 
-        // // show an error message if...
+        // show an error message if...
         
-        // if (dict_uri.length == 0) {
-        //     // 1. user forgot to include the dictionary URL
+        if (dict_uri.length == 0) {
+            // 1. user forgot to include the dictionary URL
             
-        //     showMessage("You need to specify the URL of the dictionary you want to use.", "alert-danger");
-        //     error = true;
-        // } else if (dict_uri.indexOf('%s') == -1) {
-        //     // 2. user forgot to include '%s' in the dictionary URL
+            showMessage("You need to specify the URL of the dictionary you want to use.", "alert-danger");
+            error = true;
+        } else if (dict_uri.indexOf('%s') == -1) {
+            // 2. user forgot to include '%s' in the dictionary URL
 
-        //     showMessage("The dictionary URL needs to include the position of the lookup word or phrase. For this, use '%s' (without quotation marks).", "alert-danger");
-        //     error = true;
-        // } else if (translator_uri.length == 0) {
-        //     // 3. user forgot to include the translator URL
+            showMessage("The dictionary URL needs to include the position of the lookup word or phrase. For this, use '%s' (without quotation marks).", "alert-danger");
+            error = true;
+        } else if (translator_uri.length == 0) {
+            // 3. user forgot to include the translator URL
 
-        //     showMessage("You need to specify the URL of the translator you want to use.", "alert-danger");
-        //     error = true;
-        // } else if (translator_uri.indexOf('%s') == -1) {
-        //     // 4. user forgot to include '%s' in the translator URL
+            showMessage("You need to specify the URL of the translator you want to use.", "alert-danger");
+            error = true;
+        } else if (translator_uri.indexOf('%s') == -1) {
+            // 4. user forgot to include '%s' in the translator URL
 
-        //     showMessage("The translator URL needs to include the position of the lookup word or phrase. For this, use '%s' (without quotation marks).", "alert-danger");
-        //     error = true;
-        // }
+            showMessage("The translator URL needs to include the position of the lookup word or phrase. For this, use '%s' (without quotation marks).", "alert-danger");
+            error = true;
+        }
 
-        // if (error) {
-        //     e.preventDefault();
-        //     e.stopPropagation();
-        // }
+        if (error) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
     }); // end #savebtn.on.click
 
     /**
