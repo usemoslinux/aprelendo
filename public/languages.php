@@ -31,18 +31,14 @@ require_once PUBLIC_PATH . 'header.php';
 use Aprelendo\Includes\Classes\Language;
 
 $user_id = $user->getId();
+$lang = new Language($pdo, $user_id);
 
-if (isset($_POST['submit'])) {                  // check if we need to save new language data
-    $lang = new Language($pdo, $user_id);
-    $lang->loadRecord($_POST['id']);
-    $lang->editRecord($_POST, $user->isPremium());
-} elseif (isset($_GET['chg'])) {        
-    $lang = new Language($pdo, $user_id);
+if (isset($_GET['chg'])) {           
     $lang->loadRecord($_GET['chg']);
 } elseif(isset($_GET['act'])) { 
-    $lang = new Language($pdo, $user_id);
     $lang->loadRecord($_GET['act']);
 } 
+
 ?>
 
     <div class="container mtb d-flex flex-grow-1 flex-column">

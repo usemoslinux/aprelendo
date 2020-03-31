@@ -22,9 +22,17 @@ require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
 $is_premium_user = $user->isPremium();
+
+if(empty($error_msg)) {
+    echo '<div id="alert-msg" class="d-none"></div>';
+} else {
+    echo '<div id="alert-msg" class="alert alert-danger">' . $error_msg .'</div>';
+}
+
 ?>
 
-<form class="" action="languages.php" method="post">
+
+<form id="form-editlanguage" method="post">
 
     <input type="hidden" name="id" value="<?php echo $lang->getId(); ?>">
     <input type="hidden" name="language" class="form-control" value="<?php echo $lang->getName(); ?>">

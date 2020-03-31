@@ -40,4 +40,89 @@ $(document).ready(function() {
             }
         });
     }); // end .btn-link.on.click
+
+    /**
+     * Edits language record
+     * This is triggered when user presses the "Save" button & submits the form
+     */
+    $("#form-editlanguage").on("submit", function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: "post",
+            url: "ajax/editlanguage.php",
+            data: $(this).serialize(),
+        })
+        .done(function (data) {
+            if (typeof data != "undefined" && data !== "") {
+                showMessage(data.error_msg, "alert-danger");
+            } else {
+                window.location.replace("languages.php");
+            }
+        })
+        .fail(function (xhr, ajaxOptions, thrownError) {
+            showMessage(
+                "Oops! There was an unexpected error trying to edit your language preferences.",
+                "alert-danger"
+            );
+        });
+    });
+
+    /**
+     * Does some checks before submiting the form's data
+     * Triggers when user clicks the Save button
+     */
+    $('#savebtn').on('click', function(e) {
+        // var dict_uri = $('#dict-uri').val();
+        // var translator_uri = $('#translator-uri').val();
+        // var error = false;
+
+        // // show an error message if...
+        
+        // if (dict_uri.length == 0) {
+        //     // 1. user forgot to include the dictionary URL
+            
+        //     showMessage("You need to specify the URL of the dictionary you want to use.", "alert-danger");
+        //     error = true;
+        // } else if (dict_uri.indexOf('%s') == -1) {
+        //     // 2. user forgot to include '%s' in the dictionary URL
+
+        //     showMessage("The dictionary URL needs to include the position of the lookup word or phrase. For this, use '%s' (without quotation marks).", "alert-danger");
+        //     error = true;
+        // } else if (translator_uri.length == 0) {
+        //     // 3. user forgot to include the translator URL
+
+        //     showMessage("You need to specify the URL of the translator you want to use.", "alert-danger");
+        //     error = true;
+        // } else if (translator_uri.indexOf('%s') == -1) {
+        //     // 4. user forgot to include '%s' in the translator URL
+
+        //     showMessage("The translator URL needs to include the position of the lookup word or phrase. For this, use '%s' (without quotation marks).", "alert-danger");
+        //     error = true;
+        // }
+
+        // if (error) {
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        // }
+    }); // end #savebtn.on.click
+
+    /**
+     * Shows custom message in the top section of the screen
+     * @param {string} html
+     * @param {string} type
+     */
+    function showMessage(html, type) {
+        $("#alert-msg")
+            .html(html)
+            .removeClass()
+            .addClass("alert " + type);
+        $(window).scrollTop(0);
+    } // end showMessage
+
+    
+
+
+
+    
+
 });

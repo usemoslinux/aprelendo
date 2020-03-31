@@ -95,6 +95,19 @@ class Language extends DBEntity
      */
     public function editRecord(array $new_record, bool $is_premium_user): void {
         try {
+            // check for errors first
+            if (empty($new_record['dict-uri'])) {
+                throw new \Exception('You need to specify the URL of the dictionary you want to use.');
+            } else if (strpos($new_record['dict-uri'], '%s') === false) {
+                throw new \Exception("The dictionary URL needs to include the position of the lookup word or phrase. For this, use '%s' (without quotation marks).");
+            } else if (empty($new_record['translator-uri'])) {
+                throw new \Exception('You need to specify the URL of the translator you want to use.');
+            } else if (strpos($new_record['translator-uri'], '%s') === false) {
+                throw new \Exception("The translator URL needs to include the position of the lookup word or phrase. For this, use '%s' (without quotation marks).");
+            }
+
+            // if everything is fine, proceed editing the record
+            
             $this->dictionary_uri = $new_record['dict-uri'];
             $this->translator_uri = $new_record['translator-uri'];
             $this->level          = $new_record['level'];
