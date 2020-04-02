@@ -55,8 +55,8 @@ class SharedTexts extends Texts
                               int $limit, int $sort_by): array {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
-            $filter_type_sql = $filter_type == 0 ? 'AND t.type > :filter_type' : 'AND t.type = :filter_type';
-            $filter_level_sql = $filter_level == 0 ? 'AND t.level > :filter_level' : 'AND t.level = :filter_level';
+            $filter_type_sql = $filter_type == 0 ? 'AND t.type >= :filter_type' : 'AND t.type = :filter_type';
+            $filter_level_sql = $filter_level == 0 ? 'AND t.level >= :filter_level' : 'AND t.level = :filter_level';
 
             $lang = new Language($this->pdo, $this->user_id);
             $lang->loadRecord($this->lang_id);
@@ -125,7 +125,7 @@ class SharedTexts extends Texts
             $lang->loadRecord($this->lang_id);
 
             $filter_level = $lang->getLevel();
-            $filter_level_sql = $filter_level == 0 ? 'AND t.level > :filter_level' : 'AND t.level = :filter_level';
+            $filter_level_sql = $filter_level == 0 ? 'AND t.level >= :filter_level' : 'AND t.level = :filter_level';
 
             $sql = "SELECT t.id, 
                     (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 

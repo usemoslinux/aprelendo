@@ -92,7 +92,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                 <div class="input-group">
                                     <input type="password" id="newpassword" name="newpassword" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required>
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fas fa-eye-slash" aria-hidden="true"></i></button>
                                     </div>
                                 </div>
                                 <small id="password-strength-text"></small>
@@ -102,7 +102,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                 <div class="input-group">
                                     <input type="password" id="newpassword-confirmation" name="newpassword-confirmation" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required >
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fas fa-eye-slash" aria-hidden="true"></i></button>
                                     </div>
                                 </div>
                                 <small id="passwords-match-text"></small>

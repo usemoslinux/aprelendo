@@ -445,6 +445,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     color: inherit;
     font-size: 1.5rem;
     padding-right: initial;
+    vertical-align: bottom;
 }
 
 .footer p {

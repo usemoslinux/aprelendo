@@ -292,8 +292,8 @@ class Texts extends DBEntity {
     public function countSearchRows(int $filter_type, int $filter_level, string $search_text): int {
         try {
             $search_text = '%' . $search_text . '%';
-            $filter_type_sql = $filter_type == 0 ? 'AND `type`>?' : 'AND `type`=?';
-            $filter_level_sql = $filter_level == 0 ? 'AND `level`>?' : 'AND `level`=?';
+            $filter_type_sql = $filter_type == 0 ? 'AND `type`>=?' : 'AND `type`=?';
+            $filter_level_sql = $filter_level == 0 ? 'AND `level`>=?' : 'AND `level`=?';
             
             $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
                     WHERE `user_id`=? 
@@ -319,7 +319,7 @@ class Texts extends DBEntity {
     */
     public function countAllRows(int $filter_level = 0): int {
         try {
-            $filter_level_sql = $filter_level == 0 ? 'AND `level`>?' : 'AND `level`=?';
+            $filter_level_sql = $filter_level == 0 ? 'AND `level`>=?' : 'AND `level`=?';
             $sql = "SELECT COUNT(`id`) FROM `{$this->table}` 
                     WHERE `user_id`=? AND `lang_id`=? $filter_level_sql";
 
@@ -352,8 +352,8 @@ class Texts extends DBEntity {
                               int $limit, int $sort_by): array {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
-            $filter_type_sql = $filter_type == 0 ? 'AND `type` > :filter_type' : 'AND `type` = :filter_type';
-            $filter_level_sql = $filter_level == 0 ? 'AND `level` > :filter_level' : 'AND `level` = :filter_level';
+            $filter_type_sql = $filter_type == 0 ? 'AND `type` >= :filter_type' : 'AND `type` = :filter_type';
+            $filter_level_sql = $filter_level == 0 ? 'AND `level` >= :filter_level' : 'AND `level` = :filter_level';
             
             $sql = "SELECT `id`, 
                             NULL, 
@@ -409,7 +409,7 @@ class Texts extends DBEntity {
     public function getAll(int $filter_level, int $offset, int $limit, int $sort_by): array  {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
-            $filter_level_sql = $filter_level == 0 ? 'AND `level`>:level' : 'AND `level`=:level';
+            $filter_level_sql = $filter_level == 0 ? 'AND `level`>= :level' : 'AND `level` = :level';
             $sql = "SELECT `id`, 
                     NULL, 
                     `title`, 

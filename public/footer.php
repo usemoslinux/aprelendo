@@ -50,6 +50,11 @@
                             <i class="fab fa-twitter"></i>
                         </a>
                     </li>
+                    <li class="list-inline-item">
+                        <a href="https://www.youtube.com/channel/UCc5gaiAsGU4sC09mvVjibCA" aria-label="Aprelendo's YouTube channel" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
