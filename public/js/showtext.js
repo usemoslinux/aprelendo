@@ -36,10 +36,11 @@ $(document).ready(function() {
     // $doc & $pagereader are used to make this JS code work when showing simple texts &
     // ebooks (which are displayed inside an iframe)
     var $doc = $(parent.document);
+    var $dic_frame = $doc.find("#dicFrame");
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
 
-    loadAudio();
+    // loadAudio();
 
     /**
      * Sets keyboard shortcuts for media player
@@ -348,8 +349,8 @@ $(document).ready(function() {
         getWordFrequency($selword.text(), doclang);
         setAddDeleteButtons();
 
-        $("#iframe-loader").attr('class','lds-ripple m-auto');
-        $("#dicFrame").attr('class','d-none');
+        $doc.find("#iframe-loader").attr('class','lds-ripple m-auto');
+        $dic_frame.attr('class','d-none');
 
         // build translate sentence url
         translate_paragraph_link = buildTranslateParagraphLink();
@@ -358,26 +359,23 @@ $(document).ready(function() {
         var search_text = $selword.text().replace(/\r?\n|\r/gm, " ");
         var url = dictionaryURI.replace("%s", encodeURIComponent(search_text));
 
-        $(parent.document)
-            .find("#dicFrame")
-            .get(0)
-            .contentWindow.location.replace(url);
+        $dic_frame.get(0)
+                  .contentWindow.location.replace(url);
         $("#btnadd").focus();
         // the previous line loads iframe content without adding it to browser history,
-        // as this one does: $('#dicFrame').attr('src', url);
+        // as this one does: $dic_frame.attr('src', url);
 
-        $(parent.document)
-            .find("#myModal")
+        $doc.find("#myModal")
             .modal("show");
     } // end showModal
 
     /**
      * Hides loader spinner when dictionary iframe finished loading
      */
-    $("#dicFrame").on("load", function() {
-        $("#iframe-loader").attr('class','d-none');
-        $(this).removeClass();
-    }); // end #dicFrame.on.load()
+    $dic_frame.on("load", function() {
+        $doc.find("#iframe-loader").attr('class','d-none');
+        $dic_frame.removeClass();
+    }); // end $dic_frame.on.load()
 
     $doc.on("click", "#btn-translate", function() {
         window.open(translate_paragraph_link);
