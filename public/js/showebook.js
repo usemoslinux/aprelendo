@@ -234,6 +234,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: "/ajax/archivetext.php",
+                async: false,
                 data: {
                     words: oldwords
                 }
