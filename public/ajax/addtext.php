@@ -74,10 +74,16 @@ try {
             $xml_text = $texts_table->extractFromXML($text);
             
             if ($xml_text != false) {
+                /* For some reason new lines on the client side are counted by Jquery/JS as '\n', 
+                   but on the server side the $_POST variable gets '\r\n' instead. 
+                   To make them both compatible, we need to eliminate all instances of '\r' */
+                $text = preg_replace('/\r/m', '', $text);
                 if (mb_strlen($xml_text) > 20000) {
                     $errors[] = "<li>Maximum supported text length is 20.000 characters.</li>";
                 }    
             } else {
+                // same as above
+                $text = preg_replace('/\r/m', '', $text);
                 if (mb_strlen($text) > 20000) {
                     $errors[] = "<li>Maximum supported text length is 20.000 characters.</li>";
                 }
