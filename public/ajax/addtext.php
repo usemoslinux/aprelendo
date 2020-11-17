@@ -78,13 +78,13 @@ try {
                    but on the server side the $_POST variable gets '\r\n' instead. 
                    To make them both compatible, we need to eliminate all instances of '\r' */
                 $text = preg_replace('/\r/m', '', $text);
-                if (mb_strlen($xml_text) > 20000) {
+                if (mb_strlen($xml_text) > 10000) {
                     $errors[] = "<li>Maximum supported text length is 20.000 characters.</li>";
                 }    
             } else {
                 // same as above
                 $text = preg_replace('/\r/m', '', $text);
-                if (mb_strlen($text) > 20000) {
+                if (mb_strlen($text) > 10000) {
                     $errors[] = "<li>Maximum supported text length is 20.000 characters.</li>";
                 }
             }

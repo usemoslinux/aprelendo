@@ -107,7 +107,7 @@ $(document).ready(function() {
     $("#text").on("input", function() {
         var $textarea = $(this);
         var $span_chars_left = $("#span-chars-left");
-        var chars_left = 20000 - $textarea.val().length;
+        var chars_left = 10000 - $textarea.val().length;
         var msg_text = chars_left < 0 ? " chars over maximum" : " left";
 
         if (chars_left < 0) {
@@ -134,9 +134,9 @@ $(document).ready(function() {
         var reader = new FileReader();
         reader.onload = function(e) {
             var text = e.target.result;
-            if (text.length > 20000) {
+            if (text.length > 10000) {
                 showMessage(
-                    "This file has more than 20000 characters. Please try again with a shorter one.",
+                    "This file has more than 10,000 characters. Please try again with a shorter one.",
                     "alert-danger"
                 );
             } else {
