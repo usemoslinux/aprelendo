@@ -10,8 +10,6 @@
   <meta name="keywords"
     content="language, learning, language learning, flashcards, total reading, reading, news, ebooks, books, videos">
   <meta name="author" content="Aprelendo">
-  <meta name="google-signin-client_id"
-    content="1031628353503-jauslklbhvifr2iv7rr0mglmmp496081.apps.googleusercontent.com">
   <link rel='shortcut icon' type='image/x-icon' href='img/logo.svg' />
 
   <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>

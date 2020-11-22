@@ -44,7 +44,7 @@ require_once PUBLIC_PATH . 'header.php';
                     <a class="active">Add ebook</a>
                 </li>
             </ol>
-            <div class="alert alert-info"><i class="fas fa-info-circle"></i> Ebooks will remain in your "private" library. Therefore, you will be the only one with access to them.</div>
+            <div class="alert alert-info"><i class="fas fa-info-circle"></i> Ebooks will remain in your "private" library. Only you will be able to access to them.</div>
             <div id="alert-msg" class="d-none"></div>
             <div class="progress d-none">
                 <div id="upload-progress-bar" class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" role="progressbar"

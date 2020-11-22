@@ -22,8 +22,8 @@ $(document).ready(function() {
     var $sel_start, $sel_end;
     var start_sel_time, end_sel_time;
     var $selword = null; // jQuery object of the selected word/phrase
-    dictionaryURI = "";
-    translatorURI = "";
+    dictionary_URI = "";
+    translator_URI = "";
     var translate_paragraph_link = "";
     prevsel = 0; // previous selection index in #selPhrase
     resume_video = false;
@@ -37,8 +37,8 @@ $(document).ready(function() {
         dataType: "json"
     }).done(function(data) {
         if (data.error_msg == null) {
-            dictionaryURI = data.dictionary_uri;
-            translatorURI = data.translator_uri;
+            dictionary_URI = data.dictionary_uri;
+            translator_URI = data.translator_uri;
         }
     });
 
@@ -292,7 +292,7 @@ $(document).ready(function() {
             .addBack();
         var sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ");
 
-        return translatorURI.replace("%s", encodeURIComponent(sentence));
+        return translator_URI.replace("%s", encodeURIComponent(sentence));
     } // end buildTranslateParagraphLink
 
     /**
@@ -309,7 +309,6 @@ $(document).ready(function() {
             url: "/ajax/getwordfreq.php",
             data: { word: word, lg_iso: lg_iso }
         }).done(function(data) {
-            console.log("freq: " + data);
             if (data == 0) {
                 $freqlvl.hide();
             } else if (data < 81) {
@@ -348,7 +347,7 @@ $(document).ready(function() {
 
         // show dictionary
         var selword_text = $selword.text().replace(/(\r\n|\n|\r)/gm, " ");
-        var url = dictionaryURI.replace("%s", encodeURIComponent(selword_text));
+        var url = dictionary_URI.replace("%s", encodeURIComponent(selword_text));
 
         $(parent.document)
             .find("#dicFrame")

@@ -18,17 +18,18 @@
  */
 
 $(document).ready(function() {
-    var highlighting = false;
-    var $sel_start, $sel_end;
-    var $start_sel_time, $end_sel_time;
-    var $swiping = false;
-    var $selword = null; // jQuery object of the selected word/phrase
+    var highlighting = false; // selection/highlighting mode
+    var $sel_start, $sel_end; // Jquery object with the first & last elements of the selection 
+    var start_sel_time, end_sel_time; // used in mobile devices to activate "word/phrase selection mode"
+    var start_sel_pos_top; // used in mobile devices to activate "word/phrase selection mode"
+    var swiping = false; // used in mobile devices to activate "word/phrase selection mode"
+    var $selword = null; // jQuery object with selected word/phrase
     var time_handler = null;
-    var dictionaryURI = "";
-    var translatorURI = "";
+    var dictionary_URI = "";
+    var translator_URI = "";
     var translate_paragraph_link = "";
     var phase = 1; // first phase of the learning cycle
-    var playingaudio = false;
+    var playing_audio = false;
     var abloop_start = 0;
     var abloop_end = 0;
     window.parent.show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
@@ -40,7 +41,7 @@ $(document).ready(function() {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     var $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
 
-    loadAudio();
+    // loadAudio();
 
     /**
      * Sets keyboard shortcuts for media player
@@ -131,14 +132,14 @@ $(document).ready(function() {
      * @param {event object} e
      */
     $(document).on("mousedown touchstart", ".word", function(e) {
-        e.preventDefault();
         e.stopPropagation();
         if (e.which < 2) {
             // if left mouse button / touch...
             highlighting = true;
             $sel_start = $sel_end = $(this);
             if (e.type == "touchstart") {
-                $start_sel_time = new Date();
+                start_sel_time = new Date();
+                start_sel_pos_top = $sel_start.offset().top - $(window).scrollTop();
             }
         }
     }); // end .word.on.mousedown/touchstart
@@ -148,30 +149,33 @@ $(document).ready(function() {
      * @param {event object} e
      */
     $(document).on("mouseup touchend", ".word", function(e) {
-        e.preventDefault();
         e.stopPropagation();
 
-        $end_sel_time = new Date();
+        end_sel_time = new Date();
+        
+        if (e.type == "touchend") {
+            $('html').css({'overflow':'visible'});    
+            swiping = false;
+        }
 
-        if (e.type == "touchend" && ($end_sel_time - $start_sel_time < 1000) ) {
-            return;
+        if (highlighting) {
+            if (e.which < 2) {
+                // if left mouse button / touch...
+                highlighting = false;
+                
+                if ($sel_start === $sel_end) {
+                    $closest = $(this).closest('.learning, .learned, .forgotten');
+                    if ($closest.length) {
+                        $selword = $closest;
+                    } else {
+                        $selword = $(this);
+                    }
+                }
+                showModal();
+            }
         }
         
-        if (e.which < 2) {
-            // if left mouse button / touch...
-            highlighting = false;
-            if ($sel_start === $sel_end) {
-                $closest = $(this).closest('.learning, .learned, .forgotten');
-                if ($closest.length) {
-                    $selword = $closest;
-                } else {
-                    $selword = $(this);
-                }
-            }
-            showModal();
-        }
-
-        $start_sel_time = $end_sel_time = new Date();
+        start_sel_time = end_sel_time = new Date();
     }); // end .word.mouseup/touchend
 
     /**
@@ -190,16 +194,24 @@ $(document).ready(function() {
      * @param {event object} e
      */
     $(document).on("mouseover touchmove", ".word", function(e) {
-        e.preventDefault();
         e.stopPropagation();
 
-        $end_sel_time = new Date();
+        end_sel_time = new Date();
 
-        if (e.type == "touchmove" && ($end_sel_time - $start_sel_time < 1000) ) {
-            return;
-        }
+        if (e.type == "touchmove") {
+            var cur_sel_pos_top = $(this).offset().top - $(window).scrollTop();
+            swiping = swiping ? swiping : Math.abs(start_sel_pos_top - cur_sel_pos_top) > 0;
+
+            if (!swiping) {
+                highlighting = (end_sel_time - start_sel_time > 1000);
+            }
+        } 
 
         if (highlighting) {
+            if (e.type == "touchmove") {
+                $('html').css({'overflow':'hidden'});
+            }
+            
             $(".word").removeClass("highlighted");
 
             $sel_end =
@@ -235,8 +247,8 @@ $(document).ready(function() {
         dataType: "json"
     }).done(function(data) {
         if (data.error_msg == null) {
-            dictionaryURI = data.dictionary_uri;
-            translatorURI = data.translator_uri;
+            dictionary_URI = data.dictionary_uri;
+            translator_URI = data.translator_uri;
         }
     }); // end $.ajax
 
@@ -265,7 +277,7 @@ $(document).ready(function() {
             .addBack();
         var sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ");
 
-        return translatorURI.replace("%s", encodeURI(sentence));
+        return translator_URI.replace("%s", encodeURI(sentence));
     } // end buildTranslateParagraphLink
 
     /**
@@ -340,9 +352,9 @@ $(document).ready(function() {
                 audioplayer.prop("currentTime")
             ) {
                 audioplayer.trigger("pause"); // pause audio
-                playingaudio = true;
+                playing_audio = true;
             } else {
-                playingaudio = false;
+                playing_audio = false;
             }
         }
 
@@ -357,7 +369,7 @@ $(document).ready(function() {
 
         // show dictionary
         var search_text = $selword.text().replace(/\r?\n|\r/gm, " ");
-        var url = dictionaryURI.replace("%s", encodeURIComponent(search_text));
+        var url = dictionary_URI.replace("%s", encodeURIComponent(search_text));
 
         $dic_frame.get(0)
                   .contentWindow.location.replace(url);
@@ -769,7 +781,7 @@ $(document).ready(function() {
         var audioplayer = $("#audioplayer");
 
         // Resumes playing if audio was paused when clicking on a word
-        if (playingaudio && audioplayer.length) {
+        if (playing_audio && audioplayer.length) {
             audioplayer.trigger("play");
         }
 
