@@ -42,9 +42,9 @@ try {
         throw new \Exception(403);
     }
 
-    $audiolang = array( 'en' => 'en-gb', 
+    $audiolang = array( 'en' => 'en-us', 
                         'es' => 'es-es', 
-                        'pt' => 'pt-pt', 
+                        'pt' => 'pt-br', 
                         'fr' => 'fr-fr', 
                         'it' => 'it-it', 
                         'de' => 'de-de');

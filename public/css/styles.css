@@ -848,6 +848,8 @@ input {
     height: 97%;
     margin-bottom: 10px;
     margin-top: 10px;
+    max-width: 750px;
+    width: 100%;
 }
 
 #myModal .modal-content {
@@ -919,10 +921,6 @@ input {
     .flex>.col-lg-9 {
         flex: 1;
         width: auto;
-    }
-
-    .modal-dialog {
-        margin: 15px auto 0 auto;
     }
 }
 
