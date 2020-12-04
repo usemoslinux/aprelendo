@@ -86,14 +86,19 @@ try {
 ?>
 
 <!DOCTYPE html>
-<html <?php echo getCSS($class, []); ?> >
+<html>
 
 <head>
-    <meta charset="utf-8">
+<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Language learning platform designed to boost your reading, listening, speaking and writing skills.">
+    <meta name="keywords" content="language, learning, language learning, flashcards, total reading, reading, news, ebooks, books, videos">
+    <meta name="author" content="Aprelendo">
+    <meta name="google-signin-client_id" content="913422235077-p01j7jbo80c7vpbesb4uuvl10vemfl13.apps.googleusercontent.com" >
     <link rel='shortcut icon' type='image/x-icon' href='img/logo.svg' />
-    <title>Aprelendo</title>
+
+    <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
 
     <!-- Epub.js & jszip -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>

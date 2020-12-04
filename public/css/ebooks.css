@@ -24,77 +24,9 @@ select {
     cursor: pointer;
 }
 
-.learning  .word:hover,
-.learned   .word:hover,
-.forgotten .word:hover {
-    background-color: inherit;
-}
-
-.word:hover {
-    background-color: #e8e8e8;
-}
-
-.highlighted {
-    background-color: #e8e8e8 !important;
-}
-
-.reviewing {
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
-}
-
-.new {
-    border-color: DodgerBlue;
-}
-
-.new:hover {
-    background-color: DodgerBlue;
-}
-
-.learning {
-    border-color: orange;
-}
-
-.learning:hover {
-    background-color: orange;
-}
-
-.learned {
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
-    border-color: yellowgreen;
-}
-
-.learned:hover {
-    background-color: yellowgreen;
-}
-
-.forgotten {
-    border-color: red;
-}
-
-.forgotten:hover {
-    background-color: red;
-}
-
-.frequency-list {
-    border-bottom-width: 1px;
-    border-bottom-style: dotted;
-    border-color: DodgerBlue;
-}
-
 .lightmode {
     background-color: white;
     color: #000000;
-    -moz-user-select: none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-}
-
-.darkmode {
-    background-color: #323847;
-    color: whitesmoke;
     -moz-user-select: none;
 	-khtml-user-select: none;
 	-webkit-user-select: none;
@@ -108,6 +40,98 @@ select {
 	-khtml-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
+}
+
+.darkmode {
+    background-color: #323847;
+    color: #cccccc;
+    -moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.learning  .word:hover,
+.learned   .word:hover,
+.forgotten .word:hover {
+    background-color: inherit;
+}
+
+.word:hover {
+    background-color: #e8e8e8;
+}
+
+.highlighted {
+    background-color: #e8e8e8;
+}
+
+.darkmode .highlighted {
+    color: dimgray !important;
+    background-color: whitesmoke !important;
+}
+
+.darkmode .word:hover {
+    color: dimgray;
+    background-color: whitesmoke;
+}
+
+.darkmode .reviewing:hover,
+.darkmode .learned:hover {
+    color: whitesmoke;
+}
+
+.sepiamode .word:hover
+{
+    background-color: ghostwhite;
+}
+
+.sepiamode .highlighted  {
+    background-color: ghostwhite !important;
+}
+
+.reviewing {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+}
+
+.new {
+    border-color: DodgerBlue;
+}
+
+.word.new:hover {
+    background-color: DodgerBlue;
+}
+
+.learning {
+    border-color: orange;
+}
+
+.word.learning:hover {
+    background-color: orange;
+}
+
+.learned {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-color: green;
+}
+
+.word.learned:hover {
+    background-color: green;
+}
+
+.forgotten {
+    border-color: crimson;
+}
+
+.word.forgotten:hover {
+    background-color: crimson;
+}
+
+.frequency-list {
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+    border-color: DodgerBlue;
 }
 
 #toc {
@@ -169,21 +193,34 @@ select {
 
 /* SIDEBAR */
 #opener {
-    /* position: absolute; */
     top: 0;
     left: 0;
     padding: 10px;
-    stroke: #E2E2E2;
-    fill: #E2E2E2;
+}
+
+.lightmode #opener {
+    stroke: #6c757d;
+    fill: #6c757d;
+}
+
+.sepiamode #opener {
+    stroke: #384452;
+    fill: #384452;
+}
+
+.darkmode #opener {
+    stroke: #cccccc;
+    fill: #cccccc;
 }
 
 #opener:hover {
-    stroke: #777;
-    fill: #777;
+    stroke: #5a6268;
+    fill: #5a6268;
 }
 
 #navigation {
     background: whitesmoke;
+    color: black;
     font: 14px 'Lato';
     max-height: 100vh;
     left: 0;
@@ -295,12 +332,26 @@ svg {
 }
 
 #header {
-    background-color: whitesmoke;
     font: 14px 'Lato';
     height: 44px;
     position: sticky;
     top: 0;
     z-index: 2;
+}
+
+.lightmode #header {
+    background-color: white;
+    color: #000000;
+}
+
+.sepiamode #header {
+    background-color: #ebe7d9;
+    color: #384452;
+}
+
+.darkmode #header {
+    background-color: #323847;
+    color: #cccccc;
 }
 
 /* Underline words spinner */

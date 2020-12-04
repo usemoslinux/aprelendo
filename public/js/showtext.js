@@ -880,13 +880,13 @@ $(document).ready(function() {
             $curinput.val().toLowerCase() ==
             $curinput.attr("data-text").toLowerCase()
         ) {
-            $curinput.css("border-color", "yellowgreen");
+            $curinput.css("border-color", "green");
             $curinput
                 .next("span")
                 .not(".d-none")
                 .addClass("d-none");
         } else if ($.trim($curinput.val()) != "") {
-            $curinput.css("border-color", "tomato");
+            $curinput.css("border-color", "crimson");
             $curinput
                 .next("span")
                 .removeClass("d-none")

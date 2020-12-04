@@ -74,12 +74,10 @@ $(document).ready(function() {
         rendition.themes.default({
             body: {
                 "font-family": reader.style.fontFamily + " !important",
-                padding: "0 5% !important"
-            },
-            p: {
                 "font-size": reader.style.fontSize + " !important",
                 "text-align": reader.style.textAlign + " !important",
-                "line-height": reader.style.lineHeight + " !important"
+                "line-height": reader.style.lineHeight + " !important",
+                "padding": "0 5% !important"
             }
         });
 

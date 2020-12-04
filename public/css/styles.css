@@ -508,23 +508,6 @@ ol {
     color: #0275d8;
 }
 
-/* DISPLAY MODES */
-
-.lightmode {
-    background-color: white;
-    color: #000000;
-}
-
-.darkmode {
-    background-color: #323847;
-    color: #aaaaaa;
-}
-
-.sepiamode {
-    background-color: #ebe7d9;
-    color: #384452;
-}
-
 #eucookielaw {
     background-color: rgba(20, 20, 20, 0.9);
     min-height: 26px;
@@ -714,6 +697,21 @@ a[role="menuitem"] {
     cursor: pointer;
 }
 
+.lightmode {
+    background-color: white;
+    color: #000000;
+}
+
+.darkmode {
+    background-color: #323847;
+    color: #cccccc;
+}
+
+.sepiamode {
+    background-color: #ebe7d9;
+    color: #384452;
+}
+
 .learning  .word:hover,
 .learned   .word:hover,
 .forgotten .word:hover {
@@ -725,7 +723,31 @@ a[role="menuitem"] {
 }
 
 .highlighted {
-    background-color: #e8e8e8 !important;
+    background-color: #e8e8e8;
+}
+
+.darkmode .highlighted {
+    color: dimgray !important;
+    background-color: whitesmoke !important;
+}
+
+.darkmode .word:hover {
+    color: dimgray;
+    background-color: whitesmoke;
+}
+
+.darkmode .reviewing:hover,
+.darkmode .learned:hover {
+    color: whitesmoke;
+}
+
+.sepiamode .word:hover
+{
+    background-color: ghostwhite;
+}
+
+.sepiamode .highlighted  {
+    background-color: ghostwhite !important;
 }
 
 .reviewing {
@@ -737,7 +759,7 @@ a[role="menuitem"] {
     border-color: DodgerBlue;
 }
 
-.new:hover {
+.word.new:hover {
     background-color: DodgerBlue;
 }
 
@@ -745,26 +767,26 @@ a[role="menuitem"] {
     border-color: orange;
 }
 
-.learning:hover {
-    background-color: orange;
+.word.learning:hover {
+    background-color: orange; 
 }
 
 .learned {
     border-bottom-width: 2px;
     border-bottom-style: solid;
-    border-color: yellowgreen;
+    border-color: green;
 }
 
-.learned:hover {
-    background-color: yellowgreen;
+.word.learned:hover {
+    background-color: green;
 }
 
 .forgotten {
-    border-color: red;
+    border-color: crimson;
 }
 
-.forgotten:hover {
-    background-color: red;
+.word.forgotten:hover {
+    background-color: crimson;
 }
 
 .frequency-list {
@@ -815,6 +837,7 @@ video {
     -moz-transition: border-color 0.5s;
     border-width: 0;
     border-bottom: 2px solid gray;
+    color: inherit;
 }
 
 .dict-input-group {
@@ -829,7 +852,7 @@ video {
 .dict-wronganswer {
     background-color: inherit;
     border: 0;
-    color: tomato;
+    color: crimson;
     display: inherit;
     font-size: inherit;
     padding: 0 4px 0 10px;
@@ -842,6 +865,7 @@ input {
 /* MODAL DIALOG (TO ADD NEW WORDS) */
 
 #myModal .modal-dialog {
+    color: black;
     display: flex;
     flex: 1;
     font-family: "Lato", sans-serif;

@@ -47,9 +47,9 @@ require_once PUBLIC_PATH . 'header.php';
             <p><strong style="background-color:DodgerBlue">New</strong>: words you've just added to your learning list.</p>
             <p><strong style="background-color:Orange">Reviewed</strong>: words that you reviewed at least once but
                 that still need additional reviews.</p>
-            <p><strong style="background-color:MediumSeaGreen">Learned</strong>: words that the
+            <p><strong style="background-color:Green">Learned</strong>: words that the
                 system thinks you have already reviewed enough times.</p>
-            <p><strong style="background-color:Tomato">Forgotten</strong>: words you reviewed or learned in the past,
+            <p><strong style="background-color:Crimson">Forgotten</strong>: words you reviewed or learned in the past,
                 but that you marked for learning once again.</p>
             <p><small>This chart shows only "unique" words or phrases.</small></p>
         </div>
