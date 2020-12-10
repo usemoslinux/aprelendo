@@ -417,19 +417,23 @@ class Reader extends Text
                         <div></div>
                     </div>';
 
-        $html .=   '<audio controls id="audioplayer" class="d-none">
-                        <source src="" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                    <form id="audioplayer-speedbar" class="d-none">
-                        <div class="form-group flex-pbr-form">
-                            <label id="label-speed" class="basic" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
-                            <input id="pbr" type="range" class="custom-range flex-pbr" value="1" min="0.5" max="2" step="0.1">
-                            <label id="label-abloop" class="px-1 basic">A-B Loop:</label>
-                            <button id="btn-abloop" class="btn btn-outline-secondary btn-sm">A</button>
-                        </div>
-                    </form>
-                    ';
+                    
+        $display_mode_css = $this->prefs->getDisplayMode() . 'mode';
+
+        $html .=   '<div id="audioplayer-container" class="' . $display_mode_css . '">' .
+                        '<audio controls id="audioplayer" class="d-none">
+                                <source src="" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                            <form id="audioplayer-speedbar" class="d-none">
+                                <div id="audioplayer-speedbar-container">
+                                    <label id="label-speed" class="basic" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
+                                    <input id="range-speed" type="range" class="custom-range" value="1" min="0.5" max="2" step="0.1">
+                                    <label id="label-abloop" class="px-1 basic">A-B Loop:</label>
+                                    <button id="btn-abloop" class="btn btn-outline-secondary btn-sm">A</button>
+                                </div>
+                            </form>
+                        </div>';
         
         $html .= '<hr>';
         

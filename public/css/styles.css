@@ -383,6 +383,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 
 .close {
     right: 0 !important;
+    padding: .75rem .75rem;
 }
 
 .container {
@@ -795,9 +796,11 @@ a[role="menuitem"] {
     border-color: gray;
 }
 
-audio,
-video {
+audio {
     width: 100%;
+}
+
+#audioplayer-container {
     position: sticky;
     top: 0;
     z-index: 1;
@@ -808,13 +811,39 @@ video {
     white-space: normal;
 }
 
-#label-speed, #label-abloop {
+#label-speed {
     margin-top: 4px;
+    flex-basis: 75px;
+    flex-shrink: 0;
+}
+
+#audioplayer-speedbar-container {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    align-items: stretch;
+    margin: 0;
+}
+
+#range-speed {
+    background-color: transparent;
+    flex-grow: 1;
+    margin-left: 10px;
+    margin-top: 3px;
+    width: 50px;
+}
+
+#label-abloop {
+    margin-top: 4px;
+    flex-basis: 66px;
+    flex-shrink: 0;
 }
 
 #btn-abloop {
     font: 0.85rem 'Lato';
-    padding: .0 0.5rem;
+    /* padding: .0 0.5rem; */
+    flex-basis: 30px;
+    flex-shrink: 0;
 }
 
 #alert-msg-phase {
@@ -899,18 +928,6 @@ input {
 
 #bdgfreqlvl {
     border-radius: 0;
-}
-
-.flex-pbr-form {
-    display: flex;
-}
-
-.flex-pbr {
-    background-color: transparent;
-    display: flex;
-    flex: 1;
-    margin-left: 10px;
-    margin-top: 3px;
 }
 
 .btn-add {
