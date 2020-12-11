@@ -109,6 +109,17 @@ class Texts extends DBEntity {
             $level = $this->calculateDifficulty($text);
             $nr_of_words = $this->nr_of_words;
         }
+
+
+        // fix string casings before saving
+        if (mb_strtoupper($title, 'UTF-8') == $title) {
+            // don't allow all upper case titles
+            $title =  mb_strtoupper(mb_substr($title, 0, 1)) . mb_strtolower(mb_substr($title, 1));
+        }
+
+        $author     =  mb_convert_case($author, MB_CASE_TITLE, 'UTF-8');
+        $source_url =  mb_convert_case($author, MB_CASE_TITLE, 'UTF-8');
+        $audio_url  =  mb_convert_case($author, MB_CASE_TITLE, 'UTF-8');
         
         try {
             // add text to table
