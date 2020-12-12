@@ -427,7 +427,7 @@ class Reader extends Text
                             </audio>
                             <form id="audioplayer-speedbar" class="d-none">
                                 <div id="audioplayer-speedbar-container">
-                                    <label id="label-speed" class="basic" for="pbr">Speed: <span id="currentpbr">1.0</span> x</label>
+                                    <label id="label-speed" class="basic" for="range-speed">Speed: <span id="currentpbr">1.0</span> x</label>
                                     <input id="range-speed" type="range" class="custom-range" value="1" min="0.5" max="2" step="0.1">
                                     <label id="label-abloop" class="px-1 basic">A-B Loop:</label>
                                     <button id="btn-abloop" class="btn btn-outline-secondary btn-sm">A</button>

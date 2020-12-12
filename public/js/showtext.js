@@ -792,7 +792,7 @@ $(document).ready(function() {
     /**
      * Changes playback speed when user moves slider
      */
-    $("body").on("input change", "#pbr", function() {
+    $("body").on("input change", "#range-speed", function() {
         cpbr = parseFloat($(this).val()).toFixed(1);
         $("#currentpbr").text(cpbr);
         $("#audioplayer").prop("playbackRate", cpbr);
