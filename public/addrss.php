@@ -36,30 +36,34 @@ require_once PUBLIC_PATH . 'header.php';
     <div class="container mtb d-flex flex-grow-1 flex-column">
         <div class="row">
             <div class="col-12">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="texts.php">Home</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a class="active">Add RSS article</a>
-                    </li>
-                </ol>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="texts.php">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a class="active">Add RSS article</a>
+                        </li>
+                    </ol>
+                </nav>
                 <div class="alert alert-info"><i class="fas fa-info-circle"></i> All RSS texts you add to Aprelendo will be shared with the rest of our community. You will find them in the "<a class="alert-link" href="sharedtexts.php">shared texts</a>" section.</div>
             </div>
             <div class="col-12">
                 <div class="row flex">
                     <div class="col-sm-12">
-                        <div class="lds-ripple mx-auto">
-                            <div></div>
-                            <div></div>
-                        </div>
+                        <main>
+                            <div class="lds-ripple mx-auto">
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </main>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script defer src="js/addrss.js"></script>
+    <script defer src="js/addrss-min.js"></script>
     <?php require_once 'footer.php'; ?>
 
     

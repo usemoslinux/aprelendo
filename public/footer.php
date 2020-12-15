@@ -40,18 +40,23 @@
                     <li class="list-inline-item">
                         <a id="support" href="support.php">Support</a>
                     </li>
+                </ul>
+                <ul class="list-inline">
                     <li class="list-inline-item">
-                        <a href="https://www.facebook.com/aprelendo" aria-label="Aprelendo's Facebook Page" target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.facebook.com/aprelendo" aria-label="Aprelendo's Facebook Page"
+                            target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-facebook"></i>
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="https://twitter.com/aprelendo" aria-label="Aprelendo's Twitter Page" target="_blank" rel="noopener noreferrer">
+                        <a href="https://twitter.com/aprelendo" aria-label="Aprelendo's Twitter Page" target="_blank"
+                            rel="noopener noreferrer">
                             <i class="fab fa-twitter"></i>
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="https://www.youtube.com/channel/UCc5gaiAsGU4sC09mvVjibCA" aria-label="Aprelendo's YouTube channel" target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.youtube.com/channel/UCc5gaiAsGU4sC09mvVjibCA"
+                            aria-label="Aprelendo's YouTube channel" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-youtube"></i>
                         </a>
                     </li>

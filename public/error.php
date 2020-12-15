@@ -28,7 +28,6 @@ $error_msg = isset($_GET['message']) ? $_GET['message'] : '';
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
         content="Language learning platform designed to boost your reading, listening, speaking and writing skills.">
@@ -39,17 +38,19 @@ $error_msg = isset($_GET['message']) ? $_GET['message'] : '';
 
     <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
 
-    <link rel="stylesheet" type="text/css" href="css/500.css">
+    <link rel="stylesheet" type="text/css" href="css/500-min.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato">
 </head>
 
 <body>
-    <div class="page-wrap">
-        <h1>Oops!</h1>
-        <h2><?php echo $error; ?></h2>
-        <p><?php echo $error_msg; ?></p>
-        <p><a href="/">Home</a></p>
-    </div>
+    <main>
+        <div class="page-wrap">
+            <h1>Oops!</h1>
+            <h2><?php echo $error; ?></h2>
+            <p><?php echo $error_msg; ?></p>
+            <p><a href="/">Home</a></p>
+        </div>
+    </main>
 </body>
 
 </html>

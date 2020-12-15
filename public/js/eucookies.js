@@ -19,7 +19,7 @@
 
 $(document).ready(function() {
     if (document.cookie.indexOf("accept_cookies") === -1) {
-        $("#eucookielaw").fadeIn(1200, function() {
+        $("#eucookielaw").fadeIn(800, function() {
             $(this).show();
         });
     }
@@ -29,7 +29,7 @@ $(document).ready(function() {
      */
     $("#removecookie").click(function() {
         setCookie("accept_cookies", true, 365 * 10);
-        $("#eucookielaw").fadeOut(1200, function() {
+        $("#eucookielaw").fadeOut(800, function() {
             $(this).remove();
         });
     }); // end #removecookie.on.click

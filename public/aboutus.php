@@ -35,59 +35,65 @@ if (!$user->isLoggedIn()) {
 <div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
         <div class="col-sm-12">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="index.php">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a class="active">About us</a>
-                </li>
-            </ol>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="index.php">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="active">About us</a>
+                    </li>
+                </ol>
+            </nav>
         </div>
-        <!-- /col -->
     </div>
-    <!--/row -->
-
-    <!-- TEAM -->
-    <div class="simple-text">
-        <div class="row vertical-align-center">
-            <div class="col-sm-9">
-                <h4>Team</h4>
-                <p>Hey guys! I'm Pablo, creator of Aprelendo. I'm a diplomat and as part of my job I'm always in contact with people from other countries and frequently need to communicate in several languages.</p>
-                <p>I am particularly intrigued about how people become fluent in a second language. Especially as we tend to see people that are proficient in more than one language as geniuses that have a special talent for that. However, if you think about it, we all learned to speak our native language without problems. So, we should be able to do it a second time, right? It seems evident to me that there is something very wrong with the way foreign languages are taught in academic institutions around the world. Aprelendo is my small contribution to change that situation. Also, it allowed me to combine two of my biggest passions: computer science and languages.</p>
+    
+    <main>
+        <div class="simple-text">
+            <!-- TEAM -->
+            <div class="row vertical-align-center">
+                <div class="col-sm-9">
+                    <section>
+                        <h4>Team</h4>
+                        <p>Hey guys! I'm Pablo, creator of Aprelendo. I'm a diplomat and as part of my job I'm always in contact with people from other countries and frequently need to communicate in several languages.</p>
+                        <p>I am particularly intrigued about how people become fluent in a second language. Especially as we tend to see people that are proficient in more than one language as geniuses that have a special talent for that. However, if you think about it, we all learned to speak our native language without problems. So, we should be able to do it a second time, right? It seems evident to me that there is something very wrong with the way foreign languages are taught in academic institutions around the world. Aprelendo is my small contribution to change that situation. Also, it allowed me to combine two of my biggest passions: computer science and languages.</p>
+                    </section>
+                </div>
+                <div class="col-sm-3 d-none d-sm-block">
+                    <figure>
+                        <img class="rounded-circle" src="img/avatar_pablo.jpg" alt="Pablo Castagnino - Photo">
+                    </figure>
+                </div>
             </div>
-            <div class="col-sm-3 d-none d-sm-block">
-                <img class="rounded-circle" src="img/avatar_pablo.jpg" alt="Pablo Castagnino - Photo">
+
+            <!-- ABOUT APRELENDO -->
+            <br>
+            <div class="row vertical-align-center">
+                <div class="col-sm-9">
+                    <section>
+                        <h4>About aprelendo</h4>
+                        <p>Evidence shows that the best way to learn a language is through immersion. That's how we all learned to speak our native language. The real challenge is how to achieve that with a second language that few people around you use. Believe me, it's not easy. In my experience, people who become really fluent in a second language usually use it at home in some way or another and have the help of a "caring and interested tutor" (either their parents or soulmate).</p>
+
+                        <p>Yet, using a second language 100% of the time can be quite difficult to achieve. For starters, not everyone has the chance to have a "caring tutor" at home. Besides, it is increasingly difficult to find one in a business or day-to-day environement. Apart from this, it can be very demotivating (especially in the initial levels) to spend the whole day using a second language, and some may see it as a waste of time (because you will take longer to do everything, even thinking). Also, depending on your proficiency level and the different contexts in which you spend most of your day, it may even be materially impossible to practice immersion since your colleagues and friends may not understand that language or will not have the patience to deal with you, especially if you do not share a similar level of proficiency. Living in another country might help, but it's not enough, as nowadays many people may speak English or even your native language.</p>
+
+                        <p>In a context in which the Internet has become a tool for bringing people together and disseminating information, online learning has become an increasingly popular alternative. Some language learning services allow you to contact native speakers and chat with them, at your best convenience. However, they don't offer a complete learning experience and sooner or later they end up being tiring and tremendously boring. Truth is that after a couple of sessions you no longer know what to talk about with people on the other side, not to mention that it's hard to find someone with whom you really share something. Other services focus almost entirely on vocabulary acquisition, by using of flashcards or other similar methods, like gamification.</p>
+                        
+                        <p>Aprelendo, on the other hand, is based on the idea that learning a new language by reading texts you like is easier, more engaging and -more importantly- more effective than reviewing stand-alone flashcards, as most language learning software seem to do these days. It is also based on the idea that it is often impossible to reach total immersion, for the reasons detailed above. Instead, we developed a method we like to call <a href="totalreading.php">total reading</a>, which enables students to develop not only their reading comprehension -as the name might imply-, but all their comprehension (reading & listening) and communication (writing & speaking) skills in a second language.</p>
+                        
+                        <p>One word of caution: our system is not magic. Your perseverance and effort will still be required to learn a new language. Also, Aprelendo should be seen only as a complementary method to others you may choose in your learning experience. It is even advisable that you alternate your Aprelendo sessions with grammar lessons or other approaches that let you better understand the intricacies of your target language. 
+                        </p>
+                        
+                        <p>In sum, Aprelendo was designed to allow you to learn a language from the comfort of your home and adapting to your schedules and interests with the added benefit of improving all your levels of comprehension and communication in each session, instead of just improving your oral expression or vocabulary, as most popular language learning services do. As long as you can read at least 1 article per day using Aprelendo, we are sure you will notice the results within a few weeks. Just try it and <a href="https://www.facebook.com/aprelendo" target="_blank" rel="noopener noreferrer">let us know</a> what you think.</p>
+                    </section>
+                </div>
+                <div class="col-sm-3 d-none d-sm-block">
+                    <figure>
+                        <img class="img-fluid" src="img/logo.svg" alt="Aprelendo logo">
+                    </figure>
+                </div>
             </div>
         </div>
-        <!--/row -->
-
-        <!-- ABOUT APRELENDO -->
-        <br>
-        <div class="row vertical-align-center">
-            <div class="col-sm-9">
-                <h4>About aprelendo</h4>
-                <p>Evidence shows that the best way to learn a language is through immersion. That's how we all learned to speak our native language. The real challenge is how to achieve that with a second language that few people around you use. Believe me, it's not easy. In my experience, people who become really fluent in a second language usually use it at home in some way or another and have the help of a "caring and interested tutor" (either their parents or soulmate).</p>
-
-                <p>Yet, using a second language 100% of the time can be quite difficult to achieve. For starters, not everyone has the chance to have a "caring tutor" at home. Besides, it is increasingly difficult to find one in a business or day-to-day environement. Apart from this, it can be very demotivating (especially in the initial levels) to spend the whole day using a second language, and some may see it as a waste of time (because you will take longer to do everything, even thinking). Also, depending on your proficiency level and the different contexts in which you spend most of your day, it may even be materially impossible to practice immersion since your colleagues and friends may not understand that language or will not have the patience to deal with you, especially if you do not share a similar level of proficiency. Living in another country might help, but it's not enough, as nowadays many people may speak English or even your native language.</p>
-
-                <p>In a context in which the Internet has become a tool for bringing people together and disseminating information, online learning has become an increasingly popular alternative. Some language learning services allow you to contact native speakers and chat with them, at your best convenience. However, they don't offer a complete learning experience and sooner or later they end up being tiring and tremendously boring. Truth is that after a couple of sessions you no longer know what to talk about with people on the other side, not to mention that it's hard to find someone with whom you really share something. Other services focus almost entirely on vocabulary acquisition, by using of flashcards or other similar methods, like gamification.</p>
-                
-                <p>Aprelendo, on the other hand, is based on the idea that learning a new language by reading texts you like is easier, more engaging and -more importantly- more effective than reviewing stand-alone flashcards, as most language learning software seem to do these days. It is also based on the idea that it is often impossible to reach total immersion, for the reasons detailed above. Instead, we developed a method we like to call <a href="totalreading.php">total reading</a>, which enables students to develop not only their reading comprehension -as the name might imply-, but all their comprehension (reading & listening) and communication (writing & speaking) skills in a second language.</p>
-                
-                <p>One word of caution: our system is not magic. Your perseverance and effort will still be required to learn a new language. Also, Aprelendo should be seen only as a complementary method to others you may choose in your learning experience. It is even advisable that you alternate your Aprelendo sessions with grammar lessons or other approaches that let you better understand the intricacies of your target language. 
-                </p>
-                
-                <p>In sum, Aprelendo was designed to allow you to learn a language from the comfort of your home and adapting to your schedules and interests with the added benefit of improving all your levels of comprehension and communication in each session, instead of just improving your oral expression or vocabulary, as most popular language learning services do. As long as you can read at least 1 article per day using Aprelendo, we are sure you will notice the results within a few weeks. Just try it and <a href="https://www.facebook.com/aprelendo" target="_blank" rel="noopener noreferrer">let us know</a> what you think.</p>
-            </div>
-
-            <div class="col-sm-3 d-none d-sm-block">
-                <img class="img-fluid" src="img/logo.svg" alt="Aprelendo logo">
-            </div>
-        </div>
-        <!--/row -->
-
-    </div>
+    </main>
 </div>
 <!--/container -->
 

@@ -29,7 +29,7 @@ use Aprelendo\Includes\Classes\User;
         <div class="row">
             <div class="col-sm-0 col-sm-1 col-lg-3"></div>
             <div class="col-sm-12 col-sm-10 col-lg-6">
-                <section>
+                <main>
                     <?php 
                     if (isset($_GET['username']) && !empty($_GET['username']) && isset($_GET['hash']) && !empty($_GET['hash'])) {
                         // check if username & hash values passed by the reset link are set
@@ -47,9 +47,7 @@ use Aprelendo\Includes\Classes\User;
                     }
                     ?>
                     <br>
-                    <footer>
-                    </footer>
-                </section>
+                </main>
             </div>
             <div class="col-sm-0 col-sm-1 col-lg-3"></div>
         </div>

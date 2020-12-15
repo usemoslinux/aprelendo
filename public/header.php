@@ -33,83 +33,86 @@ $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
 </script>
 
 <div class="d-flex h-100 flex-column">
-    <nav class="navbar navbar-expand-md navbar-light">
-        <div class="container">
-            <!-- Brand -->
-            <a class="navbar-brand" href="index.php">Aprelendo</a>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light">
+            <div class="container">
+                <!-- Brand -->
+                <a class="navbar-brand" href="index.php">Aprelendo</a>
 
-            <!-- Toggler Button -->
-            <button class="navbar-toggler" type="button" aria-label="toggler button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <!-- Toggler Button -->
+                <button class="navbar-toggler" type="button" aria-label="toggler button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <!-- Navbar links -->
-            <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav ml-auto">
-                    <li id="language-dropdown" class="nav-item dropdown">
-                        <a href="javascript:;" id="language-menu" class="nav-link dropdown-toggle" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img id="img-language-flag" src="/img/flags/<?php echo $user->getLang() . '.svg';?>"
-                                alt="<?php echo $lang_full; ?> flag">
-                            <span id="learning-lang-span">
-                                <?php echo $lang_full; ?>
-                            </span>
-                            <b class="caret"></b>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="language-menu">
-                            <a class="dropdown-item" href="<?php echo 'languages.php?chg=' . $user->getLangId(); ?>">
-                                <?php echo $lang_full; ?> settings</a>
-                            <a class="dropdown-item" href="languages.php">Change current language</a>
-                        </div>
-                    </li>
-
-                    <li id="user-dropdown" class="nav-item dropdown">
-                        <a id="user-menu" href="javascript:;" class="nav-link dropdown-toggle" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user-circle"></i>
-                            <?php echo ucfirst($user->getName()); ?>
-                            <b class="caret"></b>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu">
-                            <div class="dropdown-header">
-                                Sections
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav ml-auto">
+                        <li id="language-dropdown" class="nav-item dropdown">
+                            <a href="javascript:;" id="language-menu" class="nav-link dropdown-toggle" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img id="img-language-flag" src="/img/flags/<?php echo $user->getLang() . '.svg';?>"
+                                    alt="<?php echo $lang_full; ?> flag">
+                                <span id="learning-lang-span">
+                                    <?php echo $lang_full; ?>
+                                </span>
+                                <b class="caret"></b>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="language-menu">
+                                <a class="dropdown-item" href="<?php echo 'languages.php?chg=' . $user->getLangId(); ?>">
+                                    <?php echo $lang_full; ?> settings</a>
+                                <a class="dropdown-item" href="languages.php">Change current language</a>
                             </div>
-                            <a href="texts.php" class="dropdown-item">My texts</a>
-                            <a href="sharedtexts.php" class="dropdown-item">Shared texts</a>
-                            <a href="sources.php" class="dropdown-item">Popular sources</a>
-                            <a href="words.php" class="dropdown-item">Word list</a>
-                            <a href="stats.php" class="dropdown-item">Statistics</a>
-                            <div class="dropdown-divider"></div>
-                            <div class="dropdown-header">
-                                Settings
-                            </div>
-                            <a href="userprofile.php" class="dropdown-item">My profile</a>
-                            <a href="preferences.php" class="dropdown-item">Preferences</a>
-                            <div class="dropdown-divider"></div>
+                        </li>
 
-                            <?php if (!$user->isPremium()): ?>
-                            <div class="dropdown-header text-primary" >
-                                Premium
-                            </div>
-                            <a href="gopremium.php" class="dropdown-item">Upgrade account</a>
-                            <div class="dropdown-divider"></div>
-                            <?php endif; ?>
+                        <li id="user-dropdown" class="nav-item dropdown">
+                            <a id="user-menu" href="javascript:;" class="nav-link dropdown-toggle" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i>
+                                <?php echo ucfirst($user->getName()); ?>
+                                <b class="caret"></b>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu">
+                                <div class="dropdown-header">
+                                    Sections
+                                </div>
+                                <a href="texts.php" class="dropdown-item">My texts</a>
+                                <a href="sharedtexts.php" class="dropdown-item">Shared texts</a>
+                                <a href="sources.php" class="dropdown-item">Popular sources</a>
+                                <a href="words.php" class="dropdown-item">Word list</a>
+                                <a href="stats.php" class="dropdown-item">Statistics</a>
+                                <div class="dropdown-divider"></div>
+                                <div class="dropdown-header">
+                                    Settings
+                                </div>
+                                <a href="userprofile.php" class="dropdown-item">My profile</a>
+                                <a href="preferences.php" class="dropdown-item">Preferences</a>
+                                <div class="dropdown-divider"></div>
 
-                            <a href="logout.php" onclick="signOut();" class="dropdown-item">Logout</a>
-                            <script>
-                                function signOut() {
-                                    var auth2 = gapi.auth2.getAuthInstance();
-                                    auth2.signOut().then(function () {
-                                        auth2.disconnect();
-                                        
-                                        console.log('User signed out.');
-                                    });
-                                }
-                            </script>
-                        </div>
-                    </li>
-                </ul>
+                                <?php if (!$user->isPremium()): ?>
+                                <div class="dropdown-header text-primary" >
+                                    Premium
+                                </div>
+                                <a href="gopremium.php" class="dropdown-item">Upgrade account</a>
+                                <div class="dropdown-divider"></div>
+                                <?php endif; ?>
+
+                                <a href="logout.php" onclick="signOut();" class="dropdown-item">Logout</a>
+                                <script>
+                                    function signOut() {
+                                        var auth2 = gapi.auth2.getAuthInstance();
+                                        auth2.signOut().then(function () {
+                                            auth2.disconnect();
+                                            
+                                            console.log('User signed out.');
+                                        });
+                                    }
+                                </script>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
+    
     

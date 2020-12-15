@@ -35,45 +35,57 @@ if (!$user->isLoggedIn()) {
 <div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
         <div class="col-sm-12">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="index.php">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a class="active">Privacy policy</a>
-                </li>
-            </ol>
-            <div class="row flex simple-text">
-                <div class="col-sm-12">
-                    <h4>Our privacy policy</h4>
-                    <i>Last updated: May 2019</i>
-                    <p>Protecting the privacy of Aprelendo website users is important to us. Our Online Privacy Policy is designed to inform you about our collection and use of personal information on this website. From time to time, we may make changes to this Privacy Policy, so we encourage you to check back and review it regularly to ensure you are aware of current practices.</p>
-                    <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to <a href="support.php">contact us</a>.</p>
-                    <br>
-                    <h6>Personal information</h6>
-                    <p>We collect some minimal information about you on this website. This information includes only your user name and email address, which you provide directly when you register to our service. Additionally, we may log the IP address and web browser details of the computer or device you use to connect with us. You provide this indirectly, by using our service.</p>
-                    <br>
-                    <h6>Cookies</h6>
-                    <p>When you use and access Aprelendo we place a number of cookies in your web browser.</p>
-                    <p>Unlike most websites, we won't use them to provide analytics, store your preferences, enable advertisements delivery or include behavioral advertising. We only use cookies to enable auto-login ("remember me") functionality and to remember the last reading chapter of ebooks.</p>
-                    <p>Here is a detailed description of the cookies we store in your computer:</p>
-                    <ul>
-                        <li>user_token: user token to enable auto-login</li>
-                        <li>accept_cookies: tells us you have accepted to use cookies</li>
-                        <li>hide_welcome_msg: hides welcome message, which introduces Aprelendo to new users</li>
-                        <li>[ebook_key]-lastpos: indicates ebook's last reading position</li>
-                    </ul>
-                    <br>
-                    <strong>Third-party cookies</strong>
-                    <p>We don't use third-party cookies.</p>
-                    <br>
-                    <strong>Deleting/blocking cookies</strong>
-                    <p>Please note that if you delete cookies or refuse to accept them, you might not be able to use all of the features we offer and some of our pages might not display properly.</p>
-                    <br>
-                    <h6>Consent</h6>
-                    <p>By using our website, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.</p>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="index.php">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="active">Privacy policy</a>
+                    </li>
+                </ol>
+            </nav>
+            <main>
+                <div class="row flex simple-text">
+                    <div class="col-sm-12">
+                        <section>
+                            <h4>Our privacy policy</h4>
+                            <i>Last updated: December 2020</i>
+                            <p>Protecting the privacy of Aprelendo website users is important to us.</p> 
+                            <p>Our Privacy Policy is designed to inform you about the personal information we collect on this website. From time to time, we may make changes to this Privacy Policy, so we encourage you to check back and review it regularly to ensure you are aware of current practices.</p>
+                            <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to <a href="support.php">contact us</a>.</p>
+                            <br>
+                            <h6>Personal information</h6>
+                            <p>We collect some minimal information about you on this website. This information includes your user name and email address, which you provide when you register to our service. Additionally, we may log the IP address and web browser details of the computer or device you use. In case you use your Google account to log in to Aprelendo we will get your basic profile information (full name, e-mail address and profile image).</p>
+                            <br>
+                            <h6>Cookies</h6>
+                            <p>When you use and access Aprelendo we place a minimal number of cookies on your web browser.</p>
+                            <p>Unlike most websites, we won't use them to provide analytics, store your preferences or deliver personalized ads.</p>
+                            <p>Here is a detailed description of the cookies we store on your computer:</p>
+                            <ul>
+                                <li>user_token: user token to enable auto-login</li>
+                                <li>accept_cookies: tells us you have accepted to use cookies</li>
+                                <li>hide_welcome_msg: hides welcome message, which introduces Aprelendo to new users</li>
+                                <li>[ebook_key]-lastpos: indicates ebook's last reading position</li>
+                            </ul>
+                            <br>
+                            <strong>Third-party cookies</strong>
+                            <p>The following is a list of third party services we use that may store cookies on your computer:</p>
+                            <ul>
+                                <li>Google sign-in</li>
+                                <li>YouTube</li>
+                                <li>External dictionaries</li>
+                            </ul>
+                            <br>
+                            <strong>Deleting/blocking cookies</strong>
+                            <p>Please note that if you delete cookies or refuse to accept them, you might not be able to use all of the features we offer and some of our pages might not display properly.</p>
+                            <br>
+                            <h6>Consent</h6>
+                            <p>By using our website, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.</p>
+                        </section>
+                    </div>
                 </div>
-            </div>
+            </main>
         </div>
     </div>
 </div>

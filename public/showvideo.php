@@ -90,6 +90,6 @@ require_once PUBLIC_PATH . 'head.php';
         ?>
         
         <script defer src="js/showvideo.js"></script>
-        <script defer src="js/ytvideo.js"></script>
+        <script defer src="js/ytvideo-min.js"></script>
     </body>
 </html>

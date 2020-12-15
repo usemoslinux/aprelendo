@@ -27,19 +27,23 @@ require_once PUBLIC_PATH . 'header.php';
     <div class="container mtb d-flex flex-grow-1 flex-column">
         <div class="row">
             <div class="col-sm-12">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="texts.php">Home</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a class="active">Popular sources</a>
-                    </li>
-                </ol>
-                <div class="row flex">
-                    <div class="col-sm-12">
-                        <?php require_once 'listsources.php'; ?>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="texts.php">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a class="active">Popular sources</a>
+                        </li>
+                    </ol>
+                </nav>
+                <main>
+                    <div class="row flex">
+                        <div class="col-sm-12">
+                            <?php require_once 'listsources.php'; ?>
+                        </div>
                     </div>
-                </div>
+                </main>
             </div>
         </div>
     </div>

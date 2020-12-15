@@ -18,7 +18,7 @@
  */
 
 $(document).ready(function() {
-    var ebook_id = $("script[src*='showebook.js']").attr("data-id");
+    var ebook_id = $("script[src*='showebook-min.js']").attr("data-id");
     var book = ePub();
 
     var formData = new FormData();
@@ -67,9 +67,9 @@ $(document).ready(function() {
         // theming
         var reader = document.getElementById("readerpage");
 
-        rendition.themes.register("darkmode", "/css/ebooks.css");
-        rendition.themes.register("lightmode", "/css/ebooks.css");
-        rendition.themes.register("sepiamode", "/css/ebooks.css");
+        rendition.themes.register("darkmode", "/css/ebooks-min.css");
+        rendition.themes.register("lightmode", "/css/ebooks-min.css");
+        rendition.themes.register("sepiamode", "/css/ebooks-min.css");
 
         rendition.themes.default({
             body: {

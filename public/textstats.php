@@ -94,77 +94,81 @@ function print_table_footer($array_table_rows) {
 <div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
         <div class="col-sm-12">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="texts.php">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a class="active">Review Statistics</a>
-                </li>
-            </ol>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="texts.php">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="active">Review Statistics</a>
+                    </li>
+                </ol>
+            </nav>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <button class="btn btn-success float-right mb-3" type="button"
-                onclick="window.location.replace('texts.php');"><i class="fas fa-chevron-circle-left"></i> Go back to
-                your library</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="alert alert-info" role="alert">
-                Congrats! You've finished reviewing this text. It will now be marked as "archived".
+    <main>
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-success float-right mb-3" type="button"
+                    onclick="window.location.replace('texts.php');"><i class="fas fa-chevron-circle-left"></i> Go back to
+                    your library</button>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-borderless">
-                <thead class="thead-light">
-                    <tr>
-                        <th style="width: 50%">Category</th>
-                        <th class="text-center" style="width: 25%">Words/Phrases</th>
-                        <th class="text-center" style="width: 25%">%</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php echo print_table_rows($array_table1); ?>
-                </tbody>
-                <tfoot>
-                    <?php echo print_table_footer($array_table1); ?>
-                </tfoot>
-            </table>
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info" role="alert">
+                    Congrats! You've finished reviewing this text. It will now be marked as "archived".
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-borderless">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="width: 50%">Category</th>
+                            <th class="text-center" style="width: 25%">Words/Phrases</th>
+                            <th class="text-center" style="width: 25%">%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php echo print_table_rows($array_table1); ?>
+                    </tbody>
+                    <tfoot>
+                        <?php echo print_table_footer($array_table1); ?>
+                    </tfoot>
+                </table>
 
-            <table class="table table-borderless">
-                <thead class="thead-light">
-                    <tr>
-                        <th style="width: 50%">Group</th>
-                        <th class="text-center" style="width: 25%">Words/Phrases</th>
-                        <th class="text-center" style="width: 25%">%</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php echo print_table_rows($array_table2); ?>
-                </tbody>
-                <tfoot>
-                    <?php echo print_table_footer($array_table2); ?>
-                </tfoot>
-            </table>
+                <table class="table table-borderless">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="width: 50%">Group</th>
+                            <th class="text-center" style="width: 25%">Words/Phrases</th>
+                            <th class="text-center" style="width: 25%">%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php echo print_table_rows($array_table2); ?>
+                    </tbody>
+                    <tfoot>
+                        <?php echo print_table_footer($array_table2); ?>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="col-12">
+                <p><strong class="word reviewing new">New</strong>: words you've just added to your learning list.</p>
+                <p><strong class="word reviewing learning">Reviewed</strong>: words that you already reviewed at least once,
+                    but still need to review more times.</p>
+                <p><strong class="word learned">Learned</strong>: words that the system thinks you have already reviewed
+                    enough times.</p>
+                <p><strong class="word reviewing forgotten">Forgotten</strong>: words you reviewed or learned in the past
+                    and you marked for learning once again.</p>
+                <p><strong class="word frequency-list">Other</strong>: words that you never marked for learning and you seem
+                    to understand well.</p>
+                <p><small>This chart shows only words or phrases.</small></p>
+            </div>
         </div>
-        <div class="col-12">
-            <p><strong class="word reviewing new">New</strong>: words you've just added to your learning list.</p>
-            <p><strong class="word reviewing learning">Reviewed</strong>: words that you already reviewed at least once,
-                but still need to review more times.</p>
-            <p><strong class="word learned">Learned</strong>: words that the system thinks you have already reviewed
-                enough times.</p>
-            <p><strong class="word reviewing forgotten">Forgotten</strong>: words you reviewed or learned in the past
-                and you marked for learning once again.</p>
-            <p><strong class="word frequency-list">Other</strong>: words that you never marked for learning and you seem
-                to understand well.</p>
-            <p><small>This chart shows only words or phrases.</small></p>
-        </div>
-    </div>
+    </main>
 </div>
 
 <?php require_once 'footer.php'; ?>

@@ -99,5 +99,5 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 echo $html;
 ?>
 
-<script defer src="js/listtexts.js"></script>
-<script defer src="js/listsharedtexts.js"></script>
+<script defer src="js/listtexts-min.js"></script>
+<script defer src="js/listsharedtexts-min.js"></script>

@@ -90,7 +90,6 @@ try {
 
 <head>
 <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Language learning platform designed to boost your reading, listening, speaking and writing skills.">
     <meta name="keywords" content="language, learning, language learning, flashcards, total reading, reading, news, ebooks, books, videos">
@@ -101,21 +100,21 @@ try {
     <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
 
     <!-- Epub.js & jszip -->
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js" integrity="sha384-6M0rZuK8mRhdpnt5f7OV2x+2kGHdPMTeq8E4qSbS5S4Ohq+Mcq1ZmSWQV3FdawvW" crossorigin="anonymous"></script>
     <script defer src="js/epubjs/epub.min.js"></script>
 
     <!-- JQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CRaleway:400,700" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CRaleway:400,700" integrity="sha384-VMwax1QiSiP2EeDnJ3RhuYjZx6Kl3hp/QcrUwm52HErp+KFOuG5f/Z6N1UR8PoWT" crossorigin="anonymous">
     
     <!-- Extra style sheets -->
-    <link rel="stylesheet" type="text/css" href="css/ebooks.css">
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/ebooks-min.css">
+    <link rel="stylesheet" type="text/css" href="css/styles-min.css">
 </head>
 
 <body id="readerpage" <?php echo getCSS($class, $styles); ?> >
@@ -157,7 +156,7 @@ try {
     ?>
 
     <!-- <script defer src="js/showtext.js"></script> -->
-    <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook.js"></script>
+    <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook-min.js"></script>
 
 </body>
 

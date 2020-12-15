@@ -50,14 +50,16 @@ if (!empty($_GET)) {
 <div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
         <div class="col-sm-12">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="texts.php">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a class="active">Shared texts</a>
-                </li>
-            </ol>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="texts.php">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="active">Shared texts</a>
+                    </li>
+                </ol>
+            </nav>
             <div class="row flex">
                 <div class="col-sm-12">
                     <form class="form-flex-row" method="get">
@@ -121,9 +123,9 @@ if (!empty($_GET)) {
                                 </div>
                             </div>
                             <!-- /btn-group -->
-                            <input type="text" id="s" name="s" class="form-control" placeholder="Search..." value="<?php echo isset($search_text) ? $search_text : '' ?>">
+                            <input type="text" id="s" name="s" class="form-control" aria-label="Search text" placeholder="Search..." value="<?php echo isset($search_text) ? $search_text : '' ?>">
                             <div class="input-group-append">
-                                <button id="btn-search" type="submit" name="submit" class="btn btn-secondary">
+                                <button id="btn-search" type="submit" name="submit" class="btn btn-secondary" aria-label="Search">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>

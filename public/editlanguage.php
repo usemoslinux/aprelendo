@@ -31,12 +31,9 @@ if(empty($error_msg)) {
 
 ?>
 
-
 <form id="form-editlanguage" method="post">
-
     <input type="hidden" name="id" value="<?php echo $lang->getId(); ?>">
     <input type="hidden" name="language" class="form-control" value="<?php echo $lang->getName(); ?>">
-
     <fieldset>
         <div class="card">
             <div class="card-header">Dictionary & Translator</div>

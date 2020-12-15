@@ -30,125 +30,155 @@ use Aprelendo\Includes\Classes\Language;
 <div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
         <div class="col-sm-12">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="texts.php">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a class="active">User profile</a>
-                </li>
-            </ol>
-            <div id="msgbox"></div>
-            <form id="userprofile-form" class="" method="post">
-                <div class="card">
-                    <div class="card-header">User details</div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="username">Username:</label>
-                            <input type="text" id="username" name="username" class="form-control" value="<?php echo $user->getName();?>"
-                                maxlength="20" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">E-mail address:</label>
-                            <input type="email" id="email" name="email" class="form-control" value="<?php echo $user->getEmail();?>"
-                                maxlength="50" required>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="card">
-                    <div class="card-header">Password</div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="password">Current password:</label>
-                            <small>
-                                <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
-                            </small>
-                            <div class="input-group">
-                                <input type="password" id="password" name="password" class="form-control"  title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fas fa-eye-slash" aria-hidden="true"></i></button>
-                                </div>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="texts.php">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="active">User profile</a>
+                    </li>
+                </ol>
+            </nav>
+            <main>
+                <div id="msgbox"></div>
+                <form id="userprofile-form" class="" method="post">
+                    <div class="card">
+                        <div class="card-header">User details</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="username">Username:</label>
+                                <input type="text" id="username" name="username" class="form-control"
+                                    value="<?php echo $user->getName();?>" maxlength="20" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-mail address:</label>
+                                <input type="email" id="email" name="email" class="form-control"
+                                    value="<?php echo $user->getEmail();?>" maxlength="50" required>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="password">New password:</label>
-                            <small>
-                                <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
-                            </small>
-                            <div class="input-group">
-                                <input type="password" id="newpassword" name="newpassword" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                    </div>
+                    <br>
+                    <div class="card">
+                        <div class="card-header">Password</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="password">Current password:</label>
+                                <small>
+                                    <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
+                                </small>
+                                <div class="input-group">
+                                    <input type="password" id="password" name="password" class="form-control"
+                                        title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                        autocomplete="off" required>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                            aria-label="Show/hide current password" tabindex="-1"><i
+                                                class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                                    </div>
                                 </div>
                             </div>
-                            <small id="password-strength-text"></small>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Repeat new password:</label>
-                            <small>
-                                <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
-                            </small>
-                            <div class="input-group">
-                                <input type="password" id="newpassword-confirmation" name="newpassword-confirmation" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off">
-                                <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button" tabindex="-1"><i class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                            <div class="form-group">
+                                <label for="password">New password:</label>
+                                <small>
+                                    <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
+                                </small>
+                                <div class="input-group">
+                                    <input type="password" id="newpassword" name="newpassword" class="form-control"
+                                        pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
+                                        title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                        autocomplete="off">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                            aria-label="Show/hide new password" tabindex="-1"><i
+                                                class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                                    </div>
                                 </div>
+                                <small id="password-strength-text"></small>
                             </div>
-                            <small id="passwords-match-text"></small>
+                            <div class="form-group">
+                                <label for="password">Repeat new password:</label>
+                                <div class="input-group">
+                                    <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
+                                        class="form-control"
+                                        pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
+                                        title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                        autocomplete="off">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                            aria-label="Show/hide new password confirmation" tabindex="-1"><i
+                                                class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                                <small id="passwords-match-text"></small>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <br>
-                <div class="card">
-                    <div class="card-header">Languages</div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="src_lang">Your native language:</label>
-                            <select name="src_lang" class="form-control custom-select" id="src_lang">
-                                <?php $native_lang_index = Language::getIndex($user->getNativeLang()); ?>
-                                <option value="en" <?php echo $native_lang_index==0 ? ' selected ' : '' ; ?>>English</option>
-                                <option value="es" <?php echo $native_lang_index==1 ? ' selected ' : '' ; ?>>Spanish</option>
-                                <option value="pt" <?php echo $native_lang_index==2 ? ' selected ' : '' ; ?>>Portuguese</option>
-                                <option value="fr" <?php echo $native_lang_index==3 ? ' selected ' : '' ; ?>>French</option>
-                                <option value="it" <?php echo $native_lang_index==4 ? ' selected ' : '' ; ?>>Italian</option>
-                                <option value="de" <?php echo $native_lang_index==5 ? ' selected ' : '' ; ?>>German</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="to_lang">Active learning language:</label>
-                            <select name="to_lang" class="form-control custom-select" id="to_lang">
-                                <?php $lang_index = Language::getIndex($user->getLang()); ?>
-                                <option value="en" <?php echo $lang_index==0 ? ' selected ' : '' ; ?>>English</option>
-                                <option value="es" <?php echo $lang_index==1 ? ' selected ' : '' ; ?>>Spanish</option>
-                                <option value="pt" <?php echo $lang_index==2 ? ' selected ' : '' ; ?>>Portuguese</option>
-                                <option value="fr" <?php echo $lang_index==3 ? ' selected ' : '' ; ?>>French</option>
-                                <option value="it" <?php echo $lang_index==4 ? ' selected ' : '' ; ?>>Italian</option>
-                                <option value="de" <?php echo $lang_index==5 ? ' selected ' : '' ; ?>>German</option>
-                            </select>
+                    <br>
+                    <div class="card">
+                        <div class="card-header">Languages</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="src_lang">Your native language:</label>
+                                <select name="src_lang" class="form-control custom-select" id="src_lang">
+                                    <?php $native_lang_index = Language::getIndex($user->getNativeLang()); ?>
+                                    <option value="en" <?php echo $native_lang_index==0 ? ' selected ' : '' ; ?>>English
+                                    </option>
+                                    <option value="es" <?php echo $native_lang_index==1 ? ' selected ' : '' ; ?>>Spanish
+                                    </option>
+                                    <option value="pt" <?php echo $native_lang_index==2 ? ' selected ' : '' ; ?>>
+                                        Portuguese</option>
+                                    <option value="fr" <?php echo $native_lang_index==3 ? ' selected ' : '' ; ?>>French
+                                    </option>
+                                    <option value="it" <?php echo $native_lang_index==4 ? ' selected ' : '' ; ?>>Italian
+                                    </option>
+                                    <option value="de" <?php echo $native_lang_index==5 ? ' selected ' : '' ; ?>>German
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="to_lang">Active learning language:</label>
+                                <select name="to_lang" class="form-control custom-select" id="to_lang">
+                                    <?php $lang_index = Language::getIndex($user->getLang()); ?>
+                                    <option value="en" <?php echo $lang_index==0 ? ' selected ' : '' ; ?>>English
+                                    </option>
+                                    <option value="es" <?php echo $lang_index==1 ? ' selected ' : '' ; ?>>Spanish
+                                    </option>
+                                    <option value="pt" <?php echo $lang_index==2 ? ' selected ' : '' ; ?>>Portuguese
+                                    </option>
+                                    <option value="fr" <?php echo $lang_index==3 ? ' selected ' : '' ; ?>>French
+                                    </option>
+                                    <option value="it" <?php echo $lang_index==4 ? ' selected ' : '' ; ?>>Italian
+                                    </option>
+                                    <option value="de" <?php echo $lang_index==5 ? ' selected ' : '' ; ?>>German
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <br>
-                <div class="text-right">
-                    <button id="btn-delete-account" name="deleteaccount" class="btn btn-danger float-left">Delete
-                        Account</button>
-                    <button id="cancelbtn" name="cancel" class="btn btn-link" onclick="window.location='/'">Cancel</button>
-                    <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
-                </div>
-            </form>
+                    <br>
+                    <div class="text-right">
+                        <button type="button" id="btn-delete-account" name="deleteaccount"
+                            class="btn btn-danger float-left">Delete
+                            Account</button>
+                        <button type="button" id="cancelbtn" name="cancel" class="btn btn-link"
+                            onclick="window.location='/'">Cancel</button>
+                        <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
+            </main>
         </div>
     </div>
 </div>
 
 <!-- Modal window -->
-<div id="delete-account-modal" class="modal fade" data-keyboard="true" role="dialog">
+<aside id="delete-account-modal" class="modal fade" data-keyboard="true" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Are you sure about this?</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <p class="alert alert-danger">Deleting you account is an irreversible action.</p>
@@ -156,14 +186,14 @@ use Aprelendo\Includes\Classes\Language;
                 <p>Also, all the files (e.g., epub files) you uploaded to our servers will be deleted, as well as your word list and your private and shared texts libraries. This applies to all the languages you were learning using Aprelendo.</p>
             </div>
             <div class="modal-footer">
-            <button id="btn-cancel" type="button" data-dismiss="modal" class="btn btn-static float-left btn-cancel">Cancel</button>
+            <button id="btn-cancel" type="button" data-dismiss="modal" class="btn btn-link">Cancel</button>
                 <button id="btn-confirm-delete-account" type="button" data-dismiss="modal" class="btn btn-danger">Delete Account</button>
             </div>
         </div>
     </div>
-</div>
+</aside>
 
-<script defer src="js/userprofile.js"></script>
-<script defer src="js/password.js"></script>
+<script defer src="js/userprofile-min.js"></script>
+<script defer src="js/password-min.js"></script>
 
 <?php require_once 'footer.php'; ?>

@@ -44,20 +44,23 @@ if (isset($_GET['chg'])) {
     <div class="container mtb d-flex flex-grow-1 flex-column">
         <div class="row">
             <div class="col-sm-12">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="texts.php">Home</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a <?php echo isset($_GET['chg']) ? '' : 'class="active"'; ?> >Languages</a>
-                    </li>
-                    <?php 
-                        if (isset($_GET['chg'])) {
-                            echo '<li class="breadcrumb-item active">' . ucfirst(Language::getNameFromIso($lang->getName())) . '</li>';    
-                        }
-                    ?>
-                </ol>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="texts.php">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a <?php echo isset($_GET['chg']) ? '' : 'class="active"'; ?> >Languages</a>
+                        </li>
+                        <?php 
+                            if (isset($_GET['chg'])) {
+                                echo '<li class="breadcrumb-item active">' . ucfirst(Language::getNameFromIso($lang->getName())) . '</li>';    
+                            }
+                        ?>
+                    </ol>
+                </nav>
 
+                <main>
                 <?php 
 
                 if (isset($_GET['chg'])) { // chg parameter = show edit language page
@@ -68,11 +71,11 @@ if (isset($_GET['chg'])) {
                     include('listlanguages.php');
                 }
                 ?>
-
+                </main>
             </div>
         </div>
     </div>
 
-    <script defer src="js/languages.js"></script>
+    <script defer src="js/languages-min.js"></script>
     <?php require_once 'footer.php'; ?>
     

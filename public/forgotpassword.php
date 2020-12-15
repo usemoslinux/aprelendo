@@ -26,7 +26,7 @@ use Aprelendo\Includes\Classes\User;
 
 ?>
 
-<div>
+<main>
     <div class="container mtb d-flex flex-grow-1 flex-column">
         <div class="row">
             <div class="col-sm-0 col-sm-1 col-lg-3"></div>
@@ -103,8 +103,8 @@ use Aprelendo\Includes\Classes\User;
             <div class="col-sm-0 col-sm-1 col-lg-3"></div>
         </div>
     </div>
-</div>
+</main>
 
 <?php require_once 'footer.php'?>
 
-<script defer src="js/forgotpassword.js"></script>
+<script defer src="js/forgotpassword-min.js"></script>
