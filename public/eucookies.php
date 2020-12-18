@@ -28,7 +28,7 @@ if(!isset($_COOKIE['accept_cookies']))
 { ?>
     <div id="eucookielaw">
         <p>We use cookies. <a href="privacy.php" id="more-privacy-policy">Learn more</a>.</p>
-        <a id="removecookie">OK</a>
+        <button id="removecookie" class="btn btn-success">OK</button>
     </div>
     <script defer src="js/eucookies-min.js"></script>
 <?php } ?>

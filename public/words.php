@@ -55,7 +55,7 @@ $query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])
                                 <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
                                 <input type="text" id="s" name="s" class="form-control" aria-label="Search text" placeholder="Search..." value="<?php echo $search_text ?>">
                                 <div class="input-group-append">
-                                    <button type="submit" name="submit" class="btn btn-secondary">
+                                    <button type="submit" name="submit" aria-label="Search" class="btn btn-secondary">
                                     <i class="fas fa-search"></i>
                                     </button>
                                 </div>

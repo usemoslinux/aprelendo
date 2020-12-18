@@ -19,25 +19,27 @@
  */
 ?>
 <div class="d-flex h-100 flex-column">
-    <nav class="navbar navbar-expand-md navbar-light">
-        <div class="container">
-            <!-- Brand -->
-            <a class="navbar-brand" href="index.php">Aprelendo</a>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light">
+            <div class="container">
+                <!-- Brand -->
+                <a class="navbar-brand" href="index.php">Aprelendo</a>
 
-            <!-- Toggler Button -->
-            <button class="navbar-toggler" aria-label="toggler button" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <!-- Toggler Button -->
+                <button class="navbar-toggler" aria-label="toggler button" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <!-- Navbar links -->
-            <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item my-auto"><a class="nav-link" href="index.php#hiw">How it works</a></li>
-                    <li class="nav-item my-auto"><a class="nav-link" href="gopremium.php">Go premium</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="login-menu" href="login.php">Sign in</a>
-                    </li>
-                </ul>
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item my-auto"><a class="nav-link" href="index.php#hiw">How it works</a></li>
+                        <li class="nav-item my-auto"><a class="nav-link" href="gopremium.php">Go premium</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="login-menu" href="login.php">Sign in</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>

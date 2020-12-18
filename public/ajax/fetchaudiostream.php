@@ -31,7 +31,7 @@ use Aprelendo\Includes\Classes\LogAudioStreams;
 
 try {
     if (!isset($_POST['text']) || empty($_POST['text'] || !isset($_POST['langiso']) || empty($_POST['langiso']))){
-        throw new \Exception(404);
+        throw new \Exception('Malformed request', 400);
     }
 
     $stream_log = new LogAudioStreams($pdo, $user->getId());
@@ -39,7 +39,7 @@ try {
     $premium_user = $user->isPremium();
 
     if ((!$premium_user && $nr_of_streams_today >= 1) || ($premium_user && $nr_of_streams_today >= 3)){
-        throw new \Exception(403);
+        throw new \Exception('Forbidden', 403);
     }
 
     $audiolang = array( 'en' => 'en-us', 
@@ -66,10 +66,12 @@ try {
     // if no errors, log audio stream 
     if ($voice['error'] === NULL && $voice['response'] !== false) {
         $stream_log->addRecord();
+    } else {
+        throw new \Exception($voice['error'], 400);
     }
     
 } catch (\Exception $e) {
-    http_response_code($e->getMessage());
+    http_response_code($e->getCode());
 }
 
 

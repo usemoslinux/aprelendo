@@ -144,7 +144,7 @@ class Language extends DBEntity
         try {
             // create & save default language preferences for user
             foreach (self::$iso_code as $key => $value) {
-                $translator_uri = 'https://translate.google.com/m?hl=' . $value . '&sl=' . self::$iso_code[$native_lang] . '&&ie=UTF-8&q=%s';
+                $translator_uri = 'https://translate.google.com/?ui=tob&hl=' . $value . '&sl=' . self::$iso_code[$native_lang] . '&&ie=UTF-8&q=%s';
                 $dictionary_uri = 'https://mobile.linguee.com/' . $value . '-' . self::$iso_code[$native_lang] . '/search?source=auto&query=%s';
                 
                 $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`, `translator_uri`) 

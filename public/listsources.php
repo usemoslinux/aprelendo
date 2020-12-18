@@ -38,13 +38,13 @@ function printSources($sources) {
 
     $html = '<div class="alert alert-info">These are the most popular sources for the currently selected language. They are probably a good starting place to find new content to practice. Remember to use our <a href="extensions.php" class="alert-link" target="_blank" rel="noopener noreferrer">extensions</a> to add articles from these or other sources to your Aprelendo library.</div>'; 
 
-    $html .= '<div class="list-group">';
+    $html .= '<div id="list-group-popular-sources" class="list-group">';
 
     foreach ($sources as $source) {
         $html .= 
         "<a href='//{$source['domain']}' target='_blank'  rel='noopener noreferrer' class='list-group-item d-flex justify-content-between align-items-center list-group-item-action'>
             {$source['domain']}
-            <span class='badge badge-secondary badge-pill'>{$source['times_used']}</span> 
+            <span class='badge badge-secondary badge-pill ml-2'>{$source['times_used']}</span> 
         </a>";
     }
 

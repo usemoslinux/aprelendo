@@ -320,13 +320,54 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 	border-color: #6c757d;
 }
 
-.breadcrumb {
-    padding: 10px 15px;
-    background-color: whitesmoke;
+.btn-success {
+	color: #fff;
+	background-color: #208836;
+	border-color: transparent;
 }
 
-.breadcrumb .active:hover {
-    color: #6c757d;
+.btn-success:hover {
+	color: #fff;
+	background-color: #1D7C30;
+    border-color: #1e7e34;
+}
+
+.btn-primary {
+	color: #fff;
+	background-color: #0070EB;
+	border-color: transparent;
+}
+
+.btn-primary:hover {
+	color: #fff;
+	background-color: #0062CC;
+    border-color: #007bff;
+}
+
+.btn-danger {
+	color: #fff;
+	background-color: #C42131;
+	border-color: transparent;
+}
+
+.btn-danger:hover {
+	color: #fff;
+	background-color: #B01C2C;
+    border-color: #bd2130;
+}
+
+.breadcrumb {
+	padding: 10px 15px;
+	background-color: rgba(0,0,0,.075);
+	border: 1px solid burlywood;
+}
+
+.breadcrumb .active {
+    font-weight: bold;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+	content: ">";
 }
 
 .form-control:focus {
@@ -371,19 +412,6 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 .hline-w {
     border-bottom: 2px solid #fff;
     margin-bottom: 25px;
-}
-
-.alert {
-    padding: 10px;
-}
-
-.alert ul {
-    margin-bottom: 0;
-}
-
-.close {
-    right: 0 !important;
-    padding: .75rem .75rem;
 }
 
 .container {
@@ -489,7 +517,6 @@ APRELENDO CUSTOMIZATIONS
 
 ul,
 ol {
-    /* padding: inherit; */
     padding: 0 25px;
 }
 
@@ -546,6 +573,52 @@ ol {
     padding: 2px;
 }
 
+/* CUSTOM ALERT BOXES */
+
+.alert
+{
+       padding: 20px;
+    border-left: 3px solid #eee;
+}
+
+.alert p:last-child
+{
+    margin-bottom: 0;
+}
+
+.alert-success
+{
+    background-color: #F4FDF0;
+    border-color: #3C763D;
+}
+
+.alert-danger
+{
+    background-color: #fdf7f7;
+    border-color: #d9534f;
+}
+
+.alert-warning
+{
+    background-color: #fcf8f2;
+    border-color: #f0ad4e;
+}
+
+.alert-info
+{
+    background-color: #f4f8fa;
+    border-color: #5bc0de;
+}
+
+.alert ul {
+    margin-bottom: 0;
+}
+
+.alert-dismissible .close {
+    right: 0 !important;
+    padding: .75rem .75rem;
+}
+
 /* COOKIES */
 
 #eucookielaw {
@@ -571,12 +644,6 @@ ol {
 
 #more-privacy-policy:hover {
     text-decoration: underline;
-}
-
-#removecookie {
-    cursor: pointer;
-	color: greenyellow;
-	text-transform: uppercase;    
 }
 
 /* LIST TEXTS & RSS PAGES */
@@ -659,7 +726,6 @@ a[role="menuitem"] {
 
 .source {
     border-bottom: 1px solid;
-    color: #0095dd;
     font-size: 0.9em;
 }
 
@@ -793,7 +859,7 @@ audio {
 
 #label-speed {
     margin-top: 4px;
-    flex-basis: 75px;
+    flex-basis: 85px;
     flex-shrink: 0;
 }
 
@@ -803,20 +869,21 @@ audio {
     flex-direction: row;
     align-items: stretch;
     margin: 0;
+    padding-bottom: 5px;
 }
 
 #range-speed {
     background-color: transparent;
     flex-grow: 1;
-    margin-left: 10px;
     margin-top: 3px;
     width: 50px;
 }
 
 #label-abloop {
     margin-top: 4px;
-    flex-basis: 66px;
+    flex-basis: 80px;
     flex-shrink: 0;
+    text-align: center;
 }
 
 #btn-abloop {
@@ -878,11 +945,10 @@ input {
     display: flex;
     flex: 1;
     font-family: "Lato", sans-serif;
-    height: 97%;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    height: calc(100% - 1rem);
+    margin: .5rem auto;
     max-width: 750px;
-    width: 100%;
+    width: calc(100% - 1rem);
 }
 
 #myModal .modal-content {
@@ -908,10 +974,6 @@ input {
 
 #bdgfreqlvl {
     border-radius: 0;
-}
-
-.btn-add {
-    margin-bottom: 12px;
 }
 
 .forget {
@@ -945,7 +1007,6 @@ input {
 
 .table {
     background-color: white;
-    border-radius: 4px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -1263,6 +1324,12 @@ div.blurry-background {
 
 .word-description.forgotten {
     background-color: Crimson;
+}
+
+/* POPULAR SOURCES */
+
+#list-group-popular-sources .list-group-item {
+    word-wrap: anywhere;
 }
 
 /* OTHER PAGES */

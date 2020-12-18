@@ -117,9 +117,7 @@ class Texts extends DBEntity {
             $title =  mb_strtoupper(mb_substr($title, 0, 1)) . mb_strtolower(mb_substr($title, 1));
         }
 
-        $author     =  mb_convert_case($author, MB_CASE_TITLE, 'UTF-8');
-        $source_url =  mb_convert_case($author, MB_CASE_TITLE, 'UTF-8');
-        $audio_url  =  mb_convert_case($author, MB_CASE_TITLE, 'UTF-8');
+        $author =  mb_convert_case($author, MB_CASE_TITLE, 'UTF-8');
         
         try {
             // add text to table

@@ -29,7 +29,7 @@ $(document).ready(function() {
      */
     $("#removecookie").click(function() {
         setCookie("accept_cookies", true, 365 * 10);
-        $("#eucookielaw").fadeOut(800, function() {
+        $("#eucookielaw").slideDown(1500, function() {
             $(this).remove();
         });
     }); // end #removecookie.on.click

@@ -70,7 +70,7 @@ abstract class Table
     protected function print_header(): string {
         $html = '<div class="row">
             <div class="col-sm-12">
-            <table id="textstable" class="table table-hover">
+            <table id="textstable" class="table table-bordered table-hover">
             <colgroup>';
         
         foreach ($this->col_widths as $col_width) { 
@@ -81,7 +81,7 @@ abstract class Table
             }
         }
         
-        $html .= '</colgroup><thead><tr>';
+        $html .= '</colgroup><thead class="thead-light"><tr>';
 
         if ($this->has_chkbox) {
             $html .= '<th class="col-checkbox"><div class="custom-control custom-checkbox"><input id="chkbox-selall" class="custom-control-input" aria-label="Select all" type="checkbox"><label class="custom-control-label" for="chkbox-selall"></label></div></th>';

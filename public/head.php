@@ -71,7 +71,7 @@ if ($this_is_show_page) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CRaleway:400,700" integrity="sha384-VMwax1QiSiP2EeDnJ3RhuYjZx6Kl3hp/QcrUwm52HErp+KFOuG5f/Z6N1UR8PoWT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CRaleway:400,700">
     
     <!-- Custom styles for this template -->
     <link href="css/styles-min.css" rel="stylesheet">
@@ -87,7 +87,7 @@ if ($this_is_show_page) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <!-- Google API -->
-    <script src="https://apis.google.com/js/platform.js?onload=init" integrity="sha384-dnjYPXNV5CV3yDkFR3TILkxSZmaRe8eDq+NXUrCAU4uqwZAQnIt8HlXt6SAxnNXW" crossorigin="anonymous"></script>
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 </head>
 
 <?php

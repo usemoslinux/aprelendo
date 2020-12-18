@@ -392,14 +392,14 @@ class Reader extends Text
     public function showText(): string {
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
         // $time_start = microtime(true);
-        $html = "<div id='text-container' data-textID='" . $this->id . "'>";
+        $html = "<div id='text-container' class='my-3' data-textID='" . $this->id . "'>";
         
         // display source, if available
         if (!empty($this->source_uri)) {
             $html .= '<a class="source" href="' . $this->source_uri . '" target="_blank" rel="noopener noreferrer">' . Url::getDomainName($this->source_uri) . '</a>'; 
         }
         
-        $html .= '<h1>' . $this->title . '</h1>'; // display title
+        $html .= '<h2 class="my-3">' . $this->title . '</h2>'; // display title
         
         // display author, if available
         if (!empty($this->author)) {
@@ -422,7 +422,7 @@ class Reader extends Text
 
         $html .=   '<div id="audioplayer-container" class="' . $display_mode_css . '">' .
                         '<audio controls id="audioplayer" class="d-none">
-                                <source src="" type="audio/mpeg">
+                                <source id="audio-mp3" src="" type="audio/mpeg">
                                 Your browser does not support the audio element.
                             </audio>
                             <form id="audioplayer-speedbar" class="d-none">
@@ -443,9 +443,8 @@ class Reader extends Text
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <strong>Assisted learning - Phase 1:</strong> Reading
-                            <br>
-                            <span class="small">Look up words in the dictionary. Try to understand the meaning of both the text as a whole and each word/phrase.</span>
+                            <h6>Assisted learning - Phase 1: Reading</h6>
+                            <span class="small">Before looking up words/phrases in the dictionary, try to understand their meaning through context. In order to do so, go from the general to the particular (i.e., first, try to understand the general meaning of the document, then analyze each paragraph, and finally each word/phrase).</span>
                         </div>';   
         }
         

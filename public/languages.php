@@ -54,7 +54,7 @@ if (isset($_GET['chg'])) {
                         </li>
                         <?php 
                             if (isset($_GET['chg'])) {
-                                echo '<li class="breadcrumb-item active">' . ucfirst(Language::getNameFromIso($lang->getName())) . '</li>';    
+                                echo '<li class="breadcrumb-item"><a class="active">' . ucfirst(Language::getNameFromIso($lang->getName())) . '</a></li>';    
                             }
                         ?>
                     </ol>
