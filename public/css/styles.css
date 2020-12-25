@@ -278,9 +278,9 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 }
 
 .navbar-light {
-    /* background-color: #0275d8; */
     background: linear-gradient(to right, #0062E6, #33AEFF);
     border-color: transparent;
+    box-shadow: 0 .10rem .10rem 0 rgba(0,0,0,.1);
 }
 
 .headerwrap .navbar-light {

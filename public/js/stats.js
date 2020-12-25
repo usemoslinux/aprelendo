@@ -86,10 +86,6 @@ $(document).ready(function() {
             ]
         },
         options: {
-            title: {
-                display: true,
-                text: "Your progress this week"
-            },
             scales: {
                 yAxes: [
                     {

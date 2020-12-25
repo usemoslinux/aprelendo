@@ -28,16 +28,17 @@ use Aprelendo\Includes\Classes\Conversion;
 use Aprelendo\Includes\Classes\Curl;
 
 class Texts extends DBEntity {
-    protected $id          = 0;
-    protected $lang_id     = 0;
-    protected $title       = '';
-    protected $author      = '';
-    protected $text        = '';
-    protected $audio_uri   = '';
-    protected $source_uri  = '';
-    protected $type        = 0;
-    protected $nr_of_words = 0;
-    protected $level       = 0;
+    protected $id            = 0;
+    protected $lang_id       = 0;
+    protected $title         = '';
+    protected $author        = '';
+    protected $text          = '';
+    protected $audio_uri     = '';
+    protected $source_uri    = '';
+    protected $type          = 0;
+    protected $nr_of_words   = 0;
+    protected $level         = 0;
+    protected $date_created  = '';
     
     /**
     * Constructor
@@ -71,17 +72,18 @@ class Texts extends DBEntity {
                 throw new \Exception('There was an unexpected error trying to load record from texts table.');
             }
 
-            $this->id         = $row['id']; 
-            $this->user_id    = $row['user_id']; 
-            $this->lang_id    = $row['lang_id']; 
-            $this->title      = $row['title'];
-            $this->author     = $row['author']; 
-            $this->text       = $row['text']; 
-            $this->audio_uri  = $row['audio_uri'];
-            $this->source_uri = $row['source_uri'];
-            $this->type       = $row['type'];
-            $this->word_count = $row['word_count'];
-            $this->level      = $row['level'];
+            $this->id            = $row['id']; 
+            $this->user_id       = $row['user_id']; 
+            $this->lang_id       = $row['lang_id']; 
+            $this->title         = $row['title'];
+            $this->author        = $row['author']; 
+            $this->text          = $row['text']; 
+            $this->audio_uri     = $row['audio_uri'];
+            $this->source_uri    = $row['source_uri'];
+            $this->type          = $row['type'];
+            $this->word_count    = $row['word_count'];
+            $this->level         = $row['level'];
+            $this->date_created  = $row['date_created'];
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to load record from texts table.');
         } finally {
@@ -676,6 +678,14 @@ class Texts extends DBEntity {
     {
         return $this->level;
     }
+
+    /**
+     * Get the value of date_created
+     */ 
+    public function getDateCreated(): string
+    {
+        return $this->date_created;
+    } // end getDateCreated()
 } 
     
 ?>
