@@ -20,8 +20,14 @@
 
 require_once('../includes/dbinit.php'); // connect to database
 use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Includes\Classes\Gems;
 
 $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
+
+$gems = new Gems($pdo, $user->getId(), $user->getLangId());
+$nr_of_gems  = (int)$gems->getGems();
+$streak_days = (int)$gems->getDaysStreak();
+
 ?>
 
 <script>
@@ -47,6 +53,8 @@ $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
                 <!-- Navbar links -->
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ml-auto">
+                        <li id="streak-days" class="nav-item gamification"><img src="/img/gamification/streak.svg" alt="Streak" title="Streak days"> <?php echo $streak_days; ?></li>
+                        <li id="gems" class="nav-item gamification"><img src="/img/gamification/gems.svg" alt="Gems" title="Gems earned"> <?php echo $nr_of_gems; ?></li>
                         <li id="language-dropdown" class="nav-item dropdown">
                             <a href="javascript:;" id="language-menu" class="nav-link dropdown-toggle" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

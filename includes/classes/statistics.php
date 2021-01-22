@@ -115,63 +115,6 @@ class Statistics extends DBEntity {
 
         return $stats;
     } // end getTextStats()
-    
-    private function checkFirstUploadByType(int $days, int $text_type) {
-        $result = [];
-
-        // get nr. of uploaded texts of each type
-        $sql = "SELECT `user_id`, `type`, 
-                    COUNT(`text`) AS `count_total`,
-                    SUM(`date_created` >= CURDATE() - INTERVAL ? DAY) AS `count_last_week`
-                FROM `texts`
-                WHERE `user_id`=? AND `lang_id`=? AND `type`=?";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$days, $this->user_id, $this->lang_id, $text_type]);
-        $row_texts = $stmt->fetch();
-        
-        // get nr. of uploaded shared texts of each type
-        $sql = "SELECT `user_id`, `type`, 
-                    COUNT(`text`) AS `count_total`,
-                    SUM(`date_created` >= CURDATE() - INTERVAL ? DAY) AS `count_last_week`
-                FROM `shared_texts`
-                WHERE `user_id`=? AND `lang_id`=? AND `type`=?";
-                $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$days, $this->user_id, $this->lang_id, $text_type]);
-        $row_shared_texts = $stmt->fetch();
-        
-        // add up both results
-        $row_sum = array();
-        foreach (array_keys($row_texts + $row_shared_texts) as $key) {
-            $row_sum[$key] = (isset($row_texts[$key]) ? $row_texts[$key] : 0) + (isset($row_shared_texts[$key]) ? $row_shared_texts[$key] : 0);
-        }
-        
-        // check if user uploaded in the last $days a new text of this $type for the first time 
-        if ($row_sum['count_total'] > 0 AND $row_sum['count_total'] == $row_sum['count_last_week'] ) {
-            $result = TRUE;
-        }
-
-        return $result;
-    }
-
-    private function isMostActiveAllTimeUploader() {
-        $lang = new Language($this->pdo, $this->user_id);
-        $lang->loadRecord($this->lang_id);
-        $lang_iso = $lang->getName();
-
-        $sql = "SELECT t.`user_id` AS `user_id`, t.lang_id AS `lang_id`, COUNT(t.`text`)
-                FROM texts AS t
-                INNER JOIN languages AS l ON t.lang_id = l.id 
-                WHERE l.name='$lang_iso'
-                GROUP BY `lang_id`
-                ORDER BY `user_id` ASC
-                LIMIT 1";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        $row = $stmt->fetch();
-
-        return $row['user_id'] == $this->user_id;
-    }
-
 }
 
 ?>

@@ -30,11 +30,13 @@ use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\SharedTexts;
 use Aprelendo\Includes\Classes\EbookFile;
 use Aprelendo\Includes\Classes\LogFileUploads;
+use Aprelendo\Includes\Classes\Gems;
 
 $user_id = $user->getId();
 $lang_id = $user->getLangId();
 
 try {
+    $text_added_successfully = false;
     switch ($_POST['mode']) {
         case 'simple':
         case 'video':
@@ -70,25 +72,16 @@ try {
                 Only videos with subtitles in your target language are supported.</li>";
             }
             
-            // check if text is longer than the max. number of chars allowed
-            $xml_text = $texts_table->extractFromXML($text);
-            
-            if ($xml_text != false) {
-                /* For some reason new lines on the client side are counted by Jquery/JS as '\n', 
-                   but on the server side the $_POST variable gets '\r\n' instead. 
-                   To make them both compatible, we need to eliminate all instances of '\r' */
-                $text = preg_replace('/\r/m', '', $text);
-                if (mb_strlen($xml_text) > 10000) {
-                    $errors[] = "<li>Maximum supported text length is 20.000 characters.</li>";
-                }    
-            } else {
-                // same as above
+            /*  Check if text is longer than the max. number of chars allowed, ignore if video
+                For some reason new lines on the client side are counted by Jquery/JS as '\n', 
+                but on the server side the $_POST variable gets '\r\n' instead. 
+                To make them both compatible, we need to eliminate all instances of '\r' */
+            if ($_POST['mode'] == 'simple') {
                 $text = preg_replace('/\r/m', '', $text);
                 if (mb_strlen($text) > 10000) {
-                    $errors[] = "<li>Maximum supported text length is 20.000 characters.</li>";
+                    $errors[] = "<li>Maximum supported text length is 10,000 characters.</li>";
                 }
             }
-            
             
             // save text in db
             if (empty($errors)) {
@@ -110,6 +103,7 @@ try {
                         throw new \Exception($msg);
                     }
                     $texts_table->add($title, $author, $text, $source_url, $target_file_name, $type);
+                    $text_added_successfully = true;
                 }
                 
                 // if everything goes fine return HTTP code 204 (No content), as nothing is returned 
@@ -127,6 +121,15 @@ try {
             $author = $_POST['author'];
             $source_url = $_POST['url'];
             $text = $_POST['text'];
+            
+            /*  Check if text is longer than the max. number of chars allowed, ignore if video
+            For some reason new lines on the client side are counted by Jquery/JS as '\n', 
+            but on the server side the $_POST variable gets '\r\n' instead. 
+            To make them both compatible, we need to eliminate all instances of '\r' */
+            $text = preg_replace('/\r/m', '', $text);
+            if (mb_strlen($text) > 10000) {
+                throw new \Exception("Maximum supported text length is 10,000 characters.");
+            }
 
             $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
 
@@ -141,6 +144,7 @@ try {
             // if successful, return insert_id in json format
             $insert_id = $texts_table->add($title, $author, $text, $source_url, '', '1');
             if ($insert_id > 0) {
+                $text_added_successfully = true;
                 $arr = array('insert_id' => $insert_id);
                 echo json_encode($arr);
             }
@@ -182,7 +186,8 @@ try {
             $insert_id = $texts_table->add($title, $author, $text, $target_file_name, $audio_uri, $type);
             
             if ($insert_id > 0) {
-                // if everything goes fine log upload & return HTTP code 204 (No content), as nothing is returned 
+                // if everything goes fine log upload
+                $text_added_successfully = true;
                 $file_upload_log->addRecord();
                 $filename = array('filename' => $target_file_name);
                 header('Content-Type: application/json');
@@ -193,6 +198,17 @@ try {
         }
         default:
             break;
+    }
+
+    // if text was added with success, update user score (gems)
+    if ($text_added_successfully) {
+        $events = array(
+            'texts' => array (
+                'new' => 1
+                )
+            );
+        $gems = new Gems($pdo, $user_id, $lang_id);
+        $new_gems = $gems->updateScore($events);
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

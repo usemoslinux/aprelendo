@@ -43,9 +43,15 @@
                 </ul>
                 <ul class="list-inline">
                     <li class="list-inline-item">
-                        <a href="https://www.facebook.com/aprelendo" aria-label="Aprelendo's Facebook Page"
+                        <a href="https://www.facebook.com/aprelendo.fb" aria-label="Aprelendo's Facebook Page"
                             target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-facebook"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://www.instagram.com/apre.lendo/" aria-label="Aprelendo's Instagram Page"
+                            target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-instagram"></i>
                         </a>
                     </li>
                     <li class="list-inline-item">

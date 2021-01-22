@@ -169,11 +169,11 @@ class User
      * @param string $password_hash
      * @return bool
      */
-    public function existsByNameAndPasswordHash(string $name, string $password_hash): bool {
+    public function existsByEmailAndPasswordHash(string $email, string $password_hash): bool {
         try {
-            $sql = "SELECT COUNT(*) AS `exists` FROM `users` WHERE `name`=? AND `password_hash`=?";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$name, $password_hash]);
+            $sql = "SELECT COUNT(*) AS `exists` FROM `users` WHERE `email`=? AND `password_hash`=?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$email, $password_hash]);
             $num_rows = $stmt->fetchColumn();
            
             return ($num_rows) && ($num_rows > 0) ? true : false;
@@ -182,7 +182,7 @@ class User
         } finally {
             $stmt = null;
         }
-    } // end existsByName()
+    } // end existsByEmailAndPasswordHash()
     
     /**
      * Creates new user & associated languages and reader preferences
@@ -580,11 +580,11 @@ class User
      * @param string $name
      * @return void
      */
-    public function updatePasswordHash(string $password_hash, string $name): void {
+    public function updatePasswordHash(string $password_hash, string $email): void {
         try {
-            $sql = "UPDATE `users` SET `password_hash`=? WHERE `name`=?";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$password_hash, $username]);
+            $sql = "UPDATE `users` SET `password_hash`=? WHERE `email`=?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$password_hash, $email]);
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to update user record.');
         } finally {

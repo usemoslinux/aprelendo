@@ -39,7 +39,7 @@ $(document).ready(function() {
     var $doc = $(parent.document);
     var $dic_frame = $doc.find("#dicFrame");
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
-    var $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
+    $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
       
     loadAudio();
 
@@ -164,7 +164,7 @@ $(document).ready(function() {
         
         if (e.type == "touchend") {
             if (!swiping) {
-                highlighting = (end_sel_time - start_sel_time > 1000);
+                highlighting = (end_sel_time - start_sel_time) > 1000;
             }
             $('html').css({'overflow':'visible'});    
             swiping = false;
@@ -176,7 +176,7 @@ $(document).ready(function() {
                 highlighting = false;
                 
                 if ($sel_start === $sel_end) {
-                    $closest = $(this).closest('.learning, .learned, .forgotten');
+                    var $closest = $(this).closest('.learning, .learned, .forgotten');
                     if ($closest.length) {
                         $selword = $closest;
                     } else {
@@ -215,7 +215,7 @@ $(document).ready(function() {
             swiping = swiping ? swiping : Math.abs(start_sel_pos_top - cur_sel_pos_top) > 0;
 
             if (!swiping) {
-                highlighting = (end_sel_time - start_sel_time > 1000);
+                highlighting = (end_sel_time - start_sel_time) > 1000;
             }
         } 
 
@@ -227,9 +227,7 @@ $(document).ready(function() {
             $(".word").removeClass("highlighted");
 
             $sel_end =
-                e.type === "mouseover"
-                    ? $(this)
-                    : $(
+                e.type === "mouseover" ? $(this) : $(
                           document.elementFromPoint(
                               e.originalEvent.touches[0].clientX,
                               e.originalEvent.touches[0].clientY
@@ -276,12 +274,7 @@ $(document).ready(function() {
             .last()
             .next();
         $end_obj =
-            $end_obj.length > 0
-                ? $end_obj
-                : $selword
-                      .nextAll()
-                      .last()
-                      .next();
+            $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
         var $sentence = $start_obj
             .nextUntil($end_obj)
             .addBack()
@@ -460,19 +453,9 @@ $(document).ready(function() {
                             $phrase.text().toLowerCase() ===
                             sel_text.toLowerCase()
                         ) {
-                            if (
-                                $(this).is(
-                                    ".new, .learning, .learned, .forgotten"
-                                )
-                            ) {
-                                $phrase.wrapAll(
-                                    "<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></span>"
-                                );
-                            } else {
-                                $phrase.wrapAll(
-                                    "<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>"
-                                );
-                            }
+                            $phrase.wrapAll(
+                                "<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>"
+                            );
 
                             $phrase.contents().unwrap();
                         }
@@ -511,7 +494,7 @@ $(document).ready(function() {
                 // if there were no previous word underlined, therefore phases 2 & 3 were off,
                 // when user adds his first new word, activate these phases
                 var actual_phase = $("#alert-msg-phase").attr("data-phase");
-                if (phase == 4 && audio_is_loaded && actual_phase == 3) {
+                if (phase == 4 && actual_phase == 3) {
                     var phase_names = [
                         "Reading",
                         "Listening",
@@ -578,8 +561,39 @@ $(document).ready(function() {
                     }
                 }).done(function(result) {
                     // if everything went fine, remove the underlining
-                    $filter.removeClass();
-                    $filter.addClass('word');
+                    // also, the case of the word/phrase in the text has to be respected
+                    // for phrases, we need to make sure that new underlining is added for each word (call to underlinewords.php)
+
+                    var $result = $(result);
+                    var $cur_filter = {};
+                    var cur_word = /""/;
+                    var word_html = "";
+                    var word_is_new = false;
+
+                    $filter.each(function() {
+                        $cur_filter = $(this);
+
+                        $result.filter(".word").each(function(key) {
+                            cur_word = new RegExp(
+                                "\\b" + $(this).text() + "\\b",
+                                "iu"
+                            ).exec($cur_filter.text());
+                            $(this).text(cur_word);
+                            
+                            // check if any word marked by PHP as .learning should be marked as .new instead
+                            if ($(this).hasClass("learning")) {
+                                word_html = $(this).html();
+                                word_is_new = $pagereader.find(".new").filter(function() {
+                                    return $(this).html() == word_html;
+                                }).length > 0;
+                                if (word_is_new) {
+                                    $(this).removeClass("learning").addClass("new");
+                                }
+                            }
+                        });
+                        
+                        $cur_filter.replaceWith($result.clone());
+                    });
 
                     // if user is in phase 3 (speaking) and deleted the only word that was underlined
                     // don't allow phase 3 (writing) & go directly to last phase (save changes)
@@ -726,12 +740,13 @@ $(document).ready(function() {
         var word = "";
         var archive_text = true;
         var is_shared = $("#is_shared").length > 0;
+        var gems_earned = 0;
 
         $(".learning").each(function() {
             word = $(this)
                 .text()
                 .toLowerCase();
-            if (jQuery.inArray(word, oldwords) == -1) {
+            if ($.inArray(word, oldwords) == -1) {
                 oldwords.push(word);
             }
         });
@@ -753,36 +768,67 @@ $(document).ready(function() {
             }
         })
             .done(function(data) {
-                window.parent.show_confirmation_dialog = false;
-                var url = "/textstats.php";
-                var total_words =
-                    Number($(".word").length) + Number($(".phrase").length);
-                var form = $(
-                    '<form action="' +
-                        url +
-                        '" method="post">' +
-                        '<input type="hidden" name="created" value="' +
-                        $(".reviewing.new").length +
-                        '" />' +
-                        '<input type="hidden" name="reviewed" value="' +
-                        $(".reviewing.learning").length +
-                        '" />' +
-                        '<input type="hidden" name="learned" value="' +
-                        $(".learned").length +
-                        '" />' +
-                        '<input type="hidden" name="forgotten" value="' +
-                        $(".reviewing.forgotten").length +
-                        '" />' +
-                        '<input type="hidden" name="total" value="' +
-                        total_words +
-                        '" />' +
-                        "</form>"
-                );
-                $("body").append(form);
-                form.submit();
+                if (data.error_msg == null) {
+                    // update user score (gems)
+                    var review_data = {
+                        words : { new:       $(".reviewing.new").length, 
+                                  learning:  $(".reviewing.learning").length, 
+                                  forgotten: $(".reviewing.forgotten").length },
+                        texts : { reviewed:  1 }
+                    };
+
+                    $.ajax({
+                        type: "post",
+                        url: "ajax/updateuserscore.php",
+                        data: review_data
+                    })
+                    .done(function(data) {
+                        // show text review stats
+                        if (data.error_msg == null) {
+                            gems_earned = data.gems_earned;
+                            window.parent.show_confirmation_dialog = false;
+                            var url = "/textstats.php";
+                            var total_words =
+                                Number($(".word").length) + Number($(".phrase").length);
+                            var form = $(
+                                '<form action="' +
+                                    url +
+                                    '" method="post">' +
+                                    '<input type="hidden" name="created" value="' +
+                                    $(".reviewing.new").length +
+                                    '" />' +
+                                    '<input type="hidden" name="reviewed" value="' +
+                                    $(".reviewing.learning").length +
+                                    '" />' +
+                                    '<input type="hidden" name="learned" value="' +
+                                    $(".learned").length +
+                                    '" />' +
+                                    '<input type="hidden" name="forgotten" value="' +
+                                    $(".reviewing.forgotten").length +
+                                    '" />' +
+                                    '<input type="hidden" name="total" value="' +
+                                    total_words +
+                                    '" />' +
+                                    '<input type="hidden" name="gems_earned" value="' +
+                                    gems_earned +
+                                    '" />' +
+                                    "</form>"
+                            );
+                            $("body").append(form);
+                            form.submit();
+                        } else {
+                            alert("Oops! There was an unexpected error.");
+                        }
+                    })
+                    .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Oops! There was an unexpected error.");
+                    });
+                } else {
+                    alert("Oops! There was an unexpected error.");
+                }
             })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Oops! There was an error updating the database.");
+                alert("Oops! There was an unexpected error.");
             });
     } // end #btn-save.on.click
 
@@ -805,7 +851,7 @@ $(document).ready(function() {
      * Changes playback speed when user moves slider
      */
     $("body").on("input change", "#range-speed", function() {
-        cpbr = parseFloat($(this).val()).toFixed(1);
+        var cpbr = parseFloat($(this).val()).toFixed(1);
         $("#currentpbr").text(cpbr);
         $("#audioplayer").prop("playbackRate", cpbr);
     }); // end #pbr.on.input/change
@@ -862,7 +908,7 @@ $(document).ready(function() {
         } else {
             // toggle dictation off
             $(".learning, .new, .forgotten").each(function(index, value) {
-                $elem = $(this);
+                var $elem = $(this);
                 $elem
                     .show()
                     .nextAll(":lt(1)")
@@ -993,11 +1039,10 @@ $(document).ready(function() {
         if ($(e.target).is(".word") === false) {
             e.stopPropagation();
 
-            $text_container = $("#text-container").length
-                ? $("#text-container")
-                : $pagereader.contents();
+            var $text_container = $("#text-container").length ? $("#text-container") : $pagereader.contents();
 
             highlighting = false;
+            $('html').css({'overflow':'visible'});  
             $text_container.find(".highlighted").removeClass("highlighted");
         }
     }); // end $pagereader.on.click

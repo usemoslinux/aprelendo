@@ -32,7 +32,7 @@ $(document).ready(function() {
         );
 
         $.ajax({
-            type: "post",
+            type: "POST",
             url: "ajax/forgotpassword.php",
             data: form_data
         })
@@ -67,7 +67,7 @@ $(document).ready(function() {
             "alert-info"
         );
 
-        if ($("#pass1").val() === $("#pass2").val()) {
+        if ($("#newpassword").val() === $("#newpassword-confirmation").val()) {
             // 1. passwords entered by user are identical
             $.ajax({
                 type: "post",
@@ -101,8 +101,8 @@ $(document).ready(function() {
                 "The passwords you entered are not identical. Please try again.",
                 "alert-danger"
             );
-            $("#pass1").val("");
-            $("#pass2").val("");
+            $("#newpassword").val("");
+            $("#newpassword-confirmation").val("");
         }
     }); // end #form_create_new_password.on.submit
 

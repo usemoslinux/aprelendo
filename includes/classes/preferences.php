@@ -54,12 +54,12 @@ class Preferences extends DBEntity {
      */
     public function edit(string $font_family, string $font_size, string $line_height, string $text_alignment, 
                          string $display_mode, bool $assisted_learning): void {
-        $this->font_family       = isset($font_family)       && !empty($font_family)       ? $font_family       : $this->font_family;
-        $this->font_size         = isset($font_size)         && !empty($font_size)         ? $font_size         : $this->font_size;
-        $this->line_height       = isset($line_height)       && !empty($line_height)       ? $line_height       : $this->line_height;
-        $this->text_alignment    = isset($text_alignment)    && !empty($text_alignment)    ? $text_alignment    : $this->text_alignment;
-        $this->display_mode      = isset($display_mode)      && !empty($display_mode)      ? $display_mode      : $this->display_mode;
-        $this->assisted_learning = isset($assisted_learning)                               ? $assisted_learning : $this->assisted_learning;
+        $this->font_family       = isset($font_family)       && !empty($font_family)       ? $font_family            : $this->font_family;
+        $this->font_size         = isset($font_size)         && !empty($font_size)         ? $font_size              : $this->font_size;
+        $this->line_height       = isset($line_height)       && !empty($line_height)       ? $line_height            : $this->line_height;
+        $this->text_alignment    = isset($text_alignment)    && !empty($text_alignment)    ? $text_alignment         : $this->text_alignment;
+        $this->display_mode      = isset($display_mode)      && !empty($display_mode)      ? $display_mode           : $this->display_mode;
+        $this->assisted_learning = isset($assisted_learning)                               ? (int)$assisted_learning : $this->assisted_learning;
 
         try {
             $sql = "REPLACE INTO `{$this->table}` (`user_id`, `font_family`,

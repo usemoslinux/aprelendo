@@ -21,6 +21,10 @@ $(document).ready(function() {
     $("#search").focus();
     $("input:checkbox").prop("checked", false);
 
+    if ($('#modal-achievements').length) {
+        $('#modal-achievements').modal('show');
+    }
+
     /**
      * Deletes selected texts from the database
      * Trigger: when user selects "Delete" in the action menu

@@ -35,6 +35,11 @@ $learned = isset($_POST['learned']) && !empty($_POST['learned']) ? $_POST['learn
 $forgotten = isset($_POST['forgotten']) && !empty($_POST['forgotten']) ? $_POST['forgotten'] : 0;
 $other = $total - $created - $reviewed - $learned - $forgotten;
 
+$gems_earned = isset($_POST['gems_earned']) && !empty($_POST['gems_earned']) ? (int)$_POST['gems_earned'] : 0;
+$gems_message = '';
+$gems_message = ($gems_earned > 0) ? ' You earned ' . $gems_earned . ' gems! Keep it up!' : $gems_message;
+$gems_message = ($gems_earned < 0) ? ' You lost ' . abs($gems_earned) . ' gems! Keep trying and you\'ll get better.' : $gems_message;
+
 $array_table1 = array(
                     array('New', $created, $total === 0 ? '-' : sprintf("%.2f%%", ($created / $total) * 100)),
                     array('Reviewed', $reviewed, $total === 0 ? '-' : sprintf("%.2f%%", ($reviewed / $total) * 100)),
@@ -121,6 +126,16 @@ function print_table_footer($array_table_rows) {
                 </div>
             </div>
         </div>
+        <?php if ($gems_earned != 0): ?>
+        <div class="row">
+            <div class="col-12">
+                <div class="alert <?php echo ($gems_earned > 0) ? 'alert-warning' : 'alert-danger'  ?>" role="alert">
+                    <img src="/img/gamification/gems.svg" alt="Gems" title="Gems earned" style="width: 1rem;height: 1rem;">
+                    <?php echo $gems_message; ?>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
         <div class="row">
             <div class="col-12">
                 <table class="table table-borderless">
@@ -165,7 +180,7 @@ function print_table_footer($array_table_rows) {
                     and you marked for learning once again.</p>
                 <p><strong class="word frequency-list">Other</strong>: words that you never marked for learning and you seem
                     to understand well.</p>
-                <p><small>This chart shows only words or phrases.</small></p>
+                <p><small>Note: if a word appeared more than once in the text it will count as the number of times it appeared in the text.</small></p>
             </div>
         </div>
     </main>

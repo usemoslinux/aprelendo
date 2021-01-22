@@ -101,7 +101,7 @@ $(document).ready(function() {
                     .then(function() {
                         // Add the rest of the scripts and stylesheets
                         Promise.all([
-                            contents.addScript("/js/showtext.js"),
+                            contents.addScript("/js/showtext-min.js"),
                             contents.addScript(
                                 "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
                             ),

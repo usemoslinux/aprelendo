@@ -150,10 +150,10 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     border: none;
 }
 
-.dropdown-toggle>img {
+.dropdown-toggle>img,
+.gamification img {
     width: 30px;
     height: 30px;
-    margin-top: -5px;
 }
 
 .navbar-nav>li>.dropdown-menu {
@@ -184,6 +184,9 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     border-radius: 98px;
     font-size: 1rem;
     text-shadow: none;
+    height: 38px;
+    margin-top: 4px;
+    padding: 6px 8px;
 }
 
 .navbar-light .navbar-nav .nav-link:focus,
@@ -195,8 +198,11 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     display: none;
 }
 
-#img-language-flag {
-    display: inline;
+.gamification {
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: .5rem .5rem .5rem 0
 }
 
 @media only screen and (max-width: 767px) {
@@ -209,6 +215,9 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
         background-color: transparent;
         color: white;
         padding-bottom: 0;
+        height: auto;
+        margin-top: inherit;
+        padding: .5rem 0;
     }
 
     #user-menu:hover,
@@ -222,14 +231,22 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
         display: inline;
     }
 
-    #language-menu {
-        font-size: 1rem;
-        margin-top: 12px;
-    }
-
-    #img-language-flag {
+    #img-language-flag, 
+    .gamification img {
         width: 16px;
         height: 16px;
+    }
+
+    #streak-days {
+        margin-top: 20px;
+    }    
+
+    #streak-days:after {
+        content: " day streak";
+    }
+
+    #xp-points:after {
+        content: " gems earned";
     }
 }
 
@@ -262,7 +279,6 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 }
 
 @media screen and (max-width: 767px) {
-
     .navbar-light .navbar-nav .open .dropdown-menu>a:focus,
     .navbar-light .navbar-nav .open .dropdown-menu>a:hover {
         color: black;
@@ -275,12 +291,15 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     .navbar-nav {
         padding: inherit;
     }
+
+    .nav-item {
+        margin-left: 1rem;
+    }
 }
 
 .navbar-light {
     background: linear-gradient(to right, #0062E6, #33AEFF);
     border-color: transparent;
-    box-shadow: 0 .10rem .10rem 0 rgba(0,0,0,.1);
 }
 
 .headerwrap .navbar-light {
@@ -1174,7 +1193,8 @@ i.status_learned {
 }
 
 .video-reading-line {
-    background-color: beige;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
 }
 
 @media screen and (max-width: 767px) {

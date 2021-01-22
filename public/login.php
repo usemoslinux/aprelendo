@@ -58,8 +58,10 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         </div>
                         <div class="form-group">
                             <label for="password">Password:</label>
-                            <input type="password" id="password" name="password" class="form-control" pattern=".{8,}"
-                                required>
+                            <input type="password" id="password" name="password" class="form-control"
+                                pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
+                                title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                autocomplete="off">
                         </div>
                         <p>
 

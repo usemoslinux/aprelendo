@@ -22,13 +22,13 @@ $(document).ready(function() {
     var $sel_start, $sel_end;
     var start_sel_time, end_sel_time;
     var $selword = null; // jQuery object of the selected word/phrase
-    dictionary_URI = "";
-    translator_URI = "";
+    var dictionary_URI = "";
+    var translator_URI = "";
     var translate_paragraph_link = "";
-    prevsel = 0; // previous selection index in #selPhrase
-    resume_video = false;
-    video_paused = true;
+    var resume_video = false;
+    var video_paused = false;
     var show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
+    var gems_earned = 0;
 
     // ajax call to get dictionary & translator URIs
     $.ajax({
@@ -49,6 +49,8 @@ $(document).ready(function() {
     $(document).on("mousedown touchstart", ".word", function(e) {
         e.preventDefault();
         e.stopPropagation();
+
+        video_paused = player.getPlayerState() != 1;
 
         // if there is video playing
         if (!video_paused) {
@@ -119,9 +121,7 @@ $(document).ready(function() {
             $(".word").removeClass("highlighted");
 
             $sel_end =
-                e.type === "mouseover"
-                    ? $(this)
-                    : $(
+                e.type === "mouseover" ? $(this) : $(
                           document.elementFromPoint(
                               e.originalEvent.touches[0].clientX,
                               e.originalEvent.touches[0].clientY
@@ -155,7 +155,6 @@ $(document).ready(function() {
     function setAddDeleteButtons() {
         var $btnremove = $("#btnremove");
         var $btnadd = $("#btnadd");
-        var $btncancel = $("#btncancel");
 
         var underlined_words_in_selection = $selword.filter(
             ".learning, .new, .forgotten, .learned"
@@ -217,19 +216,9 @@ $(document).ready(function() {
                             phrase.text().toLowerCase() ===
                             sel_text.toLowerCase()
                         ) {
-                            if (
-                                $(this).is(
-                                    ".new, .learning, .learned, .forgotten"
-                                )
-                            ) {
-                                phrase.wrapAll(
-                                    "<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></span>"
-                                );
-                            } else {
-                                phrase.wrapAll(
-                                    "<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>"
-                                );
-                            }
+                            phrase.wrapAll(
+                                "<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>"
+                            );
 
                             phrase.contents().unwrap();
                         }
@@ -279,12 +268,7 @@ $(document).ready(function() {
             .last()
             .next();
         $end_obj =
-            $end_obj.length > 0
-                ? $end_obj
-                : $selword
-                      .nextAll()
-                      .last()
-                      .next();
+            $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
         var $sentence = $start_obj
             .nextUntil($end_obj)
             .addBack()
@@ -391,8 +375,39 @@ $(document).ready(function() {
                     }
                 }).done(function(result) {
                     // if everything went fine, remove the underlining
-                    $filter.removeClass();
-                    $filter.addClass('word');
+                    // also, the case of the word/phrase in the text has to be respected
+                    // for phrases, we need to make sure that new underlining is added for each word (call to underlinewords.php)
+
+                    var $result = $(result);
+                    var $cur_filter = {};
+                    var cur_word = /""/;
+                    var word_html = "";
+                    var word_is_new = false;
+
+                    $filter.each(function() {
+                        $cur_filter = $(this);
+
+                        $result.filter(".word").each(function(key) {
+                            cur_word = new RegExp(
+                                "\\b" + $(this).text() + "\\b",
+                                "iu"
+                            ).exec($cur_filter.text());
+                            $(this).text(cur_word);
+                        });
+
+                        // check if any word marked by PHP as .learning should be marked as .new instead
+                        if ($(this).hasClass("learning")) {
+                            word_html = $(this).html();
+                            word_is_new = $(".new").filter(function() {
+                                return $(this).html() == word_html;
+                            }).length > 0;
+                            if (word_is_new) {
+                                $(this).removeClass("learning").addClass("new");
+                            }
+                        }
+
+                        $cur_filter.replaceWith($result.clone());
+                    });
                 });
             })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
@@ -420,7 +435,7 @@ $(document).ready(function() {
             word = $(this)
                 .text()
                 .toLowerCase();
-            if (jQuery.inArray(word, oldwords) == -1) {
+            if ($.inArray(word, oldwords) == -1) {
                 oldwords.push(word);
             }
         });
@@ -436,8 +451,64 @@ $(document).ready(function() {
             }
         })
             .done(function(data) {
-                show_confirmation_dialog = false;
-                window.location.replace("texts.php");
+                if (data.error_msg == null) {
+                    // update user score (gems)
+                    var review_data = {
+                        words : { new:       $(".reviewing.new").length, 
+                                  learning:  $(".reviewing.learning").length, 
+                                  forgotten: $(".reviewing.forgotten").length },
+                        texts : { reviewed:  1 }
+                    };
+
+                    $.ajax({
+                        type: "post",
+                        url: "ajax/updateuserscore.php",
+                        data: review_data
+                    })
+                    .done(function(data) {
+                        // show text review stats
+                        if (data.error_msg == null) {
+                            gems_earned = data.gems_earned;
+                            show_confirmation_dialog = false;
+                            var url = "/textstats.php";
+                            var total_words =
+                                Number($(".word").length) + Number($(".phrase").length);
+                            var form = $(
+                                '<form action="' +
+                                    url +
+                                    '" method="post">' +
+                                    '<input type="hidden" name="created" value="' +
+                                    $(".reviewing.new").length +
+                                    '" />' +
+                                    '<input type="hidden" name="reviewed" value="' +
+                                    $(".reviewing.learning").length +
+                                    '" />' +
+                                    '<input type="hidden" name="learned" value="' +
+                                    $(".learned").length +
+                                    '" />' +
+                                    '<input type="hidden" name="forgotten" value="' +
+                                    $(".reviewing.forgotten").length +
+                                    '" />' +
+                                    '<input type="hidden" name="total" value="' +
+                                    total_words +
+                                    '" />' +
+                                    '<input type="hidden" name="gems_earned" value="' +
+                                    gems_earned +
+                                    '" />' +
+                                    "</form>"
+                            );
+                            $("body").append(form);
+                            form.submit();
+                        } else {
+                            alert("Oops! There was an unexpected error.");
+                        }
+                    })
+                    .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Oops! There was an unexpected error.");
+                    });
+                } else {
+                    alert("Oops! There was an unexpected error.");
+                }
             })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
                 alert("Oops! There was an error updating the database.");

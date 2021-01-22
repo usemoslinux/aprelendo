@@ -176,4 +176,5 @@ if (!empty($_GET)) {
     </div>
 </div>
 
+<?php require_once 'achievementsmodal.php';?>
 <?php require_once 'footer.php'; ?>

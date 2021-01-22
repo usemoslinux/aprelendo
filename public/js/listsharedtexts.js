@@ -32,7 +32,7 @@ $(document).ready(function() {
         })
             .done(function(data) {
                 if (data.error_msg) {
-                    alert("error!");
+                    alert("Oops! There was an unexpected error");
                 } else {
                     like_btn.toggleClass("fas far");
                     var total_likes = parseInt(
@@ -46,7 +46,7 @@ $(document).ready(function() {
                 }
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
-                alert(thrownError);
+                alert("Oops! There was an unexpected error");
             });
     }); // end i.fa-heart.on.click
 });

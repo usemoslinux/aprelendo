@@ -115,7 +115,7 @@ require_once PUBLIC_PATH . 'head.php';
         <div class="hiw pt-5">
             <div class="container">
                 <div class="row text-center">
-                    <h1 id="hiw" class="col-12">How it works</h1>
+                    <h2 id="hiw" class="w-100 mb-5">How it works</h2>
                     <div class="col-lg-4">
                         <h4>1. Add</h4>
                         <p>Add texts & YouTube videos to your Aprelendo library using our <a href="extensions.php"

@@ -29,20 +29,33 @@ if (!isset($_POST) || empty($_POST)) {
 }
 
 try {
-    if (isset($_POST['email'])) {
-        // check if email exists in db
-        $user = new User($pdo);
-        $user->existsByEmail($email);
-        
-        $user->loadRecordByEmail($email);
+    if (isset($_POST['email']) && isset($_POST['newpassword']) && isset($_POST['newpassword-confirmation'])) {
+        if ($_POST['newpassword'] === $_POST['newpassword-confirmation']) {
+            // create password hash
+            $options = [
+                'cost' => 11,
+            ];
+            $email = $_POST['email'];
+            $password_hash = password_hash($_POST['newpassword'], PASSWORD_BCRYPT, $options);
 
-        if (!empty($user->getEmail)) {
-            // get username associated to that email address
-            $username = $text->getName();
-            $password_hash = $text->getPasswordHash();
+            $user = new User($pdo);
+            $user->updatePasswordHash($password_hash, $email);
+        } else {
+            throw new \Exception('The passwords you entered are not identical. Please try again.');
+        }
+    } elseif (isset($_POST['email'])) {
+        if (!empty($_POST['email'])) {
+            // check if email exists in db
+            $email = $_POST['email'];
+            $user = new User($pdo);
+            $user->loadRecordByEmail($email);
+            
+            // get password hash associated to that email address
+            $username = $user->getName();
+            $password_hash = $user->getPasswordHash();
             
             // create reset link & send email
-            $reset_link = "https://www.aprelendo.com/forgotpassword.php?username=$username&reset=$password_hash";
+            $reset_link = "https://www.aprelendo.com/forgotpassword.php?email=$email&reset=$password_hash";
             $to = $email;
             $subject = 'Aprelendo - Password reset';
             
@@ -67,20 +80,6 @@ try {
         } else { // if email address does not exist in db
             throw new \Exception('No user registered with that email address. Please try again.');
         } 
-    } else if(isset($_POST['username']) && isset($_POST['pass1']) && isset($_POST['pass2'])) {
-        if ($_POST['pass1'] === $_POST['pass2']) {
-            // create password hash
-            $options = [
-                'cost' => 11,
-            ];
-            $username = $_POST['username'];
-            $password_hash = password_hash($_POST['pass1'], PASSWORD_BCRYPT, $options);
-
-            $user = new User($pdo);
-            $user->updatePasswordHash($password_hash, $username);
-        } else {
-            throw new \Exception('The passwords you entered are not identical. Please try again.');
-        }
     } else {
         throw new \Exception('Oops! There was an unexpected error when trying to reset your password.');
     }

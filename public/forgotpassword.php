@@ -36,64 +36,83 @@ use Aprelendo\Includes\Classes\User;
                         <h1 class="text-center">Restore password</h1>
                     </header>
                     <br>
-                    <div id="alert-msg" class="d-none"></div>
+                    
 
                     <?php 
-                // 1. check if username & password values passed by the reset link are set
-                if(isset($_GET['username']) && isset($_GET['reset'])) {
-                    // check if username & password exist in db
-                    $user = new User($pdo);
-                            
-                    // 1.1. if username & password values passed by the reset link are found in db, then...
-                    if ($user->existsByNameAndPasswordHash($username, $password_hash)) { // 
-                ?>
+                    // 1. check if email & password values passed by the reset link are set
+                    if(isset($_GET['email']) && isset($_GET['reset'])) {
+                        // check if email & password exist in db
+                        $email = $_GET['email'];
+                        $password_hash = $_GET['reset'];
+                        $user = new User($pdo);
+                                
+                        // 1.1. if email & password values passed by the reset link are found in db, then...
+                        if ($user->existsByEmailAndPasswordHash($email, $password_hash)) { // 
+                    ?>
 
-                    <p>Enter your new password twice.</p>
+                    <div id="alert-msg" class="alert alert-info">Enter your new password twice.</div>
                     <form id="form_create_new_password">
-                        <input type="hidden" id="username" name="username" value="<?php echo $_GET['username']; ?>">
+                        <input type="hidden" id="email" name="email" value="<?php echo $email ; ?>">
                         <div class="form-group">
-                            <label for="pass1">New password:</label>
+                            <label for="newpassword">Password:</label>
                             <small>
-                                <i>at least 8 characters long</i>
+                                <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
                             </small>
-                            <input type="password" id="pass1" name="pass1" class="form-control" pattern=".{8,}"
-                                required>
+                            <div class="input-group">
+                                <input type="password" id="newpassword" name="newpassword" class="form-control"
+                                    pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
+                                    title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                    autocomplete="off" required>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                        aria-label="Show/hide password" tabindex="-1"><i class="fas fa-eye-slash"
+                                            aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                            <small id="password-strength-text"></small>
                         </div>
                         <div class="form-group">
-                            <label for="pass2">Confirm password:</label>
-                            <small>
-                                <i>at least 8 characters long</i>
-                            </small>
-                            <input type="password" id="pass2" name="pass2" class="form-control" pattern=".{8,}"
-                                required>
+                            <label for="newpassword-confirmation">Confirm password:</label>
+                            <div class="input-group">
+                                <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
+                                    class="form-control"
+                                    pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
+                                    title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                    autocomplete="off" required>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                        aria-label="Show/hide password confirmation" tabindex="-1"><i
+                                            class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                            <small id="passwords-match-text"></small>
                         </div>
-                        <button type="submit" id="create_new_password" class="btn btn-success">Save new password</button>
+                        <button type="submit" id="create_new_password" class="btn btn-block btn-success">Save new password</button>
                     </form>
 
                     <?php
-                    } else { // 1.2. if username & password are set but not found in db, then ...
-                ?>
+                        } else { // 1.2. if email & password are set but not found in db, then ...
+                    ?>
 
-                    <div id="alert_msg" class="alert alert-danger">Can't reset user password. Possibly the recovery
-                        link has expired.</div>
+                    <div id="alert-msg" class="alert alert-danger">Can't reset user password. Possibly the recovery link has expired.</div>
 
                     <?php 
-                    }
-                } else { // 2. if username & password are NOT set, show form to send the reset password link
-                ?>
+                        }
+                    } else { // 2. if email & password are NOT set, show form to send the reset password link
+                    ?>
 
-                    <p>Enter your email address to receive a link to reset your password.</p>
+                    <div id="alert-msg" class="alert alert-info">Enter your email address to receive a link to reset your password.</div>
                     <form id="form_forgot_password">
                         <div class="form-group">
                             <label for="email">E-mail address:</label>
                             <input type="email" id="email" name="email" class="form-control" maxlength="50" required>
                         </div>
-                        <button type="submit" id="btn_forgot_password" class="btn btn-success">Request password</button>
+                        <button type="submit" id="btn_forgot_password" class="btn btn-block btn-success">Request password</button>
                     </form>
 
                     <?php 
-                }
-                ?>
+                    }
+                    ?>
 
                     <br>
                     <footer>
@@ -105,6 +124,8 @@ use Aprelendo\Includes\Classes\User;
     </div>
 </main>
 
+<script defer src="js/forgotpassword-min.js"></script>
+<script defer src="js/password-min.js"></script>
+
 <?php require_once 'footer.php'?>
 
-<script defer src="js/forgotpassword-min.js"></script>

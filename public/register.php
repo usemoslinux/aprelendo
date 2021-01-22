@@ -51,28 +51,32 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <br>
                     <div id="error-msg" class="d-none"></div>
                     <form id="form-register">
-                            <div class="form-group">
-                                <label for="native-lang">Native language:</label>
-                                <select name="native-lang" class="form-control custom-select" id="native-lang">
-                                    <option value="en" selected>English</option>
-                                    <option value="es">Spanish</option>
-                                    <option value="pt">Portuguese</option>
-                                    <option value="fr">French</option>
-                                    <option value="it">Italian</option>
-                                    <option value="de">German</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="learning-lang">Want to learn:</label>
-                                <select name="learning-lang" class="form-control custom-select" id="learning-lang">
-                                    <option value="en" <?php echo $to_lang=='English' ? 'selected' : '' ; ?>>English</option>
-                                    <option value="es" <?php echo $to_lang=='Spanish' ? 'selected' : '' ; ?>>Spanish</option>
-                                    <option value="pt" <?php echo $to_lang=='Portuguese' ? 'selected' : '' ; ?>>Portuguese</option>
-                                    <option value="fr" <?php echo $to_lang=='French' ? 'selected' : '' ; ?>>French</option>
-                                    <option value="it" <?php echo $to_lang=='Italian' ? 'selected' : '' ; ?>>Italian</option>
-                                    <option value="de" <?php echo $to_lang=='German' ? 'selected' : '' ; ?>>German</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label for="native-lang">Native language:</label>
+                            <select name="native-lang" class="form-control custom-select" id="native-lang">
+                                <option value="en" selected>English</option>
+                                <option value="es">Spanish</option>
+                                <option value="pt">Portuguese</option>
+                                <option value="fr">French</option>
+                                <option value="it">Italian</option>
+                                <option value="de">German</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="learning-lang">Want to learn:</label>
+                            <select name="learning-lang" class="form-control custom-select" id="learning-lang">
+                                <option value="en" <?php echo $to_lang=='English' ? 'selected' : '' ; ?>>English
+                                </option>
+                                <option value="es" <?php echo $to_lang=='Spanish' ? 'selected' : '' ; ?>>Spanish
+                                </option>
+                                <option value="pt" <?php echo $to_lang=='Portuguese' ? 'selected' : '' ; ?>>Portuguese
+                                </option>
+                                <option value="fr" <?php echo $to_lang=='French' ? 'selected' : '' ; ?>>French</option>
+                                <option value="it" <?php echo $to_lang=='Italian' ? 'selected' : '' ; ?>>Italian
+                                </option>
+                                <option value="de" <?php echo $to_lang=='German' ? 'selected' : '' ; ?>>German</option>
+                            </select>
+                        </div>
                         <div>
                             <div class="form-group">
                                 <label for="username">Username:</label>
@@ -85,30 +89,42 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                     required>
                             </div>
                             <div class="form-group">
-                                <label for="password">Password:</label>
+                                <label for="newpassword">Password:</label>
                                 <small>
                                     <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
                                 </small>
                                 <div class="input-group">
-                                    <input type="password" id="newpassword" name="newpassword" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required>
+                                    <input type="password" id="newpassword" name="newpassword" class="form-control"
+                                        pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
+                                        title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                        autocomplete="off" required>
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button" aria-label="Show/hide password" tabindex="-1"><i class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                            aria-label="Show/hide password" tabindex="-1"><i class="fas fa-eye-slash"
+                                                aria-hidden="true"></i></button>
                                     </div>
                                 </div>
                                 <small id="password-strength-text"></small>
                             </div>
                             <div class="form-group">
-                                <label for="password">Confirm password:</label>
+                                <label for="newpassword-confirmation">Confirm password:</label>
                                 <div class="input-group">
-                                    <input type="password" id="newpassword-confirmation" name="newpassword-confirmation" class="form-control" pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}" title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters" autocomplete="off" required >
+                                    <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
+                                        class="form-control"
+                                        pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
+                                        title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                        autocomplete="off" required>
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button" aria-label="Show/hide password confirmation" tabindex="-1"><i class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                            aria-label="Show/hide password confirmation" tabindex="-1"><i
+                                                class="fas fa-eye-slash" aria-hidden="true"></i></button>
                                     </div>
                                 </div>
                                 <small id="passwords-match-text"></small>
                             </div>
                             <button type="submit" id="btn_register" class="btn btn-block btn-success">Sign up</button>
-                            <small>By registering, you declare to have read and accepted the <a href="privacy.php" target="_blank" rel="noopener noreferrer">privacy policy</a>.</small>    
+                            <small>By registering, you declare to have read and accepted the <a href="privacy.php"
+                                    target="_blank" rel="noopener noreferrer">privacy policy</a>.</small>
                         </div>
                     </form>
                     

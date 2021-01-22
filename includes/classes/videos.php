@@ -103,7 +103,6 @@ class Videos extends DBEntity {
             if ($result === false) {
                 throw new \Exception('Malformed YouTube link');
             }
-            return $result;
         } else {
             // check if user copied the url directly from the url bar (alternative method)
             $yt_urls = array('https://www.youtube.com/watch',
@@ -118,16 +117,16 @@ class Videos extends DBEntity {
                     // extract youtube video id
                     foreach ($url_params as $url_param) {
                         if(strpos($url_param, 'v=') === 0) {
-                            return substr($url_param, 2);
+                            $result = substr($url_param, 2);
+                            break;
                         } else {
                             throw new \Exception('Malformed YouTube link');
                         }
                     }
-                } else {
-                    throw new \Exception('Malformed YouTube link');
                 }
             }
         }
+        return $result;
     } // end extractYTId()
 
     /**
