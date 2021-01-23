@@ -128,6 +128,24 @@ class Achievements extends DBEntity {
             $stmt = null;
         }
     }
+
+    /**
+     * Returns achievements by $type_id and $threshold
+     *
+     * @param integer $type_id
+     * @param integer $threshold
+     * @return array|null
+     */
+    private function checkByType(int $type_id, int $threshold): ?array {
+        $sql = "SELECT * 
+                FROM `achievements`
+                WHERE `type_id`=? AND `threshold`<=?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$type_id, $threshold]);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
+        return $result;
+    }
 }
 
 ?>
