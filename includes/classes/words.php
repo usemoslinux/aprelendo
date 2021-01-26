@@ -314,10 +314,6 @@ class Words extends DBEntity {
             $stmt->execute([$this->user_id, $this->lang_id]);
             $result = $stmt->fetchAll();
 
-            if (!$result || empty($result)) {
-                throw new \Exception('Oops! There are no words in your library yet.');
-            }
-
             return $result;
         } catch (\PDOException $e) {
             throw new \Exception('Oops! There was an unexpected error trying to process your search request.');

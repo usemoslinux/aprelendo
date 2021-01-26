@@ -97,16 +97,16 @@ $(document).ready(function() {
             rendition.hooks.content.register(function(contents) {
                 // Add JQuery
                 contents
-                    .addScript("https://code.jquery.com/jquery-3.3.1.min.js")
+                    .addScript("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js")
                     .then(function() {
                         // Add the rest of the scripts and stylesheets
                         Promise.all([
                             contents.addScript("/js/showtext-min.js"),
                             contents.addScript(
-                                "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                                "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"
                             ),
                             contents.addScript(
-                                "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                                "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"
                             )
                         ]);
 
