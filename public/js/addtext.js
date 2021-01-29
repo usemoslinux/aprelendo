@@ -82,26 +82,6 @@ $(document).ready(function() {
     }); // end #btn-upload-audio.on.click
 
     /**
-     * Checks if the audio file being uploaded is bigger than the allowed limit
-     * This is triggered when the user clicks the "upload" audio file button
-     */
-    $("#audio-uri").on("change", function() {
-        var $input_audio = $(this);
-        var max_file_size =
-            $("#form-addtext").attr("data-premium") == "0" ? 2097152 : 10485760;
-        if ($input_audio[0].files[0].size > max_file_size) {
-            showMessage(
-                "This file is bigger than the allowed limit (" +
-                    max_file_size / 1048576 +
-                    " MB). " +
-                    "Notice that if f you decide to continue the text will be uploaded without an audio file.",
-                "alert-danger"
-            );
-            $input_audio.val("");
-        }
-    }); // end #audio-uri.on.change
-
-    /**
      * Checks how many characters are left for user input
      */
     $("#text").on("input", function() {

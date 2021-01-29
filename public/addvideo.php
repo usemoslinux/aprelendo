@@ -84,7 +84,7 @@ require_once PUBLIC_PATH . 'header.php';
                                                 value="<?php if (isset($_GET['url']) && !empty($_GET['url'])) { echo $_GET['url']; } ?>" required>
                                             <div class="input-group-append">
                                                 <button id="btn-fetch" class="btn btn-secondary" type="button">
-                                                    <i id="btn-fetch-img" class="fas fa-arrow-down"></i> Fetch</button>
+                                                    <i id="btn-fetch-img" class="fas fa-arrow-down text-warning"></i> Fetch</button>
                                             </div>
                                         </div>
                                     </div>

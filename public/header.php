@@ -22,6 +22,12 @@ require_once('../includes/dbinit.php'); // connect to database
 use Aprelendo\Includes\Classes\Language;
 use Aprelendo\Includes\Classes\Gems;
 
+if (isset($_GET['lang']) && !empty($_GET['lang'])) {
+    $lang = new Language($pdo, $user->getId());
+    $lang->loadRecordByName($_GET['lang']);
+    $user->setActiveLang($lang->getId());
+}
+
 $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
 
 $gems = new Gems($pdo, $user->getId(), $user->getLangId());
