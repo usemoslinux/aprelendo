@@ -104,9 +104,6 @@ $(document).ready(function() {
                             contents.addScript("/js/showtext-min.js"),
                             contents.addScript(
                                 "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"
-                            ),
-                            contents.addScript(
-                                "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"
                             )
                         ]);
 
