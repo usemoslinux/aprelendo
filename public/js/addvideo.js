@@ -70,7 +70,7 @@ $(document).ready(function() {
             $("#error-msg").addClass("d-none");
             $("#btn-fetch-img")
                 .removeClass()
-                .addClass("fas fa-sync fa-spin");
+                .addClass("fas fa-sync fa-spin text-warning");
 
             $.ajax({
                 type: "POST",
@@ -115,7 +115,7 @@ $(document).ready(function() {
                 .always(function() {
                     $("#btn-fetch-img")
                         .removeClass()
-                        .addClass("fas fa-arrow-down");
+                        .addClass("fas fa-arrow-down text-warning");
                 }); // end ajax
         } else {
             showMessage(

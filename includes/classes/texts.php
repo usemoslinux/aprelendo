@@ -521,7 +521,7 @@ class Texts extends DBEntity {
     * Raw Score = 0.1579 * (PDW) + 0.0496 * ASL
     * PDW = Percentage of Difficult Words
     * ASL = Average Sentence Length in words
-    * If (PDW) is greater than 25%: 100% - 80% (wordfreq for beginners) + 5% (additional threshold that accounts for names, numbers, etc.), then:
+    * If (PDW) is greater than 25%: 100% - 80% (wordfreq for beginners) + 5% (additional threshold that accounts for names, etc.), then:
     * Adjusted Score = Raw Score + 3.6365, otherwise Adjusted Score = Raw Score
     * If Adjusted Score < 5, text difficulty is set to "beginner".
     * If Adjusted Score < 9, text difficulty is set to "intermediate".
@@ -549,7 +549,8 @@ class Texts extends DBEntity {
             $text = $xml_text;
         }
 
-        $nr_of_words = $this->nr_of_words = preg_match_all('/(\w+)/u', $text, $words_in_text);
+        //$nr_of_words = $this->nr_of_words = preg_match_all('/(\w+)/u', $text, $words_in_text);
+        $nr_of_words = $this->nr_of_words = preg_match_all('/\b[^\d\W]+\b/u', $text, $words_in_text); // only words, ignores numbers
         $nr_of_sentences = preg_match_all('/[^?!.]{3,}[?!.][^?!.]/u', $text . ' ', $sentences_in_text);
         
         try {
@@ -564,7 +565,7 @@ class Texts extends DBEntity {
             $row = $stmt->fetch(\PDO::FETCH_NUM);
             $frequency_list_table = 'frequency_list_' . $row[0];
             
-            // build frequency list array for "beginner" level words (80%)
+            // build frequency list array for "beginner" level words (90%)
             $sql = "SELECT `word` 
                     FROM `$frequency_list_table` WHERE `frequency_index` <= 90";
 

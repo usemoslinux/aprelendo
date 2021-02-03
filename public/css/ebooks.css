@@ -137,6 +137,7 @@ select {
 #toc {
     display: block;
     margin: 25px auto;
+    min-height: 100vh;
 }
 
 /* ARROWS (NEXT & PREVIOUS) */

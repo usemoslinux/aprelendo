@@ -109,6 +109,16 @@ try {
 
     <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
 
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA==" crossorigin="anonymous" />
+
+    <!-- Extra style sheets -->
+    <link rel="stylesheet" type="text/css" href="css/ebooks-min.css">
+    <link rel="stylesheet" type="text/css" href="css/styles-min.css">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CRaleway:400,700">
+
     <!-- Epub.js & jszip -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js" integrity="sha384-6M0rZuK8mRhdpnt5f7OV2x+2kGHdPMTeq8E4qSbS5S4Ohq+Mcq1ZmSWQV3FdawvW" crossorigin="anonymous"></script>
     <script defer src="js/epubjs/epub.min.js"></script>
@@ -118,13 +128,6 @@ try {
 
     <!-- Bootstrap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js" integrity="sha512-XKa9Hemdy1Ui3KSGgJdgMyYlUg1gM+QhL6cnlyTe2qzMCYm4nAZ1PsVerQzTTXzonUR+dmswHqgJPuwCq1MaAg==" crossorigin="anonymous"></script>
-
-    <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CRaleway:400,700">
-    
-    <!-- Extra style sheets -->
-    <link rel="stylesheet" type="text/css" href="css/ebooks-min.css">
-    <link rel="stylesheet" type="text/css" href="css/styles-min.css">
 </head>
 
 <body id="readerpage" <?php echo getCSS($class, $styles); ?> >

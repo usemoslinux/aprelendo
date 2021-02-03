@@ -138,7 +138,7 @@ $(document).ready(function() {
         if (url != "") {
             $("#btn-fetch-img")
                 .removeClass()
-                .addClass("fas fa-sync fa-spin");
+                .addClass("fas fa-sync fa-spin text-warning");
             $.ajax({
                 type: "GET",
                 url: "ajax/fetchurl.php",
@@ -193,7 +193,7 @@ $(document).ready(function() {
                 .always(function() {
                     $("#btn-fetch-img")
                         .removeClass()
-                        .addClass("fas fa-arrow-down");
+                        .addClass("fas fa-arrow-down text-warning");
                 });
         }
     } // end fetch_url
