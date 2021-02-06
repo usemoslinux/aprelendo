@@ -992,7 +992,8 @@ $(document).ready(function() {
      * Loads audio for text
      */
     function loadAudio() {
-        if ($("#audioplayer").length > 0) {
+        var $audio_player = $("#audioplayer");
+        if ($audio_player.length > 0) {
             var txt = $("#text").text();
             var doclang = $("html").attr("lang");
 
@@ -1007,8 +1008,7 @@ $(document).ready(function() {
                         skipAudioPhases();
                         return false;
                     }
-                    var $audio_player = $("#audioplayer");
-                    $audio_player.find("source").attr("src", e.response);
+                    $("#audio-mp3").attr("src", e.response);
                     $audio_player[0].load();
                     $("#audioplayer-loader").addClass("d-none");
                     $("#audioplayer").removeClass("d-none");

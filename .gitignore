@@ -11,3 +11,4 @@ jsconfig.json
 todo.md
 sitemap.xml
 **/*.log
+public/test.php
