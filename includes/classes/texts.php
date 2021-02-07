@@ -276,11 +276,13 @@ class Texts extends DBEntity {
                 return false;
             }
     
-            $sql = "SELECT COUNT(*)
-                    FROM `{$this->table}`
-                    WHERE `user_id` = ? AND `source_uri` = ?";
+            // check if source_url exists in 'texts' or 'archived_texts' table
+            $sql = "SELECT
+                    (SELECT COUNT(*) FROM `{$this->table}` WHERE `user_id` = ? AND `source_uri` = ?) +
+                    (SELECT COUNT(*) FROM `archived_texts` WHERE `user_id` = ? AND `source_uri` = ?)
+                    AS SumCount";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $source_url]);
+            $stmt->execute([$this->user_id, $source_url, $this->user_id, $source_url]);
             $num_rows = $stmt->fetchColumn(); 
     
             return $num_rows > 0;

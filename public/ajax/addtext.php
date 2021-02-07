@@ -97,8 +97,8 @@ try {
                     $texts_table->update($id, $title, $author, $text, $source_url, $target_file_name, $type);
                 } else {
                     if ($texts_table->exists($source_url)) {
-                        $msg = 'The text you are trying to add already exists in our database. ';
-                        $msg .= $is_shared ? 'Look for it in the <a class="alert-link" href="sharedtexts.php">shared texts</a> section.' : 'Look for it in your <a class="alert-link" href="texts.php">private library</a>.';
+                        $msg = 'The text you are trying to add already exists. ';
+                        $msg .= $is_shared ? 'Look for it in the <a class="alert-link" href="sharedtexts.php">shared texts</a> section.' : 'Look for it in your <a class="alert-link" href="texts.php">private library</a>. Remember that you may have <a class="alert-link" href="texts.php?sa=1">archived</a> it.';
 
                         throw new \Exception($msg);
                     }

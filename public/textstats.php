@@ -122,7 +122,7 @@ function print_table_footer($array_table_rows) {
         <div class="row">
             <div class="col-12">
                 <div class="alert alert-info" role="alert">
-                    Congrats! You've finished reviewing this text. <?php echo !$_POST['is_shared'] ? 'It will now be marked as "<a href="texts.php?sa=1">archived</a>".' : ''; ?>
+                    Congrats! You've finished reviewing this text. <?php echo !$_POST['is_shared'] ? 'It will now be marked as "<a class="alert-link" href="texts.php?sa=1">archived</a>".' : ''; ?>
                 </div>
             </div>
         </div>
