@@ -495,6 +495,7 @@ $(document).ready(function() {
                                     '<input type="hidden" name="gems_earned" value="' +
                                     gems_earned +
                                     '" />' +
+                                    '<input type="hidden" name="is_shared" value="1" />' +
                                     "</form>"
                             );
                             $("body").append(form);

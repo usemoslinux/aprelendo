@@ -464,7 +464,7 @@ class Reader extends Text
         $html .= '<p></p>';
         
         if ($this->prefs->getAssistedLearning()) {
-            $html .= '<button type="button" id="btn-next-phase" class="basic btn btn-lg btn-primary btn-block">Go to phase 2
+            $html .= '<button type="button" id="btn-next-phase" class="btn btn-lg btn-primary btn-block">Go to phase 2
                       <br>
                       <span class="small">Listening</span>
                       </button>';
@@ -517,7 +517,7 @@ class Reader extends Text
         
         $html .= '</div>';
         
-        $html .= '<br><button type="button" id="btn-save" title="Save the learning status of your words" class="basic btn btn-lg btn-success btn-block">Finish & Save</button>';
+        $html .= '<br><button type="button" id="btn-save" title="Save the learning status of your words" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
         
         // $time_end = microtime(true);
         // $execution_time = ($time_end - $time_start);

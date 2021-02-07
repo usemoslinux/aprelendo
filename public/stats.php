@@ -61,7 +61,7 @@ use Aprelendo\Includes\Classes\Achievements;
                         system thinks you have already reviewed enough times.</p>
                     <p><strong class="word-description forgotten">Forgotten</strong>: words you reviewed or learned in the past,
                         but that you marked for learning once again.</p>
-                    <p><small>Note: if a word appeared more than once in the text it will only count as one.</small></p>
+                    <p><small>Note: considering each text individually, if a word appeared more than once it will only count as one.</small></p>
                 </div>
             </div>
         </section>
