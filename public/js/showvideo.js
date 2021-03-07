@@ -293,7 +293,9 @@ $(document).ready(function() {
             url: "/ajax/getwordfreq.php",
             data: { word: word, lg_iso: lg_iso }
         }).done(function(data) {
-            if (data < 81) {
+            if (data == 0){
+                $freqlvl.hide();
+            } else if (data < 81) {
                 $freqlvl
                     .hide()
                     .text("High frequency word")
@@ -307,8 +309,6 @@ $(document).ready(function() {
                     .removeClass()
                     .addClass("badge badge-warning")
                     .show();
-            } else if (data == 0){
-                $freqlvl.hide();
             }
         }).fail(function() {
             $freqlvl.hide();
