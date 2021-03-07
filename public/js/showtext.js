@@ -336,7 +336,7 @@ $(document).ready(function() {
                     .removeClass()
                     .addClass("badge badge-warning")
                     .show();
-            } else {
+            } else if (data == 0){
                 $freqlvl.hide();
             }
         }).fail(function() {
