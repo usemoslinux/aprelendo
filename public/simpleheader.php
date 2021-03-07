@@ -21,9 +21,9 @@
 <div class="d-flex h-100 flex-column">
     <header>
         <nav class="navbar navbar-expand-md navbar-light">
-            <div class="container">
+            <div class="container mtb">
                 <!-- Brand -->
-                <a class="navbar-brand" href="index.php">Aprelendo</a>
+                <a class="navbar-brand" href="index.php"></a>
 
                 <!-- Toggler Button -->
                 <button class="navbar-toggler" aria-label="toggler button" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">

@@ -47,9 +47,9 @@ $streak_days = (int)$gems->getDaysStreak();
 <div class="d-flex h-100 flex-column">
     <header>
         <nav class="navbar navbar-expand-md navbar-light">
-            <div class="container">
+            <div class="container mtb">
                 <!-- Brand -->
-                <a class="navbar-brand" href="index.php">Aprelendo</a>
+                <a class="navbar-brand" href="index.php"></a>
 
                 <!-- Toggler Button -->
                 <button class="navbar-toggler" type="button" aria-label="toggler button" data-toggle="collapse" data-target="#collapsibleNavbar">

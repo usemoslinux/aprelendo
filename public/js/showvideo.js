@@ -293,24 +293,26 @@ $(document).ready(function() {
             url: "/ajax/getwordfreq.php",
             data: { word: word, lg_iso: lg_iso }
         }).done(function(data) {
-            if (data == 0) {
-                $freqlvl.hide();
-            } else if (data < 81) {
+            if (data < 81) {
                 $freqlvl
                     .hide()
                     .text("High frequency word")
                     .removeClass()
                     .addClass("badge badge-danger")
                     .show();
-            } else {
+            } else if (data < 97){
                 $freqlvl
                     .hide()
                     .text("Medium frequency word")
                     .removeClass()
                     .addClass("badge badge-warning")
                     .show();
+            } else {
+                $freqlvl.hide();
             }
-        });
+        }).fail(function() {
+            $freqlvl.hide();
+        });;
     } // end getWordFrequency
 
     /**

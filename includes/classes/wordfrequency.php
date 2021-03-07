@@ -82,7 +82,7 @@ class WordFrequency {
             $table = 'frequency_list_' . $lg_iso;
             $sql = "SELECT `word`, `frequency_index` 
                     FROM `$table`   
-                    WHERE `frequency_index` < 80";
+                    WHERE `frequency_index` < 81";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
             $result = $stmt->fetchAll();

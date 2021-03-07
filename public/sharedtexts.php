@@ -47,7 +47,7 @@ if (!empty($_GET)) {
 
 ?>
 
-<div class="container mtb d-flex flex-grow-1 flex-column">
+<div class="container mtb d-flex flex-column">
     <div class="row">
         <div class="col-sm-12">
             <nav>
@@ -66,7 +66,7 @@ if (!empty($_GET)) {
                         <input id="ft" name="ft" value="<?php echo $filter_type; ?>" type="hidden">
                         <input id="fl" name="fl" value="<?php echo $filter_level; ?>" type="hidden">
                         <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
-                        <div id="search-wrapper-div" class="input-group my-2">
+                        <div id="search-wrapper-div" class="input-group mb-3">
                             <div id="filter-wrapper-div" class="input-group-prepend">
                                 <button type="button" id="btn-filter" class="btn btn-secondary dropdown-toggle"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter
@@ -131,8 +131,8 @@ if (!empty($_GET)) {
                             </div>
                         </div>
                         <!-- Split button -->
-                        <div class="dropdown ml-md-2 my-2">
-                            <button type="button" class="btn btn-success dropdown-btn dropdown-toggle" data-toggle="dropdown">
+                        <div class="dropdown dropdown-add ml-md-2 mb-3">
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                                 <i class="fas fa-plus"></i> Add
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">

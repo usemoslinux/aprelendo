@@ -1,9 +1,8 @@
 .vscode/
-addons/
 vendor/
 config/config.php
 public/test/
-temp/
+tests/
 uploads/
 php-info.php
 jsconfig.json

@@ -92,7 +92,7 @@ if (!$user->isLoggedIn()) {
                     <div class="card mb-5 mb-lg-0">
                         <div class="card-body">
                             <h6 class="card-price text-center">Free as<br>in <br>beer <small><i class="fas fa-beer text-warning"></i></small><span class="period"></span></h6>
-                            <div style="height:15px"></div>
+                            <div style="height:17px"></div>
                             <hr>
                             <ul class="fa-ul">
                                 <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts

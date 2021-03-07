@@ -82,11 +82,11 @@ $msg_progress_bar = "$nr_of_words_learned_today / 10";
 <!-- Activity monitor -->
 <div class="row flex">
     <div class="col-sm-12">
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-body">
                 <h6 class="card-title">Today's goal: Practice 10 words</h6>
                 <div class="progress my-2" style="height: 10px;">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="min-width: 5%; width: <?php echo strval($per_of_words_leardned_today) . '%'; ?>"><?php echo $msg_progress_bar; ?></div>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="min-width: 34px; width: <?php echo strval($per_of_words_leardned_today) . '%'; ?>"><?php echo $msg_progress_bar; ?></div>
                 </div> 
                 <?php echo $message_html; ?>
                 <a href="stats.php" class="font-italic float-right"><i class="fas fa-chart-line"></i> More stats</a>

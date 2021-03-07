@@ -127,15 +127,26 @@ $(document).ready(function() {
     }); // end #upload-text.on.change
 
     /**
+     * Checks that the string parameter is a valid URL
+     * @param {string} str 
+     */
+    function validateUrl(str)
+    {
+        var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
+        var regexp = new RegExp(expression);
+        return regexp.test(str);
+    } 
+
+    /**
      * Fetches text from url using Mozilla's redability parser
      * This is triggered when user clicks the Fetch button or, externally, by bookmarklet/addons calls
      */
-    function fetch_url() {
+    function fetch_url(url) {
         resetControls(true);
 
-        var url = $("#url").val();
+        url = url == "" ? $("#url").val() : url; 
 
-        if (url != "") {
+        if (validateUrl(url)) {
             $("#btn-fetch-img")
                 .removeClass()
                 .addClass("fas fa-sync fa-spin text-warning");
@@ -199,6 +210,11 @@ $(document).ready(function() {
     } // end fetch_url
 
     $("#btn-fetch").on("click", fetch_url);
+
+    $("#url").on("paste", function(e) {
+        var pastedData = e.originalEvent.clipboardData.getData('text');
+        fetch_url(pastedData);
+    });
 
     function resetControls(exceptSourceURI) {
         $("#alert-msg").addClass("d-none");

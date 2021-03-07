@@ -34,7 +34,7 @@ if (!empty($_GET)) {
 $query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '';
 ?>
 
-<div class="container mtb d-flex flex-grow-1 flex-column">
+<div class="container mtb d-flex flex-column">
     <div class="row">
         <div class="col-sm-12">
             <nav>
@@ -51,7 +51,7 @@ $query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])
                 <div class="row flex">
                     <div class="col-sm-12">
                         <form class="form-flex-row" method="get">
-                            <div class="input-group my-2">
+                            <div class="input-group mb-3">
                                 <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
                                 <input type="text" id="s" name="s" class="form-control" aria-label="Search text" placeholder="Search..." value="<?php echo $search_text ?>">
                                 <div class="input-group-append">
@@ -61,8 +61,8 @@ $query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])
                                 </div>
                             </div>
                             <!-- Split button -->
-                            <div class="dropdown ml-md-2 my-2">
-                                <button type="button" class="btn btn-success dropdown-btn dropdown-toggle <?php echo $user->isPremium() ? '"' : 'disabled" title="Premium users only"'; ?> data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="dropdown dropdown-add ml-md-2 mb-3">
+                                <button type="button" class="btn btn-success dropdown-toggle <?php echo $user->isPremium() ? '"' : 'disabled" title="Premium users only"'; ?> data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-file-export"></i> Export
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">

@@ -113,6 +113,15 @@ use Aprelendo\Includes\Classes\Texts;
                             </div>
                         </div>
                     </div>
+                    <div class="form-row mb-2">
+                        <div class="col-12">
+                            <div id="shared-text-wrapper-div" class="custom-control custom-switch">
+                                <input id="shared-text" class="custom-control-input" type="checkbox" name="shared-text" <?php if
+                                    (isset($art_is_shared)) {echo 'checked' ;}?>>
+                                <label class="custom-control-label" for="shared-text" id="shared-text-label"> Share text with our community</label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group col-12">
                             <div class="d-flex justify-content-between">
@@ -123,15 +132,6 @@ use Aprelendo\Includes\Classes\Texts;
                                 placeholder="Text goes here (required), max. length = 10,000 chars" required><?php if (isset($art_content)) {echo $art_content;}?></textarea>
                             <label for="upload-text" id="upload-txtfile-label">Upload txt file:</label>
                             <input id="upload-text" type="file" name="upload-text" accept=".txt">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-12">
-                            <div id="shared-text-wrapper-div" class="custom-control custom-switch">
-                                <input id="shared-text" class="custom-control-input" type="checkbox" name="shared-text" <?php if
-                                    (isset($art_is_shared)) {echo 'checked' ;}?>>
-                                <label class="custom-control-label" for="shared-text" id="shared-text-label"> Share text with the community</label>
-                            </div>
                         </div>
                     </div>
                     <div class="form-row">
