@@ -29,7 +29,7 @@
                 <button id="btncancel" type="button" data-dismiss="modal" class="btn btn-link">Cancel</button>
                 <button id="btnadd" type="button" class="btn btn-primary mb-2" data-dismiss="modal">Add</button>
             </div>
-            <span id="bdgfreqlvl" class="badge"></span>
+            <span id="bdgfreqlvl" class="badge d-none"></span>
             <div class="modal-body" id="definitions">
                 <div id="iframe-loader" class="lds-ripple m-auto">
                     <div></div>
