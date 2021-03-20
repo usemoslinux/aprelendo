@@ -156,6 +156,6 @@ use Aprelendo\Includes\Classes\Texts;
 </div>
 
 <script defer src="js/readability/Readability-min.js"></script>
-<script defer src="js/addtext.js"></script>
+<script defer src="js/addtext-min.js"></script>
 
 <?php require_once 'footer.php'?>
