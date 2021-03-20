@@ -319,6 +319,8 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 .btn:focus,
 .btn.focus {
     color: #fff;
+    outline: 0;
+	box-shadow: none;
 }
 
 .btn-outline-secondary {
@@ -1217,24 +1219,11 @@ span.flag-icon {
 }
 
 img.flag-icon {
-    border-radius: 50%;
-    display: block;
-    height: 60px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 60px;
-}
-
-img.flag-icon:hover {
-    box-shadow: 0 0 0 3px white;
-}
-
-span.flag-icon>p {
-    font-weight: bold;
+    width: 32px;
 }
 
 div.blurry-background {
-    background: rgba(37, 43, 47, 0.15) url("../img/backgrounds/welcome-page-background.jpg");
+    background: radial-gradient(circle, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%), url("../img/backgrounds/welcome-page-background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -1250,6 +1239,10 @@ div.blurry-background {
 
 .blurry-background h1 {
     margin: 3rem auto;
+}
+
+.blurry-background .dropdown-item {
+    text-shadow: none;
 }
 
 /* CREATE ACCOUNT */

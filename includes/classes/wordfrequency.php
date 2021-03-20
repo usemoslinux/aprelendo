@@ -39,19 +39,10 @@ class WordFrequency {
      * @param string $lg_iso
      * @return int
      */
-    public static function get(\PDO $pdo, string $word, string $lg_iso) {
+    public static function get(\PDO $pdo, string $word, string $lg_iso): int {
         try {
             $table = 'frequency_list_' . $lg_iso;
             $word = mb_strtolower($word);
-
-            $sql = "SELECT COUNT(*) AS `exists` FROM {$table} WHERE word=?";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$word]);
-            $row = $stmt->fetch();
-
-            if (!$row || $row['exists'] == 0) {
-                return 0;
-            }
 
             $sql = "SELECT * FROM {$table} WHERE word=?";
             $stmt = $pdo->prepare($sql);
@@ -59,7 +50,7 @@ class WordFrequency {
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$row) {
-                throw new \Exception('There was an unexpected error trying to load record from frequency list table.');
+                return 0;
             }
 
             $word_freq = $row['frequency_index'];
@@ -87,7 +78,7 @@ class WordFrequency {
             $stmt->execute();
             $result = $stmt->fetchAll();
 
-            if (!$result || empty($result)) {
+            if ($result === false) {
                 throw new \Exception('There was an unexpected error trying to load records from frequency list table.');
             }
 

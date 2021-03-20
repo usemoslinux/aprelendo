@@ -61,22 +61,42 @@ $(document).ready(function() {
      */
     $("#learning-lang").on("change", function() {
         var lang_array = [
-            "English",
-            "Spanish",
-            "Portuguese",
-            "French",
-            "Italian",
-            "German"
-        ];
-        var iso_array = ["en", "es", "pt", "fr", "it", "de"];
+                            "Arabic",
+                            "Chinese",
+                            "Dutch",
+                            "English",
+                            "French",
+                            "German",
+                            "Greek",
+                            "Hebrew",
+                            "Hindi",
+                            "Italian",
+                            "Japanese",
+                            "Korean",
+                            "Portuguese",
+                            "Russian",              
+                            "Spanish"
+                        ];
+        var iso_array = ["ar", "zh", "nl", "en", "fr", "de", "el", "he", "hi", "it", "ja", "ko", "pt", "ru", "es"];
+
         var welcome_array = [
-            "Welcome!",
-            "¡Bienvenido!",
-            "Bemvindo!",
-            "Bienvenue!",
-            "Benvenuto!",
-            "Willkommen!"
-        ];
+                                "أهلا بك!",
+                                "欢迎！",
+                                "Welkom!",
+                                "Welcome!",
+                                "Bienvenue!",
+                                "Willkommen!",
+                                "Καλως ΗΡΘΑΤΕ!",
+                                "ברוך הבא!",
+                                "स्वागत हे!",
+                                "Benvenuto!",
+                                "ようこそ！",
+                                "어서 오십시오!",
+                                "Bemvindo!",
+                                "Добро пожаловать!",                    
+                                "¡Bienvenido!"
+                            ];
+
         var sel_index = $(this).prop("selectedIndex");
         var img_uri = "img/flags/" + iso_array[sel_index] + ".svg";
 

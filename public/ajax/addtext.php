@@ -46,8 +46,9 @@ try {
             $source_url = $_POST['url'];
             $text = $_POST['text'];
             $type = $_POST['type'];
+            $level = isset($_POST['level']) ? $_POST['level'] : 0;
             $is_shared = $_POST['mode'] == 'video' || isset($_POST['shared-text']) ? true : false;
-            $target_file_name = '';
+            $audio_uri = '';
             $errors = [];
             
             // initialize text table
@@ -61,11 +62,7 @@ try {
             if (!isset($title) || empty($title)) {
                 $errors[] = "<li>Title is a required field. Please enter one and try again.</li>";
             }
-            
-            /*if (!isset($author) || empty($author)) {
-                $errors[] = "<li>Author is a required field. Please enter one and try again.</li>";
-            }*/
-            
+                        
             if (!isset($text) || empty($text)) {
                 $errors[] = "<li>Text is a required field. Please enter one and try again. In case you
                 are uploading a video, enter a valid YouTube URL and fetch the correct transcript. 
@@ -85,16 +82,9 @@ try {
             
             // save text in db
             if (empty($errors)) {
-                // Audio file validation
-                // if (isset($_FILES['audio']) && !empty($_FILES['audio']) && $_FILES['audio']['error'] !== UPLOAD_ERR_NO_FILE) {
-                //     $audio_file = new AudioFile($user->isPremium());
-                //     $file_uploaded = $audio_file->put($_FILES['audio']);
-                //     $target_file_name = $audio_file->getName();
-                // }
-                
                 if (!empty($_POST['id'])) {
                     $id = $_POST['id'];
-                    $texts_table->update($id, $title, $author, $text, $source_url, $target_file_name, $type);
+                    $texts_table->update($id, $title, $author, $text, $source_url, $audio_uri, $type);
                 } else {
                     if ($texts_table->exists($source_url)) {
                         $msg = 'The text you are trying to add already exists. ';
@@ -102,7 +92,8 @@ try {
 
                         throw new \Exception($msg);
                     }
-                    $texts_table->add($title, $author, $text, $source_url, $target_file_name, $type);
+                    $level = $level == 0 ? $texts_table->calculateDifficulty($text) : $level;
+                    $texts_table->add($title, $author, $text, $source_url, $audio_uri, $type, $level);
                     $text_added_successfully = true;
                 }
                 
@@ -120,6 +111,8 @@ try {
             $title = $_POST['title'];
             $author = $_POST['author'];
             $source_url = $_POST['url'];
+            $audio_uri = '';
+            $type = 1; // article (assumes that all rss texts are articles)
             $text = $_POST['text'];
             
             /*  Check if text is longer than the max. number of chars allowed, ignore if video
@@ -142,7 +135,8 @@ try {
             }
             
             // if successful, return insert_id in json format
-            $insert_id = $texts_table->add($title, $author, $text, $source_url, '', '1');
+            $level = $texts_table->calculateDifficulty($text);
+            $insert_id = $texts_table->add($title, $author, $text, $source_url, $audio_uri, $type, $level);
             if ($insert_id > 0) {
                 $text_added_successfully = true;
                 $arr = array('insert_id' => $insert_id);
@@ -158,6 +152,7 @@ try {
             $title = $_POST['title'];
             $author = $_POST['author'];
             $type = 6; // 6 = ebook
+            $level = isset($_POST['level']) && !empty($_POST['level']) ? $_POST['level'] : 0;
             $audio_uri = '';
             $target_file_name = '';
             $text = '';
@@ -183,7 +178,7 @@ try {
 
             // save text in db
             $texts_table = new Texts($pdo, $user_id, $lang_id);
-            $insert_id = $texts_table->add($title, $author, $text, $target_file_name, $audio_uri, $type);
+            $insert_id = $texts_table->add($title, $author, $text, $target_file_name, $audio_uri, $type, $level);
             
             if ($insert_id > 0) {
                 // if everything goes fine log upload

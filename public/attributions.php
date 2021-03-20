@@ -84,7 +84,7 @@ if (!$user->isLoggedIn()) {
                                     <a href="https://blacktie.co/" target="_blank" rel="noopener noreferrer">Blacktie</a>
                                 </li>
                                 <li>Wallpaper by
-                                    <a href="https://www.pexels.com/@suzyhazelwood?utm_content=attributionCopyText&utm_medium=referral&utm_source=pexels" target="_blank" rel="noopener noreferrer">Suzy Hazelwood</a> from <a href="https://www.pexels.com/" target="_blank" rel="noopener noreferrer">Pexels</a>
+                                    <a href="https://unsplash.com/photos/MKeQGpkPgwc" target="_blank" rel="noopener noreferrer">JD X</a> from <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">Unsplash</a>
                                 </li>
                             </ul>
                         </section>

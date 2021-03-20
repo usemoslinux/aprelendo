@@ -42,12 +42,21 @@ try {
         throw new \Exception('Forbidden', 403);
     }
 
-    $audiolang = array( 'en' => 'en-us', 
-                        'es' => 'es-es', 
-                        'pt' => 'pt-br', 
-                        'fr' => 'fr-fr', 
+    $audiolang = array( 'ar' => 'ar-sa',
+                        'zh' => 'zh-cn',
+                        'nl' => 'nl-nl',
+                        'en' => 'en-us', 
+                        'fr' => 'fr-fr',
+                        'de' => 'de-de',
+                        'el' => 'el-gr',
+                        'he' => 'he-il',
+                        'hi' => 'hi-in',
                         'it' => 'it-it', 
-                        'de' => 'de-de');
+                        'ja' => 'ja-jp', 
+                        'ko' => 'ko-kr', 
+                        'pt' => 'pt-br', 
+                        'ru' => 'ru-ru',
+                        'es' => 'es-es' );
     
     $tts = new VoiceRSS;
     $voice = $tts->speech([

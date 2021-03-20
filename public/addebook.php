@@ -59,21 +59,31 @@ require_once PUBLIC_PATH . 'header.php';
                     <input type="hidden" name="mode" value="ebook" />
                     <input type="hidden" name="type" value="6">
                     <div class="form-row">
-                        <div class="form-group col-lg-4">
-                            <label for="title">Title:</label>
-                            <input type="text" id="title" name="title" class="form-control" maxlength="200" placeholder="Text title (required)" autofocus
-                                required value="<?php if (isset($art_title)) {echo $art_title;}?>">
+                        <div class="form-group col-lg-6">
+                            <label for="level">Level:</label>
+                            <select name="level" id="type" class="form-control custom-select">
+                                <option value="1">Beginner</option>
+                                <option value="2" selected>Intermediate</option>
+                                <option value="3">Advanced</option>
+                            </select>
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label for="author">Author:</label>
-                            <input type="text" id="author" name="author" class="form-control" maxlength="100" placeholder="Author full name (required)"
-                                required value="<?php if (isset($art_author)) {echo $art_author;}?>">
-                        </div>
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-6">
                             <input class="d-none" id="url" name="url" type="file" accept=".epub">
                             <button id="btn-upload-epub" type="button" class="btn btn-primary btn-upload">
-                                <i class="fas fa-upload"></i>&nbsp;Upload epub file
+                                <i class="fas fa-upload"></i>&nbsp;Select epub file
                             </button>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="title">Title:</label>
+                            <input type="text" id="title" name="title" class="form-control" maxlength="200"
+                                placeholder="Book title (required)" autofocus required
+                                value="<?php if (isset($art_title)) {echo $art_title;}?>">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="author">Author:</label>
+                            <input type="text" id="author" name="author" class="form-control" maxlength="100"
+                                placeholder="Author (required)" required
+                                value="<?php if (isset($art_author)) {echo $art_author;}?>">
                         </div>
                     </div>
                     <div class="form-row">

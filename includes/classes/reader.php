@@ -232,7 +232,7 @@ class Reader extends Text
     */
     public function addLinks(string $text): string
     {
-        $find = array('/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|<[^>]*>(*SKIP)(*F)|(\w+)/iu', '/<[^>]*>(*SKIP)(*F)|[^\w<]+/u');
+        $find = array('/\s*<span class=\'word[^>]+>.*?<\/span>(*SKIP)(*F)|<[^>]*>(*SKIP)(*F)|(\w+)/iu', '/<[^>]*>(*SKIP)(*F)|[^\w<]+/u');
         
         $replace = array("<span class='word' data-toggle='modal' data-target='#myModal'>$0</span>", "<span>$0</span>");
         
@@ -506,7 +506,7 @@ class Reader extends Text
         $html .= '<div id="message-window"></div>';
         $xml = new SimpleXMLElement($this->text);
 
-        for ($i=0; $i < sizeof($xml)-1; $i++) { 
+        for ($i=0; $i < sizeof($xml); $i++) { 
             $start = $xml->text[$i]['start'];
             $dur = $xml->text[$i]['dur'];
 

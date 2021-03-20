@@ -103,15 +103,18 @@ class Texts extends DBEntity {
     * @return int
     */
     public function add(string $title, string $author, string $text, string $source_url, 
-                        string $audio_url, int $type): int {
-        $level = 0;
-        $nr_of_words = 0;
+                        string $audio_url, int $type, int $level): int {
 
-        if (isset($text) && !empty($text))  {
-            $level = $this->calculateDifficulty($text);
-            $nr_of_words = $this->nr_of_words;
-        }
+        // get language iso
+        $lang = new Language($this->pdo, $this->user_id);
+        $lang->loadRecord($this->lang_id);
+        $lang_iso = $lang->getName();
 
+        // if $text is XML code (video transcript), extract text from XML string
+        $xml_text = $this->extractFromXML($text);
+
+        // count words in text
+        $nr_of_words = ($xml_text != false) ? preg_match_all('/\w+/u', $xml_text, $words) : preg_match_all('/\w+/u', $text, $words);
 
         // fix string casings before saving
         if (mb_strtoupper($title, 'UTF-8') == $title) {
@@ -137,10 +140,7 @@ class Texts extends DBEntity {
 
             // add entry to popularsources
             $pop_sources = new PopularSources($this->pdo);
-            $lang = new Language($this->pdo, $this->user_id);
-            $lang->loadRecord($this->lang_id);
-            
-            $pop_sources->add($lang->getName(), Url::getDomainName($source_url));
+            $pop_sources->add($lang_iso, Url::getDomainName($source_url));
 
             return $insert_id;
         } catch (\PDOException $e) {
@@ -470,15 +470,9 @@ class Texts extends DBEntity {
     public function extractFromXML(string $xml) {
         // check if $text is valid XML (video transcript) or simple text
         libxml_use_internal_errors(true); // used to avoid raising Exceptions in case of error
-        $xml = simplexml_load_string(html_entity_decode(stripslashes($xml)));
+        $xml = (array)simplexml_load_string(html_entity_decode(stripslashes($xml)));
         
-        if ($xml) {
-            $temp_array = (array)$xml->text;
-            $temp_array = array_splice($temp_array, 2, -1);
-            return implode(" ", $temp_array); 
-        } else {
-            return false;
-        }
+        return array_key_exists('text', $xml) ? implode(" ", $xml['text']) : false;
     } // end extractFromXML()
     
     /**
@@ -521,7 +515,7 @@ class Texts extends DBEntity {
     * @param string $text
     * @return int
     */
-    private function calculateDifficulty(string $text = ''): int {
+    public function calculateDifficulty(string $text = ''): int {
         try {
             $frequency_list_table = '';     // frequency list table name: should be something like frequency_list_en 
             $frequency_list_words = [];     // array with all the words in the corresponding frequency list table 
@@ -568,55 +562,17 @@ class Texts extends DBEntity {
                 $frequency_list_indexes[] = $row['frequency_index'];
             }    
 
-            // calculate nr. of words & nr. of sentences in text
-
-            /*
-                explanation of regex to extract list of words from the text
-                
-                1st part: select all words including word characters except for those having an apostrophe or single
-                quote in the middle, abbreviations (USA or U.S.A.) and words starting with a capital letter
-                (?<![\p{L}]['’])(?![A-Z]{2,})(?![a-zA-Z]\.){2,}(?!\p{Lu})\b(\p{L}+)\b(?!['’][\p{L}])
-
-                ignore contractions before and after apostrophes or single quotes (often used as apostrophes)
-                (?<![\p{L}]['’])                           >>>>> ignore contractions before apostrophes or single quotes (ISN't)
-                (?!['’][\p{L}])                            >>>>> ignore contractions after apostrophes or single quotes (isn'T)
-                
-                (?![A-Z]{2,})                              >>>>> ignore abbreviations (EU, USA, etc.)
-                (?![a-zA-Z]\.){2,}                         >>>>> ignore abbreviations (E.U, U.S.A., e.g., i.e., etc.)
-                (?!\p{Lu})                                 >>>>> ignore words starting with a capital letter
-                \b(\p{L}+)\b                               >>>>> select only words word including unicode characters (ignore numbers, etc.)
-
-                2nd part: select all words that start with a capital letter which are at the beginning of a line or sentence. Ignore all
-                words starting with a capital letter in the middle of a sentence (e.g. names of people or places)
-                (?![A-Z]{2,})(?![a-zA-Z]\.){2,}(?<=^|[\.\!\?]\s)(?<![\p{L}]['’])\b(\p{L}+)\b(?!['’][\p{L}])
-                
-                (?<![\p{L}]['’])                           >>>>> ignore contractions before apostrophes or single quotes (ISN't)
-                (?!['’][\p{L}])                            >>>>> ignore contractions after apostrophes or single quotes (isn'T)
-                
-                (?![A-Z]{2,})                              >>>>> ignore abbreviations (EU, USA, etc.)
-                (?![a-zA-Z]\.){2,}                         >>>>> ignore abbreviations (E.U, U.S.A., e.g., i.e., etc.)
-                (?<=^|[\.\!\?]\s)                          >>>>> only include words starting a line or a sentence
-                \b(\p{L}+)\b                               >>>>> select only words word including unicode characters (ignore numbers, etc.)
-
-                Note: it is important to include the /u (unicode) and /m (multiline) flags. Unicode, so that word selection works as
-                expected for any language. Multiline because otherwise the string would be considered a very long string instead
-                of one composed of multiple lines and the beginning of line selector (^) would not work correctly.
-                
-                Note 2: for German we need to use a special regex string as all nouns are capitalized, not only names of people or places.
-            */
-            if ($lang_iso == 'de') {
-                $regex_word_filter = "/(?<![\p{L}]['’])(?![A-Z]{2,})(?![a-zA-Z]\.){2,}\b(\p{L}+)\b(?!['’][\p{L}])/um";
-            } else {
-                $regex_word_filter = "/(?<![\p{L}]['’])(?![A-Z]{2,})(?![a-zA-Z]\.){2,}(?!\p{Lu})\b(\p{L}+)\b(?!['’][\p{L}])|(?![A-Z]{2,})(?![a-zA-Z]\.){2,}(?<=^|[\.\!\?]\s)(?<![\p{L}]['’])\b(\p{L}+)\b(?!['’][\p{L}])/um";
+            // if there is no frequency list for this language, return unknown level for text
+            if (empty($frequency_list_words)) {
+                return 0;
             }
 
-            $nr_of_words = $this->nr_of_words = preg_match_all($regex_word_filter, $text, $words_in_text);
+            // calculate nr. of words & nr. of sentences in text
+            $nr_of_words = $this->countVocabTokens($lang_iso, $text, $words_in_text);
             $nr_of_sentences = preg_match_all("/([?!.] \p{L}|^\s*?\p{L})/um", $text . ' ', $sentences_in_text);
 
-            if($nr_of_words == 0) {
-                throw new \Exception("Oops! There was an unexpected error trying to calculate this text's difficulty.");
-            }
-
+            // check how many words in the frequency list where found in the "tokenized" list of words of the text
+            // and calculate score
             $words_found = array_uintersect($words_in_text[0], $frequency_list_words, 'strcasecmp');
             
             foreach ($words_found as $word_found) {
@@ -642,6 +598,58 @@ class Texts extends DBEntity {
             $stmt = null;
         }
     } // end calculateDifficulty()
+
+    /**
+     * Calculates the nr. of words in a text
+     *
+     * @param string $lang_iso
+     * @param string $text
+     * @param array $words_in_text
+     * @return integer
+     */
+    private function countVocabTokens(string $lang_iso, string $text, ?array &$words_in_text): int {
+        /*
+            explanation of regex to extract list of words from the text
+            
+            1st part: select all words including word characters except for those having an apostrophe or single
+            quote in the middle, abbreviations (USA or U.S.A.) and words starting with a capital letter
+            (?<![\p{L}]['’])(?![A-Z]{2,})(?![a-zA-Z]\.){2,}(?!\p{Lu})\b(\p{L}+)\b(?!['’][\p{L}])
+            
+            ignore contractions before and after apostrophes or single quotes (often used as apostrophes)
+            (?<![\p{L}]['’])                           >>>>> ignore contractions before apostrophes or single quotes (ISN't)
+            (?!['’][\p{L}])                            >>>>> ignore contractions after apostrophes or single quotes (isn'T)
+            
+            (?![A-Z]{2,})                              >>>>> ignore abbreviations (EU, USA, etc.)
+            (?![a-zA-Z]\.){2,}                         >>>>> ignore abbreviations (E.U, U.S.A., e.g., i.e., etc.)
+            (?!\p{Lu})                                 >>>>> ignore words starting with a capital letter
+            \b(\p{L}+)\b                               >>>>> select only words word including unicode characters (ignore numbers, etc.)
+            
+            2nd part: select all words that start with a capital letter which are at the beginning of a line or sentence. Ignore all
+            words starting with a capital letter in the middle of a sentence (e.g. names of people or places)
+            (?![A-Z]{2,})(?![a-zA-Z]\.){2,}(?<=^|[\.\!\?]\s)(?<![\p{L}]['’])\b(\p{L}+)\b(?!['’][\p{L}])
+            
+            (?<![\p{L}]['’])                           >>>>> ignore contractions before apostrophes or single quotes (ISN't)
+            (?!['’][\p{L}])                            >>>>> ignore contractions after apostrophes or single quotes (isn'T)
+            
+            (?![A-Z]{2,})                              >>>>> ignore abbreviations (EU, USA, etc.)
+            (?![a-zA-Z]\.){2,}                         >>>>> ignore abbreviations (E.U, U.S.A., e.g., i.e., etc.)
+            (?<=^|[\.\!\?]\s)                          >>>>> only include words starting a line or a sentence
+            \b(\p{L}+)\b                               >>>>> select only words word including unicode characters (ignore numbers, etc.)
+            
+            Note: it is important to include the /u (unicode) and /m (multiline) flags. Unicode, so that word selection works as
+            expected for any language. Multiline because otherwise the string would be considered a very long string instead
+            of one composed of multiple lines and the beginning of line selector (^) would not work correctly.
+            
+            Note 2: for German we need to use a special regex string as all nouns are capitalized, not only names of people or places.
+        */
+        if ($lang_iso == 'de') {
+            $regex_word_filter = "/(?<![\p{L}]['’])(?![A-Z]{2,})(?![a-zA-Z]\.){2,}\b(\p{L}+)\b(?!['’][\p{L}])/um";
+        } else {
+            $regex_word_filter = "/(?<![\p{L}]['’])(?![A-Z]{2,})(?![a-zA-Z]\.){2,}(?!\p{Lu})\b(\p{L}+)\b(?!['’][\p{L}])|(?![A-Z]{2,})(?![a-zA-Z]\.){2,}(?<=^|[\.\!\?]\s)(?<![\p{L}]['’])\b(\p{L}+)\b(?!['’][\p{L}])/um";
+        }
+        
+        return preg_match_all($regex_word_filter, $text, $words_in_text);
+    } // end countVocabTokens()
 
     /**
      * Get the value of id

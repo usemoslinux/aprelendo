@@ -31,13 +31,23 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <header>
                         <h1 class="text-center">
                             <?php
-                            $title_array = array('English' => array('en', 'Welcome!'),
-                                'Spanish' => array('es', '¡Bienvenido!'),
-                                'Portuguese' => array('pt', 'Bemvindo!'),
-                                'French' => array('fr', 'Bienvenue!'),
-                                'Italian' => array('it', 'Benvenuto!'),
-                                'German' => array('de', 'Willkommen!'));
-                            
+                            $title_array =  array(  'Arabic'  => array('ar', 'أهلا بك!'),
+                                                    'Chinese' => array('zh', '欢迎！'),
+                                                    'Dutch'   => array('nl', 'Welkom!'),
+                                                    'English' => array('en', 'Welcome!'),
+                                                    'French' => array('fr', 'Bienvenue!'),
+                                                    'German' => array('de', 'Willkommen!'),
+                                                    'Greek' => array('el', 'Καλως ΗΡΘΑΤΕ!'),
+                                                    'Hebrew' => array('he', 'ברוך הבא!'),
+                                                    'Hindi' => array('hi', 'स्वागत हे!'),
+                                                    'Italian' => array('it', 'Benvenuto!'),
+                                                    'Japanese' => array('ja', 'ようこそ！'),
+                                                    'Korean' => array('ko', '어서 오십시오!'),
+                                                    'Portuguese' => array('pt', 'Bemvindo!'),
+                                                    'Russian' => array('ru', 'Добро пожаловать!'),                    
+                                                    'Spanish' => array('es', '¡Bienvenido!')
+                                            );
+
                             $to_lang = isset($_GET['tolang']) ? htmlspecialchars(ucfirst($_GET['tolang']), ENT_QUOTES, 'UTF-8') : 'English';
                             $native_lang = isset($_GET['srclang']) ? ucfirst($_GET['srclang']) : 'English';
                             
@@ -54,27 +64,41 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <div class="form-group">
                             <label for="native-lang">Native language:</label>
                             <select name="native-lang" class="form-control custom-select" id="native-lang">
+                                <option value="ar">Arabic</option>
+                                <option value="zh">Chinese</option>
+                                <option value="nl">Dutch</option>
                                 <option value="en" selected>English</option>
-                                <option value="es">Spanish</option>
-                                <option value="pt">Portuguese</option>
                                 <option value="fr">French</option>
-                                <option value="it">Italian</option>
                                 <option value="de">German</option>
+                                <option value="el">Greek</option>
+                                <option value="he">Hebrew</option>
+                                <option value="hi">Hindi</option>
+                                <option value="it">Italian</option>
+                                <option value="ja">Japanese</option>
+                                <option value="ko">Korean</option>
+                                <option value="pt">Portuguese</option>
+                                <option value="ru">Russian</option>
+                                <option value="es">Spanish</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="learning-lang">Want to learn:</label>
                             <select name="learning-lang" class="form-control custom-select" id="learning-lang">
-                                <option value="en" <?php echo $to_lang=='English' ? 'selected' : '' ; ?>>English
-                                </option>
-                                <option value="es" <?php echo $to_lang=='Spanish' ? 'selected' : '' ; ?>>Spanish
-                                </option>
-                                <option value="pt" <?php echo $to_lang=='Portuguese' ? 'selected' : '' ; ?>>Portuguese
-                                </option>
-                                <option value="fr" <?php echo $to_lang=='French' ? 'selected' : '' ; ?>>French</option>
-                                <option value="it" <?php echo $to_lang=='Italian' ? 'selected' : '' ; ?>>Italian
-                                </option>
-                                <option value="de" <?php echo $to_lang=='German' ? 'selected' : '' ; ?>>German</option>
+                                <option value="ar" <?php echo $to_lang=='Arabic'     ? 'selected' : '' ; ?>>Arabic</option>
+                                <option value="zh" <?php echo $to_lang=='Chinese'    ? 'selected' : '' ; ?>>Chinese</option>
+                                <option value="nl" <?php echo $to_lang=='Dutch'      ? 'selected' : '' ; ?>>Dutch</option>
+                                <option value="en" <?php echo $to_lang=='English'    ? 'selected' : '' ; ?>>English</option>
+                                <option value="fr" <?php echo $to_lang=='French'     ? 'selected' : '' ; ?>>French</option>
+                                <option value="de" <?php echo $to_lang=='German'     ? 'selected' : '' ; ?>>German</option>
+                                <option value="el" <?php echo $to_lang=='Greek'      ? 'selected' : '' ; ?>>Greek</option>
+                                <option value="he" <?php echo $to_lang=='Hebrew'     ? 'selected' : '' ; ?>>Hebrew</option>
+                                <option value="hi" <?php echo $to_lang=='Hindi'      ? 'selected' : '' ; ?>>Hindi</option>
+                                <option value="it" <?php echo $to_lang=='Italian'    ? 'selected' : '' ; ?>>Italian</option>
+                                <option value="ja" <?php echo $to_lang=='Japanese'   ? 'selected' : '' ; ?>>Japanese</option>
+                                <option value="ko" <?php echo $to_lang=='Korean'     ? 'selected' : '' ; ?>>Korean</option>
+                                <option value="pt" <?php echo $to_lang=='Portuguese' ? 'selected' : '' ; ?>>Portuguese</option>
+                                <option value="ru" <?php echo $to_lang=='Russian'    ? 'selected' : '' ; ?>>Russian</option>
+                                <option value="es" <?php echo $to_lang=='Spanish'    ? 'selected' : '' ; ?>>Spanish</option>
                             </select>
                         </div>
                         <div>
@@ -123,7 +147,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                 <small id="passwords-match-text"></small>
                             </div>
                             <button type="submit" id="btn_register" class="btn btn-block btn-success">Sign up</button>
-                            <small>By registering, you declare to have read and accepted the <a href="privacy.php"
+                            <small>By registering, you declare to have read and accepted our <a href="privacy.php"
                                     target="_blank" rel="noopener noreferrer">privacy policy</a>.</small>
                         </div>
                     </form>

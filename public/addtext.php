@@ -76,7 +76,7 @@ use Aprelendo\Includes\Classes\Texts;
                     <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
                     <input type="hidden" name="mode" value="simple" />
                     <div class="form-row">
-                        <div class="form-group col-12">
+                        <div class="form-group col-lg-6">
                             <label for="type">Type:</label>
                             <select name="type" id="type" class="form-control custom-select">
                                 <option value="1">Article</option>
@@ -84,6 +84,14 @@ use Aprelendo\Includes\Classes\Texts;
                                 <option value="3">Letter</option>
                                 <option value="4">Song</option>
                                 <option value="7">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="level">Level:</label>
+                            <select name="level" id="type" class="form-control custom-select">
+                                <option value="1">Beginner</option>
+                                <option value="2" selected>Intermediate</option>
+                                <option value="3">Advanced</option>
                             </select>
                         </div>
                     </div>
@@ -148,6 +156,6 @@ use Aprelendo\Includes\Classes\Texts;
 </div>
 
 <script defer src="js/readability/Readability-min.js"></script>
-<script defer src="js/addtext-min.js"></script>
+<script defer src="js/addtext.js"></script>
 
 <?php require_once 'footer.php'?>

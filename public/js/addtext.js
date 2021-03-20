@@ -20,7 +20,7 @@
 $(document).ready(function() {
     // Check for an external api call. If detected, try to fetch text using Mozilla's readability parser
     if ($("#external_call").length) {
-        fetch_url();
+        fetch_url($("#url").val());
     }
 
     /**
@@ -132,9 +132,8 @@ $(document).ready(function() {
      */
     function validateUrl(str)
     {
-        var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
-        var regexp = new RegExp(expression);
-        return regexp.test(str);
+        var patt = new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
+        return patt.test(str);
     } 
 
     /**
@@ -144,8 +143,6 @@ $(document).ready(function() {
     function fetch_url(url) {
         resetControls(true);
 
-        url = url == "" ? $("#url").val() : url; 
-
         if (validateUrl(url)) {
             $("#btn-fetch-img")
                 .removeClass()
@@ -154,7 +151,6 @@ $(document).ready(function() {
                 type: "GET",
                 url: "ajax/fetchurl.php",
                 data: { url: url }
-                //dataType: "html"
             })
                 .done(function(data) {
                     if (data.error_msg != null) {
@@ -209,7 +205,9 @@ $(document).ready(function() {
         }
     } // end fetch_url
 
-    $("#btn-fetch").on("click", fetch_url);
+    $("#btn-fetch").on("click", function(e) {
+        fetch_url($("#url").val());
+    });
 
     $("#url").on("paste", function(e) {
         var pastedData = e.originalEvent.clipboardData.getData('text');

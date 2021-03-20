@@ -378,14 +378,12 @@ $(document).ready(function() {
         var search_text = $selword.text().replace(/\r?\n|\r/gm, " ");
         var url = dictionary_URI.replace("%s", encodeURIComponent(search_text));
 
-        $dic_frame.get(0)
-                  .contentWindow.location.replace(url);
+        $dic_frame.get(0).contentWindow.location.replace(url);
         $("#btnadd").focus();
         // the previous line loads iframe content without adding it to browser history,
         // as this one does: $dic_frame.attr('src', url);
 
-        $doc.find("#myModal")
-            .modal("show");
+        $doc.find("#myModal").modal("show");
     } // end showModal
 
     /**

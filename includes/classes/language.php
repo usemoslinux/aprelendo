@@ -35,12 +35,22 @@ class Language extends DBEntity
     private $level           = 0;
 
     private static $iso_code = array(  
+        'ar' => 'arabic',
+        'zh' => 'chinese',
+        'nl' => 'dutch',
         'en' => 'english',
-        'es' => 'spanish',
-        'pt' => 'portuguese',
         'fr' => 'french',
+        'de' => 'german',
+        'el' => 'greek',
+        'he' => 'hebrew',
+        'hi' => 'hindi',
         'it' => 'italian',
-        'de' => 'german');
+        'ja' => 'japanese',
+        'ko' => 'korean',
+        'pt' => 'portuguese',
+        'ru' => 'russian',
+        'es' => 'spanish'
+        );
 
     /**
      * Constructor
@@ -144,9 +154,9 @@ class Language extends DBEntity
         try {
             // create & save default language preferences for user
             foreach (self::$iso_code as $key => $value) {
-                $translator_uri = 'https://translate.google.com/?ui=tob&hl=' . $value . '&sl=' . self::$iso_code[$native_lang] . '&&ie=UTF-8&q=%s';
-                $dictionary_uri = 'https://mobile.linguee.com/' . $value . '-' . self::$iso_code[$native_lang] . '/search?source=auto&query=%s';
-                
+                $translator_uri = 'https://translate.google.com/?hl=' . $native_lang . '&sl=' . $key . '&tl=' . $native_lang . '&text=%s';
+                $dictionary_uri = 'https://' . $key . '.m.wiktionary.org/wiki/%s';
+
                 $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`, `translator_uri`) 
                         VALUES (?, ?, ?, ?)";
                 $stmt = $this->pdo->prepare($sql);
@@ -207,7 +217,7 @@ class Language extends DBEntity
     } // end getNameFromIso()
 
     /**
-     * Gives index of 639-1 iso codes in Language::$lg_iso_codes array
+     * Gives index of 639-1 iso codes in Language::$iso_codes array
      *
      * @param string $lang_name
      * @return int
@@ -238,7 +248,7 @@ class Language extends DBEntity
      */
     public function getAvailableLangs(): array {
         try {
-            $sql = "SELECT `id`, `name` FROM `{$this->table}` WHERE `user_id`=?";
+            $sql = "SELECT `id`, `name` FROM `{$this->table}` WHERE `user_id`=? ORDER BY `name` ASC";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id]);
             $result = $stmt->fetchAll();

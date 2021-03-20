@@ -62,8 +62,26 @@ class Curl
 
         curl_close($ch);
 
+        $charset = preg_match('/(?<=\bcharset=)[A-Za-z]*-[a-zA-Z0-9]*/', $info['content_type'], $match) ? $match[0] : 'utf-8';
+        
+         
+        // if HTML doc get character encoding 
+        
+        // $doc = new \DOMDocument();
+        // if ($doc->loadHTML($result)) {
+        //     $xpath = new \DOMXPath($doc);
+        //     $charset_dom = $xpath->query('//meta/@charset');
+        //     if ($charset_dom->length > 0) {
+        //         $charset = $charset_dom[0]->nodeValue;
+        //     }
+        // }
+
+        return (strtolower($charset) == 'utf-8') ? $result : iconv($charset, 'utf-8', $result);
+        
+        // return $result ? iconv($charset, 'utf-8', $result) : '';
+
         // convert result to utf-8 in case it is encoded in Windows-1252 (ISO 8859-1)
-        return $result ? iconv(mb_detect_encoding($result, 'UTF-8, ISO-8859-1', true), "UTF-8", $result) : '';
+        // return $result ? iconv(mb_detect_encoding($result, 'UTF-8, ISO-8859-1', true), "UTF-8", $result) : '';
     } // end getUrlContents()
 
 }

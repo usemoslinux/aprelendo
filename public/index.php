@@ -49,60 +49,82 @@ require_once PUBLIC_PATH . 'head.php';
                                     <u>total reading</u>
                                 </a></h5>
                             <br>
-                            <h4>Select the language you want to learn...</h4>
-                            <br>
+                            
                         </div>
                     </div>
                 </div>
-                <div class="container-fluid">
+                <div class="container-fluid mb-5">
                     <div class="row">
-                        <div class="col-4 col-lg-2">
-                            <a href="register.php?tolang=english">
-                                <span class="flag-icon">
-                                    <img src="img/flags/en.svg" alt="English" class="flag-icon">
-                                    <p>English</p>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="col-4 col-lg-2">
-                            <a href="register.php?tolang=spanish">
-                                <span class="flag-icon">
-                                    <img src="img/flags/es.svg" alt="Spanish" class="flag-icon">
-                                    <p>Spanish</p>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="col-4 col-lg-2">
-                            <a href="register.php?tolang=portuguese">
-                                <span class="flag-icon">
-                                    <img src="img/flags/pt.svg" alt="Portuguese" class="flag-icon">
-                                    <p>Portuguese</p>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="col-4 col-lg-2">
-                            <a href="register.php?tolang=french">
-                                <span class="flag-icon">
-                                    <img src="img/flags/fr.svg" alt="French" class="flag-icon">
-                                    <p>French</p>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="col-4 col-lg-2">
-                            <a href="register.php?tolang=italian">
-                                <span class="flag-icon">
-                                    <img src="img/flags/it.svg" alt="Italian" class="flag-icon">
-                                    <p>Italian</p>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="col-4 col-lg-2">
-                            <a href="register.php?tolang=german">
-                                <span class="flag-icon">
-                                    <img src="img/flags/de.svg" alt="German" class="flag-icon">
-                                    <p>German</p>
-                                </span>
-                            </a>
+                        <div class="col">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    I want to learn
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <a class="dropdown-item" href="register.php?tolang=arabic" type="button">
+                                        <img src="img/flags/ar.svg" alt="Arabic" class="flag-icon">
+                                        &nbsp;Arabic
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=chinese" type="button">
+                                        <img src="img/flags/zh.svg" alt="Chinese" class="flag-icon">
+                                        &nbsp;Chinese
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=dutch" type="button">
+                                        <img src="img/flags/nl.svg" alt="Dutch" class="flag-icon">
+                                        &nbsp;Dutch
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=english" type="button">
+                                        <img src="img/flags/en.svg" alt="English" class="flag-icon">
+                                        &nbsp;English
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=french" type="button">
+                                        <img src="img/flags/fr.svg" alt="French" class="flag-icon">
+                                        &nbsp;French
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=german" type="button">
+                                        <img src="img/flags/de.svg" alt="German" class="flag-icon">
+                                        &nbsp;German
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=greek" type="button">
+                                        <img src="img/flags/el.svg" alt="Greek" class="flag-icon">
+                                        &nbsp;Greek
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=hebrew" type="button">
+                                        <img src="img/flags/he.svg" alt="Hebrew" class="flag-icon">
+                                        &nbsp;Hebrew
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=hindi" type="button">
+                                        <img src="img/flags/hi.svg" alt="Hindi" class="flag-icon">
+                                        &nbsp;Hindi
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=italian" type="button">
+                                        <img src="img/flags/it.svg" alt="Italian" class="flag-icon">
+                                        &nbsp;Italian
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=japanese" type="button">
+                                        <img src="img/flags/ja.svg" alt="Japanese" class="flag-icon">
+                                        &nbsp;Japanese
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=korean" type="button">
+                                        <img src="img/flags/ko.svg" alt="Korean" class="flag-icon">
+                                        &nbsp;Korean
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=portuguese" type="button">
+                                        <img src="img/flags/pt.svg" alt="Portuguese" class="flag-icon">
+                                        &nbsp;Portuguese
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=russian" type="button">
+                                        <img src="img/flags/ru.svg" alt="Russian" class="flag-icon">
+                                        &nbsp;Russian
+                                    </a>
+                                    <a class="dropdown-item" href="register.php?tolang=spanish" type="button">
+                                        <img src="img/flags/es.svg" alt="Spanish" class="flag-icon">
+                                        &nbsp;Spanish
+                                    </a>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -172,7 +194,7 @@ require_once PUBLIC_PATH . 'head.php';
                         <p>Our language learning system is aimed especially (though not exclusively) at users with 
                             a beginner-intermediate level upwards. Complete beginners may encounter difficulties in this system, 
                             but it is very beneficial for those who are on a learning "plateau" or anyone seeking to improve 
-                            their language skills</p>
+                            their language skills.</p>
                         <p>
                             <br>
                             <a href="totalreading.php" class="btn btn-theme">More Info</a>
