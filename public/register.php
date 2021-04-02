@@ -51,7 +51,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             $to_lang = isset($_GET['tolang']) ? htmlspecialchars(ucfirst($_GET['tolang']), ENT_QUOTES, 'UTF-8') : 'English';
                             $native_lang = isset($_GET['srclang']) ? ucfirst($_GET['srclang']) : 'English';
                             
-                            echo '<img id="learning-flag" src="img/flags/' . $title_array["$to_lang"][0] . '.svg" alt="' . $to_lang . '" class="flag-icon">';
+                            echo '<img id="learning-flag" src="img/flags/' . $title_array["$to_lang"][0] . '.svg" alt="' . $to_lang . '"><br>';
                             echo $title_array["$to_lang"][1];
                             ?>
                         </h1>

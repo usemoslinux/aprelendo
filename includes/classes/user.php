@@ -457,7 +457,6 @@ class User
         } 
         
         header('Location:/index.php');
-        exit;
     } // end logout()
         
     /**
@@ -628,6 +627,7 @@ class User
             // delete files uploaded by user
             $table_names = array('texts', 'archived_texts');
             
+            // delete epub or audio files uploaded by user
             foreach ($table_names as $table) {
                 $user_id_col_name = $table == 'texts' ? 'user_id' : 'user_id';
                 $source_uri_col_name = $table == 'texts' ? 'source_uri' : 'source_uri';

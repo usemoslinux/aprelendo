@@ -1226,6 +1226,12 @@ div.blurry-background {
     flex-wrap: wrap;
 }
 
+/* REGISTER */
+
+#learning-flag {
+    width: 64px;
+}
+
 /* LOGIN */
 
 .abcRioButton.abcRioButtonBlue {
