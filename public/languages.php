@@ -50,11 +50,11 @@ if (isset($_GET['chg'])) {
                             <a href="texts.php">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a <?php echo isset($_GET['chg']) ? '' : 'class="active"'; ?> >Languages</a>
+                            <span <?php echo isset($_GET['chg']) ? '' : 'class="active"'; ?> >Languages</span>
                         </li>
                         <?php 
                             if (isset($_GET['chg'])) {
-                                echo '<li class="breadcrumb-item"><a class="active">' . ucfirst(Language::getNameFromIso($lang->getName())) . '</a></li>';    
+                                echo '<li class="breadcrumb-item"><span class="active">' . ucfirst(Language::getNameFromIso($lang->getName())) . '</span></li>';    
                             }
                         ?>
                     </ol>

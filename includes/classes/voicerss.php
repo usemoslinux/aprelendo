@@ -59,7 +59,7 @@ class VoiceRSS
 		
 		$curl_options = array(CURLOPT_RETURNTRANSFER => 1,
 		   					  CURLOPT_BINARYTRANSFER => (isset($settings['b64']) && $settings['b64']) ? 0 : 1,
-							  CURLOPT_HTTPHEADER => array('Content-Type: application/x-www-form-urlencoded; charset=UTF-8'),
+							  CURLOPT_HTTPHEADER => array('Content-Type: application/x-www-form-urlencoded; charset=UTF-8; Expect: 100-continue'),
 							  CURLOPT_POST => 1,
 							  CURLOPT_POSTFIELDS => $this->_buildRequest($settings)
 							 );

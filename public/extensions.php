@@ -41,7 +41,7 @@ if (!$user->isLoggedIn()) {
                         <a href="index.php">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="active">Extensions & Bookmarklet</a>
+                        <span class="active">Extensions & Bookmarklet</span>
                     </li>
                 </ol>
             </nav>
@@ -56,6 +56,8 @@ if (!$user->isLoggedIn()) {
                                 <a href="https://addons.mozilla.org/en-US/firefox/addon/aprelendo/" target="_blank" rel="noopener noreferrer" class="btn btn-danger"><i class="fab fa-firefox"></i> Install Firefox extension</a>
                             </div>
                             <p>Once installed, click the Aprelendo button (which should have been added to your browser's main toolbar) to import the content of the page being displayed in the active tab.</p>
+                            <p>For a step-by-step guide, we recommend you to watch the following video:</p>
+                            <iframe width="560" height="315" style="max-width: 100%; text-align:center;" src="https://www.youtube.com/embed/6ShMD6uu1bk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </section>
                         <br>
                         <section>

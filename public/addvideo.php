@@ -33,7 +33,7 @@ require_once PUBLIC_PATH . 'header.php';
                         <a href="texts.php">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="active">Add video</a>
+                        <span class="active">Add video</span>
                     </li>
                 </ol>
             </nav>
@@ -46,8 +46,8 @@ require_once PUBLIC_PATH . 'header.php';
                         <div id="alert-msg" class="d-none"></div>
                     </div>
                     <!-- VIDEO CONTAINER -->
-                    <div id="add-video-container" class="col-lg-6">
-                        <div id="add-video-wrapper">
+                    <div class="col-lg-6 mb-3">
+                        <div id="add-video-wrapper" class="embed-responsive embed-responsive-16by9">
                             <i id="yt-logo" class="fab fa-youtube fa-3x"></i>
                             <iframe id="yt-video" style="border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                         </div>

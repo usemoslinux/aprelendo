@@ -58,11 +58,6 @@ function onPlayerStateChange(event) {
         var timer;
         video_paused = false;
 
-        var next_obj_offset = {};
-        var next_obj_height = {};
-        var window_height = $(window).height();
-        var offset;
-
         function updateTime(time_interval) {
             timer = setInterval(function() {
                 if (!video_paused) {
@@ -78,24 +73,7 @@ function onPlayerStateChange(event) {
                         !$next_obj.hasClass("video-reading-line")
                     ) {
                         $next_obj.addClass("video-reading-line");
-
-                        // scroll element to the middle of screen
-                        next_obj_offset = $next_obj.offset().top;
-                        next_obj_height = $next_obj.height();
-
-                        if (next_obj_height < window_height) {
-                            offset =
-                                next_obj_offset -
-                                (window_height / 2 - next_obj_height / 2);
-                        } else {
-                            offset = next_obj_offset;
-                        }
-                        $("html,body").animate(
-                            {
-                                scrollTop: offset
-                            },
-                            300
-                        );
+                        $next_obj[0].scrollIntoView();
                     }
                 } else {
                     clearInterval(timer);

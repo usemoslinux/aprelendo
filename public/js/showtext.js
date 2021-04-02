@@ -1007,11 +1007,14 @@ $(document).ready(function() {
                 dataType: "json"
             })
                 .done(function(e) {
-                    if (e.error != null || e.response == false) {
+                    if (e.error != null || !e.response) {
+                        $("#audioplayer-loader").addClass("d-none");
+                        $("#alert-msg-audio").removeClass("d-none").empty().append('There was an unexpected error trying to create audio from this text. <a class="alert-link" href="#" id="retry-audio-load">Try again</a> later.');
                         skipAudioPhases();
                         return false;
                     }
                     $("#audio-mp3").attr("src", e.response);
+                    console.log(e.response);
                     $audio_player[0].load();
                     $("#audioplayer-loader").addClass("d-none");
                     $("#audioplayer").removeClass("d-none");

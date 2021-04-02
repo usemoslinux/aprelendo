@@ -28,6 +28,5 @@ $(document).ready(function() {
         $("#inp-item-nbr").val($(this).data("item-nbr"));
         $(this).siblings().removeClass("active");
         $(this).addClass("active");
-
     });
 });

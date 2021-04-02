@@ -45,7 +45,7 @@ html {
 body {
     background: white;
     color: #384452;
-    font-family: "Lato", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 400;
     height: 100%;
     margin: 0;
@@ -57,7 +57,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "Raleway", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 700;
 }
 
@@ -292,6 +292,12 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 .navbar-light {
     background: linear-gradient(to right, #0062E6, #33AEFF);
     border-color: transparent;
+    box-shadow: 0 .125rem .25rem 0 rgba(0,0,0,.15);
+}
+
+div.blurry-background .navbar-light,
+body.blue-gradient-wallpaper .navbar-light {
+	box-shadow: none;
 }
 
 .headerwrap .navbar-light {
@@ -848,7 +854,7 @@ audio {
 }
 
 .basic {
-    font: 0.85rem 'Lato';
+    font: 0.85rem 'Roboto';
     white-space: normal;
 }
 
@@ -882,7 +888,7 @@ audio {
 }
 
 #btn-abloop {
-    font: 0.85rem 'Lato';
+    font: 0.85rem 'Roboto';
     /* padding: .0 0.5rem; */
     flex-basis: 30px;
     flex-shrink: 0;
@@ -939,7 +945,7 @@ input {
     color: black;
     display: flex;
     flex: 1;
-    font-family: "Lato", sans-serif;
+    font-family: "Roboto", sans-serif;
     height: calc(100% - 1rem);
     margin: .5rem auto;
     max-width: 750px;
@@ -1132,34 +1138,10 @@ i.status_learned {
 /* ADD VIDEO */
 
 #add-video-wrapper {
-    position: relative;
     border: 1px solid red;
-    height: 0;
-    padding-bottom: 56.25%;
-}
-
-#add-video-container {
-    margin-bottom: 20px;
 }
 
 /* SHOW VIDEO */
-
-.video-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 100%;
-}
-
-#add-video-wrapper iframe,
-.video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
 
 #yt-logo {
     color: red;
@@ -1174,29 +1156,8 @@ i.status_learned {
     border-radius: 2px;
 }
 
-@media screen and (max-width: 767px) {
-    #show-video-container {
-        position: -webkit-sticky;
-        /* Safari */
-        position: sticky;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: calc(100vw * 0.5625);
-    }
-
-    #show-transcript-container {
-        position: initial;
-        overflow-y: scroll;
-    }
-
-    .video-wrapper {
-        position: static;
-    }
-
-    #html-video {
-        height: 100%;
-    }
+#text-container {
+    flex: 1;
 }
 
 /* SET DEFAULT LANGUAGE */
@@ -1332,6 +1293,15 @@ div.blurry-background {
     margin-left: 30px;
 }
 
+.simple-text h1,
+.simple-text h2,
+.simple-text h3,
+.simple-text h4,
+.simple-text h5,
+.simple-text h6 {
+    color: #0275d8;
+}
+
 .simple-text a:not(.btn),
 p>a:not(.btn),
 small>a:not(.btn) {
@@ -1346,9 +1316,12 @@ small>a:not(.btn):hover {
 }
 
 .blockquote {
-    width: 35%;
-    margin: 1rem;
-    text-align: center;
+	max-width: 390px;
+	margin: 1rem 0;
+	text-align: center;
+	padding: 1rem;
+	color: #0275d8;
+	font-size: 1.4rem;
 }
 
 /* HOW IT WORKS */

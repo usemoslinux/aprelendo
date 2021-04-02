@@ -185,6 +185,10 @@ class Language extends DBEntity
             $stmt->execute([$this->user_id, $lang]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
+            if (!$row) {
+                throw new \Exception('The record does not exist.');
+            }
+
             $this->id               = $row['id']; 
             $this->user_id          = $row['user_id']; 
             $this->name             = $row['name'];
@@ -195,10 +199,6 @@ class Language extends DBEntity
             $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
             $this->show_freq_words  = $row['show_freq_words'];
             $this->level            = $row['level'];
-            
-            if (!$row) {
-                throw new \Exception('The record does not exist.');
-            }
         } catch (\Exception $e) {
             throw new \Exception('There was an unexpected error trying to load this record.');
         } finally {
@@ -251,7 +251,7 @@ class Language extends DBEntity
             $sql = "SELECT `id`, `name` FROM `{$this->table}` WHERE `user_id`=? ORDER BY `name` ASC";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id]);
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if (!$result || empty($result)) {
                 throw new \Exception('There was an unexpected error trying to get available languages for user.');
             }

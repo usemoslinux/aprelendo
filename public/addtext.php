@@ -36,7 +36,7 @@ use Aprelendo\Includes\Classes\Texts;
                         <a href="texts.php">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="active">Add text</a>
+                        <span class="active">Add text</span>
                     </li>
                 </ol>
             </nav>

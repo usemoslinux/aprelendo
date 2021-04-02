@@ -105,7 +105,7 @@ function print_table_footer($array_table_rows) {
                         <a href="texts.php">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="active">Review Statistics</a>
+                        <span class="active">Review Statistics</span>
                     </li>
                 </ol>
             </nav>

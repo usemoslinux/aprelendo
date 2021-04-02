@@ -56,7 +56,7 @@ class Likes extends DBEntity
             $sql = "SELECT `text_id` FROM `{$this->table}` WHERE `text_id`=? AND `user_id`=?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->text_id, $this->user_id]);
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             
             if (count($result) > 0) {
                 $sql = "DELETE FROM `{$this->table}` WHERE `text_id`=? AND `user_id`=?";

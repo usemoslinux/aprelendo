@@ -37,7 +37,7 @@ if (isset($_POST['txt']) && isset($_POST['is_ebook'])) {
         $result = $reader->colorizeWords(html_entity_decode($_POST['txt']));
         echo $reader->addLinks($result);
     } else {
-        echo $reader->colorizeWordsFast(html_entity_decode($_POST['txt']));
+        echo $reader->colorizeWordsFast(html_entity_decode($_POST['txt']), $user_dic, $freq_words);
     }
 }
 

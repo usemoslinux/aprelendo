@@ -193,7 +193,7 @@ class Texts extends DBEntity {
                             WHERE `id` IN ($id_params)";
             $stmt = $this->pdo->prepare($select_sql);
             $stmt->execute($ids_array);
-            $uris = $stmt->fetchall();
+            $uris = $stmt->fetchall(\PDO::FETCH_ASSOC);
             
             // delete entries from db
             $delete_sql =  "DELETE FROM `{$this->table}` 
@@ -395,7 +395,7 @@ class Texts extends DBEntity {
             $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
 
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if (!$result || empty($result)) {
                 throw new \Exception('Oops! There are no texts meeting your search criteria.');
@@ -447,7 +447,7 @@ class Texts extends DBEntity {
             $stmt->bindParam(':level', $filter_level, \PDO::PARAM_INT);
 
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if (!$result || empty($result)) {
                 throw new \Exception('Oops! There are no texts in your private library yet. Feel free to add one or access the <a href="sharedtexts.php">shared texts</a> section.');

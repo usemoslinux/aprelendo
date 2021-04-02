@@ -36,7 +36,7 @@ use Aprelendo\Includes\Classes\Language;
                         <a href="texts.php">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="active">User profile</a>
+                        <span class="active">User profile</span>
                     </li>
                 </ol>
             </nav>

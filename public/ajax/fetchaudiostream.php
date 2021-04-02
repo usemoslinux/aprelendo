@@ -65,7 +65,7 @@ try {
         'src' => $_POST['text'],
         'r' => '0',
         'c' => 'mp3',
-        'f' => '44khz_16bit_stereo',
+        'f' => '44khz_16bit_mono',
         'ssml' => 'false',
         'b64' => 'true'
     ]);
@@ -73,7 +73,7 @@ try {
     echo json_encode($voice);
 
     // if no errors, log audio stream 
-    if ($voice['error'] === NULL && $voice['response'] !== false) {
+    if ($voice['error'] === NULL && $voice['response']) {
         $stream_log->addRecord();
     } else {
         throw new \Exception($voice['error'], 400);

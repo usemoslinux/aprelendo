@@ -23,9 +23,14 @@ use Aprelendo\Includes\Classes\Language;
 use Aprelendo\Includes\Classes\Gems;
 
 if (isset($_GET['lang']) && !empty($_GET['lang'])) {
-    $lang = new Language($pdo, $user->getId());
-    $lang->loadRecordByName($_GET['lang']);
-    $user->setActiveLang($lang->getId());
+    try {
+        $lang = new Language($pdo, $user->getId());
+        $lang->loadRecordByName($_GET['lang']);
+        $user->setActiveLang($lang->getId());
+    } catch (\Throwable $th) {
+        header("Location: index.php");
+        exit;
+    } 
 }
 
 $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));

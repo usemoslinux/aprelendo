@@ -46,7 +46,7 @@ $assisted_learning = $prefs->getAssistedLearning()
                             <a href="texts.php">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a class="active">Preferences</a>
+                            <span class="active">Preferences</span>
                         </li>
                     </ol>
                 </nav>
@@ -66,7 +66,7 @@ $assisted_learning = $prefs->getAssistedLearning()
                                                     <option value="Open Sans" <?php echo $font_family=='Open Sans' ? ' selected ' : ''; ?>>Open Sans</option>
                                                     <option value="Times New Roman" <?php echo $font_family=='Times New Roman' ? ' selected ' : ''; ?>>Times New Roman</option>
                                                     <option value="Georgia" <?php echo $font_family=='Georgia' ? ' selected ' : ''; ?>>Georgia</option>
-                                                    <option value="Lato" <?php echo $font_family=='Lato' ? ' selected ' : ''; ?>>Lato</option>
+                                                    <option value="Roboto" <?php echo $font_family=='Roboto' ? ' selected ' : ''; ?>>Roboto</option>
                                                 </select>
                                             </div>
                                         </div>

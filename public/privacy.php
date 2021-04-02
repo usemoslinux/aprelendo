@@ -41,7 +41,7 @@ if (!$user->isLoggedIn()) {
                         <a href="index.php">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="active">Privacy policy</a>
+                        <span class="active">Privacy policy</span>
                     </li>
                 </ol>
             </nav>

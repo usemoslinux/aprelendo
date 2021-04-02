@@ -38,7 +38,7 @@ use Aprelendo\Includes\Classes\Achievements;
                         <a href="texts.php">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="active">Statistics</a>
+                        <span class="active">Statistics</span>
                     </li>
                 </ol>
             </nav>

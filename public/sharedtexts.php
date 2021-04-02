@@ -56,7 +56,7 @@ if (!empty($_GET)) {
                         <a href="texts.php">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="active">Shared texts</a>
+                        <span class="active">Shared texts</span>
                     </li>
                 </ol>
             </nav>

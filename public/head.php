@@ -29,9 +29,13 @@ $no_login_required_pages = array('index.php', 'register.php', 'login.php', 'acco
                                  'totalreading.php', 'compatibledics.php', 'error.php', 'forgotpassword.php', 
                                  'gopremium.php');
 
+$use_google_login = false;
+
 // check if login is required to access page
 if (!in_array($curpage, $no_login_required_pages)) {
     require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in and set $user object
+    $google_id = $user->getGoogleId();
+    $use_google_login = isset($google_id) && !empty($google_id);
 }                                 
 
 // check if user is allowed to view this page
@@ -81,7 +85,8 @@ if ($this_is_show_page) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA==" crossorigin="anonymous" />
 
     <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CRaleway:400,700">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
     
     <!-- Custom styles for this template -->
     <link href="css/styles-min.css" rel="stylesheet">
@@ -95,8 +100,11 @@ if ($this_is_show_page) {
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js" integrity="sha512-wV7Yj1alIZDqZFCUQJy85VN+qvEIly93fIQAN7iqDFCPEucLCeNFz4r35FCo9s6WrpdDQPi80xbljXB8Bjtvcg==" crossorigin="anonymous"></script>
 
+    <?php if($curpage=='login.php' || $use_google_login): ?>
     <!-- Google API -->
     <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+    
+    <?php endif; ?>
 </head>
 
 <?php

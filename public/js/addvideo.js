@@ -57,9 +57,7 @@ $(document).ready(function() {
     /**
      * Fetches Youtube video, including title, channel & transcript
      */
-    $("#btn-fetch").on("click", function() {
-        var url = $("#url").val();
-
+    function fetch_url(url) {
         video_id = extractYTId(url); //get youtube video id
 
         emptyAll(); // empty all input boxes
@@ -123,7 +121,7 @@ $(document).ready(function() {
                 "alert-danger"
             );
         }
-    }); // end #btn-fetch.on.click
+    }; // end fetch_url
 
     /**
      * Shows custom message in the top section of the screen
@@ -189,6 +187,15 @@ $(document).ready(function() {
 
     // Check for an external api call. If detected, try to fetch text using Mozilla's readability parser
     if ($("#external_call").length) {
-        $("#btn-fetch").trigger("click");
+        fetch_url($("#url").val());
     }
+
+    $("#btn-fetch").on("click", function(e) {
+        fetch_url($("#url").val());
+    });
+
+    $("#url").on("paste", function(e) {
+        var pastedData = e.originalEvent.clipboardData.getData('text');
+        fetch_url(pastedData);
+    });
 });

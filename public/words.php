@@ -43,7 +43,7 @@ $query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])
                         <a href="texts.php">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="active">Word list</a>
+                        <span class="active">Word list</span>
                     </li>
                 </ol>
             </nav>

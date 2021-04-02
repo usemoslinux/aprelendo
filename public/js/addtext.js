@@ -162,8 +162,8 @@ $(document).ready(function() {
                             );
                             doc.body.parentElement.innerHTML = data;
                             var article = new Readability(doc).parse();
-                            $("#title").val(article.title);
-                            $("#author").val(article.byline);
+                            $("#title").val($("<input>").html(article.title).text());
+                            $("#author").val($("<input>").html(article.byline).text());
                             var txt = "";
                             var $tempDom = $("<output>").append(
                                 $.parseHTML(article.content)

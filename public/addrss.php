@@ -42,7 +42,7 @@ require_once PUBLIC_PATH . 'header.php';
                             <a href="texts.php">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a class="active">Add RSS article</a>
+                            <span class="active">Add RSS article</span>
                         </li>
                     </ol>
                 </nav>

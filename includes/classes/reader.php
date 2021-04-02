@@ -309,7 +309,7 @@ class Reader extends Text
     * @param string $text
     * @return string
     */
-    public function colorizeWordsFast(string $text): string {
+    public function colorizeWordsFast(string $text, ?array &$dic_words, ?array &$freq_words): string {
         $user_id = $this->user_id;
         $lang_id = $this->lang_id;
         
@@ -326,20 +326,24 @@ class Reader extends Text
         
         try {
             // get words in personal dictionary
-            $words_table = new Words($this->pdo, $user_id, $lang_id);
-            $dic_words = $words_table->getAll(0, 1000000, 5);
-
+            if (!isset($dic_words)) {
+                $words_table = new Words($this->pdo, $user_id, $lang_id);
+                $dic_words = $words_table->getAll(0, 1000000, 5);
+            }
+            
             $dic_words = !$dic_words || empty($dic_words) ? [] : $dic_words;
 
             // get high frequency words list, only if necessary
             
             if ($this->show_freq_words) {
-                $user = new User($this->pdo);
-                $user_is_logged_and_premium = $user->isLoggedIn() && $user->isPremium();
-                if ($user->isLoggedIn() && $user->isPremium()) {
-                    $lang = new Language($this->pdo, $user_id);
-                    $lang->loadRecord($lang_id);                   
-                    $freq_words = WordFrequency::getHighFrequencyList($this->pdo, $lang->getName());
+                if (!isset($freq_words)) {
+                    $user = new User($this->pdo);
+                    $user_is_logged_and_premium = $user->isLoggedIn() && $user->isPremium();
+                    if ($user->isLoggedIn() && $user->isPremium()) {
+                        $lang = new Language($this->pdo, $user_id);
+                        $lang->loadRecord($lang_id);                   
+                        $freq_words = WordFrequency::getHighFrequencyList($this->pdo, $lang->getName());
+                    }
                 }
             }
         } catch (\PDOException $e) {
@@ -353,7 +357,7 @@ class Reader extends Text
             $search_in_dic = \array_search(mb_strtolower($word), array_column($dic_words, 'word'));
             if ($search_in_dic === false) {
                 // if necessary, underline frequency words
-                if ($this->show_freq_words && $user_is_logged_and_premium) { 
+                if ($this->show_freq_words) { 
                     $search_in_freq_dic = \array_search(mb_strtolower($word), \array_column($freq_words, 'word'));
                     if ($search_in_freq_dic === false) {
                         $word = "<span class='word' data-toggle='modal' data-target='#myModal'>$word</span>";
@@ -451,7 +455,7 @@ class Reader extends Text
         // display text
         $html .= '<div id="text" style="line-height:' . $this->prefs->getLineHeight() . ';">';
         
-        $text = $this->colorizeWordsFast($this->text);
+        $text = $this->colorizeWordsFast($this->text, $user_dic, $freq_words);
         $text = nl2br($text);
 
         $html .= $text . '</div>';
@@ -490,19 +494,17 @@ class Reader extends Text
      * @return string
      */
     public function showVideo(string $yt_id): string {
-        ini_set('max_execution_time', 300); //300 seconds = 5 minutes
-        // $time_start = microtime(true);
-
+        // $user_dic = [];
+        // $freq_words = [];
         $yt_id = $yt_id ? $yt_id : '';
 
-        $html = '<div id="show-video-container" class="col-md-6">' .
-            '<div class="video-wrapper">' .
-                '<div data-ytid="' . $yt_id . '" id="player"></div>' .
-            '</div>' .
-            '</div>' .
-            '<div id="show-transcript-container" class="col-md-6">';
+        $html = '<div class="col-lg-6 offset-lg-3">' .
+                    '<div style="height: 100vh;" class="d-flex flex-column">' .
+                        '<div class="embed-responsive embed-responsive-16by9" style="max-height: 50%;">' .
+                            '<div data-ytid="' . $yt_id . '" id="player"></div>' .
+                        '</div>';
 
-        $html .= "<div id='text-container' data-textID='" . $this->id . "'>";
+        $html .= "<div id='text-container' class='overflow-auto' data-textID='" . $this->id . "'>";
         $html .= '<div id="message-window"></div>';
         $xml = new SimpleXMLElement($this->text);
 
@@ -510,20 +512,16 @@ class Reader extends Text
             $start = $xml->text[$i]['start'];
             $dur = $xml->text[$i]['dur'];
 
-            $text = $this->colorizeWordsFast(html_entity_decode($xml->text[$i], ENT_QUOTES | ENT_XML1, 'UTF-8'));
+            $text = $this->colorizeWordsFast(html_entity_decode($xml->text[$i], ENT_QUOTES | ENT_XML1, 'UTF-8'), $user_dic, $freq_words);
 
             $html .= "<div class='text-center' data-start='$start' data-dur='$dur' >". $text .'</div>';
         }
         
-        $html .= '</div>';
-        
-        $html .= '<br><button type="button" id="btn-save" title="Save the learning status of your words" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
-        
-        // $time_end = microtime(true);
-        // $execution_time = ($time_end - $time_start);
-        // $html .= '<b>Total Execution Time:</b> ' . $execution_time . ' Secs';
+        $html .= '<div class="p-3"><button type="button" id="btn-save" title="Save the learning status of your words" class="btn btn-lg btn-success btn-block">Finish & Save</button></div>';
 
-        return $html.'<br></div>';
+        $html .= '</div></div></div>';
+
+        return $html;
     } // end showVideo()
 
     /**

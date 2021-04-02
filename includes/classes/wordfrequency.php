@@ -76,7 +76,7 @@ class WordFrequency {
                     WHERE `frequency_index` < 81";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if ($result === false) {
                 throw new \Exception('There was an unexpected error trying to load records from frequency list table.');

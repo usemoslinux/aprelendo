@@ -36,6 +36,7 @@ class User
     private $premium_until   = '';
     private $activation_hash = '';
     private $active          = false;
+    private $google_id       = '';
     
     private $error_msg = '';
     
@@ -859,6 +860,15 @@ class User
     public function getActive(): bool
     {
         return $this->active;
+    }
+
+    /**
+     * Get the value of google_id
+     * @return string
+     */ 
+    public function getGoogleId(): string
+    {
+        return $this->google_id;
     }
 
     /**

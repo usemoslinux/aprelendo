@@ -137,7 +137,6 @@ select {
 #toc {
     display: block;
     margin: 25px auto;
-    min-height: 100vh;
 }
 
 /* ARROWS (NEXT & PREVIOUS) */
@@ -222,8 +221,9 @@ select {
 #navigation {
     background: whitesmoke;
     color: black;
-    font: 14px 'Lato';
+    font: 14px 'Roboto';
     max-height: 100vh;
+    min-height: 100vh;
     left: 0;
     max-width: 100%;
     overflow-x: hidden;
@@ -333,7 +333,7 @@ svg {
 }
 
 #header {
-    font: 14px 'Lato';
+    font: 14px 'Roboto';
     height: 44px;
     position: -webkit-sticky; /* Safari */ 
     position: sticky;

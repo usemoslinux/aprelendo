@@ -226,7 +226,7 @@ class Words extends DBEntity {
             $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
 
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if (!$result || empty($result)) {
                 throw new \Exception('Oops! There are no words meeting your search criteria.');
@@ -266,7 +266,7 @@ class Words extends DBEntity {
             $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
 
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             return $result;
         } catch (\PDOException $e) {
@@ -289,7 +289,7 @@ class Words extends DBEntity {
                     ORDER BY `is_phrase` ASC";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id]);
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             return $result;
         } catch (\PDOException $e) {
@@ -312,7 +312,7 @@ class Words extends DBEntity {
                     ORDER BY `is_phrase` ASC";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id]);
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             return $result;
         } catch (\PDOException $e) {
