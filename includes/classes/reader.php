@@ -443,12 +443,12 @@ class Reader extends Text
         
         // display assisted learning message
         if ($this->prefs->getAssistedLearning()) {
-            $html .=   '<div id="alert-msg-phase" data-phase="1" class="alert alert-info alert-dismissible show" role="alert">
+            $html .=   '<div id="alert-msg-phase" class="alert alert-info alert-dismissible show" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <h6>Assisted learning - Phase 1: Reading</h6>
-                            <span class="small">Before looking up words/phrases in the dictionary, try to understand their meaning through context. In order to do so, go from the general to the particular (i.e., first, try to understand the general meaning of the document, then analyze each paragraph, and finally each word/phrase).</span>
+                            <h5 class="alert-heading">Assisted learning - Phase 1: Reading</h5>
+                            <span class="small">Read the text and try to understand what is going on. When you come across a word or phrase you don\'t understand, keep reading until the end of the sentence, or better yet, the paragraph. If by the end of the passage you still haven\'t guessed its meaning, click on it to look it up in the dictionary. You can use a monolingual or bilingual dictionary. Choose the one that suits you best. Just make sure you use it well.</span>
                         </div>';   
         }
         

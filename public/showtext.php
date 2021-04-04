@@ -86,7 +86,7 @@ require_once PUBLIC_PATH . 'head.php';
         require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
         ?>
 
-        <script defer src="js/showtext-min.js"></script>
+        <script defer src="js/showtext.js"></script>
         
 </body>
 

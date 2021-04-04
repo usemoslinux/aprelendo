@@ -28,7 +28,7 @@ $(document).ready(function() {
     var dictionary_URI = "";
     var translator_URI = "";
     var translate_paragraph_link = "";
-    var phase = 1; // first phase of the learning cycle
+    var next_phase = 2; // next phase of the learning cycle
     var playing_audio = false;
     var abloop_start = 0;
     var abloop_end = 0;
@@ -405,6 +405,7 @@ $(document).ready(function() {
     $doc.on("click", "#btnadd", function() {
         var is_phrase = $selword.length > 1 ? 1: 0;
         var sel_text = $selword.text();
+        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
 
         // add selection to "words" table
         $.ajax({
@@ -416,6 +417,8 @@ $(document).ready(function() {
             }
         })
             .done(function() {
+                var no_prev_underlined_words = $(".learning, .new, .forgotten").length == 0;
+
                 // if successful, underline word or phrase
                 if (is_phrase) {
                     // if it's a phrase
@@ -491,24 +494,17 @@ $(document).ready(function() {
                     $filterword.contents().unwrap();
                 }
 
-                // if there were no previous word underlined, therefore phases 2 & 3 were off,
+                // if there were no previous words underlined, therefore phases 2 & 3 were off,
                 // when user adds his first new word, activate these phases
-                var actual_phase = $("#alert-msg-phase").attr("data-phase");
-                if (phase == 4 && actual_phase == 3) {
-                    var phase_names = [
-                        "Reading",
-                        "Listening",
-                        "Speaking",
-                        "Writing"
-                    ];
-                    $("#btn-next-phase").html(
-                        "Go to phase " +
-                            phase +
-                            '<br><span class="small">' +
-                            phase_names[phase - 1] +
-                            "</span>"
-                    );
-                    phase = parseInt(actual_phase);
+                if (next_phase == 6 && no_prev_underlined_words) {
+                    if (!audio_is_loaded) {
+                        skipAudioPhases();
+                    } else {
+                        $("#btn-next-phase").html(
+                            'Go to phase 4<br><span class="small">Writing</span>'
+                        );
+                        next_phase = 4;
+                    }
                 }
             })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
@@ -525,13 +521,7 @@ $(document).ready(function() {
      * Triggered when user clicks the "Delete" button in the dictionary modal window
      */
     $doc.on("click", "#btnremove", function() {
-        var audio_is_loaded =
-            $("#audioplayer")
-                .find("source")
-                .attr("src") != undefined &&
-            $("#audioplayer")
-                .find("source")
-                .attr("src") != "";
+        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
 
         $.ajax({
             type: "POST",
@@ -596,16 +586,16 @@ $(document).ready(function() {
                     });
 
                     // if user is in phase 3 (speaking) and deleted the only word that was underlined
-                    // don't allow phase 3 (writing) & go directly to last phase (save changes)
+                    // don't allow phase 4 (writing) & go directly to phase 5 (save changes)
                     if (
-                        phase == 3 &&
+                        next_phase == 4 &&
                         audio_is_loaded > 0 &&
                         $(".learning, .new, .forgotten").length == 0
                     ) {
                         $("#btn-next-phase").html(
-                            'Finish & Save<br><span class="small">Skipped phase 4 (writing): no underlined words</span>'
+                            'Finish & Save<br><span class="small">Skipped phase 4 (writing) & 5 (reviewing): no underlined words</span>'
                         );
-                        phase++;
+                        next_phase = 6;
                     }
                 });
             })
@@ -619,48 +609,17 @@ $(document).ready(function() {
     /**
      * Executes next phase of assisted learning
      * Triggered when the user presses the big blue button at the end
+     * Phases: 1 = reading; 2 = listening; 3 = speaking; 4 = writing; 5 = reviewing
      */
     $("body").on("click", "#btn-next-phase", function() {
-        var audio_is_loaded =
-            $("#audioplayer")
-                .find("source")
-                .attr("src") != undefined &&
-            $("#audioplayer")
-                .find("source")
-                .attr("src") != "";
+        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
         var $msg_phase = $("#alert-msg-phase");
 
-        switch (phase) {
-            case 1:
-                $("html, body").animate(
-                    {
-                        scrollTop: 0
-                    },
-                    "slow"
-                );
+        if (next_phase < 6 && !audio_is_loaded) {
+            skipAudioPhases();
+        }
 
-                if (!audio_is_loaded) {
-                    $(this).html(
-                        'Finish & Save<br><span class="small">Skipped phases 2, 3 & 4: no audio detected</span>'
-                    );
-                    phase = 4;
-                    break;
-                }
-
-                phase++;
-
-                $msg_phase
-                    .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6>Assisted learning - Phase 2: Listening</h6><span class="small">Pay attention to the pronunciation of each word. You can slow down the audio if necessary.</span>'
-                    )
-                    .attr("data-phase", phase);
-
-                $(this).html(
-                    'Go to phase 3<br><span class="small">Speaking</span>'
-                );
-
-                playAudioFromBeginning();
-                break;
+        switch (next_phase) {
             case 2:
                 $("html, body").animate(
                     {
@@ -668,30 +627,16 @@ $(document).ready(function() {
                     },
                     "slow"
                 );
-                if (!audio_is_loaded) {
-                    $(this).html(
-                        'Finish & Save<br><span class="small">Skipped phase 4 (writing): no audio detected</span>'
-                    );
-                    phase = 4;
-                    break;
-                }
 
-                if ($(".learning, .new, .forgotten").length == 0) {
-                    $(this).html(
-                        'Finish & Save<br><span class="small">Skipped phase 4 (writing): no underlined words</span>'
-                    );
-                    phase = 4;
-                    $msg_phase.attr("data-phase", 3);
-                } else {
-                    $(this).html(
-                        'Go to phase 4<br><span class="small">Writing</span>'
-                    );
-                    phase++;
-                    $msg_phase.attr("data-phase", phase);
-                }
+                next_phase++;
 
-                $msg_phase.html(
-                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6>Assisted learning - Phase 3: Speaking</h6><span class="small">Read out loud and try to emulate the pronunciation of each word as you listen to the audio. You can slow it down if necessary.</span>'
+                $msg_phase
+                    .html(
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 2: Listening</h5><span class="small">Pay attention to the pronunciation of each word. You can slow down the audio if necessary.</span>'
+                    );
+
+                $(this).html(
+                    'Go to phase 3<br><span class="small">Speaking</span>'
                 );
 
                 playAudioFromBeginning();
@@ -704,19 +649,63 @@ $(document).ready(function() {
                     "slow"
                 );
 
-                phase++;
+                if ($(".learning, .new, .forgotten").length == 0) {
+                    $(this).html(
+                        'Finish & Save<br><span class="small">Skipped phase 4 (writing) & 5 (reviewing): no underlined words</span>'
+                    );
+                    next_phase = 6;
+                } else {
+                    $(this).html(
+                        'Go to phase 4<br><span class="small">Writing</span>'
+                    );
+                    next_phase++;
+                }
+
+                $msg_phase.html(
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 3: Speaking</h5><span class="small">Read the text out loud and try to emulate the pronunciation of each word as you listen to the audio. You can slow it down if necessary.</span>'
+                );
+
+                playAudioFromBeginning();
+                break;
+            case 4:
+                $("html, body").animate(
+                    {
+                        scrollTop: 0
+                    },
+                    "slow"
+                );
+
+                next_phase++;
+
+                $(this).html('Go to phase 5<br><span class="small">Reviewing</span>');
+
+                $msg_phase
+                    .html(
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation.</span>'
+                    );
+
+                toggleDictation();
+                break;
+            case 5:
+                $("html, body").animate(
+                    {
+                        scrollTop: 0
+                    },
+                    "slow"
+                );
+
+                next_phase++;
 
                 $(this).html("Finish & Save");
 
                 $msg_phase
                     .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6>Assisted learning - Phase 4: Writing</h6><span class="small">Fill in the blanks as you listen to the dictation.</span>'
-                    )
-                    .attr("data-phase", phase);
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 5: Reviewing</h5><span class="small"><u>This is the most <a href="https://en.wikipedia.org/wiki/Testing_effect" class="alert-link" target="_blank" rel="noopener noreferrer">critical phase</a> for long-term language acquisition.</u><br>Review all the underlined words, even the ones with green underlining. Try to remember their meaning and pronunciation. Pay attention to their spelling as well. Can you come up with with alternative phrases in which you could use them? The latter is essential to turn your <a href="https://en.wiktionary.org/wiki/passive_vocabulary" class="alert-link" target="_blank" rel="noopener noreferrer">passive vocabulary</a> into <a href="https://en.wiktionary.org/wiki/active_vocabulary" class="alert-link" target="_blank" rel="noopener noreferrer">active vocabulary</a>.</span>'
+                    );
 
                 toggleDictation();
                 break;
-            case 4:
+            case 6:
                 archiveTextAndSaveWords();
                 break;
             default:
@@ -872,58 +861,61 @@ $(document).ready(function() {
      * Toggles dictation on/off
      */
     function toggleDictation() {
-        if ($(".dict-answer").length == 0) {
-            // toggle dictation on
-            //replace all underlined words/phrases with input boxes
-            $(".learning, .new, .forgotten").each(function(index, value) {
-                var $elem = $(this);
-                var length = $elem.text().length;
-                var width = $elem.width();
-                var line_height = $elem.css("font-size");
-                $elem
-                    .hide()
-                    .after(
-                        '<div class="input-group dict-input-group"><input type="text" class="dict" ' +
-                            'style="width:' +
-                            width +
-                            "px; line-height:" +
-                            line_height +
-                            ';" ' +
-                            'maxlength="' +
-                            length +
-                            '" data-text="' +
-                            $elem.text() +
-                            '">' +
-                            '<span class="input-group-append dict-answer d-none"></span></div>'
-                    );
-            });
-            $("html, body").animate(
-                {
-                    scrollTop: 0
-                },
-                "slow"
-            ); // go back to the top of the page
-
-            // automatically play audio, from the beginning
-            playAudioFromBeginning();
-
-            $(":text:first").focus(); // focus first input
-        } else {
-            // toggle dictation off
-            $(".learning, .new, .forgotten").each(function(index, value) {
-                var $elem = $(this);
-                $elem
-                    .show()
-                    .nextAll(":lt(1)")
-                    .remove();
-            });
-            $("html, body").animate(
-                {
-                    scrollTop: 0
-                },
-                "slow"
-            );
-            $("#audioplayer").trigger("pause");
+        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
+        if (audio_is_loaded) {
+            if ($(".dict-answer").length == 0) {
+                // toggle dictation on
+                // replace all underlined words/phrases with input boxes
+                $(".learning, .new, .forgotten").each(function(index, value) {
+                    var $elem = $(this);
+                    var length = $elem.text().length;
+                    var width = $elem.width();
+                    var line_height = $elem.css("font-size");
+                    $elem
+                        .hide()
+                        .after(
+                            '<div class="input-group dict-input-group"><input type="text" class="dict" ' +
+                                'style="width:' +
+                                width +
+                                "px; line-height:" +
+                                line_height +
+                                ';" ' +
+                                'maxlength="' +
+                                length +
+                                '" data-text="' +
+                                $elem.text() +
+                                '">' +
+                                '<span class="input-group-append dict-answer d-none"></span></div>'
+                        );
+                });
+                $("html, body").animate(
+                    {
+                        scrollTop: 0
+                    },
+                    "slow"
+                ); // go back to the top of the page
+    
+                // automatically play audio, from the beginning
+                playAudioFromBeginning();
+    
+                $(":text:first").focus(); // focus first input
+            } else {
+                // toggle dictation off
+                $(".learning, .new, .forgotten").each(function(index, value) {
+                    var $elem = $(this);
+                    $elem
+                        .show()
+                        .nextAll(":lt(1)")
+                        .remove();
+                });
+                $("html, body").animate(
+                    {
+                        scrollTop: 0
+                    },
+                    "slow"
+                );
+                $("#audioplayer").trigger("pause");
+            }
         }
     } // end toggleDictation
 
@@ -984,11 +976,23 @@ $(document).ready(function() {
      * Helper function to skip audio phases
      */
     function skipAudioPhases() {
-        $("#btn-next-phase").html(
-            'Finish & Save<br><span class="small">Skipped phases 2, 3 & 4: no audio detected</span>'
-        );
+        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
 
-        phase = 4;
+        if (!audio_is_loaded) {
+            if ($(".learning, .new, .forgotten").length == 0) {
+                $("#btn-next-phase").html(
+                    'Finish & Save<br><span class="small">Skipped some phases: no audio detected & no underlined words</span>'
+                );
+        
+                next_phase = 6;    
+            } else {
+                $("#btn-next-phase").html(
+                    'Go to phase 5<br><span class="small">Skipped some phases: no audio detected</span>'
+                );
+        
+                next_phase = 5;
+            }    
+        }
     } // end skipAudioPhases
 
     /**
@@ -1014,7 +1018,6 @@ $(document).ready(function() {
                         return false;
                     }
                     $("#audio-mp3").attr("src", e.response);
-                    console.log(e.response);
                     $audio_player[0].load();
                     $("#audioplayer-loader").addClass("d-none");
                     $("#audioplayer").removeClass("d-none");
