@@ -448,7 +448,7 @@ class Reader extends Text
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <h5 class="alert-heading">Assisted learning - Phase 1: Reading</h5>
-                            <span class="small">Read the text and try to understand what is going on. When you come across a word or phrase you don\'t understand, keep reading until the end of the sentence, or better yet, the paragraph. If by the end of the passage you still haven\'t guessed its meaning, click on it to look it up in the dictionary. You can use a monolingual or bilingual dictionary. Choose the one that suits you best. Just make sure you use it well.</span>
+                            <span class="small">Read the text and try to understand what is going on. When you come across a word or phrase you don\'t understand, keep reading until the end of the sentence, or better yet, the paragraph. If by the end of the passage you still haven\'t guessed its meaning, click on it to look it up in the dictionary or right click on any word to translate the whole sentence.</span>
                         </div>';   
         }
         

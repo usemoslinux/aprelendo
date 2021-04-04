@@ -138,13 +138,14 @@ $assisted_learning = $prefs->getAssistedLearning()
                                         <div id="help-learning-mode" class="collapse small">
                                             <hr>
                                             <p>
-                                                Assisted mode is designed to aid you in your language learning process. It typically consists of 4 phases:
+                                                Assisted mode is designed to aid you in your language learning process. It typically consists of 5 phases:
                                             </p>
                                             <ol>
-                                                <li>Reading: try to understand what the text is about. If you see words or phrases that you don&#39;t understand, look them up in the built-in dictionary.</li>
-                                                <li>Listening: listen to the recording and pay attention to the different sounds.</li>
-                                                <li>Speaking: speak on top of the recording, trying to imitate the pronunciation of each word. You can reduce the speed of the recording if necessary.</li>
-                                                <li>Dictation: type the words you marked for learning as they are spoken.</li>
+                                                <li><strong>Reading</strong>: try to understand what the text is about. If you see words or phrases that you don&#39;t understand, look them up in the built-in dictionary.</li>
+                                                <li><strong>Listening</strong>: listen to the -automagically created- audio version of the text and pay attention to the different sounds.</li>
+                                                <li><strong>Speaking</strong>: speak on top of the recording, trying to imitate the pronunciation of each word. You can reduce the speed of the recording if necessary.</li>
+                                                <li><strong>Dictation</strong>: type the words you marked for learning as they are spoken.</li>
+                                                <li><strong>Review</strong>: this is the most <a href="https://en.wikipedia.org/wiki/Testing_effect" target="_blank" rel="noopener noreferrer">critical phase</a> for long-term language acquisition. Review all the underlined words. Make an effort to remember their meaning and pronunciation, while also paying attention to their spelling. Speak out alternative sentences using these words. The latter is essential to turn your <a href="https://en.wiktionary.org/wiki/passive_vocabulary" target="_blank" rel="noopener noreferrer">passive vocabulary</a> into <a href="https://en.wiktionary.org/wiki/active_vocabulary" target="_blank" rel="noopener noreferrer">active vocabulary</a>.</li>
                                             </ol>
                                             Remember: assisted mode only works for simple texts (articles, lyrics, conversation transcripts, etc.), not videos or ebooks.
                                         </div>

@@ -91,19 +91,23 @@ if (!$user->isLoggedIn()) {
                         <br>
 
                         <section>
-                            <h4>Why using flash cards might not be a good idea to learn a new language?</h4>
+                            <h4>Why using flashcards might not be a good idea to learn a new language?</h4>
                             <p>If you have ever used spaced repetition software like <a
                                     href="https://apps.ankiweb.net/">Anki</a> you probably know that creating new
                                 flashcards can rapidly become a very tiresome and time consuming task and, after a
                                 while, reviewing them also becomes dull and monotonous.</p>
                             <p>Also, most of these programs are not specifically designed for language learning. If they
-                                are used correctly, they might help achieving that goal and give users the impression
-                                they are advancing their language skills. However, the overall results will be
-                                suboptimal, to say the least. One of the reasons for this is that they are very easy to
-                                misuse. There is nothing in them encouraging users to add context or visual and phonetic
-                                cues to their cards. Dealing with different verb conjugations or words with more than one
-                                meaning is also usually a problem. Of course, there are ways to handle these cases, but
-                                they are often convoluted and the average user misses them entirely.</p>
+                                are used correctly, they might help you achieving that goal and give you the impression
+                                you are advancing your language skills. However, the overall results will be
+                                suboptimal, to say the least.</p>
+                            <p>
+                                The reason for this is that flashcard programs only help you train your card deck, which most 
+                                probably has little bearing on the real situations you will face. Besides, they are very easy 
+                                to misuse. They usually do not encourage you to add context or visual and phonetic cues to your
+                                cards. Dealing with different verb conjugations or words with more than one meaning is also 
+                                usually a problem. Of course, there are ways to handle these cases, but they are often convoluted 
+                                and easy to miss for the average user.</p>
+                            <p></p>
                         </section>
                         <br>
 
@@ -155,15 +159,16 @@ if (!$user->isLoggedIn()) {
                             <h4>How does Aprelendo implement total reading?</h4>
                             <div class="row">
                                 <div class="col-12 col-lg-6">
-                                    <p>Aprelendo allows reading texts in <strong>two modes</strong>: free and assisted. Free mode
-                                        lets you read texts however you like. Assisted mode, on the other hand, leads you through 4 phases:</p>
+                                    <p>Aprelendo allows reading texts in <strong>two modes</strong>: free and assisted. <strong>Free mode</strong>
+                                        lets you read texts however you like. <strong>Assisted mode</strong>, on the other hand, leads you through 5 phases:</p>
                                     <ol>
-                                        <li>Reading: try to understand what the text is about. If you see words or phrases that
+                                        <li><strong>Reading</strong>: try to understand what the text is about. If you see words or phrases that
                                             you don&#39;t understand, look them up in the built-in dictionary.</li>
-                                        <li>Listening: listen to the -automagically created- audio version of the text and pay attention to the different sounds.</li>
-                                        <li>Speaking: speak on top of the recording, trying to imitate the pronunciation of each
+                                        <li><strong>Listening</strong>: listen to the -automagically created- audio version of the text and pay attention to the different sounds.</li>
+                                        <li><strong>Speaking</strong>: speak on top of the recording, trying to imitate the pronunciation of each
                                             word. You can reduce the speed of the recording if necessary.</li>
-                                        <li>Dictation: type the words you marked for learning as they are spoken.</li>
+                                        <li><strong>Dictation</strong>: type the words you marked for learning as they are spoken.</li>
+                                        <li><strong>Review</strong>: this is the most <a href="https://en.wikipedia.org/wiki/Testing_effect" target="_blank" rel="noopener noreferrer">critical phase</a> for long-term language acquisition. Review all the underlined words. Make an effort to remember their meaning and pronunciation, while also paying attention to their spelling. Try to come up with alternative phrases in which you could use them. The latter is essential to turn your <a href="https://en.wiktionary.org/wiki/passive_vocabulary" target="_blank" rel="noopener noreferrer">passive vocabulary</a> into <a href="https://en.wiktionary.org/wiki/active_vocabulary" target="_blank" rel="noopener noreferrer">active vocabulary</a>.</li>
                                     </ol>
                                     <p>As you see, by using Aprelendo you will be practicing all four dimensions of the language
                                         you want to learn at the same time, in a systematic and integrated way.</p>

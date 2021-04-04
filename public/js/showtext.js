@@ -142,13 +142,17 @@ $(document).ready(function() {
     $(document).on("mousedown touchstart", ".word", function(e) {
         e.stopPropagation();
         if (e.which < 2) {
-            // if left mouse button / touch...
+            // if left mouse button (e.which = 1) / touch (e.which = 0)...
             highlighting = true;
             $sel_start = $sel_end = $(this);
             if (e.type == "touchstart") {
                 start_sel_time = new Date();
                 start_sel_pos_top = $sel_start.offset().top - $(window).scrollTop();
             }
+        } else if (e.which == 3) {
+            // on right click show translation of the whole sentence
+            $selword = $(this);
+            window.open(buildTranslateParagraphLink());
         }
     }); // end .word.on.mousedown/touchstart
 
@@ -700,7 +704,7 @@ $(document).ready(function() {
 
                 $msg_phase
                     .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 5: Reviewing</h5><span class="small"><u>This is the most <a href="https://en.wikipedia.org/wiki/Testing_effect" class="alert-link" target="_blank" rel="noopener noreferrer">critical phase</a> for long-term language acquisition.</u><br>Review all the underlined words, even the ones with green underlining. Try to remember their meaning and pronunciation. Pay attention to their spelling as well. Can you come up with with alternative phrases in which you could use them? The latter is essential to turn your <a href="https://en.wiktionary.org/wiki/passive_vocabulary" class="alert-link" target="_blank" rel="noopener noreferrer">passive vocabulary</a> into <a href="https://en.wiktionary.org/wiki/active_vocabulary" class="alert-link" target="_blank" rel="noopener noreferrer">active vocabulary</a>.</span>'
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 5: Reviewing</h5><span class="small"><u>This is the most <a href="https://en.wikipedia.org/wiki/Testing_effect" class="alert-link" target="_blank" rel="noopener noreferrer">critical phase</a> for long-term language acquisition.</u><br>Review all the underlined words, even the ones with green underlining. Make an effort to remember their meaning and pronunciation, while also paying attention to their spelling. Speak out alternative sentences using these words. The latter is essential to turn your <a href="https://en.wiktionary.org/wiki/passive_vocabulary" class="alert-link" target="_blank" rel="noopener noreferrer">passive vocabulary</a> into <a href="https://en.wiktionary.org/wiki/active_vocabulary" class="alert-link" target="_blank" rel="noopener noreferrer">active vocabulary</a>.</span>'
                     );
 
                 toggleDictation();

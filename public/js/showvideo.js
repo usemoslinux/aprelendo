@@ -65,6 +65,10 @@ $(document).ready(function() {
             if (e.type == "touchstart") {
                 start_sel_time = new Date();
             }
+        } else if (e.which == 3) {
+            // on right click show translation of the whole sentence
+            $selword = $(this);
+            window.open(buildTranslateParagraphLink());
         }
     }); // end .word.on.mousedown/touchstart
 

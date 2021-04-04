@@ -850,7 +850,7 @@ audio {
     /* Safari */
     position: sticky;
     top: 0;
-    z-index: 10000;
+    z-index: 3;
 }
 
 .basic {
@@ -950,6 +950,7 @@ input {
     margin: .5rem auto;
     max-width: 750px;
     width: calc(100% - 1rem);
+    z-index: 4;
 }
 
 #myModal .modal-content {
