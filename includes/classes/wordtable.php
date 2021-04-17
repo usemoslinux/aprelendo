@@ -51,8 +51,10 @@ class WordTable extends Table {
             $word_id = $this->rows[$i]['id'];
             $word = $this->rows[$i]['word'];
             $word_status = $this->rows[$i]['status'];
-            $status = array('fa-hourglass-end status_learned', 'fa-hourglass-half status_learning', 'fa-hourglass-start status_new');
-            $status_text = array('Learned', 'Learning', 'New');
+            // $status = 0 ("learned"), 1 ("learning"), 2 ("new"), 3 ("forgotten")
+            $status = array('fa-hourglass-end status_learned', 'fa-hourglass-half status_learning', 
+                            'fa-hourglass-start status_new', 'fa-hourglass-start status_forgotten');
+            $status_text = array('Learned', 'Learning', 'New', 'Forgotten');
 
             if ($this->has_chkbox) {
                 $html .= "<tr><td class='col-checkbox'><div class='custom-control custom-checkbox'><input id='row-$word_id' class='custom-control-input chkbox-selrow' type='checkbox' aria-label='Select row' data-idWord='$word_id'><label class='custom-control-label' for='row-$word_id'></label></div></td>";

@@ -48,25 +48,7 @@ class Statistics extends DBEntity {
         $this->table = 'words';    
         --$days;
 
-        // get how many words were created in each of the last $days
-        for ($i=$days; $i >= 0; $i--) {
-            $sql = "SELECT COUNT(word) AS `created` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `date_created` < CURDATE() - INTERVAL ?-1 DAY AND `date_created` > CURDATE() - INTERVAL ? DAY";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
-            $row = $stmt->fetch();
-            $stats['created'][] = $row['created'];
-        }
-
-        // get how many words' status were modified in each of the last $days
-        for ($i=$days; $i >= 0; $i--) { 
-            $sql = "SELECT COUNT(word) AS `modified` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=1 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
-            $row = $stmt->fetch();
-            $stats['modified'][] = $row['modified'];
-        }
-
-        // get how many words were learned in each of the last $days
+        // get how many words acquired "learned" status in each of the last $days
         for ($i=$days; $i >= 0; $i--) { 
             $sql = "SELECT COUNT(word) AS `learned` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
             $stmt = $this->pdo->prepare($sql);
@@ -75,9 +57,27 @@ class Statistics extends DBEntity {
             $stats['learned'][] = $row['learned'];
         }
 
-        // get how many learned words were forgotten in each of the last $days
+        // get how many words acquired "learning" status in each of the last $days
         for ($i=$days; $i >= 0; $i--) { 
-            $sql = "SELECT COUNT(word) AS `forgotten` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=2 AND `date_modified`>`date_created` AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
+            $sql = "SELECT COUNT(word) AS `learning` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=1 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
+            $row = $stmt->fetch();
+            $stats['learning'][] = $row['learning'];
+        }
+
+        // get how many words acquired "new" status in each of the last $days
+        for ($i=$days; $i >= 0; $i--) {
+            $sql = "SELECT COUNT(word) AS `new` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=2 AND `date_created` < CURDATE() - INTERVAL ?-1 DAY AND `date_created` > CURDATE() - INTERVAL ? DAY";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
+            $row = $stmt->fetch();
+            $stats['new'][] = $row['new'];
+        }
+
+        // get how many learned words acquired "forgotten" status in each of the last $days
+        for ($i=$days; $i >= 0; $i--) { 
+            $sql = "SELECT COUNT(word) AS `forgotten` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=3 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
             $row = $stmt->fetch();

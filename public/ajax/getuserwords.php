@@ -30,15 +30,8 @@ use Aprelendo\Includes\Classes\Reader;
 
 $reader = new Reader($pdo, $user->getId(), $user->getLangId());
 
-// for ebooks, use slower method to underline words (as input is HTML code)
-// for everything else, use faster method (as input is simple text)
-if (isset($_POST['txt']) && isset($_POST['is_ebook'])) {
-    if ($_POST['is_ebook'] == true) {
-        $result = $reader->colorizeWords(html_entity_decode($_POST['txt']));
-        echo $reader->addLinks($result);
-    } else {
-        echo $reader->colorizeWordsFast(html_entity_decode($_POST['txt']), $user_dic, $freq_words);
-    }
+if (isset($_POST['txt'])) {
+    echo $reader->getWordsForText(html_entity_decode($_POST['txt'])); 
 }
 
 ?>

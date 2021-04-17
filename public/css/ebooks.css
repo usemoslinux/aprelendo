@@ -148,16 +148,6 @@ select {
     color: #ccc;
 }
 
-.arrow:hover,
-.navlink:hover {
-    color: #777;
-}
-
-.arrow:active,
-.navlink:hover {
-    color: #000;
-}
-
 #prev {
     left: 0;
 }
@@ -179,16 +169,6 @@ select {
     -moz-user-select: none;
     user-select: none;
     text-decoration: none;
-}
-
-.arrow:hover,
-.navlink:hover {
-    color: #777;
-}
-
-.arrow:active,
-.navlink:hover {
-    color: #000;
 }
 
 /* SIDEBAR */

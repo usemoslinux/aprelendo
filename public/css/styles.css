@@ -905,6 +905,10 @@ audio {
     user-select: none;
 }
 
+#text {
+    white-space: pre-line;
+}
+
 
 /* DICTATION */
 
@@ -1111,6 +1115,10 @@ input {
 }
 
 /* WORDS */
+
+i.status_forgotten {
+    color: Crimson;
+}
 
 i.status_new {
     color: DodgerBlue;

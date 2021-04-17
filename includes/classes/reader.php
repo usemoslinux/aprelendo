@@ -203,7 +203,8 @@ class Reader extends Text
 
     /**
      * Constructor
-     * Used for mini reader (word/phrase). Used by underlinewords.php
+     * Used for mini reader (word/phrase). Used to access reader preferences without 
+     * the need to display some text
      *
      * @param \PDO $pdo
      * @param int $user_id
@@ -222,181 +223,53 @@ class Reader extends Text
         $lang->loadRecord($lang_id);
         $this->show_freq_words   = $lang->getShowFreqWords();
     } // end createMiniReader()
-
-    /**
-    * Makes all words clickable by wrapping them in SPAN tags
-    * Returns the modified $text, which includes the new HTML code
-    * 
-    * @param string $text
-    * @return string
-    */
-    public function addLinks(string $text): string
-    {
-        $find = array('/\s*<span class=\'word[^>]+>.*?<\/span>(*SKIP)(*F)|<[^>]*>(*SKIP)(*F)|(\w+)/iu', '/<[^>]*>(*SKIP)(*F)|[^\w<]+/u');
-        
-        $replace = array("<span class='word' data-toggle='modal' data-target='#myModal'>$0</span>", "<span>$0</span>");
-        
-        return preg_replace($find, $replace, $text);
-    } // end addLinks()
     
     /**
-    * Underlines words with different colors depending on their status
-    * Returns the modified $text, which includes the new HTML code
-    * It is used for ebooks, as they use HTML code as input ($text).
-    * Because of this, colorizeWords is much slower than colorizeWordsFast. 
-    * Also, span creation for the rest of the words and separators is done by AddLinks()
-    *
-    * @param string $text
-    * @param \PDO $pdo
-    * @return string
-    */
-    public function colorizeWords(string $text): string {
+     * Gets words that the user added to his private library, as well as high frequency words for the 
+     * current language user is learning. Returns an array containing 3 subarrays: text, user_words & high_freq.
+     * The return value of this method is used as an input for colorizewords.js to underline & colorize words. 
+     *
+     * @param string $text
+     * @return string
+     */
+    public function getWordsForText(string $text): string {
         try {
-            $user_id = $this->user_id;
-            $lang_id = $this->lang_id;
+            // return value will be composed of 3 arrays: 
+            // $result['text']: text to be reviewed
+            // $result['user_words']: words user added to his private library
+            // $result['high_freq']: high frequency words for the language the user is learning
+
+            $result['text'] = $text;
             
-            // 1. colorize phrases & words that are being reviewed
-            $words_table = new Words($this->pdo, $user_id, $lang_id);
-            $words = $words_table->getLearning();
-
-            foreach ($words as $word) {
-                $phrase = $word['word'];
-                $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
-                "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
-            }
-            
-            // 2. colorize phrases & words that were already learned
-            $words = $words_table->getLearned();
-
-            foreach ($words as $word) {
-                $phrase = $word['word'];
-                $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $phrase . "\b/iu",
-                "<span class='word learned' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
-            }
-
-            // 3. colorize frequency list words
+            // 1. get user words & phrases
+            $words_table = new Words($this->pdo, $this->user_id, $this->lang_id);
+            $result['user_words'] = $words_table->getAll(0,1000000,4);
+          
+            // 2. get frequency list words
             if ($this->show_freq_words) {
                 $user = new User($this->pdo);
                 if ($user->isLoggedIn() && $user->isPremium()) {
-                    $lang = new Language($this->pdo, $user_id);
-                    $lang->loadRecord($lang_id);
+                    $lang = new Language($this->pdo, $this->user_id);
+                    $lang->loadRecord($this->lang_id);
                     $freq_words = WordFrequency::getHighFrequencyList($this->pdo, $lang->getName());
-                    $freq_words = \array_column($freq_words, 'word');
-
-                    foreach ($freq_words as $freq_word) {
-                        // $text = preg_replace("/\s*<span[^>]+>.*?<\/span>(*SKIP)(*F)|\b" . $freq_word . "\b/iu",
-                        $text = preg_replace("/<[^>]*>(*SKIP)(*F)|\b" . $freq_word . "\b/iu",
-                        "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$0</span>", "$text");
-                    }
+                    $result['high_freq'] = \array_column($freq_words, 'word');
                 }
             }
-            return $text;
+            return json_encode($result);
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected problem loading the private list of words for this user.');
         } finally {
             $stmt = null;
         }        
-    } // end colorizeWords()
+    } // end getWordsForText()
 
-    /**
-    * Underlines words with different colors depending on their status and creates spans
-    * for the rest of the words & separators.
-    * Returns the modified $text, which includes the new HTML code
-    * It is used for simple texts, videos & RSS feeds, as they all use plain text as input ($text).
-    * Because of this, colorizeWordsFast is much faster than colorizeWords even though it does
-    * much more (it's like doing colorizeWords + AddLinks).
-    *
-    * @param string $text
-    * @return string
-    */
-    public function colorizeWordsFast(string $text, ?array &$dic_words, ?array &$freq_words): string {
-        $user_id = $this->user_id;
-        $lang_id = $this->lang_id;
-        
-        // divide text in two arrays: words & word separators
-        \preg_match_all("/(\w+)/u", $text, $words);
-        \preg_match_all("/(\W+)/u", $text, $separators);
-        
-        // check if text starts with a word or a word separator (this will be used when merging again words & separators)
-        if (\preg_match("/\W/u", $text, $first_separator, PREG_OFFSET_CAPTURE)) {
-            $separator_first = $first_separator[0][1] === 0;
-        } else {
-            $separator_first = false;
-        }
-        
-        try {
-            // get words in personal dictionary
-            if (!isset($dic_words)) {
-                $words_table = new Words($this->pdo, $user_id, $lang_id);
-                $dic_words = $words_table->getAll(0, 1000000, 5);
-            }
-            
-            $dic_words = !$dic_words || empty($dic_words) ? [] : $dic_words;
-
-            // get high frequency words list, only if necessary
-            
-            if ($this->show_freq_words) {
-                if (!isset($freq_words)) {
-                    $user = new User($this->pdo);
-                    $user_is_logged_and_premium = $user->isLoggedIn() && $user->isPremium();
-                    if ($user->isLoggedIn() && $user->isPremium()) {
-                        $lang = new Language($this->pdo, $user_id);
-                        $lang->loadRecord($lang_id);                   
-                        $freq_words = WordFrequency::getHighFrequencyList($this->pdo, $lang->getName());
-                    }
-                }
-            }
-        } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected problem loading the private list of words for this user.');
-        } finally {
-            $stmt = null;
-        }   
-        
-        // replace words & separators with corresponding html code
-        foreach ($words[0] as &$word) {
-            $search_in_dic = \array_search(mb_strtolower($word), array_column($dic_words, 'word'));
-            if ($search_in_dic === false) {
-                // if necessary, underline frequency words
-                if ($this->show_freq_words) { 
-                    $search_in_freq_dic = \array_search(mb_strtolower($word), \array_column($freq_words, 'word'));
-                    if ($search_in_freq_dic === false) {
-                        $word = "<span class='word' data-toggle='modal' data-target='#myModal'>$word</span>";
-                    } else {
-                        $word = "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>$word</span>";
-                    }
-                } else {
-                    $word = "<span class='word' data-toggle='modal' data-target='#myModal'>$word</span>";
-                }
-            } else {
-                $learning_level = $dic_words[$search_in_dic]['status'] > 0 ? 'learning' : 'learned';
-                $word = "<span class='word reviewing $learning_level' data-toggle='modal' data-target='#myModal'>$word</span>";
-            }
-        }
-
-        foreach ($separators[0] as &$separator) {
-            $separator = "<span>$separator</span>";
-        }
-
-        // merge words & separators and to create complete html code
-        $html = [];
-        if ($separator_first) {
-            array_map(function ($a, $b) use (&$html) { array_push($html, $a, $b); }, $separators[0], $words[0]);
-        } else {
-            array_map(function ($a, $b) use (&$html) { array_push($html, $a, $b); }, $words[0], $separators[0]);
-        }
-        
-        return implode($html);
-    } // end colorizeWordsFast()
-    
     /**
      * Constructs HTML code to show text in reader
      *
      * @return string
      */
     public function showText(): string {
-        ini_set('max_execution_time', 300); //300 seconds = 5 minutes
-        // $time_start = microtime(true);
-        $html = "<div id='text-container' class='my-3' data-textID='" . $this->id . "'>";
+        $html = "<div id='text-container' class='my-3' data-type='text' data-textID='" . $this->id . "'>";
         
         // display source, if available
         if (!empty($this->source_uri)) {
@@ -455,16 +328,10 @@ class Reader extends Text
         // display text
         $html .= '<div id="text" style="line-height:' . $this->prefs->getLineHeight() . ';">';
         
-        $text = $this->colorizeWordsFast($this->text, $user_dic, $freq_words);
-        $text = nl2br($text);
+        // $text = $this->colorizeWordsFast($this->text, $user_dic, $freq_words);
+        // $text = nl2br($text);
 
-        $html .= $text . '</div>';
-        
-        // display total execution time
-        // $time_end = microtime(true);
-        // $execution_time = ($time_end - $time_start);
-        // $html .= '<b>Total Execution Time:</b> ' . $execution_time . ' Secs';
-        
+        $html .= $this->getText() . '</div>';
         $html .= '<p></p>';
         
         if ($this->prefs->getAssistedLearning()) {
@@ -494,8 +361,6 @@ class Reader extends Text
      * @return string
      */
     public function showVideo(string $yt_id): string {
-        // $user_dic = [];
-        // $freq_words = [];
         $yt_id = $yt_id ? $yt_id : '';
 
         $html = '<div class="col-lg-6 offset-lg-3">' .
@@ -504,16 +369,15 @@ class Reader extends Text
                             '<div data-ytid="' . $yt_id . '" id="player"></div>' .
                         '</div>';
 
-        $html .= "<div id='text-container' class='overflow-auto' data-textID='" . $this->id . "'>";
-        $html .= '<div id="message-window"></div>';
+        $html .= "<div id='text-container' class='overflow-auto' data-type='video' data-textID='" . $this->id . "'>";
         $xml = new SimpleXMLElement($this->text);
 
         for ($i=0; $i < sizeof($xml); $i++) { 
             $start = $xml->text[$i]['start'];
             $dur = $xml->text[$i]['dur'];
 
-            $text = $this->colorizeWordsFast(html_entity_decode($xml->text[$i], ENT_QUOTES | ENT_XML1, 'UTF-8'), $user_dic, $freq_words);
-
+            // $text = $this->colorizeWordsFast(html_entity_decode($xml->text[$i], ENT_QUOTES | ENT_XML1, 'UTF-8'), $user_dic, $freq_words);
+            $text = html_entity_decode($xml->text[$i], ENT_QUOTES | ENT_XML1, 'UTF-8');
             $html .= "<div class='text-center' data-start='$start' data-dur='$dur' >". $text .'</div>';
         }
         

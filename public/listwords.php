@@ -95,4 +95,4 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
 
 ?>
 
-  <script defer src="js/listwords-min.js"></script>
+  <script defer src="js/listwords.js"></script>

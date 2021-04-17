@@ -48,7 +48,7 @@ $(document).ready(function() {
             })
                 .done(function() {
                     window.location.replace(
-                        "words.php?p=" + getCurrentPage().p
+                        "words.php" + parameterizeArray(getCurrentURIParameters())
                     );
                 })
                 .fail(function(request, status, error) {
@@ -72,16 +72,13 @@ $(document).ready(function() {
     } // end toggleActionMenu
 
     /**
-     * Returns current page
+     * Returns current URI parameters
      */
-    function getCurrentPage() {
+    function getCurrentURIParameters() {
         var parts = window.location.search.substr(1).split("&");
-        if (parts == "") {
-            result = {
-                p: 1
-            };
-        } else {
-            var result = {};
+        var result = { p: "1" };
+
+        if (parts != "") {
             for (var i = 0; i < parts.length; i++) {
                 var temp = parts[i].split("=");
                 result[decodeURIComponent(temp[0])] = decodeURIComponent(
@@ -89,8 +86,26 @@ $(document).ready(function() {
                 );
             }
         }
-        return result;
-    } // end getCurrentPage
+        
+        return result; // remove trailing '&'
+    } // end getCurrentURIParameters
+
+    /**
+     * Converts array to URI string with parameters
+     * @param {array} arr 
+     * @returns string
+     */
+    function parameterizeArray(arr) {
+        let result = '?';
+                        
+        for (const key in arr) {
+            if (arr[key]) {
+                result += key + '=' + encodeURIComponent(arr[key]) + '&';
+            }
+        }
+
+        return result.slice(0,-1);
+    } // end parameterizeArray
 
     $(document).on("change", ".chkbox-selrow", toggleActionMenu);
 
@@ -110,7 +125,11 @@ $(document).ready(function() {
      * Selects sorting
      */
     $("#dropdown-menu-sort").on("click", function(e) {
-        var params = "s=" + $("#s").val() + "&o=" + $("#o").val();
-        window.location.replace("words.php?" + params);
+        var params = { s: $("#s").val(), 
+                       o: $("#o").val() };
+
+        var uri_str = parameterizeArray(params);
+        
+        window.location.replace("words.php" + uri_str);
     }); // end #dropdown-menu-sort.on.click
 });

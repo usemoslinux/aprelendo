@@ -16,8 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-$(document).ready(function() {
+ $(document).ready(function() {
     var ebook_id = $("script[src*='showebook-min.js']").attr("data-id");
     var book = ePub();
 
@@ -47,8 +46,7 @@ $(document).ready(function() {
         .then(response => response.arrayBuffer())
         .then(arraybuffer => openBook(arraybuffer))
         .catch(function(e) {
-            // alert('There was an unexpected problem opening this ebook file. Try again later.');
-            alert(e.message);
+            alert('There was an unexpected problem opening this ebook file. Try again later.');
             window.location.replace("texts.php");
         });
 
@@ -101,31 +99,31 @@ $(document).ready(function() {
                     .then(function() {
                         // Add the rest of the scripts and stylesheets
                         Promise.all([
+                            contents.addScript("/js/underlinewords-min.js"),
                             contents.addScript("/js/showtext-min.js"),
                             contents.addScript(
                                 "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"
                             )
                         ]);
 
+                        // underline text
                         $(".loading-spinner").fadeIn(1000);
-                        // underline words
                         $.ajax({
                             type: "POST",
-                            url: "../ajax/underlinewords.php",
-                            data: {
-                                txt: contents.content.innerHTML,
-                                is_ebook: true
-                            }
+                            url: "/ajax/getuserwords.php",
+                            // data: { txt: $(contents.content).text() },
+                            data: { txt: $(contents.content).html() },
+                            dataType: "json"
                         })
-                            .done(function(result) {
-                                contents.content.innerHTML = result;
-                                $(".loading-spinner").fadeOut(1000);
-                            })
-                            .fail(function(xhr, ajaxOptions, thrownError) {
-                                alert(
-                                    "There was an unexpected error when trying to underline words for this ebook!"
-                                );
-                            });
+                        .done(function(data) {
+                            contents.content.innerHTML = underlineWords(data);
+                            $(".loading-spinner").fadeOut(1000);
+                        })
+                        .fail(function(xhr, ajaxOptions, thrownError) {
+                            alert(
+                                "There was an unexpected error when trying to underline words for this ebook!"
+                            );
+                        }); // end $.ajax    
                     });
             });
 
@@ -136,7 +134,9 @@ $(document).ready(function() {
                     e.preventDefault();
                     $.when(SaveWords()).then(function() {
                         rendition.next();
-                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                        $("html, body").animate({
+                            scrollTop: 0
+                        }, "slow");
                     });
                 },
                 false
@@ -149,7 +149,9 @@ $(document).ready(function() {
                     e.preventDefault();
                     $.when(SaveWords()).then(function() {
                         rendition.prev();
-                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                        $("html, body").animate({
+                            scrollTop: 0
+                        }, "slow");
                     });
                 },
                 false
@@ -227,16 +229,16 @@ $(document).ready(function() {
                 });
 
             $.ajax({
-                type: "POST",
-                url: "/ajax/archivetext.php",
-                async: false,
-                data: {
-                    words: oldwords
-                }
-            })
-            .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Oops! There was an error updating the database.");
-            });
+                    type: "POST",
+                    url: "/ajax/archivetext.php",
+                    async: false,
+                    data: {
+                        words: oldwords
+                    }
+                })
+                .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Oops! There was an error updating the database.");
+                });
 
             // don't show confirmation dialog when closing window
             window.parent.show_confirmation_dialog = false;

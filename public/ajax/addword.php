@@ -32,18 +32,21 @@ if (isset($_POST['word'])) {
     $user_id = $user->getId();
     $lang_id = $user->getLangId();
     
-    $word = $_POST['word'];
-    $status = 2;
-    $is_phrase = $_POST['is_phrase'];
-    
     try {
+        $word = $_POST['word'];
+        $is_phrase = $_POST['is_phrase'];
+        
         $words_table = new Words($pdo, $user_id, $lang_id);
+ 
+        // if word already exists in table, status = 3 ("forgotten")
+        // otherwise, $status = 2 ("new")
+        $status = $words_table->exists($word) ? 3 : 2;
+        
         $words_table->add($word, $status, $is_phrase);
     } catch (Exception $e) {
         $error = array('error_msg' => $e->getMessage());
         header('Content-Type: application/json');
         echo json_encode($error);
     }
-    
 }
 ?>

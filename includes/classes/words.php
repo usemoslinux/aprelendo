@@ -240,6 +240,27 @@ class Words extends DBEntity {
         }        
     } // end getSearch()
 
+     /**
+     * Checks if word exists
+     *
+     * @param string $word
+     * @return bool
+     */
+    public function exists(string $word): bool {
+        try {
+            $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `word`=?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$word]);
+            $num_rows = $stmt->fetchColumn();
+           
+            return ($num_rows) && ($num_rows > 0) ? true : false;
+        } catch (\PDOException $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end exists()
+
     /**
      * Gets all the words for the current user & language combination
      * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
@@ -254,7 +275,7 @@ class Words extends DBEntity {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
             
-            $sql = "SELECT `id`, `word`, `status` 
+            $sql = "SELECT `id`, `word`, `status`, `is_phrase`   
                     FROM `{$this->table}` 
                     WHERE `user_id`=:user_id AND `lang_id`=:lang_id  
                     ORDER BY $sort_sql LIMIT :offset, :limit";

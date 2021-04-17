@@ -42,6 +42,20 @@ $(document).ready(function() {
         }
     });
 
+    // ajax call to underline text
+    $.ajax({
+        type: "POST",
+        url: "/ajax/getuserwords.php",
+        data: { txt: $('#text-container').html() },
+        dataType: "json"
+    })
+    .done(function(data) {
+        $('#text-container').html(underlineWords(data));
+    })
+    .fail(function(xhr, ajaxOptions, thrownError) {
+        console.log("There was an unexpected error trying to underline words in this text")
+    }); // end $.ajax    
+
     /**
      * Word/Phrase selection start
      * @param {event object} e
@@ -372,49 +386,53 @@ $(document).ready(function() {
                     );
                 });
 
+                // ajax call to underline text
                 $.ajax({
-                    url: "ajax/underlinewords.php",
                     type: "POST",
-                    data: {
-                        txt: $selword.text(),
-                        is_ebook: false
-                    }
-                }).done(function(result) {
-                    // if everything went fine, remove the underlining
+                    url: "/ajax/getuserwords.php",
+                    data: { txt: $selword.text() },
+                    dataType: "json"
+                })
+                .done(function(data) {
+                    // if everything went fine, remove the underlining and underline once again the whole selection
                     // also, the case of the word/phrase in the text has to be respected
-                    // for phrases, we need to make sure that new underlining is added for each word (call to underlinewords.php)
+                    // for phrases, we need to make sure that new underlining is added for each word
 
-                    var $result = $(result);
+                    var $result = $(underlineWords(data));
                     var $cur_filter = {};
                     var cur_word = /""/;
-                    var word_html = "";
-                    var word_is_new = false;
 
                     $filter.each(function() {
                         $cur_filter = $(this);
 
                         $result.filter(".word").each(function(key) {
                             cur_word = new RegExp(
-                                "\\b" + $(this).text() + "\\b",
-                                "iu"
+                                "(?<![\\p{L}|^])" + $(this).text() + "(?![\\p{L}|$])",
+                                "iug"
                             ).exec($cur_filter.text());
                             $(this).text(cur_word);
-                        });
+                            
+                            // check if any word marked by PHP as .learning should be marked as .new instead
+                            var word = $(this).text().toLowerCase();
+                            var user_word = data.user_words.find(function (element) {
+                                return element.word == word;    
+                            });
 
-                        // check if any word marked by PHP as .learning should be marked as .new instead
-                        if ($(this).hasClass("learning")) {
-                            word_html = $(this).html();
-                            word_is_new = $(".new").filter(function() {
-                                return $(this).html() == word_html;
-                            }).length > 0;
-                            if (word_is_new) {
-                                $(this).removeClass("learning").addClass("new");
+                            if (user_word !== undefined) {
+                                if (user_word.status == 2) {
+                                    $(this).removeClass("learning").addClass("new");                                    
+                                } else if (user_word.status == 3) {
+                                    $(this).removeClass("learning").addClass("forgotten");
+                                }
                             }
-                        }
-
+                        });
+                        
                         $cur_filter.replaceWith($result.clone());
                     });
-                });
+                })
+                .fail(function(xhr, ajaxOptions, thrownError) {
+                    console.log("There was an unexpected error trying to underline words in this text")
+                }); // end $.ajax    
             })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
                 alert(

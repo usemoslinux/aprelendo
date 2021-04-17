@@ -23,39 +23,13 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check i
 
 use Aprelendo\Includes\Classes\Statistics;
 
-/**
- * GAMIFICATION IDEAS
- * 
- * 1. Show weekly streaks
- * 2. Compare users stats with other user stats:
- *    - How many words where studied in the last 7 days
- *    - How many texts where added in the last 7 days
- *    
- * 3. Badges
- *    - Most learned words last week
- *    - Most new words last week
- *    - Most texts studied last week
- *    - Most texts added last week
- *    - Most active user uploading shared texts
- *    - Your first song
- *    - Your first letter
- *    - Your first conversation
- *    - Your first Youtube video
- *    - Your first ebook
- *    - Using "free" mode
- *    - Custom dictionary (for any/current language?)
- *    - Custom translator (for any/current language?)
- *    - Lazy lazy
-
- */
-
 $stats = new Statistics($pdo, $user->getId(), $user->getLangId());
 $week_stats = $stats->get(7); // get weekly statistics
 
 $streak_days = 0;
 
 for ($i=6; $i >= 0; $i--) { 
-    if ($week_stats['created'][$i] + $week_stats['modified'][$i] + $week_stats['learned'][$i] < 10) {
+    if ($week_stats['forgotten'][$i] + $week_stats['new'][$i] + $week_stats['learning'][$i] + $week_stats['learned'][$i] < 10) {
         break;    
     }
     $streak_days++;
@@ -72,9 +46,9 @@ if ($streak_days > 0) {
 $message_html .= '</span>';
 
 $today_stats = $stats->get(1); // get today's statistics
-$nr_of_words_learned_today = $today_stats['created'][0] + $today_stats['modified'][0] + $today_stats['learned'][0];
-$per_of_words_leardned_today = round($nr_of_words_learned_today * 100 / 10);
-$msg_progress_bar = "$nr_of_words_learned_today / 10";
+$nr_of_words_reviewed_today = $today_stats['forgotten'][0] + $today_stats['new'][0] + $today_stats['learning'][0] + $today_stats['learned'][0];
+$per_of_words_leardned_today = round($nr_of_words_reviewed_today * 100 / 10);
+$msg_progress_bar = "$nr_of_words_reviewed_today / 10";
 
 
 ?>

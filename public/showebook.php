@@ -172,6 +172,7 @@ try {
         require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
     ?>
 
+    <script defer src="js/underlinewords-min.js"></script>
     <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook-min.js"></script>
 
 </body>

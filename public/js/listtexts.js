@@ -36,8 +36,10 @@ $(document).ready(function() {
                 ids.push($(this).attr("data-idText"));
             });
 
-            var params = getURIParameters();
-            var is_archived = params.sa == "1";
+            var uri_params = getCurrentURIParameters();
+            var is_archived = uri_params.sa == "1";
+            var cur_page = uri_params.p ? uri_params.p : "1";
+
             /**
              * Deletes selected texts from the database (based on their ID).
              * When done, also removes selected rows from HTML table.
@@ -52,16 +54,17 @@ $(document).ready(function() {
                 }
             })
                 .done(function() {
-                    var params =
-                        "f=" +
-                        $("#f").val() +
-                        "&s=" +
-                        $("#s").val() +
-                        "&sa=" +
-                        $("#sa").val() +
-                        "&o=" +
-                        $("#o").val();
-                    window.location.replace("texts.php?" + params);
+                    var params = {  p: cur_page,
+                                    ft: $("#ft").val(), // filter type
+                                    fl: $("#fl").val(), // filter level
+                                    s: $("#s").val(),   // search text
+                                    sa: $("#sa").val(), // is shared
+                                    o: $("#o").val()    // order
+                                };
+
+                    var uri_str = parameterizeArray(params);
+
+                    window.location.replace("texts.php" + uri_str);
                 })
                 .fail(function() {
                     alert(
@@ -82,6 +85,9 @@ $(document).ready(function() {
             ids.push($(this).attr("data-idText"));
         });
 
+        var uri_params = getCurrentURIParameters();
+        var cur_page = uri_params.p ? uri_params.p : "1";
+
         /**
          * Moves selected texts from the "texts" table to the "archived_texts" table in the database (archive);
          * or, vice-versa, moves texts from the "archived_texts" table to the "texts" table (unarchive)
@@ -98,18 +104,17 @@ $(document).ready(function() {
             }
         })
             .done(function() {
-                var params =
-                    "f=" +
-                    $("#f").val() +
-                    "&s=" +
-                    $("#s").val() +
-                    "&sa=" +
-                    $("#sa").val() +
-                    "&o=" +
-                    $("#o").val();
-                // var params = window.location.search.substr(1).split("?");
+                var params = {  p: cur_page,
+                                ft: $("#ft").val(), // filter type
+                                fl: $("#fl").val(), // filter level
+                                s: $("#s").val(),   // search text
+                                sa: $("#sa").val(), // is shared
+                                o: $("#o").val()    // order
+                            };
 
-                window.location.replace("texts.php?" + params);
+                var uri_str = parameterizeArray(params);
+
+                window.location.replace("texts.php" + uri_str);
             })
             .fail(function() {
                 alert(
@@ -173,16 +178,15 @@ $(document).ready(function() {
      */
     $("#dropdown-menu-sort").on("click", function(e) {
         var filename = getCurrentFileName();
-        var params =
-            "f=" +
-            $("#f").val() +
-            "&s=" +
-            $("#s").val() +
-            "&sa=" +
-            $("#sa").val() +
-            "&o=" +
-            $("#o").val();
-        window.location.replace(filename + "?" + params);
+        var params = {  ft: $("#ft").val(), // filter type
+                        fl: $("#fl").val(), // filter level
+                        s: $("#s").val(),   // search text
+                        sa: $("#sa").val(), // is shared
+                        o: $("#o").val()    // order
+                    };
+
+        var uri_str = parameterizeArray(params);
+        window.location.replace(filename + uri_str);
     }); // end #dropdown-menu-sort.on.click
 
     /**
@@ -221,11 +225,11 @@ $(document).ready(function() {
     } // end getCurrentFileName
 
     /**
-     * Returns current page GET parameters
+     * Returns current URI parameters
      */
-    function getURIParameters() {
+     function getCurrentURIParameters() {
         var parts = window.location.search.substr(1).split("&");
-        var result = {};
+        var result = { p: "1" };
 
         if (parts != "") {
             for (var i = 0; i < parts.length; i++) {
@@ -235,6 +239,24 @@ $(document).ready(function() {
                 );
             }
         }
-        return result;
-    } // end getURIParameters
+        
+        return result; // remove trailing '&'
+    } // end getCurrentURIParameters
+
+    /**
+     * Converts array to URI string with parameters
+     * @param {array} arr 
+     * @returns string
+     */
+     function parameterizeArray(arr) {
+        let result = '?';
+                        
+        for (const key in arr) {
+            if (arr[key]) {
+                result += key + '=' + encodeURIComponent(arr[key]) + '&';
+            }
+        }
+
+        return result.slice(0,-1);
+    } // end parameterizeArray
 });
