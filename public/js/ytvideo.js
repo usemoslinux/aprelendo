@@ -62,18 +62,23 @@ function onPlayerStateChange(event) {
             timer = setInterval(function() {
                 if (!video_paused) {
                     video_time = player.getCurrentTime();
-                    $next_obj = $obj
+                    var $next_obj = $obj
                         .filter(function() {
                             return $(this).attr("data-start") < video_time;
                         })
                         .last();
-                    $obj.removeClass("video-reading-line");
                     if (
                         $next_obj.length > 0 &&
                         !$next_obj.hasClass("video-reading-line")
                     ) {
+                        $obj.removeClass("video-reading-line");
                         $next_obj.addClass("video-reading-line");
-                        $next_obj[0].scrollIntoView();
+                        
+                        $next_obj[0].scrollIntoView({
+                            behavior: 'auto',
+                            block: 'center',
+                            inline: 'center'
+                        });
                     }
                 } else {
                     clearInterval(timer);

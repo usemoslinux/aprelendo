@@ -44,6 +44,7 @@ function getCSS($class, $styles) {
 
 $class = '';
 $styles = [];
+$doclang = $user->getLang();
 
 try {
     if (isset($_GET['id']) && !empty($_GET['id'])) {
@@ -86,7 +87,7 @@ try {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang=<?php echo "\"$doclang\""; ?> >
 
 <head>
 <meta charset="utf-8">
@@ -128,7 +129,7 @@ try {
     <script defer src="js/epubjs/epub.min.js"></script>
 
     <!-- JQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
 
     <!-- Bootstrap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js" integrity="sha512-XKa9Hemdy1Ui3KSGgJdgMyYlUg1gM+QhL6cnlyTe2qzMCYm4nAZ1PsVerQzTTXzonUR+dmswHqgJPuwCq1MaAg==" crossorigin="anonymous"></script>

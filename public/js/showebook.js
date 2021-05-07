@@ -17,6 +17,7 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
  $(document).ready(function() {
+    var doclang = $("html").attr("lang");
     var ebook_id = $("script[src*='showebook-min.js']").attr("data-id");
     var book = ePub();
 
@@ -95,7 +96,7 @@
             rendition.hooks.content.register(function(contents) {
                 // Add JQuery
                 contents
-                    .addScript("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js")
+                    .addScript("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js")
                     .then(function() {
                         // Add the rest of the scripts and stylesheets
                         Promise.all([
@@ -116,7 +117,8 @@
                             dataType: "json"
                         })
                         .done(function(data) {
-                            contents.content.innerHTML = underlineWords(data);
+                            contents.content.innerHTML = underlineWords(data, doclang);
+                            console.log("doclang: " + doclang);
                             $(".loading-spinner").fadeOut(1000);
                         })
                         .fail(function(xhr, ajaxOptions, thrownError) {

@@ -328,9 +328,6 @@ class Reader extends Text
         // display text
         $html .= '<div id="text" style="line-height:' . $this->prefs->getLineHeight() . ';">';
         
-        // $text = $this->colorizeWordsFast($this->text, $user_dic, $freq_words);
-        // $text = nl2br($text);
-
         $html .= $this->getText() . '</div>';
         $html .= '<p></p>';
         
@@ -353,7 +350,6 @@ class Reader extends Text
         return $html;
     } // end showText()
 
-
     /**
      * Constructs HTML code to show text in reader
      *
@@ -364,29 +360,56 @@ class Reader extends Text
         $yt_id = $yt_id ? $yt_id : '';
 
         $html = '<div class="col-lg-6 offset-lg-3">' .
-                    '<div style="height: 100vh;" class="d-flex flex-column">' .
-                        '<div class="embed-responsive embed-responsive-16by9" style="max-height: 50%;">' .
+                    '<div id="main-container" style="height: 100vh; height: calc(var(--vh, 1vh) * 100);" class="d-flex flex-column">' .
+                        '<div class="embed-responsive embed-responsive-16by9" style="max-height: 60%;">' .
                             '<div data-ytid="' . $yt_id . '" id="player"></div>' .
                         '</div>';
 
-        $html .= "<div id='text-container' class='overflow-auto' data-type='video' data-textID='" . $this->id . "'>";
+        $html .= '<button type="button" id="btn-save" title="Save the learning status of your words" class="btn btn-sm btn-success ml-sm-auto my-2">Save</button>';
+        $html .= "<div id='text-container' class='overflow-auto mb-1' data-type='video' data-textID='" . $this->id . "'>";
         $xml = new SimpleXMLElement($this->text);
 
         for ($i=0; $i < sizeof($xml); $i++) { 
             $start = $xml->text[$i]['start'];
             $dur = $xml->text[$i]['dur'];
-
-            // $text = $this->colorizeWordsFast(html_entity_decode($xml->text[$i], ENT_QUOTES | ENT_XML1, 'UTF-8'), $user_dic, $freq_words);
             $text = html_entity_decode($xml->text[$i], ENT_QUOTES | ENT_XML1, 'UTF-8');
             $html .= "<div class='text-center' data-start='$start' data-dur='$dur' >". $text .'</div>';
         }
         
-        $html .= '<div class="p-3"><button type="button" id="btn-save" title="Save the learning status of your words" class="btn btn-lg btn-success btn-block">Finish & Save</button></div>';
-
         $html .= '</div></div></div>';
 
         return $html;
     } // end showVideo()
+
+    /**
+     * Constructs HTML code to show an offline video
+     *
+     * @param string $file file path
+     * @return string html
+     */
+    public function showOfflineVideo(string $file): string {
+        $html = '<div class="col-lg-6 offset-lg-3">' .
+                    '<div style="height: 100vh; height: calc(var(--vh, 1vh) * 100);" class="d-flex flex-column">' .
+                        '<div id="offline-video-container" class="embed-responsive embed-responsive-16by9 mt-1" style="max-height: 60%;">' .
+                        '<input id="video-file-input" type="file" name="video-file-input" accept="video/mp4,video/ogg,video/webm" style="display: none;" />' .
+                        '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt" style="display: none;" />' . 
+                            '<video id="video-stream" controls>' .
+                                '<source src="' . $file . '"/>'. 
+                                'Your browser does not support HTML5 video.' .
+                            '</video>' .
+                        '</div>';
+
+        $html .= '<div class="d-flex flex-wrap">'.
+                    '<button type="button" id="btn-selvideo" title="Select video" class="btn btn-sm btn-primary mr-2 my-2">Select video...</button>'.
+                    '<button type="button" id="btn-selsubs" title="Select subtitles" class="btn btn-sm btn-primary mr-2 my-2">Select subs...</button>'.
+                    '<button type="button" id="btn-save" title="Save the learning status of your words" class="btn btn-sm btn-success ml-sm-auto my-2">Save</button>'.
+                 '</div>'. 
+                 '<div id="text-container" class="overflow-auto mb-1"></div>';
+
+        $html .= '</div></div>';
+
+        return $html;
+    } // end showOfflineVideo()
 
     /**
      * Get the value of prefs

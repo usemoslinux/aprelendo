@@ -33,6 +33,7 @@ $(document).ready(function() {
     var abloop_start = 0;
     var abloop_end = 0;
     window.parent.show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
+    var doclang = $("html").attr("lang");
 
     // $doc & $pagereader are used to make this JS code work when showing simple texts &
     // ebooks (which are displayed inside an iframe)
@@ -41,7 +42,7 @@ $(document).ready(function() {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
       
-    loadAudio();
+    // loadAudio();
 
     // underline text
     if ($('#text-container').data('type') == 'text') {
@@ -52,7 +53,7 @@ $(document).ready(function() {
             dataType: "json"
         })
         .done(function(data) {
-            $('#text').html(underlineWords(data));
+            $('#text').html(underlineWords(data, doclang));
         })
         .fail(function(xhr, ajaxOptions, thrownError) {
             console.log("There was an unexpected error trying to underline words in this text");
@@ -153,6 +154,7 @@ $(document).ready(function() {
      */
     $(document).on("contextmenu",function(e){
         e.preventDefault();
+        return false;
      }); // end document.contextmenu
 
     /**
@@ -182,7 +184,7 @@ $(document).ready(function() {
      */
     $(document).on("mouseup touchend", ".word", function(e) {
         e.stopPropagation();
-        e.preventDefault();
+        // e.preventDefault();
 
         end_sel_time = new Date();
         
@@ -374,7 +376,6 @@ $(document).ready(function() {
      */
     function showModal() {
         var audioplayer = $("#audioplayer");
-        var doclang = $("html").attr("lang");
 
         if (audioplayer.length) {
             // if there is audio playing
@@ -578,7 +579,7 @@ $(document).ready(function() {
                     // also, the case of the word/phrase in the text has to be respected
                     // for phrases, we need to make sure that new underlining is added for each word
 
-                    var $result = $(underlineWords(data));
+                    var $result = $(underlineWords(data, doclang));
                     var $cur_filter = {};
                     var cur_word = /""/;
 
@@ -586,10 +587,19 @@ $(document).ready(function() {
                         $cur_filter = $(this);
 
                         $result.filter(".word").each(function(key) {
-                            cur_word = new RegExp(
-                                "(?<![\\p{L}|^])" + $(this).text() + "(?![\\p{L}|$])",
-                                "iug"
-                            ).exec($cur_filter.text());
+                            if (langs_with_no_word_separator.includes(doclang)) {
+                                cur_word = new RegExp(
+                                    "(?<![^])" + $(this).text() + "(?![$])",
+                                    "iug"
+                                ).exec($cur_filter.text());                            } 
+                            else {
+                                cur_word = new RegExp(
+                                    "(?<![\\p{L}|^])" + $(this).text() + "(?![\\p{L}|$])",
+                                    "iug"
+                                ).exec($cur_filter.text());
+                            }
+
+                            
                             $(this).text(cur_word);
                             
                             // check if any word marked by PHP as .learning should be marked as .new instead
@@ -1027,7 +1037,6 @@ $(document).ready(function() {
         var $audio_player = $("#audioplayer");
         if ($audio_player.length > 0) {
             var txt = $("#text").text();
-            var doclang = $("html").attr("lang");
 
             $.ajax({
                 type: "POST",
@@ -1047,6 +1056,13 @@ $(document).ready(function() {
                     $("#audioplayer-loader").addClass("d-none");
                     $("#audioplayer").removeClass("d-none");
                     $("#audioplayer-speedbar").removeClass("d-none");
+
+                    $("#btn-next-phase").html(
+                        'Go to phase 2<br><span class="small">Listening</span>'
+                    );
+
+                    next_phase = 2;
+                    
                     return true;
                 })
                 .fail(function(xhr) {

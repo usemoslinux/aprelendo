@@ -29,13 +29,24 @@ $available_langs = $lang->getAvailableLangs();
 if ($available_langs) {
     $html = '<div id="accordion" class="accordion">';
 
+    // add long language name to $available_langs array
+    $available_langs = array_map(function($record) {
+        $record['long_name'] = ucfirst(Language::getNameFromIso($record['name']));
+        return $record;
+    }, $available_langs);
+
+    // sort $available_langs by long language name
+    $col = array_column($available_langs, 'long_name');
+    array_multisort($col, SORT_ASC, $available_langs);
+
+    // create html
     foreach ($available_langs as $lang_record) {
         $lg_id = $lang_record['id'];  
         $lg_iso_code = $lang_record['name'];
 
         $item_id = 'item-' . $lg_iso_code;
         $heading_id = 'heading-' . $lg_iso_code;
-        $lgname = ucfirst(Language::getNameFromIso($lg_iso_code));
+        $lgname = $lang_record['long_name'];
         
         $is_active = $lg_id == $user->getLangId() ? 'bg-primary text-white' : '';
         $html .= "<div class='card'>
@@ -49,17 +60,12 @@ if ($available_langs) {
         $html .= "<div id='$item_id' class='collapse' aria-labelledby='$lgname' data-parent='#accordion'>
                     <div class='card-body'>";
 
-        if ($lg_id == $user->getLangId()) {
-            $html .= "<button type='button' onclick='location.href=\"languages.php?act=$lg_id\"' class='btn btn-primary disabled'>Set as active</button>
-                      <button type='button' onclick='location.href=\"languages.php?chg=$lg_id\"' class='btn btn-secondary'>Edit</button>
-                         <span class='message'></span>
-                      </div></div></div>";
-        } else {
-            $html .= "<button type='button' onclick='location.href=\"languages.php?act=$lg_id\"' class='btn btn-primary'>Set as active</button>
-                      <button type='button' onclick='location.href=\"languages.php?chg=$lg_id\"' class='btn btn-secondary'>Edit</button>
-                         <span class='message'></span>
-                      </div></div></div>";
-        }
+        $btn_disabled = $lg_id == $user->getLangId() ? 'disabled' : '';
+        $html .= "<button type='button' onclick='location.href=\"languages.php?act=$lg_id\"' 
+                          class='btn btn-primary $btn_disabled'>Set as active</button>
+                  <button type='button' onclick='location.href=\"languages.php?chg=$lg_id\"' class='btn btn-secondary'>Edit</button>
+                  <span class='message'></span>
+                  </div></div></div>";
     }
     $html .= '</div>';
 

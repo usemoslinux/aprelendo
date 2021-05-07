@@ -700,6 +700,7 @@ class User
 
     /**
      * Checks if user is allowed to access element in db
+     * Either it owns it or it is a shared element
      *
      * @param string $table
      * @param int $id

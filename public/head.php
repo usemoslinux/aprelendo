@@ -21,7 +21,7 @@
 require_once '../includes/dbinit.php';  // connect to database
 
 $curpage = basename($_SERVER['PHP_SELF']); // returns the current file Name
-$show_pages = array('showtext.php', 'showvideo.php', 'showebook.php');
+$show_pages = array('showtext.php', 'showvideo.php', 'showebook.php', 'showofflinevideo.php');
 
 // these are the same pages that use simpleheader.php instead of header.php
 $no_login_required_pages = array('index.php', 'register.php', 'login.php', 'accountactivation.php', 
@@ -45,9 +45,12 @@ if ($this_is_show_page) {
     $doclang = $user->getLang();
 
     $table = isset($_GET['sh']) && $_GET['sh'] != 0 ? 'shared_texts' : 'texts';
-    if (!$user->isAllowedToAccessElement($table, (int)$_GET['id'])) {
-        header("HTTP/1.1 401 Unauthorized");
-        exit;
+    
+    if ($curpage != 'showofflinevideo.php') {
+        if (!isset($_GET['id']) || empty($_GET['id']) || !$user->isAllowedToAccessElement($table, (int)$_GET['id'])) {
+            header("HTTP/1.1 401 Unauthorized");
+            exit;
+        }
     }
 
     $is_shared = $table == 'shared_texts' ? true : false;
@@ -95,7 +98,7 @@ if ($this_is_show_page) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
 
     <!-- JQuery JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js" integrity="sha512-wV7Yj1alIZDqZFCUQJy85VN+qvEIly93fIQAN7iqDFCPEucLCeNFz4r35FCo9s6WrpdDQPi80xbljXB8Bjtvcg==" crossorigin="anonymous"></script>

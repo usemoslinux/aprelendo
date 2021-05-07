@@ -157,6 +157,10 @@ if (!empty($_GET)) {
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a class="dropdown-item" href="addtext.php">Plain text</a>
                                     <a class="dropdown-item" href="addvideo.php">Youtube video</a>
+                                    <a href="showofflinevideo.php" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"';
+                                        ?>>
+                                        Movie/TV show
+                                    </a>
                                     <a href="addebook.php" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"';
                                         ?>>
                                         Ebook (epub)

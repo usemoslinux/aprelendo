@@ -18,6 +18,7 @@
  */
 
 $(document).ready(function() {
+    var player = document.querySelector('video');
     var highlighting = false;
     var $sel_start, $sel_end;
     var start_sel_time, end_sel_time;
@@ -51,20 +52,6 @@ $(document).ready(function() {
         }
     });
 
-    // ajax call to underline text
-    $.ajax({
-        type: "POST",
-        url: "/ajax/getuserwords.php",
-        data: { txt: $('#text-container').html() },
-        dataType: "json"
-    })
-    .done(function(data) {
-        $('#text-container').html(underlineWords(data, doclang));
-    })
-    .fail(function(xhr, ajaxOptions, thrownError) {
-        console.log("There was an unexpected error trying to underline words in this text")
-    }); // end $.ajax    
-
     /**
      * Disable right click context menu 
      */
@@ -80,11 +67,11 @@ $(document).ready(function() {
     $(document).on("mousedown touchstart", ".word", function(e) {
         e.stopPropagation();
 
-        video_paused = player.getPlayerState() != 1;
+        video_paused = player.paused;
 
         // if there is video playing
         if (!video_paused) {
-            player.pauseVideo();
+            player.pause();
             resume_video = true;
         }
 
@@ -102,7 +89,7 @@ $(document).ready(function() {
             window.open(buildTranslateParagraphLink());
         }
     }); // end .word.on.mousedown/touchstart
-
+    
     /**
      * Word/Phrase selection end
      * @param {event object} e
@@ -165,7 +152,7 @@ $(document).ready(function() {
             if (e.type == "touchmove") {
                 $('html').css({'overflow':'hidden'});
             }
-
+            
             $(".word").removeClass("highlighted");
 
             $sel_end =
@@ -367,11 +354,11 @@ $(document).ready(function() {
      * Updates vh value on window resize
      * Fix for mobile devices where vh includes hidden address bar
      */
-    $(window).on('resize', function () {
+     $(window).on('resize', function () {
         vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
     });
-    
+        
     /**
      * Shows dictionary when user clicks a word
      * All words are enclosed in span.word tags
@@ -490,7 +477,12 @@ $(document).ready(function() {
      * Finished studying this text. Archives text & saves new status of words/phrases
      * Executes when the user presses the big green button at the end
      */
-    $(document).on("click", "#btn-save", function() {
+    $("#btn-save").on("click", archiveTextAndSaveWords);
+
+    /**
+     * Archives text and updates status of all underlined words & phrases
+     */
+    function archiveTextAndSaveWords() {
         // build array with underlined words
         var oldwords = [];
         var ids = [];
@@ -578,14 +570,14 @@ $(document).ready(function() {
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
                 alert("Oops! There was an error updating the database.");
             });
-    }); // end #btn-save.on.click
+    } // end #btn-save.on.click
 
     /**
      * Resumes video when modal window is closed
      */
     $("#myModal").on("hidden.bs.modal", function() {
         if (resume_video) {
-            player.playVideo();
+            player.play();
             resume_video = false;
         }
 
@@ -602,7 +594,7 @@ $(document).ready(function() {
     }); // end #dicFrame.on.load()
 
     $("#btn-translate").on("click", function() {
-        window.open(translate_paragraph_link,'_blank','noopener');
+        window.open(translate_paragraph_link);
     }); // end #btn-translate.on.click()
 
     /**
@@ -617,6 +609,123 @@ $(document).ready(function() {
             .find(".highlighted")
             .removeClass("highlighted");
     }); // end #text-container.on.click
+
+    /**
+     * Open video selection dialog
+     */
+    $("#btn-selvideo").on("click", function (e) {
+        e.preventDefault();
+        $("#video-file-input").trigger('click');
+    });
+
+    /**
+     * After user selects video, load it
+     */
+    $("#video-file-input").on("change", function () {
+        if (this.files[0]) {
+            var file = this.files[0];    
+            var type = file.type;
+            if (player.canPlayType(type)) {
+                var fileURL = URL.createObjectURL(file);
+                player.src = fileURL;
+            }
+        }
+    });
+
+    /**
+     * Open subtitle selection dialog
+     */
+     $("#btn-selsubs").on("click", function (e) {
+        e.preventDefault();
+        $("#subs-file-input").trigger('click');
+    });
+
+    /**
+     * After user selects subs, load them
+     */
+    $("#subs-file-input").on("change", function () {
+        if (this.files[0]) {
+            var file = this.files[0];    
+            const reader = new FileReader();
+            var srt = '';
+
+            reader.addEventListener('load', (event) => {
+                var srt = event.target.result;
+                var data = parser.fromSrt(srt, true);
+                var text = '';
+
+                for (var i = 0; i < data.length; i++) {
+                    var obj = data[i];
+                    var line = '<div class="text-center"';
+                    
+                    for (var key in obj){
+                      var value = obj[key];
+                      switch (key) {
+                          case 'startTime':
+                              line += ' data-start="' + value + '"';
+                              break;
+                          case 'endTime':
+                              line += ' data-end="' + value + '"';
+                              break;
+                          case 'text':
+                              line += '>' + value;
+                              break;
+                          default:
+                              break;
+                      }
+                    }
+                    
+                    line += '</div>';
+                    text += line;
+                }
+                
+                document.getElementById('text-container').innerHTML = text;
+
+                // ajax call to underline text
+                $.ajax({
+                    type: "POST",
+                    url: "/ajax/getuserwords.php",
+                    data: { txt: $('#text-container').html() },
+                    dataType: "json"
+                })
+                .done(function(data) {
+                    $('#text-container').html(underlineWords(data, doclang));
+                })
+                .fail(function(xhr, ajaxOptions, thrownError) {
+                    console.log("There was an unexpected error trying to underline words in this text")
+                }); // end $.ajax    
+                // document.getElementById('text-container').innerText = JSON.stringify(data);
+            });
+            
+            reader.readAsText(file);
+        }
+    });
+
+    /**
+     * Show reading line when video's currentTime changes
+     */
+    $("#video-stream").on("timeupdate", function (e) {
+        var video_time = document.getElementById('video-stream').currentTime * 1000;
+        var $obj = $("div.text-center", "#text-container");
+        var $next_obj = $obj
+                        .filter(function() {
+                            return $(this).attr("data-start") < video_time;
+                        })
+                        .last();
+        if (
+            $next_obj.length > 0 &&
+            !$next_obj.hasClass("video-reading-line")
+        ) {
+            $obj.removeClass("video-reading-line");
+            $next_obj.addClass("video-reading-line");
+            
+            $next_obj[0].scrollIntoView({
+                behavior: 'auto',
+                block: 'center',
+                inline: 'center'
+            });
+        }
+    });
 
     /**
      * Shows dialog message reminding users to save changes before leaving

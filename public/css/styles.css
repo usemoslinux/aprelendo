@@ -1169,6 +1169,16 @@ i.status_learned {
     flex: 1;
 }
 
+/* SHOW OFFLINE VIDEO */
+
+#offline-video-container {
+    border: 1px solid black;
+}
+
+#video-stream {
+    object-fit: fill;
+}
+
 /* SET DEFAULT LANGUAGE */
 
 #help-dictionary>ul,
