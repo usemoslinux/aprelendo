@@ -42,7 +42,7 @@ $(document).ready(function() {
     var $pagereader = $doc.find('iframe[id^="epubjs"]');
     $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
       
-    // loadAudio();
+    loadAudio();
 
     // underline text
     if ($('#text-container').data('type') == 'text') {
