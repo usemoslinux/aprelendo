@@ -20,6 +20,10 @@ select {
     max-width: 100%;
 }
 
+#viewer {
+    padding: 15px;
+}
+
 .word {
     cursor: pointer;
 }
@@ -199,8 +203,6 @@ select {
 }
 
 #navigation {
-    background: whitesmoke;
-    color: black;
     font: 14px 'Roboto';
     max-height: 100vh;
     min-height: 100vh;
@@ -381,6 +383,14 @@ body {
     height: 100%;
     width: 100%;
     min-height: 800px;
+}
+
+pre {
+    color: inherit;
+}
+
+img {
+    display: block; 
 }
 
 .epub-view {
