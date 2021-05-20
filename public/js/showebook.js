@@ -18,7 +18,7 @@
  */
  $(document).ready(function() {
     var doclang = $("html").attr("lang");
-    var ebook_id = $("script[src*='showebook.js']").attr("data-id");
+    var ebook_id = $("script[src*='showebook-min.js']").attr("data-id");
     var book = ePub();
 
     var $viewer = document.getElementById("viewer");
