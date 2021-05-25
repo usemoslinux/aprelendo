@@ -844,18 +844,18 @@ $(document).ready(function() {
                             $("body").append(form);
                             form.submit();
                         } else {
-                            alert("Oops! There was an unexpected error1.");
+                            alert("Oops! There was an unexpected error.");
                         }
                     })
                     .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                        alert("Oops! There was an unexpected error2.");
+                        alert("Oops! There was an unexpected error.");
                     });
                 } else {
-                    alert("Oops! There was an unexpected error3.");
+                    alert("Oops! There was an unexpected error.");
                 }
             })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Oops! There was an unexpected error4.");
+                alert("Oops! There was an unexpected error.");
             });
     } // end #btn-save-text.on.click
 
