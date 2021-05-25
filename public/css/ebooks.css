@@ -297,12 +297,12 @@ svg {
 }
 
 /* HEADER  */
-#btn-save {
+#btn-save-ebook {
     margin-top: 5px;
     margin-right: 10px;
 }
 
-#btn-save:hover, #btn-save:focus, #btn-save.focus {
+#btn-save-ebook:hover, #btn-save-ebook:focus, #btn-save-ebook.focus {
 	color: white;
 	text-decoration: none;
 }

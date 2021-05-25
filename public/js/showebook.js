@@ -125,12 +125,13 @@
         false
     );
 
-    $("body").on("click", "#btn-save", function() {
+    $("body").on("click", "#btn-save-ebook", function() {
         // save word status
-        SaveWords();
-
-        window.location.replace("texts.php");
-    }); // end #btn-save.on.click
+        $.when(SaveWords()).then(function() {
+            window.location.replace("texts.php");
+        });
+        // SaveWords();
+    }); // end #btn-save-ebook.on.click
 
     /**
      * Updates status of all underlined words & phrases

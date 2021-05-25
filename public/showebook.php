@@ -155,7 +155,7 @@ try {
                 </svg>
             </span>
             <span>
-                <button class="basic btn btn-secondary float-right" id="btn-save">Save & Close</button>
+                <button class="basic btn btn-secondary float-right" id="btn-save-ebook">Save & Close</button>
                 <div class="loading-spinner mx-auto float-right">
                     <div></div>
                     <div></div>

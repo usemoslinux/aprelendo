@@ -337,7 +337,7 @@ class Reader extends Text
                       <span class="small">Listening</span>
                       </button>';
         } else {
-            $html .= '<button type="button" id="btn-save" title="Save the learning status of your words & archive this text" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
+            $html .= '<button type="button" id="btn-save-text" title="Save the learning status of your words & archive this text" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
             
             // if there is audio available & at least 1 learning word in current document
             $learningwords = strpos($html, "<span class='word learning'") || strpos($html, "<span class='new learning'");
@@ -365,7 +365,7 @@ class Reader extends Text
                             '<div data-ytid="' . $yt_id . '" id="player"></div>' .
                         '</div>';
 
-        $html .= '<button type="button" id="btn-save" title="Save the learning status of your words" class="btn btn-sm btn-success ml-sm-auto my-2">Save</button>';
+        $html .= '<button type="button" id="btn-save-ytvideo" title="Save the learning status of your words" class="btn btn-sm btn-success ml-sm-auto my-2">Save</button>';
         $html .= "<div id='text-container' class='overflow-auto mb-1' data-type='video' data-textID='" . $this->id . "'>";
         $xml = new SimpleXMLElement($this->text);
 
@@ -402,7 +402,7 @@ class Reader extends Text
         $html .= '<div class="d-flex flex-wrap">'.
                     '<button type="button" id="btn-selvideo" title="Select video" class="btn btn-sm btn-primary mr-2 my-2">Select video...</button>'.
                     '<button type="button" id="btn-selsubs" title="Select subtitles" class="btn btn-sm btn-primary mr-2 my-2">Select subs...</button>'.
-                    '<button type="button" id="btn-save" title="Save the learning status of your words" class="btn btn-sm btn-success ml-sm-auto my-2">Save</button>'.
+                    '<button type="button" id="btn-save-offline-video" title="Save the learning status of your words" class="btn btn-sm btn-success ml-sm-auto my-2">Save</button>'.
                  '</div>'. 
                  '<div id="text-container" class="overflow-auto mb-1"></div>';
 

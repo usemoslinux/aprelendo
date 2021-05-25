@@ -752,7 +752,7 @@ $(document).ready(function() {
      * Finished studying this text. Archives text & saves new status of words/phrases
      * Triggered when the user presses the big green button at the end of the review
      */
-    $("body").on("click", "#btn-save", archiveTextAndSaveWords);
+    $("body").on("click", "#btn-save-text", archiveTextAndSaveWords);
 
     /**
      * Archives text (only if necessary) and updates status of all underlined words & phrases
@@ -844,20 +844,20 @@ $(document).ready(function() {
                             $("body").append(form);
                             form.submit();
                         } else {
-                            alert("Oops! There was an unexpected error.");
+                            alert("Oops! There was an unexpected error1.");
                         }
                     })
                     .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                        alert("Oops! There was an unexpected error.");
+                        alert("Oops! There was an unexpected error2.");
                     });
                 } else {
-                    alert("Oops! There was an unexpected error.");
+                    alert("Oops! There was an unexpected error3.");
                 }
             })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Oops! There was an unexpected error.");
+                alert("Oops! There was an unexpected error4.");
             });
-    } // end #btn-save.on.click
+    } // end #btn-save-text.on.click
 
     /**
      * Triggered when modal dictionary window is closed

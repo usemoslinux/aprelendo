@@ -490,7 +490,7 @@ $(document).ready(function() {
      * Finished studying this text. Archives text & saves new status of words/phrases
      * Executes when the user presses the big green button at the end
      */
-    $(document).on("click", "#btn-save", function() {
+    $(document).on("click", "#btn-save-ytvideo", function() {
         // build array with underlined words
         var oldwords = [];
         var ids = [];
@@ -578,7 +578,7 @@ $(document).ready(function() {
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
                 alert("Oops! There was an error updating the database.");
             });
-    }); // end #btn-save.on.click
+    }); // end #btn-save-ytvideo.on.click
 
     /**
      * Resumes video when modal window is closed
