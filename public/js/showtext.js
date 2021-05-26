@@ -372,7 +372,7 @@ $(document).ready(function() {
 
     /**
      * Shows dictionary when user clicks a word
-     * All words are enclosed in span.word tags
+     * All words are enclosed in a.word tags
      */
     function showModal() {
         var audioplayer = $("#audioplayer");
@@ -393,7 +393,7 @@ $(document).ready(function() {
         getWordFrequency($selword.text(), doclang);
         setAddDeleteButtons();
 
-        $doc.find("#iframe-loader").attr('class','lds-ripple m-auto');
+        $doc.find("#iframe-loader").attr('class','lds-ellipsis m-auto');
         $dic_frame.attr('class','d-none');
 
         // build translate sentence url
@@ -452,7 +452,7 @@ $(document).ready(function() {
                     // build filter based on first word of the phrase
                     var $filterphrase = $pagereader
                         .contents()
-                        .find("span.word")
+                        .find("a.word")
                         .filter(function() {
                             return (
                                 $(this)
@@ -468,13 +468,13 @@ $(document).ready(function() {
                     // loop through the filter and underline all instances of the phrase
                     $filterphrase.each(function() {
                         var $lastword = $(this)
-                            .nextAll("span.word")
+                            .nextAll("a.word")
                             .slice(0, word_count - 1)
                             .last();
                         var $phrase = $(this)
                             .nextUntil($lastword)
                             .addBack()
-                            .next("span.word")
+                            .next("a.word")
                             .addBack();
 
                         if (
@@ -482,7 +482,7 @@ $(document).ready(function() {
                             sel_text.toLowerCase()
                         ) {
                             $phrase.wrapAll(
-                                "<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>"
+                                "<a class='word reviewing new' data-toggle='modal' data-target='#myModal'></a>"
                             );
 
                             $phrase.contents().unwrap();
@@ -493,7 +493,7 @@ $(document).ready(function() {
                     // build filter with all the instances of the word in the text
                     var $filterword = $pagereader
                         .contents()
-                        .find("span.word")
+                        .find("a.word")
                         .filter(function() {
                             return (
                                 $(this)
@@ -507,11 +507,11 @@ $(document).ready(function() {
                         var $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
-                                "<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></span>"
+                                "<a class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></a>"
                             );
                         } else {
                             $word.wrap(
-                                "<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>"
+                                "<a class='word reviewing new' data-toggle='modal' data-target='#myModal'></a>"
                             );
                         }
                     });
@@ -558,7 +558,7 @@ $(document).ready(function() {
             .done(function() {
                 var $filter = $pagereader
                     .contents()
-                    .find("span.word")
+                    .find("a.word")
                     .filter(function() {
                         return (
                             $(this)
@@ -970,13 +970,13 @@ $(document).ready(function() {
         ) {
             $curinput.css("border-color", "green");
             $curinput
-                .next("span")
+                .next("a")
                 .not(".d-none")
                 .addClass("d-none");
         } else if ($.trim($curinput.val()) != "") {
             $curinput.css("border-color", "crimson");
             $curinput
-                .next("span")
+                .next("a")
                 .removeClass("d-none")
                 .addClass("dict-wronganswer")
                 .text("[ " + $curinput.attr("data-text") + " ]");

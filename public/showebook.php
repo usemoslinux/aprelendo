@@ -155,10 +155,11 @@ try {
                 </svg>
             </span>
             <span>
-                <button class="basic btn btn-secondary float-right" id="btn-save-ebook">Save & Close</button>
-                <div class="loading-spinner mx-auto float-right">
-                    <div></div>
-                    <div></div>
+                <button class="basic btn btn-secondary float-right" title="Close" id="btn-close-ebook">x</button>
+                <div class="loading-spinner mr-2 float-right">
+                    <div class="ldio-nhngmna4s2b">
+                        <div></div><div></div><div></div><div></div><div></div>
+                    </div>
                 </div>
             </span>
         </div>

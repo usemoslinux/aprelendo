@@ -31,9 +31,8 @@
             </div>
             <span id="bdgfreqlvl" class="badge d-none"></span>
             <div class="modal-body" id="definitions">
-                <div id="iframe-loader" class="lds-ripple m-auto">
-                    <div></div>
-                    <div></div>
+                <div id="iframe-loader" class="lds-ellipsis m-auto">
+                    <div></div><div></div><div></div><div></div>
                 </div>
                 <iframe id="dicFrame" style="width:100%;border:none;"></iframe>
             </div>

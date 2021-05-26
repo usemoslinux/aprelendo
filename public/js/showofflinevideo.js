@@ -228,7 +228,7 @@ $(document).ready(function() {
                     // if it's a phrase
                     var firstword = $selword.eq(0).text();
                     var phraseext = $selword.filter(".word").length;
-                    var $filterphrase = $("span.word").filter(function() {
+                    var $filterphrase = $("a.word").filter(function() {
                         return (
                             $(this)
                                 .text()
@@ -238,13 +238,13 @@ $(document).ready(function() {
 
                     $filterphrase.each(function() {
                         var lastword = $(this)
-                            .nextAll("span.word")
+                            .nextAll("a.word")
                             .slice(0, phraseext - 1)
                             .last();
                         var phrase = $(this)
                             .nextUntil(lastword)
                             .addBack()
-                            .next("span.word")
+                            .next("a.word")
                             .addBack();
 
                         if (
@@ -252,7 +252,7 @@ $(document).ready(function() {
                             sel_text.toLowerCase()
                         ) {
                             phrase.wrapAll(
-                                "<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>"
+                                "<a class='word reviewing new' data-toggle='modal' data-target='#myModal'></a>"
                             );
 
                             phrase.contents().unwrap();
@@ -260,7 +260,7 @@ $(document).ready(function() {
                     });
                 } else {
                     // if it's a word
-                    var $filterword = $("span.word").filter(function() {
+                    var $filterword = $("a.word").filter(function() {
                         return (
                             $(this)
                                 .text()
@@ -272,11 +272,11 @@ $(document).ready(function() {
                         var $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
-                                "<span class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></span>"
+                                "<a class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></a>"
                             );
                         } else {
                             $word.wrap(
-                                "<span class='word reviewing new' data-toggle='modal' data-target='#myModal'></span>"
+                                "<a class='word reviewing new' data-toggle='modal' data-target='#myModal'></a>"
                             );
                         }
                     });
@@ -361,13 +361,13 @@ $(document).ready(function() {
         
     /**
      * Shows dictionary when user clicks a word
-     * All words are enclosed in span.word tags
+     * All words are enclosed in a.word tags
      */
     function showModal() {
         getWordFrequency($selword.text(), doclang);
         setAddDeleteButtons();
 
-        $("#iframe-loader").attr('class','lds-ripple m-auto');
+        $("#iframe-loader").attr('class','lds-ellipsis m-auto');
         $("#dicFrame").attr('class','d-none');
 
         // build translate sentence url
@@ -402,7 +402,7 @@ $(document).ready(function() {
             }
         })
             .done(function() {
-                var $filter = $("span.word").filter(function() {
+                var $filter = $("a.word").filter(function() {
                     return (
                         $(this)
                             .text()

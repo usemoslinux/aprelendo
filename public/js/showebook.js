@@ -21,6 +21,8 @@
     var ebook_id = $("script[src*='showebook-min.js']").attr("data-id");
     var book = ePub();
 
+    window.parent.show_confirmation_dialog = false; // don't show confirmation dialog on close
+    
     var $viewer = document.getElementById("viewer");
 
     var formData = new FormData();
@@ -125,13 +127,9 @@
         false
     );
 
-    $("body").on("click", "#btn-save-ebook", function() {
-        // save word status
-        $.when(SaveWords()).then(function() {
-            window.location.replace("texts.php");
-        });
-        // SaveWords();
-    }); // end #btn-save-ebook.on.click
+    $("body").on("click", "#btn-close-ebook", function() {
+        window.location.replace("texts.php");
+    }); // end #btn-close-ebook.on.click
 
     /**
      * Updates status of all underlined words & phrases

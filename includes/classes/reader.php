@@ -227,7 +227,7 @@ class Reader extends Text
     /**
      * Gets words that the user added to his private library, as well as high frequency words for the 
      * current language user is learning. Returns an array containing 3 subarrays: text, user_words & high_freq.
-     * The return value of this method is used as an input for colorizewords.js to underline & colorize words. 
+     * The return value of this method is used as an input for underlinewords.js to underline & colorize words. 
      *
      * @param string $text
      * @return string
@@ -288,7 +288,7 @@ class Reader extends Text
 
         $html .=   '<div id="alert-msg-audio" class="alert alert-danger d-none"></div>';
 
-        $html .=   '<div id="audioplayer-loader" class="lds-facebook mx-auto">
+        $html .=   '<div id="audioplayer-loader" class="lds-facebook mx-auto" title="Loading audio...">
                         <div></div>
                         <div></div>
                         <div></div>

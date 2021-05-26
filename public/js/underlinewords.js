@@ -20,29 +20,29 @@
 var langs_with_no_word_separator = ['zh', 'ja', 'ko'];
 
 /**
- * Adds spans to unknown words and whitespaces
+ * Adds as to unknown words and whitespaces
  * This way these unknown words will be clickable and empty spaces will be recognized 
  * when selecting phrases
  * @param {string} text 
  * @returns string
  */
 function addLinks(text, doclang) {
-    // add span to unknown words, but use different regex for languages with no word separators, such as Chinese
+    // add a to unknown words, but use different regex for languages with no word separators, such as Chinese
     var pattern = '';
     if (langs_with_no_word_separator.includes(doclang)) {
-        pattern = new RegExp(/(?:\s*<span class='word[^>]+>.*?<\/span>|<[^>]*>)|(\p{L})/iug);    
+        pattern = new RegExp(/(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(\p{L})/iug);    
     } else {
-        pattern = new RegExp(/(?:\s*<span class='word[^>]+>.*?<\/span>|<[^>]*>)|(\p{L}+)/iug);
+        pattern = new RegExp(/(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(\p{L}+)/iug);
     }
     
     result = text.replace(pattern, function(match, g1) {
-        return g1 === undefined ? match : '<span class="word" data-toggle="modal" data-target="#myModal">' + g1 + '</span>';
+        return g1 === undefined ? match : '<a class="word" data-toggle="modal" data-target="#myModal">' + g1 + '</a>';
     });
 
-    // add span to whitespaces
+    // add a to whitespaces
     pattern = new RegExp(/(?<=<[^>]*>)([^\p{L}<]+)/ug);
     result = result.replace(pattern, function(match, g1) {
-        return g1 === undefined ? match : '<span>' + g1 + '</span>';    
+        return g1 === undefined ? match : '<a>' + g1 + '</a>';    
     });
 
     return result;
@@ -64,7 +64,7 @@ function underlineWords(data, doclang) {
     var user_words_learned = '';
     var high_freq = '';
 
-    // 1. colorize phrases & words
+    // 1. underline phrases & words
 
     Object.values(data.user_words).forEach(element => {
         if (element.is_phrase > 0) {
@@ -94,7 +94,7 @@ function underlineWords(data, doclang) {
             }
 
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>" + g1 + "</span>";
+                return g1 === undefined ? match : "<a class='word reviewing learning' data-toggle='modal' data-target='#myModal'>" + g1 + "</a>";
             });
         }
 
@@ -102,13 +102,13 @@ function underlineWords(data, doclang) {
             user_phrases_learned  = user_phrases_learned.slice(0, -1); // remove trailing |
 
             if (langs_with_no_word_separator.includes(doclang)) {
-                pattern = new RegExp("(?:\s*<span class='word[^>]+>.*?<\/span>|<[^>]*>)|(" + user_phrases_learned + ")", 'iug');
+                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(" + user_phrases_learned + ")", 'iug');
             } else {
-                pattern = new RegExp("(?:\s*<span class='word[^>]+>.*?<\/span>|<[^>]*>)|(?<![\\p{L}])(" + user_phrases_learned + ")(?![\\p{L}])", 'iug');
+                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(?<![\\p{L}])(" + user_phrases_learned + ")(?![\\p{L}])", 'iug');
             }
 
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<span class='word learned' data-toggle='modal' data-target='#myModal'>" + g1 + "</span>";
+                return g1 === undefined ? match : "<a class='word learned' data-toggle='modal' data-target='#myModal'>" + g1 + "</a>";
             });
         }
 
@@ -116,13 +116,13 @@ function underlineWords(data, doclang) {
             user_words_learning = user_words_learning.slice(0, -1); // remove trailing |
 
             if (langs_with_no_word_separator.includes(doclang)) {
-                pattern = new RegExp("(?:\s*<span class='word[^>]+>.*?<\/span>|<[^>]*>)|(" + user_words_learning + ")", 'iug');
+                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(" + user_words_learning + ")", 'iug');
             } else {
-                pattern = new RegExp("(?:\s*<span class='word[^>]+>.*?<\/span>|<[^>]*>)|(?<![\\p{L}])(" + user_words_learning + ")(?![\\p{L}])", 'iug');
+                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(?<![\\p{L}])(" + user_words_learning + ")(?![\\p{L}])", 'iug');
             }
 
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<span class='word reviewing learning' data-toggle='modal' data-target='#myModal'>" + g1 + "</span>";
+                return g1 === undefined ? match : "<a class='word reviewing learning' data-toggle='modal' data-target='#myModal'>" + g1 + "</a>";
             });
         }
 
@@ -130,29 +130,29 @@ function underlineWords(data, doclang) {
             user_words_learned  = user_words_learned.slice(0, -1); // remove trailing |
             
             if (langs_with_no_word_separator.includes(doclang)) {
-                pattern = new RegExp("(?:\s*<span class='word[^>]+>.*?<\/span>|<[^>]*>)|(" + user_words_learned + ")", 'iug');
+                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(" + user_words_learned + ")", 'iug');
             } else {
-                pattern = new RegExp("(?:\s*<span class='word[^>]+>.*?<\/span>|<[^>]*>)|(?<![\\p{L}])(" + user_words_learned + ")(?![\\p{L}])", 'iug');
+                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(?<![\\p{L}])(" + user_words_learned + ")(?![\\p{L}])", 'iug');
             }
             
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<span class='word learned' data-toggle='modal' data-target='#myModal'>" + g1 + "</span>";
+                return g1 === undefined ? match : "<a class='word learned' data-toggle='modal' data-target='#myModal'>" + g1 + "</a>";
             });
         }
 
-    // 2. colorize frequency list words
+    // 2. underline frequency list words
 
     if (data.high_freq) {
         high_freq = data.high_freq.join('|');
         
         if (langs_with_no_word_separator.includes(doclang)) {
-            pattern = new RegExp("(?:\s*<span class='word[^>]+>.*?<\/span>|<[^>]*>)|(" + high_freq + ")", 'iug');
+            pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(" + high_freq + ")", 'iug');
         } else {
-            pattern = new RegExp("(?:\s*<span class='word[^>]+>.*?<\/span>|<[^>]*>)|(?<![\\p{L}])(" + high_freq + ")(?![\\p{L}])", 'iug');
+            pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(?<![\\p{L}])(" + high_freq + ")(?![\\p{L}])", 'iug');
         }
 
         text = text.replace(pattern, function(match, p1, offset, string) {
-            return p1 === undefined ? match : "<span class='word frequency-list' data-toggle='modal' data-target='#myModal'>" + p1 + "</span>";
+            return p1 === undefined ? match : "<a class='word frequency-list' data-toggle='modal' data-target='#myModal'>" + p1 + "</a>";
         });
     }
 

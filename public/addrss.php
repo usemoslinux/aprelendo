@@ -52,9 +52,9 @@ require_once PUBLIC_PATH . 'header.php';
                 <div class="row flex">
                     <div class="col-sm-12">
                         <main>
-                            <div class="lds-ripple mx-auto">
-                                <div></div>
-                                <div></div>
+                            <div class="lds-ellipsis text-center mx-auto">
+                                <div></div><div></div><div></div><div></div>
+                                <small>loading...</small>
                             </div>
                         </main>
                     </div>

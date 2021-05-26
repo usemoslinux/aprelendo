@@ -24,12 +24,12 @@ $(document).ready(function() {
         url: "ajax/fetchrssfeeds.php"
     })
         .done(function(data) {
-            $(".lds-ripple").fadeOut(function() {
+            $(".lds-ellipsis").fadeOut(function() {
                 $(this).after(data);
             });
         })
         .fail(function(xhr, ajaxOptions, thrownError) {
-            $(".lds-ripple").fadeOut(function() {
+            $(".lds-ellipsis").fadeOut(function() {
                 $(this).after(
                     '<div class="alert alert-danger">Oops! There was an error trying to retrieve your RSS feeds. Please try again later.</div>'
                 );
