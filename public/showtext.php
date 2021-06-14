@@ -67,27 +67,44 @@ require_once PUBLIC_PATH . 'head.php';
 
 ?>
 
-<body id="readerpage" <?php echo $html; ?> >
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-12 col-lg-6 offset-lg-3">
+<body id="readerpage" <?php echo $html; ?>>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="sidebar" class="col-2">
+                <div class="sidebar">
+                    <div class="sidebar-sticky-item my-4"><button type="button" data-toggle="modal"
+                            data-target="#reader-settings-modal" class="btn btn-sm btn-secondary d-block" title="Reading settings">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <button id="btn-toggle-audio-player-controls" type="button" class="btn btn-sm btn-primary d-block mt-2" title="Toggle sticky audio controls">
+                            <i class="fas fa-headphones"></i>
+                        </button>
+                        
+                        <button id="<?php echo $prefs->getAssistedLearning() ? 'btn-next-phase' : 'btn-save-text'; ?>" type="button" class="btn btn-sm btn-success d-block mt-2" title="Go to phase 2: Listening">
+                            <i class="fas fa-chevron-circle-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-10 col-sm-8 pl-0 pr-4 pr-sm-0">
                 <?php
                     echo $reader->showText();
                     if ($is_shared) {
                         echo '<input type="hidden" id="is_shared">';
                     }
                 ?>
-                </div>
-                
             </div>
+
         </div>
+    </div>
 
-        <?php 
+    <?php 
         require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
-        ?>
+        require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
+    ?>
 
-        <script defer src="js/underlinewords-min.js"></script>
-        <script defer src="js/showtext-min.js"></script>
+    <script defer src="js/underlinewords-min.js"></script>
+    <script defer src="js/showtext-min.js"></script>
 </body>
 
 </html>

@@ -33,7 +33,7 @@ $font_size         = $prefs->getFontSize();
 $line_height       = $prefs->getLineHeight();
 $text_align        = $prefs->getTextAlignment();
 $display_mode      = $prefs->getDisplayMode();
-$assisted_learning = $prefs->getAssistedLearning()
+$assisted_learning = $prefs->getAssistedLearning();
 
 ?>
 
@@ -61,7 +61,7 @@ $assisted_learning = $prefs->getAssistedLearning()
                                         <div class="form-group">
                                             <label for="fontfamily">Font Family:</label>
                                             <div>
-                                                <select name="fontfamily" id="fontfamily" class="form-control custom-select">
+                                                <select name="fontfamily" id="fontfamily" class="form-control custom-select" autocomplete="off">
                                                     <option value="Helvetica" <?php echo $font_family=='Helvetica' ? ' selected ' : ''; ?>>Helvetica</option>
                                                     <option value="Open Sans" <?php echo $font_family=='Open Sans' ? ' selected ' : ''; ?>>Open Sans</option>
                                                     <option value="Times New Roman" <?php echo $font_family=='Times New Roman' ? ' selected ' : ''; ?>>Times New Roman</option>
@@ -73,9 +73,9 @@ $assisted_learning = $prefs->getAssistedLearning()
                                         <div class="form-group">
                                             <label for="fontsize">Font Size:</label>
                                             <div>
-                                                <select name="fontsize" id="fontsize" class="form-control custom-select">
-                                                    <option value="14pt" <?php echo $font_size=='14pt' ? ' selected ' : ''; ?>>14 pt</option>
+                                                <select name="fontsize" id="fontsize" class="form-control custom-select" autocomplete="off">
                                                     <option value="12pt" <?php echo $font_size=='12pt' ? ' selected ' : ''; ?>>12 pt</option>
+                                                    <option value="14pt" <?php echo $font_size=='14pt' ? ' selected ' : ''; ?>>14 pt</option>
                                                     <option value="16pt" <?php echo $font_size=='16pt' ? ' selected ' : ''; ?>>16 pt</option>
                                                     <option value="18pt" <?php echo $font_size=='18pt' ? ' selected ' : ''; ?>>18 pt</option>
                                                 </select>
@@ -84,7 +84,7 @@ $assisted_learning = $prefs->getAssistedLearning()
                                         <div class="form-group">
                                             <label for="lineheight">Line height:</label>
                                             <div>
-                                                <select name="lineheight" id="lineheight" class="form-control custom-select">
+                                                <select name="lineheight" id="lineheight" class="form-control custom-select" autocomplete="off">
                                                     <option value="1.5" <?php echo $line_height=='1.5' ? ' selected ' : ''; ?>>1.5 Lines</option>
                                                     <option value="2" <?php echo $line_height=='2' ? ' selected ' : ''; ?>>2</option>
                                                     <option value="2.5" <?php echo $line_height=='2.5' ? ' selected ' : ''; ?>>2.5</option>
@@ -95,7 +95,7 @@ $assisted_learning = $prefs->getAssistedLearning()
                                         <div class="form-group">
                                             <label for="alignment">Text alignment:</label>
                                             <div>
-                                                <select name="alignment" id="alignment" class="form-control custom-select">
+                                                <select name="alignment" id="alignment" class="form-control custom-select" autocomplete="off">
                                                     <option value="left" <?php echo $text_align=='left' ? ' selected ' : ''; ?>>Left</option>
                                                     <option value="center" <?php echo $text_align=='center' ? ' selected ' : ''; ?>>Center</option>
                                                     <option value="right" <?php echo $text_align=='right' ? ' selected ' : ''; ?>>Right</option>
@@ -106,7 +106,7 @@ $assisted_learning = $prefs->getAssistedLearning()
                                         <div class="form-group">
                                             <label for="mode">Display mode:</label>
                                             <div>
-                                                <select name="mode" id="mode" class="form-control custom-select">
+                                                <select name="mode" id="mode" class="form-control custom-select" autocomplete="off">
                                                     <option value="light" <?php echo $display_mode=='light' ? ' selected ' : ''; ?>>Light</option>
                                                     <option value="sepia" <?php echo $display_mode=='sepia' ? ' selected ' : ''; ?>>Sepia</option>
                                                     <option value="dark" <?php echo $display_mode=='dark' ? ' selected ' : ''; ?>>Dark</option>

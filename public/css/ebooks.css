@@ -16,170 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
-select {
-    max-width: 100%;
-}
-
-#viewer {
-    padding: 15px;
-}
-
-.word {
-    cursor: pointer;
-}
-
-.lightmode {
-    background-color: white;
-    color: #000000;
-    -moz-user-select: none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-}
-
-.sepiamode {
-    background-color: #ebe7d9;
-    color: #384452;
-    -moz-user-select: none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-}
-
-.darkmode {
-    background-color: #323847;
-    color: #cccccc;
-    -moz-user-select: none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-}
-
-.learning  .word:hover,
-.learned   .word:hover,
-.forgotten .word:hover {
-    background-color: inherit;
-}
-
-.word:hover {
-    background-color: #e8e8e8;
-}
-
-.highlighted {
-    background-color: #e8e8e8;
-}
-
-.darkmode .highlighted {
-    color: dimgray !important;
-    background-color: whitesmoke !important;
-}
-
-.darkmode .word:hover {
-    color: dimgray;
-    background-color: whitesmoke;
-}
-
-.darkmode .reviewing:hover,
-.darkmode .learned:hover {
-    color: whitesmoke;
-}
-
-.sepiamode .word:hover
-{
-    background-color: ghostwhite;
-}
-
-.sepiamode .highlighted  {
-    background-color: ghostwhite !important;
-}
-
-.reviewing {
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
-}
-
-.new {
-    border-color: DodgerBlue;
-}
-
-.word.new:hover {
-    background-color: DodgerBlue;
-}
-
-.learning {
-    border-color: orange;
-}
-
-.word.learning:hover {
-    background-color: orange;
-}
-
-.learned {
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
-    border-color: green;
-}
-
-.word.learned:hover {
-    background-color: green;
-}
-
-.forgotten {
-    border-color: crimson;
-}
-
-.word.forgotten:hover {
-    background-color: crimson;
-}
-
-.frequency-list {
-    border-bottom-width: 1px;
-    border-bottom-style: dotted;
-    border-color: DodgerBlue;
-}
-
-#toc {
-    display: block;
-    margin: 25px auto;
-}
 
 /* ARROWS (NEXT & PREVIOUS) */
 .navlink {
-    margin: 14px;
+    margin: 50px;
     display: block;
     text-align: center;
     text-decoration: none;
-    color: #ccc;
 }
 
-#prev {
-    left: 0;
-}
-
-#next {
-    right: 0;
-}
-
-.arrow {
-    position: fixed;
-    top: 50%;
-    margin-top: -32px;
-    font-size: 52px;
-    color: #E2E2E2;
-    font-family: arial, sans-serif;
-    font-weight: bold;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-    text-decoration: none;
+.navlink:hover {
+    text-decoration: underline;
 }
 
 /* SIDEBAR */
+
 #opener {
-    top: 0;
-    left: 0;
-    padding: 10px;
+    width: 30px;
+    height: 30px;
 }
 
 .lightmode #opener {
@@ -223,20 +77,25 @@ select {
     position: fixed;
 }
 
-#navigation h1 {
+#title {
     font-size: 16px;
     font-weight: normal;
     margin-bottom: 10px;
-    margin-top: 7px;
+    margin-top: 12px;
     text-align: center;
 }
 
-#navigation h2 {
+#author {
     font-size: 14px;
     font-weight: normal;
     /* color: #B0B0B0; */
     margin-bottom: 20px;
     text-align: center;
+}
+
+#toc {
+    display: block;
+    margin: 25px auto;
 }
 
 #navigation ul {
@@ -297,26 +156,11 @@ svg {
 }
 
 /* HEADER  */
-#btn-close-ebook {
-    margin-top: 5px;
-    margin-right: 10px;
-}
-
-#btn-close-ebook:hover, #btn-close-ebook:focus, #btn-close-ebook.focus {
-	color: white;
-	text-decoration: none;
-}
-
-#book-title {
-    position: absolute;
-    left: 50px;
-    top: 15px;
-    font-weight: bold;
-}
 
 #header {
     font: 14px 'Roboto';
     height: 44px;
+    padding: .5rem 1rem;
     position: -webkit-sticky; /* Safari */ 
     position: sticky;
     top: 0;
@@ -338,7 +182,8 @@ svg {
     color: #cccccc;
 }
 
-/* Underline words spinner */
+/* UNDERLINE WORDS SPINNER */
+
 @keyframes ldio-nhngmna4s2b {
     0% { transform: translate(6px,40px) scale(0); }
     25% { transform: translate(6px,40px) scale(0); }
@@ -384,8 +229,8 @@ svg {
     background: #abbd81;
 }
 .loading-spinner {
-    width: 44px;
-    height: 44px;
+    width: 30px;
+    height: 30px;
     display: inline-block;
     overflow: hidden;
     background: none;
@@ -394,22 +239,33 @@ svg {
     width: 100%;
     height: 100%;
     position: relative;
-    transform: translateZ(0) scale(0.44);
+    transform: translateZ(0) scale(0.3);
     backface-visibility: hidden;
     transform-origin: 0 0; /* see note above */
 }
 .ldio-nhngmna4s2b div { box-sizing: content-box; }
 
 /* OTHER */
+#readerpage {
+	padding: 0;
+	margin: 0;
+    position: absolute;
+    height: 100%;
+    min-height: 800px;
+    width: 100%;
+    max-width: 100%;
+}
+
 body {
     margin: 0;
+    padding: 0;
     background: #fafafa;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #333;
-    position: absolute;
+    /* position: absolute;
     height: 100%;
     width: 100%;
-    min-height: 800px;
+    min-height: 800px; */
 }
 
 pre {

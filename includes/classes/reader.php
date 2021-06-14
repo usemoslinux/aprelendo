@@ -269,7 +269,7 @@ class Reader extends Text
      * @return string
      */
     public function showText(): string {
-        $html = "<div id='text-container' class='my-3' data-type='text' data-textID='" . $this->id . "'>";
+        $html = '<div id="text-container" class="my-3" data-type="text" data-textID="' . $this->id . '" data-assisted-learning="' . $this->prefs->getAssistedLearning() . '">';
         
         // display source, if available
         if (!empty($this->source_uri)) {
@@ -307,7 +307,7 @@ class Reader extends Text
                                     <label id="label-speed" class="basic" for="range-speed">Speed: <span id="currentpbr">1.0</span> x</label>
                                     <input id="range-speed" type="range" class="custom-range" value="1" min="0.5" max="2" step="0.1">
                                     <label id="label-abloop" class="px-1 basic">A-B Loop:</label>
-                                    <button id="btn-abloop" class="btn btn-outline-secondary btn-sm">A</button>
+                                    <button id="btn-abloop" class="btn btn-outline-secondary btn-sm" title="Toggle A-B Loop">A</button>
                                 </div>
                             </form>
                         </div>';
@@ -331,21 +331,6 @@ class Reader extends Text
         $html .= $this->getText() . '</div>';
         $html .= '<p></p>';
         
-        if ($this->prefs->getAssistedLearning()) {
-            $html .= '<button type="button" id="btn-next-phase" class="btn btn-lg btn-primary btn-block">Go to phase 2
-                      <br>
-                      <span class="small">Listening</span>
-                      </button>';
-        } else {
-            $html .= '<button type="button" id="btn-save-text" title="Save the learning status of your words & archive this text" class="btn btn-lg btn-success btn-block">Finish & Save</button>';
-            
-            // if there is audio available & at least 1 learning word in current document
-            $learningwords = strpos($html, "<span class='word learning'") || strpos($html, "<span class='new learning'");
-            if (!empty($this->audio_uri && $learningwords === true)) {
-                $html .= '<button type="button" id="btndictation" class="btn btn-lg btn-info btn-block">Toggle dictation on/off</button>';
-            }
-        }
-        
         $html .= '<p></p></div>';
         return $html;
     } // end showText()
@@ -360,12 +345,19 @@ class Reader extends Text
         $yt_id = $yt_id ? $yt_id : '';
 
         $html = '<div class="col-lg-6 offset-lg-3">' .
-                    '<div id="main-container" style="height: 100vh; height: calc(var(--vh, 1vh) * 100);" class="d-flex flex-column">' .
-                        '<div class="embed-responsive embed-responsive-16by9" style="max-height: 60%;">' .
-                            '<div data-ytid="' . $yt_id . '" id="player"></div>' .
-                        '</div>';
+                    '<div id="main-container" style="height: 100vh; height: calc(var(--vh, 1vh) * 100);" class="d-flex flex-column">';
+        
+        $html .= '<div class="d-flex flex-row-reverse  my-2">
+                        <button type="button" id="btn-save-ytvideo" title="Close and save the learning status of your words" class="btn btn-sm btn-success">Save</button>
+                        <button type="button" data-toggle="modal" data-target="#reader-settings-modal" class="btn btn-sm btn-secondary mr-2" title="Reader settings">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                  </div>';
 
-        $html .= '<button type="button" id="btn-save-ytvideo" title="Save the learning status of your words" class="btn btn-sm btn-success ml-sm-auto my-2">Save</button>';
+        $html .= '<div class="embed-responsive embed-responsive-16by9" style="max-height: 60%;">' .
+                  '<div data-ytid="' . $yt_id . '" id="player"></div>' .
+               '</div>';
+
         $html .= "<div id='text-container' class='overflow-auto mb-1' data-type='video' data-textID='" . $this->id . "'>";
         $xml = new SimpleXMLElement($this->text);
 
@@ -393,16 +385,19 @@ class Reader extends Text
                         '<div id="offline-video-container" class="embed-responsive embed-responsive-16by9 mt-1" style="max-height: 60%;">' .
                         '<input id="video-file-input" type="file" name="video-file-input" accept="video/mp4,video/ogg,video/webm" style="display: none;" />' .
                         '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt" style="display: none;" />' . 
-                            '<video id="video-stream" controls>' .
+                            '<video id="video-stream" controls controlsList="nofullscreen nodownload noremoteplayback" playsinline disablePictureInPicture>' .
                                 '<source src="' . $file . '"/>'. 
                                 'Your browser does not support HTML5 video.' .
                             '</video>' .
                         '</div>';
 
         $html .= '<div class="d-flex flex-wrap">'.
-                    '<button type="button" id="btn-selvideo" title="Select video" class="btn btn-sm btn-primary mr-2 my-2">Select video...</button>'.
-                    '<button type="button" id="btn-selsubs" title="Select subtitles" class="btn btn-sm btn-primary mr-2 my-2">Select subs...</button>'.
-                    '<button type="button" id="btn-save-offline-video" title="Save the learning status of your words" class="btn btn-sm btn-success ml-sm-auto my-2">Save</button>'.
+                    '<button type="button" id="btn-selvideo" title="Select video" class="btn btn-sm btn-primary mr-2 my-2">Video...</button>'.
+                    '<button type="button" id="btn-selsubs" title="Select subtitles" class="btn btn-sm btn-primary mr-2 my-2">Subs...</button>'.
+                    '<button type="button" data-toggle="modal" data-target="#reader-settings-modal" class="btn btn-sm btn-secondary mr-2 my-2" title="Reader settings">
+                        <i class="fas fa-cog"></i>
+                    </button>' .
+                    '<button type="button" id="btn-save-offline-video" title="Save the learning status of your words" class="btn btn-sm btn-success ml-auto my-2">Save</button>'.
                  '</div>'. 
                  '<div id="text-container" class="overflow-auto mb-1"></div>';
 

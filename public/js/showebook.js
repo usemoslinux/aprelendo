@@ -105,7 +105,7 @@
                 display(url);
                 $("html, body").animate({
                     scrollTop: 0
-                }, "slow");
+                }, "fast");
             });
         },
         false
@@ -121,7 +121,7 @@
                 display(url);
                 $("html, body").animate({
                     scrollTop: 0
-                }, "slow");
+                }, "fast");
             });
         },
         false
@@ -189,6 +189,9 @@
     book.loaded.navigation.then(function(toc) {
         var $nav = document.getElementById("toc"),
             docfrag = document.createDocumentFragment();
+        var key = book.key() + "-lastpos";
+        var current_section_href = localStorage.getItem(key);
+        
         var addTocItems = function(parent, tocItems) {
             var $ul = document.createElement("ul");
             tocItems.forEach(function(chapter) {
@@ -196,6 +199,9 @@
                 var link = document.createElement("a");
                 link.textContent = chapter.label;
                 link.href = chapter.href;
+
+                // link.innerHTML = current_section_href == chapter.href ? '<b>'+ link.innerHTML + '</b>' : link.innerHTML;
+
                 item.appendChild(link);
 
                 if (chapter.subitems) {
@@ -205,7 +211,10 @@
                 link.onclick = function() {
                     var url = link.getAttribute("href");
                     display(url);
-                    navigation.classList.add("closed");
+                    opener.click();
+                    $("html, body").animate({
+                        scrollTop: 0
+                    }, "fast");
                     return false;
                 };
 
@@ -246,10 +255,13 @@
     function display(item){
         var section = book.spine.get(item);
         if(section) {
-        //   currentSection = section;
           section.render().then(function(ebook_html){
             var $parsed = $('<div/>').append(ebook_html);
             $parsed.find('*').removeAttr("class").removeAttr("style");
+            // $parsed.find("div").each(function(index, element){
+            //     var $elem = $(element);
+            //     $elem.replaceWith('<p>' + $elem.text() + '</p>')
+            // });
 
             // underline text
             $(".loading-spinner").fadeIn(1000);
@@ -305,9 +317,19 @@
 
             // save book position to resume reading from there later
             localStorage.setItem(book.key() + "-lastpos", item);
+            updateToc(item);
           });
         }
 
         return section;
+    }
+
+    function updateToc(current_chapter_url) {
+        var $nav = document.getElementById('toc');
+        if ($nav.querySelector('.font-weight-bold') !== null) {
+            $nav.querySelector('.font-weight-bold').classList.remove('font-weight-bold');
+        }
+        
+        $nav.querySelector('a[href*="' + current_chapter_url + '"]').classList.add('font-weight-bold');
     }
 });

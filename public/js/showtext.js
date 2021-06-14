@@ -306,7 +306,7 @@ $(document).ready(function() {
             .addBack()
             .next()
             .addBack();
-        var sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ");
+        var sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
 
         return translator_URI.replace("%s", encodeURI(sentence));
     } // end buildTranslateParagraphLink
@@ -525,8 +525,8 @@ $(document).ready(function() {
                     if (!audio_is_loaded) {
                         skipAudioPhases();
                     } else {
-                        $("#btn-next-phase").html(
-                            'Go to phase 4<br><span class="small">Writing</span>'
+                        $("#btn-next-phase").attr('title',
+                            'Go to phase 4: Writing'
                         );
                         next_phase = 4;
                     }
@@ -627,8 +627,8 @@ $(document).ready(function() {
                         audio_is_loaded > 0 &&
                         $(".learning, .new, .forgotten").length == 0
                     ) {
-                        $("#btn-next-phase").html(
-                            'Finish & Save<br><span class="small">Skipped phase 4 (writing) & 5 (reviewing): no underlined words</span>'
+                        $("#btn-next-phase").attr('title',
+                            'Finish & Save - Skipped phase 4 (writing) & 5 (reviewing): no underlined words'
                         );
                         next_phase = 6;
                     }
@@ -660,7 +660,7 @@ $(document).ready(function() {
                     {
                         scrollTop: 0
                     },
-                    "slow"
+                    "fast"
                 );
 
                 next_phase++;
@@ -670,8 +670,8 @@ $(document).ready(function() {
                         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 2: Listening</h5><span class="small">Pay attention to the pronunciation of each word. You can slow down the audio if necessary.</span>'
                     );
 
-                $(this).html(
-                    'Go to phase 3<br><span class="small">Speaking</span>'
+                $(this).attr('title',
+                    'Go to phase 3: Speaking'
                 );
 
                 playAudioFromBeginning();
@@ -681,17 +681,17 @@ $(document).ready(function() {
                     {
                         scrollTop: 0
                     },
-                    "slow"
+                    "fast"
                 );
 
                 if ($(".learning, .new, .forgotten").length == 0) {
-                    $(this).html(
-                        'Finish & Save<br><span class="small">Skipped phase 4 (writing) & 5 (reviewing): no underlined words</span>'
+                    $(this).attr('title',
+                        'Finish & Save - Skipped phase 4 (writing) & 5 (reviewing): no underlined words</span>'
                     );
                     next_phase = 6;
                 } else {
-                    $(this).html(
-                        'Go to phase 4<br><span class="small">Writing</span>'
+                    $(this).attr('title',
+                        'Go to phase 4: Writing'
                     );
                     next_phase++;
                 }
@@ -707,12 +707,14 @@ $(document).ready(function() {
                     {
                         scrollTop: 0
                     },
-                    "slow"
+                    "fast"
                 );
 
                 next_phase++;
 
-                $(this).html('Go to phase 5<br><span class="small">Reviewing</span>');
+                $(this).attr('title', 
+                    'Go to phase 5: Reviewing'
+                    );
 
                 $msg_phase
                     .html(
@@ -726,12 +728,12 @@ $(document).ready(function() {
                     {
                         scrollTop: 0
                     },
-                    "slow"
+                    "fast"
                 );
 
                 next_phase++;
 
-                $(this).html("Finish & Save");
+                $(this).attr('title', 'Finish & Save');
 
                 $msg_phase
                     .html(
@@ -857,7 +859,24 @@ $(document).ready(function() {
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
                 alert("Oops! There was an unexpected error.");
             });
-    } // end #btn-save-text.on.click
+    } // end #archiveTextAndSaveWords
+
+    /**
+     * Changes the position of audio player controls (sticky or initial)
+     */
+    $("#btn-toggle-audio-player-controls").on("click", function () {
+        var $audio_player_container = $('#audioplayer-container');
+        if ($audio_player_container.css('position') == 'static') {
+            $audio_player_container.css({
+                'position': '-webkit-sticky',
+                'position': 'sticky'
+            });
+        } else {
+            $audio_player_container.css({
+                'position': 'static'
+            });
+        }
+    }); // end #btn-toggle-audio-player-controls
 
     /**
      * Triggered when modal dictionary window is closed
@@ -927,7 +946,7 @@ $(document).ready(function() {
                     {
                         scrollTop: 0
                     },
-                    "slow"
+                    "fast"
                 ); // go back to the top of the page
     
                 // automatically play audio, from the beginning
@@ -947,7 +966,7 @@ $(document).ready(function() {
                     {
                         scrollTop: 0
                     },
-                    "slow"
+                    "fast"
                 );
                 $("#audioplayer").trigger("pause");
             }
@@ -1015,14 +1034,14 @@ $(document).ready(function() {
 
         if (!audio_is_loaded) {
             if ($(".learning, .new, .forgotten").length == 0) {
-                $("#btn-next-phase").html(
-                    'Finish & Save<br><span class="small">Skipped some phases: no audio detected & no underlined words</span>'
+                $("#btn-next-phase").attr('title',
+                    'Finish & Save - Skipped some phases: no audio detected & no underlined words'
                 );
         
                 next_phase = 6;    
             } else {
-                $("#btn-next-phase").html(
-                    'Go to phase 5<br><span class="small">Skipped some phases: no audio detected</span>'
+                $("#btn-next-phase").attr('title',
+                    'Go to phase 5: Reviewing - Skipped some phases: no audio detected'
                 );
         
                 next_phase = 5;
@@ -1057,8 +1076,8 @@ $(document).ready(function() {
                     $("#audioplayer").removeClass("d-none");
                     $("#audioplayer-speedbar").removeClass("d-none");
 
-                    $("#btn-next-phase").html(
-                        'Go to phase 2<br><span class="small">Listening</span>'
+                    $("#btn-next-phase").attr('title',
+                        'Go to phase 2: Listening'
                     );
 
                     next_phase = 2;
@@ -1068,7 +1087,7 @@ $(document).ready(function() {
                 .fail(function(xhr) {
                     if (xhr.status == 403) {
                         $("#audioplayer-loader").addClass("d-none");
-                        $("#alert-msg-audio").removeClass("d-none").empty().append('You have reached your audio streaming limit for today. Although it is possible to continue with the revision of the text, we do not recommend it. Alternatively, you can try again tomorrow or <a class="alert-link" href="gopremium.php">improve your plan</a> to increase your daily audio streaming limit.');
+                        $("#alert-msg-audio").removeClass("d-none").empty().append('You have reached your audio streaming limit. Try again tomorrow or <a class="alert-link" href="gopremium.php">improve your plan</a> to increase your daily audio streaming limit.');
                     } else {
                         $("#audioplayer-loader").addClass("d-none");
                         $("#alert-msg-audio").removeClass("d-none").empty().append('There was an unexpected error trying to create audio from this text. <a class="alert-link" href="#" id="retry-audio-load">Try again</a> later.');

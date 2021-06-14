@@ -318,7 +318,8 @@ body.blue-gradient-wallpaper .navbar-light {
 .btn-group,
 .form-control {
     box-shadow: 0 .10rem .10rem 0 rgba(0, 0, 0, 0.1);
-    font-size: inherit;
+    font-family: "Roboto",sans-serif;
+    font-size: 1rem;
 }
 
 .btn:hover,
@@ -533,8 +534,7 @@ ol {
 
 @media screen and (min-width: 767px) {
 
-    ul.nav,
-    .ml-auto {
+    ul.nav {
         padding-right: 0;
     }
 }
@@ -745,6 +745,21 @@ a[role="menuitem"] {
 
 /* SHOW TEXT PAGE */
 
+.sidebar {
+	position: absolute;
+	height: 100%;
+	left: 50%;
+	margin-left: -17px;
+}
+
+.sidebar-sticky-item {
+	position: -webkit-sticky;
+	position: sticky;
+    text-align: left;
+	top: 1.5rem;
+	z-index: 3;
+}
+
 .source {
     border-bottom: 1px solid;
     font-size: 0.9em;
@@ -762,31 +777,36 @@ a[role="menuitem"] {
 
 .word {
     cursor: pointer;
+    padding-top: 5px;
 }
 
 .lightmode {
     background-color: white;
     color: #000000;
+    -ms-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 .darkmode {
     background-color: #323847;
     color: #cccccc;
+    -ms-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 .sepiamode {
     background-color: #ebe7d9;
     color: #384452;
-}
-
-.learning .word:hover,
-.learned .word:hover,
-.forgotten .word:hover {
-    background-color: inherit;
+    -ms-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 .word:hover {
     background-color: #e8e8e8;
+    color: #333;
 }
 
 .highlighted {
@@ -796,20 +816,6 @@ a[role="menuitem"] {
 .darkmode .highlighted {
     color: dimgray !important;
     background-color: whitesmoke !important;
-}
-
-.darkmode .word:hover {
-    color: dimgray;
-    background-color: whitesmoke;
-}
-
-.darkmode .reviewing:hover,
-.darkmode .learned:hover {
-    color: whitesmoke;
-}
-
-.sepiamode .word:hover {
-    background-color: ghostwhite;
 }
 
 .sepiamode .highlighted {
@@ -825,16 +831,20 @@ a[role="menuitem"] {
     border-color: DodgerBlue;
 }
 
-.word.new:hover {
+.word.new:hover,
+.word.new:active {
     background-color: DodgerBlue;
+    color: ghostwhite;
 }
 
 .learning {
     border-color: orange;
 }
 
-.word.learning:hover {
+.word.learning:hover
+.word.learning:active {
     background-color: orange;
+    color: ghostwhite;
 }
 
 .learned {
@@ -843,16 +853,20 @@ a[role="menuitem"] {
     border-color: green;
 }
 
-.word.learned:hover {
+.word.learned:hover,
+.word.learned:active {
     background-color: green;
+    color: ghostwhite;
 }
 
 .forgotten {
     border-color: crimson;
 }
 
-.word.forgotten:hover {
+.word.forgotten:hover,
+.word.forgotten:active {
     background-color: crimson;
+    color: ghostwhite;
 }
 
 .frequency-list {
@@ -866,9 +880,6 @@ audio {
 }
 
 #audioplayer-container {
-    position: -webkit-sticky;
-    /* Safari */
-    position: sticky;
     top: 0;
     z-index: 3;
 }
@@ -996,6 +1007,14 @@ input {
 .modal-open {
     overflow: initial;
     padding-right: 0 !important;
+}
+
+.modal {
+    font-family: "Roboto",sans-serif;
+    font-size: 1rem;
+    color: #384452;
+    text-align: left;
+    line-height: 1.5;
 }
 
 #bdgfreqlvl {

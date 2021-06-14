@@ -146,32 +146,39 @@ try {
 
     <div id="main">
         <div id="header">
-            <span id="opener">
-                <span id="book-title" class="book-title d-none"></span>
+            <span class="d-flex flex-row-reverse">
+                <button class="basic btn btn-link mr-n2" title="Close" id="btn-close-ebook"><i class="fas fa-times"></i></button>
+                
+                <button type="button" data-toggle="modal" data-target="#reader-settings-modal" class="basic btn btn-sm btn-secondary mr-2" title="Reader settings">
+                    <i class="fas fa-cog"></i>
+                </button>
 
-                <svg height="24px" id="hamburger" style="enable-background:new 0 0 32 32;" version="1.1" viewBox="0 0 32 32"
-                    width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z" />
-                </svg>
-            </span>
-            <span>
-                <button class="basic btn btn-secondary float-right" title="Close" id="btn-close-ebook">x</button>
-                <div class="loading-spinner mr-2 float-right">
+                <div class="loading-spinner mr-2">
                     <div class="ldio-nhngmna4s2b">
                         <div></div><div></div><div></div><div></div><div></div>
                     </div>
                 </div>
+
+                <span id="book-title" class="font-weight-bold ml-2 mr-auto my-auto"></span>
+
+                <span id="opener">
+                    <svg height="24px" id="hamburger" style="enable-background:new 0 0 32 32;" version="1.1" viewBox="0 0 32 32"
+                        width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z" />
+                    </svg>
+                </span>    
             </span>
         </div>
 
         <a id="prev" href="#prev" class="navlink"></a>
-        <div id="viewer" class="scrolled"></div>
+        <div id="viewer" class="py-0 px-5 scrolled"></div>
         <a id="next" href="#next" class="navlink"></a>
 
     </div>
 
     <?php 
         require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
+        require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
     ?>
 
     <script defer src="js/underlinewords-min.js"></script>

@@ -28,7 +28,7 @@ $(document).ready(function() {
 
         $.ajax({
             url: "ajax/savepreferences.php",
-            type: "post",
+            type: "POST",
             data: $("#prefs-form").serialize()
         })
             .done(function(data) {

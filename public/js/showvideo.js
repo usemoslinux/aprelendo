@@ -322,7 +322,7 @@ $(document).ready(function() {
             .addBack()
             .next()
             .addBack();
-        var sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ");
+        var sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
 
         return translator_URI.replace("%s", encodeURIComponent(sentence));
     } // end buildTranslateParagraphLink

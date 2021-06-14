@@ -69,6 +69,8 @@ $(document).ready(function() {
         var $progressbar = $("#upload-progress-bar");
         var form_data = new FormData(document.getElementById("form-addebook"));
 
+        $('#alert-msg').addClass('d-none');
+
         $progressbar.parent().removeClass("d-none");
         $("#btn-upload-epub").addClass("disabled");
         $("#btn-save").addClass("disabled");

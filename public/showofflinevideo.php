@@ -79,7 +79,8 @@ require_once PUBLIC_PATH . 'head.php';
         </div>
 
         <?php 
-        require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
+            require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
+            require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
         ?>
 
         <script defer src="js/underlinewords-min.js"></script>
