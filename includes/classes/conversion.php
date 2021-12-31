@@ -60,6 +60,26 @@ class Conversion {
         return $out;
     } // end XMLtoArray()
 
+    /**
+     * Convert an array to XML
+     * @param array $array
+     * @param SimpleXMLElement $xml
+     */
+    public static function arrayToXml($array, &$xml){
+        foreach ($array as $key => $value) {
+            if(is_int($key)){
+                $key = "e";
+            }
+            if(is_array($value)){
+                $label = $xml->addChild($key);
+                self::arrayToXml($value, $label);
+            }
+            else {
+                $xml->addChild($key, $value);
+            }
+        }
+    }
+
 }
 
 ?>

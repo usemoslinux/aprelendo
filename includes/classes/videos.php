@@ -23,6 +23,7 @@ namespace Aprelendo\Includes\Classes;
 use Aprelendo\Includes\Classes\Connect;
 use Aprelendo\Includes\Classes\DBEntity;
 use Aprelendo\Includes\Classes\Curl;
+use Aprelendo\Includes\Classes\Conversion;
 
 class Videos extends DBEntity {
     private $lang_id        = 0;
@@ -61,12 +62,30 @@ class Videos extends DBEntity {
         $lang = urlencode($lang);
         $youtube_id = urlencode($youtube_id);
         
-        $transcript_xml = Curl::getUrlContents("https://video.google.com/timedtext?lang=$lang&v=$youtube_id");
+        //$transcript_xml = Curl::getUrlContents("https://video.google.com/timedtext?lang=$lang&v=$youtube_id"); // not working any more
 
+        // temporary fix, uses youtube-dl to download subtitles
+        
+        // solution 1
+        // exec("youtube-dl -o '%(id)s' --write-sub --sub-lang $lang --skip-download --sub-format ttml https://www.youtube.com/watch?v=$youtube_id", $output, $return);
+        // $temp_file_name = $youtube_id . '.' . $lang . '.ttml';
+        // $transcript_xml = file_get_contents($temp_file_name); // grab file content
+        // unlink($temp_file_name); // delete file
+
+        // requires a python app called youtube_transcript_api
+        // to install it run sudo pip install youtube_transcript_api
+        $output = shell_exec("youtube_transcript_api $youtube_id --languages $lang --format json --exclude-generated 2>&1");
+
+        $output_array = json_decode($output, true); // convert json to array
+        // $transcript_xml = implode( "\n", $output_array[0]);
+        $transcript_xml = new \SimpleXMLElement('<root/>');
+        Conversion::arrayToXml($output_array[0], $transcript_xml);
+        
+        // if subtitle exists, get video title & author
         if (empty($transcript_xml)) {
             throw new \Exception("Oops! There was a problem trying to fetch this video's subtitles.");
         } else {
-            $transcript_xml = array ('text' => $transcript_xml);
+            $transcript_xml = array ('text' => $transcript_xml->asXML());
         
             $file = Curl::getUrlContents("https://www.googleapis.com/youtube/v3/videos?id=$youtube_id&key=" . YOUTUBE_API_KEY . "&part=snippet");
             $file = json_decode($file, true);
