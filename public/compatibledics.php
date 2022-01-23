@@ -235,10 +235,16 @@ if (!$user->isLoggedIn()) {
                                 <li>Meriam Webster: <a href="https://www.merriam-webster.com/dictionary/%s"
                                         target="_blank"
                                         rel="noopener noreferrer">https://www.merriam-webster.com/dictionary/%s</a></li>
+                                <li>Cambridge Dictionary: <a href="https://dictionary.cambridge.org/us/dictionary/english/%s" target="_blank"
+                                        rel="noopener noreferrer">https://dictionary.cambridge.org/us/dictionary/english/%s</a></li>
                                 <li>Forvo: <a href="https://forvo.com/search/%s/en/" target="_blank"
                                         rel="noopener noreferrer">https://forvo.com/search/%s/en/</a></li>
                                 <li>Vocabulary.com: <a href="https://www.vocabulary.com/dictionary/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.vocabulary.com/dictionary/%s</a></li>
+                                <li>Urban Dictionary: <a href="https://www.urbandictionary.com/define.php?term=%s" target="_blank"
+                                        rel="noopener noreferrer">https://www.urbandictionary.com/define.php?term=%s</a></li>
+                                <li>Visuwords: <a href="https://visuwords.com/%s" target="_blank"
+                                        rel="noopener noreferrer">https://visuwords.com/%s</a></li>
                                 <li>Google: <a href="https://www.google.com/search?q=define:%s" target="_blank"
                                         rel="noopener noreferrer">https://www.google.com/search?q=define:%s</a></li>
                                 <br>

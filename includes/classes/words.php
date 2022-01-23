@@ -61,11 +61,11 @@ class Words extends DBEntity {
             $word = mb_strtolower($word);
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`)
                     VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
-                    `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `is_phrase`=?, `date_modified`=NOW()";
+                    `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `date_modified`=NOW()";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $word, $status, (int)$is_phrase, 
-                            $this->user_id, $this->lang_id, $word, $status, (int)$is_phrase]);
+                            $this->user_id, $this->lang_id, $word, $status]);
             
             if ($stmt->rowCount() == 0) {
                 throw new \Exception('There was an unexpected error trying to add record to words table.');

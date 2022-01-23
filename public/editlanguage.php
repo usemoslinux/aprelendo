@@ -49,7 +49,7 @@ if(empty($error_msg)) {
                         value="<?php echo htmlspecialchars($lang->getTranslatorUri()); ?>">
                 </div>
                 <div class="text-right">
-                    <a href="javascript:;" title="Help" data-toggle="collapse" data-target="#help-dictionary"><i
+                    <a href="javascript:;" title="Help" data-toggle="collapse" data-target="#help-dictionary">Help <i
                             class="far fa-question-circle"></i></a>
                 </div>
 

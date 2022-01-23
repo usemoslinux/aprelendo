@@ -18,8 +18,23 @@
  */
 
 $(document).ready(function() {
+    var dictionary_URI = "";
+    var $dic_frame = $("#dicFrame");
+    var $sel_word = $();
+
     $("#search").focus();
     $("input:checkbox").prop("checked", false);
+    
+    // ajax call to get dictionary URI
+    $.ajax({
+        url: "/ajax/getdicuris.php",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        if (data.error_msg == null) {
+            dictionary_URI = data.dictionary_uri;
+        }
+    }); // end $.ajax 
 
     // action menu implementation
 
@@ -132,4 +147,92 @@ $(document).ready(function() {
         
         window.location.replace("words.php" + uri_str);
     }); // end #dropdown-menu-sort.on.click
+
+
+    /**
+     * Open dictionary modal
+     * Triggers when user clicks word
+     * @param {event object} e
+     */
+    $(".word").on("click", function(e) {
+        $sel_word = $(this);
+        var url = dictionary_URI.replace("%s", encodeURI($sel_word.text()));
+
+        // set up buttons
+        $("#btnadd").text("Forgot");
+        $("#btn-translate").hide();
+        $("#btnremove").removeClass().addClass("btn btn-danger mr-auto");
+        
+        // show loading spinner
+        $("#iframe-loader").attr('class','lds-ellipsis m-auto');
+        $dic_frame.attr('class','d-none');
+
+        $dic_frame.get(0).contentWindow.location.replace(url);
+        // the previous line loads iframe content without adding it to browser history,
+        // as this one does: $dic_frame.attr('src', url);
+
+        $("#myModal").modal("show");
+    }); // end #.word.on.click
+
+    /**
+     * Hides loader spinner when dictionary iframe finished loading
+     */
+     $dic_frame.on("load", function() {
+        $("#iframe-loader").attr('class','d-none');
+        $dic_frame.removeClass();
+    }); // end $dic_frame.on.load()
+
+    /**
+     * Updates status of forgotten words
+     * Triggers when user click in Forgot button in dictionary modal
+     */
+    $("#btnadd").on("click", function(e) {
+        // add selection to "words" table
+        $.ajax({
+            type: "POST",
+            url: "/ajax/addword.php",
+            data: {
+                word: $sel_word.text()
+            }
+        }).done(function(data) {
+            if (data.error_msg != null) {
+                alert(data.error_msg);
+            } else {
+                var $hourglass = $sel_word.parent().next().children(":first");
+                $hourglass.removeClass().addClass("fas fa-hourglass-start status_forgotten");
+                $hourglass.attr("title", "Forgotten");
+            }
+        }).fail(function() {
+            alert(
+                "Oops! There was an error updating this words' status."
+            );
+        });
+    }); // end #btnadd.on.click
+
+    /**
+     * Deletes current word
+     * Triggers when user selects Delete button in dictionary modal
+     * @param {event object} e
+     */
+    $("#btnremove").on("click", function(e) {
+        var sel_word_id = $sel_word.parent().prev().children(":first").children(":first").data("idword");
+
+        $.ajax({
+            url: "ajax/removeword.php",
+            type: "POST",
+            data: {
+                word: $sel_word.text() //JSON.stringify(ids)
+            }
+        })
+            .done(function() {
+                window.location.replace(
+                    "words.php" + parameterizeArray(getCurrentURIParameters())
+                );
+            })
+            .fail(function(request, status, error) {
+                alert(
+                    "There was an error when trying to delete the selected words. Refresh the page and try again."
+                );
+            });
+    }); // end #btnremove.on.click
 });

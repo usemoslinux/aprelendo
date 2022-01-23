@@ -34,7 +34,7 @@ if (isset($_POST['word'])) {
     
     try {
         $word = $_POST['word'];
-        $is_phrase = $_POST['is_phrase'];
+        $is_phrase =  (isset($_POST['is_phrase']) && !empty($_POST['is_phrase'])) ? $_POST['is_phrase'] : false;
         
         $words_table = new Words($pdo, $user_id, $lang_id);
  

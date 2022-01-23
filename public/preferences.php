@@ -131,7 +131,7 @@ $assisted_learning = $prefs->getAssistedLearning();
                                             </div>
                                         </div>
                                         <div class="text-right">
-                                            <a href="javascript:;" title="Help" data-toggle="collapse" data-target="#help-learning-mode">
+                                            <a href="javascript:;" title="Help" data-toggle="collapse" data-target="#help-learning-mode">Help 
                                                 <i class="far fa-question-circle"></i>
                                             </a>
                                         </div>

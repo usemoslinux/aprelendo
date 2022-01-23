@@ -92,6 +92,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     echo $pagination->print('words.php', '', $sort_by);
 }
 
+require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
 
 ?>
 
