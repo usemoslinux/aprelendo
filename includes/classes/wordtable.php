@@ -60,7 +60,7 @@ class WordTable extends Table {
                 $html .= "<tr><td class='col-checkbox'><div class='custom-control custom-checkbox'><input id='row-$word_id' class='custom-control-input chkbox-selrow' type='checkbox' aria-label='Select row' data-idWord='$word_id'><label class='custom-control-label' for='row-$word_id'></label></div></td>";
             } 
             
-            $html .= '<td class="col-title"><span class="word">' . $word . '</span></td><td class="col-status text-center">' .
+            $html .= '<td class="col-title"><a class="word word-list">' . $word . '</a></td><td class="col-status text-center">' .
                 '<i title="' . $status_text[$word_status] . '" class="fas ' . $status[$word_status] . '"></i></td></tr>';
         }
         return $html;

@@ -803,7 +803,7 @@ a[role="menuitem"] {
 	user-select: none;
 }
 
-.word:hover {
+.word:not(.word-list):hover{
     background-color: #e8e8e8;
     color: #333;
 }
