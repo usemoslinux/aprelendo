@@ -32,7 +32,7 @@ if(isset($unnanounced_achievements) && !empty($unnanounced_achievements)):
 ?>
 
 <!-- ACHIEVEMENTS MODAL WINDOW -->
-<div id="modal-achievements" class="modal fade" data-keyboard="true" role="dialog">
+<div id="modal-achievements" class="modal fade" data-keyboard="true" role="dialog"  tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <!-- Modal content-->
         <div class="modal-content mb-xs-3">

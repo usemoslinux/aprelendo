@@ -40,8 +40,8 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
 
 
 <!-- Reader Settings Modal -->
-<div class="modal fade" id="reader-settings-modal" tabindex="-1" role="dialog" aria-labelledby="reader-settings-modal-label"
-    aria-hidden="true">
+<div class="modal fade" id="reader-settings-modal" data-keyboard="true" tabindex="-1" role="dialog" aria-labelledby="reader-settings-modal-label"
+    aria-hidden="true" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
