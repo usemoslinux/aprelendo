@@ -989,13 +989,13 @@ $(document).ready(function() {
         ) {
             $curinput.css("border-color", "green");
             $curinput
-                .next("a")
+                .next("span")
                 .not(".d-none")
                 .addClass("d-none");
         } else if ($.trim($curinput.val()) != "") {
             $curinput.css("border-color", "crimson");
             $curinput
-                .next("a")
+                .next("span")
                 .removeClass("d-none")
                 .addClass("dict-wronganswer")
                 .text("[ " + $curinput.attr("data-text") + " ]");
