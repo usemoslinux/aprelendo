@@ -294,10 +294,7 @@ class Reader extends Text
                         <div></div>
                     </div>';
 
-                    
-        $display_mode_css = $this->prefs->getDisplayMode() . 'mode';
-
-        $html .=   '<div id="audioplayer-container" class="' . $display_mode_css . '">' .
+        $html .=   '<div id="audioplayer-container">' .
                         '<audio controls id="audioplayer" class="d-none">
                                 <source id="audio-mp3" src="" type="audio/mpeg">
                                 Your browser does not support the audio element.
