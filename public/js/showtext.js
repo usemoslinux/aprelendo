@@ -891,6 +891,7 @@ $(document).ready(function() {
 
         // removes word selection
         $selword.removeClass("highlighted");
+
     }); // end #myModal.on.hidden.bs.modal
 
     /**

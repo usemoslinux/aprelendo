@@ -939,7 +939,6 @@ audio {
     white-space: pre-line;
 }
 
-
 /* DICTATION */
 
 .dict {
@@ -1004,8 +1003,9 @@ input {
 }
 
 .modal-open {
-    overflow: initial;
+    overflow-y: scroll;
     padding-right: 0 !important;
+    position: fixed; 
 }
 
 .modal {
