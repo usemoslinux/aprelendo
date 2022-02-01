@@ -150,7 +150,7 @@ $(document).ready(function() {
             if (!swiping) {
                 highlighting = (end_sel_time - start_sel_time) > 1000;
             }
-            $('html').css({'overflow':'visible'});    
+            $("html").enableScroll(); 
             swiping = false;
         }
 
@@ -205,7 +205,7 @@ $(document).ready(function() {
 
         if (highlighting) {
             if (e.type == "touchmove") {
-                $('html').css({'overflow':'hidden'});
+                $("html").disableScroll();
             }
             
             $(".word").removeClass("highlighted");
@@ -268,6 +268,26 @@ $(document).ready(function() {
 
         return translator_URI.replace("%s", encodeURI(sentence));
     } // end buildTranslateParagraphLink
+
+    /**
+     * Disables scrolling without making text jump around
+     */
+    $.fn.disableScroll = function() {
+        window.oldScrollPos = $(window).scrollTop();
+
+        $(window).on('scroll.scrolldisabler',function ( event ) {
+            $(window).scrollTop( window.oldScrollPos );
+            event.preventDefault();
+        });
+    };
+
+    /**
+     * Renables scrolling without making text jump around
+     */
+
+    $.fn.enableScroll = function() {
+        $(window).off('scroll.scrolldisabler');
+    };
 
     /**
      * Sets Add & Delete buttons depending on whether selection exists in database
@@ -1111,7 +1131,7 @@ $(document).ready(function() {
             var $text_container = $("#text-container").length ? $("#text-container") : $pagereader.contents();
 
             highlighting = false;
-            $('html').css({'overflow':'visible'});  
+            $("html").enableScroll();
             $text_container.find(".highlighted").removeClass("highlighted");
         }
     }); // end $pagereader.on.click

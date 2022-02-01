@@ -178,10 +178,10 @@ class Reader extends Text
         $argv = func_get_args();
         switch(func_num_args()) {
             case 3:
-                self::createMiniReader($argv[0], $argv[1], $argv[2]);
+                $this->createMiniReader($argv[0], $argv[1], $argv[2]);
                 break;
             case 5:
-                self::createFullReader($argv[0], $argv[1], $argv[2], $argv[3], $argv[4]);
+                $this->createFullReader($argv[0], $argv[1], $argv[2], $argv[3], $argv[4]);
                 break;
          }
     } // end __construct()
