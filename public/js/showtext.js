@@ -63,60 +63,18 @@ $(document).ready(function() {
             skipAudioPhases();
         }); // end $.ajax
     }
-    
-    /**
-     * Sets keyboard shortcuts for media player
-     * @param {event object} e Used to get keycodes
-     */
-    $(window).on("keydown", function(e) {
-        var $audioplayer = $("#audioplayer");
-        if ($audioplayer.length && e.ctrlKey) {
-            switch (e.keyCode) {
-                case 32: // "spacebar" keyCode
-                    if ($audioplayer.prop("paused")) {
-                        $audioplayer.trigger("play");
-                    } else {
-                        $audioplayer.trigger("pause");
-                    }
-
-                    break;
-            }
-        }
-    }); // end window.on.keydown
 
     /**
-     * Pauses dictation audio when user is typing an answer inside an input
-     * @param {event object} e Used to get keycodes
+     * Toggles audio player
      */
-    $("body").on("input", "input:text", function(e) {
-        var lastkeypress = new Date().getTime();
-        var keyCode = e.keyCode || e.which;
-
-        if (keyCode != 9) {
-            clearTimeout(time_handler);
-            toggleAudio(lastkeypress);
-        }
-    }); // end input:text.on.input
-
-    /**
-     * Pauses audio for some secs when user is typing answer in dictation mode
-     * @param {Date} lastkeypress
-     */
-    function toggleAudio(lastkeypress) {
-        var currentTime = new Date().getTime();
-        var $audioplayer = $("#audioplayer");
-
-        if ((currentTime - lastkeypress > 1000) && !$audioplayer.prop("ended")) {
-            $audioplayer.trigger("play");
-        } else {
-            var playing = !$audioplayer.prop("paused");
+    function toggleAudio() {
+        $audioplayer = $("#audioplayer");
+        var playing = !$audioplayer.prop("paused");
             if (playing) {
                 $audioplayer.trigger("pause");
+            } else {
+                $audioplayer.trigger("play");
             }
-            time_handler = setTimeout(() => {
-                toggleAudio(lastkeypress);
-            }, 1000);
-        }
     } // end toggleAudio
 
     /**
@@ -526,7 +484,7 @@ $(document).ready(function() {
                         skipAudioPhases();
                     } else {
                         $("#btn-next-phase").attr('title',
-                            'Go to phase 4: Writing'
+                            'Go to phase 4: Writing (be patient, may take a while to load depending on text length)'
                         );
                         next_phase = 4;
                     }
@@ -619,19 +577,6 @@ $(document).ready(function() {
                         
                         $cur_filter.replaceWith($result.clone());
                     });
-
-                    // if user is in phase 3 (speaking) and deleted the only word that was underlined
-                    // don't allow phase 4 (writing) & go directly to phase 5 (save changes)
-                    if (
-                        next_phase == 4 &&
-                        audio_is_loaded > 0 &&
-                        $(".learning, .new, .forgotten").length == 0
-                    ) {
-                        $("#btn-next-phase").attr('title',
-                            'Finish & Save - Skipped phase 4 (writing) & 5 (reviewing): no underlined words'
-                        );
-                        next_phase = 6;
-                    }
                 });
             })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
@@ -684,17 +629,11 @@ $(document).ready(function() {
                     "fast"
                 );
 
-                if ($(".learning, .new, .forgotten").length == 0) {
-                    $(this).attr('title',
-                        'Finish & Save - Skipped phase 4 (writing) & 5 (reviewing): no underlined words</span>'
+                next_phase++;
+
+                $(this).attr('title', 
+                    'Go to phase 4: Writing (be patient, may take a while to load depending on text length)'
                     );
-                    next_phase = 6;
-                } else {
-                    $(this).attr('title',
-                        'Go to phase 4: Writing'
-                    );
-                    next_phase++;
-                }
 
                 $msg_phase.html(
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 3: Speaking</h5><span class="small">Read the text out loud and try to emulate the pronunciation of each word as you listen to the audio. You can slow it down if necessary.</span>'
@@ -710,15 +649,21 @@ $(document).ready(function() {
                     "fast"
                 );
 
-                next_phase++;
-
-                $(this).attr('title', 
-                    'Go to phase 5: Reviewing'
+                if ($(".learning, .new, .forgotten").length == 0) {
+                    $(this).attr('title',
+                        'Finish & Save - Skipped phase 5 (reviewing): no underlined words</span>'
                     );
+                    next_phase = 6;
+                } else {
+                    $(this).attr('title',
+                        'Go to phase 5: Reviewing'
+                    );
+                    next_phase++;
+                }
 
                 $msg_phase
                     .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation.</span>'
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>spacebar</kbd>. To rewind or fast-forward, use the <kbd>&#8593;</kbd> and <kbd>&#8595;</kbd> keys.</span>'
                     );
 
                 toggleDictation();
@@ -891,15 +836,15 @@ $(document).ready(function() {
 
         // removes word selection
         $selword.removeClass("highlighted");
-
     }); // end #myModal.on.hidden.bs.modal
 
     /**
      * Changes playback speed when user moves slider
      */
-    $("body").on("input change", "#range-speed", function() {
-        var cpbr = parseFloat($(this).val()).toFixed(1);
-        $("#currentpbr").text(cpbr);
+    $("body").on("input change", "#range-speed", function(e, data) {
+        var cpbr = data !== undefined ? data.cpbr : parseFloat($(this).val()).toFixed(1);
+        $(this).val(cpbr);
+        $("#currentpbr").text(cpbr);    
         $("#audioplayer").prop("playbackRate", cpbr);
     }); // end #pbr.on.input/change
 
@@ -919,30 +864,45 @@ $(document).ready(function() {
         var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
         if (audio_is_loaded) {
             if ($(".dict-answer").length == 0) {
+                // if user is no words are underlined don't allow phase 5 (reviewing) & go directly to phase 6 (save changes)
+                if ($(".learning, .new, .forgotten").length == 0) {
+                    $("#btn-next-phase").attr('title',
+                        'Finish & Save - 5 (reviewing): no underlined words'
+                    );
+                    next_phase = 6;
+                }
+
                 // toggle dictation on
                 // replace all underlined words/phrases with input boxes
-                $(".learning, .new, .forgotten").each(function(index, value) {
+                var $container = $("#text").clone();
+                var $elems = $container.find(".word");
+                var $original_elems = $(".word");
+
+                $elems.each(function(index, value) {
                     var $elem = $(this);
                     var length = $elem.text().length;
-                    var width = $elem.width();
-                    var line_height = $elem.css("font-size");
+                    var width = $original_elems.eq(index).width();
+                    var line_height = $original_elems.eq(index).css("font-size");
                     $elem
                         .hide()
                         .after(
                             '<div class="input-group dict-input-group"><input type="text" class="dict" ' +
-                                'style="width:' +
-                                width +
-                                "px; line-height:" +
-                                line_height +
-                                ';" ' +
-                                'maxlength="' +
-                                length +
-                                '" data-text="' +
-                                $elem.text() +
-                                '">' +
-                                '<span class="input-group-append dict-answer d-none"></span></div>'
+                            'style="width:' +
+                            width +
+                            "px; line-height:" +
+                            line_height +
+                            ';" ' +
+                            'maxlength="' +
+                            length +
+                            '" data-text="' +
+                            $elem.text() +
+                            '">' +
+                            '<span class="input-group-append dict-answer d-none"></span></div>'
                         );
                 });
+
+                $("#text").replaceWith($container);
+
                 $("html, body").animate(
                     {
                         scrollTop: 0
@@ -951,12 +911,13 @@ $(document).ready(function() {
                 ); // go back to the top of the page
     
                 // automatically play audio, from the beginning
+                $("#range-speed").trigger("change", [{cpbr:0.5}]);
                 playAudioFromBeginning();
     
                 $(":text:first").focus(); // focus first input
             } else {
                 // toggle dictation off
-                $(".learning, .new, .forgotten").each(function(index, value) {
+                $(".word").each(function(index, value) {
                     var $elem = $(this);
                     $elem
                         .show()
@@ -982,7 +943,7 @@ $(document).ready(function() {
      * Checks if answer is correct and shows a cue to indicate status when user moves
      * focus out of an input box.
      */
-    $("body").on("blur", ":text", function() {
+    $("body").on("blur", ".dict", function() {
         var $curinput = $(this);
         if (
             $curinput.val().toLowerCase() ==
@@ -1001,19 +962,57 @@ $(document).ready(function() {
                 .addClass("dict-wronganswer")
                 .text("[ " + $curinput.attr("data-text") + " ]");
         }
-    }); // end :text.on.blur
+    }); // end .dict.on.blur
 
     /**
-     * Jumps to next input when user presses Enter inside an input
+     * Jumps to next input when input's maxlength is reached
      */
-    $("body").on("input", ".dict", function(e) {
-        if (e.which === 13) {
+    $("body").on("input", ".dict", function() {
+        var maxLength = $(this).attr("maxlength");
+        // if maxlength reached, switch focus to next input
+        if(maxLength == $(this).val().length) {
             var index = $(".dict").index(this) + 1;
             $(".dict")
                 .eq(index)
                 .focus();
         }
     }); // end .dict.on.input
+
+    /**
+     * Jumps to next input when input's maxlength is reached
+     */
+    $("body").on("keydown", ".dict", function(e) {
+        var key = e.key;
+        var curTime = $("#audioplayer")[0].currentTime;
+
+        // if space is pressed, toggle audio; if arrow up, rewind 5 secs; 
+        // if arrow down fast-forward 5 secs; if backspace, move focus to previous input
+        switch (key) {
+            case " ":
+                // only toggle audio playback if 
+                if ($(this).data("text").indexOf(" ") == -1) {
+                    toggleAudio();   
+                    return false;     
+                }
+                break;
+            case "ArrowUp":
+                $("#audioplayer")[0].currentTime = curTime - 1;
+                break;
+            case "ArrowDown":
+                $("#audioplayer")[0].currentTime = curTime + 1;
+                break;
+            case "Backspace":
+                if (!$(this).val()) {
+                    var index = $(".dict").index(this) - 1;
+                    $(".dict")
+                        .eq(index)
+                        .focus();    
+                }
+                break;
+            default:
+                break;
+        }
+    }); // end .dict.on.keydown
 
     /**
      * Tries to reload audio

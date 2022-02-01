@@ -21,7 +21,8 @@ $(document).ready(function() {
 
     $('#btn-save-reader-prefs').on('click', function () {
         // apply changes
-        
+        var className = $('#mode').val() + 'mode';
+
         $doc = $(parent.document.body);
         $doc.css({
             'font-family' : $('#fontfamily').val(),
@@ -32,7 +33,8 @@ $(document).ready(function() {
         
         $('#text').css('line-height', $('#lineheight').val());
 
-        $doc.removeClass().addClass($('#mode').val() + 'mode');
+        $doc.removeClass().addClass(className);
+        $doc.find("#audioplayer-container").removeClass().addClass(className);
 
         // save changes 
 
