@@ -68,7 +68,7 @@ $(document).ready(function() {
      * Toggles audio player
      */
     function toggleAudio() {
-        $audioplayer = $("#audioplayer");
+        var $audioplayer = $("#audioplayer");
         var playing = !$audioplayer.prop("paused");
             if (playing) {
                 $audioplayer.trigger("pause");
@@ -131,6 +131,7 @@ $(document).ready(function() {
             }
         } else if (e.which == 3) {
             // on right click show translation of the whole sentence
+            $("#audioplayer").trigger("pause");
             $selword = $(this);
             window.open(buildTranslateParagraphLink());
         }
@@ -353,15 +354,15 @@ $(document).ready(function() {
      * All words are enclosed in a.word tags
      */
     function showModal() {
-        var audioplayer = $("#audioplayer");
+        var $audioplayer = $("#audioplayer");
 
-        if (audioplayer.length) {
+        if ($audioplayer.length) {
             // if there is audio playing
             if (
-                !audioplayer.prop("paused") &&
-                audioplayer.prop("currentTime")
+                !$audioplayer.prop("paused") &&
+                $audioplayer.prop("currentTime")
             ) {
-                audioplayer.trigger("pause"); // pause audio
+                $audioplayer.trigger("pause"); // pause audio
                 playing_audio = true;
             } else {
                 playing_audio = false;
@@ -847,11 +848,11 @@ $(document).ready(function() {
      * Triggered when modal dictionary window is closed
      */
     $doc.on("hidden.bs.modal", "#myModal", function() {
-        var audioplayer = $("#audioplayer");
+        var $audioplayer = $("#audioplayer");
 
         // Resumes playing if audio was paused when clicking on a word
-        if (playing_audio && audioplayer.length) {
-            audioplayer.trigger("play");
+        if (playing_audio && $audioplayer.length) {
+            $audioplayer.trigger("play");
         }
 
         // removes word selection
@@ -954,10 +955,6 @@ $(document).ready(function() {
             }
         }
     } // end toggleDictation
-
-    $("body").on("click", "#btndictation", function() {
-        toggleDictation();
-    }); // end #btndictation.on.click
 
     /**
      * Checks if answer is correct and shows a cue to indicate status when user moves
