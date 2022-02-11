@@ -106,12 +106,14 @@ $(document).ready(function() {
         }
     }); // end #audioplayer.timeupdate
 
-
     /**
      * Disables right click context menu
      */
     $(document).on("contextmenu",function(e){
-        e.preventDefault();
+        // opens dictionary translator in case user right clicked on a word/phrase
+        if ($(e.target).is(".word")) {
+            window.open(buildTranslateParagraphLink());
+        }
         return false;
      }); // end document.contextmenu
 
@@ -130,10 +132,9 @@ $(document).ready(function() {
                 start_sel_pos_top = $sel_start.offset().top - $(window).scrollTop();
             }
         } else if (e.which == 3) {
-            // on right click show translation of the whole sentence
             $("#audioplayer").trigger("pause");
             $selword = $(this);
-            window.open(buildTranslateParagraphLink());
+            // opening the translator was moved to $(document).on("contextmenu") due to a bug in Windows
         }
     }); // end .word.on.mousedown/touchstart
 
