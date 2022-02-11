@@ -685,7 +685,7 @@ $(document).ready(function() {
 
                 $msg_phase
                     .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>spacebar</kbd>. To rewind or fast-forward, use the <kbd>&#8593;</kbd> and <kbd>&#8595;</kbd> keys.</span>'
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>spacebar</kbd> (or <kbd>Shift + spacebar</kbd> if the expression to write in the input box contains spaces). To rewind or fast-forward 1 second, use the <kbd>&#8593;</kbd> and <kbd>&#8595;</kbd> keys.</span>'
                     );
 
                 toggleDictation();
@@ -1001,18 +1001,21 @@ $(document).ready(function() {
      */
     $("body").on("keydown", ".dict", function(e) {
         var key = e.key;
+        var shifted = e.shiftKey;
         var curTime = $("#audioplayer")[0].currentTime;
 
         // if space is pressed, toggle audio; if arrow up, rewind 5 secs; 
         // if arrow down fast-forward 5 secs; if backspace, move focus to previous input
         switch (key) {
             case " ":
-                // only toggle audio playback if 
-                if ($(this).data("text").indexOf(" ") == -1) {
-                    toggleAudio();   
-                    return false;     
+                // only toggle audio playback if word/phrase does not have spaces 
+                // or if shift key is pressed
+                if ($(this).data("text").indexOf(" ") > 0 && !shifted) {
+                    break; // write space
                 }
-                break;
+
+                toggleAudio();   
+                return false; // don't write space
             case "ArrowUp":
                 $("#audioplayer")[0].currentTime = curTime - 1;
                 break;
