@@ -997,7 +997,7 @@ $(document).ready(function() {
     }); // end .dict.on.input
 
     /**
-     * Jumps to next input when input's maxlength is reached
+     * Implements shortcuts for dictation
      */
     $("body").on("keydown", ".dict", function(e) {
         var key = e.key;
