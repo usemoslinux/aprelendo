@@ -94,7 +94,6 @@ require_once PUBLIC_PATH . 'head.php';
                     }
                 ?>
             </div>
-
         </div>
     </div>
 

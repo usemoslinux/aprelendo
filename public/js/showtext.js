@@ -111,7 +111,10 @@ $(document).ready(function() {
      */
     $(document).on("contextmenu",function(e){
         // opens dictionary translator in case user right clicked on a word/phrase
-        if ($(e.target).is(".word")) {
+        // but only on desktop browsers
+        var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (!isMobile && $(e.target).is(".word")) {
             window.open(buildTranslateParagraphLink());
         }
         return false;
