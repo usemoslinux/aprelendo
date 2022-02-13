@@ -104,7 +104,7 @@ require_once PUBLIC_PATH . 'head.php';
     ?>
 
     <script defer src="js/underlinewords-min.js"></script>
-    <script defer src="js/showtext/min.js"></script>
+    <script defer src="js/showtext-min.js"></script>
 </body>
 
 </html>
