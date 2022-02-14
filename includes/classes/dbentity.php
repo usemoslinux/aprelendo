@@ -35,6 +35,24 @@ class DBEntity {
         $this->pdo = $pdo;
         $this->user_id = $user_id;
     } // end __construct()
+
+    /**
+     * Executes SQL passed as parameter
+     *
+     * @param string $sql
+     * @return array
+     */
+    public function executeSQL(string $sql): array {
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to execute SQL query.');
+        } finally {
+            $stmt = null;
+        }
+    }
 }
 
 ?>

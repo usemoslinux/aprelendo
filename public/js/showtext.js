@@ -688,7 +688,7 @@ $(document).ready(function() {
 
                 $msg_phase
                     .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>spacebar</kbd> (or <kbd>Shift + spacebar</kbd> if the expression to write in the input box contains spaces). To rewind or fast-forward 1 second, use the <kbd>&#8593;</kbd> and <kbd>&#8595;</kbd> keys.</span>'
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>spacebar</kbd> (or <kbd>Shift + spacebar</kbd> if the expression to write in the input box contains spaces). To rewind or fast-forward 1 second, use <kbd>1</kbd> and <kbd>2</kbd>.</span>'
                     );
 
                 toggleDictation();
@@ -1003,14 +1003,15 @@ $(document).ready(function() {
      * Implements shortcuts for dictation
      */
     $("body").on("keydown", ".dict", function(e) {
-        var key = e.key;
+        var key = e.code;
         var shifted = e.shiftKey;
         var curTime = $("#audioplayer")[0].currentTime;
 
-        // if space is pressed, toggle audio; if arrow up, rewind 5 secs; 
-        // if arrow down fast-forward 5 secs; if backspace, move focus to previous input
+        // if space is pressed, toggle audio; if arrow up or "1", rewind 5 secs; 
+        // if arrow down or "2" fast-forward 5 secs; if backspace, move focus to previous input
         switch (key) {
-            case " ":
+            
+            case "Space":
                 // only toggle audio playback if word/phrase does not have spaces 
                 // or if shift key is pressed
                 if ($(this).data("text").indexOf(" ") > 0 && !shifted) {
@@ -1019,12 +1020,12 @@ $(document).ready(function() {
 
                 toggleAudio();   
                 return false; // don't write space
-            case "ArrowUp":
+            case "Digit1":
                 $("#audioplayer")[0].currentTime = curTime - 1;
-                break;
-            case "ArrowDown":
+                return false; // pretend key was not pressed
+            case "Digit2":
                 $("#audioplayer")[0].currentTime = curTime + 1;
-                break;
+                return false; // pretend key was not pressed
             case "Backspace":
                 if (!$(this).val()) {
                     var index = $(".dict").index(this) - 1;

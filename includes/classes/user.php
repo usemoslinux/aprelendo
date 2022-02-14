@@ -22,7 +22,6 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\File;
 use Aprelendo\Includes\Classes\Language;
-use Aprelendo\Includes\Classes\Curl;
 
 class User 
 {
@@ -708,6 +707,9 @@ class User
      */
     public function isAllowedToAccessElement(string $table, int $id): bool
     {
+        $id_col_name = '';
+        $user_id_col_name = '';
+        
         if ($table == 'shared_texts') {
             return true;
         }

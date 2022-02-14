@@ -24,8 +24,6 @@ use Aprelendo\Includes\Classes\File;
 use Aprelendo\Includes\Classes\PopularSources;
 use Aprelendo\Includes\Classes\Url;
 use Aprelendo\Includes\Classes\Language;
-use Aprelendo\Includes\Classes\Conversion;
-use Aprelendo\Includes\Classes\Curl;
 
 class Texts extends DBEntity {
     protected $id            = 0;

@@ -18,7 +18,7 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-spl_autoload_register('AutoLoader');
+spl_autoload_register('autoLoader');
 
 /**
  * Imports files based on the namespace as folder and class as filename.
@@ -26,7 +26,7 @@ spl_autoload_register('AutoLoader');
  * @param string $class
  * @return void
  */
-function AutoLoader($class)
+function autoLoader($class)
 {
     $class_name = str_replace('\\', DIRECTORY_SEPARATOR, $class);
     require_once dirname(APP_ROOT) . DIRECTORY_SEPARATOR . strtolower($class_name) . '.php';
