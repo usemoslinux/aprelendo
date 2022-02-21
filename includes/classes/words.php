@@ -80,15 +80,11 @@ class Words extends DBEntity {
     /**
      * Updates status of existing words in database
      * 
-     * @param string $words array containing all the words to update
+     * @param array $words array containing all the words to update
      * @return void
      */
     public function updateByName(array $words): void {
         try {
-            // $csvwords = Conversion::ArraytoCSV($words);
-            $user_id = $this->user_id;
-            $lang_id = $this->lang_id;
-
             $in  = str_repeat('?,', count($words) - 1) . '?';
 
             $sql = "UPDATE `{$this->table}` SET `status`=`status`-1, `date_modified`=NOW() 
@@ -104,6 +100,26 @@ class Words extends DBEntity {
     } // end updateByName()
 
     /**
+     * Updates status of existing words in database
+     * 
+     * @param array $words array containing all the words to update
+     * @return void
+     */
+    public function updateStatus(string $word, bool $forgot): void {
+        try {
+            $forgot = $forgot ? "3" : "`status`-1";
+            $sql = "UPDATE `{$this->table}` SET `status`=$forgot, `date_modified`=NOW() 
+                    WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->user_id, $this->lang_id, $word]);
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to update record from words table.');
+        } finally {
+            $stmt = null;
+        }
+    } // end updateByName()
+
+    /**
      * Deletes 1 word in database using word (not the id, the actual word) as a parameter to select it
      *
      * @param string $word
@@ -111,9 +127,9 @@ class Words extends DBEntity {
      */
     public function deleteByName(string $word): void {
         try {
-            $sql = "DELETE FROM `{$this->table}` WHERE `word`=?";
+            $sql = "DELETE FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$word]);
+            $stmt->execute([$this->user_id, $this->lang_id, $word]);
             
             if ($stmt->rowCount() == 0) {
                 throw new \Exception('There was an unexpected error trying to delete record from words table.');

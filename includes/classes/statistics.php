@@ -59,9 +59,13 @@ class Statistics extends DBEntity {
 
         // get how many words acquired "learning" status in each of the last $days
         for ($i=$days; $i >= 0; $i--) { 
-            $sql = "SELECT COUNT(word) AS `learning` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=1 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY";
+            $sql = "SELECT SUM(learning) learning
+                    FROM
+                    (SELECT COUNT(word) AS `learning` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=1 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY
+                    UNION ALL
+                    SELECT COUNT(word) AS `learning` FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `status`=2 AND `date_modified` > `date_created` AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY AND `date_modified` > CURDATE() - INTERVAL ? DAY) s";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
+            $stmt->execute([$this->user_id, $this->lang_id, $i, $i, $this->user_id, $this->lang_id, $i, $i]);
             $row = $stmt->fetch();
             $stats['learning'][] = $row['learning'];
         }

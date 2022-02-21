@@ -98,6 +98,7 @@ $streak_days = (int)$gems->getDaysStreak();
                                 <a href="sharedtexts.php" class="dropdown-item">Shared texts</a>
                                 <a href="sources.php" class="dropdown-item">Popular sources</a>
                                 <a href="words.php" class="dropdown-item">Word list</a>
+                                <a href="cards.php" class="dropdown-item">Practice cards</a>
                                 <a href="stats.php" class="dropdown-item">Statistics</a>
                                 <div class="dropdown-divider"></div>
                                 <div class="dropdown-header">

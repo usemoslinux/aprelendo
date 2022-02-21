@@ -1509,3 +1509,10 @@ small>a:not(.btn):hover {
         height: 26px;
     }
 }
+
+/* CARDS */
+
+.card-text p:not(:last-child) {
+    border-bottom: solid 1px lightgrey;
+    padding-bottom: .5rem;
+}
