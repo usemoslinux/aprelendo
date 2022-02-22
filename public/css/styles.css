@@ -1516,3 +1516,7 @@ small>a:not(.btn):hover {
     border-bottom: solid 1px lightgrey;
     padding-bottom: .5rem;
 }
+
+#card-text p {
+    font-size: 1.5em;
+}

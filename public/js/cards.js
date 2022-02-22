@@ -157,7 +157,7 @@ $(document).ready(function() {
                 $("#card").data('word', word);
                 $("#card-loader").addClass('d-none');
                 $("#card-counter").text((cur_card_index+1) + "/" + max_cards);
-                $("#card-header").html("<b class='display-4'>" + word + "</b>");
+                $("#card-header").html("<h3 class='m-0'>" + word + "</h3>");
                 $("#card-text").append(decodeEntities(examples));
                 $(".btn-remember").prop('disabled', false);
                 cur_word_index++;
