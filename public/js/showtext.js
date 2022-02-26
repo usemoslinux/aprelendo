@@ -688,7 +688,7 @@ $(document).ready(function() {
 
                 $msg_phase
                     .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>spacebar</kbd> (or <kbd>Shift + spacebar</kbd> if the expression to write in the input box contains spaces). To rewind or fast-forward 1 second, use <kbd>1</kbd> and <kbd>2</kbd>.</span>'
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>spacebar</kbd> (or <kbd>Shift + spacebar</kbd> if the expression to write in the input box contains spaces). To rewind or fast-forward 1 second, use <kbd>,</kbd> and <kbd>.</kbd>. For the moment, these shortcuts work only on desktop devices.</span>'
                     );
 
                 toggleDictation();
@@ -1003,30 +1003,34 @@ $(document).ready(function() {
      * Implements shortcuts for dictation
      */
     $("body").on("keydown", ".dict", function(e) {
-        var key = e.code;
+        var keyCode = e.keyCode || e.which;
+        
+        // IME on mobile devices may not return correct keyCode
+        if (keyCode == 0 || keyCode == 229) { 
+            return;
+        }
+
         var shifted = e.shiftKey;
         var curTime = $("#audioplayer")[0].currentTime;
 
         // if space is pressed, toggle audio; if arrow up or "1", rewind 5 secs; 
         // if arrow down or "2" fast-forward 5 secs; if backspace, move focus to previous input
-        switch (key) {
-            
-            case "Space":
+        switch (keyCode) {
+            case 32: // space
                 // only toggle audio playback if word/phrase does not have spaces 
                 // or if shift key is pressed
                 if ($(this).data("text").indexOf(" ") > 0 && !shifted) {
                     break; // write space
                 }
-
                 toggleAudio();   
                 return false; // don't write space
-            case "Digit1":
+            case 188: // comma
                 $("#audioplayer")[0].currentTime = curTime - 1;
                 return false; // pretend key was not pressed
-            case "Digit2":
+            case 190: // dot
                 $("#audioplayer")[0].currentTime = curTime + 1;
                 return false; // pretend key was not pressed
-            case "Backspace":
+            case 8: // backspace
                 if (!$(this).val()) {
                     var index = $(".dict").index(this) - 1;
                     $(".dict")
