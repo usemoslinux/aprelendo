@@ -124,8 +124,16 @@ $(document).ready(function() {
                 const word_regex = new RegExp('(?<![\\p{L}|\\d])' + word + '(?![\\p{L}|\\d])', 'gmiu');
 
                 data.forEach(text => {                   
-                    // remove html tags from text, if any
-                    sentence = text.text.replace(new RegExp('<[^>]*>', 'g'), '');
+                    // check is text is xml. If true, remove tags and decode html char codes
+                    if (isValidXML(text.text)) {
+                        sentence = text.text.replace(new RegExp('<[^>]*>|\\s\\s+', 'g'), ' ');
+
+                        const decodeHtmlCharCodes = str => 
+                            str.replace(/(&#(\d+);)/g, (match, capture, charCode) => 
+                                String.fromCharCode(charCode));
+
+                        decodeHtmlCharCodes(sentence);
+                    }
 
                     // extract example sentences from text
                     while ((m = sentence_regex.exec(sentence)) !== null) {
@@ -137,7 +145,7 @@ $(document).ready(function() {
                         // create html for each example sentence
                         m.forEach((match, groupIndex) => {
                             match = match.replace(word_regex, function(match, g1) {
-                                return g1 === undefined ? match : "<span class='word font-weight-bold'>" + match + "</span>";
+                                return g1 === undefined ? match : "<span class='word font-weight-bold'>" + match.replace(new RegExp('\\s\\s+', 'g'), ' ') + "</span>";
                             });
                             // make sure example sentence is unique, then add to the list
                             examples += examples.search(match) > 0 ? "" : "<p>" + match + "</p>\n";
@@ -158,7 +166,7 @@ $(document).ready(function() {
                 $("#card-loader").addClass('d-none');
                 $("#card-counter").text((cur_card_index+1) + "/" + max_cards);
                 $("#card-header").html("<h3 class='m-0'>" + word + "</h3>");
-                $("#card-text").append(decodeEntities(examples));
+                $("#card-text").append(examples);
                 $(".btn-remember").prop('disabled', false);
                 cur_word_index++;
                 cur_card_index++;
@@ -166,6 +174,20 @@ $(document).ready(function() {
             .fail(function(xhr, ajaxOptions, thrownError) {
                 showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.", "alert-danger");
             }); // end $.ajax
+    }
+
+    function isValidXML(xml) {
+        try {
+            if (xml !== "") {   
+                let parser = new DOMParser;
+                let xmlDoc = parser.parseFromString(xml, 'text/xml');
+                return true;
+            } else {
+                return false;
+            } 
+        } catch (error) {
+            return false;
+        }
     }
 
     /**
@@ -193,11 +215,11 @@ $(document).ready(function() {
     /**
      * Decodes HTML entities, this should be XSS safe
      */
-    function decodeEntities(encodedString) {
-        var textArea = document.createElement('textarea');
-        textArea.innerHTML = encodedString;
-        return textArea.value;
-    }
+    // function decodeEntities(encodedString) {
+    //     var textArea = document.createElement('textarea');
+    //     textArea.innerHTML = encodedString;
+    //     return textArea.value;
+    // }
 
     /**
      * Open dictionary modal
