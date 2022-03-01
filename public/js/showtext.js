@@ -1035,6 +1035,10 @@ $(document).ready(function() {
                         .focus();    
                 }
                 break;
+            case 32: // space
+                if ($(this).data("text").indexOf(" ") > 0) {
+                    return;
+                }
             case 49: // 1
                 $("#audioplayer")[0].currentTime = curTime - 1;
                 break;
