@@ -145,7 +145,7 @@ $(document).ready(function() {
                         // create html for each example sentence
                         m.forEach((match, groupIndex) => {
                             match = match.replace(word_regex, function(match, g1) {
-                                return g1 === undefined ? match : "<span class='word font-weight-bold'>" + match.replace(new RegExp('\\s\\s+', 'g'), ' ') + "</span>";
+                                return g1 === undefined ? match : "<a class='word font-weight-bold'>" + match.replace(new RegExp('\\s\\s+', 'g'), ' ') + "</a>";
                             });
                             // make sure example sentence is unique, then add to the list
                             examples += examples.search(match) > 0 ? "" : "<p>" + match + "</p>\n";

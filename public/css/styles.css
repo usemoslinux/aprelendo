@@ -803,22 +803,18 @@ a[role="menuitem"] {
 	user-select: none;
 }
 
-.word:not(.word-list):hover{
+.lightmode .word:hover,
+.darkmode .word:hover,
+.lightmode .highlighted,
+.darkmode .highlighted {
     background-color: #e8e8e8;
     color: #333;
 }
 
-.highlighted {
-    background-color: #e8e8e8;
-}
-
-.darkmode .highlighted {
-    color: dimgray !important;
-    background-color: whitesmoke !important;
-}
-
+.sepiamode .word:hover,
 .sepiamode .highlighted {
-    background-color: ghostwhite !important;
+    background-color: rosybrown;
+    color: #333;
 }
 
 .reviewing {
