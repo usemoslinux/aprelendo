@@ -688,7 +688,7 @@ $(document).ready(function() {
 
                 $msg_phase
                     .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>spacebar</kbd> (or <kbd>Shift + spacebar</kbd> if the expression to write in the input box contains spaces). To rewind or fast-forward 1 second, use <kbd>,</kbd> and <kbd>.</kbd>. For the moment, these shortcuts work only on desktop devices.</span>'
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>2</kbd>. To rewind or fast-forward 1 second, use <kbd>1</kbd> and <kbd>2</kbd>.</span>'
                     );
 
                 toggleDictation();
@@ -986,53 +986,22 @@ $(document).ready(function() {
     }); // end .dict.on.blur
 
     /**
-     * Jumps to next input when input's maxlength is reached
-     */
-    $("body").on("input", ".dict", function() {
-        var maxLength = $(this).attr("maxlength");
-        // if maxlength reached, switch focus to next input
-        if(maxLength == $(this).val().length) {
-            var index = $(".dict").index(this) + 1;
-            $(".dict")
-                .eq(index)
-                .focus();
-        }
-    }); // end .dict.on.input
-
-    /**
      * Implements shortcuts for dictation
      */
     $("body").on("keydown", ".dict", function(e) {
         var keyCode = e.keyCode || e.which;
         
         // IME on mobile devices may not return correct keyCode
-        if (keyCode == 0 || keyCode == 229) { 
+        if (e.isComposing || keyCode == 0 || keyCode == 229) { 
             return;
         }
 
-        var shifted = e.shiftKey;
-        var curTime = $("#audioplayer")[0].currentTime;
-
-        // if space is pressed, toggle audio; if arrow up or "1", rewind 5 secs; 
-        // if arrow down or "2" fast-forward 5 secs; if backspace, move focus to previous input
+        // if backspace, move focus to previous input
         switch (keyCode) {
-            case 32: // space
-                // only toggle audio playback if word/phrase does not have spaces 
-                // or if shift key is pressed
-                if ($(this).data("text").indexOf(" ") > 0 && !shifted) {
-                    break; // write space
-                }
-                toggleAudio();   
-                return false; // don't write space
-            case 188: // comma
-                $("#audioplayer")[0].currentTime = curTime - 1;
-                return false; // pretend key was not pressed
-            case 190: // dot
-                $("#audioplayer")[0].currentTime = curTime + 1;
-                return false; // pretend key was not pressed
             case 8: // backspace
                 if (!$(this).val()) {
                     var index = $(".dict").index(this) - 1;
+                    e.preventDefault();
                     $(".dict")
                         .eq(index)
                         .focus();    
@@ -1042,6 +1011,52 @@ $(document).ready(function() {
                 break;
         }
     }); // end .dict.on.keydown
+
+    /**
+     * Implements shortcuts for dictation
+     */
+    $("body").on("input", ".dict", function(e) {
+        var keyCode = e.keyCode || e.which;
+        var maxLength = $(this).attr("maxlength");
+        var curTime = $("#audioplayer")[0].currentTime;
+
+        // make sure keycode is correct (fix for IME on mobile devices)
+        if (keyCode == 0 || keyCode == 229) { 
+            keyCode = e.target.value.charAt(e.target.selectionStart - 1).charCodeAt();             
+        }
+
+        // if "1", rewind 1 sec; if "2", toggle audio; if "3" fast-forward 1 sec
+        switch (keyCode) {
+            case 8: // backspace
+                if (!$(this).val()) {
+                    var index = $(".dict").index(this) - 1;
+                    $(".dict")
+                        .eq(index)
+                        .focus();    
+                }
+                break;
+            case 49: // 1
+                $("#audioplayer")[0].currentTime = curTime - 1;
+                break;
+            case 50: // 2
+                toggleAudio();   
+                break;
+            case 51: // 3
+                $("#audioplayer")[0].currentTime = curTime + 1;
+                break;
+            default:
+                break;
+        }
+        $(this).val($(this).val().replace(/[0-9]|\s/gi, '')); // don't allow digits or spaces to get printed
+
+        // if maxlength reached, switch focus to next input
+        if(maxLength == $(this).val().length) {
+            var index = $(".dict").index(this) + 1;
+            $(".dict")
+                .eq(index)
+                .focus();
+        }
+    }); // end .dict.on.input
 
     /**
      * Tries to reload audio
