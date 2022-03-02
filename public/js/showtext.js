@@ -1051,7 +1051,7 @@ $(document).ready(function() {
             default:
                 break;
         }
-        $(this).val($(this).val().replace(/[0-9]|\s/gi, '')); // don't allow digits or spaces to get printed
+        $(this).val($(this).val().replace(/[0-9]/gi, '').trimEnd()); // don't allow digits or spaces to get printed
 
         // if maxlength reached, switch focus to next input
         if(maxLength == $(this).val().length) {
