@@ -688,7 +688,7 @@ $(document).ready(function() {
 
                 $msg_phase
                     .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>2</kbd>. To rewind or fast-forward 1 second, use <kbd>1</kbd> and <kbd>2</kbd>.</span>'
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>2</kbd>. To rewind or fast-forward 1 second, use <kbd>1</kbd> and <kbd>3</kbd>.</span>'
                     );
 
                 toggleDictation();
@@ -1035,10 +1035,6 @@ $(document).ready(function() {
                         .focus();    
                 }
                 break;
-            case 32: // space
-                if ($(this).data("text").indexOf(" ") > 0) {
-                    return;
-                }
             case 49: // 1
                 $("#audioplayer")[0].currentTime = curTime - 1;
                 break;
