@@ -57,17 +57,11 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                         <div>
                             <select name="fontfamily" id="fontfamily" class="form-control custom-select"
                                 autocomplete="off">
-                                <option value="Helvetica"
-                                    <?php echo $font_family == 'Helvetica' ? ' selected ' : ''; ?>>Helvetica</option>
-                                <option value="Open Sans"
-                                    <?php echo $font_family == 'Open Sans' ? ' selected ' : ''; ?>>Open Sans</option>
-                                <option value="Times New Roman"
-                                    <?php echo $font_family == 'Times New Roman' ? ' selected ' : ''; ?>>Times New Roman
-                                </option>
-                                <option value="Georgia" <?php echo $font_family == 'Georgia' ? ' selected ' : ''; ?>>
-                                    Georgia</option>
-                                <option value="Roboto" <?php echo $font_family == 'Roboto' ? ' selected ' : ''; ?>>
-                                    Roboto</option>
+                                <option value="Arial, sans-serif" <?php echo $font_family=='Arial' ? ' selected ' : ''; ?>>Arial</option>
+                                <option value="Courier, monospace" <?php echo $font_family=='Courier' ? ' selected ' : ''; ?>>Courier</option>
+                                <option value="Georgia, Times, serif" <?php echo $font_family=='Georgia' ? ' selected ' : ''; ?>>Georgia</option>
+                                <option value="Roboto, sans-serif" <?php echo $font_family=='Roboto' ? ' selected ' : ''; ?>>Roboto</option>
+                                <option value="Times New Roman, Times, serif" <?php echo $font_family=='Times New Roman' ? ' selected ' : ''; ?>>Times New Roman</option>
                             </select>
                         </div>
                     </div>

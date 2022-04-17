@@ -587,6 +587,7 @@ ol {
 .alert {
     padding: 20px;
     border-left: 3px solid #eee;
+    font-family: "Roboto", sans-serif;
 }
 
 .alert p:last-child {

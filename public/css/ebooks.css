@@ -260,12 +260,8 @@ body {
     margin: 0;
     padding: 0;
     background: #fafafa;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Roboto", Arial, Helvetica, sans-serif;
     color: #333;
-    /* position: absolute;
-    height: 100%;
-    width: 100%;
-    min-height: 800px; */
 }
 
 pre {
