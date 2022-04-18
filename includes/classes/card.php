@@ -71,7 +71,8 @@ class Card
     } // end getAllWordsUserIsLearning()
 
     /**
-     * Gets example sentences in user texts (both active and archived) and shared texts
+     * Gets example sentences in texts (both active and archived) and shared texts
+     * To improve results, it includes all texts in the db, not only those uploaded by user
      *
      * @param string $word
      * @return array
@@ -92,7 +93,7 @@ class Card
                 (SELECT shared_texts.text
                 FROM shared_texts
                 LEFT JOIN languages ON languages.id = shared_texts.lang_id
-                WHERE languages.name = '{$this->lang_iso}' AND shared_texts.text regexp \"(^|[[:punct:]]|[[:space:]])$word([[:space:]]|[[:punct:]]|$)\"
+                WHERE languages.name = '{$this->lang_iso}' AND type <> 5 AND shared_texts.text regexp \"(^|[[:punct:]]|[[:space:]])$word([[:space:]]|[[:punct:]]|$)\"
                 LIMIT 1)";
 
         try {

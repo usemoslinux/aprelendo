@@ -124,19 +124,8 @@ $(document).ready(function() {
                 const word_regex = new RegExp('(?<![\\p{L}|\\d])' + word + '(?![\\p{L}|\\d])', 'gmiu');
 
                 data.forEach(text => {                   
-                    // check is text is xml. If true, remove tags and decode html char codes
-                    if (isValidXML(text.text)) {
-                        sentence = text.text.replace(new RegExp('<[^>]*>|\\s\\s+', 'g'), ' ');
-
-                        const decodeHtmlCharCodes = str => 
-                            str.replace(/(&#(\d+);)/g, (match, capture, charCode) => 
-                                String.fromCharCode(charCode));
-
-                        decodeHtmlCharCodes(sentence);
-                    }
-
                     // extract example sentences from text
-                    while ((m = sentence_regex.exec(sentence)) !== null) {
+                    while ((m = sentence_regex.exec(text.text)) !== null) {
                         // This is necessary to avoid infinite loops with zero-width matches
                         if (m.index === sentence_regex.lastIndex) {
                             sentence_regex.lastIndex++;
@@ -174,20 +163,6 @@ $(document).ready(function() {
             .fail(function(xhr, ajaxOptions, thrownError) {
                 showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.", "alert-danger");
             }); // end $.ajax
-    }
-
-    function isValidXML(xml) {
-        try {
-            if (xml !== "") {   
-                let parser = new DOMParser;
-                let xmlDoc = parser.parseFromString(xml, 'text/xml');
-                return true;
-            } else {
-                return false;
-            } 
-        } catch (error) {
-            return false;
-        }
     }
 
     /**
