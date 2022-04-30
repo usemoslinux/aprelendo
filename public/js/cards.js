@@ -132,7 +132,7 @@ $(document).ready(function() {
                         }
                         
                         if (examples_count < 3) {
-                            // create html for each example sentence, max 5 examples
+                            // create html for each example sentence, max 3 examples
                             m.forEach((match, groupIndex) => {
                                 match = match.replace(word_regex, function(match, g1) {
                                     return g1 === undefined ? match : "<a class='word font-weight-bold'>" + match.replace(new RegExp('\\s\\s+', 'g'), ' ') + "</a>";
