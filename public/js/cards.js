@@ -131,7 +131,7 @@ $(document).ready(function() {
                             sentence_regex.lastIndex++;
                         }
                         
-                        if (examples_count < 6) {
+                        if (examples_count < 3) {
                             // create html for each example sentence, max 5 examples
                             m.forEach((match, groupIndex) => {
                                 match = match.replace(word_regex, function(match, g1) {
