@@ -85,28 +85,35 @@ $(document).ready(function() {
      * Checks how many characters are left for user input
      */
     $("#text").on("input", function() {
-        var $textarea = $(this);
-        var $span_chars_left = $("#span-chars-left");
-        var chars_left = 10000 - $textarea.val().length;
-        var msg_text = chars_left < 0 ? " chars over maximum" : " left";
-
-        if (chars_left < 0) {
-            $span_chars_left
-                .removeClass("text-success")
-                .addClass("text-danger");
-            $span_chars_left.text(
-                chars_left.toLocaleString() + " over maximum"
-            );
-        } else {
-            $span_chars_left
-                .removeClass("text-danger")
-                .addClass("text-success");
-            $span_chars_left.text(chars_left.toLocaleString() + " left");
-        }
+        updateCharsLeft();
     }); // end #text.on.input
 
     /**
-     * Checks if the text file being uploaded is bigger than the allowed limit
+     * Tells user how many characters are left in message box
+     */
+    function updateCharsLeft() {
+        const MAX_CHARS = 10000;
+        var $textarea = $("#text");
+        var $msg_box = $("#span-chars-left");
+        var chars_left = MAX_CHARS - $textarea.val().length;
+
+        if (chars_left < 0) {
+            $msg_box
+                .removeClass("text-success")
+                .addClass("text-danger");
+            $msg_box.html(
+                chars_left.toLocaleString() + " for Text-to-Speech (TTS) Support"
+            );
+        } else {
+            $msg_box
+                .removeClass("text-danger")
+                .addClass("text-success");
+            $msg_box.text(chars_left.toLocaleString() + " left");
+        }
+    } // end updateCharsLeft()
+
+    /**
+     * Inserts text from file in textarea
      * This is triggered when the user clicks the "upload" text button
      */
     $("#upload-text").on("change", function() {
@@ -114,16 +121,11 @@ $(document).ready(function() {
         var reader = new FileReader();
         reader.onload = function(e) {
             var text = e.target.result;
-            if (text.length > 10000) {
-                showMessage(
-                    "This file has more than 10,000 characters. Please try again with a shorter one.",
-                    "alert-danger"
-                );
-            } else {
-                $("#text").val($.trim(text));
-            }
+            $("#text").val($.trim(text));
+            updateCharsLeft();
         };
         reader.readAsText(file);
+        $(this).val(""); // reset value, allows user to select same file if necessary
     }); // end #upload-text.on.change
 
     /**
@@ -205,15 +207,27 @@ $(document).ready(function() {
         }
     } // end fetch_url
 
+    /**
+     * Fetch text from URL
+     * This is triggered when user clicks the Fetch button
+     */
     $("#btn-fetch").on("click", function(e) {
         fetch_url($("#url").val());
     });
 
+    /**
+     * Automatically fetch text from URL
+     * This is triggered when user pastes a URL 
+     */
     $("#url").on("paste", function(e) {
         var pastedData = e.originalEvent.clipboardData.getData('text');
         fetch_url(pastedData);
     });
 
+    /**
+     * Resets control values, i.e. empty form
+     * @param {string} exceptSourceURI 
+     */
     function resetControls(exceptSourceURI) {
         $("#alert-msg").addClass("d-none");
         $("#type").prop("selectedIndex", 0);

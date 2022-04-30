@@ -349,7 +349,6 @@ body.blue-gradient-wallpaper .navbar-light {
 .btn-success:hover {
     color: #fff;
     background-color: #1D7C30;
-    border-color: #1e7e34;
 }
 
 .btn-primary {
@@ -361,7 +360,6 @@ body.blue-gradient-wallpaper .navbar-light {
 .btn-primary:hover {
     color: #fff;
     background-color: #0062CC;
-    border-color: #007bff;
 }
 
 .btn-danger {
@@ -373,7 +371,6 @@ body.blue-gradient-wallpaper .navbar-light {
 .btn-danger:hover {
     color: #fff;
     background-color: #B01C2C;
-    border-color: #bd2130;
 }
 
 .breadcrumb {

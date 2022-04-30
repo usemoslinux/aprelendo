@@ -69,15 +69,11 @@ try {
                 Only videos with subtitles in your target language are supported.</li>";
             }
             
-            /*  Check if text is longer than the max. number of chars allowed, ignore if video
-                For some reason new lines on the client side are counted by Jquery/JS as '\n', 
+            /*  For some reason new lines on the client side are counted by Jquery/JS as '\n', 
                 but on the server side the $_POST variable gets '\r\n' instead. 
                 To make them both compatible, we need to eliminate all instances of '\r' */
             if ($_POST['mode'] == 'simple') {
                 $text = preg_replace('/\r/m', '', $text);
-                if (mb_strlen($text) > 10000) {
-                    $errors[] = "<li>Maximum supported text length is 10,000 characters.</li>";
-                }
             }
             
             // save text in db
@@ -115,14 +111,10 @@ try {
             $type = 1; // article (assumes that all rss texts are articles)
             $text = $_POST['text'];
             
-            /*  Check if text is longer than the max. number of chars allowed, ignore if video
-            For some reason new lines on the client side are counted by Jquery/JS as '\n', 
+            /*  For some reason new lines on the client side are counted by Jquery/JS as '\n', 
             but on the server side the $_POST variable gets '\r\n' instead. 
             To make them both compatible, we need to eliminate all instances of '\r' */
             $text = preg_replace('/\r/m', '', $text);
-            if (mb_strlen($text) > 10000) {
-                throw new \Exception("Maximum supported text length is 10,000 characters.");
-            }
 
             $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
 

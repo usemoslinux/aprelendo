@@ -62,11 +62,11 @@ $assisted_learning = $prefs->getAssistedLearning();
                                             <label for="fontfamily">Font Family:</label>
                                             <div>
                                                 <select name="fontfamily" id="fontfamily" class="form-control custom-select" autocomplete="off">
-                                                    <option value="Arial, sans-serif" <?php echo $font_family=='Arial' ? ' selected ' : ''; ?>>Arial</option>
-                                                    <option value="Courier, monospace" <?php echo $font_family=='Courier' ? ' selected ' : ''; ?>>Courier</option>
-                                                    <option value="Georgia, Times, serif" <?php echo $font_family=='Georgia' ? ' selected ' : ''; ?>>Georgia</option>
-                                                    <option value="Roboto, sans-serif" <?php echo $font_family=='Roboto' ? ' selected ' : ''; ?>>Roboto</option>
-                                                    <option value="Times New Roman, Times, serif" <?php echo $font_family=='Times New Roman' ? ' selected ' : ''; ?>>Times New Roman</option>
+                                                    <option value="Arial, sans-serif" <?php echo $font_family=='Arial, sans-serif' ? ' selected ' : ''; ?>>Arial</option>
+                                                    <option value="Courier, monospace" <?php echo $font_family=='Courier, monospace' ? ' selected ' : ''; ?>>Courier</option>
+                                                    <option value="Georgia, serif" <?php echo $font_family=='Georgia, serif' ? ' selected ' : ''; ?>>Georgia</option>
+                                                    <option value="Roboto, sans-serif" <?php echo $font_family=='Roboto, sans-serif' ? ' selected ' : ''; ?>>Roboto</option>
+                                                    <option value="Times New Roman, serif" <?php echo $font_family=='Times New Roman, serif' ? ' selected ' : ''; ?>>Times New Roman</option>
                                                 </select>
                                             </div>
                                         </div>

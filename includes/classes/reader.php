@@ -40,6 +40,8 @@ class Text
     protected $word_count = 0;
     protected $level      = 0;
     protected $is_shared  = false;
+    protected $is_long_text = false;
+    private const MAX_TEXT_LENGTH = 10000;
     
     /**
      * Constructor
@@ -69,6 +71,7 @@ class Text
             $this->title        = $row['title'];
             $this->author       = $row['author'];
             $this->source_uri   = $row['source_uri'];
+            $this->is_long_text = mb_strlen($this->text) > self::MAX_TEXT_LENGTH;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         } finally {
@@ -161,6 +164,13 @@ class Text
     public function getIsShared(): bool {
         return $this->is_shared;
     } // end getIsShared()
+
+    /**
+     * Get the value of is_long_text
+     */ 
+    public function getIsLongText(): bool {
+        return $this->is_long_text;
+    } // end getIsLongText()
 }
 
 class Reader extends Text
@@ -269,7 +279,8 @@ class Reader extends Text
      * @return string
      */
     public function showText(): string {
-        $html = '<div id="text-container" class="my-3" data-type="text" data-textID="' . $this->id . '" data-assisted-learning="' . $this->prefs->getAssistedLearning() . '">';
+        $html = '<div id="text-container" class="my-3" data-type="text" data-textID="' . $this->id . '" data-assisted-learning="' . 
+        (int)$this->prefs->getAssistedLearning() . '" data-is-long-text="' . (int)$this->is_long_text . '">';
         
         // display source, if available
         if (!empty($this->source_uri)) {
@@ -283,38 +294,38 @@ class Reader extends Text
             $html .= '<div class="author">' . $this->author . '</div>';
         }
        
-        // display audio player
-        $html .= '<hr>';
+        if ($this->prefs->getAssistedLearning() && !$this->getIsLongText()) {
+            // display audio player
+            $html .= '<hr>';
 
-        $html .=   '<div id="alert-msg-audio" class="alert alert-danger d-none"></div>';
+            $html .=   '<div id="alert-msg-audio" class="alert alert-danger d-none"></div>';
 
-        $html .=   '<div id="audioplayer-loader" class="lds-facebook mx-auto" title="Loading audio...">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>';
-
-        $display_mode_css = $this->prefs->getDisplayMode() . 'mode';
-
-        $html .=   '<div id="audioplayer-container" class="' . $display_mode_css . '">' .
-                        '<audio controls id="audioplayer" class="d-none">
-                                <source id="audio-mp3" src="" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                            <form id="audioplayer-speedbar" class="d-none">
-                                <div id="audioplayer-speedbar-container">
-                                    <label id="label-speed" class="basic" for="range-speed">Speed: <span id="currentpbr">1.0</span> x</label>
-                                    <input id="range-speed" type="range" class="custom-range" value="1" min="0.5" max="2" step="0.1">
-                                    <label id="label-abloop" class="px-1 basic">A-B Loop:</label>
-                                    <button id="btn-abloop" class="btn btn-outline-secondary btn-sm" title="Toggle A-B Loop">A</button>
-                                </div>
-                            </form>
+            $html .=   '<div id="audioplayer-loader" class="lds-facebook mx-auto" title="Loading audio...">
+                            <div></div>
+                            <div></div>
+                            <div></div>
                         </div>';
-        
-        $html .= '<hr>';
-        
-        // display assisted learning message
-        if ($this->prefs->getAssistedLearning()) {
+
+            $display_mode_css = $this->prefs->getDisplayMode() . 'mode';
+
+            $html .=   '<div id="audioplayer-container" class="' . $display_mode_css . '">' .
+                            '<audio controls id="audioplayer" class="d-none">
+                                    <source id="audio-mp3" src="" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                                <form id="audioplayer-speedbar" class="d-none">
+                                    <div id="audioplayer-speedbar-container">
+                                        <label id="label-speed" class="basic" for="range-speed">Speed: <span id="currentpbr">1.0</span> x</label>
+                                        <input id="range-speed" type="range" class="custom-range" value="1" min="0.5" max="2" step="0.1">
+                                        <label id="label-abloop" class="px-1 basic">A-B Loop:</label>
+                                        <button id="btn-abloop" class="btn btn-outline-secondary btn-sm" title="Toggle A-B Loop">A</button>
+                                    </div>
+                                </form>
+                            </div>';
+            
+            $html .= '<hr>';
+            
+            // display assisted learning message
             $html .=   '<div id="alert-msg-phase" class="alert alert-info alert-dismissible show" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>

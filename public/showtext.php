@@ -35,6 +35,7 @@ try {
         }
 
         $reader = new Reader($pdo, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
+        $is_long_text = $reader->getIsLongText();
         $prefs = $reader->getPrefs();
 
         switch ($prefs->getDisplayMode()) {
@@ -53,6 +54,7 @@ try {
         $font_family = $prefs->getFontFamily();
         $font_size = $prefs->getFontSize();
         $text_align = $prefs->getTextAlignment();
+        $assisted_learning = $prefs->getAssistedLearning();
         
         $html .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
@@ -80,7 +82,8 @@ require_once PUBLIC_PATH . 'head.php';
                             <i class="fas fa-headphones"></i>
                         </button>
                         
-                        <button id="<?php echo $prefs->getAssistedLearning() ? 'btn-next-phase' : 'btn-save-text'; ?>" type="button" class="btn btn-sm btn-success d-block mt-2" title="Go to phase 2: Listening">
+                        <button id="<?php echo $assisted_learning && !$is_long_text ? 'btn-next-phase' : 'btn-save-text'; ?>"             type="button" class="btn btn-sm btn-success d-block mt-2" 
+                        title="<?php echo $assisted_learning && !$is_long_text ? 'Go to phase 2: Listening' : 'Save'; ?>">
                             <i class="fas fa-chevron-circle-right"></i>
                         </button>
                     </div>

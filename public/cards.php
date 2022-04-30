@@ -76,6 +76,6 @@ require_once PUBLIC_PATH . 'header.php';
 require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
 
 ?>
-<script defer src="js/cards.js"></script>
+<script defer src="js/cards-min.js"></script>
 
 <?php require_once 'footer.php' ?>
