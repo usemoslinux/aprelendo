@@ -115,7 +115,7 @@ $(document).ready(function() {
             .done(function(data) {
                 // alert(data);
                 var examples = "";
-                var sentence = "";
+                var examples_count = 0;
                 // old sentence_regex '[^\\n.?!]*(?<=[.?\s!])' + word + '(?=[\\s.?!])[^\\n.?!]*[.?!\\n)]',
                 const sentence_regex = new RegExp(
                                     '[^\\n.?!]*(?<![\\p{L}])' + word + '(?![\\p{L}])[^\\n.?!]*[.?!\\n)]',
@@ -131,14 +131,17 @@ $(document).ready(function() {
                             sentence_regex.lastIndex++;
                         }
                         
-                        // create html for each example sentence
-                        m.forEach((match, groupIndex) => {
-                            match = match.replace(word_regex, function(match, g1) {
-                                return g1 === undefined ? match : "<a class='word font-weight-bold'>" + match.replace(new RegExp('\\s\\s+', 'g'), ' ') + "</a>";
+                        if (examples_count < 6) {
+                            // create html for each example sentence, max 5 examples
+                            m.forEach((match, groupIndex) => {
+                                match = match.replace(word_regex, function(match, g1) {
+                                    return g1 === undefined ? match : "<a class='word font-weight-bold'>" + match.replace(new RegExp('\\s\\s+', 'g'), ' ') + "</a>";
+                                });
+                                // make sure example sentence is unique, then add to the list
+                                examples += examples.search(match) > 0 ? "" : "<p>" + match + "</p>\n";
+                                examples_count++;
                             });
-                            // make sure example sentence is unique, then add to the list
-                            examples += examples.search(match) > 0 ? "" : "<p>" + match + "</p>\n";
-                        });
+                        }
                     }
                 });
 
