@@ -138,7 +138,7 @@ $(document).ready(function() {
                                     return g1 === undefined ? match : "<a class='word font-weight-bold'>" + match.replace(new RegExp('\\s\\s+', 'g'), ' ') + "</a>";
                                 });
                                 // make sure example sentence is unique, then add to the list
-                                examples += examples.search(match) > 0 ? "" : "<p>" + match + "</p>\n";
+                                examples += examples.search(escapeRegex(match)) > 0 ? "" : "<p>" + match + "</p>\n";
                                 examples_count++;
                             });
                         }
@@ -166,6 +166,13 @@ $(document).ready(function() {
             .fail(function(xhr, ajaxOptions, thrownError) {
                 showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.", "alert-danger");
             }); // end $.ajax
+    }
+
+    /**
+     * Escapes regex strings
+     */
+    function escapeRegex(str) {
+        return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     }
 
     /**
