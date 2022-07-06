@@ -240,10 +240,17 @@ $(document).ready(function() {
      * Workaround to allow closing modal with back button 
      */
     $(window).on('hashchange', function (event) {
-        if(window.location.hash != "#dictionary") {
+        if (window.location.hash != "#dictionary") {
             $('#myModal').modal('hide');
         }
     }); // end of window.on.hashchange
+
+    /**
+     * When modal closes, remove hash from URL
+     */
+     $('#myModal').on('hide.bs.modal', function (event) {
+        history.pushState("", document.title, window.location.pathname + window.location.search);
+    });
 
     /**
      * Hides loader spinner when dictionary iframe finished loading

@@ -61,4 +61,11 @@ $(document).ready(function() {
         }
     }); // end of window.on.hashchange
 
+    /**
+     * When modal closes, remove hash from URL
+     */
+     $('#reader-settings-modal').on('hide.bs.modal', function (event) {
+        history.pushState("", document.title, window.location.pathname + window.location.search);
+    });
+
 });
