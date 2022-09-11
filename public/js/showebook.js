@@ -128,7 +128,7 @@
     );
 
     $("body").on("click", "#btn-close-ebook", function() {
-        window.location.replace("texts.php");
+        window.location.replace("/texts.php");
     }); // end #btn-close-ebook.on.click
 
     /**
