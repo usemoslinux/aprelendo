@@ -101,7 +101,9 @@
         function(e) {
             e.preventDefault();
             $.when(SaveWords()).then(function() {
-                var url = next.href.substr(next.href.indexOf('/', 8) + 1);
+                var url = next.href.substr(next.href.indexOf('/', 8) + 1); // remove domain name from url
+                url = url.replace(/OEBPS\//i, ""); // workaround to fix link url in some ebooks
+                // alert(url);
                 display(url);
                 $("html, body").animate({
                     scrollTop: 0
@@ -117,7 +119,9 @@
         function(e) {
             e.preventDefault();
             $.when(SaveWords()).then(function() {
-                var url = prev.href.substr(prev.href.indexOf('/', 8) + 1);
+                var url = prev.href.substr(prev.href.indexOf('/', 8) + 1); // remove domain name from url
+                url = url.replace(/OEBPS\//i, ""); // workaround to fix link url in some ebooks
+                // alert(url);
                 display(url);
                 $("html, body").animate({
                     scrollTop: 0
@@ -210,6 +214,7 @@
 
                 link.onclick = function() {
                     var url = link.getAttribute("href");
+                    alert(url);
                     display(url);
                     opener.click();
                     $("html, body").animate({
@@ -258,10 +263,6 @@
           section.render().then(function(ebook_html){
             var $parsed = $('<div/>').append(ebook_html);
             $parsed.find('*').removeAttr("class").removeAttr("style");
-            // $parsed.find("div").each(function(index, element){
-            //     var $elem = $(element);
-            //     $elem.replaceWith('<p>' + $elem.text() + '</p>')
-            // });
 
             // underline text
             $(".loading-spinner").fadeIn(1000);

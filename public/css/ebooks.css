@@ -19,7 +19,7 @@
 
 /* ARROWS (NEXT & PREVIOUS) */
 .navlink {
-    margin: 50px;
+    padding: 50px;
     display: block;
     text-align: center;
     text-decoration: none;
