@@ -103,7 +103,6 @@
             $.when(SaveWords()).then(function() {
                 var url = next.href.substr(next.href.indexOf('/', 8) + 1); // remove domain name from url
                 url = url.replace(/OEBPS\//i, ""); // workaround to fix link url in some ebooks
-                // alert(url);
                 display(url);
                 $("html, body").animate({
                     scrollTop: 0
@@ -118,15 +117,12 @@
         "click",
         function(e) {
             e.preventDefault();
-            $.when(SaveWords()).then(function() {
-                var url = prev.href.substr(prev.href.indexOf('/', 8) + 1); // remove domain name from url
-                url = url.replace(/OEBPS\//i, ""); // workaround to fix link url in some ebooks
-                // alert(url);
-                display(url);
-                $("html, body").animate({
-                    scrollTop: 0
-                }, "fast");
-            });
+            var url = prev.href.substr(prev.href.indexOf('/', 8) + 1); // remove domain name from url
+            url = url.replace(/OEBPS\//i, ""); // workaround to fix link url in some ebooks
+            display(url);
+            $("html, body").animate({
+                scrollTop: 0
+            }, "fast");
         },
         false
     );
@@ -163,8 +159,35 @@
                     words: oldwords
                 }
             })
+            .done(function(data) {
+                if (data.error_msg == null) {
+                    // update user score (gems)
+                    var review_data = {
+                        words : { new:       $(".reviewing.new").length, 
+                                  learning:  $(".reviewing.learning").length, 
+                                  forgotten: $(".reviewing.forgotten").length },
+                        texts : { reviewed:  1 }
+                    };
+
+                    $.ajax({
+                        type: "post",
+                        url: "/ajax/updateuserscore.php",
+                        data: review_data
+                    })
+                    .done(function(data) {
+                        if (data.error_msg != null) {
+                            alert("Oops! There was an unexpected error updating user score.");
+                        } 
+                    })
+                    .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Oops! There was an unexpected error updating user score.");
+                    });
+                } else {
+                    alert("Oops! There was an error unexpected error archiving text.");
+                }
+            })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Oops! There was an error updating the database.");
+                alert("Oops! There was an error unexpected error archiving text.");
             });
 
         // don't show confirmation dialog when closing window
@@ -204,8 +227,6 @@
                 link.textContent = chapter.label;
                 link.href = chapter.href;
 
-                // link.innerHTML = current_section_href == chapter.href ? '<b>'+ link.innerHTML + '</b>' : link.innerHTML;
-
                 item.appendChild(link);
 
                 if (chapter.subitems) {
@@ -214,7 +235,6 @@
 
                 link.onclick = function() {
                     var url = link.getAttribute("href");
-                    alert(url);
                     display(url);
                     opener.click();
                     $("html, body").animate({
@@ -297,6 +317,7 @@
     
                 next.textContent = nextLabel + " »";
                 next.href = nextSection.href;
+                next.title = "Go to next chapter & update word status";
             } else {
                 next.textContent = "";
             }
@@ -312,6 +333,7 @@
                 
                 prev.textContent = "« " + prevLabel;
                 prev.href = prevSection.href;
+                prev.title = "Go to previous chapter";
             } else {
                 prev.textContent = "";
             }
@@ -327,10 +349,14 @@
 
     function updateToc(current_chapter_url) {
         var $nav = document.getElementById('toc');
-        if ($nav.querySelector('.font-weight-bold') !== null) {
-            $nav.querySelector('.font-weight-bold').classList.remove('font-weight-bold');
+        var selector = $nav.querySelector('.font-weight-bold');
+        if (selector !== null) {
+            selector.classList.remove('font-weight-bold');
         }
-        
-        $nav.querySelector('a[href*="' + current_chapter_url + '"]').classList.add('font-weight-bold');
+
+        selector = $nav.querySelector('a[href*="' + current_chapter_url + '"]');
+        if (selector !== null) {
+            selector.classList.add('font-weight-bold');
+        }
     }
 });
