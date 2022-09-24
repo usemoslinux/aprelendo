@@ -95,7 +95,6 @@ try {
     <meta name="description" content="Language learning platform designed to boost your reading, listening, speaking and writing skills.">
     <meta name="keywords" content="language, learning, language learning, flashcards, total reading, reading, news, ebooks, books, videos">
     <meta name="author" content="Aprelendo">
-    <meta name="google-signin-client_id" content="913422235077-p01j7jbo80c7vpbesb4uuvl10vemfl13.apps.googleusercontent.com" >
     
     <link rel="shortcut icon" type="image/x-icon" href="img/favicons/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

@@ -69,7 +69,6 @@ if ($this_is_show_page) {
     <meta name="description" content="Language learning platform designed to boost your reading, listening, speaking and writing skills.">
     <meta name="keywords" content="language, learning, language learning, flashcards, total reading, reading, news, ebooks, books, videos">
     <meta name="author" content="Aprelendo">
-    <meta name="google-signin-client_id" content="913422235077-p01j7jbo80c7vpbesb4uuvl10vemfl13.apps.googleusercontent.com" >
 
     <link rel="shortcut icon" type="image/x-icon" href="img/favicons/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -107,7 +106,7 @@ if ($this_is_show_page) {
 
     <?php if($curpage=='login.php' || $use_google_login): ?>
     <!-- Google API -->
-    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     
     <?php endif; ?>
 </head>

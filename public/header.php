@@ -119,12 +119,7 @@ $streak_days = (int)$gems->getDaysStreak();
                                 <a href="logout.php" onclick="signOut();" class="dropdown-item">Logout</a>
                                 <script>
                                     function signOut() {
-                                        var auth2 = gapi.auth2.getAuthInstance();
-                                        auth2.signOut().then(function () {
-                                            auth2.disconnect();
-                                            
-                                            console.log('User signed out.');
-                                        });
+                                        google.accounts.id.disableAutoSelect();
                                     }
                                 </script>
                             </div>

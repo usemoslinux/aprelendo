@@ -49,20 +49,17 @@ $(document).ready(function() {
 
 /**
  * Google Sign-in
+ * Uses the new Google Identity Services library for authentication
  */
 function googleSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    // console.log('ID: ' + profile.getId());
-    // console.log('Name: ' + profile.getName());
-    // console.log('Image URL: ' + profile.getImageUrl());
-    // console.log('Email: ' + profile.getEmail());
+    var profile = jwt_decode(googleUser.credential);
 
     //pass information to server to insert or update the user record
     $.ajax({
         type: "POST",
-        data: {"id" : profile.getId(),
-               "name" : profile.getName(),
-               "email" : profile.getEmail() },
+        data: {"id" : profile.sub,
+               "name" : profile.name ,
+               "email" : profile.email },
         url: "ajax/google_oauth.php"
     })
         .done(function(data) {

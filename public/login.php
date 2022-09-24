@@ -44,7 +44,12 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     </header>
                     <br>
                     <div id="error-msg" class="d-none"></div>
-                    <div class="g-signin2" data-longtitle="true" data-onsuccess="googleSignIn" data-theme="dark"></div>
+                    <div id="g_id_onload"
+                        data-client_id="913422235077-p01j7jbo80c7vpbesb4uuvl10vemfl13.apps.googleusercontent.com"
+                        data-callback="googleSignIn">
+                    </div>
+                    <div class="g_id_signin" data-type="standard"></div>
+
                     <div class="or-line">
                         <p class="or__line">
                             <span class="or__text">Or</span>
@@ -86,6 +91,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
     </div>
 </main>
 
+<script defer src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
 <script defer src="js/login-min.js"></script>
 
 <?php require_once 'footer.php'?>
