@@ -78,11 +78,14 @@ require_once PUBLIC_PATH . 'head.php';
                             data-target="#reader-settings-modal" class="btn btn-sm btn-secondary d-block" title="Reading settings">
                             <i class="fas fa-cog"></i>
                         </button>
-                        <button id="btn-toggle-audio-player-controls" type="button" class="btn btn-sm btn-primary d-block mt-2" title="Toggle sticky audio controls">
-                            <i class="fas fa-headphones"></i>
-                        </button>
                         
-                        <button id="<?php echo $assisted_learning && !$is_long_text ? 'btn-next-phase' : 'btn-save-text'; ?>"             type="button" class="btn btn-sm btn-success d-block mt-2" 
+                        <?php if ($assisted_learning && !$is_long_text) : ?>
+                            <button id="btn-toggle-audio-player-controls" type="button" class="btn btn-sm btn-primary d-block mt-2" title="Toggle sticky audio controls">
+                                <i class="fas fa-headphones"></i>
+                            </button>
+                        <?php endif ?>
+                        
+                        <button id="<?php echo $assisted_learning && !$is_long_text ? 'btn-next-phase' : 'btn-save-text'; ?>" type="button" class="btn btn-sm btn-success d-block mt-2" 
                         title="<?php echo $assisted_learning && !$is_long_text ? 'Go to phase 2: Listening' : 'Save'; ?>">
                             <i class="fas fa-chevron-circle-right"></i>
                         </button>
