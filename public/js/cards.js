@@ -288,7 +288,7 @@ $(document).ready(function() {
     });
 
     /**
-     * Builds translator link including the paragraph to translate as a parameter
+     * Builds translator link using the word object as a parameter
      */
     function buildTranslateParagraphLink($word) {
         var sentence = $word.parent("p").text().trim();
@@ -303,5 +303,19 @@ $(document).ready(function() {
      $("#btn-translate").on("click", function() {
         window.open(buildTranslateParagraphLink($sel_word));
     }); // end #btn-translate.on.click()
+
+    /**
+     * Disables right click context menu
+     */
+     $(document).on("contextmenu",function(e){
+        // opens dictionary translator in case user right clicked on a word/phrase
+        // but only on desktop browsers
+        var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (!isMobile && $(e.target).is(".word")) {
+            window.open(buildTranslateParagraphLink($(e.target)));
+        }
+        return false;
+     }); // end document.contextmenu
 
 });
