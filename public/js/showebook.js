@@ -52,7 +52,7 @@
         .then(arraybuffer => book.open(arraybuffer))
         .catch(function(e) {
             alert('There was an unexpected problem opening this ebook file. Try again later.');
-            window.location.replace("texts.php");
+            window.location.replace("/texts");
         });
 
     var rendition = book.renderTo("viewer", {
@@ -128,7 +128,7 @@
     );
 
     $("body").on("click", "#btn-close-ebook", function() {
-        window.location.replace("/texts.php");
+        window.location.replace("/texts");
     }); // end #btn-close-ebook.on.click
 
     /**

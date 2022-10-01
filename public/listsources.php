@@ -36,7 +36,7 @@ function printSources($sources) {
         echo "<div class='simple-text'>Hmm, that's weird. We couldn't find any popular sources for the selected language.</div>";    
     }
 
-    $html = '<div class="alert alert-info">These are the most popular sources for the currently selected language. They are probably a good starting place to find new content to practice. Remember to use our <a href="extensions.php" class="alert-link" target="_blank" rel="noopener noreferrer">extensions</a> to add articles from these or other sources to your Aprelendo library.</div>'; 
+    $html = '<div class="alert alert-info">These are the most popular sources for the currently selected language. They are probably a good starting place to find new content to practice. Remember to use our <a href="/extensions" class="alert-link" target="_blank" rel="noopener noreferrer">extensions</a> to add articles from these or other sources to your Aprelendo library.</div>'; 
 
     $html .= '<div id="list-group-popular-sources" class="list-group">';
 

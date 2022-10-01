@@ -209,7 +209,7 @@ class User
             
             // check if email already exists
             if ($this->existsByEmail($email)) {
-                throw new \Exception('Email already exists. Did you <a class="alert-link" href="forgotpassword.php">forget</a> you username or password?');
+                throw new \Exception('Email already exists. Did you <a class="alert-link" href="/forgotpassword">forget</a> you username or password?');
             }
             
             // create password hash
@@ -268,7 +268,7 @@ class User
     public function sendActivationEmail(string $email, string $username, string $hash): void
     {
         // create activation link
-        $reset_link = "https://www.aprelendo.com/accountactivation.php?username=$username&hash=$hash";
+        $reset_link = "https://www.aprelendo.com/accountactivation?username=$username&hash=$hash";
 
         // create email html
         $to = $email;

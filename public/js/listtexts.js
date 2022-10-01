@@ -64,7 +64,7 @@ $(document).ready(function() {
 
                     var uri_str = parameterizeArray(params);
 
-                    window.location.replace("texts.php" + uri_str);
+                    window.location.replace("/texts" + uri_str);
                 })
                 .fail(function() {
                     alert(
@@ -114,7 +114,7 @@ $(document).ready(function() {
 
                 var uri_str = parameterizeArray(params);
 
-                window.location.replace("texts.php" + uri_str);
+                window.location.replace("/texts" + uri_str);
             })
             .fail(function() {
                 alert(

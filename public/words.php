@@ -40,7 +40,7 @@ $query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="texts.php">Home</a>
+                        <a href="/texts">Home</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="active">Word list</span>
@@ -66,10 +66,10 @@ $query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])
                                     <i class="fas fa-file-export"></i> Export
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a href="ajax/exportwords.php" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"'; ?> >
+                                    <a href="ajax/exportwords" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"'; ?> >
                                         Export all
                                     </a>
-                                    <a href="ajax/exportwords.php<?php echo !empty($query_str) ? $query_str : '' ?>" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"'; ?> >
+                                    <a href="ajax/exportwords<?php echo !empty($query_str) ? $query_str : '' ?>" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"'; ?> >
                                         Export search results
                                     </a>
                                 </div>

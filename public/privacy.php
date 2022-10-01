@@ -38,7 +38,7 @@ if (!$user->isLoggedIn()) {
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="index.php">Home</a>
+                        <a href="/index">Home</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="active">Privacy policy</span>
@@ -53,7 +53,7 @@ if (!$user->isLoggedIn()) {
                             <i>Last updated: December 2020</i>
                             <p>Protecting the privacy of Aprelendo website users is important to us.</p> 
                             <p>Our Privacy Policy is designed to inform you about the personal information we collect on this website. From time to time, we may make changes to this Privacy Policy, so we encourage you to check back and review it regularly to ensure you are aware of current practices.</p>
-                            <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to <a href="support.php">contact us</a>.</p>
+                            <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to <a href="/support">contact us</a>.</p>
                             <br>
                             <h6>Personal information</h6>
                             <p>We collect some minimal information about you on this website. This information includes your user name and email address, which you provide when you register to our service. Additionally, we may log the IP address and web browser details of the computer or device you use. In case you use your Google account to log in to Aprelendo we will get your basic profile information (full name, e-mail address and profile image).</p>

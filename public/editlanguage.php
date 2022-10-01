@@ -61,7 +61,7 @@ if(empty($error_msg)) {
                     <ul>
                         <li>Some websites ensure that their content is not embedded into other sites. Therefore, some
                             dictionaries may not work with Aprelendo. For further help, check the list of <a
-                                href="compatibledics.php">compatible dictionaries</a>.</li>
+                                href="/compatibledics">compatible dictionaries</a>.</li>
                         <li>For security reasons, only HTTPS websites are supported. Make sure you use URL addresses
                             that start with HTTPS, not HTTP.</li>
                         <li>As the dictionary is going to be shown inside a modal window, it is highly recommended to
@@ -95,7 +95,7 @@ if(empty($error_msg)) {
     <fieldset <?php echo $is_premium_user ? '' : 'disabled'; ?>>
         <div class="card">
             <div class="card-header">RSS feeds
-                <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?>
+                <?php echo $is_premium_user ? '' : ' <a href="/gopremium" class="text-danger">(premium users only)</a>'; ?>
             </div>
             <div class="card-body">
                 <div class="form-group">
@@ -120,7 +120,7 @@ if(empty($error_msg)) {
     <fieldset <?php echo $is_premium_user ? '' : 'disabled'; ?>>
         <div class="card">
             <div class="card-header">Frequency list
-                <?php echo $is_premium_user ? '' : ' <a href="gopremium.php" class="text-danger">(premium users only)</a>'; ?>
+                <?php echo $is_premium_user ? '' : ' <a href="/gopremium" class="text-danger">(premium users only)</a>'; ?>
             </div>
             <div class="card-body">
                 <div class="form-group">
@@ -136,7 +136,7 @@ if(empty($error_msg)) {
     <br>
     <div class="text-right">
         <button id="cancelbtn" name="cancel" type="button" class="btn btn-link"
-            onclick="window.location='texts.php'">Cancel</button>
+            onclick="window.location='texts'">Cancel</button>
         <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
     </div>
 </form>

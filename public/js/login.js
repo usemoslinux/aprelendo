@@ -33,7 +33,7 @@ $(document).ready(function() {
         })
             .done(function(data) {
                 if (data.error_msg == null) {
-                    window.location.replace("texts.php");
+                    window.location.replace("/texts");
                 } else {
                     showMessage(data.error_msg, "alert-danger");
                 }
@@ -64,7 +64,7 @@ function googleSignIn(googleUser) {
     })
         .done(function(data) {
             if (data.error_msg == undefined) {
-                window.location.replace("texts.php");
+                window.location.replace("/texts");
             } else {
                 showMessage(data.error_msg, "alert-danger");
             }

@@ -26,7 +26,7 @@ $user = new User($pdo);
 
 // if user is already logged in, go to "My Texts" section
 if ($user->isLoggedIn()) {
-    header('Location:texts.php');
+    header('Location:texts');
     exit;
 }
 
@@ -45,7 +45,7 @@ require_once PUBLIC_PATH . 'head.php';
                             <h1>Improve your language skills<br>by reading<br> your favorite texts</h1>
                             <h5>Want to know more about our method?<br>
                             It&#39;s called
-                                <a href="totalreading.php">
+                                <a href="/totalreading">
                                     <u>total reading</u>
                                 </a></h5>
                             <br>
@@ -62,63 +62,63 @@ require_once PUBLIC_PATH . 'head.php';
                                     I want to learn
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <a class="dropdown-item" href="register.php?tolang=arabic" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=arabic" type="button">
                                         <img src="img/flags/ar.svg" alt="Arabic" class="flag-icon">
                                         &nbsp;Arabic
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=chinese" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=chinese" type="button">
                                         <img src="img/flags/zh.svg" alt="Chinese" class="flag-icon">
                                         &nbsp;Chinese
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=dutch" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=dutch" type="button">
                                         <img src="img/flags/nl.svg" alt="Dutch" class="flag-icon">
                                         &nbsp;Dutch
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=english" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=english" type="button">
                                         <img src="img/flags/en.svg" alt="English" class="flag-icon">
                                         &nbsp;English
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=french" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=french" type="button">
                                         <img src="img/flags/fr.svg" alt="French" class="flag-icon">
                                         &nbsp;French
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=german" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=german" type="button">
                                         <img src="img/flags/de.svg" alt="German" class="flag-icon">
                                         &nbsp;German
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=greek" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=greek" type="button">
                                         <img src="img/flags/el.svg" alt="Greek" class="flag-icon">
                                         &nbsp;Greek
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=hebrew" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=hebrew" type="button">
                                         <img src="img/flags/he.svg" alt="Hebrew" class="flag-icon">
                                         &nbsp;Hebrew
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=hindi" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=hindi" type="button">
                                         <img src="img/flags/hi.svg" alt="Hindi" class="flag-icon">
                                         &nbsp;Hindi
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=italian" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=italian" type="button">
                                         <img src="img/flags/it.svg" alt="Italian" class="flag-icon">
                                         &nbsp;Italian
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=japanese" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=japanese" type="button">
                                         <img src="img/flags/ja.svg" alt="Japanese" class="flag-icon">
                                         &nbsp;Japanese
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=korean" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=korean" type="button">
                                         <img src="img/flags/ko.svg" alt="Korean" class="flag-icon">
                                         &nbsp;Korean
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=portuguese" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=portuguese" type="button">
                                         <img src="img/flags/pt.svg" alt="Portuguese" class="flag-icon">
                                         &nbsp;Portuguese
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=russian" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=russian" type="button">
                                         <img src="img/flags/ru.svg" alt="Russian" class="flag-icon">
                                         &nbsp;Russian
                                     </a>
-                                    <a class="dropdown-item" href="register.php?tolang=spanish" type="button">
+                                    <a class="dropdown-item" href="/register?tolang=spanish" type="button">
                                         <img src="img/flags/es.svg" alt="Spanish" class="flag-icon">
                                         &nbsp;Spanish
                                     </a>
@@ -140,7 +140,7 @@ require_once PUBLIC_PATH . 'head.php';
                     <h2 id="hiw" class="w-100 mb-5">How it works</h2>
                     <div class="col-lg-4">
                         <h4>1. Add</h4>
-                        <p>Add texts & YouTube videos to your Aprelendo library using our <a href="extensions.php"
+                        <p>Add texts & YouTube videos to your Aprelendo library using our <a href="/extensions"
                                     target="_blank" rel="noopener noreferrer">extensions</a>. Premium users can also upload
                                 ebooks and texts from RSS feeds.</p>
                     </div>
@@ -153,7 +153,7 @@ require_once PUBLIC_PATH . 'head.php';
                         <h4>3. Learn</h4>
                         <p>Our assisted learning method will help you to improve not only your reading comprehension
                                 but also your listening, speaking and writing skills. Check
-                                more on this on our <a href="totalreading.php" target="_blank" rel="noopener noreferrer">total reading</a>
+                                more on this on our <a href="/totalreading" target="_blank" rel="noopener noreferrer">total reading</a>
                                 section.</p>
                     </div>
                 </div>
@@ -197,7 +197,7 @@ require_once PUBLIC_PATH . 'head.php';
                             their language skills.</p>
                         <p>
                             <br>
-                            <a href="totalreading.php" class="btn btn-theme">More Info</a>
+                            <a href="/totalreading" class="btn btn-theme">More Info</a>
                         </p>
                     </div>
                     <div class="col-lg-4">
@@ -206,7 +206,7 @@ require_once PUBLIC_PATH . 'head.php';
                         <p>You can use Aprelendo on mobile and desktop devices as long as they have an Internet connection. We offer addons for Firefox and Chrome to easily add texts to your library, as well as bookmarklets for those who prefer a browser agnostic solution.</p>
                         <p>
                             <br>
-                            <a href="extensions.php" class="btn btn-theme">More Info</a>
+                            <a href="/extensions" class="btn btn-theme">More Info</a>
                         </p>
                     </div>
                 </div>

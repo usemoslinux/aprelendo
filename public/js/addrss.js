@@ -90,7 +90,7 @@ $(document).ready(function() {
         if (add_mode == "edit") {
             // create a hidden form and submit it
             var form = $(
-                '<form id="form_add_audio" action="../addtext.php" method="post"></form>'
+                '<form id="form_add_audio" action="../addtext" method="post"></form>'
             )
                 .append(
                     '<input type="hidden" name="art_title" value="' +
@@ -154,7 +154,7 @@ $(document).ready(function() {
                                 break;
                             case "readnow":
                                 location.replace(
-                                    "../showtext.php?id=" +
+                                    "../showtext?id=" +
                                         data.insert_id +
                                         "&sh=1"
                                 );

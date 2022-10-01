@@ -42,7 +42,7 @@ if (!$user->isLoggedIn()) {
                 <div class="col-lg-4">
                     <i class="fas fa-assistive-listening-systems"></i>
                     <h4>Text-to-Speech</h4>
-                    <p>Text-to-Speech (TTS) conversion is an inherent part of <a href="totalreading.php" target="_blank"
+                    <p>Text-to-Speech (TTS) conversion is an inherent part of <a href="/totalreading" target="_blank"
                             rel="noopener noreferrer">total reading</a>. Premium users are able to listen up to 3 texts per
                         day, instead of 1.</p>
                 </div>
@@ -117,7 +117,7 @@ if (!$user->isLoggedIn()) {
                                 <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Export words
                                     (CSV)</li>
                             </ul>
-                            <a href="login.php" role="button" class="btn btn-block btn-primary text-uppercase">Sign In</a>
+                            <a href="/login" role="button" class="btn btn-block btn-primary text-uppercase">Sign In</a>
                         </div>
                     </div>
                 </div>
@@ -161,7 +161,7 @@ if (!$user->isLoggedIn()) {
                                     (CSV)</li>
                             </ul>
 
-                            <form name="form-subscription" action="/payment.php" method="post" target="_top">
+                            <form name="form-subscription" action="/payment" method="post" target="_top">
                                 <input type="hidden" name="cmd" value="_xclick">
                                 <input type="hidden" name="lc" value="US">
                                 <input id="inp-item-nbr" type="hidden" name="item_number" value="1">

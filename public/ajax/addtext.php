@@ -84,7 +84,7 @@ try {
                 } else {
                     if ($texts_table->exists($source_url)) {
                         $msg = 'The text you are trying to add already exists. ';
-                        $msg .= $is_shared ? 'Look for it in the <a class="alert-link" href="sharedtexts.php">shared texts</a> section.' : 'Look for it in your <a class="alert-link" href="texts.php">private library</a>. Remember that you may have <a class="alert-link" href="texts.php?sa=1">archived</a> it.';
+                        $msg .= $is_shared ? 'Look for it in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.' : 'Look for it in your <a class="alert-link" href="/texts">private library</a>. Remember that you may have <a class="alert-link" href="/texts?sa=1">archived</a> it.';
 
                         throw new \Exception($msg);
                     }
@@ -121,7 +121,7 @@ try {
             // if text is already in db, show error message
             if ($texts_table->exists($source_url)) {
                 $msg = 'The text you are trying to add already exists in our database. ';
-                $msg .= 'Look for it in the <a class="alert-link" href="sharedtexts.php">shared texts</a> section.';
+                $msg .= 'Look for it in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.';
 
                 throw new \Exception($msg);
             }

@@ -63,7 +63,7 @@ $(document).ready(function() {
             })
                 .done(function() {
                     window.location.replace(
-                        "words.php" + parameterizeArray(getCurrentURIParameters())
+                        "words" + parameterizeArray(getCurrentURIParameters())
                     );
                 })
                 .fail(function(request, status, error) {
@@ -145,7 +145,7 @@ $(document).ready(function() {
 
         var uri_str = parameterizeArray(params);
         
-        window.location.replace("words.php" + uri_str);
+        window.location.replace("/words" + uri_str);
     }); // end #dropdown-menu-sort.on.click
 
 
@@ -249,7 +249,7 @@ $(document).ready(function() {
         })
             .done(function() {
                 window.location.replace(
-                    "words.php" + parameterizeArray(getCurrentURIParameters())
+                    "words" + parameterizeArray(getCurrentURIParameters())
                 );
             })
             .fail(function(request, status, error) {

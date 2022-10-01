@@ -19,7 +19,7 @@
  */
 
 if (!isset($_POST) || empty($_POST)) {
-    header('Location:texts.php');
+    header('Location:texts');
     exit;
 }
 
@@ -102,7 +102,7 @@ function print_table_footer($array_table_rows) {
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="texts.php">Home</a>
+                        <a href="/texts">Home</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="active">Review Statistics</span>
@@ -115,14 +115,14 @@ function print_table_footer($array_table_rows) {
         <div class="row">
             <div class="col-12">
                 <button class="btn btn-success float-right mb-3" type="button"
-                    onclick="window.location.replace('texts.php');"><i class="fas fa-chevron-circle-left"></i> Go back to
+                    onclick="window.location.replace('/texts');"><i class="fas fa-chevron-circle-left"></i> Go back to
                     your library</button>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
                 <div class="alert alert-info" role="alert">
-                    Congrats! You've finished reviewing this text. <?php echo !$_POST['is_shared'] ? 'It will now be marked as "<a class="alert-link" href="texts.php?sa=1">archived</a>".' : ''; ?>
+                    Congrats! You've finished reviewing this text. <?php echo !$_POST['is_shared'] ? 'It will now be marked as "<a class="alert-link" href="/texts?sa=1">archived</a>".' : ''; ?>
                 </div>
             </div>
         </div>

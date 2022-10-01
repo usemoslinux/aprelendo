@@ -68,7 +68,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     }
 
     // print pagination
-    echo $pagination->print('words.php', $search_text, $sort_by);
+    echo $pagination->print('words', $search_text, $sort_by);
 } else { // if page is loaded at startup, just show word list
     // initialize pagination variables
     $page = isset($_GET['page']) && $_GET['page'] != '' ? $_GET['page'] : 1;
@@ -89,7 +89,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     }
 
     // print pagination
-    echo $pagination->print('words.php', '', $sort_by);
+    echo $pagination->print('words', '', $sort_by);
 }
 
 require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window

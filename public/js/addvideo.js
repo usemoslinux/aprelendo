@@ -43,7 +43,7 @@ $(document).ready(function() {
                         showMessage(data.error_msg, "alert-danger");
                     }
                 } else {
-                    window.location.replace("sharedtexts.php");
+                    window.location.replace("/sharedtexts");
                 }
             })
             .fail(function(xhr, ajaxOptions, thrownError) {

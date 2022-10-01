@@ -53,7 +53,7 @@ if (!empty($_GET)) {
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="texts.php">Home</a>
+                        <a href="/texts">Home</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="active">Shared texts</span>
@@ -136,9 +136,9 @@ if (!empty($_GET)) {
                                 <i class="fas fa-plus"></i> Add
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="addtext.php?sh">Plain text</a>
-                                <a class="dropdown-item" href="addvideo.php">Youtube video</a>
-                                <a href="addrss.php" <?php echo $user->isPremium() ? 
+                            <a class="dropdown-item" href="/addtext?sh">Plain text</a>
+                                <a class="dropdown-item" href="/addvideo">Youtube video</a>
+                                <a href="/addrss" <?php echo $user->isPremium() ? 
                                 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"'; ?> >
                                     RSS text
                                 </a>

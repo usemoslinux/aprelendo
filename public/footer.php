@@ -20,25 +20,25 @@
 ?>
 
 <!-- FOOTER -->
-<div id="footerwrap" class="footer <?php echo $curpage == 'gopremium.php' ? 'text-white' : '' ?> ">
+<div id="footerwrap" class="footer <?php echo $curpage == 'gopremium' ? 'text-white' : '' ?> ">
     <div class="container">
         <div class="row text-center">
             <div class="col-sm-12">
                 <ul class="list-inline">
                     <li class="list-inline-item">
-                        <a href="aboutus.php">About us</a>
+                        <a href="aboutus">About us</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="privacy.php">Privacy</a>
+                        <a href="/privacy">Privacy</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="attributions.php">Attributions</a>
+                        <a href="attributions">Attributions</a>
                     </li>
                     <li class="list-inline-item">
-                        <a id="extensions" href="extensions.php">Extensions</a>
+                        <a id="extensions" href="/extensions">Extensions</a>
                     </li>
                     <li class="list-inline-item">
-                        <a id="support" href="support.php">Support</a>
+                        <a id="support" href="/support">Support</a>
                     </li>
                 </ul>
                 <ul class="list-inline">

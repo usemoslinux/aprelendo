@@ -45,9 +45,9 @@ $(document).ready(function() {
                     showMessage(data.error_msg, "alert-danger");
                 } else {
                     if (form_data.get("shared-text") == "on") {
-                        window.location.replace("sharedtexts.php");
+                        window.location.replace("/sharedtexts");
                     } else {
-                        window.location.replace("texts.php");
+                        window.location.replace("/texts");
                     }
                 }
             })

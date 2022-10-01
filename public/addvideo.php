@@ -30,7 +30,7 @@ require_once PUBLIC_PATH . 'header.php';
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="texts.php">Home</a>
+                        <a href="/texts">Home</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="active">Add video</span>
@@ -42,7 +42,7 @@ require_once PUBLIC_PATH . 'header.php';
             <main>
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="alert alert-info"><i class="fas fa-info-circle"></i> All Youtube videos you add to Aprelendo will be shared with the rest of our community. You will find them in the "<a href="sharedtexts.php">shared texts</a>" section.</div>
+                        <div class="alert alert-info"><i class="fas fa-info-circle"></i> All Youtube videos you add to Aprelendo will be shared with the rest of our community. You will find them in the "<a href="/sharedtexts">shared texts</a>" section.</div>
                         <div id="alert-msg" class="d-none"></div>
                     </div>
                     <!-- VIDEO CONTAINER -->

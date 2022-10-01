@@ -56,7 +56,7 @@ $(document).ready(function() {
             if (typeof data != "undefined" && data !== "") {
                 showMessage(data.error_msg, "alert-danger");
             } else {
-                window.location.replace("languages.php");
+                window.location.replace("/languages");
             }
         })
         .fail(function (xhr, ajaxOptions, thrownError) {

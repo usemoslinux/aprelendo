@@ -57,7 +57,7 @@ if (!empty($_GET)) {
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="texts.php">Home</a>
+                        <a href="/texts">Home</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="active">My texts</span>
@@ -155,17 +155,17 @@ if (!empty($_GET)) {
                                     <i class="fas fa-plus"></i> Add
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="addtext.php">Plain text</a>
-                                    <a class="dropdown-item" href="addvideo.php">Youtube video</a>
-                                    <a href="showofflinevideo.php" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"';
+                                    <a class="dropdown-item" href="/addtext">Plain text</a>
+                                    <a class="dropdown-item" href="/addvideo">Youtube video</a>
+                                    <a href="/showofflinevideo" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"';
                                         ?>>
                                         Movie/TV show
                                     </a>
-                                    <a href="addebook.php" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"';
+                                    <a href="/addebook" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"';
                                         ?>>
                                         Ebook (epub)
                                     </a>
-                                    <a href="addrss.php" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"';
+                                    <a href="/addrss" <?php echo $user->isPremium() ? 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"';
                                         ?>>
                                         RSS text
                                     </a>

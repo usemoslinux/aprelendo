@@ -25,7 +25,7 @@ use Aprelendo\Includes\Classes\Reader;
 
 // only premium users are allowed to visit this page
 if (!$user->isPremium()) {
-    header('Location:texts.php');
+    header('Location:texts');
     exit;
 }
 
@@ -59,7 +59,7 @@ try {
     
     $body_css .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;position:fixed;width:100%;'";
 } catch (Exception $e) {
-    header('Location:/login.php');
+    header('Location:/login');
     exit;
 }
 

@@ -45,7 +45,7 @@ $(document).ready(function() {
                         .removeClass()
                         .addClass("alert alert-success");
 
-                    window.location.replace("texts.php");
+                    window.location.replace("/texts");
                 }
             })
             .fail(function() {
@@ -86,7 +86,7 @@ $(document).ready(function() {
                         .removeClass()
                         .addClass("alert alert-danger");
                 } else {
-                    window.location.replace("index.php");
+                    window.location.replace("/index");
                 }
             })
             .fail(function() {

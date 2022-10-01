@@ -26,7 +26,7 @@ $user = new User($pdo);
 
 // if user is already logged in, go to "My Texts" section
 if ($user->isLoggedIn()) {
-    header('Location:/texts.php');
+    header('Location:/texts');
     exit;
 }
 
@@ -76,12 +76,12 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <br>
                     <footer>
                         <p class="text-muted text-center">
-                            <a href="forgotpassword.php">Forgot password</a>?
+                            <a href="/forgotpassword">Forgot password</a>?
                         </p>
-                        <p class="text-muted text-center">Not registered? <a href="register.php">Create an account</a>
+                        <p class="text-muted text-center">Not registered? <a href="/register">Create an account</a>
                             <br>
                             <small>If you like Aprelendo, you can later upgrade to <a
-                                    href="gopremium.php">Premium</a></small>
+                                    href="/gopremium">Premium</a></small>
                         </p>
 
                     </footer>

@@ -36,10 +36,10 @@ use Aprelendo\Includes\Classes\User;
                         $user = new User($pdo);
                         try {
                             $user->activate($_GET['username'], $_GET['hash']);
-                            echo '<div class="text-success text-center"><div class="display-1"><i class="far fa-check-circle"></i></div><div id="alert_msg_2">Congratulations! Your account is now active.</div></div><div class="text-center">You can now login with the username and password you provided when you signed up.</div><br><div class="text-center"><a href="login.php" class="btn btn-lg btn-success">Login now</a></div><br>';
+                            echo '<div class="text-success text-center"><div class="display-1"><i class="far fa-check-circle"></i></div><div id="alert_msg_2">Congratulations! Your account is now active.</div></div><div class="text-center">You can now login with the username and password you provided when you signed up.</div><br><div class="text-center"><a href="/login" class="btn btn-lg btn-success">Login now</a></div><br>';
                         } catch (\Exception $e) {
                             echo '<div class="text-danger text-center"><div class="display-1"><i class="fas fa-times-circle"></i></div><div id="alert_msg_2">Oh no! Your account activation failed.</div></div><br><div class="text-center">Try again later or <a
-                            href="https://www.aprelendo.com/support.php">contact support</a> for help.</div><br>';
+                            href="https://www.aprelendo.com/support">contact support</a> for help.</div><br>';
                         }
                     } else { // $_GET parameters not set or empty
                         echo "<div id='alert_msg_2' class='alert alert-danger'>The activation link seems to be malformed. Please

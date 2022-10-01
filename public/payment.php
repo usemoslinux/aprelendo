@@ -35,9 +35,9 @@ $enableSandbox = true;
 $paypalConfig = [
     'email'       => SUPPORT_EMAIL,
     'business_id' => PAYPAL_BUSINESS_ID,
-    'return_url'  => 'https://www.aprelendo.com/paymentvalidation.php',
-    'cancel_url'  => 'https://www.aprelendo.com/paymentcancelled.php',
-    'notify_url'  => 'https://www.aprelendo.com/payment.php'
+    'return_url'  => 'https://www.aprelendo.com/paymentvalidation',
+    'cancel_url'  => 'https://www.aprelendo.com/paymentcancelled',
+    'notify_url'  => 'https://www.aprelendo.com/payment'
 ];
 
 try {

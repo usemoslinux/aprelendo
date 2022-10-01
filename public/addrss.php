@@ -25,7 +25,7 @@ use Aprelendo\Includes\Classes\User;
 
 // only premium users are allowed to visit this page
 if (!$user->isPremium()) {
-    header('Location:texts.php');
+    header('Location:texts');
     exit;
 }
 
@@ -39,14 +39,14 @@ require_once PUBLIC_PATH . 'header.php';
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="texts.php">Home</a>
+                            <a href="/texts">Home</a>
                         </li>
                         <li class="breadcrumb-item">
                             <span class="active">Add RSS article</span>
                         </li>
                     </ol>
                 </nav>
-                <div class="alert alert-info"><i class="fas fa-info-circle"></i> All RSS texts you add to Aprelendo will be shared with the rest of our community. You will find them in the "<a class="alert-link" href="sharedtexts.php">shared texts</a>" section.</div>
+                <div class="alert alert-info"><i class="fas fa-info-circle"></i> All RSS texts you add to Aprelendo will be shared with the rest of our community. You will find them in the "<a class="alert-link" href="/sharedtexts">shared texts</a>" section.</div>
             </div>
             <div class="col-12">
                 <div class="row flex">

@@ -46,7 +46,7 @@ $(document).ready(function() {
                         .addClass("alert alert-success");
                     
                     $(window).scrollTop(0); 
-                    setTimeout(() => { window.location.replace("texts.php"); }, 2000);
+                    setTimeout(() => { window.location.replace("/texts"); }, 2000);
                 }
             })
             .fail(function(jqXHR, textStatus, errorThrown) {

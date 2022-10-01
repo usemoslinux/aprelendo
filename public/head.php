@@ -20,14 +20,14 @@
 
 require_once '../includes/dbinit.php';  // connect to database
 
-$curpage = basename($_SERVER['PHP_SELF']); // returns the current file Name
-$show_pages = array('showtext.php', 'showvideo.php', 'showebook.php', 'showofflinevideo.php');
+$curpage = basename($_SERVER['PHP_SELF'], '.php'); // returns the current file Name
+$show_pages = array('showtext', 'showvideo', 'showebook', 'showofflinevideo');
 
 // these are the same pages that use simpleheader.php instead of header.php
-$no_login_required_pages = array('index.php', 'register.php', 'login.php', 'accountactivation.php', 
-                                 'aboutus.php', 'privacy.php', 'attributions.php', 'extensions.php', 'support.php', 
-                                 'totalreading.php', 'compatibledics.php', 'error.php', 'forgotpassword.php', 
-                                 'gopremium.php');
+$no_login_required_pages = array('index', 'register', 'login', 'accountactivation', 
+                                 'aboutus', 'privacy', 'attributions', 'extensions', 'support', 
+                                 'totalreading', 'compatibledics', 'error', 'forgotpassword', 
+                                 'gopremium');
 
 $use_google_login = false;
 
@@ -46,7 +46,7 @@ if ($this_is_show_page) {
 
     $table = isset($_GET['sh']) && $_GET['sh'] != 0 ? 'shared_texts' : 'texts';
     
-    if ($curpage != 'showofflinevideo.php') {
+    if ($curpage != 'showofflinevideo') {
         if (!isset($_GET['id']) || empty($_GET['id']) || !$user->isAllowedToAccessElement($table, (int)$_GET['id'])) {
             header("HTTP/1.1 401 Unauthorized");
             exit;
@@ -70,16 +70,16 @@ if ($this_is_show_page) {
     <meta name="keywords" content="language, learning, language learning, flashcards, total reading, reading, news, ebooks, books, videos">
     <meta name="author" content="Aprelendo">
 
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicons/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicons/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="img/favicons/apple-touch-icon-72x72.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="img/favicons/apple-touch-icon-76x76.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="img/favicons/apple-touch-icon-114x114.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="img/favicons/apple-touch-icon-120x120.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="img/favicons/apple-touch-icon-144x144.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="img/favicons/apple-touch-icon-152x152.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-touch-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/favicons/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicons/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicons/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicons/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicons/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicons/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicons/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png" />
 
     <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
 
@@ -92,7 +92,7 @@ if ($this_is_show_page) {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
     
     <!-- Custom styles for this template -->
-    <link href="css/styles-min.css" rel="stylesheet">
+    <link href="/css/styles-min.css" rel="stylesheet">
     
     <!-- Font awesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
@@ -104,7 +104,7 @@ if ($this_is_show_page) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js" integrity="sha512-wV7Yj1alIZDqZFCUQJy85VN+qvEIly93fIQAN7iqDFCPEucLCeNFz4r35FCo9s6WrpdDQPi80xbljXB8Bjtvcg==" crossorigin="anonymous"></script>
     
 
-    <?php if($curpage=='login.php' || $use_google_login): ?>
+    <?php if($curpage=='login' || $use_google_login): ?>
     <!-- Google API -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     
@@ -114,7 +114,7 @@ if ($this_is_show_page) {
 <?php
 // show wallpaper on every page, except those in $show_pages array
 if (!$this_is_show_page) {
-    echo $curpage == 'gopremium.php' ? '<body class="blue-gradient-wallpaper">' : '<body class="pattern-wallpaper">';
+    echo $curpage == 'gopremium' ? '<body class="blue-gradient-wallpaper">' : '<body class="pattern-wallpaper">';
 }
 
 ?>

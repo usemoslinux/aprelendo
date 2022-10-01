@@ -41,7 +41,7 @@ $(document).ready(function() {
                     );
                     $("#form-register").fadeOut("fast", function() {
                         $("#error-msg").fadeOut(4000, function() {
-                            window.location.replace("login.php");
+                            window.location.replace("/login");
                         });
                     });
                 } else {

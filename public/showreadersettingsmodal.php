@@ -33,7 +33,7 @@ $text_align = $prefs->getTextAlignment();
 $display_mode = $prefs->getDisplayMode();
 $assisted_learning = $prefs->getAssistedLearning();
 
-$video_pages = array('showvideo.php', 'showofflinevideo.php');
+$video_pages = array('showvideo', 'showofflinevideo');
 $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
 
 ?>

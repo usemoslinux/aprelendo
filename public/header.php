@@ -54,7 +54,7 @@ $streak_days = (int)$gems->getDaysStreak();
         <nav class="navbar navbar-expand-md navbar-light">
             <div class="container mtb">
                 <!-- Brand -->
-                <a class="navbar-brand" href="index.php"></a>
+                <a class="navbar-brand" href="/index"></a>
 
                 <!-- Toggler Button -->
                 <button class="navbar-toggler" type="button" aria-label="toggler button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -77,9 +77,9 @@ $streak_days = (int)$gems->getDaysStreak();
                                 <b class="caret"></b>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="language-menu">
-                                <a class="dropdown-item" href="<?php echo 'languages.php?chg=' . $user->getLangId(); ?>">
+                                <a class="dropdown-item" href="<?php echo 'languages?chg=' . $user->getLangId(); ?>">
                                     <?php echo $lang_full; ?> settings</a>
-                                <a class="dropdown-item" href="languages.php">Change current language</a>
+                                <a class="dropdown-item" href="/languages">Change current language</a>
                             </div>
                         </li>
 
@@ -94,29 +94,29 @@ $streak_days = (int)$gems->getDaysStreak();
                                 <div class="dropdown-header">
                                     Sections
                                 </div>
-                                <a href="texts.php" class="dropdown-item">My texts</a>
-                                <a href="sharedtexts.php" class="dropdown-item">Shared texts</a>
-                                <a href="sources.php" class="dropdown-item">Popular sources</a>
-                                <a href="words.php" class="dropdown-item">Word list</a>
-                                <a href="cards.php" class="dropdown-item">Practice cards</a>
-                                <a href="stats.php" class="dropdown-item">Statistics</a>
+                                <a href="/texts" class="dropdown-item">My texts</a>
+                                <a href="/sharedtexts" class="dropdown-item">Shared texts</a>
+                                <a href="/sources" class="dropdown-item">Popular sources</a>
+                                <a href="/words" class="dropdown-item">Word list</a>
+                                <a href="/cards" class="dropdown-item">Practice cards</a>
+                                <a href="/stats" class="dropdown-item">Statistics</a>
                                 <div class="dropdown-divider"></div>
                                 <div class="dropdown-header">
                                     Settings
                                 </div>
-                                <a href="userprofile.php" class="dropdown-item">My profile</a>
-                                <a href="preferences.php" class="dropdown-item">Preferences</a>
+                                <a href="/userprofile" class="dropdown-item">My profile</a>
+                                <a href="/preferences" class="dropdown-item">Preferences</a>
                                 <div class="dropdown-divider"></div>
 
                                 <?php if (!$user->isPremium()): ?>
                                 <div class="dropdown-header text-primary" >
                                     Premium
                                 </div>
-                                <a href="gopremium.php" class="dropdown-item">Upgrade account</a>
+                                <a href="/gopremium.php" class="dropdown-item">Upgrade account</a>
                                 <div class="dropdown-divider"></div>
                                 <?php endif; ?>
 
-                                <a href="logout.php" onclick="signOut();" class="dropdown-item">Logout</a>
+                                <a href="/logout.php" onclick="signOut();" class="dropdown-item">Logout</a>
                                 <script>
                                     function signOut() {
                                         google.accounts.id.disableAutoSelect();

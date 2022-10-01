@@ -806,7 +806,7 @@ $(document).ready(function() {
                         if (data.error_msg == null) {
                             gems_earned = data.gems_earned;
                             window.parent.show_confirmation_dialog = false;
-                            var url = "/textstats.php";
+                            var url = "/textstats";
                             var total_words =
                                 Number($(".word").length) + Number($(".phrase").length);
                             var form = $(
@@ -1154,7 +1154,7 @@ $(document).ready(function() {
                 .fail(function(xhr) {
                     if (xhr.status == 403) {
                         $("#audioplayer-loader").addClass("d-none");
-                        $("#alert-msg-audio").removeClass("d-none").empty().append('You have reached your audio streaming limit. Try again tomorrow or <a class="alert-link" href="gopremium.php">improve your plan</a> to increase your daily audio streaming limit.');
+                        $("#alert-msg-audio").removeClass("d-none").empty().append('You have reached your audio streaming limit. Try again tomorrow or <a class="alert-link" href="/gopremium">improve your plan</a> to increase your daily audio streaming limit.');
                     } else {
                         $("#audioplayer-loader").addClass("d-none");
                         $("#alert-msg-audio").removeClass("d-none").empty().append('There was an unexpected error trying to create audio from this text. <a class="alert-link" href="#" id="retry-audio-load">Try again</a> later.');

@@ -526,7 +526,7 @@ $(document).ready(function() {
                         if (data.error_msg == null) {
                             gems_earned = data.gems_earned;
                             show_confirmation_dialog = false;
-                            var url = "/textstats.php";
+                            var url = "/textstats";
                             var total_words =
                                 Number($(".word").length) + Number($(".phrase").length);
                             var form = $(

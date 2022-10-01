@@ -30,7 +30,7 @@ require_once PUBLIC_PATH . 'header.php';
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="texts.php">Home</a>
+                            <a href="/texts">Home</a>
                         </li>
                         <li class="breadcrumb-item">
                             <span class="active">Popular sources</span>

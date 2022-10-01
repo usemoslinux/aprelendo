@@ -61,7 +61,7 @@ try {
         throw new \Exception('Oops! There was an error trying to fetch that text.');
     }
 } catch (Exception $e) {
-    header('Location:/login.php');
+    header('Location:/login');
     exit;
 }
 

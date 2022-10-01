@@ -70,18 +70,18 @@ class TextTable extends Table {
             $source_uri = isset($this->rows[$i]['source_uri']) && !empty($this->rows[$i]['source_uri']) ? ' (' . Url::getDomainName($this->rows[$i]['source_uri']) . ')': '';
             $text_author = isset($this->rows[$i]['author']) && !empty($this->rows[$i]['author']) ? "by {$this->rows[$i]['author']}" : 'by Unkown' . $source_uri;
             
-            $link = $this->show_archived ? '' : 'showtext.php';
+            $link = $this->show_archived ? '' : 'showtext';
             
             // if it's a video, then change link accordinly
             if ($this->rows[$i]['type'] && !empty($this->rows[$i]['type'])) {
                 if (isset($link) && !empty($link)) {
                     switch ($this->rows[$i]['type']) {
                         case 5: // videos
-                        $replace = str_replace('showtext.php', 'showvideo.php', $link);
+                        $replace = str_replace('showtext', 'showvideo', $link);
                         $link = empty($replace) ? '' : "<a href ='$replace?id=$text_id";
                         break;
                         case 6: // ebooks
-                        $replace = str_replace('showtext.php', 'showebook.php', $link);
+                        $replace = str_replace('showtext', 'showebook', $link);
                         $link = empty($replace) ? '' : "<a href ='$replace?id=$text_id";
                         break;    
                         default:

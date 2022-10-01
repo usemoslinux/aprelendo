@@ -65,7 +65,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
             // if there are any results, show them
             $table = New SharedTextTable($user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
             $html = $table->print($sort_by);
-            $html .= $pagination->print('sharedtexts.php', $search_text, $sort_by, $filter_type, $filter_level); // print pagination
+            $html .= $pagination->print('sharedtexts', $search_text, $sort_by, $filter_type, $filter_level); // print pagination
         } 
     } catch (\Exception $e) {
         // if there are no texts to show, print a message
@@ -88,7 +88,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         if ($rows) {
             $table = New SharedTextTable($user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
             $html = $table->print($sort_by);
-            $html .= $pagination->print('sharedtexts.php', '', $sort_by, $filter_type, $filter_level); // print pagination
+            $html .= $pagination->print('sharedtexts', '', $sort_by, $filter_type, $filter_level); // print pagination
         } 
     } catch (\Exception $e) {
         // if there are no texts to show, print a message

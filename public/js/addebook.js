@@ -115,7 +115,7 @@ $(document).ready(function() {
                                     .parent()
                                     .delay(4000)
                                     .fadeOut("slow", function() {
-                                        window.location.replace("texts.php");
+                                        window.location.replace("/texts");
                                     });
                             }
                             // if epub file has no errors...
@@ -126,7 +126,7 @@ $(document).ready(function() {
                                     .parent()
                                     .delay(1500)
                                     .fadeOut("slow", function() {
-                                        window.location.replace("texts.php");
+                                        window.location.replace("/texts");
                                     });
                             }
                         })

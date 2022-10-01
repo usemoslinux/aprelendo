@@ -147,7 +147,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                 <small id="passwords-match-text"></small>
                             </div>
                             <button type="submit" id="btn_register" class="btn btn-block btn-success">Sign up</button>
-                            <small>By registering, you declare to have read and accepted our <a href="privacy.php"
+                            <small>By registering, you declare to have read and accepted our <a href="/privacy"
                                     target="_blank" rel="noopener noreferrer">privacy policy</a>.</small>
                         </div>
                     </form>
@@ -155,7 +155,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <br>
                     <footer>
                         <p class="text-muted text-center">
-                            Already have an account? <a href="login.php">Sign in</a>
+                            Already have an account? <a href="/login">Sign in</a>
                         </p>
                     </footer>
                 </section>

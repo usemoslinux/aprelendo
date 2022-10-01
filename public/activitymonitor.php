@@ -63,7 +63,7 @@ $msg_progress_bar = "$nr_of_words_reviewed_today / 10";
                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="min-width: 34px; width: <?php echo strval($per_of_words_leardned_today) . '%'; ?>"><?php echo $msg_progress_bar; ?></div>
                 </div> 
                 <?php echo $message_html; ?>
-                <a href="stats.php" class="font-italic float-right"><i class="fas fa-chart-line"></i> More stats</a>
+                <a href="/stats" class="font-italic float-right"><i class="fas fa-chart-line"></i> More stats</a>
             </div>
         </div>
     </div>

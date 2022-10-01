@@ -448,7 +448,7 @@ class Texts extends DBEntity {
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if (!$result || empty($result)) {
-                throw new \Exception('Oops! There are no texts in your private library yet. Feel free to add one or access the <a href="sharedtexts.php">shared texts</a> section.');
+                throw new \Exception('Oops! There are no texts in your private library yet. Feel free to add one or access the <a href="/sharedtexts">shared texts</a> section.');
             }
 
             return $result;

@@ -65,7 +65,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         if ($rows) { // if there are any results, show them
             $table = New TextTable($headings, $col_widths, $rows, $show_archived, $action_menu, $sort_menu);
             $html = $table->print($sort_by);
-            $html .= $pagination->print('texts.php', $search_text, $sort_by, $filter_type, $filter_level, $show_archived); // print pagination
+            $html .= $pagination->print('texts', $search_text, $sort_by, $filter_type, $filter_level, $show_archived); // print pagination
         }
     } catch (\Exception $e) {
         $html = '<p>' . $e->getMessage() . '</p>';
@@ -92,14 +92,14 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
         if ($rows) {
             $table = New TextTable($headings, $col_widths, $rows, $show_archived, $action_menu, $sort_menu);
             $html = $table->print($sort_by);
-            $html .= $pagination->print('texts.php', '', $sort_by, $filter_type, $filter_level, $show_archived); // print pagination
+            $html .= $pagination->print('texts', '', $sort_by, $filter_type, $filter_level, $show_archived); // print pagination
         } else { // if there are no texts to show, print a message
             if (!isset($_COOKIE['hide_welcome_msg'])) {
                 
             $html = '<div class="alert alert-success alert-dismissible fade show" role="alert">
                         <p><strong>Welcome!</strong> It seems this is your first time using Aprelendo. Follow these instructions to get started:</p>
                         <ol>
-                            <li>Download and install our extensions (<a href="https://addons.mozilla.org/en-US/firefox/addon/aprelendo/" target="_blank" rel="noopener noreferrer">Firefox</a> & <a href="https://chrome.google.com/webstore/detail/aprelendo/aocicejjgilfkeeklfcomejgphjhjonj/related?hl=en-US" target="_blank" rel="noopener noreferrer">Chrome</a> are supported). In case you are using another web browser (i.e. Safari, Opera or Internet Explorer) you should try installing our <a href="extensions.php#bookmarklets" target="_blank" rel="noopener noreferrer">bookmarklet</a>.</li>
+                            <li>Download and install our extensions (<a href="https://addons.mozilla.org/en-US/firefox/addon/aprelendo/" target="_blank" rel="noopener noreferrer">Firefox</a> & <a href="https://chrome.google.com/webstore/detail/aprelendo/aocicejjgilfkeeklfcomejgphjhjonj/related?hl=en-US" target="_blank" rel="noopener noreferrer">Chrome</a> are supported). In case you are using another web browser (i.e. Safari, Opera or Internet Explorer) you should try installing our <a href="/extensions#bookmarklets" target="_blank" rel="noopener noreferrer">bookmarklet</a>.</li>
                             <li>Go to any website containing an article or page written in the language you are trying to learn. Make sure it fits your level of proficiency or a little higher. Press the aprelendo button, which  appeared after installing the extension/bookmarklet. This will add the article to your Aprelendo library. </li>
                             <li>Open the newly added article and follow the instructions for each learning phase. For more info, check our video on <a href="https://www.youtube.com/watch?v=5HLr9uxJNDs" target="_blank" rel="noopener noreferrer">how our assisted learning method works</a>.</li>
                         </ol>
@@ -109,7 +109,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
                     </div>';
             }
             
-            $html .= '<p class="text-center">Your private library is empty. Check out some <a href="sources.php">popular sources</a> for this language.</p>';
+            $html .= '<p class="text-center">Your private library is empty. Check out some <a href="/sources">popular sources</a> for this language.</p>';
         }
     } catch (\Exception $e) {
         $html = '<p class="text-center">' . $e->getMessage() . '</p>';

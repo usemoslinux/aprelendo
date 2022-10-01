@@ -61,9 +61,9 @@ if ($available_langs) {
                     <div class='card-body'>";
 
         $btn_disabled = $lg_id == $user->getLangId() ? 'disabled' : '';
-        $html .= "<button type='button' onclick='location.href=\"languages.php?act=$lg_id\"' 
+        $html .= "<button type='button' onclick='location.href=\"languages?act=$lg_id\"' 
                           class='btn btn-primary $btn_disabled'>Set as active</button>
-                  <button type='button' onclick='location.href=\"languages.php?chg=$lg_id\"' class='btn btn-secondary'>Edit</button>
+                  <button type='button' onclick='location.href=\"languages?chg=$lg_id\"' class='btn btn-secondary'>Edit</button>
                   <span class='message'></span>
                   </div></div></div>";
     }

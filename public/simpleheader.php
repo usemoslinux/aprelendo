@@ -23,7 +23,7 @@
         <nav class="navbar navbar-expand-md navbar-light">
             <div class="container mtb">
                 <!-- Brand -->
-                <a class="navbar-brand" href="index.php"></a>
+                <a class="navbar-brand" href="/index"></a>
 
                 <!-- Toggler Button -->
                 <button class="navbar-toggler" aria-label="toggler button" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -33,10 +33,10 @@
                 <!-- Navbar links -->
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item my-auto"><a class="nav-link" href="index.php#hiw">How it works</a></li>
-                        <li class="nav-item my-auto"><a class="nav-link" href="gopremium.php">Go premium</a></li>
+                        <li class="nav-item my-auto"><a class="nav-link" href="/index#hiw">How it works</a></li>
+                        <li class="nav-item my-auto"><a class="nav-link" href="/gopremium">Go premium</a></li>
                         <li class="nav-item">
-                            <a class="nav-link" id="login-menu" href="login.php">Sign in</a>
+                            <a class="nav-link" id="login-menu" href="/login">Sign in</a>
                         </li>
                     </ul>
                 </div>

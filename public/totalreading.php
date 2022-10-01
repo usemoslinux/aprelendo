@@ -38,7 +38,7 @@ if (!$user->isLoggedIn()) {
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="index.php">Home</a>
+                        <a href="/index">Home</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="active">Total reading</span>
@@ -195,7 +195,7 @@ if (!$user->isLoggedIn()) {
                                 practice using texts that are at your level (or slightly above it)</strong>. Thus, if you 
                                 are a beginner you should try to use very short texts, with very basic vocabulary. Intermediate 
                                 and advanced users, on the other hand, can try using longer and more complex texts.
-                            <p>To alleviate the lack of curated texts, we created the "<a href="sharedtexts.php">shared texts</a>" section, which
+                            <p>To alleviate the lack of curated texts, we created the "<a href="/sharedtexts">shared texts</a>" section, which
                                 allows our community to add and share texts that fit different levels of learning.
                             </p>
                         </section>
