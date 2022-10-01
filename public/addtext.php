@@ -62,10 +62,10 @@ use Aprelendo\Includes\Classes\Texts;
             } elseif (isset($_GET['sh'])) { 
                 // shared text
                 $art_is_shared = true;  
-            } 
-            elseif (isset($_GET['url'])) { 
+            } elseif (isset($_GET['url'])) { 
                 // external call (bookmarklet, addon)
                 $art_url = $_GET['url'];
+                $art_is_shared = true;
                 $external_call = true;
             }
             ?>
@@ -125,7 +125,7 @@ use Aprelendo\Includes\Classes\Texts;
                         <div class="col-12">
                             <div id="shared-text-wrapper-div" class="custom-control custom-switch">
                                 <input id="shared-text" class="custom-control-input" type="checkbox" name="shared-text" <?php if
-                                    (isset($art_is_shared)) {echo 'checked' ;}?>>
+                                    ($art_is_shared) {echo 'checked' ;}?>>
                                 <label class="custom-control-label" for="shared-text" id="shared-text-label"> Share text with our community</label>
                             </div>
                         </div>

@@ -73,15 +73,6 @@ $(document).ready(function() {
     } // end showMessage
 
     /**
-     * Makes #btn-upload-audio (button) behave like #audio-uri (input).
-     * #audio-uri is the input element used for selecting audio files to upload.
-     * It is hidden by default and replaced by a nicer button element (#btn-upload-audio).
-     */
-    $("#btn-upload-audio").on("click", function() {
-        $("#audio-uri").trigger("click");
-    }); // end #btn-upload-audio.on.click
-
-    /**
      * Checks how many characters are left for user input
      */
     $("#text").on("input", function() {
@@ -236,11 +227,9 @@ $(document).ready(function() {
         $("#title").val("");
         $("#text").val("");
         $("#upload-text").val("");
-        $("#audio-uri").val("");
         if (!exceptSourceURI) {
             $("#url").val("");
         }
-        $("#shared-text").prop("checked", false);
     } // end resetControls
 
     // when page loads, check if text was imported from RSS feed
