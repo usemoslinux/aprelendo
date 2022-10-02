@@ -56,8 +56,7 @@ $(document).ready(function() {
             $('#text').html(underlineWords(data, doclang));
         })
         .fail(function(xhr, ajaxOptions, thrownError) {
-            console.log("There was an unexpected error trying to underline words in this text");
-            
+            console.log("There was an unexpected error trying to underline words in this text");  
         })
         .always(function() {
             skipAudioPhases();

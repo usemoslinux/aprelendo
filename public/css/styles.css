@@ -143,8 +143,20 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 
 .dropdown-toggle>img,
 .gamification img {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+}
+
+#user-menu>i {
+    font-size: 32px;
+    vertical-align: middle;
+}
+
+img#img-language-flag {
+    border: 2px solid white;
+    border-radius: 50%;
+    /* box-shadow: 0 0.1rem 0.1rem 0 rgb(0 0 0 / 70%); */
 }
 
 .navbar-nav>li>.dropdown-menu {
@@ -175,7 +187,6 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     border-radius: 98px;
     font-size: 1rem;
     text-shadow: none;
-    height: 38px;
     margin-top: 4px;
     padding: 6px 8px;
 }
@@ -193,7 +204,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     color: white;
     font-size: 1rem;
     font-weight: 700;
-    padding: .5rem .5rem .5rem 0
+    /* padding: .5rem .5rem .5rem 0 */
 }
 
 @media only screen and (max-width: 767px) {
@@ -220,12 +231,6 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 
     #learning-lang-span {
         display: inline;
-    }
-
-    #img-language-flag,
-    .gamification img {
-        width: 16px;
-        height: 16px;
     }
 
     #streak-days {

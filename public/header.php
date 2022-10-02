@@ -64,12 +64,12 @@ $streak_days = (int)$gems->getDaysStreak();
                 <!-- Navbar links -->
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ml-auto">
-                        <li id="streak-days" class="nav-item gamification"><img src="/img/gamification/streak.svg" alt="Streak" title="Streak days"> <?php echo $streak_days; ?></li>
-                        <li id="gems" class="nav-item gamification"><img src="/img/gamification/gems.svg" alt="Gems" title="Gems earned"> <?php echo $nr_of_gems; ?></li>
+                        <li id="streak-days" class="nav-item gamification py-2 pr-md-2"><img src="/img/gamification/streak.svg" class="mr-3 mr-md-1" alt="Streak" title="Streak days"> <?php echo $streak_days; ?></li>
+                        <li id="gems" class="nav-item gamification py-2 pr-md-2"><img src="/img/gamification/gems.svg" class="mr-3 mr-md-1 ml-md-2" alt="Gems" title="Gems earned"> <?php echo $nr_of_gems; ?></li>
                         <li id="language-dropdown" class="nav-item dropdown">
                             <a href="javascript:;" id="language-menu" class="nav-link dropdown-toggle" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img id="img-language-flag" src="/img/flags/<?php echo $user->getLang() . '.svg';?>"
+                                <img id="img-language-flag" class="mr-3 mr-md-0" src="/img/flags/<?php echo $user->getLang() . '.svg';?>"
                                     alt="<?php echo $lang_full; ?> flag">
                                 <span id="learning-lang-span">
                                     <?php echo $lang_full; ?>
@@ -86,7 +86,7 @@ $streak_days = (int)$gems->getDaysStreak();
                         <li id="user-dropdown" class="nav-item dropdown">
                             <a id="user-menu" href="javascript:;" class="nav-link dropdown-toggle" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-user-circle"></i>
+                                <i class="fas fa-user-circle mr-3 mr-md-1"></i>
                                 <?php echo ucfirst($user->getName()); ?>
                                 <b class="caret"></b>
                             </a>
