@@ -69,27 +69,27 @@ use Aprelendo\Includes\Classes\Achievements;
         <section>
             <dl class="row">
                 <dt class="col-12">
-                    <h4 class="text-center pt-4 pb-2">Gems & study streak</h4>
+                    <h4 class="text-center py-4">Gems & study streak</h4>
                 </dt>
-                <dt class="col-sm-2">
+                <dt class="col-md-2">
                     <figure class="px-5 px-sm-0 mt-2">
-                        <img src="/img/gamification/streak.svg" class="m-2" alt="Streak" title="Streak days">
+                        <img src="/img/gamification/streak.svg" class="mx-auto d-block m-2 gamification-img" alt="Streak" title="Streak days">
                         <figcaption class="w-100 text-center font-weight-bold"><span style="font-size:2rem"><?php echo $streak_days; ?></span>
                         </figcaption>
                     </figure>
                 </dt>
-                <dd class="col-sm-10">
+                <dd class="col-md-10">
                     <p>This is the number of consecutive days you studied a text, video or ebook in the currently selected language.</p>
                     <p>Streaks are a robust repetition tool. They reward you each time you complete an action, meaning you’re more likely to keep doing it. After a while, this new routine will become a new habit.</p>
                     <p>Streaks also allow you to view your progress. You know what they say, if you can envisage your goal, then you’re halfway to achieving it.</p>
                 </dd>
-                <dt class="col-sm-2">
+                <dt class="col-md-2">
                     <figure class="px-5 px-sm-0 mt-2">
-                        <img src="/img/gamification/gems.svg" class="m-2" alt="Gems" title="Gems earned">
+                        <img src="/img/gamification/gems.svg" class="mx-auto d-block m-2 gamification-img" alt="Gems" title="Gems earned">
                         <figcaption class="w-100 text-center font-weight-bold"><span style="font-size:2rem"><?php echo $nr_of_gems; ?></span>
                     </figure>
                 </dt>
-                <dd class="col-sm-10">
+                <dd class="col-md-10">
                     <p>This is the total number of gems you have won by studying the currently selected language.</p>
                     <p>You can win gems by uploading new texts, videos or books. You also earn them by adding new words and phrases to your vocabulary list. Practice makes you worthy of more precious stones. However, you can lose them by forgetting words or phrases that were marked as learned.</p>
                     <p>Earning gems shouldn't be your ultimate goal, but it can help keep you engaged and motivated to learn.</p>
@@ -106,7 +106,7 @@ use Aprelendo\Includes\Classes\Achievements;
             $html = '<hr>
                         <section>
                         <div class="row">
-                            <div class="col-12"><h4 class="text-center pt-4 pb-2">Achievements</h4></div>
+                            <div class="col-12"><h4 class="text-center py-4">Achievements</h4></div>
                         </div>';
 
             // badges
@@ -122,9 +122,9 @@ use Aprelendo\Includes\Classes\Achievements;
                 $cols_in_row = ($row == $nr_of_lines_floor) ? ($nr_of_lines_fraction*4) : 4;
                 for ($col=0; $col < $cols_in_row; $col++) { 
                     $html .= '<div class="col-6 col-md-3">
-                                <figure class="w-100 px-4 mt-2">
-                                    <img src="' . $badges[$cur_badge_index]['img_uri'] . '" class="mx-auto d-block" alt="' . $badges[$cur_badge_index]['description'] . '">
-                                    <figcaption class="text-center small font-weight-bold">' . $badges[$cur_badge_index]['description'] . '</figcaption>
+                                <figure class="w-100 mt-2">
+                                    <img src="' . $badges[$cur_badge_index]['img_uri'] . '" class="mx-auto d-block gamification-img badge" alt="' . $badges[$cur_badge_index]['description'] . '">
+                                    <figcaption class="text-center font-weight-bold pt-2">' . $badges[$cur_badge_index]['description'] . '</figcaption>
                                 </figure>
                             </div>';
                     $cur_badge_index++;

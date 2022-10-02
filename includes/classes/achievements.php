@@ -139,7 +139,8 @@ class Achievements extends DBEntity {
     private function checkByType(int $type_id, int $threshold): ?array {
         $sql = "SELECT * 
                 FROM `achievements`
-                WHERE `type_id`=? AND `threshold`<=?";
+                WHERE `type_id`=? AND `threshold`<=?
+                ORDER BY `threshold` ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$type_id, $threshold]);
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
