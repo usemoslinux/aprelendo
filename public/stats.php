@@ -123,7 +123,7 @@ use Aprelendo\Includes\Classes\Achievements;
                 for ($col=0; $col < $cols_in_row; $col++) { 
                     $html .= '<div class="col-6 col-md-3">
                                 <figure class="w-100 mt-2">
-                                    <img src="' . $badges[$cur_badge_index]['img_uri'] . '" class="mx-auto d-block gamification-img badge" alt="' . $badges[$cur_badge_index]['description'] . '">
+                                    <img src="' . $badges[$cur_badge_index]['img_uri'] . '" class="mx-auto d-block gamification-img gamification-badge" alt="' . $badges[$cur_badge_index]['description'] . '">
                                     <figcaption class="text-center font-weight-bold pt-2">' . $badges[$cur_badge_index]['description'] . '</figcaption>
                                 </figure>
                             </div>';

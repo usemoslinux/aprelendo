@@ -1337,7 +1337,7 @@ div.blurry-background {
     max-height: 128px;
 }
 
-.badge {
+.gamification-badge {
     background: rgba(0,0,0,.075);
     border-radius: 50%;
     padding: 20px;
