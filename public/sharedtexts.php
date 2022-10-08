@@ -137,7 +137,7 @@ if (!empty($_GET)) {
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="/addtext?sh">Plain text</a>
-                                <a class="dropdown-item" href="/addvideo">Youtube video</a>
+                                <a class="dropdown-item" href="/addvideo">YouTube video</a>
                                 <a href="/addrss" <?php echo $user->isPremium() ? 
                                 'class="dropdown-item"' : 'class="dropdown-item disabled" title="Premium users only"'; ?> >
                                     RSS text

@@ -351,7 +351,7 @@ class Texts extends DBEntity {
     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
     * Values are returned using a sort pattern ($sort_by)
     *
-    * @param int $filter_type: 0 = All; 1 = Articles; 2 = Conversations; 3 = Letters; 4 = Lyrics; 6 = Ebooks; 7 = Others
+    * @param int $filter_type: 0 = All; 1 = Articles; 2 = Conversations; 3 = Letters; 4 = Lyrics; 5 = YouToube Videos; 6 = Ebooks; 7 = Others
     * @param int $filter_level: 0 = All; 1 = Beginner; 2 = Intermediate; 3 = Advanced 
     * @param string $search_text
     * @param int $offset

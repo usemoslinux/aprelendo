@@ -82,7 +82,7 @@ use Aprelendo\Includes\Classes\Texts;
                                 <option value="1">Article</option>
                                 <option value="2">Conversation</option>
                                 <option value="3">Letter</option>
-                                <option value="4">Song</option>
+                                <option value="4">Lyrics</option>
                                 <option value="7">Other</option>
                             </select>
                         </div>

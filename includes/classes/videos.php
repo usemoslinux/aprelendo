@@ -133,7 +133,7 @@ class Videos extends DBEntity {
             // check if it's a valid youtube URL
             foreach ($yt_urls as $yt_url) {
                 if (strpos($url_split[0], $yt_url) === 0) {
-                    // extract youtube video id
+                    // extract YouTube video id
                     foreach ($url_params as $url_param) {
                         if(strpos($url_param, 'v=') === 0) {
                             $result = substr($url_param, 2);

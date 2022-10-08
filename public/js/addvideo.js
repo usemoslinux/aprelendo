@@ -55,10 +55,10 @@ $(document).ready(function() {
     }); // end #form-addvideo.on.submit
 
     /**
-     * Fetches Youtube video, including title, channel & transcript
+     * Fetches YouTube video, including title, channel & transcript
      */
     function fetch_url(url) {
-        video_id = extractYTId(url); //get youtube video id
+        video_id = extractYTId(url); //get YouTube video id
 
         emptyAll(); // empty all input boxes
 
@@ -174,7 +174,7 @@ $(document).ready(function() {
             // check if it's a valid youtube URL
             for (let i = 0; i < yt_urls.length; i++) {
                 if (url_split[0].lastIndexOf(yt_urls[i]) === 0) {
-                    // extract youtube video id
+                    // extract YouTube video id
                     for (let z = 0; z < url_params.length; z++) {
                         if (url_params[z].lastIndexOf("v=") === 0) {
                             return url_params[z].substring(2);

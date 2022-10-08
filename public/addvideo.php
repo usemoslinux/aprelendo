@@ -42,7 +42,7 @@ require_once PUBLIC_PATH . 'header.php';
             <main>
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="alert alert-info"><i class="fas fa-info-circle"></i> All Youtube videos you add to Aprelendo will be shared with the rest of our community. You will find them in the "<a href="/sharedtexts">shared texts</a>" section.</div>
+                        <div class="alert alert-info"><i class="fas fa-info-circle"></i> All YouTube videos you add to Aprelendo will be shared with the rest of our community. You will find them in the "<a href="/sharedtexts">shared texts</a>" section.</div>
                         <div id="alert-msg" class="d-none"></div>
                     </div>
                     <!-- VIDEO CONTAINER -->

@@ -56,7 +56,7 @@ class TextTable extends Table {
             array('Article',        '<i title="Article" class="far fa-newspaper"></i>'),
             array('Conversation',   '<i title="Conversation" class="far fa-comments"></i>'),
             array('Letter',         '<i title="Letter" class="far fa-envelope-open"></i>'),
-            array('Song',           '<i title="Song" class="fas fa-music"></i>'),
+            array('Lyrics',         '<i title="Lyrics" class="fas fa-music"></i>'),
             array('Video',          '<i title="Video" class="fas fa-video"></i>'),
             array('Ebook',          '<i title="Ebook" class="fas fa-book"></i>'),
             array('Other',          '<i title="Other" class="far fa-file-alt"></i>')
