@@ -394,29 +394,6 @@ $(document).ready(function() {
     } // end showModal
 
     /**
-     * Adds anchor '#dictionary' to URL, to allow closing modal with back button
-     */
-    $('#myModal').on('show.bs.modal', function(e) {
-        window.location.hash = "dictionary";
-    }); // end of #myModal.on.show.bs.modal
-
-    /**
-     * Workaround to allow closing modal with back button 
-     */
-    $(window).on('hashchange', function (event) {
-        if (window.location.hash != "#dictionary") {
-            $('#myModal').modal('hide');
-        }
-    }); // end of window.on.hashchange
-
-    /**
-     * When modal closes, remove hash from URL
-     */
-     $('#myModal').on('hide.bs.modal', function (event) {
-        history.pushState("", document.title, window.location.pathname + window.location.search);
-    });
-
-    /**
      * Hides loader spinner when dictionary iframe finished loading
      */
     $dic_frame.on("load", function() {

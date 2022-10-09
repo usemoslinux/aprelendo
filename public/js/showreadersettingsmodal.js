@@ -45,27 +45,4 @@ $(document).ready(function() {
         });
     });
 
-    /**
-     * Adds anchor '#prefs' to URL, to allow closing modal with back button
-     */
-     $('#reader-settings-modal').on('show.bs.modal', function(e) {
-        window.location.hash = "prefs";
-    }); // end of #reader-settings-modal.on.show.bs.modal
-
-    /**
-     * Workaround to allow closing modal with back button 
-     */
-    $(window).on('hashchange', function (event) {
-        if(window.location.hash != "#prefs") {
-            $('#reader-settings-modal').modal('hide');
-        }
-    }); // end of window.on.hashchange
-
-    /**
-     * When modal closes, remove hash from URL
-     */
-     $('#reader-settings-modal').on('hide.bs.modal', function (event) {
-        history.pushState("", document.title, window.location.pathname + window.location.search);
-    });
-
 });
