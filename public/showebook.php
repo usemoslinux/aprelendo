@@ -135,12 +135,17 @@ try {
 </head>
 
 <body id="readerpage" <?php echo getCSS($class, $styles); ?> >
-
-    <div id="navigation" class="sidebar-closed">
-        <h1 id="title">...</h1>
-        <image id="cover" width="150px" />
-        <h2 id="author">...</h2>
-        <div id="toc"></div>
+    
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="navigation" aria-labelledby="navigation-title">
+        <div class="offcanvas-header">
+            <h1 id="title">...</h1>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <image id="cover" width="150px" />
+            <h2 id="author">...</h2>
+            <div id="toc"></div>
+        </div>
     </div>
 
     <div id="main">
@@ -160,12 +165,12 @@ try {
 
                 <span id="book-title" class="fw-bold ms-2 me-auto my-auto"></span>
 
-                <span id="opener">
+                <button id="opener" class="btn btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#navigation" aria-controls="navigation">
                     <svg height="24px" id="hamburger" style="enable-background:new 0 0 32 32;" version="1.1" viewBox="0 0 32 32"
                         width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z" />
                     </svg>
-                </span>    
+                </button>
             </span>
         </div>
 

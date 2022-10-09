@@ -201,17 +201,6 @@
 
     var navigation = document.getElementById("navigation");
     var main = document.getElementById("main");
-    var opener = document.getElementById("opener");
-
-    opener.addEventListener(
-        "click",
-        function(e) {
-            navigation.classList.toggle("sidebar-closed");
-            main.classList.toggle("sidebar-opened");
-            e.preventDefault();
-        },
-        false
-    ); // end opener.on.click
 
     book.loaded.navigation.then(function(toc) {
         var $nav = document.getElementById("toc"),
@@ -235,8 +224,10 @@
 
                 link.onclick = function() {
                     var url = link.getAttribute("href");
+                    
+                    document.getElementById("opener").click();
+                    
                     display(url);
-                    opener.click();
                     $("html, body").animate({
                         scrollTop: 0
                     }, "fast");
