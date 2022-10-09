@@ -389,9 +389,9 @@ class Reader extends Text
      * @return string html
      */
     public function showOfflineVideo(string $file): string {
-        $html = '<div class="col-lg-6 offset-lg-3">' .
+        $html = '<div class="col-xl-8 offset-xl-2">' .
                     '<div style="height: 100vh; height: calc(var(--vh, 1vh) * 100);" class="d-flex flex-column">' .
-                        '<div id="offline-video-container" class="ratio ratio-16x9 mt-1" style="max-height: 60%;">' .
+                        '<div id="offline-video-container" class="ratio ratio-16x9 mt-1">' .
                         '<input id="video-file-input" type="file" name="video-file-input" accept="video/mp4,video/ogg,video/webm" style="display: none;" />' .
                         '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt" style="display: none;" />' . 
                             '<video id="video-stream" controls controlsList="nofullscreen nodownload noremoteplayback" playsinline disablePictureInPicture>' .
@@ -401,8 +401,8 @@ class Reader extends Text
                         '</div>';
 
         $html .= '<div class="d-flex flex-wrap">'.
-                    '<button type="button" id="btn-selvideo" title="Select video" class="btn btn-sm btn-primary me-2 my-2">Video...</button>'.
-                    '<button type="button" id="btn-selsubs" title="Select subtitles" class="btn btn-sm btn-primary me-2 my-2">Subs...</button>'.
+                    '<button type="button" id="btn-selvideo" title="Select video" class="btn btn-sm btn-primary me-2 my-2"><i class="fa-solid fa-video"></i></button>'.
+                    '<button type="button" id="btn-selsubs" title="Select subtitles" class="btn btn-sm btn-primary me-2 my-2"><i class="fa-solid fa-closed-captioning"></i></button>'.
                     '<button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal" class="btn btn-sm btn-secondary me-2 my-2" title="Reader settings">
                         <i class="fas fa-cog"></i>
                     </button>' .
