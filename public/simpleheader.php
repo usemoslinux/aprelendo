@@ -26,13 +26,13 @@
                 <a class="navbar-brand" href="/index"></a>
 
                 <!-- Toggler Button -->
-                <button class="navbar-toggler" aria-label="toggler button" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <button class="navbar-toggler" aria-label="toggler button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <!-- Navbar links -->
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item my-auto"><a class="nav-link" href="/index#hiw">How it works</a></li>
                         <li class="nav-item my-auto"><a class="nav-link" href="/gopremium">Go premium</a></li>
                         <li class="nav-item">

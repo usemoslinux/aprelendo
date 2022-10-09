@@ -44,7 +44,7 @@ if(isset($unnanounced_achievements) && !empty($unnanounced_achievements)):
                 <div class="modal-split">
                     <figure class="w-75 mx-auto my-0">
                         <img src="<?php echo $achievement['img_uri'];?>" class="mx-auto d-block" alt="<?php echo $achievement['description'];?>">
-                        <figcaption class="text-center font-weight-bold"><?php echo $achievement['description'];?></figcaption>
+                        <figcaption class="text-center fw-bold"><?php echo $achievement['description'];?></figcaption>
                     </figure>
                 </div>
             <?php endforeach; ?>

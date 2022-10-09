@@ -107,7 +107,7 @@ $(document).ready(function() {
                     img_uri +
                     '" alt="' +
                     lang_array[sel_index] +
-                    '"></img>'
+                    '"></img><br>'
             );
         $("#welcome-msg").text(
             "You are only one step away from learning " + lang_array[sel_index]

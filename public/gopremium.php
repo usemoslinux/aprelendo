@@ -117,7 +117,9 @@ if (!$user->isLoggedIn()) {
                                 <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Export words
                                     (CSV)</li>
                             </ul>
-                            <a href="/login" role="button" class="btn btn-block btn-primary text-uppercase">Sign In</a>
+                            <div class="d-grid gap-2">
+                                <a href="/login" role="button" class="btn btn-primary text-uppercase">Sign In</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -166,7 +168,9 @@ if (!$user->isLoggedIn()) {
                                 <input type="hidden" name="lc" value="US">
                                 <input id="inp-item-nbr" type="hidden" name="item_number" value="1">
                                 <input type="hidden" name="bn" value="PP-BuyNowBF">
-                                <input type="submit" name="submit" class="btn btn-block btn-primary text-uppercase" value="Buy Now" />
+                                <div class="d-grid gap-2">
+                                    <input type="submit" name="submit" class="btn btn-primary text-uppercase" value="Buy Now" />
+                                </div>
                             </form>
                         </div>
                     </div>

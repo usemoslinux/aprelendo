@@ -53,7 +53,7 @@ use Aprelendo\Includes\Classes\User;
                     <div id="alert-msg" class="alert alert-info">Enter your new password twice.</div>
                     <form id="form_create_new_password">
                         <input type="hidden" id="email" name="email" value="<?php echo $email ; ?>">
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label for="newpassword">Password:</label>
                             <small>
                                 <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
@@ -63,15 +63,13 @@ use Aprelendo\Includes\Classes\User;
                                     pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
                                     title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
                                     autocomplete="off" required>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                        aria-label="Show/hide password" tabindex="-1"><i class="fas fa-eye-slash"
-                                            aria-hidden="true"></i></button>
-                                </div>
+                                <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                    aria-label="Show/hide password" tabindex="-1"><i class="fas fa-eye-slash"
+                                        aria-hidden="true"></i></button>
                             </div>
                             <small id="password-strength-text"></small>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label for="newpassword-confirmation">Confirm password:</label>
                             <div class="input-group">
                                 <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
@@ -79,15 +77,15 @@ use Aprelendo\Includes\Classes\User;
                                     pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
                                     title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
                                     autocomplete="off" required>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                        aria-label="Show/hide password confirmation" tabindex="-1"><i
-                                            class="fas fa-eye-slash" aria-hidden="true"></i></button>
-                                </div>
+                                <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                    aria-label="Show/hide password confirmation" tabindex="-1"><i
+                                        class="fas fa-eye-slash" aria-hidden="true"></i></button>
                             </div>
                             <small id="passwords-match-text"></small>
                         </div>
-                        <button type="submit" id="create_new_password" class="btn btn-block btn-success">Save new password</button>
+                        <div class="d-grid gap-2">
+                            <button type="submit" id="create_new_password" class="btn btn-success">Save new password</button>
+                        </div>
                     </form>
 
                     <?php
@@ -103,11 +101,13 @@ use Aprelendo\Includes\Classes\User;
 
                     <div id="alert-msg" class="alert alert-info">Enter your email address to receive a link to reset your password.</div>
                     <form id="form_forgot_password">
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label for="email">E-mail address:</label>
                             <input type="email" id="email" name="email" class="form-control" maxlength="50" required>
                         </div>
-                        <button type="submit" id="btn_forgot_password" class="btn btn-block btn-success">Request password</button>
+                        <div class="d-grid gap-2">
+                            <button type="submit" id="btn_forgot_password" class="btn btn-success">Request password</button>
+                        </div>
                     </form>
 
                     <?php 

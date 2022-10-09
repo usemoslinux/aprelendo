@@ -47,7 +47,7 @@ require_once PUBLIC_PATH . 'header.php';
                     </div>
                     <!-- VIDEO CONTAINER -->
                     <div class="col-lg-6 mb-3">
-                        <div id="add-video-wrapper" class="embed-responsive embed-responsive-16by9">
+                        <div id="add-video-wrapper" class="ratio ratio-16x9">
                             <i id="yt-logo" class="fab fa-youtube fa-3x"></i>
                             <iframe id="yt-video" style="border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                         </div>
@@ -64,36 +64,34 @@ require_once PUBLIC_PATH . 'header.php';
                             <form id="form-addvideo" class="add-form" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="mode" value="video" />
                                 <input type="hidden" name="type" id="type" class="form-control" value="5">
-                                <div class="form-row">
-                                    <div class="form-group col-sm-12">
+                                <div class="row">
+                                    <div class="mb-3 col-sm-12">
                                         <label for="title">Title:</label>
                                         <input type="text" id="title" name="title" class="form-control" maxlength="200" placeholder="Video title (required)" autofocus
                                             required value="">
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="mb-3 col-sm-12">
                                         <label for="author">Author:</label>
                                         <input type="text" id="author" name="author" class="form-control" maxlength="100" placeholder="Author channel name (required)"
                                             required value="">
                                     </div>
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-sm-12">
+                                <div class="row">
+                                    <div class="mb-3 col-sm-12">
                                         <label for="url">Source URL:</label>
                                         <div class="input-group">
                                             <input type="url" id="url" name="url" class="form-control" placeholder="Source URL (required) >> start here: copy URL & press fetch button"
                                                 value="<?php if (isset($_GET['url']) && !empty($_GET['url'])) { echo $_GET['url']; } ?>" required>
-                                            <div class="input-group-append">
-                                                <button id="btn-fetch" class="btn btn-secondary" type="button">
-                                                    <i id="btn-fetch-img" class="fas fa-arrow-down text-warning"></i> Fetch</button>
-                                            </div>
+                                            <button id="btn-fetch" class="btn btn-secondary" type="button">
+                                                <i id="btn-fetch-img" class="fas fa-arrow-down text-warning"></i> Fetch</button>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <input type="hidden" name="text" id="text" class="form-control" value="5">
 
-                                <div class="form-row">
-                                    <div class="form-group col-sm-12 text-right">
+                                <div class="row">
+                                    <div class="mb-3 col-sm-12 text-end">
                                         <?php 
                                             if (isset($external_call)) { echo '<input id="external_call" type="hidden">'; } 
                                         ?>

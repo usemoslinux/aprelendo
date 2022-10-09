@@ -382,6 +382,7 @@ body.blue-gradient-wallpaper .navbar-light {
     padding: 10px 15px;
     background-color: rgba(0, 0, 0, .075);
     border: 1px solid burlywood;
+    border-radius: .25rem;
 }
 
 .breadcrumb .active {
@@ -549,39 +550,8 @@ ol {
 
 /* ACCORDION */
 
-.accordion .card:first-of-type {
-    border-top: 1px;
-    border-radius: .10rem .10rem 0 0;
-}
-
-.accordion .card {
-    border-top: 0;
-    border-radius: 0;
-}
-
-.accordion .card:last-of-type {
-    border-radius: 0 0 .10rem .10rem;
-}
-
-.subaccordion>.card>.card-header {
-    border: 0;
-}
-
-.subaccordion>.card {
-    border-radius: 0 !important;
-}
-
-.card .bg-primary {
-    border-radius: inherit;
-}
-
-.card .btn-link {
-    white-space: normal;
-    text-align: left;
-}
-
-.accordion .card-header {
-    padding: 2px;
+.accordion-button {
+	padding: 10px;
 }
 
 /* CUSTOM ALERT BOXES */
@@ -749,14 +719,14 @@ a[role="menuitem"] {
 /* SHOW TEXT PAGE */
 
 .sidebar {
-	position: absolute;
+	position: relative;
 	height: 100%;
 	left: 50%;
 	margin-left: -17px;
+    width: 35px;
 }
 
 .sidebar-sticky-item {
-	position: -webkit-sticky;
 	position: sticky;
     text-align: left;
 	top: 1.5rem;
@@ -1077,7 +1047,7 @@ input {
 
 @media screen and (min-width: 992px) {
     .btn-upload {
-        margin-top: 32px;
+        margin-top: 24px;
     }
 }
 
@@ -1088,6 +1058,7 @@ input {
 .btn-link {
     box-shadow: none;
     color: inherit;
+    text-decoration: none;
 }
 
 .btn-link:hover,
@@ -1188,7 +1159,7 @@ i.status_learned {
     left: 50%;
     top: 50%;
     position: absolute;
-    transform: translate(-50%, -50%);
+    transform: translate(-27px,-24px);
 }
 
 .video-reading-line {
@@ -1349,6 +1320,7 @@ div.blurry-background {
 
 #list-group-popular-sources .list-group-item {
     word-wrap: anywhere;
+    padding: 10px;
 }
 
 /* OTHER PAGES */

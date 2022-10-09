@@ -58,7 +58,7 @@ require_once PUBLIC_PATH . 'head.php';
                         <div class="col">
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     I want to learn
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">

@@ -87,25 +87,11 @@ $(document).ready(function() {
         },
         options: {
             scales: {
-                yAxes: [
-                    {
-                        ticks: {
-                            beginAtZero: true,
-                            suggestedMax: 10,
-                            userCallback: function(label, index, labels) {
-                                // when the floored value is the same as the value we have a whole number
-                                if (Math.floor(label) === label) {
-                                    return label;
-                                }
-                            }
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Number of words"
-                        }
-                    }
-                ]
-            },
+                y: {
+                  suggestedMin: 1,
+                  suggestedMax: 10,
+                }
+              },
             maintainAspectRatio: false // Add to prevent default behaviour of full-width/height
         }
     });

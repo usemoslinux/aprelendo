@@ -349,14 +349,14 @@
 
     function updateToc(current_chapter_url) {
         var $nav = document.getElementById('toc');
-        var selector = $nav.querySelector('.font-weight-bold');
+        var selector = $nav.querySelector('.fw-bold');
         if (selector !== null) {
-            selector.classList.remove('font-weight-bold');
+            selector.classList.remove('fw-bold');
         }
 
         selector = $nav.querySelector('a[href*="' + current_chapter_url + '"]');
         if (selector !== null) {
-            selector.classList.add('font-weight-bold');
+            selector.classList.add('fw-bold');
         }
     }
 });

@@ -44,7 +44,7 @@ function printSources($sources) {
         $html .= 
         "<a href='//{$source['domain']}' target='_blank'  rel='noopener noreferrer' class='list-group-item d-flex justify-content-between align-items-center list-group-item-action'>
             {$source['domain']}
-            <span class='badge badge-secondary badge-pill ml-2'>{$source['times_used']}</span> 
+            <span class='badge bg-secondary badge-pill ms-2'>{$source['times_used']}</span> 
         </a>";
     }
 

@@ -265,7 +265,7 @@ $(document).ready(function() {
                             sel_text.toLowerCase()
                         ) {
                             phrase.wrapAll(
-                                "<a class='word reviewing new' data-toggle='modal' data-target='#myModal'></a>"
+                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal'></a>"
                             );
 
                             phrase.contents().unwrap();
@@ -285,11 +285,11 @@ $(document).ready(function() {
                         var $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
-                                "<a class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></a>"
+                                "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#myModal'></a>"
                             );
                         } else {
                             $word.wrap(
-                                "<a class='word reviewing new' data-toggle='modal' data-target='#myModal'></a>"
+                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal'></a>"
                             );
                         }
                     });

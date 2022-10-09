@@ -67,7 +67,7 @@ function printRSSFeed($feed, $groupindex) {
         $html = "<div id='$accordion_id' class='subaccordion'>
                     <div class='card'>
                         <div class='card-header' id='$heading_id'>
-                            <button id='$label_id' class='btn btn-link collapsed' data-toggle='collapse' data-target='#$item_id' aria-expanded='false' aria-controls='$item_id'>
+                            <button id='$label_id' class='btn btn-link collapsed' data-bs-toggle='collapse' data-bs-target='#$item_id' aria-expanded='false' aria-controls='$item_id'>
                                 <i class='fas fa-chevron-right'></i>
                                 $feed_title</a>
                             </button>
@@ -90,7 +90,7 @@ function printRSSFeed($feed, $groupindex) {
 
                 $html .= "<div class='card'>
                             <div class='card-header' id='$heading_id'>
-                                <button id='$label_id' class='btn btn-link collapsed entry-info' data-toggle='collapse' data-target='#$item_id' data-pubdate='$art_date' data-author='$art_author' data-src='$art_src' aria-expanded='false' aria-controls='$item_id'>
+                                <button id='$label_id' class='btn btn-link collapsed entry-info' data-bs-toggle='collapse' data-bs-target='#$item_id' data-pubdate='$art_date' data-author='$art_author' data-src='$art_src' aria-expanded='false' aria-controls='$item_id'>
                                     <i class='fas fa-chevron-right'></i>
                                     $art_title</a>
                                 </button>

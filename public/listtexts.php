@@ -103,9 +103,7 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
                             <li>Go to any website containing an article or page written in the language you are trying to learn. Make sure it fits your level of proficiency or a little higher. Press the aprelendo button, which  appeared after installing the extension/bookmarklet. This will add the article to your Aprelendo library. </li>
                             <li>Open the newly added article and follow the instructions for each learning phase. For more info, check our video on <a href="https://www.youtube.com/watch?v=5HLr9uxJNDs" target="_blank" rel="noopener noreferrer">how our assisted learning method works</a>.</li>
                         </ol>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>';
             }
             

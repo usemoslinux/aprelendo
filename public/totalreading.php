@@ -174,7 +174,7 @@ if (!$user->isLoggedIn()) {
                                         you want to learn at the same time, in a systematic and integrated way.</p>
                                 </div>
                                 <div class="col-12 col-lg-6 mt-lg-3">
-                                    <div class="embed-responsive embed-responsive-16by9">
+                                    <div class="ratio ratio-16x9">
                                             <iframe src="https://www.youtube.com/embed/qimkPHrLkS4" 
                                                     title="YouTube video player" 
                                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 

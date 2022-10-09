@@ -56,12 +56,12 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         </p>
                     </div>
                     <form id="form_login">
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label for="username">Username:</label>
                             <input type="text" id="username" name="username" class="form-control" maxlength="20"
                                 required>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label for="password">Password:</label>
                             <input type="password" id="password" name="password" class="form-control"
                                 pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
@@ -71,7 +71,9 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <p>
 
                         </p>
-                        <button type="submit" id="btn_login" class="btn btn-block btn-success">Sign in</button>
+                        <div class="d-grid gap-2">
+                            <button type="submit" id="btn_login" class="btn btn-success">Sign in</button>
+                        </div>
                     </form>
                     <br>
                     <footer>

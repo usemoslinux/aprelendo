@@ -48,17 +48,16 @@ if ($available_langs) {
         $heading_id = 'heading-' . $lg_iso_code;
         $lgname = $lang_record['long_name'];
         
-        $is_active = $lg_id == $user->getLangId() ? 'bg-primary text-white' : '';
-        $html .= "<div class='card'>
-                    <div class='card-header $is_active' id='$heading_id'>
-                        <button class='btn btn-link collapsed' data-toggle='collapse' data-target='#$item_id' aria-expanded='false' aria-controls='$item_id'>
-                            <i class='fas fa-chevron-right'></i>
+        $is_active = $lg_id == $user->getLangId();
+        $html .= "<div class='accordion-item'>
+                    <div class='accordion-header' id='$heading_id'>
+                        <button class='accordion-button " . ($is_active ? '' : 'collapsed') . "' type='button' data-bs-toggle='collapse' data-bs-target='#$item_id' aria-expanded='false' aria-controls='$item_id'>
                             $lgname
                         </button>
                     </div>";
     
-        $html .= "<div id='$item_id' class='collapse' aria-labelledby='$lgname' data-parent='#accordion'>
-                    <div class='card-body'>";
+        $html .= "<div id='$item_id' class='accordion-collapse collapse " . ($is_active ? 'show' : '') . "' aria-labelledby='$lgname' data-bs-parent='#accordion'>
+                    <div class='accordion-body'>";
 
         $btn_disabled = $lg_id == $user->getLangId() ? 'disabled' : '';
         $html .= "<button type='button' onclick='location.href=\"languages?act=$lg_id\"' 

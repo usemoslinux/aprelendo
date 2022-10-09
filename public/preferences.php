@@ -58,10 +58,10 @@ $assisted_learning = $prefs->getAssistedLearning();
                                 <div class="card">
                                     <div class="card-header">Reader</div>
                                     <div class="card-body">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="fontfamily">Font Family:</label>
                                             <div>
-                                                <select name="fontfamily" id="fontfamily" class="form-control custom-select" autocomplete="off">
+                                                <select name="fontfamily" id="fontfamily" class="form-control form-select" autocomplete="off">
                                                     <option value="Arial, sans-serif" <?php echo $font_family=='Arial, sans-serif' ? ' selected ' : ''; ?>>Arial</option>
                                                     <option value="Courier, monospace" <?php echo $font_family=='Courier, monospace' ? ' selected ' : ''; ?>>Courier</option>
                                                     <option value="Georgia, serif" <?php echo $font_family=='Georgia, serif' ? ' selected ' : ''; ?>>Georgia</option>
@@ -70,10 +70,10 @@ $assisted_learning = $prefs->getAssistedLearning();
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="fontsize">Font Size:</label>
                                             <div>
-                                                <select name="fontsize" id="fontsize" class="form-control custom-select" autocomplete="off">
+                                                <select name="fontsize" id="fontsize" class="form-control form-select" autocomplete="off">
                                                     <option value="12pt" <?php echo $font_size=='12pt' ? ' selected ' : ''; ?>>12 pt</option>
                                                     <option value="14pt" <?php echo $font_size=='14pt' ? ' selected ' : ''; ?>>14 pt</option>
                                                     <option value="16pt" <?php echo $font_size=='16pt' ? ' selected ' : ''; ?>>16 pt</option>
@@ -81,10 +81,10 @@ $assisted_learning = $prefs->getAssistedLearning();
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="lineheight">Line height:</label>
                                             <div>
-                                                <select name="lineheight" id="lineheight" class="form-control custom-select" autocomplete="off">
+                                                <select name="lineheight" id="lineheight" class="form-control form-select" autocomplete="off">
                                                     <option value="1.5" <?php echo $line_height=='1.5' ? ' selected ' : ''; ?>>1.5 Lines</option>
                                                     <option value="2" <?php echo $line_height=='2' ? ' selected ' : ''; ?>>2</option>
                                                     <option value="2.5" <?php echo $line_height=='2.5' ? ' selected ' : ''; ?>>2.5</option>
@@ -92,10 +92,10 @@ $assisted_learning = $prefs->getAssistedLearning();
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="alignment">Text alignment:</label>
                                             <div>
-                                                <select name="alignment" id="alignment" class="form-control custom-select" autocomplete="off">
+                                                <select name="alignment" id="alignment" class="form-control form-select" autocomplete="off">
                                                     <option value="left" <?php echo $text_align=='left' ? ' selected ' : ''; ?>>Left</option>
                                                     <option value="center" <?php echo $text_align=='center' ? ' selected ' : ''; ?>>Center</option>
                                                     <option value="right" <?php echo $text_align=='right' ? ' selected ' : ''; ?>>Right</option>
@@ -103,10 +103,10 @@ $assisted_learning = $prefs->getAssistedLearning();
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="mode">Display mode:</label>
                                             <div>
-                                                <select name="mode" id="mode" class="form-control custom-select" autocomplete="off">
+                                                <select name="mode" id="mode" class="form-control form-select" autocomplete="off">
                                                     <option value="light" <?php echo $display_mode=='light' ? ' selected ' : ''; ?>>Light</option>
                                                     <option value="sepia" <?php echo $display_mode=='sepia' ? ' selected ' : ''; ?>>Sepia</option>
                                                     <option value="dark" <?php echo $display_mode=='dark' ? ' selected ' : ''; ?>>Dark</option>
@@ -121,17 +121,17 @@ $assisted_learning = $prefs->getAssistedLearning();
                                         Learning
                                     </div>
                                     <div class="card-body">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="assistedlearning">Mode:</label>
                                             <div>
-                                                <select name="assistedlearning" id="assistedlearning" class="form-control custom-select">
+                                                <select name="assistedlearning" id="assistedlearning" class="form-control form-select">
                                                     <option value="1" <?php echo $assisted_learning==true ? ' selected ' : ''; ?>>Assisted</option>
                                                     <option value="0" <?php echo $assisted_learning==false ? ' selected ' : ''; ?>>Free</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="text-right">
-                                            <a href="javascript:;" title="Help" data-toggle="collapse" data-target="#help-learning-mode">Help 
+                                        <div class="text-end">
+                                            <a href="javascript:;" title="Help" data-bs-toggle="collapse" data-bs-target="#help-learning-mode">Help 
                                                 <i class="far fa-question-circle"></i>
                                             </a>
                                         </div>
@@ -152,7 +152,7 @@ $assisted_learning = $prefs->getAssistedLearning();
                                     </div>
                                 </div>
                                 <br>
-                                <div class="text-right">
+                                <div class="text-end">
                                     <button id="cancelbtn" name="cancel" type="button" class="btn btn-link" onclick="window.location='/'">Cancel</button>
                                     <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>
                                 </div>

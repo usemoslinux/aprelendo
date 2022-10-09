@@ -57,7 +57,7 @@ class WordTable extends Table {
             $status_text = array('Learned', 'Learning', 'New', 'Forgotten');
 
             if ($this->has_chkbox) {
-                $html .= "<tr><td class='col-checkbox'><div class='custom-control custom-checkbox'><input id='row-$word_id' class='custom-control-input chkbox-selrow' type='checkbox' aria-label='Select row' data-idWord='$word_id'><label class='custom-control-label' for='row-$word_id'></label></div></td>";
+                $html .= "<tr><td class='col-checkbox'><div><input id='row-$word_id' class='form-check-input chkbox-selrow' type='checkbox' aria-label='Select row' data-idWord='$word_id'><label class='form-check-label' for='row-$word_id'></label></div></td>";
             } 
             
             $html .= '<td class="col-title"><a class="word word-list">' . $word . '</a></td><td class="col-status text-center">' .

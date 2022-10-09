@@ -49,7 +49,7 @@ if (!$user->isLoggedIn()) {
                 <div class="row flex simple-text">
                     <div class="col-sm-12">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/ar.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/ar.svg"
                                 alt="Arabic">
                             <h4>Arabic</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -100,7 +100,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/zh.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/zh.svg"
                                 alt="Chinese">
                             <h4>Chinese</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -157,7 +157,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/nl.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/nl.svg"
                                 alt="Dutch">
                             <h4>Dutch</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -217,7 +217,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/en.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/en.svg"
                                 alt="English">
                             <h4>
                                 English
@@ -313,7 +313,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/fr.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/fr.svg"
                                 alt="French">
                             <h4>French</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -380,7 +380,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/de.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/de.svg"
                                 alt="German">
                             <h4>German</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -445,7 +445,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/el.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/el.svg"
                                 alt="Greek">
                             <h4>Greek</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -499,7 +499,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/he.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/he.svg"
                                 alt="Hebrew">
                             <h4>Hebrew</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -551,7 +551,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/hi.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/hi.svg"
                                 alt="Hindi">
                             <h4>Hindi</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -600,7 +600,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/it.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/it.svg"
                                 alt="Italian">
                             <h4>Italian</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -662,7 +662,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/ja.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/ja.svg"
                                 alt="Japanese">
                             <h4>Japanese</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -722,7 +722,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/ko.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/ko.svg"
                                 alt="Korean">
                             <h4>Korean</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -771,7 +771,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/pt.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/pt.svg"
                                 alt="Portuguese">
                             <h4>Portuguese</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -836,7 +836,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/ru.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/ru.svg"
                                 alt="Russian">
                             <h4>Russian</h4>
                             <strong>Monolingual dictionaries</strong>
@@ -900,7 +900,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <hr class="my-5">
                         <section>
-                            <img class="d-none d-sm-block float-right" style="max-width:10%" src="/img/flags/es.svg"
+                            <img class="d-none d-sm-block float-end" style="max-width:10%" src="/img/flags/es.svg"
                                 alt="Spanish">
                             <h4>Spanish</h4>
                             <strong>Monolingual dictionaries</strong>

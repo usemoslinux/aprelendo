@@ -114,7 +114,7 @@ function print_table_footer($array_table_rows) {
     <main>
         <div class="row">
             <div class="col-12">
-                <button class="btn btn-success float-right mb-3" type="button"
+                <button class="btn btn-success float-end mb-3" type="button"
                     onclick="window.location.replace('/texts');"><i class="fas fa-chevron-circle-left"></i> Go back to
                     your library</button>
             </div>
@@ -139,7 +139,7 @@ function print_table_footer($array_table_rows) {
         <div class="row">
             <div class="col-12">
                 <table class="table table-borderless">
-                    <thead class="thead-light">
+                    <thead class="table-light">
                         <tr>
                             <th style="width: 50%">Category</th>
                             <th class="text-center" style="width: 25%">Words/Phrases</th>
@@ -155,7 +155,7 @@ function print_table_footer($array_table_rows) {
                 </table>
 
                 <table class="table table-borderless">
-                    <thead class="thead-light">
+                    <thead class="table-light">
                         <tr>
                             <th style="width: 50%">Group</th>
                             <th class="text-center" style="width: 25%">Words/Phrases</th>

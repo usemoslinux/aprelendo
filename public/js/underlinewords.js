@@ -36,7 +36,7 @@ function addLinks(text, doclang) {
     }
     
     result = text.replace(pattern, function(match, g1) {
-        return g1 === undefined ? match : '<a class="word" data-toggle="modal" data-target="#myModal">' + g1 + '</a>';
+        return g1 === undefined ? match : '<a class="word" data-toggle="modal" data-bs-target="#myModal">' + g1 + '</a>';
     });
 
     // add a to whitespaces
@@ -94,7 +94,7 @@ function underlineWords(data, doclang) {
             }
 
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<a class='word reviewing learning' data-toggle='modal' data-target='#myModal'>" + g1 + "</a>";
+                return g1 === undefined ? match : "<a class='word reviewing learning' data-toggle='modal' data-bs-target='#myModal'>" + g1 + "</a>";
             });
         }
 
@@ -108,7 +108,7 @@ function underlineWords(data, doclang) {
             }
 
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<a class='word learned' data-toggle='modal' data-target='#myModal'>" + g1 + "</a>";
+                return g1 === undefined ? match : "<a class='word learned' data-toggle='modal' data-bs-target='#myModal'>" + g1 + "</a>";
             });
         }
 
@@ -122,7 +122,7 @@ function underlineWords(data, doclang) {
             }
 
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<a class='word reviewing learning' data-toggle='modal' data-target='#myModal'>" + g1 + "</a>";
+                return g1 === undefined ? match : "<a class='word reviewing learning' data-toggle='modal' data-bs-target='#myModal'>" + g1 + "</a>";
             });
         }
 
@@ -136,7 +136,7 @@ function underlineWords(data, doclang) {
             }
             
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<a class='word learned' data-toggle='modal' data-target='#myModal'>" + g1 + "</a>";
+                return g1 === undefined ? match : "<a class='word learned' data-toggle='modal' data-bs-target='#myModal'>" + g1 + "</a>";
             });
         }
 
@@ -152,7 +152,7 @@ function underlineWords(data, doclang) {
         }
 
         text = text.replace(pattern, function(match, p1, offset, string) {
-            return p1 === undefined ? match : "<a class='word frequency-list' data-toggle='modal' data-target='#myModal'>" + p1 + "</a>";
+            return p1 === undefined ? match : "<a class='word frequency-list' data-toggle='modal' data-bs-target='#myModal'>" + p1 + "</a>";
         });
     }
 

@@ -29,10 +29,10 @@ $(document).ready(function() {
 
     // initialize modal dictionary window buttons
     // $("#btn-translate").hide();
-    $("#btn-translate").removeClass("pl-0");
+    $("#btn-translate").removeClass("ps-0");
     $("#btnremove").hide();
     $("#btnadd").hide();
-    $("#btncancel").addClass("ml-auto").html("&#x2715");
+    $("#btncancel").addClass("ms-auto").html("&#x2715");
     $(".modal-header").addClass("p-0");
 
     // disable Yes/No buttons
@@ -135,7 +135,7 @@ $(document).ready(function() {
                             // create html for each example sentence, max 3 examples
                             m.forEach((match, groupIndex) => {
                                 match = match.replace(word_regex, function(match, g1) {
-                                    return g1 === undefined ? match : "<a class='word font-weight-bold'>" + match.replace(new RegExp('\\s\\s+', 'g'), ' ') + "</a>";
+                                    return g1 === undefined ? match : "<a class='word fw-bold'>" + match.replace(new RegExp('\\s\\s+', 'g'), ' ') + "</a>";
                                 });
                                 // make sure example sentence is unique, then add to the list
                                 examples += examples.search(escapeRegex(match)) > 0 ? "" : "<p>" + match + "</p>\n";

@@ -81,10 +81,10 @@ abstract class Table
             }
         }
         
-        $html .= '</colgroup><thead class="thead-light"><tr>';
+        $html .= '</colgroup><thead class="table-light"><tr>';
 
         if ($this->has_chkbox) {
-            $html .= '<th class="col-checkbox"><div class="custom-control custom-checkbox"><input id="chkbox-selall" class="custom-control-input" aria-label="Select all" type="checkbox"><label class="custom-control-label" for="chkbox-selall"></label></div></th>';
+            $html .= '<th class="col-checkbox"><div><input id="chkbox-selall" class="form-check-input" aria-label="Select all" type="checkbox"><label class="form-check-label" for="chkbox-selall"></label></div></th>';
         } else {
             $html .= '<th></th>';
         }
@@ -110,7 +110,7 @@ abstract class Table
         if (!empty($this->action_menu)) {
             $html .= '<div class="dropdown d-inline-block">
             <button class="btn btn-secondary dropdown-toggle disabled" type="button" 
-                id="actions-menu" data-toggle="dropdown">Actions <span class="caret"></span></button><div class="dropdown-menu 
+                id="actions-menu" data-bs-toggle="dropdown">Actions <span class="caret"></span></button><div class="dropdown-menu 
                 dropdown-menu-left" aria-labelledby="actions-menu" role="menu">';
 
             foreach ($this->action_menu as $menu_id => $menu_text) { 
@@ -120,8 +120,8 @@ abstract class Table
             $html .= '</div></div>';
         }
         
-        $html .= '<div class="dropdown d-inline-block float-right"><button class="btn btn-secondary dropdown-toggle 
-            float-right" type="button" id="sort-menu" data-toggle="dropdown">Sort by <span class="caret"></span></button>
+        $html .= '<div class="dropdown d-inline-block float-end"><button class="btn btn-secondary dropdown-toggle 
+            float-end" type="button" id="sort-menu" data-bs-toggle="dropdown">Sort by <span class="caret"></span></button>
             <div id="dropdown-menu-sort" class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-menu" role="menu">';
 
         $sort_index = 0;

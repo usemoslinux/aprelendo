@@ -54,15 +54,13 @@ $query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])
                             <div class="input-group mb-3">
                                 <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
                                 <input type="text" id="s" name="s" class="form-control" aria-label="Search text" placeholder="Search..." value="<?php echo $search_text ?>">
-                                <div class="input-group-append">
-                                    <button type="submit" name="submit" aria-label="Search" class="btn btn-secondary">
-                                    <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
+                                <button type="submit" name="submit" aria-label="Search" class="btn btn-secondary">
+                                <i class="fas fa-search"></i>
+                                </button>
                             </div>
                             <!-- Split button -->
-                            <div class="dropdown dropdown-add ml-md-2 mb-3">
-                                <button type="button" class="btn btn-success dropdown-toggle <?php echo $user->isPremium() ? '"' : 'disabled" title="Premium users only"'; ?> data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="dropdown dropdown-add ms-md-2 mb-3">
+                                <button type="button" class="btn btn-success dropdown-toggle <?php echo $user->isPremium() ? '"' : 'disabled" title="Premium users only"'; ?> data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-file-export"></i> Export
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">

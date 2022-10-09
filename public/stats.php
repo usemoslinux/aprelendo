@@ -27,7 +27,7 @@ use Aprelendo\Includes\Classes\Achievements;
 
 ?>
 
-<script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js" integrity="sha512-VMsZqo0ar06BMtg0tPsdgRADvl0kDHpTbugCBBrL55KmucH6hP9zWdLIWY//OTfMnzz6xWQRxQqsUFefwHuHyg==" crossorigin="anonymous"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
@@ -74,7 +74,7 @@ use Aprelendo\Includes\Classes\Achievements;
                 <dt class="col-md-2">
                     <figure class="px-5 px-sm-0 mt-2">
                         <img src="/img/gamification/streak.svg" class="mx-auto d-block m-2 gamification-img" alt="Streak" title="Streak days">
-                        <figcaption class="w-100 text-center font-weight-bold"><span style="font-size:2rem"><?php echo $streak_days; ?></span>
+                        <figcaption class="w-100 text-center fw-bold"><span style="font-size:2rem"><?php echo $streak_days; ?></span>
                         </figcaption>
                     </figure>
                 </dt>
@@ -86,7 +86,7 @@ use Aprelendo\Includes\Classes\Achievements;
                 <dt class="col-md-2">
                     <figure class="px-5 px-sm-0 mt-2">
                         <img src="/img/gamification/gems.svg" class="mx-auto d-block m-2 gamification-img" alt="Gems" title="Gems earned">
-                        <figcaption class="w-100 text-center font-weight-bold"><span style="font-size:2rem"><?php echo $nr_of_gems; ?></span>
+                        <figcaption class="w-100 text-center fw-bold"><span style="font-size:2rem"><?php echo $nr_of_gems; ?></span>
                     </figure>
                 </dt>
                 <dd class="col-md-10">
@@ -124,7 +124,7 @@ use Aprelendo\Includes\Classes\Achievements;
                     $html .= '<div class="col-6 col-md-3">
                                 <figure class="w-100 mt-2">
                                     <img src="' . $badges[$cur_badge_index]['img_uri'] . '" class="mx-auto d-block gamification-img gamification-badge" alt="' . $badges[$cur_badge_index]['description'] . '">
-                                    <figcaption class="text-center font-weight-bold pt-2">' . $badges[$cur_badge_index]['description'] . '</figcaption>
+                                    <figcaption class="text-center fw-bold pt-2">' . $badges[$cur_badge_index]['description'] . '</figcaption>
                                 </figure>
                             </div>';
                     $cur_badge_index++;

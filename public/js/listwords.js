@@ -161,7 +161,7 @@ $(document).ready(function() {
         // set up buttons
         $("#btnadd").text("Forgot");
         $("#btn-translate").hide();
-        $("#btnremove").removeClass().addClass("btn btn-danger mr-auto");
+        $("#btnremove").removeClass().addClass("btn btn-danger me-auto");
         
         // show loading spinner
         $("#iframe-loader").attr('class','lds-ellipsis m-auto');

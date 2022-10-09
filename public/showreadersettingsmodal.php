@@ -46,16 +46,14 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="reader-settings-modal-label">Reader preferences</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="prefs-modal-form" method="post">
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label for="fontfamily">Font Family:</label>
                         <div>
-                            <select name="fontfamily" id="fontfamily" class="form-control custom-select"
+                            <select name="fontfamily" id="fontfamily" class="form-control form-select"
                                 autocomplete="off">
                                 <option value="Arial, sans-serif" <?php echo $font_family=='Arial, sans-serif' ? ' selected ' : ''; ?>>Arial</option>
                                 <option value="Courier, monospace" <?php echo $font_family=='Courier, monospace' ? ' selected ' : ''; ?>>Courier</option>
@@ -65,10 +63,10 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label for="fontsize">Font Size:</label>
                         <div>
-                            <select name="fontsize" id="fontsize" class="form-control custom-select" autocomplete="off">
+                            <select name="fontsize" id="fontsize" class="form-control form-select" autocomplete="off">
                                 <option value="12pt" <?php echo $font_size == '12pt' ? ' selected ' : ''; ?>>12 pt
                                 </option>
                                 <option value="14pt" <?php echo $font_size == '14pt' ? ' selected ' : ''; ?>>14 pt
@@ -80,10 +78,10 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                             </select>
                         </div>
                     </div>
-                    <div class="form-group <?php echo $is_video_page ? 'd-none' : ''; ?> ">
+                    <div class="mb-3 <?php echo $is_video_page ? 'd-none' : ''; ?> ">
                         <label for="lineheight">Line height:</label>
                         <div>
-                            <select name="lineheight" id="lineheight" class="form-control custom-select"
+                            <select name="lineheight" id="lineheight" class="form-control form-select"
                                 autocomplete="off">
                                 <option value="1.5" <?php echo $line_height == '1.5' ? ' selected ' : ''; ?>>1.5 Lines
                                 </option>
@@ -94,10 +92,10 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                             </select>
                         </div>
                     </div>
-                    <div class="form-group <?php echo $is_video_page ? 'd-none' : ''; ?> ">
+                    <div class="mb-3 <?php echo $is_video_page ? 'd-none' : ''; ?> ">
                         <label for="alignment">Text alignment:</label>
                         <div>
-                            <select name="alignment" id="alignment" class="form-control custom-select"
+                            <select name="alignment" id="alignment" class="form-control form-select"
                                 autocomplete="off">
                                 <option value="left" <?php echo $text_align == 'left' ? ' selected ' : ''; ?>>Left
                                 </option>
@@ -110,10 +108,10 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label for="mode">Display mode:</label>
                         <div>
-                            <select name="mode" id="mode" class="form-control custom-select" autocomplete="off">
+                            <select name="mode" id="mode" class="form-control form-select" autocomplete="off">
                                 <option value="light" <?php echo $display_mode == 'light' ? ' selected ' : ''; ?>>Light
                                 </option>
                                 <option value="sepia" <?php echo $display_mode == 'sepia' ? ' selected ' : ''; ?>>Sepia
@@ -123,10 +121,10 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                             </select>
                         </div>
                     </div>
-                    <div class="form-group d-none">
+                    <div class="mb-3 d-none">
                         <label for="assistedlearning">Mode:</label>
                         <div>
-                            <select name="assistedlearning" id="assistedlearning" class="form-control custom-select">
+                            <select name="assistedlearning" id="assistedlearning" class="form-control form-select">
                                 <option value="1" <?php echo $assisted_learning == true ? ' selected ' : ''; ?>>Assisted
                                 </option>
                                 <option value="0" <?php echo $assisted_learning == false ? ' selected ' : ''; ?>>Free
@@ -137,8 +135,8 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-                <button id="btn-save-reader-prefs" type="button" class="btn btn-primary" data-dismiss="modal">Save
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Cancel</button>
+                <button id="btn-save-reader-prefs" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save
                     changes</button>
             </div>
         </div>

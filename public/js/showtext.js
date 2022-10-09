@@ -487,7 +487,7 @@ $(document).ready(function() {
                             sel_text.toLowerCase()
                         ) {
                             $phrase.wrapAll(
-                                "<a class='word reviewing new' data-toggle='modal' data-target='#myModal'></a>"
+                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal'></a>"
                             );
 
                             $phrase.contents().unwrap();
@@ -512,11 +512,11 @@ $(document).ready(function() {
                         var $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
-                                "<a class='word reviewing forgotten' data-toggle='modal' data-target='#myModal'></a>"
+                                "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#myModal'></a>"
                             );
                         } else {
                             $word.wrap(
-                                "<a class='word reviewing new' data-toggle='modal' data-target='#myModal'></a>"
+                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal'></a>"
                             );
                         }
                     });
@@ -659,7 +659,7 @@ $(document).ready(function() {
 
                 $msg_phase
                     .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 2: Listening</h5><span class="small">Pay attention to the pronunciation of each word. You can slow down the audio if necessary.</span>'
+                        '<button type="button" class="close btn-close" data-dismiss="alert" aria-label="Close"></button><h5>Assisted learning - Phase 2: Listening</h5><span class="small">Pay attention to the pronunciation of each word. You can slow down the audio if necessary.</span>'
                     );
 
                 $(this).attr('title',
@@ -683,7 +683,7 @@ $(document).ready(function() {
                     );
 
                 $msg_phase.html(
-                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 3: Speaking</h5><span class="small">Read the text out loud and try to emulate the pronunciation of each word as you listen to the audio. You can slow it down if necessary.</span>'
+                    '<button type="button" class="close btn-close" data-dismiss="alert" aria-label="Close"></button><h5>Assisted learning - Phase 3: Speaking</h5><span class="small">Read the text out loud and try to emulate the pronunciation of each word as you listen to the audio. You can slow it down if necessary.</span>'
                 );
 
                 playAudioFromBeginning();
@@ -710,7 +710,7 @@ $(document).ready(function() {
 
                 $msg_phase
                     .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>2</kbd>. To rewind or fast-forward 1 second, use <kbd>1</kbd> and <kbd>3</kbd>.</span>'
+                        '<button type="button" class="close btn-close" data-dismiss="alert" aria-label="Close"></button><h5>Assisted learning - Phase 4: Writing</h5><span class="small">Fill in the blanks as you listen to the dictation. To toggle audio playback press <kbd>2</kbd>. To rewind or fast-forward 1 second, use <kbd>1</kbd> and <kbd>3</kbd>.</span>'
                     );
 
                 toggleDictation();
@@ -729,7 +729,7 @@ $(document).ready(function() {
 
                 $msg_phase
                     .html(
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h5>Assisted learning - Phase 5: Reviewing</h5><span class="small"><u>This is the most <a href="https://en.wikipedia.org/wiki/Testing_effect" class="alert-link" target="_blank" rel="noopener noreferrer">critical phase</a> for long-term language acquisition.</u><br>Review all the underlined words, even the ones with green underlining. Make an effort to remember their meaning and pronunciation, while also paying attention to their spelling. Speak out alternative sentences using these words. The latter is essential to turn your <a href="https://en.wiktionary.org/wiki/passive_vocabulary" class="alert-link" target="_blank" rel="noopener noreferrer">passive vocabulary</a> into <a href="https://en.wiktionary.org/wiki/active_vocabulary" class="alert-link" target="_blank" rel="noopener noreferrer">active vocabulary</a>.</span>'
+                        '<button type="button" class="close btn-close" data-dismiss="alert" aria-label="Close"></button><h5>Assisted learning - Phase 5: Reviewing</h5><span class="small"><u>This is the most <a href="https://en.wikipedia.org/wiki/Testing_effect" class="alert-link" target="_blank" rel="noopener noreferrer">critical phase</a> for long-term language acquisition.</u><br>Review all the underlined words, even the ones with green underlining. Make an effort to remember their meaning and pronunciation, while also paying attention to their spelling. Speak out alternative sentences using these words. The latter is essential to turn your <a href="https://en.wiktionary.org/wiki/passive_vocabulary" class="alert-link" target="_blank" rel="noopener noreferrer">passive vocabulary</a> into <a href="https://en.wiktionary.org/wiki/active_vocabulary" class="alert-link" target="_blank" rel="noopener noreferrer">active vocabulary</a>.</span>'
                     );
 
                 toggleDictation();
@@ -944,7 +944,7 @@ $(document).ready(function() {
                             '" data-text="' +
                             $elem.text() +
                             '">' +
-                            '<span class="input-group-append dict-answer d-none"></span></div>'
+                            '<span class="dict-answer d-none"></span></div>'
                         );
                 });
 

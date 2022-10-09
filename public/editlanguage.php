@@ -38,18 +38,18 @@ if(empty($error_msg)) {
         <div class="card">
             <div class="card-header">Dictionary & Translator</div>
             <div class="card-body">
-                <div class="form-group">
+                <div class="mb-3">
                     <label for="dict-uri">Dictionary URI:</label>
                     <input type="url" id="dict-uri" name="dict-uri" class="form-control"
                         value="<?php echo htmlspecialchars($lang->getDictionaryUri()); ?>">
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label for="translator-uri">Translator URI:</label>
                     <input type="url" id="translator-uri" name="translator-uri" class="form-control"
                         value="<?php echo htmlspecialchars($lang->getTranslatorUri()); ?>">
                 </div>
-                <div class="text-right">
-                    <a href="javascript:;" title="Help" data-toggle="collapse" data-target="#help-dictionary">Help <i
+                <div class="text-end">
+                    <a href="javascript:;" title="Help" data-bs-toggle="collapse" data-bs-target="#help-dictionary">Help <i
                             class="far fa-question-circle"></i></a>
                 </div>
 
@@ -79,9 +79,9 @@ if(empty($error_msg)) {
         <div class="card">
             <div class="card-header">Learning level</div>
             <div class="card-body">
-                <div class="form-group">
+                <div class="mb-3">
                     <label for="level">Show texts of this level by default:</label>
-                    <select name="level" id="level" class="form-control custom-select">
+                    <select name="level" id="level" class="form-control form-select">
                         <option value="0" <?php echo $lang->getLevel() == 0 ? 'selected' : ''; ?>>All</option>
                         <option value="1" <?php echo $lang->getLevel() == 1 ? 'selected' : ''; ?>>Beginner</option>
                         <option value="2" <?php echo $lang->getLevel() == 2 ? 'selected' : ''; ?>>Intermediate</option>
@@ -98,17 +98,17 @@ if(empty($error_msg)) {
                 <?php echo $is_premium_user ? '' : ' <a href="/gopremium" class="text-danger">(premium users only)</a>'; ?>
             </div>
             <div class="card-body">
-                <div class="form-group">
+                <div class="mb-3">
                     <label for="rss-feed1-uri">RSS feed URI 1:</label>
                     <input type="url" id="rss-feed1-uri" name="rss-feed1-uri" class="form-control"
                         value="<?php echo htmlspecialchars($lang->getRssFeed1Uri()); ?>">
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label for="rss-feed2-uri">RSS feed URI 2:</label>
                     <input type="url" id="rss-feed2-uri" name="rss-feed2-uri" class="form-control"
                         value="<?php echo htmlspecialchars($lang->getRssFeed2Uri()); ?>">
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label for="rss-feed3-uri">RSS feed URI 3:</label>
                     <input type="url" id="rss-feed3-uri" name="rss-feed3-uri" class="form-control"
                         value="<?php echo htmlspecialchars($lang->getRssFeed3Uri()); ?>">
@@ -123,9 +123,9 @@ if(empty($error_msg)) {
                 <?php echo $is_premium_user ? '' : ' <a href="/gopremium" class="text-danger">(premium users only)</a>'; ?>
             </div>
             <div class="card-body">
-                <div class="form-group">
+                <div class="mb-3">
                     <label for="freq-list">Underline high frequency words:</label>
-                    <select name="freq-list" id="freq-list" class="form-control custom-select">
+                    <select name="freq-list" id="freq-list" class="form-control form-select">
                         <option value="1" <?php echo $lang->getShowFreqWords()==true ? 'selected' : ''; ?>>Yes</option>
                         <option value="0" <?php echo $lang->getShowFreqWords()==false ? 'selected' : ''; ?>>No</option>
                     </select>
@@ -134,7 +134,7 @@ if(empty($error_msg)) {
         </div>
     </fieldset>
     <br>
-    <div class="text-right">
+    <div class="text-end">
         <button id="cancelbtn" name="cancel" type="button" class="btn btn-link"
             onclick="window.location='texts'">Cancel</button>
         <button type="submit" id="savebtn" name="submit" class="btn btn-success">Save</button>

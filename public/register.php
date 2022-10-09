@@ -61,9 +61,9 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <br>
                     <div id="error-msg" class="d-none"></div>
                     <form id="form-register">
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label for="native-lang">Native language:</label>
-                            <select name="native-lang" class="form-control custom-select" id="native-lang">
+                            <select name="native-lang" class="form-control form-select" id="native-lang">
                                 <option value="ar">Arabic</option>
                                 <option value="zh">Chinese</option>
                                 <option value="nl">Dutch</option>
@@ -81,9 +81,9 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                 <option value="es">Spanish</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label for="learning-lang">Want to learn:</label>
-                            <select name="learning-lang" class="form-control custom-select" id="learning-lang">
+                            <select name="learning-lang" class="form-control form-select" id="learning-lang">
                                 <option value="ar" <?php echo $to_lang=='Arabic'     ? 'selected' : '' ; ?>>Arabic</option>
                                 <option value="zh" <?php echo $to_lang=='Chinese'    ? 'selected' : '' ; ?>>Chinese</option>
                                 <option value="nl" <?php echo $to_lang=='Dutch'      ? 'selected' : '' ; ?>>Dutch</option>
@@ -102,17 +102,17 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             </select>
                         </div>
                         <div>
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label for="username">Username:</label>
                                 <input type="text" id="username" name="username" class="form-control" maxlength="20"
                                     required>
                             </div>
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label for="email">E-mail address:</label>
                                 <input type="email" id="email" name="email" class="form-control" maxlength="50"
                                     required>
                             </div>
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label for="newpassword">Password:</label>
                                 <small>
                                     <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
@@ -122,15 +122,13 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
                                         title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
                                         autocomplete="off" required>
-                                    <div class="input-group-append">
                                         <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                             aria-label="Show/hide password" tabindex="-1"><i class="fas fa-eye-slash"
                                                 aria-hidden="true"></i></button>
-                                    </div>
                                 </div>
                                 <small id="password-strength-text"></small>
                             </div>
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label for="newpassword-confirmation">Confirm password:</label>
                                 <div class="input-group">
                                     <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
@@ -138,15 +136,15 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
                                         title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
                                         autocomplete="off" required>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                            aria-label="Show/hide password confirmation" tabindex="-1"><i
-                                                class="fas fa-eye-slash" aria-hidden="true"></i></button>
-                                    </div>
+                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                        aria-label="Show/hide password confirmation" tabindex="-1"><i
+                                            class="fas fa-eye-slash" aria-hidden="true"></i></button>
                                 </div>
                                 <small id="passwords-match-text"></small>
                             </div>
-                            <button type="submit" id="btn_register" class="btn btn-block btn-success">Sign up</button>
+                            <div class="d-grid gap-2">
+                                <button type="submit" id="btn_register" class="btn btn-success">Sign up</button>
+                            </div>
                             <small>By registering, you declare to have read and accepted our <a href="/privacy"
                                     target="_blank" rel="noopener noreferrer">privacy policy</a>.</small>
                         </div>

@@ -46,12 +46,12 @@ use Aprelendo\Includes\Classes\Language;
                     <div class="card">
                         <div class="card-header">User details</div>
                         <div class="card-body">
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label for="username">Username:</label>
                                 <input type="text" id="username" name="username" class="form-control"
                                     value="<?php echo $user->getName();?>" maxlength="20" required>
                             </div>
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label for="email">E-mail address:</label>
                                 <input type="email" id="email" name="email" class="form-control"
                                     value="<?php echo $user->getEmail();?>" maxlength="50" required>
@@ -62,7 +62,7 @@ use Aprelendo\Includes\Classes\Language;
                     <div class="card">
                         <div class="card-header">Password</div>
                         <div class="card-body">
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label for="password">Current password:</label>
                                 <small>
                                     <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
@@ -71,14 +71,12 @@ use Aprelendo\Includes\Classes\Language;
                                     <input type="password" id="password" name="password" class="form-control"
                                         title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
                                         autocomplete="off" required>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                            aria-label="Show/hide current password" tabindex="-1"><i
-                                                class="fas fa-eye-slash" aria-hidden="true"></i></button>
-                                    </div>
+                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                        aria-label="Show/hide current password" tabindex="-1"><i
+                                            class="fas fa-eye-slash" aria-hidden="true"></i></button>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label for="password">New password:</label>
                                 <small>
                                     <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
@@ -88,15 +86,13 @@ use Aprelendo\Includes\Classes\Language;
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
                                         title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
                                         autocomplete="off">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                            aria-label="Show/hide new password" tabindex="-1"><i
-                                                class="fas fa-eye-slash" aria-hidden="true"></i></button>
-                                    </div>
+                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                        aria-label="Show/hide new password" tabindex="-1"><i
+                                            class="fas fa-eye-slash" aria-hidden="true"></i></button>
                                 </div>
                                 <small id="password-strength-text"></small>
                             </div>
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label for="password">Repeat new password:</label>
                                 <div class="input-group">
                                     <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
@@ -104,11 +100,9 @@ use Aprelendo\Includes\Classes\Language;
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
                                         title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
                                         autocomplete="off">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                            aria-label="Show/hide new password confirmation" tabindex="-1"><i
-                                                class="fas fa-eye-slash" aria-hidden="true"></i></button>
-                                    </div>
+                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                        aria-label="Show/hide new password confirmation" tabindex="-1"><i
+                                            class="fas fa-eye-slash" aria-hidden="true"></i></button>
                                 </div>
                                 <small id="passwords-match-text"></small>
                             </div>
@@ -118,9 +112,9 @@ use Aprelendo\Includes\Classes\Language;
                     <div class="card">
                         <div class="card-header">Languages</div>
                         <div class="card-body">
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label for="src_lang">Your native language:</label>
-                                <select name="src_lang" class="form-control custom-select" id="src_lang">
+                                <select name="src_lang" class="form-control form-select" id="src_lang">
                                     <?php $native_lang_index = Language::getIndex($user->getNativeLang()); ?>
                                     <option value="en" <?php echo $native_lang_index==0 ? ' selected ' : '' ; ?>>English
                                     </option>
@@ -136,9 +130,9 @@ use Aprelendo\Includes\Classes\Language;
                                     </option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label for="to_lang">Active learning language:</label>
-                                <select name="to_lang" class="form-control custom-select" id="to_lang">
+                                <select name="to_lang" class="form-control form-select" id="to_lang">
                                     <?php $lang_index = Language::getIndex($user->getLang()); ?>
                                     <option value="en" <?php echo $lang_index==0 ? ' selected ' : '' ; ?>>English
                                     </option>
@@ -157,9 +151,9 @@ use Aprelendo\Includes\Classes\Language;
                         </div>
                     </div>
                     <br>
-                    <div class="text-right">
+                    <div class="text-end">
                         <button type="button" id="btn-delete-account" name="deleteaccount"
-                            class="btn btn-danger float-left">Delete
+                            class="btn btn-danger float-start">Delete
                             Account</button>
                         <button type="button" id="cancelbtn" name="cancel" class="btn btn-link"
                             onclick="window.location='/'">Cancel</button>
@@ -178,7 +172,7 @@ use Aprelendo\Includes\Classes\Language;
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Are you sure about this?</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <p class="alert alert-danger">Deleting you account is an irreversible action.</p>
@@ -186,8 +180,8 @@ use Aprelendo\Includes\Classes\Language;
                 <p>Also, all the files (e.g., epub files) you uploaded to our servers will be deleted, as well as your word list and your private and shared texts libraries. This applies to all the languages you were learning using Aprelendo.</p>
             </div>
             <div class="modal-footer">
-            <button id="btn-cancel" type="button" data-dismiss="modal" class="btn btn-link">Cancel</button>
-                <button id="btn-confirm-delete-account" type="button" data-dismiss="modal" class="btn btn-danger">Delete Account</button>
+            <button id="btn-cancel" type="button" data-bs-dismiss="modal" class="btn btn-link">Cancel</button>
+                <button id="btn-confirm-delete-account" type="button" data-bs-dismiss="modal" class="btn btn-danger">Delete Account</button>
             </div>
         </div>
     </div>

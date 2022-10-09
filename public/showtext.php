@@ -74,8 +74,8 @@ require_once PUBLIC_PATH . 'head.php';
         <div class="row">
             <div id="sidebar" class="col-2">
                 <div class="sidebar">
-                    <div class="sidebar-sticky-item my-4"><button type="button" data-toggle="modal"
-                            data-target="#reader-settings-modal" class="btn btn-sm btn-secondary d-block" title="Reading settings">
+                    <div class="sidebar-sticky-item my-4"><button type="button" data-bs-toggle="modal"
+                            data-bs-target="#reader-settings-modal" class="btn btn-sm btn-secondary d-block" title="Reading settings">
                             <i class="fas fa-cog"></i>
                         </button>
                         
@@ -92,7 +92,7 @@ require_once PUBLIC_PATH . 'head.php';
                     </div>
                 </div>
             </div>
-            <div class="col-10 col-sm-8 pl-0 pr-4 pr-sm-0">
+            <div class="col-10 col-sm-8 ps-0 pe-4 pe-sm-0">
                 <?php
                     echo $reader->showText();
                     if ($is_shared) {

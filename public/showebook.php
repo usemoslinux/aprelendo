@@ -110,7 +110,7 @@ try {
     <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.2/css/bootstrap.min.css" integrity="sha512-CpIKUSyh9QX2+zSdfGP+eWLx23C8Dj9/XmHjZY2uDtfkdLGo0uY12jgcnkX9vXOgYajEKb/jiw67EYm+kBf+6g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Extra style sheets -->
     <link rel="stylesheet" type="text/css" href="/css/ebooks-min.css">
@@ -131,8 +131,7 @@ try {
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
 
     <!-- Bootstrap -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js" integrity="sha512-XKa9Hemdy1Ui3KSGgJdgMyYlUg1gM+QhL6cnlyTe2qzMCYm4nAZ1PsVerQzTTXzonUR+dmswHqgJPuwCq1MaAg==" crossorigin="anonymous"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.2/js/bootstrap.min.js" integrity="sha512-5BqtYqlWfJemW5+v+TZUs22uigI8tXeVah5S/1Z6qBLVO7gakAOtkOzUtgq6dsIo5c0NJdmGPs0H9I+2OHUHVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
 </head>
 
 <body id="readerpage" <?php echo getCSS($class, $styles); ?> >
@@ -147,19 +146,19 @@ try {
     <div id="main">
         <div id="header">
             <span class="d-flex flex-row-reverse">
-                <button class="basic btn btn-link mr-n2" title="Close" id="btn-close-ebook"><i class="fas fa-times"></i></button>
+                <button class="basic btn btn-link me-n2" title="Close" id="btn-close-ebook"><i class="fas fa-times"></i></button>
                 
-                <button type="button" data-toggle="modal" data-target="#reader-settings-modal" class="basic btn btn-sm btn-secondary mr-2" title="Reader settings">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal" class="basic btn btn-sm btn-secondary me-2" title="Reader settings">
                     <i class="fas fa-cog"></i>
                 </button>
 
-                <div class="loading-spinner mr-2">
+                <div class="loading-spinner me-2">
                     <div class="ldio-nhngmna4s2b">
                         <div></div><div></div><div></div><div></div><div></div>
                     </div>
                 </div>
 
-                <span id="book-title" class="font-weight-bold ml-2 mr-auto my-auto"></span>
+                <span id="book-title" class="fw-bold ms-2 me-auto my-auto"></span>
 
                 <span id="opener">
                     <svg height="24px" id="hamburger" style="enable-background:new 0 0 32 32;" version="1.1" viewBox="0 0 32 32"
