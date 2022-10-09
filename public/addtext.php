@@ -121,10 +121,10 @@ use Aprelendo\Includes\Classes\Texts;
                     </div>
                     <div class="row mb-2">
                         <div class="col-12">
-                            <div id="shared-text-wrapper-div" class="custom-control custom-switch">
-                                <input id="shared-text" class="custom-control-input" type="checkbox" name="shared-text" <?php if
+                            <div id="shared-text-wrapper-div">
+                                <input id="shared-text" class="form-check-input" type="checkbox" name="shared-text" <?php if
                                     ($art_is_shared) {echo 'checked' ;}?>>
-                                <label class="custom-control-label" for="shared-text" id="shared-text-label"> Share text with our community</label>
+                                <label class="form-check-label" for="shared-text" id="shared-text-label"> Share text with our community</label>
                             </div>
                         </div>
                     </div>

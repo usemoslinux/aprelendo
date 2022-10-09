@@ -1081,7 +1081,7 @@ input {
 
 /* ADD TEXT */
 
-.add-form input,
+.add-form input:not([type='checkbox']),
 .add-form textarea {
     border-left: 3px solid;
     border-radius: 5px;
