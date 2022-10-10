@@ -157,6 +157,10 @@ try {
                     <i class="fas fa-cog"></i>
                 </button>
 
+                <button type="button" data-bs-toggle="modal" data-bs-target="#web-speech-modal" class="basic btn btn-sm btn-primary me-2" title="Web Speech settings">
+                    <i class="fa-solid fa-headphones"></i>
+                </button>
+
                 <div class="loading-spinner me-2">
                     <div class="ldio-nhngmna4s2b">
                         <div></div><div></div><div></div><div></div><div></div>
@@ -183,6 +187,7 @@ try {
     <?php 
         require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
         require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
+        require_once PUBLIC_PATH . 'showwebspeechmodal.php'; // load web speech modal window
     ?>
 
     <script defer src="js/underlinewords-min.js"></script>
