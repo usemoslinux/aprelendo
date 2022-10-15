@@ -81,20 +81,20 @@ class Card
         $sql = "(SELECT texts.text
                 FROM texts
                 LEFT JOIN languages ON languages.id = texts.lang_id
-                WHERE languages.name = '{$this->lang_iso}' AND texts.text regexp \"(^|[[:punct:]]|[[:space:]])$word([[:space:]]|[[:punct:]]|$)\"
-                LIMIT 1)
+                WHERE languages.name = '{$this->lang_iso}' AND type <> 6 AND texts.text regexp \"(^|[[:punct:]]|[[:space:]])$word([[:space:]]|[[:punct:]]|$)\"
+                LIMIT 3)
                 UNION
                 (SELECT archived_texts.text
                 FROM archived_texts
                 LEFT JOIN languages ON languages.id = archived_texts.lang_id
-                WHERE languages.name = '{$this->lang_iso}' AND archived_texts.text regexp \"(^|[[:punct:]]|[[:space:]])$word([[:space:]]|[[:punct:]]|$)\"
-                LIMIT 1)
+                WHERE languages.name = '{$this->lang_iso}' AND type <> 6 AND archived_texts.text regexp \"(^|[[:punct:]]|[[:space:]])$word([[:space:]]|[[:punct:]]|$)\"
+                LIMIT 3)
                 UNION
                 (SELECT shared_texts.text
                 FROM shared_texts
                 LEFT JOIN languages ON languages.id = shared_texts.lang_id
                 WHERE languages.name = '{$this->lang_iso}' AND type <> 5 AND shared_texts.text regexp \"(^|[[:punct:]]|[[:space:]])$word([[:space:]]|[[:punct:]]|$)\"
-                LIMIT 1)";
+                LIMIT 3)";
 
         try {
             $stmt = $this->pdo->prepare($sql);

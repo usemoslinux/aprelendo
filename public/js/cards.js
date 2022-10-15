@@ -23,7 +23,7 @@ $(document).ready(function() {
     var $dic_frame = $("#dicFrame");    // dictionary iframe inside modal window
     var $sel_word = $();                // jQuery object used to open dictionary modal
     var words = [];                     // array containing all words user is learning
-    var max_cards = 20;                 // maximum nr. of cards
+    var max_cards = 10;                 // maximum nr. of cards
     var cur_word_index = 0;             // current word index
     var cur_card_index = 0;             // current word index
 
@@ -187,8 +187,8 @@ $(document).ready(function() {
             $("#card-loader").addClass("d-none");
             return true;
         } else if (cur_card_index > max_cards-1) {
-            $("#card-header").text("This is the end, my friend");
-            $("#card-text").html("<i class='fas fa-check-circle text-success display-3'></i><br><br>You have reached the end of your practice.");
+            $("#card-header").text("Congratulations!");
+            $("#card-text").html("<i class='fa-solid fa-flag-checkered'></i><br><br>You have reached the end of your practice.<br><br>If you want to continue, you can refresh this page (F5). However, we strongly recommend you to keep your practice sessions short and take study breaks.");
             $("#card-footer").addClass("d-none");
             $("#card-loader").addClass("d-none");
             return true;

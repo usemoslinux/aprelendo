@@ -23,9 +23,9 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content mb-xs-3">
-            <div class="modal-header pb-2">
+            <div class="modal-header p-2">
                 <button id="btnremove" type="button" data-bs-dismiss="modal" class="btn btn-danger me-3" title="Delete"><i class="fas fa-trash-alt"></i></button>
-                <button id="btn-translate" type="button" class="btn btn-link ps-0 me-auto" title="Open translator"><i id="gt-icon" class="fas fa-language"></i></button>
+                <button id="btn-translate" type="button" class="btn btn-link p-0 me-auto" title="Open translator"><i id="gt-icon" class="fas fa-language"></i></button>
                 <button id="btncancel" type="button" data-bs-dismiss="modal" class="btn btn-link">Cancel</button>
                 <button id="btnadd" type="button" class="btn btn-primary" data-bs-dismiss="modal">Add</button>
             </div>

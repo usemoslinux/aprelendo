@@ -80,10 +80,17 @@ class Log extends DBEntity
         } finally {
             $stmt = null;
         }
-    } // end addRecord()
+    } // end addRecord()  
 
-    // public function remove();
-    // public function purge_old();
+    /**
+     * Remove old log records
+     * @todo Something
+     *
+     * @return void
+     */
+    public function purge_old() {
+
+    }
 }
 
 
