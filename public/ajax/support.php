@@ -60,9 +60,7 @@ try {
         $mail_sent = mail(SUPPORT_EMAIL, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
         if (!$mail_sent) {
             throw new \Exception('There was an unexpected error trying to send your query. Please try again later.');
-        } else {
-            throw new \Exception('Support email: ' . SUPPORT_EMAIL . "\r\nSubject: $subject \r\nMessage: $message \r\n Headers: $headers \r\n Sender email: " . EMAIL_SENDER);
-        }
+        } 
     } else {
         throw new \Exception('You need to complete all form fields in order to send your query. Please try again.');
     }    
