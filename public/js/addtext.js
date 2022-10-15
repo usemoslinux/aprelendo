@@ -211,8 +211,12 @@ $(document).ready(function() {
      * This is triggered when user pastes a URL 
      */
     $("#url").on("paste", function(e) {
-        var pastedData = e.originalEvent.clipboardData.getData('text');
-        fetch_url(pastedData);
+        var text = $("#text").val();
+        // only auto-fetch text if textarea is empty
+        if (!text || /^\s*$/.test(text)) {
+            var pastedData = e.originalEvent.clipboardData.getData('text');
+            fetch_url(pastedData);    
+        }
     });
 
     /**
