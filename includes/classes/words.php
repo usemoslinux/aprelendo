@@ -107,7 +107,7 @@ class Words extends DBEntity {
      */
     public function updateStatus(string $word, bool $forgot): void {
         try {
-            $forgot = $forgot ? "3" : "`status`-1";
+            $forgot = $forgot ? "3" : "CASE WHEN `status` > 0 THEN `status` - 1 ELSE 0 END";
             $sql = "UPDATE `{$this->table}` SET `status`=$forgot, `date_modified`=NOW() 
                     WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
             $stmt = $this->pdo->prepare($sql);
