@@ -188,7 +188,7 @@ $(document).ready(function() {
             return true;
         } else if (cur_card_index > max_cards-1) {
             $("#card-header").text("Congratulations!");
-            $("#card-text").html("<i class='fa-solid fa-flag-checkered'></i><br><br>You have reached the end of your practice.<br><br>If you want to continue, you can refresh this page (F5). However, we strongly recommend you to keep your practice sessions short and take study breaks.");
+            $("#card-text").html("<i class='fa-solid fa-flag-checkered text-primary display-3'></i><br><br>You have reached the end of your study.<br><br><span class='small'>If you want to continue, you can refresh this page (F5).<br>However, we strongly recommend that you keep your study sessions short and take rest intervals.</span>");
             $("#card-footer").addClass("d-none");
             $("#card-loader").addClass("d-none");
             return true;

@@ -887,6 +887,10 @@ $(document).ready(function() {
     function toggleDictation() {
         var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
         if (audio_is_loaded) {
+            var $container = $("#text").clone();
+            var $elems = $container.find(".word");
+            var $original_elems = $(".word");
+
             if ($(".dict-answer").length == 0) {
                 // if user is no words are underlined don't allow phase 5 (reviewing) & go directly to phase 6 (save changes)
                 if ($(".learning, .new, .forgotten").length == 0) {
@@ -898,10 +902,6 @@ $(document).ready(function() {
 
                 // toggle dictation on
                 // replace all underlined words/phrases with input boxes
-                var $container = $("#text").clone();
-                var $elems = $container.find(".word");
-                var $original_elems = $(".word");
-
                 $elems.each(function(index, value) {
                     var $elem = $(this);
                     var length = $elem.text().length;
@@ -941,13 +941,16 @@ $(document).ready(function() {
                 $(":text:first").focus(); // focus first input
             } else {
                 // toggle dictation off
-                $(".word").each(function(index, value) {
+                $elems.each(function(index, value) {
                     var $elem = $(this);
                     $elem
                         .show()
                         .nextAll(":lt(1)")
                         .remove();
                 });
+
+                $("#text").replaceWith($container);
+                
                 $("html, body").animate(
                     {
                         scrollTop: 0
