@@ -335,14 +335,14 @@ $(document).ready(function() {
                     .hide()
                     .text("High frequency word")
                     .removeClass()
-                    .addClass("badge badge-danger")
+                    .addClass("badge text-bg-danger")
                     .show();
             } else if (data < 97){
                 $freqlvl
                     .hide()
                     .text("Medium frequency word")
                     .removeClass()
-                    .addClass("badge badge-warning")
+                    .addClass("badge text-bg-warning")
                     .show();
             }
         }).fail(function() {
