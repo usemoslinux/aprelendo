@@ -24,18 +24,31 @@ $(document).ready(function() {
         var className = $('#mode').val() + 'mode';
 
         $doc = $(parent.document.body);
+        // change document styles and class
         $doc.css({
             'font-family' : $('#fontfamily').val(),
             'font-size' : $('#fontsize').val(),
             'text-align' : $('#alignment').val(),
-            'line-height': $('#lineheight').val()
+            'line-height': $('#lineheight').val()sss
          });
         
         $('#text').css('line-height', $('#lineheight').val());
 
         $doc.removeClass().addClass(className);
+
+        // change audioplayer class
         $doc.find("#audioplayer-container").removeClass().addClass(className);
 
+        // change offcanvas classes
+        if ($doc.find('.offcanvas').length) {
+            if (className == 'darkmode') {
+                $doc.find('.offcanvas').addClass('text-bg-dark');
+                $doc.find('#close-offcanvas').addClass('btn-close-white');
+            } else {
+                $doc.find('.offcanvas').removeClass('text-bg-dark');
+                $doc.find('#close-offcanvas').removeClass('btn-close-white');
+            }    
+        }
         // save changes 
 
         $.ajax({

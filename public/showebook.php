@@ -136,10 +136,10 @@ try {
 
 <body id="readerpage" <?php echo getCSS($class, $styles); ?> >
     
-    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="navigation" aria-labelledby="navigation-title">
+    <div class="offcanvas offcanvas-start <?php echo $class == 'darkmode' ? 'text-bg-dark' : ''; ?>" data-bs-scroll="true" tabindex="-1" id="navigation" aria-labelledby="navigation-title">
         <div class="offcanvas-header">
             <h1 id="title">...</h1>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button id="close-offcanvas" type="button" class="btn-close text-reset <?php echo $class == 'darkmode' ? 'btn-close-white' : ''; ?>" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
             <image id="cover" width="150px" />
