@@ -37,7 +37,8 @@ $(document).ready(function() {
         }); // end $.ajax
 
     $(document).on("click", ".btn-link", function() {
-        $sel_card = $(".fas", this);
+        let $accordion;
+        let $sel_card = $(".fas", this);
 
         $sel_card
             .toggleClass("fa-chevron-right")
@@ -81,15 +82,15 @@ $(document).ready(function() {
      * @param {string} add_mode three possibilities, each corresponding to one button: 'edit', 'readlater', 'readnow'
      */
     function addTextToLibrary($entry_info, $entry_text, add_mode) {
-        var art_title = $.trim($entry_info.text());
-        var art_author = $entry_info.attr("data-author");
-        var art_url = $entry_info.attr("data-src");
-        var art_pubdate = $entry_info.attr("data-pubdate");
-        var art_content = $entry_text[0].innerText;
+        const art_title = $.trim($entry_info.text());
+        const art_author = $entry_info.attr("data-author");
+        const art_url = $entry_info.attr("data-src");
+        const art_pubdate = $entry_info.attr("data-pubdate");
+        const art_content = $entry_text[0].innerText;
 
         if (add_mode == "edit") {
             // create a hidden form and submit it
-            var form = $(
+            const form = $(
                 '<form id="form_add_audio" action="../addtext" method="post"></form>'
             )
                 .append(

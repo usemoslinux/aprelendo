@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -43,7 +43,7 @@ try {
     // check password is valid
     $regex = '/(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}/';
     if (!preg_match($regex, $_POST['newpassword'])) {
-        throw new \Exception("Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters. Please try again.");
+        throw new \Exception("Password must have at least 8 characters and contain letters, special characters and a digits. Please try again.");
     }
 
     // check password & password confirmation match
@@ -52,11 +52,16 @@ try {
     }
     
     $user = new User($pdo);
-    $user->register($_POST['username'], $_POST['email'], $_POST['newpassword'], $_POST['native-lang'], $_POST['learning-lang'], true);
+    $user->register(
+        $_POST['username'],
+        $_POST['email'],
+        $_POST['newpassword'],
+        $_POST['native-lang'],
+        $_POST['learning-lang'],
+        true
+    );
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());
     header('Content-Type: application/json');
     echo json_encode($error);
 }
-
-?>

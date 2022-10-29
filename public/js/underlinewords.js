@@ -17,7 +17,7 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var langs_with_no_word_separator = ['zh', 'ja', 'ko'];
+const langs_with_no_word_separator = ['zh', 'ja', 'ko'];
 
 /**
  * Adds as to unknown words and whitespaces
@@ -28,7 +28,9 @@ var langs_with_no_word_separator = ['zh', 'ja', 'ko'];
  */
 function addLinks(text, doclang) {
     // add a to unknown words, but use different regex for languages with no word separators, such as Chinese
-    var pattern = '';
+    let pattern = '';
+    let result = '';
+    
     if (langs_with_no_word_separator.includes(doclang)) {
         pattern = new RegExp(/(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(\p{L})/iug);    
     } else {
@@ -56,13 +58,13 @@ function addLinks(text, doclang) {
  * @returns string 
  */
 function underlineWords(data, doclang) {
-    var text = data.text;
-    var pattern = '';
-    var user_phrases_learning = '';
-    var user_phrases_learned = '';
-    var user_words_learning = '';
-    var user_words_learned = '';
-    var high_freq = '';
+    let text = data.text;
+    let pattern = '';
+    let user_phrases_learning = '';
+    let user_phrases_learned = '';
+    let user_words_learning = '';
+    let user_words_learned = '';
+    let high_freq = '';
 
     // 1. underline phrases & words
 

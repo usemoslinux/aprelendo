@@ -23,8 +23,8 @@ $(document).ready(function() {
      * Triggers when user clicks on a heart
      */
     $("i.fa-heart").on("click", function() {
-        var like_btn = $(this);
-        var text_id = like_btn.attr("data-idText");
+        const like_btn = $(this);
+        const text_id = like_btn.attr("data-idText");
         $.ajax({
             type: "POST",
             url: "ajax/togglelike.php",
@@ -35,7 +35,7 @@ $(document).ready(function() {
                     alert("Oops! There was an unexpected error");
                 } else {
                     like_btn.toggleClass("fas far");
-                    var total_likes = parseInt(
+                    const total_likes = parseInt(
                         like_btn.siblings("small").text()
                     );
                     if (like_btn.hasClass("fas")) {

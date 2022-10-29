@@ -27,7 +27,7 @@ $(document).ready(function() {
 
         showMessage("Sending message to our support team...", "alert-info");
 
-        var form_data = $(this).serialize();
+        const form_data = $(this).serialize();
 
         $.ajax({
             type: "POST",

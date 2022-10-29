@@ -20,16 +20,17 @@
 // Youtube JS code to load iframe player (w/access to YT API)
 
 // 2. This code loads the IFrame Player API code asynchronously.
-var tag = document.createElement("script");
-var yt_id = document.getElementById("player").dataset.ytid;
+let tag = document.createElement("script");
+const yt_id = document.getElementById("player").dataset.ytid;
 
 tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName("script")[0];
+let firstScriptTag = document.getElementsByTagName("script")[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 // 3. This function creates an <iframe> (and YouTube player)
 //    after the API code downloads.
-var player;
+let player;
+
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
         height: "390",
@@ -50,26 +51,23 @@ function onYouTubeIframeAPIReady() {
     });
 } // end onYouTubeIframeAPIReady
 
-// 4. The API will call this function when the video player is ready.
-function onPlayerReady(event) {
-    // event.target.playVideo();
-} // end onPlayerReady
-
 // 5. The API calls this function when the player's state changes.
 //    The function indicates that when playing a video (state=1),
 //    the player should play for six seconds and then stop.
 function onPlayerStateChange(event) {
+    let video_paused;
+    
     if (event.data === YT.PlayerState.PLAYING) {
-        var $obj = $("div.text-center", "#text-container");
-        var video_time = 0;
-        var timer;
+        let $obj = $("div.text-center", "#text-container");
+        let video_time = 0;
+        let timer;
         video_paused = false;
 
         function updateTime(time_interval) {
             timer = setInterval(function() {
                 if (!video_paused) {
                     video_time = player.getCurrentTime();
-                    var $next_obj = $obj
+                    let $next_obj = $obj
                         .filter(function() {
                             return $(this).attr("data-start") < video_time;
                         })

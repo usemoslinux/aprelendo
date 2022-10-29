@@ -1,19 +1,19 @@
 <?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,11 +33,11 @@ use Aprelendo\Includes\Classes\Language;
 $user_id = $user->getId();
 $lang = new Language($pdo, $user_id);
 
-if (isset($_GET['chg'])) {           
+if (isset($_GET['chg'])) {
     $lang->loadRecord($_GET['chg']);
-} elseif(isset($_GET['act'])) { 
+} elseif (isset($_GET['act'])) {
     $lang->loadRecord($_GET['act']);
-} 
+}
 
 ?>
 
@@ -52,23 +52,24 @@ if (isset($_GET['chg'])) {
                         <li class="breadcrumb-item">
                             <span <?php echo isset($_GET['chg']) ? '' : 'class="active"'; ?> >Languages</span>
                         </li>
-                        <?php 
+                        <?php
                             if (isset($_GET['chg'])) {
-                                echo '<li class="breadcrumb-item"><span class="active">' . ucfirst(Language::getNameFromIso($lang->getName())) . '</span></li>';    
+                                echo '<li class="breadcrumb-item"><span class="active">'
+                                . ucfirst(Language::getNameFromIso($lang->getName())) . '</span></li>';
                             }
                         ?>
                     </ol>
                 </nav>
 
                 <main>
-                <?php 
+                <?php
 
                 if (isset($_GET['chg'])) { // chg parameter = show edit language page
-                    include('editlanguage.php');
-                } elseif(isset($_GET['act'])) { // act parameter = set active language
-                    include('listlanguages.php');
+                    include_once('editlanguage.php');
+                } elseif (isset($_GET['act'])) { // act parameter = set active language
+                    include_once('listlanguages.php');
                 } else { // just show list of languages
-                    include('listlanguages.php');
+                    include_once('listlanguages.php');
                 }
                 ?>
                 </main>
@@ -78,4 +79,3 @@ if (isset($_GET['chg'])) {
 
     <script defer src="js/languages-min.js"></script>
     <?php require_once 'footer.php'; ?>
-    

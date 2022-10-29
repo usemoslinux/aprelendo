@@ -25,7 +25,7 @@ $(document).ready(function() {
      */
     $(document).on("submit", "#form_forgot_password", function(e) {
         e.preventDefault();
-        var form_data = $("#form_forgot_password").serialize();
+        const form_data = $("#form_forgot_password").serialize();
         showMessage(
             "Your request is being processed. Please wait...",
             "alert-info"
@@ -61,7 +61,7 @@ $(document).ready(function() {
      */
     $(document).on("submit", "#form_create_new_password", function(e) {
         e.preventDefault();
-        var form_data = $("#form_create_new_password").serialize();
+        const form_data = $("#form_create_new_password").serialize();
         showMessage(
             "Your request is being processed. Please wait...",
             "alert-info"

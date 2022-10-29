@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,7 +34,7 @@ class Language extends DBEntity
     private $show_freq_words = false;
     private $level           = 0;
 
-    private static $iso_code = array(  
+    private static $iso_code = array(
         'ar' => 'arabic',
         'zh' => 'chinese',
         'nl' => 'dutch',
@@ -60,7 +60,8 @@ class Language extends DBEntity
      * @param int $id
      * @param int $user_id
      */
-    public function __construct (\PDO $pdo, int $user_id) {
+    public function __construct(\PDO $pdo, int $user_id)
+    {
         parent::__construct($pdo, $user_id);
         $this->table = 'languages';
     } // end __construct()
@@ -71,7 +72,8 @@ class Language extends DBEntity
      * @param int $id
      * @return void
      */
-    public function loadRecord(int $id): void {
+    public function loadRecord(int $id): void
+    {
         try {
             $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ? AND `user_id` = ?";
             $stmt = $this->pdo->prepare($sql);
@@ -79,11 +81,11 @@ class Language extends DBEntity
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             
             if ($row) {
-                $this->id               = $row['id']; 
-                $this->user_id          = $row['user_id']; 
+                $this->id               = $row['id'];
+                $this->user_id          = $row['user_id'];
                 $this->name             = $row['name'];
-                $this->dictionary_uri   = $row['dictionary_uri']; 
-                $this->translator_uri   = $row['translator_uri']; 
+                $this->dictionary_uri   = $row['dictionary_uri'];
+                $this->translator_uri   = $row['translator_uri'];
                 $this->rss_feed_1_uri   = $row['rss_feed1_uri'];
                 $this->rss_feed_2_uri   = $row['rss_feed2_uri'];
                 $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
@@ -103,17 +105,20 @@ class Language extends DBEntity
      * @param array $array
      * @return void
      */
-    public function editRecord(array $new_record, bool $is_premium_user): void {
+    public function editRecord(array $new_record, bool $is_premium_user): void
+    {
         try {
             // check for errors first
             if (empty($new_record['dict-uri'])) {
                 throw new \Exception('You need to specify the URL of the dictionary you want to use.');
             } elseif (strpos($new_record['dict-uri'], '%s') === false) {
-                throw new \Exception("The dictionary URL needs to include the position of the lookup word or phrase. For this, use '%s' (without quotation marks).");
+                throw new \Exception("The dictionary URL needs to include the position of the lookup word or phrase. '
+                    . 'For this, use '%s' (without quotation marks).");
             } elseif (empty($new_record['translator-uri'])) {
                 throw new \Exception('You need to specify the URL of the translator you want to use.');
             } elseif (strpos($new_record['translator-uri'], '%s') === false) {
-                throw new \Exception("The translator URL needs to include the position of the lookup word or phrase. For this, use '%s' (without quotation marks).");
+                throw new \Exception("The translator URL needs to include the position of the lookup word or phrase. '
+                . 'For this, use '%s' (without quotation marks).");
             }
 
             // if everything is fine, proceed editing the record
@@ -129,13 +134,13 @@ class Language extends DBEntity
                 $this->show_freq_words = $new_record['freq-list'];
             }
 
-            $sql = "UPDATE `{$this->table}` 
-                    SET `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?, `rss_feed3_uri`=?, 
-                        `show_freq_words`=?, `level`=?  
+            $sql = "UPDATE `{$this->table}`
+                    SET `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?,
+                        `rss_feed3_uri`=?, `show_freq_words`=?, `level`=?
                     WHERE `user_id`=? AND `id`=?";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->dictionary_uri, $this->translator_uri, $this->rss_feed_1_uri, 
-                            $this->rss_feed_2_uri, $this->rss_feed_3_uri, $this->show_freq_words, 
+            $stmt->execute([$this->dictionary_uri, $this->translator_uri, $this->rss_feed_1_uri,
+                            $this->rss_feed_2_uri, $this->rss_feed_3_uri, $this->show_freq_words,
                             $this->level, $this->user_id, $this->id]);
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to edit this record.');
@@ -150,14 +155,21 @@ class Language extends DBEntity
      * @param string $lang
      * @return void
      */
-    public function createInitialRecordsForUser(string $native_lang): void {
+    public function createInitialRecordsForUser(string $native_lang): void
+    {
         try {
             // create & save default language preferences for user
             foreach (self::$iso_code as $key => $value) {
-                $translator_uri = 'https://translate.google.com/?hl=' . $native_lang . '&sl=' . $key . '&tl=' . $native_lang . '&text=%s';
+                $translator_uri = 'https://translate.google.com/?hl='
+                    . $native_lang
+                    . '&sl='
+                    . $key
+                    . '&tl='
+                    . $native_lang
+                    . '&text=%s';
                 $dictionary_uri = 'https://' . $key . '.m.wiktionary.org/wiki/%s';
 
-                $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`, `translator_uri`) 
+                $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`, `translator_uri`)
                         VALUES (?, ?, ?, ?)";
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([$this->user_id, $key, $dictionary_uri, $translator_uri]);
@@ -178,7 +190,8 @@ class Language extends DBEntity
      * @param string $lang
      * @return void
      */
-    public function loadRecordByName(string $lang): void {
+    public function loadRecordByName(string $lang): void
+    {
         try {
             $sql = "SELECT * FROM `{$this->table}` WHERE `user_id`=? AND `name`=?";
             $stmt = $this->pdo->prepare($sql);
@@ -189,11 +202,11 @@ class Language extends DBEntity
                 throw new \Exception('The record does not exist.');
             }
 
-            $this->id               = $row['id']; 
-            $this->user_id          = $row['user_id']; 
+            $this->id               = $row['id'];
+            $this->user_id          = $row['user_id'];
             $this->name             = $row['name'];
-            $this->dictionary_uri   = $row['dictionary_uri']; 
-            $this->translator_uri   = $row['translator_uri']; 
+            $this->dictionary_uri   = $row['dictionary_uri'];
+            $this->translator_uri   = $row['translator_uri'];
             $this->rss_feed_1_uri   = $row['rss_feed1_uri'];
             $this->rss_feed_2_uri   = $row['rss_feed2_uri'];
             $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
@@ -212,7 +225,8 @@ class Language extends DBEntity
      * @param string $iso_code
      * @return string
      */
-    public static function getNameFromIso(string $iso_code): string {
+    public static function getNameFromIso(string $iso_code): string
+    {
         return self::$iso_code[$iso_code];
     } // end getNameFromIso()
 
@@ -222,10 +236,11 @@ class Language extends DBEntity
      * @param string $lang_name
      * @return int
      */
-    public static function getIndex(string $lang_name): int {
+    public static function getIndex(string $lang_name): int
+    {
         $keys = array_keys(self::$iso_code);
         $keys_count = count($keys)-1;
-        for ($i=0; $i <= $keys_count; $i++) { 
+        for ($i=0; $i <= $keys_count; $i++) {
             if ($keys[$i] == $lang_name) {
                 return $i;
             }
@@ -237,7 +252,8 @@ class Language extends DBEntity
      *
      * @return array
      */
-    public static function getIsoCodeArray(): array {
+    public static function getIsoCodeArray(): array
+    {
         return self::$iso_code;
     } // end getIsoCodeArray()
 
@@ -246,7 +262,8 @@ class Language extends DBEntity
      *
      * @return array
      */
-    public function getAvailableLangs(): array {
+    public function getAvailableLangs(): array
+    {
         try {
             $sql = "SELECT `id`, `name` FROM `{$this->table}` WHERE `user_id`=? ORDER BY `name` ASC";
             $stmt = $this->pdo->prepare($sql);
@@ -268,7 +285,8 @@ class Language extends DBEntity
      *
      * @return int
      */
-    public function getId(): int {
+    public function getId(): int
+    {
         return $this->id;
     } // end getId()
 
@@ -277,7 +295,8 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getName(): string {
+    public function getName(): string
+    {
         return $this->name;
     } // end getName()
 
@@ -286,7 +305,8 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getDictionaryUri(): string {
+    public function getDictionaryUri(): string
+    {
         return $this->dictionary_uri;
     } // end getDictionaryUri()
 
@@ -295,7 +315,8 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getTranslatorUri(): string {
+    public function getTranslatorUri(): string
+    {
         return is_null($this->translator_uri) ? '' : $this->translator_uri;
     } // end getTranslatorUri()
 
@@ -304,7 +325,8 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getRssFeed1Uri(): string {
+    public function getRssFeed1Uri(): string
+    {
         return is_null($this->rss_feed_1_uri) ? '' : $this->rss_feed_1_uri;
     } // end getRssFeed1Uri()
 
@@ -313,7 +335,8 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getRssFeed2Uri(): string {
+    public function getRssFeed2Uri(): string
+    {
         return is_null($this->rss_feed_2_uri) ? '' : $this->rss_feed_2_uri;
     } // end getRssFeed2Uri()
 
@@ -322,7 +345,8 @@ class Language extends DBEntity
      *
      * @return string
      */
-    public function getRssFeed3Uri(): string {
+    public function getRssFeed3Uri(): string
+    {
         return is_null($this->rss_feed_3_uri) ? '' :  $this->rss_feed_3_uri;
     } // end getRssFeed3Uri()
 
@@ -331,7 +355,8 @@ class Language extends DBEntity
      *
      * @return bool
      */
-    public function getShowFreqWords(): bool {
+    public function getShowFreqWords(): bool
+    {
         return $this->show_freq_words;
     } // end getShowFreqWords()
 
@@ -340,11 +365,9 @@ class Language extends DBEntity
      *
      * @return bool
      */
-    public function getLevel(): int {
+    public function getLevel(): int
+    {
         return $this->level;
     } // end getShowFreqWords()
 
 }
-
-
-?>

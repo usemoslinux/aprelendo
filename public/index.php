@@ -1,19 +1,19 @@
 <?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -141,27 +141,28 @@ require_once PUBLIC_PATH . 'head.php';
                     <div class="col-lg-4">
                         <h4>1. Add</h4>
                         <p>Add texts & YouTube videos to your Aprelendo library using our <a href="/extensions"
-                                    target="_blank" rel="noopener noreferrer">extensions</a>. Premium users can also upload
-                                ebooks and texts from RSS feeds.</p>
+                                    target="_blank" rel="noopener noreferrer">extensions</a>. Premium users
+                                    can also upload ebooks and texts from RSS feeds.</p>
                     </div>
                     <div class="col-lg-4">
                         <h4>2. Read</h4>
-                        <p>Read your texts and video transcripts in our clutter-free reader. Look up words you don't know in your favorite 
-                            dictionaries and get cues of the learning status of each word.</p>
+                        <p>Read your texts and video transcripts in our clutter-free reader. Look up words
+                            you don't know in your favorite dictionaries and get cues of the learning status
+                            of each word.</p>
                     </div>
                     <div class="col-lg-4">
                         <h4>3. Learn</h4>
                         <p>Our assisted learning method will help you to improve not only your reading comprehension
                                 but also your listening, speaking and writing skills. Check
-                                more on this on our <a href="/totalreading" target="_blank" rel="noopener noreferrer">total reading</a>
-                                section.</p>
+                                more on this on our <a href="/totalreading" target="_blank"
+                                rel="noopener noreferrer">total reading</a> section.</p>
                     </div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col-12">
                         <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/qimkPHrLkS4" frameborder="0" allowfullscreen
+                            <iframe src="https://www.youtube.com/embed/qimkPHrLkS4" allowfullscreen
                                 title="How it works video" class="video"></iframe>
                         </div>
                     </div>
@@ -176,11 +177,12 @@ require_once PUBLIC_PATH . 'head.php';
             <div class="container">
                 <div class="row text-center">
                     <div class="col-lg-4">
-                        <i class="fab fa-osi"></i>
+                        <span class="fab fa-osi"></span>
                         <h4>Open source</h4>
-                        <p>Aprelendo is open source software, meaning you can download and fiddle with its source code. This
-                            allows us to be super transparent and build a community of users and developers. With some
-                            technical knowledge, you can even build your own Aprelendo environment.</p>
+                        <p>Aprelendo is open source software, meaning you can download and fiddle
+                            with its source code. This allows us to be super transparent and build
+                            a community of users and developers. With some technical knowledge, you
+                            can even build your own Aprelendo environment.</p>
                         <p>
                             <br>
                             <a href="https://github.com/usemoslinux/aprelendo" target="_blank" rel="noopener noreferrer"
@@ -189,11 +191,12 @@ require_once PUBLIC_PATH . 'head.php';
                         </p>
                     </div>
                     <div class="col-lg-4">
-                        <i class="fas fa-book-open"></i>
+                        <span class="fas fa-book-open"></span>
                         <h4>Total Reading</h4>
-                        <p>Our language learning system is aimed especially (though not exclusively) at users with 
-                            a beginner-intermediate level upwards. Complete beginners may encounter difficulties in this system, 
-                            but it is very beneficial for those who are on a learning "plateau" or anyone seeking to improve 
+                        <p>Our language learning system is aimed especially (though not exclusively)
+                            at users with a beginner-intermediate level upwards. Complete beginners
+                            may encounter difficulties in this system, but it is very beneficial
+                            for those who are on a learning "plateau" or anyone seeking to improve
                             their language skills.</p>
                         <p>
                             <br>
@@ -201,9 +204,12 @@ require_once PUBLIC_PATH . 'head.php';
                         </p>
                     </div>
                     <div class="col-lg-4">
-                        <i class="fas fa-mobile-alt"></i>
+                        <span class="fas fa-mobile-alt"></span>
                         <h4>Use it on any device</h4>
-                        <p>You can use Aprelendo on mobile and desktop devices as long as they have an Internet connection. We offer addons for Firefox and Chrome to easily add texts to your library, as well as bookmarklets for those who prefer a browser agnostic solution.</p>
+                        <p>You can use Aprelendo on mobile and desktop devices as long as they have
+                            an Internet connection. We offer addons for Firefox and Chrome to easily
+                            add texts to your library, as well as bookmarklets for those who prefer
+                            a browser agnostic solution.</p>
                         <p>
                             <br>
                             <a href="/extensions" class="btn btn-theme">More Info</a>

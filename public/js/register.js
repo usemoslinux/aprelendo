@@ -24,7 +24,7 @@ $(document).ready(function() {
     $("#form-register").on("submit", function(e) {
         e.preventDefault();
 
-        var form_data = $("#form-register").serialize();
+        const form_data = $("#form-register").serialize();
 
         showMessage("Processing...", "alert-info");
 
@@ -60,7 +60,7 @@ $(document).ready(function() {
      * Updates flag and welcome message based on changes in the selected learning language
      */
     $("#learning-lang").on("change", function() {
-        var lang_array = [
+        const lang_array = [
                             "Arabic",
                             "Chinese",
                             "Dutch",
@@ -77,9 +77,9 @@ $(document).ready(function() {
                             "Russian",              
                             "Spanish"
                         ];
-        var iso_array = ["ar", "zh", "nl", "en", "fr", "de", "el", "he", "hi", "it", "ja", "ko", "pt", "ru", "es"];
+        const iso_array = ["ar", "zh", "nl", "en", "fr", "de", "el", "he", "hi", "it", "ja", "ko", "pt", "ru", "es"];
 
-        var welcome_array = [
+        const welcome_array = [
                                 "أهلا بك!",
                                 "欢迎！",
                                 "Welkom!",
@@ -97,8 +97,8 @@ $(document).ready(function() {
                                 "¡Bienvenido!"
                             ];
 
-        var sel_index = $(this).prop("selectedIndex");
-        var img_uri = "img/flags/" + iso_array[sel_index] + ".svg";
+        const sel_index = $(this).prop("selectedIndex");
+        const img_uri = "img/flags/" + iso_array[sel_index] + ".svg";
 
         $("h1")
             .text(welcome_array[sel_index])

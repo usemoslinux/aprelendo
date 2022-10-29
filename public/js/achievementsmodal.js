@@ -23,26 +23,26 @@ $(document).ready(function () {
 
 function create_achievements_modal() {
     $(".modal").each(function () {
-        var pages = $(this).find('.modal-split');
+        const pages = $(this).find('.modal-split');
 
         if (pages.length > 1) {
             pages.hide();
             pages.eq(0).show();
 
-            var b_button = document.createElement("button");
+            let b_button = document.createElement("button");
             b_button.setAttribute("type", "button");
             b_button.setAttribute("class", "btn btn-primary");
             b_button.setAttribute("style", "display: none;");
             b_button.innerHTML = "Back";
 
-            var n_button = document.createElement("button");
+            let n_button = document.createElement("button");
             n_button.setAttribute("type", "button");
             n_button.setAttribute("class", "btn btn-primary");
             n_button.innerHTML = "Next";
 
             $(this).find('.modal-footer').append(b_button).append(n_button);
 
-            var page_track = 0;
+            let page_track = 0;
 
             $(n_button).click(function () {
                 if (page_track == 0) {
@@ -84,7 +84,7 @@ function create_achievements_modal() {
                 }
             });
         } else {
-            var c_button = document.createElement("button");
+            let c_button = document.createElement("button");
             c_button.setAttribute("type", "button");
             c_button.setAttribute("class", "btn btn-secondary");
             c_button.innerHTML = "Close";

@@ -7,9 +7,9 @@
     <meta name="description"
         content="Language learning platform designed to boost your reading, listening, speaking and writing skills.">
     <meta name="keywords"
-        content="language, learning, language learning, flashcards, total reading, reading, news, ebooks, books, videos">
+        content="language, learning, language learning, flashcards, total reading, reading, ebooks, books, videos">
     <meta name="author" content="Aprelendo">
-    
+
     <link rel="shortcut icon" type="image/x-icon" href="/img/favicons/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="apple-touch-icon" sizes="57x57" href="/img/favicons/apple-touch-icon-57x57.png" />
@@ -27,7 +27,7 @@
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>

@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -45,35 +45,38 @@ try {
         if ($RSS3notempty) {
             $html .= printRSSFeed($rssfeeds->getFeed3(), 3);
         }
-        echo $html. '</div>';
+        echo $html . '</div>';
     } else {
-        throw new \Exception('There are no RSS feeds to show. Please, add some in the <a class="alert-link" href="/languages.php">languages</a> section. You can add up to 3 feeds per language.');
+        throw new \Exception('There are no RSS feeds to show. Please, add some in the <a class="alert-link" '
+            . 'href="/languages.php">languages</a> section. You can add up to 3 feeds per language.');
     }
 } catch (Exception $e) {
     echo '<div class="alert alert-danger">' . $e->getMessage() . '</div>';
 }
 
 
-function printRSSFeed($feed, $groupindex) {
+function printRSSFeed($feed, $groupindex)
+{
     $feed_title = $feed->getTitle();
     $feed_articles = $feed->getArticles();
 
-    if(isset($feed_title) && !empty($feed_title)) {
+    if (isset($feed_title) && !empty($feed_title)) {
         $accordion_id = 'accordion-' . $groupindex;
         $heading_id = 'heading-' . $groupindex;
         $item_id = 'item-' . $groupindex;
         $label_id = 'btn-' . $groupindex;
 
-        $html = "<div id='$accordion_id' class='subaccordion'>
-                    <div class='card'>
-                        <div class='card-header' id='$heading_id'>
-                            <button id='$label_id' class='btn btn-link collapsed' data-bs-toggle='collapse' data-bs-target='#$item_id' aria-expanded='false' aria-controls='$item_id'>
-                                <i class='fas fa-chevron-right'></i>
-                                $feed_title</a>
-                            </button>
-                        </div>
-                        <div id='$item_id' class='collapse' aria-labelledby='$label_id' data-parent='#accordion'>
-                            <div class='card-body'>";
+        $html = "<div id='$accordion_id' class='subaccordion'>"
+            . "<div class='card'>"
+            . "<div class='card-header' id='$heading_id'>"
+            . "<button id='$label_id' class='btn btn-link collapsed' data-bs-toggle='collapse' "
+            . "data-bs-target='#$item_id' aria-expanded='false' aria-controls='$item_id'>"
+            . "<span class='fas fa-chevron-right'></span>"
+            . "$feed_title</a>"
+            . "</button>"
+            . "</div>"
+            . "<div id='$item_id' class='collapse' aria-labelledby='$label_id' data-parent='#accordion'>"
+            . "<div class='card-body'>";
 
         if (isset($feed_articles) && !empty($feed_articles)) {
             $itemindex = 1;
@@ -88,15 +91,16 @@ function printRSSFeed($feed, $groupindex) {
                 $item_id        = 'item-' . $groupindex . '-' . $itemindex;
                 $label_id       = 'btn-' . $groupindex . '-' . $itemindex;
 
-                $html .= "<div class='card'>
-                            <div class='card-header' id='$heading_id'>
-                                <button id='$label_id' class='btn btn-link collapsed entry-info' data-bs-toggle='collapse' data-bs-target='#$item_id' data-pubdate='$art_date' data-author='$art_author' data-src='$art_src' aria-expanded='false' aria-controls='$item_id'>
-                                    <i class='fas fa-chevron-right'></i>
-                                    $art_title</a>
-                                </button>
-                            </div>
-                            <div id='$item_id' class='collapse' aria-labelledby='$label_id' data-parent='#$accordion_id'>
-                                <div class='card-body'>";
+                $html .= "<div class='card'>"
+                    . "<div class='card-header' id='$heading_id'>"
+                    . "<button id='$label_id' class='btn btn-link collapsed entry-info' data-bs-toggle='collapse' "
+                    . "data-bs-target='#$item_id' data-pubdate='$art_date' data-author='$art_author' "
+                    . "data-src='$art_src' aria-expanded='false' aria-controls='$item_id'>"
+                    . "<span class='fas fa-chevron-right'></span>$art_title</a>"
+                    . "</button>"
+                    . "</div>"
+                    . "<div id='$item_id' class='collapse' aria-labelledby='$label_id' data-parent='#$accordion_id'>"
+                    . "<div class='card-body'>";
 
                 $html .= '<div class="entry-text">' . strip_tags($art_content, '<p>') . '</div>';
                 
@@ -113,10 +117,9 @@ function printRSSFeed($feed, $groupindex) {
         }
         $html .= '</div></div></div></div>';
     } else {
-        throw new \Exception("Oops! There was an error trying to fetch this feed:" .
-            $feed->getUrl() . "\nIt is probably due to a malformed RSS feed.");
+        throw new \Exception("Oops! There was an error trying to fetch this feed:"
+            . $feed->getUrl()
+            . "\nIt is probably due to a malformed RSS feed.");
     }
     return $html;
 }
-
-?>

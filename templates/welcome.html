@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -13,7 +14,7 @@
             height: 100%;
             margin: 0;
             line-height: 1.4;
-            background-color:#F2F4F6;
+            background-color: #F2F4F6;
             color: #74787E;
             -webkit-text-size-adjust: none;
         }
@@ -33,7 +34,7 @@
             margin-top: 0;
         }
 
-        .attributes_content>table {
+        .attributes_content>div {
             box-sizing: border-box;
         }
 
@@ -219,86 +220,66 @@
 </head>
 
 <body>
-    <span class="preheader">Thanks for trying out Aprelendo. We’ve pulled together some information and resources to help you get started.</span>
-    <table class="email-wrapper">
-        <tr>
-            <td style="text-align: center">
-                <table class="email-content">
-                    <tr>
-                        <td class="email-masthead" style="text-align: center">
-                            <a href="https://www.aprelendo.com/" class="email-masthead_name">
-                                <img src="https://www.aprelendo.com/img/email_logo.png" class="img-logo" alt="Aprelendo" />
-                            </a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="email-body">
-                            <table class="email-body_inner">
-                                <tr>
-                                    <td class="content-cell">
-                                        <h1 style="text-align: left">Welcome to Aprelendo, {{name}}!</h1>
-                                        <p style="text-align: left">Thanks for signing up! We’re thrilled to have you on board.</p>
-                                        <p style="text-align: left">To be able to login you first need to activate your account by
-                                            pressing the button below:</p>
-                                        <table class="body-action">
-                                            <tr>
-                                                <td style="text-align: center">
-                                                    <a href="{{action_url}}" class="button button--" target="_blank" rel="noopener noreferrer">Activate your account</a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <p style="text-align: left">For reference, here's your login information:</p>
-                                        <table class="attributes">
-                                            <tr>
-                                                <td class="attributes_content">
-                                                    <table style="width: 100%">
-                                                        <tr>
-                                                            <td class="attributes_item">
-                                                                <strong>Login Page:</strong> <a
-                                                                    href="https://www.aprelendo.com/login">https://www.aprelendo.com/login</a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="attributes_item">
-                                                                <strong>Username:</strong>
-                                                                {{name}}</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <p style="text-align: left">Please do not reply to this e-mail. If you have any questions, feel free to <a href="https://www.aprelendo.com/support">contact our support team</a>.</p>
-                                        <p style="text-align: left">Thanks, <br>The Aprelendo Team</p>
-                                        <table class="body-sub">
-                                            <tr>
-                                                <td>
-                                                    <p class="sub">If you’re having trouble with the button above, copy and paste the URL below into your web browser.</p>
-                                                    <p class="sub">{{action_url}}</p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <table class="email-footer">
-                                <tr>
-                                    <td class="content-cell" style="text-align: center">
-                                        <p class="sub align-center" style="text-align: center">© {{current_year}} Aprelendo. All
-                                            rights reserved.</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+    <span class="preheader">Thanks for trying out Aprelendo. We&apos;ve pulled together some information and resources to
+        help you get started.</span>
+    <div class="email-wrapper">
+        <div style="text-align: center">
+            <div class="email-content">
+                <div class="email-masthead" style="text-align: center">
+                    <a href="https://www.aprelendo.com/" class="email-masthead_name">
+                        <img src="https://www.aprelendo.com/img/email_logo.png" class="img-logo" alt="Aprelendo" />
+                    </a>
+                </div>
+                <div class="email-body">
+                    <div class="email-body_inner">
+                        <div class="content-cell">
+                            <h1 style="text-align: left">Welcome to Aprelendo, {{name}}!</h1>
+                            <p style="text-align: left">Thanks for signing up! We&apos;re thrilled to have you on board.</p>
+                            <p style="text-align: left">To be able to login you first need to activate your account by
+                                pressing the button below:</p>
+                            <div class="body-action">
+                                <div style="text-align: center">
+                                    <a href="{{action_url}}" class="button button--" target="_blank"
+                                        rel="noopener noreferrer">Activate your account</a>
+                                </div>
+                            </div>
+                            <p style="text-align: left">For reference, here's your login information:</p>
+                            <div class="attributes">
+                                <div class="attributes_content">
+                                    <div style="width: 100%">
+                                        <div class="attributes_item">
+                                            <strong>Login Page:</strong> <a
+                                                href="https://www.aprelendo.com/login">
+                                                https://www.aprelendo.com/login</a>
+                                        </div>
+                                        <div class="attributes_item">
+                                            <strong>Username:</strong>
+                                            {{name}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="text-align: left">Please do not reply to this e-mail. If you have any questions,
+                                feel free to <a href="https://www.aprelendo.com/support">contact our support team</a>.
+                            </p>
+                            <p style="text-align: left">Thanks, <br>The Aprelendo Team</p>
+                            <div class="body-sub">
+                                <p class="sub">If you&apos;re having trouble with the button above, copy and paste the URL
+                                    below into your web browser.</p>
+                                <p class="sub">{{action_url}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="email-footer">
+                    <div class="content-cell" style="text-align: center">
+                        <p class="sub align-center" style="text-align: center">© {{current_year}} Aprelendo. All
+                            rights reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

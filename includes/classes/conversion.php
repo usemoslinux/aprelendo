@@ -1,49 +1,52 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace Aprelendo\Includes\Classes;
 
-class Conversion {
+class Conversion
+{
     /**
      * Converts JSON to CSV
      *
      * @param string $json in JSON format
      * @return string in CSV format
      */
-    public static function JSONtoCSV(string $json) {
+    public static function jsonToCsv(string $json)
+    {
         return implode(',', json_decode($json));
-    } // end JSONtoCSV()
+    } // end jsonToCsv()
 
     /**
      * Converts Array to CSV
      *
-     * @param array 
+     * @param array
      * @return string in CSV format
      */
-    public static function ArraytoCSV(array $array): string {
+    public static function arrayToCsv(array $array): string
+    {
         if (is_array($array)) {
-            return "'" . implode("','",$array) . "'";
+            return "'" . implode("','", $array) . "'";
         } else {
             return "'$array'";
         }
-    } // end ArraytoCSV()
+    } // end arrayToCsv()
 
     /**
      * Converts XML string to Array
@@ -51,35 +54,33 @@ class Conversion {
      * @param string $xmlObject
      * @return array
      */
-    public static function XMLtoArray(string $xmlObject): array
+    public static function xmlToArray(string $xmlObject): array
     {
         $out = array ();
-        foreach ( (array)$xmlObject as $index => $node ) {
-            $out[$index] = ( is_object ( $node ) ) ? XMLtoArray ( $node ) : $node;
+        foreach ((array)$xmlObject as $index => $node) {
+            $out[$index] = (is_object($node)) ? xmlToArray($node) : $node;
         }
         return $out;
-    } // end XMLtoArray()
+    } // end xmlToArray()
 
     /**
      * Convert an array to XML
      * @param array $array
      * @param SimpleXMLElement $xml
      */
-    public static function arrayToXml($array, &$xml){
+    public static function arrayToXml($array, &$xml)
+    {
         foreach ($array as $key => $value) {
-            if(is_int($key)){
+            if (is_int($key)) {
                 $key = "e";
             }
-            if(is_array($value)){
+            if (is_array($value)) {
                 $label = $xml->addChild($key);
                 self::arrayToXml($value, $label);
-            }
-            else {
+            } else {
                 $xml->addChild($key, $value);
             }
         }
     }
 
 }
-
-?>

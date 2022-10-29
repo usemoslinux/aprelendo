@@ -1,19 +1,19 @@
 <?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -65,7 +65,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             <label for="password">Password:</label>
                             <input type="password" id="password" name="password" class="form-control"
                                 pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                title="Password must have at least 8 characters and contain letters, special characters and a digits"
                                 autocomplete="off">
                         </div>
                         <p>

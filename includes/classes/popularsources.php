@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -23,17 +23,19 @@ namespace Aprelendo\Includes\Classes;
 use Aprelendo\Includes\Classes\DBEntity;
 use Aprelendo\Includes\Classes\Languages;
 
-class PopularSources extends DBEntity {
+class PopularSources extends DBEntity
+{
     
     /**
      * Constructor
-     * 
+     *
      * Sets basic variables
      *
      * @param PDO $pdo
      * @return void
      */
-    public function __construct(\PDO $pdo) {
+    public function __construct(\PDO $pdo)
+    {
         $this->pdo = $pdo;
         $this->table = 'popular_sources';
     } // end __construct()
@@ -45,14 +47,15 @@ class PopularSources extends DBEntity {
      * @param string $domain
      * @return void
      */
-    public function add(string $lg_iso, string $domain): void {
+    public function add(string $lg_iso, string $domain): void
+    {
         try {
             $invalid_sources = array('feedproxy.google.com',
                                      'www.youtube.com',
                                      'm.youtube.com',
                                      'youtu.be');
 
-            if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain))  {
+            if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain)) {
                 return;
             }
 
@@ -62,7 +65,7 @@ class PopularSources extends DBEntity {
                 return;
             }
 
-            $sql = "INSERT INTO `{$this->table}` (`lang_iso`, `times_used`, `domain`) 
+            $sql = "INSERT INTO `{$this->table}` (`lang_iso`, `times_used`, `domain`)
                     VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$lg_iso, $domain]);
@@ -80,9 +83,10 @@ class PopularSources extends DBEntity {
      * @param string $domain
      * @return void
      */
-    public function update(string $lg_iso, string $domain): void {
+    public function update(string $lg_iso, string $domain): void
+    {
         try {
-            if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain))  {
+            if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain)) {
                 return;
             }
     
@@ -96,7 +100,8 @@ class PopularSources extends DBEntity {
                 $stmt->execute([$lg_iso, $domain]);
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to update record from the popular sources list.');
+            throw new \Exception('There was an unexpected error trying to update record from the popular '
+                . 'sources list.');
         } finally {
             $stmt = null;
         }
@@ -108,9 +113,10 @@ class PopularSources extends DBEntity {
      * @param string $lg_iso
      * @return array
      */
-    public function getAllByLang(string $lg_iso): array {
+    public function getAllByLang(string $lg_iso): array
+    {
         try {
-            if (!isset($lg_iso) || empty($lg_iso))  {
+            if (!isset($lg_iso) || empty($lg_iso)) {
                 throw new \Exception('Wrong parameters provided to update record from the popular sources list.');
             }
 
@@ -132,5 +138,3 @@ class PopularSources extends DBEntity {
         }
     } // end getAllByLang()
 }
-
-?>

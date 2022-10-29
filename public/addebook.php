@@ -1,19 +1,19 @@
 <?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -47,11 +47,15 @@ require_once PUBLIC_PATH . 'header.php';
                 </ol>
             </nav>
             <main>
-                <div class="alert alert-info"><i class="fas fa-info-circle"></i> Ebooks will remain in your "private" library. Only you will be able to access to them.</div>
+                <div class="alert alert-info">
+                    <span class="fas fa-info-circle"></span>
+                    &nbsp;Ebooks will remain in your "private" library. Only you will be able to access to them.
+                </div>
                 <div id="alert-msg" class="d-none"></div>
                 <div class="progress d-none">
-                    <div id="upload-progress-bar" class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" role="progressbar"
-                    aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                    <div id="upload-progress-bar"
+                        class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated"
+                        role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
                     </div>
                 </div>
                 <form id="form-addebook" class="add-form" method="post" enctype="multipart/form-data">
@@ -70,7 +74,7 @@ require_once PUBLIC_PATH . 'header.php';
                         <div class="mb-3 col-lg-6">
                             <input class="d-none" id="url" name="url" type="file" accept=".epub">
                             <button id="btn-upload-epub" type="button" class="btn btn-primary btn-upload">
-                                <i class="fas fa-upload"></i>&nbsp;Select epub file
+                                <span class="fas fa-upload"></span>&nbsp;Select epub file
                             </button>
                         </div>
                         <div class="mb-3 col-lg-6">
@@ -88,7 +92,8 @@ require_once PUBLIC_PATH . 'header.php';
                     </div>
                     <div class="row">
                         <div class="mb-3 col-sm-12 text-end">
-                        <button id="btn_cancel" name="cancel" type="button" class="btn btn-link" onclick="window.location='/'">Cancel</button>
+                        <button id="btn_cancel" name="cancel" type="button" class="btn btn-link"
+                            onclick="window.location='/'">Cancel</button>
                         <button type="submit" id="btn-save" name="submit" class="btn btn-success">Save</button>
                         </div>
                     </div>
@@ -99,7 +104,10 @@ require_once PUBLIC_PATH . 'header.php';
 </div>
 
 <!-- Epub.js & jszip -->
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+    integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+</script>
 
 <script defer src="js/epubjs/epub.min.js"></script>
 

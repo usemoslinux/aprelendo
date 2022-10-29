@@ -18,24 +18,24 @@
  */
 
 $(document).ready(function() {
-    var highlighting = false;
-    var $sel_start, $sel_end;
-    var start_sel_time, end_sel_time;
-    var start_sel_pos_top; // used in mobile devices to activate "word/phrase selection mode"
-    var swiping = false; // used in mobile devices to activate "word/phrase selection mode"
-    var $selword = null; // jQuery object of the selected word/phrase
-    var dictionary_URI = "";
-    var translator_URI = "";
-    var translate_paragraph_link = "";
-    var resume_video = false;
-    var video_paused = false;
-    var show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
-    var gems_earned = 0;
-    var doclang = $("html").attr("lang");
+    let highlighting = false;
+    let $sel_start, $sel_end;
+    let start_sel_time, end_sel_time;
+    let start_sel_pos_top; // used in mobile devices to activate "word/phrase selection mode"
+    let swiping = false; // used in mobile devices to activate "word/phrase selection mode"
+    let $selword = null; // jQuery object of the selected word/phrase
+    let dictionary_URI = "";
+    let translator_URI = "";
+    let translate_paragraph_link = "";
+    let resume_video = false;
+    let video_paused = false;
+    let show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
+    let gems_earned = 0;
+    let doclang = $("html").attr("lang");
 
     // Fix for mobile devices where vh includes hidden address bar
     // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
-    var vh = window.innerHeight * 0.01;
+    let vh = window.innerHeight * 0.01;
     // Then we set the value in the --vh custom property to the root of the document
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 
@@ -153,7 +153,7 @@ $(document).ready(function() {
         end_sel_time = new Date();
 
         if (e.type == "touchmove") {
-            var cur_sel_pos_top = $(this).offset().top - $(window).scrollTop();
+            const cur_sel_pos_top = $(this).offset().top - $(window).scrollTop();
             swiping = swiping ? swiping : Math.abs(start_sel_pos_top - cur_sel_pos_top) > 0;
 
             if (!swiping) {
@@ -201,13 +201,13 @@ $(document).ready(function() {
      * Sets Add & Delete buttons depending on whether selection exists in database
      */
     function setAddDeleteButtons() {
-        var $btnremove = $("#btnremove");
-        var $btnadd = $("#btnadd");
+        let $btnremove = $("#btnremove");
+        let $btnadd = $("#btnadd");
 
-        var underlined_words_in_selection = $selword.filter(
+        let underlined_words_in_selection = $selword.filter(
             ".learning, .new, .forgotten, .learned"
         ).length;
-        var words_in_selection = $selword.filter(".word").length;
+        let words_in_selection = $selword.filter(".word").length;
 
         if (words_in_selection == underlined_words_in_selection) {
             if ($btnremove.is(":visible") === false) {
@@ -224,8 +224,8 @@ $(document).ready(function() {
      * Adds selected word or phrase to the database and underlines it in the text
      */
     $("#btnadd").on("click", function() {
-        var sel_text = $selword.text();
-        var is_phrase = $selword.length > 1 ? 1: 0;
+        const sel_text = $selword.text();
+        const is_phrase = $selword.length > 1 ? 1: 0;
         // add selection to "words" table
         $.ajax({
             type: "POST",
@@ -239,9 +239,9 @@ $(document).ready(function() {
                 // if successful, underline word or phrase
                 if (is_phrase) {
                     // if it's a phrase
-                    var firstword = $selword.eq(0).text();
-                    var phraseext = $selword.filter(".word").length;
-                    var $filterphrase = $("a.word").filter(function() {
+                    const firstword = $selword.eq(0).text();
+                    const phraseext = $selword.filter(".word").length;
+                    let $filterphrase = $("a.word").filter(function() {
                         return (
                             $(this)
                                 .text()
@@ -250,11 +250,11 @@ $(document).ready(function() {
                     });
 
                     $filterphrase.each(function() {
-                        var lastword = $(this)
+                        let lastword = $(this)
                             .nextAll("a.word")
                             .slice(0, phraseext - 1)
                             .last();
-                        var phrase = $(this)
+                        let phrase = $(this)
                             .nextUntil(lastword)
                             .addBack()
                             .next("a.word")
@@ -273,7 +273,7 @@ $(document).ready(function() {
                     });
                 } else {
                     // if it's a word
-                    var $filterword = $("a.word").filter(function() {
+                    let $filterword = $("a.word").filter(function() {
                         return (
                             $(this)
                                 .text()
@@ -282,7 +282,7 @@ $(document).ready(function() {
                     });
 
                     $filterword.each(function() {
-                        var $word = $(this);
+                        let $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
                                 "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#myModal'></a>"
@@ -308,21 +308,21 @@ $(document).ready(function() {
      * Builds translator link including the paragraph to translate as a parameter
      */
     function buildTranslateParagraphLink() {
-        var $start_obj = $selword.prevUntil(":contains('.')").last();
+        let $start_obj = $selword.prevUntil(":contains('.')").last();
         $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
-        var $end_obj = $selword
+        let $end_obj = $selword
             .prev()
             .nextUntil(":contains('.')")
             .last()
             .next();
         $end_obj =
             $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
-        var $sentence = $start_obj
+        let $sentence = $start_obj
             .nextUntil($end_obj)
             .addBack()
             .next()
             .addBack();
-        var sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
+        const sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
 
         return translator_URI.replace("%s", encodeURIComponent(sentence));
     } // end buildTranslateParagraphLink
@@ -333,7 +333,7 @@ $(document).ready(function() {
      * @param {string} lg_iso
      */
     function getWordFrequency(word, lg_iso) {
-        var $freqlvl = $("#bdgfreqlvl");
+        let $freqlvl = $("#bdgfreqlvl");
 
         // ajax call to get word frequency
         $.ajax({
@@ -360,7 +360,7 @@ $(document).ready(function() {
             }
         }).fail(function() {
             $freqlvl.hide();
-        });;
+        });
     } // end getWordFrequency
 
     /**
@@ -387,8 +387,8 @@ $(document).ready(function() {
         translate_paragraph_link = buildTranslateParagraphLink();
 
         // show dictionary
-        var selword_text = $selword.text().replace(/(\r\n|\n|\r)/gm, " ");
-        var url = dictionary_URI.replace("%s", encodeURIComponent(selword_text));
+        const selword_text = $selword.text().replace(/(\r\n|\n|\r)/gm, " ");
+        const url = dictionary_URI.replace("%s", encodeURIComponent(selword_text));
 
         $(parent.document)
             .find("#dicFrame")
@@ -415,7 +415,7 @@ $(document).ready(function() {
             }
         })
             .done(function() {
-                var $filter = $("a.word").filter(function() {
+                let $filter = $("a.word").filter(function() {
                     return (
                         $(this)
                             .text()
@@ -435,9 +435,9 @@ $(document).ready(function() {
                     // also, the case of the word/phrase in the text has to be respected
                     // for phrases, we need to make sure that new underlining is added for each word
 
-                    var $result = $(underlineWords(data, doclang));
-                    var $cur_filter = {};
-                    var cur_word = /""/;
+                    let $result = $(underlineWords(data, doclang));
+                    let $cur_filter = {};
+                    let cur_word = /""/;
 
                     $filter.each(function() {
                         $cur_filter = $(this);
@@ -458,8 +458,8 @@ $(document).ready(function() {
                             $(this).text(cur_word);
                             
                             // check if any word marked by PHP as .learning should be marked as .new instead
-                            var word = $(this).text().toLowerCase();
-                            var user_word = data.user_words.find(function (element) {
+                            const word = $(this).text().toLowerCase();
+                            const user_word = data.user_words.find(function (element) {
                                 return element.word == word;    
                             });
 
@@ -492,9 +492,9 @@ $(document).ready(function() {
      */
     $(document).on("click", "#btn-save-ytvideo", function() {
         // build array with underlined words
-        var oldwords = [];
-        var ids = [];
-        var word = "";
+        let oldwords = [];
+        let ids = [];
+        let word = "";
         $(".learning").each(function() {
             word = $(this)
                 .text()
@@ -517,7 +517,7 @@ $(document).ready(function() {
             .done(function(data) {
                 if (data.error_msg == null) {
                     // update user score (gems)
-                    var review_data = {
+                    const review_data = {
                         words : { new:       $(".reviewing.new").length, 
                                   learning:  $(".reviewing.learning").length, 
                                   forgotten: $(".reviewing.forgotten").length },
@@ -534,10 +534,10 @@ $(document).ready(function() {
                         if (data.error_msg == null) {
                             gems_earned = data.gems_earned;
                             show_confirmation_dialog = false;
-                            var url = "/textstats";
-                            var total_words =
+                            const url = "/textstats";
+                            const total_words =
                                 Number($(".word").length) + Number($(".phrase").length);
-                            var form = $(
+                            const form = $(
                                 '<form action="' +
                                     url +
                                     '" method="post">' +

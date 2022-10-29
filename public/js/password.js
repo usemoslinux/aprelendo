@@ -22,9 +22,9 @@ $(document).ready(function() {
      * Checks password confirmation matches original password
      */
     function checkPasswordsAreEqual() {
-        var $password = $("#newpassword");
-        var $password_confirmation = $("#newpassword-confirmation");
-        var $text = $("#passwords-match-text");
+        let $password = $("#newpassword");
+        let $password_confirmation = $("#newpassword-confirmation");
+        let $text = $("#passwords-match-text");
 
         if ($password.val() == "" || $password_confirmation.val() == "") {
             $password_confirmation.css("border-bottom", "1px solid #ced4da");
@@ -42,13 +42,13 @@ $(document).ready(function() {
      * Checks password strength and changes progress bar accordingly
      */
     $("#newpassword").on("input", function() {
-        var number = /([0-9])/;
-        var letters = /([a-zA-Z])/;
-        var special_chars = /([~`!@#$%^&*()\-_+={};:\[\]\?\.\/,])/;
+        const number = /([0-9])/;
+        const letters = /([a-zA-Z])/;
+        const special_chars = /([~`!@#$%^&*()\-_+={};:\[\]\?\.\/,])/;
 
-        var $password = $(this);
-        var $password_confirmation = $("#newpassword-confirmation");
-        var $text = $("#password-strength-text");
+        let $password = $(this);
+        let $password_confirmation = $("#newpassword-confirmation");
+        let $text = $("#password-strength-text");
 
         if ($password.val().length < 8) {
             $password.css("border-bottom", "2px solid red");
@@ -84,10 +84,10 @@ $(document).ready(function() {
      */
     $(".show-hide-password-btn").on("click", function(e) {
         e.preventDefault();
-        var $password_input = $(this)
+        let $password_input = $(this)
             .parent()
             .siblings("input");
-        var $password_i = $(this).find("i");
+        let $password_i = $(this).find("i");
 
         if ($password_input.attr("type") == "text") {
             $password_input.attr("type", "password");

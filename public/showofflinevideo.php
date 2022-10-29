@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -57,7 +57,8 @@ try {
     $font_size = $prefs->getFontSize();
     $text_align = $prefs->getTextAlignment();
     
-    $body_css .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;position:fixed;width:100%;'";
+    $body_css .= ' style="font-family:' . $font_family . ';font-size:' . $font_size . ';text-align:'
+        . $text_align . ';position:fixed;width:100%;';
 } catch (Exception $e) {
     header('Location:/login');
     exit;
@@ -78,7 +79,7 @@ require_once PUBLIC_PATH . 'head.php';
             </div>
         </div>
 
-        <?php 
+        <?php
             require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
             require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
         ?>
@@ -88,4 +89,3 @@ require_once PUBLIC_PATH . 'head.php';
         <script defer src="js/subtitles-parser/subtitles.parser.min.js"></script>
     </body>
 </html>
-

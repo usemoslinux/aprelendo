@@ -36,12 +36,13 @@ $assisted_learning = $prefs->getAssistedLearning();
 $video_pages = array('showvideo', 'showofflinevideo');
 $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
 
+$sel = ' selected ';
 ?>
 
 
 <!-- Reader Settings Modal -->
-<div class="modal fade" id="reader-settings-modal" data-keyboard="true" tabindex="-1" role="dialog" aria-labelledby="reader-settings-modal-label"
-    aria-hidden="true" tabindex="-1">
+<div class="modal fade" id="reader-settings-modal" data-keyboard="true" tabindex="-1" role="dialog"
+    aria-labelledby="reader-settings-modal-label" aria-hidden="true" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -55,11 +56,26 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                         <div>
                             <select name="fontfamily" id="fontfamily" class="form-control form-select"
                                 autocomplete="off">
-                                <option value="Arial, sans-serif" <?php echo $font_family=='Arial, sans-serif' ? ' selected ' : ''; ?>>Arial</option>
-                                <option value="Courier, monospace" <?php echo $font_family=='Courier, monospace' ? ' selected ' : ''; ?>>Courier</option>
-                                <option value="Georgia, serif" <?php echo $font_family=='Georgia, serif' ? ' selected ' : ''; ?>>Georgia</option>
-                                <option value="Roboto, sans-serif" <?php echo $font_family=='Roboto, sans-serif' ? ' selected ' : ''; ?>>Roboto</option>
-                                <option value="Times New Roman, serif" <?php echo $font_family=='Times New Roman, serif' ? ' selected ' : ''; ?>>Times New Roman</option>
+                                <option value="Arial, sans-serif" <?php echo $font_family=='Arial, sans-serif'
+                                    ? $sel                                     : ''; ?>>
+                                    Arial
+                                </option>
+                                <option value="Courier, monospace" <?php echo $font_family=='Courier, monospace'
+                                    ? $sel                                     : ''; ?>>
+                                    Courier
+                                </option>
+                                <option value="Georgia, serif" <?php echo $font_family=='Georgia, serif'
+                                    ? $sel                                     : ''; ?>>
+                                    Georgia
+                                </option>
+                                <option value="Roboto, sans-serif" <?php echo $font_family=='Roboto, sans-serif'
+                                    ? $sel                                     : ''; ?>>
+                                    Roboto
+                                </option>
+                                <option value="Times New Roman, serif" <?php echo $font_family=='Times New Roman, serif'
+                                    ? $sel                                     : ''; ?>>
+                                    Times New Roman
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -67,13 +83,13 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                         <label for="fontsize">Font Size:</label>
                         <div>
                             <select name="fontsize" id="fontsize" class="form-control form-select" autocomplete="off">
-                                <option value="12pt" <?php echo $font_size == '12pt' ? ' selected ' : ''; ?>>12 pt
+                                <option value="12pt" <?php echo $font_size == '12pt' ? $sel : ''; ?>>12 pt
                                 </option>
-                                <option value="14pt" <?php echo $font_size == '14pt' ? ' selected ' : ''; ?>>14 pt
+                                <option value="14pt" <?php echo $font_size == '14pt' ? $sel : ''; ?>>14 pt
                                 </option>
-                                <option value="16pt" <?php echo $font_size == '16pt' ? ' selected ' : ''; ?>>16 pt
+                                <option value="16pt" <?php echo $font_size == '16pt' ? $sel : ''; ?>>16 pt
                                 </option>
-                                <option value="18pt" <?php echo $font_size == '18pt' ? ' selected ' : ''; ?>>18 pt
+                                <option value="18pt" <?php echo $font_size == '18pt' ? $sel : ''; ?>>18 pt
                                 </option>
                             </select>
                         </div>
@@ -83,12 +99,12 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                         <div>
                             <select name="lineheight" id="lineheight" class="form-control form-select"
                                 autocomplete="off">
-                                <option value="1.5" <?php echo $line_height == '1.5' ? ' selected ' : ''; ?>>1.5 Lines
+                                <option value="1.5" <?php echo $line_height == '1.5' ? $sel : ''; ?>>1.5 Lines
                                 </option>
-                                <option value="2" <?php echo $line_height == '2' ? ' selected ' : ''; ?>>2</option>
-                                <option value="2.5" <?php echo $line_height == '2.5' ? ' selected ' : ''; ?>>2.5
+                                <option value="2" <?php echo $line_height == '2' ? $sel : ''; ?>>2</option>
+                                <option value="2.5" <?php echo $line_height == '2.5' ? $sel : ''; ?>>2.5
                                 </option>
-                                <option value="3" <?php echo $line_height == '3' ? ' selected ' : ''; ?>>3</option>
+                                <option value="3" <?php echo $line_height == '3' ? $sel : ''; ?>>3</option>
                             </select>
                         </div>
                     </div>
@@ -97,13 +113,13 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                         <div>
                             <select name="alignment" id="alignment" class="form-control form-select"
                                 autocomplete="off">
-                                <option value="left" <?php echo $text_align == 'left' ? ' selected ' : ''; ?>>Left
+                                <option value="left" <?php echo $text_align == 'left' ? $sel : ''; ?>>Left
                                 </option>
-                                <option value="center" <?php echo $text_align == 'center' ? ' selected ' : ''; ?>>Center
+                                <option value="center" <?php echo $text_align == 'center' ? $sel : ''; ?>>Center
                                 </option>
-                                <option value="right" <?php echo $text_align == 'right' ? ' selected ' : ''; ?>>Right
+                                <option value="right" <?php echo $text_align == 'right' ? $sel : ''; ?>>Right
                                 </option>
-                                <option value="justify" <?php echo $text_align == 'justify' ? ' selected ' : ''; ?>>
+                                <option value="justify" <?php echo $text_align == 'justify' ? $sel : ''; ?>>
                                     Justify</option>
                             </select>
                         </div>
@@ -112,11 +128,11 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                         <label for="mode">Display mode:</label>
                         <div>
                             <select name="mode" id="mode" class="form-control form-select" autocomplete="off">
-                                <option value="light" <?php echo $display_mode == 'light' ? ' selected ' : ''; ?>>Light
+                                <option value="light" <?php echo $display_mode == 'light' ? $sel : ''; ?>>Light
                                 </option>
-                                <option value="sepia" <?php echo $display_mode == 'sepia' ? ' selected ' : ''; ?>>Sepia
+                                <option value="sepia" <?php echo $display_mode == 'sepia' ? $sel : ''; ?>>Sepia
                                 </option>
-                                <option value="dark" <?php echo $display_mode == 'dark' ? ' selected ' : ''; ?>>Dark
+                                <option value="dark" <?php echo $display_mode == 'dark' ? $sel : ''; ?>>Dark
                                 </option>
                             </select>
                         </div>
@@ -125,9 +141,9 @@ $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
                         <label for="assistedlearning">Mode:</label>
                         <div>
                             <select name="assistedlearning" id="assistedlearning" class="form-control form-select">
-                                <option value="1" <?php echo $assisted_learning == true ? ' selected ' : ''; ?>>Assisted
+                                <option value="1" <?php echo $assisted_learning ? $sel : ''; ?>>Assisted
                                 </option>
-                                <option value="0" <?php echo $assisted_learning == false ? ' selected ' : ''; ?>>Free
+                                <option value="0" <?php echo !$assisted_learning ? $sel : ''; ?>>Free
                                 </option>
                             </select>
                         </div>

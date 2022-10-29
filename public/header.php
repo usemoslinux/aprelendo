@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,7 +30,7 @@ if (isset($_GET['lang']) && !empty($_GET['lang'])) {
     } catch (\Throwable $th) {
         header("Location: index.php");
         exit;
-    } 
+    }
 }
 
 $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
@@ -57,24 +57,32 @@ $streak_days = (int)$gems->getDaysStreak();
                 <a class="navbar-brand" href="/index"></a>
 
                 <!-- Toggler Button -->
-                <button class="navbar-toggler" type="button" aria-label="toggler button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <button class="navbar-toggler" type="button" aria-label="toggler button" data-bs-toggle="collapse"
+                    data-bs-target="#collapsibleNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <!-- Navbar links -->
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ms-auto">
-                        <li id="streak-days" class="nav-item gamification py-2 pe-md-2"><img src="/img/gamification/streak.svg" class="me-3 me-md-1" alt="Streak" title="Streak days"> <?php echo $streak_days; ?></li>
-                        <li id="gems" class="nav-item gamification py-2 pe-md-2"><img src="/img/gamification/gems.svg" class="me-3 me-md-1 ms-md-2" alt="Gems" title="Gems earned"> <?php echo $nr_of_gems; ?></li>
+                        <li id="streak-days" class="nav-item gamification py-2 pe-md-2">
+                            <img src="/img/gamification/streak.svg" class="me-3 me-md-1" alt="Streak"
+                            title="Streak days"> <?php echo $streak_days; ?>
+                        </li>
+                        <li id="gems" class="nav-item gamification py-2 pe-md-2">
+                            <img src="/img/gamification/gems.svg" class="me-3 me-md-1 ms-md-2" alt="Gems"
+                            title="Gems earned"> <?php echo $nr_of_gems; ?>
+                        </li>
                         <li id="language-dropdown" class="nav-item dropdown">
                             <a href="javascript:;" id="language-menu" class="nav-link dropdown-toggle" role="button"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img id="img-language-flag" class="me-3 me-md-0" src="/img/flags/<?php echo $user->getLang() . '.svg';?>"
+                                <img id="img-language-flag" class="me-3 me-md-0"
+                                    src="/img/flags/<?php echo $user->getLang() . '.svg';?>"
                                     alt="<?php echo $lang_full; ?> flag">
                                 <span id="learning-lang-span">
                                     <?php echo $lang_full; ?>
                                 </span>
-                                <b class="caret"></b>
+                                <strong class="caret"></strong>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="language-menu">
                                 <a class="dropdown-item" href="<?php echo 'languages?chg=' . $user->getLangId(); ?>">
@@ -86,9 +94,9 @@ $streak_days = (int)$gems->getDaysStreak();
                         <li id="user-dropdown" class="nav-item dropdown">
                             <a id="user-menu" href="javascript:;" class="nav-link dropdown-toggle" role="button"
                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-user-circle me-3 me-md-1"></i>
+                                <span class="fas fa-user-circle me-3 me-md-1"></span>
                                 <?php echo ucfirst($user->getName()); ?>
-                                <b class="caret"></b>
+                                <strong class="caret"></strong>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu">
                                 <div class="dropdown-header">
@@ -129,5 +137,3 @@ $streak_days = (int)$gems->getDaysStreak();
             </div>
         </nav>
     </header>
-    
-    

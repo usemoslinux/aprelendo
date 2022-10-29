@@ -24,7 +24,7 @@ $(document).ready(function() {
     $("#form_login").on("submit", function(e) {
         e.preventDefault();
 
-        var form_data = $("#form_login").serialize();
+        const form_data = $("#form_login").serialize();
 
         $.ajax({
             type: "POST",
@@ -52,7 +52,7 @@ $(document).ready(function() {
  * Uses the new Google Identity Services library for authentication
  */
 function googleSignIn(googleUser) {
-    var profile = jwt_decode(googleUser.credential);
+    const profile = jwt_decode(googleUser.credential);
 
     //pass information to server to insert or update the user record
     $.ajax({

@@ -17,15 +17,15 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
  $(document).ready(function() {
-    var doclang = $("html").attr("lang");
-    var ebook_id = $("script[src*='showebook-min.js']").attr("data-id");
-    var book = ePub();
+    const doclang = $("html").attr("lang");
+    const ebook_id = $("script[src*='showebook-min.js']").attr("data-id");
+    const book = ePub();
 
     window.parent.show_confirmation_dialog = false; // don't show confirmation dialog on close
     
-    var $viewer = document.getElementById("viewer");
+    let $viewer = document.getElementById("viewer");
 
-    var formData = new FormData();
+    let formData = new FormData();
     formData.append("id", ebook_id);
 
     /**
@@ -55,12 +55,12 @@
             window.location.replace("/texts");
         });
 
-    var rendition = book.renderTo("viewer", {
+    let rendition = book.renderTo("viewer", {
         flow: "scrolled-doc"
     });
 
     // theming
-    var reader = document.getElementById("readerpage");
+    let reader = document.getElementById("readerpage");
 
     rendition.themes.register("darkmode", "/css/ebooks-min.css");
     rendition.themes.register("lightmode", "/css/ebooks-min.css");
@@ -79,8 +79,8 @@
     rendition.themes.select(reader.className);
 
     book.opened.then(function(){
-        var key = book.key() + "-lastpos";
-        var last_pos = localStorage.getItem(key);
+        const key = book.key() + "-lastpos";
+        const last_pos = localStorage.getItem(key);
 
         if (last_pos) {
             display(last_pos);
@@ -95,13 +95,13 @@
         });
     });
 
-    var next = document.getElementById("next");
+    let next = document.getElementById("next");
     next.addEventListener(
         "click",
         function(e) {
             e.preventDefault();
             $.when(SaveWords()).then(function() {
-                var url = next.href.substr(next.href.indexOf('/', 8) + 1); // remove domain name from url
+                let url = next.href.substr(next.href.indexOf('/', 8) + 1); // remove domain name from url
                 url = url.replace(/OEBPS\//i, ""); // workaround to fix link url in some ebooks
                 display(url);
                 $("html, body").animate({
@@ -112,12 +112,12 @@
         false
     );
         
-    var prev = document.getElementById("prev");
+    let prev = document.getElementById("prev");
     prev.addEventListener(
         "click",
         function(e) {
             e.preventDefault();
-            var url = prev.href.substr(prev.href.indexOf('/', 8) + 1); // remove domain name from url
+            let url = prev.href.substr(prev.href.indexOf('/', 8) + 1); // remove domain name from url
             url = url.replace(/OEBPS\//i, ""); // workaround to fix link url in some ebooks
             display(url);
             $("html, body").animate({
@@ -136,9 +136,8 @@
      */
     function SaveWords() {
         // build array with underlined words
-        var $pagereader = $(document).find('iframe[id^="epubjs"]');
-        var oldwords = [];
-        var word = "";
+        let oldwords = [];
+        let word = "";
 
         $(document)
             .find(".learning")
@@ -162,7 +161,7 @@
             .done(function(data) {
                 if (data.error_msg == null) {
                     // update user score (gems)
-                    var review_data = {
+                    const review_data = {
                         words : { new:       $(".reviewing.new").length, 
                                   learning:  $(".reviewing.learning").length, 
                                   forgotten: $(".reviewing.forgotten").length },
@@ -199,20 +198,15 @@
         book.destroy();
     }); // end parent.window.unload
 
-    var navigation = document.getElementById("navigation");
-    var main = document.getElementById("main");
-
     book.loaded.navigation.then(function(toc) {
-        var $nav = document.getElementById("toc"),
+        let $nav = document.getElementById("toc"),
             docfrag = document.createDocumentFragment();
-        var key = book.key() + "-lastpos";
-        var current_section_href = localStorage.getItem(key);
         
-        var addTocItems = function(parent, tocItems) {
-            var $ul = document.createElement("ul");
+        const addTocItems = function(parent, tocItems) {
+            let $ul = document.createElement("ul");
             tocItems.forEach(function(chapter) {
-                var item = document.createElement("li");
-                var link = document.createElement("a");
+                let item = document.createElement("li");
+                let link = document.createElement("a");
                 link.textContent = chapter.label;
                 link.href = chapter.href;
 
@@ -223,7 +217,7 @@
                 }
 
                 link.onclick = function() {
-                    var url = link.getAttribute("href");
+                    const url = link.getAttribute("href");
                     
                     document.getElementById("opener").click();
                     
@@ -249,10 +243,10 @@
     }); // end book.loaded.navigation
 
     book.loaded.metadata.then(function(meta) {
-        var $title = document.getElementById("title");
-        var $book_title = document.getElementById("book-title");
-        var $author = document.getElementById("author");
-        var $cover = document.getElementById("cover");
+        let $title = document.getElementById("title");
+        let $book_title = document.getElementById("book-title");
+        let $author = document.getElementById("author");
+        let $cover = document.getElementById("cover");
 
         if ($title != null) {
             $title.textContent = meta.title;
@@ -269,10 +263,10 @@
     }); // book.loaded.metadata
 
     function display(item){
-        var section = book.spine.get(item);
+        let section = book.spine.get(item);
         if(section) {
           section.render().then(function(ebook_html){
-            var $parsed = $('<div/>').append(ebook_html);
+            let $parsed = $('<div/>').append(ebook_html);
             $parsed.find('*').removeAttr("class").removeAttr("style");
 
             // underline text
@@ -294,12 +288,13 @@
             }); // end $.ajax  
 
             // create previous and next links on top and bottom of page
-            var nextSection = section.next();
-            var prevSection = section.prev();
+            let nextSection = section.next();
+            let prevSection = section.prev();
     
             if (nextSection) {
-                nextNav = book.navigation.get(nextSection.href);
-    
+                const nextNav = book.navigation.get(nextSection.href);
+                let nextLabel = '';
+                
                 if (nextNav) {
                     nextLabel = nextNav.label;
                 } else {
@@ -314,7 +309,8 @@
             }
     
             if (prevSection) {
-                prevNav = book.navigation.get(prevSection.href);
+                const prevNav = book.navigation.get(prevSection.href);
+                let prevLabel = '';
     
                 if (prevNav) {
                     prevLabel = prevNav.label;
@@ -339,15 +335,15 @@
     }
 
     function updateToc(current_chapter_url) {
-        var $nav = document.getElementById('toc');
-        var selector = $nav.querySelector('.fw-bold');
-        if (selector !== null) {
-            selector.classList.remove('fw-bold');
+        let $nav = document.getElementById('toc');
+        let $selector = $nav.querySelector('.fw-bold');
+        if ($selector !== null) {
+            $selector.classList.remove('fw-bold');
         }
 
-        selector = $nav.querySelector('a[href*="' + current_chapter_url + '"]');
-        if (selector !== null) {
-            selector.classList.add('fw-bold');
+        $selector = $nav.querySelector('a[href*="' + current_chapter_url + '"]');
+        if ($selector !== null) {
+            $selector.classList.add('fw-bold');
         }
     }
 });

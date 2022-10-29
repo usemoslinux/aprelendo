@@ -32,7 +32,7 @@ require_once PUBLIC_PATH . 'head.php';
                 </div>
                 <br>
 
-                <h1 class="text-danger text-center"><i class="far fa-check-circle"></i> Paypal payment cancelled</h1>
+                <h1 class="text-danger text-center"><span class="far fa-check-circle"></span> Paypal payment cancelled</h1>
                 <h5 class="text-center">Your susbscription to Aprelendo was cancelled</h5>
                 <hr>
                 <div class="text-center">

@@ -1,19 +1,19 @@
 <?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -38,16 +38,16 @@ use Aprelendo\Includes\Classes\User;
                     <br>
                     
 
-                    <?php 
+                    <?php
                     // 1. check if email & password values passed by the reset link are set
-                    if(isset($_GET['email']) && isset($_GET['reset'])) {
+                    if (isset($_GET['email']) && isset($_GET['reset'])) {
                         // check if email & password exist in db
                         $email = $_GET['email'];
                         $password_hash = $_GET['reset'];
                         $user = new User($pdo);
                                 
                         // 1.1. if email & password values passed by the reset link are found in db, then...
-                        if ($user->existsByEmailAndPasswordHash($email, $password_hash)) { // 
+                        if ($user->existsByEmailAndPasswordHash($email, $password_hash)) {
                     ?>
 
                     <div id="alert-msg" class="alert alert-info">Enter your new password twice.</div>
@@ -56,16 +56,16 @@ use Aprelendo\Includes\Classes\User;
                         <div class="mb-3">
                             <label for="newpassword">Password:</label>
                             <small>
-                                <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
+                                <em>at least 8 characters (including letters, numbers &amp; special characters)</em>
                             </small>
                             <div class="input-group">
                                 <input type="password" id="newpassword" name="newpassword" class="form-control"
                                     pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                    title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                    title="Password must have at least 8 characters and contain letters, special characters and a digits"
                                     autocomplete="off" required>
                                 <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                    aria-label="Show/hide password" tabindex="-1"><i class="fas fa-eye-slash"
-                                        aria-hidden="true"></i></button>
+                                    aria-label="Show/hide password" tabindex="-1"><span class="fas fa-eye-slash"
+                                        aria-hidden="true"></span></button>
                             </div>
                             <small id="password-strength-text"></small>
                         </div>
@@ -75,16 +75,18 @@ use Aprelendo\Includes\Classes\User;
                                 <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
                                     class="form-control"
                                     pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                    title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                    title="Password must have at least 8 characters and contain letters, special characters and a digits"
                                     autocomplete="off" required>
                                 <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                    aria-label="Show/hide password confirmation" tabindex="-1"><i
-                                        class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                                    aria-label="Show/hide password confirmation" tabindex="-1">
+                                    <span class="fas fa-eye-slash" aria-hidden="true"></span></button>
                             </div>
                             <small id="passwords-match-text"></small>
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" id="create_new_password" class="btn btn-success">Save new password</button>
+                            <button type="submit" id="create_new_password" class="btn btn-success">
+                                Save new password
+                            </button>
                         </div>
                     </form>
 
@@ -92,25 +94,29 @@ use Aprelendo\Includes\Classes\User;
                         } else { // 1.2. if email & password are set but not found in db, then ...
                     ?>
 
-                    <div id="alert-msg" class="alert alert-danger">Can't reset user password. Possibly the recovery link has expired.</div>
+                    <div id="alert-msg" class="alert alert-danger">Can't reset user password. Possibly the recovery
+                        link has expired.</div>
 
-                    <?php 
+                    <?php
                         }
                     } else { // 2. if email & password are NOT set, show form to send the reset password link
                     ?>
 
-                    <div id="alert-msg" class="alert alert-info">Enter your email address to receive a link to reset your password.</div>
+                    <div id="alert-msg" class="alert alert-info">Enter your email address to receive a link to
+                        reset your password.</div>
                     <form id="form_forgot_password">
                         <div class="mb-3">
                             <label for="email">E-mail address:</label>
                             <input type="email" id="email" name="email" class="form-control" maxlength="50" required>
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" id="btn_forgot_password" class="btn btn-success">Request password</button>
+                            <button type="submit" id="btn_forgot_password" class="btn btn-success">
+                                Request password
+                            </button>
                         </div>
                     </form>
 
-                    <?php 
+                    <?php
                     }
                     ?>
 
@@ -128,4 +134,3 @@ use Aprelendo\Includes\Classes\User;
 <script defer src="js/password-min.js"></script>
 
 <?php require_once 'footer.php'?>
-

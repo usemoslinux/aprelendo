@@ -34,9 +34,9 @@ $(document).ready(function() {
     $("#url").on("change", function() {
         $("#alert-msg").addClass("d-none");
 
-        var $epub_file = $(this);
-        var file_name = $epub_file[0].files[0].name.split(".");
-        var ext = file_name.pop().toLowerCase();
+        const $epub_file = $(this);
+        const file_name = $epub_file[0].files[0].name.split(".");
+        const ext = file_name.pop().toLowerCase();
 
         if ($epub_file[0].files[0].size > 2097152) {
             showMessage(
@@ -52,7 +52,7 @@ $(document).ready(function() {
             resetControls(true);
         } else {
             if (window.FileReader) {
-                var reader = new FileReader();
+                const reader = new FileReader();
                 reader.onload = openBook;
                 reader.readAsArrayBuffer($epub_file[0].files[0]);
             }
@@ -66,8 +66,8 @@ $(document).ready(function() {
      */
     $("#form-addebook").on("submit", function(e) {
         e.preventDefault();
-        var $progressbar = $("#upload-progress-bar");
-        var form_data = new FormData(document.getElementById("form-addebook"));
+        const $progressbar = $("#upload-progress-bar");
+        const form_data = new FormData(document.getElementById("form-addebook"));
 
         $('#alert-msg').addClass('d-none');
 
@@ -183,13 +183,13 @@ $(document).ready(function() {
      * @param {arrayBuffer} e
      */
     function openBook(e) {
-        var book = ePub();
-        var bookData = e.target.result;
+        const book = ePub();
+        const bookData = e.target.result;
         book.open(bookData);
 
         book.loaded.metadata.then(function(meta) {
-            var $title = document.getElementById("title");
-            var $author = document.getElementById("author");
+            const $title = document.getElementById("title");
+            const $author = document.getElementById("author");
 
             if ($title != null) {
                 $title.value = meta.title;

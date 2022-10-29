@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,7 +24,8 @@ use Aprelendo\Includes\Classes\Connect;
 use Aprelendo\Includes\Classes\DBEntity;
 use Aprelendo\Includes\Classes\Conversion;
 
-class Words extends DBEntity {
+class Words extends DBEntity
+{
     private $id            = 0;
     private $lang_id       = 0;
     private $word          = '';
@@ -35,14 +36,15 @@ class Words extends DBEntity {
 
     /**
      * Constructor
-     * 
+     *
      * Sets 3 basic variables used to identify any text: $pdo, $user_id & lang_id
      *
      * @param \PDO $pdo
      * @param int $user_id
      * @param int $lang_id
      */
-    public function __construct(\PDO $pdo, int $user_id, int $lang_id) {
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id)
+    {
         parent::__construct($pdo, $user_id);
         $this->lang_id = $lang_id;
         $this->table = 'words';
@@ -56,7 +58,8 @@ class Words extends DBEntity {
      * @param int $is_phrase It's an integer but it acts like a boolean (only uses 0 & 1)
      * @return void
      */
-    public function add(string $word, int $status, bool $is_phrase): void {
+    public function add(string $word, int $status, bool $is_phrase): void
+    {
         try {
             $word = mb_strtolower($word);
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`)
@@ -64,7 +67,7 @@ class Words extends DBEntity {
                     `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `date_modified`=NOW()";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $word, $status, (int)$is_phrase, 
+            $stmt->execute([$this->user_id, $this->lang_id, $word, $status, (int)$is_phrase,
                             $this->user_id, $this->lang_id, $word, $status]);
             
             if ($stmt->rowCount() == 0) {
@@ -79,16 +82,17 @@ class Words extends DBEntity {
 
     /**
      * Updates status of existing words in database
-     * 
+     *
      * @param array $words array containing all the words to update
      * @return void
      */
-    public function updateByName(array $words): void {
+    public function updateByName(array $words): void
+    {
         try {
             $in  = str_repeat('?,', count($words) - 1) . '?';
 
-            $sql = "UPDATE `{$this->table}` SET `status`=`status`-1, `date_modified`=NOW() 
-                    WHERE `user_id`=? AND `lang_id`=? AND `word` 
+            $sql = "UPDATE `{$this->table}` SET `status`=`status`-1, `date_modified`=NOW()
+                    WHERE `user_id`=? AND `lang_id`=? AND `word`
                     IN ($in)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute(array_merge([$this->user_id, $this->lang_id], $words));
@@ -101,14 +105,15 @@ class Words extends DBEntity {
 
     /**
      * Updates status of existing words in database
-     * 
+     *
      * @param array $words array containing all the words to update
      * @return void
      */
-    public function updateStatus(string $word, bool $forgot): void {
+    public function updateStatus(string $word, bool $forgot): void
+    {
         try {
             $forgot = $forgot ? "3" : "CASE WHEN `status` > 0 THEN `status` - 1 ELSE 0 END";
-            $sql = "UPDATE `{$this->table}` SET `status`=$forgot, `date_modified`=NOW() 
+            $sql = "UPDATE `{$this->table}` SET `status`=$forgot, `date_modified`=NOW()
                     WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $word]);
@@ -125,7 +130,8 @@ class Words extends DBEntity {
      * @param string $word
      * @return void
      */
-    public function deleteByName(string $word): void {
+    public function deleteByName(string $word): void
+    {
         try {
             $sql = "DELETE FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
             $stmt = $this->pdo->prepare($sql);
@@ -147,7 +153,8 @@ class Words extends DBEntity {
      * @param string $ids JSON that identifies the texts to be deleted
      * @return void
      */
-    public function delete(string $ids): void {
+    public function delete(string $ids): void
+    {
         try {
             $ids_array = json_decode($ids);
             $id_params = str_repeat("?,", count($ids_array)-1) . "?";
@@ -171,19 +178,19 @@ class Words extends DBEntity {
      * @param string $search_text
      * @return int
      */
-    public function countSearchRows(string $search_text): int {
+    public function countSearchRows(string $search_text): int
+    {
         try {
             $like_str = '%' . $search_text . '%';
             
             $sql = "SELECT COUNT(`word`) AS `count_search`
-                    FROM `{$this->table}` 
-                    WHERE `user_id`=? AND `lang_id`=?  
+                    FROM `{$this->table}`
+                    WHERE `user_id`=? AND `lang_id`=?
                     AND `word` LIKE ?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $like_str]);
             $row = $stmt->fetch();
-            $total_rows = $row['count_search'];
-            return $total_rows;
+            return $row['count_search'];
         } catch (\PDOException $e) {
             return 0;
         } finally {
@@ -197,16 +204,16 @@ class Words extends DBEntity {
      *
      * @return int
      */
-    public function countAllRows(): int {
+    public function countAllRows(): int
+    {
         try {
             $sql = "SELECT COUNT(word) AS `count_all`
-                    FROM `{$this->table}`  
+                    FROM `{$this->table}`
                     WHERE `user_id`=? AND `lang_id`=?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id]);
             $row = $stmt->fetch();
-            $total_rows = $row['count_all'];
-            return $total_rows;
+            return $row['count_all'];
         } catch (\PDOException $e) {
             return 0;
         } finally {
@@ -216,7 +223,8 @@ class Words extends DBEntity {
 
     /**
      * Gets words by using a search pattern ($search_text).
-     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
+     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit
+     * (how many rows to get)
      * Values are returned using a sort pattern ($sort_by)
      *
      * @param string $search_text
@@ -225,13 +233,14 @@ class Words extends DBEntity {
      * @param int $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
-    public function getSearch(string $search_text, int $offset, int $limit, int $sort_by): array {
+    public function getSearch(string $search_text, int $offset, int $limit, int $sort_by): array
+    {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
 
-            $sql = "SELECT `id`, `word`, `status` 
-                    FROM `{$this->table}` 
-                    WHERE `user_id`=:user_id AND `lang_id`=:lang_id AND word LIKE :search_str 
+            $sql = "SELECT `id`, `word`, `status`
+                    FROM `{$this->table}`
+                    WHERE `user_id`=:user_id AND `lang_id`=:lang_id AND word LIKE :search_str
                     ORDER BY $sort_sql LIMIT :offset, :limit";
             $stmt = $this->pdo->prepare($sql);
 
@@ -253,7 +262,7 @@ class Words extends DBEntity {
             throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
-        }        
+        }
     } // end getSearch()
 
      /**
@@ -262,7 +271,8 @@ class Words extends DBEntity {
      * @param string $word
      * @return bool
      */
-    public function exists(string $word): bool {
+    public function exists(string $word): bool
+    {
         try {
             $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `word`=?";
             $stmt = $this->pdo->prepare($sql);
@@ -279,7 +289,8 @@ class Words extends DBEntity {
 
     /**
      * Gets all the words for the current user & language combination
-     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
+     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit
+     * (how many rows to get)
      * Values are returned using a sort pattern ($sort_by)
      *
      * @param int $offset
@@ -287,13 +298,14 @@ class Words extends DBEntity {
      * @param int $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
-    public function getAll(int $offset, int $limit, int $sort_by): array {
+    public function getAll(int $offset, int $limit, int $sort_by): array
+    {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
             
-            $sql = "SELECT `id`, `word`, `status`, `is_phrase`   
-                    FROM `{$this->table}` 
-                    WHERE `user_id`=:user_id AND `lang_id`=:lang_id  
+            $sql = "SELECT `id`, `word`, `status`, `is_phrase`
+                    FROM `{$this->table}`
+                    WHERE `user_id`=:user_id AND `lang_id`=:lang_id
                     ORDER BY $sort_sql LIMIT :offset, :limit";
             $stmt = $this->pdo->prepare($sql);
 
@@ -303,32 +315,29 @@ class Words extends DBEntity {
             $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
 
             $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            return $result;
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }
-    } // end getAll()  
+    } // end getAll()
 
     /**
      * Gets words user is still learning
      *
      * @return array
      */
-    public function getLearning(): array {
+    public function getLearning(): array
+    {
         try {
-            $sql = "SELECT `word` 
-                    FROM `words` 
-                    WHERE `user_id`=? AND `lang_id`=? AND `status`>0 
+            $sql = "SELECT `word`
+                    FROM `words`
+                    WHERE `user_id`=? AND `lang_id`=? AND `status`>0
                     ORDER BY `is_phrase` ASC";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id]);
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            return $result;
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
         } finally {
@@ -341,17 +350,16 @@ class Words extends DBEntity {
      *
      * @return array
      */
-    public function getLearned(): array {
+    public function getLearned(): array
+    {
         try {
-            $sql = "SELECT `word` 
-                    FROM `words` 
-                    WHERE `user_id`=? AND `lang_id`=? AND `status`=0 
+            $sql = "SELECT `word`
+                    FROM `words`
+                    WHERE `user_id`=? AND `lang_id`=? AND `status`=0
                     ORDER BY `is_phrase` ASC";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id]);
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            return $result;
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
         } finally {
@@ -360,41 +368,44 @@ class Words extends DBEntity {
     } // end getLearned()
 
     /**
-     * Converts sorting patterns selected by user (expressed as an integer value in the sort menu) 
+     * Converts sorting patterns selected by user (expressed as an integer value in the sort menu)
      * to valid SQL strings
      *
      * @param int $sort_by
      * @return string
      */
-    private function buildSortSQL(int $sort_by): string {
+    private function buildSortSQL(int $sort_by): string
+    {
+        $result = '';
         switch ($sort_by) {
             case '0': // new first
-                return '`id` DESC';
+                $result = '`id` DESC';
                 break;
             case '1': // old first
-                return '`id`';
+                $result = '`id`';
                 break;
             case '2': // learned first
-                return '`status`';
+                $result = '`status`';
                 break;
             case '3': // learning first
-                return '`status` DESC';
+                $result = '`status` DESC';
                 break;
             case '4': // words first
-                return '`is_phrase` DESC';
+                $result = '`is_phrase` DESC';
                 break;
             case '5': // phrases first
-                return '`is_phrase`';
+                $result = '`is_phrase`';
                 break;
             default:
-                return '';
+                $result = '';
                 break;
         }
+        return $result;
     } // end buildSortSQL()
 
     /**
      * Exports words to a CSV file
-     * 
+     *
      * It exports either the whole set of words corresponding to a user & language combination,
      * or the specific subset that results from applying additional filters (e.g. $search_text).
      * Results are ordered using $order_by.
@@ -403,14 +414,15 @@ class Words extends DBEntity {
      * @param int $order_by Is converted to a string using buildSortSQL()
      * @return boolean
      */
-    public function createCSVFile(string $search_text, int $order_by): bool {
+    public function createCSVFile(string $search_text, int $order_by): bool
+    {
         try {
             $sort_sql = $this->buildSortSQL($order_by);
             
             $filter = !empty($search_text) ? "AND word LIKE '%$search_text%' " : '';
             $filter .= $order_by !== -1 ? "ORDER BY $sort_sql" : '';
 
-            $sql = "SELECT `word` 
+            $sql = "SELECT `word`
                     FROM `{$this->table}`
                     WHERE `user_id`=? AND `lang_id`=? $filter";
             $stmt = $this->pdo->prepare($sql);
@@ -449,7 +461,7 @@ class Words extends DBEntity {
 
     /**
      * Get the value of id
-     */ 
+     */
     public function getId(): int
     {
         return $this->id;
@@ -457,7 +469,7 @@ class Words extends DBEntity {
 
     /**
      * Get the value of lang_id
-     */ 
+     */
     public function getLangId(): int
     {
         return $this->lang_id;
@@ -465,7 +477,7 @@ class Words extends DBEntity {
 
     /**
      * Get the value of word
-     */ 
+     */
     public function getWord(): string
     {
         return $this->word;
@@ -473,7 +485,7 @@ class Words extends DBEntity {
 
     /**
      * Get the value of status
-     */ 
+     */
     public function getStatus(): int
     {
         return $this->status;
@@ -481,7 +493,7 @@ class Words extends DBEntity {
 
     /**
      * Get the value of is_phrase
-     */ 
+     */
     public function getIsPhrase(): bool
     {
         return $this->is_phrase;
@@ -489,7 +501,7 @@ class Words extends DBEntity {
 
     /**
      * Get the value of date_created
-     */ 
+     */
     public function getDateCreated(): string
     {
         return $this->date_created;
@@ -497,11 +509,9 @@ class Words extends DBEntity {
 
     /**
      * Get the value of date_modified
-     */ 
+     */
     public function getDateModified(): string
     {
         return is_null($this->date_modified) ? '' : $this->date_modified;
     } // end getDateModified()
 }
-
-?>

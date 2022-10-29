@@ -23,7 +23,7 @@ $(document).ready(function() {
      * Triggers when user opens/closes accordion item
      */
     $(".btn-link").on("click", function() {
-        $sel_card = $(".fas", this);
+        let $sel_card = $(".fas", this);
 
         $sel_card
             .toggleClass("fa-chevron-right")
@@ -72,9 +72,9 @@ $(document).ready(function() {
      * Triggers when user clicks the Save button
      */
     $('#savebtn').on('click', function(e) {
-        var dict_uri = $('#dict-uri').val();
-        var translator_uri = $('#translator-uri').val();
-        var error = false;
+        const dict_uri = $('#dict-uri').val();
+        const translator_uri = $('#translator-uri').val();
+        let error = false;
 
         // show an error message if...
         

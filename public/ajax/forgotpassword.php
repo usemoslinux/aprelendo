@@ -1,19 +1,19 @@
 <?php
 /**
 * Copyright (C) 2019 Pablo Castagnino
-* 
+*
 * This file is part of aprelendo.
-* 
+*
 * aprelendo is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
-* 
+*
 * aprelendo is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
-* 
+*
 * You should have received a copy of the GNU General Public License
 * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -75,11 +75,12 @@ try {
             
             $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
             if (!$mail_sent) {
-                throw new \Exception('There was an error trying to send you an e-mail with your new temporary password.');
+                throw new \Exception('There was an error trying to send you an e-mail with your new '
+                    . 'temporary password.');
             }
         } else { // if email address does not exist in db
             throw new \Exception('No user registered with that email address. Please try again.');
-        } 
+        }
     } else {
         throw new \Exception('Oops! There was an unexpected error when trying to reset your password.');
     }
@@ -88,5 +89,3 @@ try {
     header('Content-Type: application/json');
     echo json_encode($error);
 }
-
-?>

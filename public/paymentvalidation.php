@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,7 +22,7 @@ require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 require_once PUBLIC_PATH . 'head.php';
 
-use Aprelendo\Includes\Classes\Paypal; 
+use Aprelendo\Includes\Classes\Paypal;
 
 $html_array = [];
 $error = !isset($_GET['tx']) || empty($_GET['tx']) || $_GET['tx'] == NULL;
@@ -36,7 +36,7 @@ try {
     $paypal = new Paypal($pdo, $user->getId(), PAYPAL_SANDBOX);
     $res = $paypal->verifyTransactionPDT($tx);
 
-    $html_array = [ 'h1_img_class' => 'far fa-check-circle', 
+    $html_array = [ 'h1_img_class' => 'far fa-check-circle',
                     'h1_msg'   => 'Paypal payment successful',
                     'h1_class' => 'text-success',
                     'h5_msg'   => 'Thank you for your purchase'];
@@ -65,8 +65,9 @@ try {
             </div>
             <br>
 
-            <h1 class="<?php echo $html_array['h1_class']; ?> text-center"><i
-                    class="<?php echo $html_array['h1_img_class']; ?>"></i> <?php echo $html_array['h1_msg']; ?></h1>
+            <h1 class="<?php echo $html_array['h1_class']; ?> text-center">
+                <span class="<?php echo $html_array['h1_img_class']; ?>">
+                </span> <?php echo $html_array['h1_msg']; ?></h1>
             <h5 class="text-center"><?php echo $html_array['h5_msg']; ?></h5>
             <hr>
             <?php if (!$error): ?>

@@ -24,10 +24,10 @@
  * @param {integer} days 
  */
 function setCookie(name, value, days) {
-    var expires;
+    let expires;
 
     if (days) {
-        var date = new Date();
+        let date = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = "; expires=" + date.toGMTString();
     } else {
@@ -41,10 +41,10 @@ function setCookie(name, value, days) {
  * @param {string} name 
  */
 function getCookie(name) {
-    var nameEQ = encodeURIComponent(name) + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
+    const nameEQ = encodeURIComponent(name) + "=";
+    const ca = document.cookie.split(';');
+    for (const element of ca) {
+        let c = element;
         while (c.charAt(0) === ' ')
             c = c.substring(1, c.length);
         if (c.indexOf(nameEQ) === 0)

@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,27 +31,32 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <header>
                         <h1 class="text-center">
                             <?php
-                            $title_array =  array(  'Arabic'  => array('ar', 'أهلا بك!'),
-                                                    'Chinese' => array('zh', '欢迎！'),
-                                                    'Dutch'   => array('nl', 'Welkom!'),
-                                                    'English' => array('en', 'Welcome!'),
-                                                    'French' => array('fr', 'Bienvenue!'),
-                                                    'German' => array('de', 'Willkommen!'),
-                                                    'Greek' => array('el', 'Καλως ΗΡΘΑΤΕ!'),
-                                                    'Hebrew' => array('he', 'ברוך הבא!'),
-                                                    'Hindi' => array('hi', 'स्वागत हे!'),
-                                                    'Italian' => array('it', 'Benvenuto!'),
-                                                    'Japanese' => array('ja', 'ようこそ！'),
-                                                    'Korean' => array('ko', '어서 오십시오!'),
-                                                    'Portuguese' => array('pt', 'Bemvindo!'),
-                                                    'Russian' => array('ru', 'Добро пожаловать!'),                    
-                                                    'Spanish' => array('es', '¡Bienvenido!')
+                            $title_array =  array('Arabic'  => array('ar', 'أهلا بك!'),
+                                                  'Chinese' => array('zh', '欢迎！'),
+                                                  'Dutch'   => array('nl', 'Welkom!'),
+                                                  'English' => array('en', 'Welcome!'),
+                                                  'French' => array('fr', 'Bienvenue!'),
+                                                  'German' => array('de', 'Willkommen!'),
+                                                  'Greek' => array('el', 'Καλως ΗΡΘΑΤΕ!'),
+                                                  'Hebrew' => array('he', 'ברוך הבא!'),
+                                                  'Hindi' => array('hi', 'स्वागत हे!'),
+                                                  'Italian' => array('it', 'Benvenuto!'),
+                                                  'Japanese' => array('ja', 'ようこそ！'),
+                                                  'Korean' => array('ko', '어서 오십시오!'),
+                                                  'Portuguese' => array('pt', 'Bemvindo!'),
+                                                  'Russian' => array('ru', 'Добро пожаловать!'),
+                                                  'Spanish' => array('es', '¡Bienvenido!')
                                             );
 
-                            $to_lang = isset($_GET['tolang']) ? htmlspecialchars(ucfirst($_GET['tolang']), ENT_QUOTES, 'UTF-8') : 'English';
+                            $to_lang = isset($_GET['tolang'])
+                                ? htmlspecialchars(ucfirst($_GET['tolang']), ENT_QUOTES, 'UTF-8')
+                                : 'English';
+
                             $native_lang = isset($_GET['srclang']) ? ucfirst($_GET['srclang']) : 'English';
                             
-                            echo '<img id="learning-flag" src="img/flags/' . $title_array["$to_lang"][0] . '.svg" alt="' . $to_lang . '"><br>';
+                            echo '<img id="learning-flag" src="img/flags/'
+                                . $title_array["$to_lang"][0]
+                                . '.svg" alt="' . $to_lang . '"><br>';
                             echo $title_array["$to_lang"][1];
                             ?>
                         </h1>
@@ -84,21 +89,51 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <div class="mb-3">
                             <label for="learning-lang">Want to learn:</label>
                             <select name="learning-lang" class="form-control form-select" id="learning-lang">
-                                <option value="ar" <?php echo $to_lang=='Arabic'     ? 'selected' : '' ; ?>>Arabic</option>
-                                <option value="zh" <?php echo $to_lang=='Chinese'    ? 'selected' : '' ; ?>>Chinese</option>
-                                <option value="nl" <?php echo $to_lang=='Dutch'      ? 'selected' : '' ; ?>>Dutch</option>
-                                <option value="en" <?php echo $to_lang=='English'    ? 'selected' : '' ; ?>>English</option>
-                                <option value="fr" <?php echo $to_lang=='French'     ? 'selected' : '' ; ?>>French</option>
-                                <option value="de" <?php echo $to_lang=='German'     ? 'selected' : '' ; ?>>German</option>
-                                <option value="el" <?php echo $to_lang=='Greek'      ? 'selected' : '' ; ?>>Greek</option>
-                                <option value="he" <?php echo $to_lang=='Hebrew'     ? 'selected' : '' ; ?>>Hebrew</option>
-                                <option value="hi" <?php echo $to_lang=='Hindi'      ? 'selected' : '' ; ?>>Hindi</option>
-                                <option value="it" <?php echo $to_lang=='Italian'    ? 'selected' : '' ; ?>>Italian</option>
-                                <option value="ja" <?php echo $to_lang=='Japanese'   ? 'selected' : '' ; ?>>Japanese</option>
-                                <option value="ko" <?php echo $to_lang=='Korean'     ? 'selected' : '' ; ?>>Korean</option>
-                                <option value="pt" <?php echo $to_lang=='Portuguese' ? 'selected' : '' ; ?>>Portuguese</option>
-                                <option value="ru" <?php echo $to_lang=='Russian'    ? 'selected' : '' ; ?>>Russian</option>
-                                <option value="es" <?php echo $to_lang=='Spanish'    ? 'selected' : '' ; ?>>Spanish</option>
+                                <option value="ar" <?php echo $to_lang=='Arabic'     ? 'selected' : '' ; ?>>
+                                    Arabic
+                                </option>
+                                <option value="zh" <?php echo $to_lang=='Chinese'    ? 'selected' : '' ; ?>>
+                                    Chinese
+                                </option>
+                                <option value="nl" <?php echo $to_lang=='Dutch'      ? 'selected' : '' ; ?>>
+                                    Dutch
+                                </option>
+                                <option value="en" <?php echo $to_lang=='English'    ? 'selected' : '' ; ?>>
+                                    English
+                                </option>
+                                <option value="fr" <?php echo $to_lang=='French'     ? 'selected' : '' ; ?>>
+                                    French
+                                </option>
+                                <option value="de" <?php echo $to_lang=='German'     ? 'selected' : '' ; ?>>
+                                    German
+                                </option>
+                                <option value="el" <?php echo $to_lang=='Greek'      ? 'selected' : '' ; ?>>
+                                    Greek
+                                </option>
+                                <option value="he" <?php echo $to_lang=='Hebrew'     ? 'selected' : '' ; ?>>
+                                    Hebrew
+                                </option>
+                                <option value="hi" <?php echo $to_lang=='Hindi'      ? 'selected' : '' ; ?>>
+                                    Hindi
+                                </option>
+                                <option value="it" <?php echo $to_lang=='Italian'    ? 'selected' : '' ; ?>>
+                                    Italian
+                                </option>
+                                <option value="ja" <?php echo $to_lang=='Japanese'   ? 'selected' : '' ; ?>>
+                                    Japanese
+                                </option>
+                                <option value="ko" <?php echo $to_lang=='Korean'     ? 'selected' : '' ; ?>>
+                                    Korean
+                                </option>
+                                <option value="pt" <?php echo $to_lang=='Portuguese' ? 'selected' : '' ; ?>>
+                                    Portuguese
+                                </option>
+                                <option value="ru" <?php echo $to_lang=='Russian'    ? 'selected' : '' ; ?>>
+                                    Russian
+                                </option>
+                                <option value="es" <?php echo $to_lang=='Spanish'    ? 'selected' : '' ; ?>>
+                                    Spanish
+                                </option>
                             </select>
                         </div>
                         <div>
@@ -115,16 +150,16 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             <div class="mb-3">
                                 <label for="newpassword">Password:</label>
                                 <small>
-                                    <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
+                                    <em>at least 8 characters (including letters, numbers &amp; special characters)</em>
                                 </small>
                                 <div class="input-group">
                                     <input type="password" id="newpassword" name="newpassword" class="form-control"
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                        title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                        title="Password must have at least 8 characters and contain letters, special characters and a digits"
                                         autocomplete="off" required>
-                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                            aria-label="Show/hide password" tabindex="-1"><i class="fas fa-eye-slash"
-                                                aria-hidden="true"></i></button>
+                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                        aria-label="Show/hide password" tabindex="-1"><span class="fas fa-eye-slash"
+                                            aria-hidden="true"></span></button>
                                 </div>
                                 <small id="password-strength-text"></small>
                             </div>
@@ -134,11 +169,11 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                     <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
                                         class="form-control"
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                        title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                        title="Password must have at least 8 characters and contain letters, special characters and a digits"
                                         autocomplete="off" required>
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                        aria-label="Show/hide password confirmation" tabindex="-1"><i
-                                            class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                                        aria-label="Show/hide password confirmation" tabindex="-1">
+                                        <span class="fas fa-eye-slash" aria-hidden="true"></span></button>
                                 </div>
                                 <small id="passwords-match-text"></small>
                             </div>
@@ -149,7 +184,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                     target="_blank" rel="noopener noreferrer">privacy policy</a>.</small>
                         </div>
                     </form>
-                    
+
                     <br>
                     <footer>
                         <p class="text-muted text-center">

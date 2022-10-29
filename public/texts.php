@@ -140,14 +140,14 @@ if (!empty($_GET)) {
                                 <input type="text" id="s" name="s" class="form-control" placeholder="Search..."
                                     aria-label="Search text" value="<?php echo isset($search_text) ? $search_text : '' ?>">
                                 <button id="btn-search" type="submit" name="submit" class="btn btn-secondary" aria-label="Search">
-                                    <i class="fas fa-search"></i>
+                                    <span class="fas fa-search"></span>
                                 </button>
                             </div><!-- /btn-group -->
                             <!-- Split button -->
                             <div class="dropdown dropdown-add ms-md-2 mb-3">
                                 <button type="button" class="btn btn-success dropdown-toggle"
                                     data-bs-toggle="dropdown">
-                                    <i class="fas fa-plus"></i> Add
+                                    <span class="fas fa-plus"></span> Add
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a class="dropdown-item" href="/addtext">Plain text</a>

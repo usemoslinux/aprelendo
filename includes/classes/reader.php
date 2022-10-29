@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,7 +27,7 @@ use Aprelendo\Includes\Classes\Preferences;
 use Aprelendo\Includes\Classes\WordFrequency;
 use SimpleXMLElement;
 
-class Text 
+class Text
 {
     protected $pdo;
     protected $id         = 0;
@@ -51,7 +51,8 @@ class Text
      * @param int $id
      * @param bool $is_shared
      */
-    public function __construct(\PDO $pdo, int $id, bool $is_shared) {
+    public function __construct(\PDO $pdo, int $id, bool $is_shared)
+    {
         try {
             $this->pdo = $pdo;
             $this->is_shared = $is_shared;
@@ -85,90 +86,100 @@ class Text
      *
      * @return int
      */
-    protected function estimatedReadingTime(): int {
+    protected function estimatedReadingTime(): int
+    {
         $word_count = str_word_count($this->text);
         $reading_time = $word_count / 200;
         $mins = floor($reading_time);
         $secs = $reading_time - $mins;
-        $reading_time = $mins + (($secs < 30) ? 0 : 1);
-
-        return $reading_time;
+        return $mins + (($secs < 30) ? 0 : 1);
     } // end estimatedReadingTime()
 
     /**
      * Get the value of id
-     */ 
-    public function getId(): int {
+     */
+    public function getId(): int
+    {
         return $this->id;
     } // end getId()
 
     /**
      * Get the value of title
-     */ 
-    public function getTitle(): string {
+     */
+    public function getTitle(): string
+    {
         return $this->title;
     } // end getTitle()
 
     /**
      * Get the value of author
-     */ 
-    public function getAuthor(): string {
+     */
+    public function getAuthor(): string
+    {
         return $this->author;
     } // end getAuthor()
 
     /**
      * Get the value of source_uri
-     */ 
-    public function getSourceUri(): string {
+     */
+    public function getSourceUri(): string
+    {
         return is_null($this->source_uri) ? '' : $this->source_uri;
     } // end getSourceUri()
 
     /**
      * Get the value of audio_uri
-     */ 
-    public function getAudioUri(): string {
+     */
+    public function getAudioUri(): string
+    {
         return is_null($this->audio_uri) ? '' : $this->audio_uri;
     } // end getAudioUri()
 
     /**
      * Get the value of text
-     */ 
-    public function getText(): string {
+     */
+    public function getText(): string
+    {
         return $this->text;
     } // end getText()
 
     /**
      * Get the value of type
-     */ 
-    public function getType(): int {
+     */
+    public function getType(): int
+    {
         return $this->type;
     } // end getType()
 
     /**
      * Get the value of word_count
-     */ 
-    public function getWordCount(): int {
+     */
+    public function getWordCount(): int
+    {
         return is_null($this->word_count) ? 0 : $this->word_count;
     } // end getWordCount()
 
     /**
      * Get the value of level
-     */ 
-    public function getLevel(): int {
+     */
+    public function getLevel(): int
+    {
         return is_null($this->level) ? 0 : $this->level;
     } // end getLevel()
 
     /**
      * Get the value of is_shared
-     */ 
-    public function getIsShared(): bool {
+     */
+    public function getIsShared(): bool
+    {
         return $this->is_shared;
     } // end getIsShared()
 
     /**
      * Get the value of is_long_text
-     */ 
-    public function getIsLongText(): bool {
+     */
+    public function getIsLongText(): bool
+    {
         return $this->is_long_text;
     } // end getIsLongText()
 }
@@ -184,16 +195,16 @@ class Reader extends Text
      * Constructor
      * Calls createFullReader or createMiniReader depending on the nr. of args
      */
-    public function __construct() {
+    public function __construct()
+    {
         $argv = func_get_args();
-        switch(func_num_args()) {
-            case 3:
-                $this->createMiniReader($argv[0], $argv[1], $argv[2]);
-                break;
-            case 5:
-                $this->createFullReader($argv[0], $argv[1], $argv[2], $argv[3], $argv[4]);
-                break;
-         }
+        $num_args = func_num_args();
+
+        if ($num_args == 3) {
+            $this->createMiniReader($argv[0], $argv[1], $argv[2]);
+        } elseif ($num_args == 5) {
+            $this->createFullReader($argv[0], $argv[1], $argv[2], $argv[3], $argv[4]);
+        }
     } // end __construct()
 
     /**
@@ -206,14 +217,15 @@ class Reader extends Text
      * @param int $lang_id
      * @return void
      */
-    private function createFullReader($pdo, $is_shared, $text_id, $user_id, $lang_id) {
+    private function createFullReader($pdo, $is_shared, $text_id, $user_id, $lang_id)
+    {
         parent::__construct($pdo, $text_id, $is_shared);
         $this->createMiniReader($pdo, $user_id, $lang_id);
     } // end createFullReader()
 
     /**
      * Constructor
-     * Used for mini reader (word/phrase). Used to access reader preferences without 
+     * Used for mini reader (word/phrase). Used to access reader preferences without
      * the need to display some text
      *
      * @param \PDO $pdo
@@ -221,7 +233,8 @@ class Reader extends Text
      * @param int $lang_id
      * @return void
      */
-    private function createMiniReader(\PDO $pdo, int $user_id, int $lang_id): void {
+    private function createMiniReader(\PDO $pdo, int $user_id, int $lang_id): void
+    {
         $this->pdo               = $pdo;
         $this->user_id           = $user_id;
         $this->lang_id           = $lang_id;
@@ -235,16 +248,17 @@ class Reader extends Text
     } // end createMiniReader()
     
     /**
-     * Gets words that the user added to his private library, as well as high frequency words for the 
+     * Gets words that the user added to his private library, as well as high frequency words for the
      * current language user is learning. Returns an array containing 3 subarrays: text, user_words & high_freq.
-     * The return value of this method is used as an input for underlinewords.js to underline & colorize words. 
+     * The return value of this method is used as an input for underlinewords.js to underline & colorize words.
      *
      * @param string $text
      * @return string
      */
-    public function getWordsForText(string $text): string {
+    public function getWordsForText(string $text): string
+    {
         try {
-            // return value will be composed of 3 arrays: 
+            // return value will be composed of 3 arrays:
             // $result['text']: text to be reviewed
             // $result['user_words']: words user added to his private library
             // $result['high_freq']: high frequency words for the language the user is learning
@@ -253,7 +267,7 @@ class Reader extends Text
             
             // 1. get user words & phrases
             $words_table = new Words($this->pdo, $this->user_id, $this->lang_id);
-            $result['user_words'] = $words_table->getAll(0,1000000,4);
+            $result['user_words'] = $words_table->getAll(0, 1000000, 4);
           
             // 2. get frequency list words
             if ($this->show_freq_words) {
@@ -268,9 +282,7 @@ class Reader extends Text
             return json_encode($result);
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected problem loading the private list of words for this user.');
-        } finally {
-            $stmt = null;
-        }        
+        }
     } // end getWordsForText()
 
     /**
@@ -278,13 +290,16 @@ class Reader extends Text
      *
      * @return string
      */
-    public function showText(): string {
-        $html = '<div id="text-container" class="my-3" data-type="text" data-textID="' . $this->id . '" data-assisted-learning="' . 
-        (int)$this->prefs->getAssistedLearning() . '" data-is-long-text="' . (int)$this->is_long_text . '">';
+    public function showText(): string
+    {
+        $html = '<div id="text-container" class="my-3" data-type="text" data-textID="' . $this->id
+            . '" data-assisted-learning="' . (int)$this->prefs->getAssistedLearning() . '" data-is-long-text="'
+            . (int)$this->is_long_text . '">';
         
         // display source, if available
         if (!empty($this->source_uri)) {
-            $html .= '<a class="source" href="' . $this->source_uri . '" target="_blank" rel="noopener noreferrer">' . Url::getDomainName($this->source_uri) . '</a>'; 
+            $html .= '<a class="source" href="' . $this->source_uri . '" target="_blank" rel="noopener noreferrer">'
+                . Url::getDomainName($this->source_uri) . '</a>';
         }
         
         $html .= '<h2 class="my-3">' . $this->title . '</h2>'; // display title
@@ -315,10 +330,13 @@ class Reader extends Text
                                 </audio>
                                 <form id="audioplayer-speedbar" class="d-none">
                                     <div id="audioplayer-speedbar-container">
-                                        <label id="label-speed" class="basic" for="range-speed">Speed: <span id="currentpbr">1.0</span> x</label>
-                                        <input id="range-speed" type="range" class="form-range" value="1" min="0.5" max="2" step="0.1">
+                                        <label id="label-speed" class="basic" for="range-speed">
+                                            Speed: <span id="currentpbr">1.0</span> x</label>
+                                        <input id="range-speed" type="range" class="form-range" value="1" min="0.5"
+                                            max="2" step="0.1">
                                         <label id="label-abloop" class="px-1 basic">A-B Loop:</label>
-                                        <button id="btn-abloop" class="btn btn-outline-secondary btn-sm" title="Toggle A-B Loop">A</button>
+                                        <button id="btn-abloop" class="btn btn-outline-secondary btn-sm"
+                                            title="Toggle A-B Loop">A</button>
                                     </div>
                                 </form>
                             </div>';
@@ -330,8 +348,12 @@ class Reader extends Text
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                             </button>
                             <h5 class="alert-heading">Assisted learning - Phase 1: Reading</h5>
-                            <span class="small">Read the text and try to understand what is going on. When you come across a word or phrase you don\'t understand, keep reading until the end of the sentence, or better yet, the paragraph. If by the end of the passage you still haven\'t guessed its meaning, click on it to look it up in the dictionary or right click on any word to translate the whole sentence.</span>
-                        </div>';   
+                            <span class="small">Read the text and try to understand what is going on. When you come
+                                across a word or phrase you don\'t understand, keep reading until the end of the
+                                sentence, or better yet, the paragraph. If by the end of the passage you still
+                                haven\'t guessed its meaning, click on it to look it up in the dictionary or right
+                                click on any word to translate the whole sentence.</span>
+                        </div>';
         }
         
         // display text
@@ -350,16 +372,21 @@ class Reader extends Text
      * @param string $yt_id YouTube Id
      * @return string
      */
-    public function showVideo(string $yt_id): string {
+    public function showVideo(string $yt_id): string
+    {
         $yt_id = $yt_id ? $yt_id : '';
 
         $html = '<div class="col-lg-6 offset-lg-3">' .
-                    '<div id="main-container" style="height: 100vh; height: calc(var(--vh, 1vh) * 100);" class="d-flex flex-column">';
+                    '<div id="main-container" style="height: 100vh; height: calc(var(--vh, 1vh) * 100);"
+                        class="d-flex flex-column">';
         
         $html .= '<div class="d-flex flex-row-reverse  my-2">
-                        <button type="button" id="btn-save-ytvideo" title="Close and save the learning status of your words" class="btn btn-sm btn-success">Save</button>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal" class="btn btn-sm btn-secondary me-2" title="Reader settings">
-                            <i class="fas fa-cog"></i>
+                        <button type="button" id="btn-save-ytvideo"
+                            title="Close and save the learning status of your words" class="btn btn-sm btn-success">
+                            Save</button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
+                            class="btn btn-sm btn-secondary me-2" title="Reader settings">
+                            <span class="fas fa-cog"></span>
                         </button>
                   </div>';
 
@@ -367,7 +394,8 @@ class Reader extends Text
                   '<div data-ytid="' . $yt_id . '" id="player"></div>' .
                '</div>';
 
-        $html .= "<div id='text-container' class='overflow-auto mb-1' data-type='video' data-textID='" . $this->id . "'>";
+        $html .= "<div id='text-container' class='overflow-auto mb-1' data-type='video' data-textID='"
+            . $this->id . "'>";
         $xml = new SimpleXMLElement($this->text);
 
         for ($i=0; $i < sizeof($xml); $i++) {
@@ -388,26 +416,34 @@ class Reader extends Text
      * @param string $file file path
      * @return string html
      */
-    public function showOfflineVideo(string $file): string {
+    public function showOfflineVideo(string $file): string
+    {
         $html = '<div class="col-xl-8 offset-xl-2">' .
                     '<div style="height: 100vh; height: calc(var(--vh, 1vh) * 100);" class="d-flex flex-column">' .
                         '<div id="offline-video-container" class="ratio ratio-16x9 mt-1">' .
-                        '<input id="video-file-input" type="file" name="video-file-input" accept="video/mp4,video/ogg,video/webm" style="display: none;" />' .
-                        '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt" style="display: none;" />' . 
-                            '<video id="video-stream" controls controlsList="nofullscreen nodownload noremoteplayback" playsinline disablePictureInPicture>' .
-                                '<source src="' . $file . '"/>'. 
+                        '<input id="video-file-input" type="file" name="video-file-input"
+                            accept="video/mp4,video/ogg,video/webm" style="display: none;" />' .
+                        '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt"
+                            style="display: none;" />' .
+                            '<video id="video-stream" controls controlsList="nofullscreen nodownload noremoteplayback"
+                                playsinline disablePictureInPicture>' .
+                                '<source src="' . $file . '"/>'.
                                 'Your browser does not support HTML5 video.' .
                             '</video>' .
                         '</div>';
 
         $html .= '<div class="d-flex flex-wrap">'.
-                    '<button type="button" id="btn-selvideo" title="Select video" class="btn btn-sm btn-primary me-2 my-2"><i class="fa-solid fa-video"></i></button>'.
-                    '<button type="button" id="btn-selsubs" title="Select subtitles" class="btn btn-sm btn-primary me-2 my-2"><i class="fa-solid fa-closed-captioning"></i></button>'.
-                    '<button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal" class="btn btn-sm btn-secondary me-2 my-2" title="Reader settings">
-                        <i class="fas fa-cog"></i>
+                    '<button type="button" id="btn-selvideo" title="Select video" class="btn btn-sm btn-primary
+                        me-2 my-2"><span class="fa-solid fa-video"></span></button>'.
+                    '<button type="button" id="btn-selsubs" title="Select subtitles" class="btn btn-sm btn-primary
+                        me-2 my-2"><span class="fa-solid fa-closed-captioning"></span></button>'.
+                    '<button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
+                        class="btn btn-sm btn-secondary me-2 my-2" title="Reader settings">
+                        <span class="fas fa-cog"></span>
                     </button>' .
-                    '<button type="button" id="btn-save-offline-video" title="Save the learning status of your words" class="btn btn-sm btn-success ms-auto my-2">Save</button>'.
-                 '</div>'. 
+                    '<button type="button" id="btn-save-offline-video" title="Save the learning status of your words"
+                        class="btn btn-sm btn-success ms-auto my-2">Save</button>'.
+                 '</div>'.
                  '<div id="text-container" class="overflow-auto mb-1"></div>';
 
         $html .= '</div></div>';
@@ -417,7 +453,7 @@ class Reader extends Text
 
     /**
      * Get the value of prefs
-     */ 
+     */
     public function getPrefs(): Preferences
     {
         return $this->prefs;
@@ -425,11 +461,9 @@ class Reader extends Text
 
     /**
      * Get the value of show_freq_words
-     */ 
+     */
     public function getShowFreqWords(): bool
     {
         return $this->show_freq_words;
     }
 }
-
-?>

@@ -1,26 +1,26 @@
 <?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace Aprelendo\Includes\Classes;
 
-class Pagination 
+class Pagination
 {
   private $limit        = 0; // number of rows per page
   private $adjacents    = 0; // adjacent page numbers
@@ -39,7 +39,8 @@ class Pagination
    * @param int $total_rows Total amount of rows
    * @param int $adjacents How many adjacent pages to show in pagination
    */
-  public function __construct(int $page = 1, int $limit = 10, int $total_rows, int $adjacents = 2) {
+  public function __construct(int $page = 1, int $limit = 10, int $total_rows, int $adjacents = 2)
+  {
     $this->limit = $limit;
     $this->adjacents = $adjacents;
     $this->total_rows = $total_rows;
@@ -51,21 +52,21 @@ class Pagination
     }
     
     // Generate the range of the page numbers which will be displayed
-    if($this->total_pages <= (1+($this->adjacents * 2))) {
+    if ($this->total_pages <= (1+($this->adjacents * 2))) {
       $this->start = 1;
       $this->end   = $this->total_pages;
     } else {
-      if(($this->page - $this->adjacents) > 1) { 
-        if(($this->page + $this->adjacents) < $this->total_pages) { 
-          $this->start = ($this->page - $this->adjacents);            
-          $this->end   = ($this->page + $this->adjacents);         
-        } else {             
-          $this->start = ($this->total_pages - (1+($this->adjacents*2)));  
-          $this->end   = $this->total_pages;               
+      if (($this->page - $this->adjacents) > 1) {
+        if (($this->page + $this->adjacents) < $this->total_pages) {
+          $this->start = ($this->page - $this->adjacents);
+          $this->end   = ($this->page + $this->adjacents);
+        } else {
+          $this->start = ($this->total_pages - (1+($this->adjacents*2)));
+          $this->end   = $this->total_pages;
         }
-      } else {               
-        $this->start = 1;                                
-        $this->end   = (1+($this->adjacents * 2));             
+      } else {
+        $this->start = 1;
+        $this->end   = (1+($this->adjacents * 2));
       }
     }
   } // end __construct()
@@ -81,8 +82,14 @@ class Pagination
    * @param int $show_archived
    * @return string HTML of pagination
    */
-  public function print(string $url, string $search_text, int $sort_by, 
-                        int $filter_type = 0, int $filter_level = 0, int $show_archived = -1): string {
+  public function print(
+      string $url,
+      string $search_text,
+      int $sort_by,
+      int $filter_type = 0,
+      int $filter_level = 0,
+      int $show_archived = -1
+    ): string {
     
     $result = '';
     $search_text = urlencode($search_text);
@@ -98,8 +105,8 @@ class Pagination
     $sa = ($show_archived !== -1)  ? "sa=$show_archived&" : '';
     $query = "?$s$o$ft$fl$sa";
 
-    if($this->total_pages > 1) { 
-      $result = 
+    if ($this->total_pages > 1) {
+      $result =
       "<nav aria-label='Page navigation'>
         <div class='text-center'>
           <ul class='pagination pagination-sm justify-content-center'>
@@ -115,17 +122,20 @@ class Pagination
             </li>
             <!-- Links of the pages with page number -->";
 
-        for($i=$this->start; $i<=$this->end; $i++) {
-          $result .= 
+        for ($i=$this->start; $i<=$this->end; $i++) {
+          $result .=
           "<li class='page-item " . ($i == $this->page ? ' active ' : ' ') . "'>
             <a class='page-link' href='$url" . $query . "p=$i'>$i</a>
           </li>";
         }
         
-        $result .= 
+        $result .=
           "<!-- Link of the next page -->
             <li class='page-item " . ($this->page >= $this->total_pages ? ' disabled ' : ' ') . "'>
-              <a class='page-link' href='$url" . $query . "p=" . ($this->page < $this->total_pages ? $this->page+1 : $this->total_pages) . "'>&gt;</a>
+              <a class='page-link' href='$url"
+                . $query
+                . "p="
+                . ($this->page < $this->total_pages ? $this->page+1 : $this->total_pages) . "'>&gt;</a>
             </li>
           <!-- Link of the last page -->
             <li class='page-item " . ($this->page >= $this->total_pages ? ' disabled ' : ' ') . "'>
@@ -141,11 +151,9 @@ class Pagination
   /**
    * Get the value of offset
    * @return int
-   */ 
+   */
   public function getOffset(): int
   {
     return $this->offset;
   }
 }
-
-?>

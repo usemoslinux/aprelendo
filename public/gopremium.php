@@ -40,20 +40,20 @@ if (!$user->isLoggedIn()) {
                 <h1 id="hiw" class="col-12">Why go premium?<br><br></h1>
 
                 <div class="col-lg-4">
-                    <i class="fas fa-assistive-listening-systems"></i>
+                    <span class="fas fa-assistive-listening-systems"></span>
                     <h4>Text-to-Speech</h4>
                     <p>Text-to-Speech (TTS) conversion is an inherent part of <a href="/totalreading" target="_blank"
                             rel="noopener noreferrer">total reading</a>. Premium users are able to listen up to 3 texts per
                         day, instead of 1.</p>
                 </div>
                 <div class="col-lg-4">
-                    <i class="fas fa-film"></i>
+                    <span class="fas fa-film"></span>
                     <h4>Movies & TV shows</h4>
                     <p>Watch your favorite movies and TV shows using Aprelendo. Our built-in tools will allow you to look up words and phrases in the dictionary or translator.</p>
                 </div>
                 
                 <div class="col-lg-4">
-                    <i class="fas fa-book-open"></i>
+                    <span class="fas fa-book-open"></span>
                     <h4>Epub support</h4>
                     <p>Are you a book lover? As a premium user you will be able to upload 1 epub file per day (&lt;2MB in
                         size) and read as many ebooks as you like.</p>
@@ -63,20 +63,20 @@ if (!$user->isLoggedIn()) {
 
             <div class="row text-center">
                 <div class="col-lg-4">
-                    <i class="fas fa-rss"></i>
+                    <span class="fas fa-rss"></span>
                     <h4>RSS/Atom feeds</h4>
                     <p>Old good <a href="https://en.wikipedia.org/wiki/RSS" target="_blank"
                             rel="noopener noreferrer">RSS/Atom</a>... By going premium you will be allowed to add texts from
                         up to 3 feeds. Each one will show its last 10 publications.</p>
                 </div>
                 <div class="col-lg-4">
-                    <i class="fas fa-cloud-download-alt"></i>
+                    <span class="fas fa-cloud-download-alt"></span>
                     <h4>Export words</h4>
                     <p>If you are an <a href="https://apps.ankiweb.net/" target="_blank" rel="noopener noreferrer">Anki</a>
                         user or like creating flashcards to learn new vocabulary, you will appreciate this.</p>
                 </div>
                 <div class="col-lg-4">
-                    <i class="fas fa-fire"></i>
+                    <span class="fas fa-fire"></span>
                     <h4>High frequency words</h4>
                     <p>Premium users will get visual aids indicating which are the most important words to learn, i.e. those
                         that are among the most used by native speakers.</p>
@@ -92,29 +92,29 @@ if (!$user->isLoggedIn()) {
                 <div class="col-lg-6">
                     <div class="card mb-5 mb-lg-0">
                         <div class="card-body">
-                            <h6 class="card-price text-center">Free as<br>in <br>beer <small><i class="fas fa-beer text-warning"></i></small><span class="period"></span></h6>
+                            <h6 class="card-price text-center">Free as<br>in <br>beer <small><span class="fas fa-beer text-warning"></span></small><span class="period"></span></h6>
                             <div style="height:17px"></div>
                             <hr>
                             <ul class="fa-ul">
-                                <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts
+                                <li><span class="fa-li"><span class="fas fa-check"></span></span>Unlimited texts
                                 </li>
-                                <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited videos
+                                <li><span class="fa-li"><span class="fas fa-check"></span></span>Unlimited videos
                                 </li>
-                                <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited words
+                                <li><span class="fa-li"><span class="fas fa-check"></span></span>Unlimited words
                                 </li>
-                                <li><span class="fa-li"><i class="fas fa-check"></i></span>Web browser
+                                <li><span class="fa-li"><span class="fas fa-check"></span></span>Web browser
                                     extensions</li>
-                                <li><span class="fa-li"><i class="fas fa-check"></i></span>TTS support
+                                <li><span class="fa-li"><span class="fas fa-check"></span></span>TTS support
                                     (1 text p/day)</li>
-                                <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Watch movies 
+                                <li class="text-muted"><span class="fa-li"><span class="fas fa-times"></span></span>Watch movies 
                                 &amp; TV shows</li>
-                                <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Up to 3 RSS
+                                <li class="text-muted"><span class="fa-li"><span class="fas fa-times"></span></span>Up to 3 RSS
                                     feeds</li>
-                                <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Ebook support
+                                <li class="text-muted"><span class="fa-li"><span class="fas fa-times"></span></span>Ebook support
                                     (&lt;2 MB)</li>
-                                <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Underline
+                                <li class="text-muted"><span class="fa-li"><span class="fas fa-times"></span></span>Underline
                                     high frequency words</li>
-                                <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Export words
+                                <li class="text-muted"><span class="fa-li"><span class="fas fa-times"></span></span>Export words
                                     (CSV)</li>
                             </ul>
                             <div class="d-grid gap-2">
@@ -141,25 +141,25 @@ if (!$user->isLoggedIn()) {
                             </div>
                             <hr>
                             <ul class="fa-ul">
-                                <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited texts
+                                <li><span class="fa-li"><span class="fas fa-check"></span></span>Unlimited texts
                                 </li>
-                                <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited videos
+                                <li><span class="fa-li"><span class="fas fa-check"></span></span>Unlimited videos
                                 </li>
-                                <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited words
+                                <li><span class="fa-li"><span class="fas fa-check"></span></span>Unlimited words
                                 </li>
-                                <li><span class="fa-li"><i class="fas fa-check"></i></span>Web browser
+                                <li><span class="fa-li"><span class="fas fa-check"></span></span>Web browser
                                     extensions</li>
-                                <li class="text-success"><span class="fa-li"><i class="fas fa-check"></i></span>TTS support
+                                <li class="text-success"><span class="fa-li"><span class="fas fa-check"></span></span>TTS support
                                     (3 texts p/day)</li>
-                                <li class="text-success"><span class="fa-li"><i class="fas fa-check"></i></span>Watch movies 
+                                <li class="text-success"><span class="fa-li"><span class="fas fa-check"></span></span>Watch movies 
                                 &amp; TV shows</li>
-                                <li class="text-success"><span class="fa-li"><i class="fas fa-check"></i></span>Up to 3 RSS
+                                <li class="text-success"><span class="fa-li"><span class="fas fa-check"></span></span>Up to 3 RSS
                                     feeds</li>
-                                <li class="text-success"><span class="fa-li"><i class="fas fa-check"></i></span>Ebook support
+                                <li class="text-success"><span class="fa-li"><span class="fas fa-check"></span></span>Ebook support
                                     (&lt;2 MB)</li>
-                                <li class="text-success"><span class="fa-li"><i class="fas fa-check"></i></span>Underline
+                                <li class="text-success"><span class="fa-li"><span class="fas fa-check"></span></span>Underline
                                     high frequency words</li>
-                                <li class="text-success"><span class="fa-li"><i class="fas fa-check"></i></span>Export words
+                                <li class="text-success"><span class="fa-li"><span class="fas fa-check"></span></span>Export words
                                     (CSV)</li>
                             </ul>
 
@@ -175,7 +175,7 @@ if (!$user->isLoggedIn()) {
                         </div>
                     </div>
                 </div>
-        </div>        
+        </div>
         </div>
     </section>
 </main>

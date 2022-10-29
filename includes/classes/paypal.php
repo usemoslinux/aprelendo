@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,9 +41,12 @@ class Paypal extends DBEntity
      * @param int $user_id
      * @param boolean $enable_sandbox Paypal sandbox for testing purposes
      */
-    public function __construct(\PDO $pdo, int $user_id, bool $enable_sandbox) {
+    public function __construct(\PDO $pdo, int $user_id, bool $enable_sandbox)
+    {
         parent::__construct($pdo, $user_id);
-        $this->url = $enable_sandbox ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
+        $this->url = $enable_sandbox
+            ? 'https://www.sandbox.paypal.com/cgi-bin/webscr'
+            : 'https://www.paypal.com/cgi-bin/webscr';
         $this->table = 'payments';
     } // end __construct()
 
@@ -52,7 +55,8 @@ class Paypal extends DBEntity
      *
      * @return void
      */
-    public function loadRecordByUserId(): void {
+    public function loadRecordByUserId(): void
+    {
         try {
             $sql = "SELECT * FROM `{$this->table}` WHERE `user_id` = ? ORDER BY date_created DESC LIMIT 1";
             $stmt = $this->pdo->prepare($sql);
@@ -60,11 +64,11 @@ class Paypal extends DBEntity
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
            
             if ($row) {
-                $this->id              = $row['id']; 
-                $this->txn_id          = $row['txn_id']; 
-                $this->item_id         = $row['item_id']; 
+                $this->id              = $row['id'];
+                $this->txn_id          = $row['txn_id'];
+                $this->item_id         = $row['item_id'];
                 $this->amount          = $row['amount'];
-                $this->status          = $row['status']; 
+                $this->status          = $row['status'];
                 $this->date_created    = $row['date_created'];
             }
         } catch (\PDOException $e) {
@@ -74,7 +78,8 @@ class Paypal extends DBEntity
         }
     } // end loadRecordByUserId()
 
-    public function verifyTransactionPDT(string $tx): array {
+    public function verifyTransactionPDT(string $tx): array
+    {
         $req = 'cmd=_notify-synch';
         $req .= '&tx=' . $tx . '&at=' . PAYPAL_AUTH_TOKEN;
 
@@ -97,16 +102,16 @@ class Paypal extends DBEntity
             $lines = explode("\n", $res);
             $response = [];
             
-            if (strcmp ($lines[0], "SUCCESS") == 0) {
-                for ($i=1; $i<count($lines);$i++){
+            if (strcmp($lines[0], "SUCCESS") == 0) {
+                for ($i=1; $i<count($lines); $i++) {
                     if (!empty($lines[$i])) {
                         list($key,$val) = explode("=", $lines[$i]);
-                        $response[\urldecode($key)] = \urldecode($val); 
+                        $response[\urldecode($key)] = \urldecode($val);
                     }
                 }
                                 
                 // check the payment_status is Completed
-                if( $response["payment_status"]!="Completed") {
+                if ($response["payment_status"]!="Completed") {
                     throw new \Exception('Payment not completed.');
                 }
             } else {
@@ -126,12 +131,14 @@ class Paypal extends DBEntity
      * @param array $data Paypal Payment data
      * @return void
      */
-    public function addPDTPayment(array $data): void {
+    public function addPDTPayment(array $data): void
+    {
         try {
             $today = date('Y-m-d H:i:s');
 
-            $sql = "INSERT INTO `{$this->table}` (`user_id`, `txn_id`, `amount`, `status`, `item_id`, `date_created`) 
-                    VALUES(?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO `{$this->table}`
+                (`user_id`, `txn_id`, `amount`, `status`, `item_id`, `date_created`)
+                VALUES(?, ?, ?, ?, ?, ?)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$data['cm'],
                             $data['tx'],
@@ -156,7 +163,8 @@ class Paypal extends DBEntity
      * @param int $txn_id Paypal transaction id
      * @return boolean
      */
-    public function checkTxnId(string $txn_id): bool {
+    public function checkTxnId(string $txn_id): bool
+    {
         $sql = "SELECT COUNT(*) AS `exists` FROM `{$this->table}` WHERE `txn_id`=?";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$txn_id]);
@@ -168,13 +176,9 @@ class Paypal extends DBEntity
     /**
      * Get the value of url
      * @return string
-     */ 
+     */
     public function getUrl(): string
     {
         return $this->url;
     }
 }
-
-
-
-?>

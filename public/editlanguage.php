@@ -49,8 +49,8 @@ if(empty($error_msg)) {
                         value="<?php echo htmlspecialchars($lang->getTranslatorUri()); ?>">
                 </div>
                 <div class="text-end">
-                    <a href="javascript:;" title="Help" data-bs-toggle="collapse" data-bs-target="#help-dictionary">Help <i
-                            class="far fa-question-circle"></i></a>
+                    <a href="javascript:;" title="Help" data-bs-toggle="collapse" data-bs-target="#help-dictionary">Help
+                        <span class="far fa-question-circle"></span></a>
                 </div>
 
                 <div id="help-dictionary" class="collapse small">

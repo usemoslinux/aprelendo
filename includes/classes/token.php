@@ -1,26 +1,27 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace Aprelendo\Includes\Classes;
 
-class Token extends DBEntity {
+class Token extends DBEntity
+{
     
     private $id      = 0;
     private $token   = '';
@@ -32,7 +33,8 @@ class Token extends DBEntity {
      * @param \PDO $pdo
      * @param int $user_id
      */
-    public function __construct(\PDO $pdo, int $user_id) {
+    public function __construct(\PDO $pdo, int $user_id)
+    {
         $this->pdo = $pdo;
         $this->user_id = $user_id;
         $this->table = 'auth_tokens';
@@ -43,7 +45,8 @@ class Token extends DBEntity {
      *
      * @return \PDO
      */
-    private function deleteOld(): void {
+    private function deleteOld(): void
+    {
         try {
             $this->pdo->query("DELETE FROM `{$this->table}` WHERE `expires` < NOW()");
         } catch (\Exception $e) {
@@ -57,7 +60,8 @@ class Token extends DBEntity {
      * @param int $id
      * @return void
      */
-    public function loadRecord(int $id): void {
+    public function loadRecord(int $id): void
+    {
         try {
             $sql = "SELECT *
                     FROM `{$this->table}`
@@ -67,10 +71,10 @@ class Token extends DBEntity {
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             
             if ($row) {
-                $this->id       = $row['id']; 
-                $this->user_id  = $row['user_id']; 
+                $this->id       = $row['id'];
+                $this->user_id  = $row['user_id'];
                 $this->token    = $row['token'];
-                $this->expires  = $row['expires']; 
+                $this->expires  = $row['expires'];
             }
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to load token record.');
@@ -95,7 +99,8 @@ class Token extends DBEntity {
      *
      * @return void
      */
-    public function add(): void {
+    public function add(): void
+    {
         $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : "";
         $user_id = $this->user_id;
 
@@ -108,7 +113,7 @@ class Token extends DBEntity {
             // a valid token is already in the db
             if (!setcookie('user_token', $this->token, strtotime($this->expires), "/", $domain, true)) {
                 throw new \Exception('There was an unexpected error trying to create token cookie.');
-            } 
+            }
         } else {
             // create new token, insert it in db & set cookie
             $token = $this->generate();
@@ -122,7 +127,7 @@ class Token extends DBEntity {
 
                 if (!setcookie('user_token', $token, $time_stamp, "/", $domain, true)) {
                     throw new \Exception('There was an unexpected error trying to create token cookie.');
-                } 
+                }
             } catch (\PDOException $e) {
                 throw new \Exception('There was an unexpected error trying to add token record.');
             } finally {
@@ -131,5 +136,3 @@ class Token extends DBEntity {
         }
     } // end add()
 }
-
-?>

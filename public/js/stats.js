@@ -19,7 +19,7 @@
 
 $(document).ready(function() {
     // get data to feed chart
-    var created = [],
+    let created = [],
         reviewed = [],
         learned = [],
         forgotten = [];
@@ -41,8 +41,8 @@ $(document).ready(function() {
 
     // build chart
     // color scheme: { blue: new; green: learned; yellow: learning; red: forgotten }
-    var ctx = document.getElementById("myChart").getContext("2d");
-    var myChart = new Chart(ctx, {
+    const ctx = document.getElementById("myChart").getContext("2d");
+    const myChart = new Chart(ctx, {
         type: "bar",
         data: {
             labels: [

@@ -71,10 +71,10 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://en.bab.la/dictionary/arabic-english/%s</a></li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/aren/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/aren/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a href="https://mobile.pons.com"
                                     target="_blank" rel="noopener noreferrer">PONS</a>
@@ -92,10 +92,10 @@ if (!$user->isLoggedIn()) {
                                         target="_blank"
                                         rel="noopener noreferrer">https://translate.yandex.com/?lang=ar-en&text=%s</a>
                                 </li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -123,11 +123,11 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/zhen/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/zhen/%s</a></li>
-                                <small><i>To make them work in your
+                                <small><em>To make them work in your
                                         native language make sure to replace "en" or "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
                                             rel="noopener noreferrer">ISO code</a> or name
-                                        .</i></small>
+                                        .</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a href="https://www.yellowbridge.com/"
                                     target="_blank" rel="noopener noreferrer">Yellow Bridge</a>
@@ -149,10 +149,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#zh/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#zh/en/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -188,10 +188,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/nlen/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/nlen/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a href="https://mobile.reverso.net" target="_blank"
                                     rel="noopener noreferrer">Reverso</a> (no modal support).
@@ -209,10 +209,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#nl/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#nl/en/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -281,11 +281,11 @@ if (!$user->isLoggedIn()) {
                                         target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/es/translation.asp?tranword=%s</a>
                                 </li>
-                                <small><i>To make them work in your native language make sure to replace "es" or
+                                <small><em>To make them work in your native language make sure to replace "es" or
                                         "spanish" with the <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
                                             rel="noopener noreferrer">ISO code</a> or
-                                        name .</i></small>
+                                        name .</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a
                                     href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
@@ -305,10 +305,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#en/es/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#en/es/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "es" or
+                                <small><em>To make them work in your native language make sure to replace "es" or
                                         "spanish" with the <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -349,10 +349,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/fren/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/fren/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a
                                     href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
@@ -372,10 +372,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#fr/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#fr/en/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -414,10 +414,10 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://www.wordreference.com/deen/%s</a></li>
                                 <li>Dict.cc: <a href="https://deen.dict.cc/?s=%s" target="_blank"
                                         rel="noopener noreferrer">https://deen.dict.cc/?s=%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the
                                         corresponding <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
-                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a
                                     href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
@@ -437,10 +437,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#de/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#de/en/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the
                                         corresponding <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
-                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -470,10 +470,10 @@ if (!$user->isLoggedIn()) {
                                         target="_blank"
                                         rel="noopener noreferrer">https://www.dict.com/?t=gr&set=_engr&w=%s</a>
                                 </li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the
                                         corresponding <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
-                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a href="https://mobile.reverso.net" target="_blank"
                                     rel="noopener noreferrer">Reverso</a> (no modal support).
@@ -491,10 +491,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#el/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#el/en/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the
                                         corresponding <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
-                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -520,10 +520,10 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://www.morfix.co.il/en/%s</a></li>
                                 <li>Dict.com: <a href="https://www.dict.com/hebrew-english/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.dict.com/hebrew-english/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a href="https://en.glosbe.com/"
                                     target="_blank" rel="noopener noreferrer">Glosbe</a>
@@ -543,10 +543,10 @@ if (!$user->isLoggedIn()) {
                                         target="_blank"
                                         rel="noopener noreferrer">https://translate.yandex.com/?lang=he-en&text=%s</a>
                                 </li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -568,10 +568,10 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://en.bab.la/dictionary/hindi-english/%s</a></li>
                                 <li>Bolti: <a href="https://www.boltidictionary.com/en/search?s=%s" target="_blank"
                                         rel="noopener noreferrer">https://www.boltidictionary.com/en/search?s=%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a href="https://www.shabdkosh.com/"
                                     target="_blank" rel="noopener noreferrer">Shabdkosh</a>
@@ -592,10 +592,10 @@ if (!$user->isLoggedIn()) {
                                         target="_blank"
                                         rel="noopener noreferrer">https://translate.yandex.com/?lang=hi-en&text=%s</a>
                                 </li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -631,10 +631,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/iten/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/iten/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a
                                     href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
@@ -654,10 +654,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#it/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#it/en/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -685,10 +685,10 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://www.dict.com/japanese-english/%s</a></li>
                                 <li>Jisho: <a href="https://jisho.org/search/%s" target="_blank"
                                         rel="noopener noreferrer">https://jisho.org/search/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a href="https://tangorin.com/"
                                     target="_blank" rel="noopener noreferrer">Tangorin</a>
@@ -714,10 +714,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#ja/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#ja/en/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -741,10 +741,10 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://en.dict.naver.com/#/search?query=%s</a></li>
                                 <li>ZKorean: <a href="https://zkorean.com/dictionary/search_results?word=%s" target="_blank"
                                         rel="noopener noreferrer">https://zkorean.com/dictionary/search_results?word=%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a href="https://en.glosbe.com/"
                                     target="_blank" rel="noopener noreferrer">Glosbe</a>
@@ -763,10 +763,10 @@ if (!$user->isLoggedIn()) {
                                         target="_blank"
                                         rel="noopener noreferrer">https://translate.yandex.com/?lang=ko-en&text=%s</a>
                                 </li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -806,10 +806,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/pten/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/pten/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the
                                         corresponding <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
-                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a
                                     href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
@@ -828,10 +828,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#pt/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#pt/en/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the
                                         corresponding <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
-                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            target="_blank" rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -863,10 +863,10 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://en.openrussian.org/ru/%s</a></li>
                                 <li>Academic.ru: <a href="https://translate.academic.ru/%s" target="_blank"
                                         rel="noopener noreferrer">https://translate.academic.ru/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a href="https://www.russiandict.net/"
                                     target="_blank" rel="noopener noreferrer">Russiandict</a>
@@ -892,10 +892,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#ru/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#ru/en/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <hr class="my-5">
@@ -936,10 +936,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/esen/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/esen/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
                                 The following have been reported not to work: <a
                                     href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
@@ -959,10 +959,10 @@ if (!$user->isLoggedIn()) {
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#es/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#es/en/%s</a></li>
-                                <small><i>To make them work in your native language make sure to replace "en" or
+                                <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
-                                            rel="noopener noreferrer">ISO code</a> or name.</i></small>
+                                            rel="noopener noreferrer">ISO code</a> or name.</em></small>
                             </ul>
                         </section>
                         <br>

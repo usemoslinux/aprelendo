@@ -1,19 +1,19 @@
 <?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,6 +24,8 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Includes\Classes\Language;
+
+$sel = ' selected ';
 
 ?>
 
@@ -65,30 +67,30 @@ use Aprelendo\Includes\Classes\Language;
                             <div class="mb-3">
                                 <label for="password">Current password:</label>
                                 <small>
-                                    <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
+                                    <em>at least 8 characters (including letters, numbers &amp; special characters)</em>
                                 </small>
                                 <div class="input-group">
                                     <input type="password" id="password" name="password" class="form-control"
-                                        title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                        title="Password must have at least 8 characters and contain letters, special characters and a digits"
                                         autocomplete="off" required>
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                        aria-label="Show/hide current password" tabindex="-1"><i
-                                            class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                                        aria-label="Show/hide current password" tabindex="-1">
+                                            <span class="fas fa-eye-slash" aria-hidden="true"></span></button>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="password">New password:</label>
                                 <small>
-                                    <i>at least 8 characters (including letters, numbers &amp; special characters)</i>
+                                    <em>at least 8 characters (including letters, numbers &amp; special characters)</em>
                                 </small>
                                 <div class="input-group">
                                     <input type="password" id="newpassword" name="newpassword" class="form-control"
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                        title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                        title="Password must have at least 8 characters and contain letters, special characters and a digits"
                                         autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                        aria-label="Show/hide new password" tabindex="-1"><i
-                                            class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                                        aria-label="Show/hide new password" tabindex="-1">
+                                        <span class="fas fa-eye-slash" aria-hidden="true"></span></button>
                                 </div>
                                 <small id="password-strength-text"></small>
                             </div>
@@ -98,11 +100,11 @@ use Aprelendo\Includes\Classes\Language;
                                     <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
                                         class="form-control"
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                        title="Password must contain a letter, a special character and a digit. Password length must be minimum 8 characters"
+                                        title="Password must have at least 8 characters and contain letters, special characters and a digits"
                                         autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                        aria-label="Show/hide new password confirmation" tabindex="-1"><i
-                                            class="fas fa-eye-slash" aria-hidden="true"></i></button>
+                                        aria-label="Show/hide new password confirmation" tabindex="-1">
+                                        <span class="fas fa-eye-slash" aria-hidden="true"></span></button>
                                 </div>
                                 <small id="passwords-match-text"></small>
                             </div>
@@ -116,17 +118,17 @@ use Aprelendo\Includes\Classes\Language;
                                 <label for="src_lang">Your native language:</label>
                                 <select name="src_lang" class="form-control form-select" id="src_lang">
                                     <?php $native_lang_index = Language::getIndex($user->getNativeLang()); ?>
-                                    <option value="en" <?php echo $native_lang_index==0 ? ' selected ' : '' ; ?>>English
+                                    <option value="en" <?php echo $native_lang_index==0 ? $sel : '' ; ?>>English
                                     </option>
-                                    <option value="es" <?php echo $native_lang_index==1 ? ' selected ' : '' ; ?>>Spanish
+                                    <option value="es" <?php echo $native_lang_index==1 ? $sel : '' ; ?>>Spanish
                                     </option>
-                                    <option value="pt" <?php echo $native_lang_index==2 ? ' selected ' : '' ; ?>>
+                                    <option value="pt" <?php echo $native_lang_index==2 ? $sel : '' ; ?>>
                                         Portuguese</option>
-                                    <option value="fr" <?php echo $native_lang_index==3 ? ' selected ' : '' ; ?>>French
+                                    <option value="fr" <?php echo $native_lang_index==3 ? $sel : '' ; ?>>French
                                     </option>
-                                    <option value="it" <?php echo $native_lang_index==4 ? ' selected ' : '' ; ?>>Italian
+                                    <option value="it" <?php echo $native_lang_index==4 ? $sel : '' ; ?>>Italian
                                     </option>
-                                    <option value="de" <?php echo $native_lang_index==5 ? ' selected ' : '' ; ?>>German
+                                    <option value="de" <?php echo $native_lang_index==5 ? $sel : '' ; ?>>German
                                     </option>
                                 </select>
                             </div>
@@ -134,17 +136,17 @@ use Aprelendo\Includes\Classes\Language;
                                 <label for="to_lang">Active learning language:</label>
                                 <select name="to_lang" class="form-control form-select" id="to_lang">
                                     <?php $lang_index = Language::getIndex($user->getLang()); ?>
-                                    <option value="en" <?php echo $lang_index==0 ? ' selected ' : '' ; ?>>English
+                                    <option value="en" <?php echo $lang_index==0 ? $sel : '' ; ?>>English
                                     </option>
-                                    <option value="es" <?php echo $lang_index==1 ? ' selected ' : '' ; ?>>Spanish
+                                    <option value="es" <?php echo $lang_index==1 ? $sel : '' ; ?>>Spanish
                                     </option>
-                                    <option value="pt" <?php echo $lang_index==2 ? ' selected ' : '' ; ?>>Portuguese
+                                    <option value="pt" <?php echo $lang_index==2 ? $sel : '' ; ?>>Portuguese
                                     </option>
-                                    <option value="fr" <?php echo $lang_index==3 ? ' selected ' : '' ; ?>>French
+                                    <option value="fr" <?php echo $lang_index==3 ? $sel : '' ; ?>>French
                                     </option>
-                                    <option value="it" <?php echo $lang_index==4 ? ' selected ' : '' ; ?>>Italian
+                                    <option value="it" <?php echo $lang_index==4 ? $sel : '' ; ?>>Italian
                                     </option>
-                                    <option value="de" <?php echo $lang_index==5 ? ' selected ' : '' ; ?>>German
+                                    <option value="de" <?php echo $lang_index==5 ? $sel : '' ; ?>>German
                                     </option>
                                 </select>
                             </div>
@@ -176,12 +178,16 @@ use Aprelendo\Includes\Classes\Language;
             </div>
             <div class="modal-body">
                 <p class="alert alert-danger">Deleting you account is an irreversible action.</p>
-                <p>Before you delete your account, be aware that all your profile information will be deleted from our servers, thus your user name will be available to anyone else who is willing to subscribe.</p>
-                <p>Also, all the files (e.g., epub files) you uploaded to our servers will be deleted, as well as your word list and your private and shared texts libraries. This applies to all the languages you were learning using Aprelendo.</p>
+                <p>Before you delete your account, be aware that all your profile information will be deleted from
+                    our servers, thus your user name will be available to anyone else who is willing to subscribe.</p>
+                <p>Also, all the files (e.g., epub files) you uploaded to our servers will be deleted, as well as your
+                    word list and your private and shared texts libraries. This applies to all the languages you were
+                    learning using Aprelendo.</p>
             </div>
             <div class="modal-footer">
             <button id="btn-cancel" type="button" data-bs-dismiss="modal" class="btn btn-link">Cancel</button>
-                <button id="btn-confirm-delete-account" type="button" data-bs-dismiss="modal" class="btn btn-danger">Delete Account</button>
+                <button id="btn-confirm-delete-account" type="button" data-bs-dismiss="modal"
+                    class="btn btn-danger">Delete Account</button>
             </div>
         </div>
     </div>

@@ -18,28 +18,27 @@
  */
 
 $(document).ready(function() {
-    var highlighting = false; // selection/highlighting mode
-    var $sel_start, $sel_end; // Jquery object with the first & last elements of the selection 
-    var start_sel_time, end_sel_time; // used in mobile devices to activate "word/phrase selection mode"
-    var start_sel_pos_top; // used in mobile devices to activate "word/phrase selection mode"
-    var swiping = false; // used in mobile devices to activate "word/phrase selection mode"
-    var $selword = null; // jQuery object with selected word/phrase
-    var time_handler = null;
-    var dictionary_URI = "";
-    var translator_URI = "";
-    var translate_paragraph_link = "";
-    var next_phase = 2; // next phase of the learning cycle
-    var playing_audio = false;
-    var abloop_start = 0;
-    var abloop_end = 0;
+    let highlighting = false; // selection/highlighting mode
+    let $sel_start, $sel_end; // Jquery object with the first & last elements of the selection 
+    let start_sel_time, end_sel_time; // used in mobile devices to activate "word/phrase selection mode"
+    let start_sel_pos_top; // used in mobile devices to activate "word/phrase selection mode"
+    let swiping = false; // used in mobile devices to activate "word/phrase selection mode"
+    let $selword = null; // jQuery object with selected word/phrase
+    let dictionary_URI = "";
+    let translator_URI = "";
+    let translate_paragraph_link = "";
+    let next_phase = 2; // next phase of the learning cycle
+    let playing_audio = false;
+    let abloop_start = 0;
+    let abloop_end = 0;
     window.parent.show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
-    var doclang = $("html").attr("lang");
+    let doclang = $("html").attr("lang");
 
     // $doc & $pagereader are used to make this JS code work when showing simple texts &
     // ebooks (which are displayed inside an iframe)
-    var $doc = $(parent.document);
-    var $dic_frame = $doc.find("#dicFrame");
-    var $pagereader = $doc.find('iframe[id^="epubjs"]');
+    let $doc = $(parent.document);
+    let $dic_frame = $doc.find("#dicFrame");
+    let $pagereader = $doc.find('iframe[id^="epubjs"]');
     $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
       
     loadAudio();
@@ -67,8 +66,8 @@ $(document).ready(function() {
      * Toggles audio player
      */
     function toggleAudio() {
-        var $audioplayer = $("#audioplayer");
-        var playing = !$audioplayer.prop("paused");
+        let $audioplayer = $("#audioplayer");
+        let playing = !$audioplayer.prop("paused");
             if (playing) {
                 $audioplayer.trigger("pause");
             } else {
@@ -111,7 +110,7 @@ $(document).ready(function() {
     $(document).on("contextmenu",function(e){
         // opens dictionary translator in case user right clicked on a word/phrase
         // but only on desktop browsers
-        var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         if (!isMobile && $(e.target).is(".word")) {
             window.open(buildTranslateParagraphLink());
@@ -146,7 +145,6 @@ $(document).ready(function() {
      */
     $(document).on("mouseup touchend", ".word", function(e) {
         e.stopPropagation();
-        // e.preventDefault();
 
         end_sel_time = new Date();
         
@@ -164,7 +162,7 @@ $(document).ready(function() {
                 highlighting = false;
                 
                 if ($sel_start === $sel_end) {
-                    var $closest = $(this).closest('.learning, .learned, .forgotten');
+                    let $closest = $(this).closest('.learning, .learned, .forgotten');
                     if ($closest.length) {
                         $selword = $closest;
                     } else {
@@ -199,7 +197,7 @@ $(document).ready(function() {
         end_sel_time = new Date();
 
         if (e.type == "touchmove") {
-            var cur_sel_pos_top = $(this).offset().top - $(window).scrollTop();
+            const cur_sel_pos_top = $(this).offset().top - $(window).scrollTop();
             swiping = swiping ? swiping : Math.abs(start_sel_pos_top - cur_sel_pos_top) > 0;
 
             if (!swiping) {
@@ -254,21 +252,21 @@ $(document).ready(function() {
      * Builds translator link including the paragraph to translate as a parameter
      */
     function buildTranslateParagraphLink() {
-        var $start_obj = $selword.prevUntil(":contains('.')").last();
+        let $start_obj = $selword.prevUntil(":contains('.')").last();
         $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
-        var $end_obj = $selword
+        let $end_obj = $selword
             .prev()
             .nextUntil(":contains('.')")
             .last()
             .next();
         $end_obj =
             $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
-        var $sentence = $start_obj
+        let $sentence = $start_obj
             .nextUntil($end_obj)
             .addBack()
             .next()
             .addBack();
-        var sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
+        const sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
 
         return translator_URI.replace("%s", encodeURI(sentence));
     } // end buildTranslateParagraphLink
@@ -297,13 +295,13 @@ $(document).ready(function() {
      * Sets Add & Delete buttons depending on whether selection exists in database
      */
     function setAddDeleteButtons() {
-        var $btnremove = $(parent.document).find("#btnremove");
-        var $btnadd = $(parent.document).find("#btnadd");
+        let $btnremove = $(parent.document).find("#btnremove");
+        let $btnadd = $(parent.document).find("#btnadd");
 
-        var underlined_words_in_selection = $selword.filter(
+        const underlined_words_in_selection = $selword.filter(
             ".learning, .new, .forgotten, .learned"
         ).length;
-        var words_in_selection = $selword.filter(".word").length;
+        const words_in_selection = $selword.filter(".word").length;
 
         if (words_in_selection == underlined_words_in_selection) {
             if ($btnremove.is(":visible") === false) {
@@ -322,7 +320,7 @@ $(document).ready(function() {
      * @param {string} lg_iso
      */
     function getWordFrequency(word, lg_iso) {
-        var $freqlvl = $doc.find("#bdgfreqlvl");
+        let $freqlvl = $doc.find("#bdgfreqlvl");
 
         // ajax call to get word frequency
         $.ajax({
@@ -357,7 +355,7 @@ $(document).ready(function() {
      * All words are enclosed in a.word tags
      */
     function showModal() {
-        var $audioplayer = $("#audioplayer");
+        let $audioplayer = $("#audioplayer");
 
         if ($audioplayer.length) {
             // if there is audio playing
@@ -382,8 +380,8 @@ $(document).ready(function() {
         translate_paragraph_link = buildTranslateParagraphLink();
 
         // show dictionary
-        var search_text = $selword.text().replace(/\r?\n|\r/gm, " ");
-        var url = dictionary_URI.replace("%s", encodeURIComponent(search_text));
+        const search_text = $selword.text().replace(/\r?\n|\r/gm, " ");
+        const url = dictionary_URI.replace("%s", encodeURIComponent(search_text));
 
         $dic_frame.get(0).contentWindow.location.replace(url);
         $("#btnadd").focus();
@@ -410,9 +408,9 @@ $(document).ready(function() {
      * Triggered when user clicks the "Add" button in the dictionary modal window
      */
     $doc.on("click", "#btnadd", function() {
-        var is_phrase = $selword.length > 1 ? 1: 0;
-        var sel_text = $selword.text();
-        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
+        const is_phrase = $selword.length > 1 ? 1: 0;
+        const sel_text = $selword.text();
+        const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
 
         // add selection to "words" table
         $.ajax({
@@ -424,15 +422,15 @@ $(document).ready(function() {
             }
         })
             .done(function() {
-                var no_prev_underlined_words = $(".learning, .new, .forgotten").length == 0;
+                const no_prev_underlined_words = $(".learning, .new, .forgotten").length == 0;
 
                 // if successful, underline word or phrase
                 if (is_phrase) {
                     // if it's a phrase
-                    var word_count = $selword.filter(".word").length;
+                    const word_count = $selword.filter(".word").length;
 
                     // build filter based on first word of the phrase
-                    var $filterphrase = $pagereader
+                    let $filterphrase = $pagereader
                         .contents()
                         .find("a.word")
                         .filter(function() {
@@ -449,11 +447,11 @@ $(document).ready(function() {
 
                     // loop through the filter and underline all instances of the phrase
                     $filterphrase.each(function() {
-                        var $lastword = $(this)
+                        let $lastword = $(this)
                             .nextAll("a.word")
                             .slice(0, word_count - 1)
                             .last();
-                        var $phrase = $(this)
+                        let $phrase = $(this)
                             .nextUntil($lastword)
                             .addBack()
                             .next("a.word")
@@ -473,7 +471,7 @@ $(document).ready(function() {
                 } else {
                     // if it's a word
                     // build filter with all the instances of the word in the text
-                    var $filterword = $pagereader
+                    let $filterword = $pagereader
                         .contents()
                         .find("a.word")
                         .filter(function() {
@@ -486,7 +484,7 @@ $(document).ready(function() {
 
                     // loop through the filter and underline all instances of the word
                     $filterword.each(function() {
-                        var $word = $(this);
+                        let $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
                                 "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#myModal'></a>"
@@ -528,8 +526,6 @@ $(document).ready(function() {
      * Triggered when user clicks the "Delete" button in the dictionary modal window
      */
     $doc.on("click", "#btnremove", function() {
-        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
-
         $.ajax({
             type: "POST",
             url: "/ajax/removeword.php",
@@ -538,7 +534,7 @@ $(document).ready(function() {
             }
         })
             .done(function() {
-                var $filter = $pagereader
+                let $filter = $pagereader
                     .contents()
                     .find("a.word")
                     .filter(function() {
@@ -561,9 +557,9 @@ $(document).ready(function() {
                     // also, the case of the word/phrase in the text has to be respected
                     // for phrases, we need to make sure that new underlining is added for each word
 
-                    var $result = $(underlineWords(data, doclang));
-                    var $cur_filter = {};
-                    var cur_word = /""/;
+                    let $result = $(underlineWords(data, doclang));
+                    let $cur_filter = {};
+                    let cur_word = /""/;
 
                     $filter.each(function() {
                         $cur_filter = $(this);
@@ -585,8 +581,8 @@ $(document).ready(function() {
                             $(this).text(cur_word);
                             
                             // check if any word marked by PHP as .learning should be marked as .new instead
-                            var word = $(this).text().toLowerCase();
-                            var user_word = data.user_words.find(function (element) {
+                            const word = $(this).text().toLowerCase();
+                            const user_word = data.user_words.find(function (element) {
                                 return element.word == word;    
                             });
 
@@ -616,8 +612,8 @@ $(document).ready(function() {
      * Phases: 1 = reading; 2 = listening; 3 = speaking; 4 = writing; 5 = reviewing
      */
     $("body").on("click", "#btn-next-phase", function() {
-        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
-        var $msg_phase = $("#alert-msg-phase");
+        const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
+        let $msg_phase = $("#alert-msg-phase");
 
         if (next_phase < 6 && !audio_is_loaded) {
             skipAudioPhases();
@@ -730,12 +726,12 @@ $(document).ready(function() {
      */
     function archiveTextAndSaveWords() {
         // build array with underlined words
-        var oldwords = [];
-        var id = [];
-        var word = "";
-        var archive_text = true;
-        var is_shared = $("#is_shared").length > 0;
-        var gems_earned = 0;
+        let oldwords = [];
+        let id = [];
+        let word = "";
+        let archive_text = true;
+        const is_shared = $("#is_shared").length > 0;
+        let gems_earned = 0;
 
         $(".learning").each(function() {
             word = $(this)
@@ -765,7 +761,7 @@ $(document).ready(function() {
             .done(function(data) {
                 if (data.error_msg == null) {
                     // update user score (gems)
-                    var review_data = {
+                    const review_data = {
                         words : { new:       $(".reviewing.new").length, 
                                   learning:  $(".reviewing.learning").length, 
                                   forgotten: $(".reviewing.forgotten").length },
@@ -782,10 +778,10 @@ $(document).ready(function() {
                         if (data.error_msg == null) {
                             gems_earned = data.gems_earned;
                             window.parent.show_confirmation_dialog = false;
-                            var url = "/textstats";
-                            var total_words =
+                            const url = "/textstats";
+                            const total_words =
                                 Number($(".word").length) + Number($(".phrase").length);
-                            var form = $(
+                            const form = $(
                                 '<form action="' +
                                     url +
                                     '" method="post">' +
@@ -834,10 +830,9 @@ $(document).ready(function() {
      * Changes the position of audio player controls (sticky or initial)
      */
     $("#btn-toggle-audio-player-controls").on("click", function () {
-        var $audio_player_container = $('#audioplayer-container');
+        let $audio_player_container = $('#audioplayer-container');
         if ($audio_player_container.css('position') == 'static') {
             $audio_player_container.css({
-                'position': '-webkit-sticky',
                 'position': 'sticky'
             });
         } else {
@@ -851,7 +846,7 @@ $(document).ready(function() {
      * Triggered when modal dictionary window is closed
      */
     $doc.on("hidden.bs.modal", "#myModal", function() {
-        var $audioplayer = $("#audioplayer");
+        let $audioplayer = $("#audioplayer");
 
         // Resumes playing if audio was paused when clicking on a word
         if (playing_audio && $audioplayer.length) {
@@ -866,7 +861,7 @@ $(document).ready(function() {
      * Changes playback speed when user moves slider
      */
     $("body").on("input change", "#range-speed", function(e, data) {
-        var cpbr = data !== undefined ? data.cpbr : parseFloat($(this).val()).toFixed(1);
+        const cpbr = data !== undefined ? data.cpbr : parseFloat($(this).val()).toFixed(1);
         $(this).val(cpbr);
         $("#currentpbr").text(cpbr);    
         $("#audioplayer").prop("playbackRate", cpbr);
@@ -876,7 +871,7 @@ $(document).ready(function() {
      * Plays audio from beginning
      */
     function playAudioFromBeginning() {
-        var $audioplayer = $("#audioplayer");
+        let $audioplayer = $("#audioplayer");
         $audioplayer.prop("currentTime", "0");
         $audioplayer.trigger("play");
     } // end playAudioFromBeginning
@@ -885,11 +880,11 @@ $(document).ready(function() {
      * Toggles dictation on/off
      */
     function toggleDictation() {
-        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
+        const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
         if (audio_is_loaded) {
-            var $container = $("#text").clone();
-            var $elems = $container.find(".word");
-            var $original_elems = $(".word");
+            let $container = $("#text").clone();
+            let $elems = $container.find(".word");
+            let $original_elems = $(".word");
 
             if ($(".dict-answer").length == 0) {
                 // if user is no words are underlined don't allow phase 5 (reviewing) & go directly to phase 6 (save changes)
@@ -903,10 +898,10 @@ $(document).ready(function() {
                 // toggle dictation on
                 // replace all underlined words/phrases with input boxes
                 $elems.each(function(index, value) {
-                    var $elem = $(this);
-                    var length = $elem.text().length;
-                    var width = $original_elems.eq(index).width();
-                    var line_height = $original_elems.eq(index).css("font-size");
+                    let $elem = $(this);
+                    const length = $elem.text().length;
+                    const width = $original_elems.eq(index).width();
+                    const line_height = $original_elems.eq(index).css("font-size");
                     $elem
                         .hide()
                         .after(
@@ -942,7 +937,7 @@ $(document).ready(function() {
             } else {
                 // toggle dictation off
                 $elems.each(function(index, value) {
-                    var $elem = $(this);
+                    let $elem = $(this);
                     $elem
                         .show()
                         .nextAll(":lt(1)")
@@ -967,7 +962,7 @@ $(document).ready(function() {
      * focus out of an input box.
      */
     $("body").on("blur", ".dict", function() {
-        var $curinput = $(this);
+        let $curinput = $(this);
         if (
             $curinput.val().toLowerCase() ==
             $curinput.attr("data-text").toLowerCase()
@@ -991,7 +986,7 @@ $(document).ready(function() {
      * Implements shortcuts for dictation
      */
     $("body").on("keydown", ".dict", function(e) {
-        var keyCode = e.keyCode || e.which;
+        const keyCode = e.keyCode || e.which;
         
         // IME on mobile devices may not return correct keyCode
         if (e.isComposing || keyCode == 0 || keyCode == 229) { 
@@ -999,18 +994,15 @@ $(document).ready(function() {
         }
 
         // if backspace, move focus to previous input
-        switch (keyCode) {
-            case 8: // backspace
-                if (!$(this).val()) {
-                    var index = $(".dict").index(this) - 1;
-                    e.preventDefault();
-                    $(".dict")
-                        .eq(index)
-                        .focus();    
-                }
-                break;
-            default:
-                break;
+        if (keyCode == 8) {
+            // backspace
+            if (!$(this).val()) {
+                const index = $(".dict").index(this) - 1;
+                e.preventDefault();
+                $(".dict")
+                    .eq(index)
+                    .focus();    
+            }
         }
     }); // end .dict.on.keydown
 
@@ -1018,9 +1010,9 @@ $(document).ready(function() {
      * Implements shortcuts for dictation
      */
     $("body").on("input", ".dict", function(e) {
-        var keyCode = e.keyCode || e.which;
-        var maxLength = $(this).attr("maxlength");
-        var curTime = $("#audioplayer")[0].currentTime;
+        let keyCode = e.keyCode || e.which;
+        const maxLength = $(this).attr("maxlength");
+        const curTime = $("#audioplayer")[0].currentTime;
 
         // make sure keycode is correct (fix for IME on mobile devices)
         if (keyCode == 0 || keyCode == 229) { 
@@ -1031,7 +1023,7 @@ $(document).ready(function() {
         switch (keyCode) {
             case 8: // backspace
                 if (!$(this).val()) {
-                    var index = $(".dict").index(this) - 1;
+                    const index = $(".dict").index(this) - 1;
                     $(".dict")
                         .eq(index)
                         .focus();    
@@ -1053,7 +1045,7 @@ $(document).ready(function() {
 
         // if maxlength reached, switch focus to next input
         if(maxLength == $(this).val().length) {
-            var index = $(".dict").index(this) + 1;
+            const index = $(".dict").index(this) + 1;
             $(".dict")
                 .eq(index)
                 .focus();
@@ -1076,7 +1068,7 @@ $(document).ready(function() {
      * Helper function to skip audio phases
      */
     function skipAudioPhases() {
-        var audio_is_loaded = $("#audioplayer").find("source").attr("src") != false;
+        const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
 
         if (!audio_is_loaded) {
             if ($(".learning, .new, .forgotten").length == 0) {
@@ -1099,9 +1091,9 @@ $(document).ready(function() {
      * Loads audio for text
      */
     function loadAudio() {
-        var $audio_player = $("#audioplayer");
+        let $audio_player = $("#audioplayer");
         if ($audio_player.length > 0) {
-            var txt = $("#text").text();
+            const txt = $("#text").text();
 
             $.ajax({
                 type: "POST",
@@ -1154,7 +1146,7 @@ $(document).ready(function() {
         if ($(e.target).is(".word") === false) {
             e.stopPropagation();
 
-            var $text_container = $("#text-container").length ? $("#text-container") : $pagereader.contents();
+            let $text_container = $("#text-container").length ? $("#text-container") : $pagereader.contents();
 
             highlighting = false;
             $("html").enableScroll();

@@ -18,9 +18,9 @@
  */
 
 $(document).ready(function() {
-    var dictionary_URI = "";
-    var $dic_frame = $("#dicFrame");
-    var $sel_word = $();
+    let dictionary_URI = "";
+    const $dic_frame = $("#dicFrame");
+    let $sel_word = $();
 
     $("#search").focus();
     $("input:checkbox").prop("checked", false);
@@ -44,7 +44,7 @@ $(document).ready(function() {
      */
     $("#mDelete").on("click", function() {
         if (confirm("Really delete?")) {
-            var ids = [];
+            let ids = [];
             $("input.chkbox-selrow:checked").each(function() {
                 ids.push($(this).attr("data-idWord"));
             });
@@ -90,12 +90,12 @@ $(document).ready(function() {
      * Returns current URI parameters
      */
     function getCurrentURIParameters() {
-        var parts = window.location.search.substr(1).split("&");
-        var result = { p: "1" };
+        const parts = window.location.search.substr(1).split("&");
+        let result = { p: "1" };
 
         if (parts != "") {
-            for (var i = 0; i < parts.length; i++) {
-                var temp = parts[i].split("=");
+            for (const part of parts) {
+                const temp = part.split("=");
                 result[decodeURIComponent(temp[0])] = decodeURIComponent(
                     temp[1]
                 );
@@ -130,7 +130,7 @@ $(document).ready(function() {
     $(document).on("click", "#chkbox-selall", function(e) {
         e.stopPropagation();
 
-        var $chkboxes = $(".chkbox-selrow");
+        const $chkboxes = $(".chkbox-selrow");
         $chkboxes.prop("checked", $(this).prop("checked"));
 
         toggleActionMenu();
@@ -140,10 +140,10 @@ $(document).ready(function() {
      * Selects sorting
      */
     $("#dropdown-menu-sort").on("click", function(e) {
-        var params = { s: $("#s").val(), 
+        const params = { s: $("#s").val(), 
                        o: $("#o").val() };
 
-        var uri_str = parameterizeArray(params);
+        const uri_str = parameterizeArray(params);
         
         window.location.replace("/words" + uri_str);
     }); // end #dropdown-menu-sort.on.click
@@ -156,7 +156,7 @@ $(document).ready(function() {
      */
     $(".word").on("click", function(e) {
         $sel_word = $(this);
-        var url = dictionary_URI.replace("%s", encodeURI($sel_word.text()));
+        const url = dictionary_URI.replace("%s", encodeURI($sel_word.text()));
 
         // set up buttons
         $("#btnadd").text("Forgot");
@@ -198,7 +198,7 @@ $(document).ready(function() {
             if (data.error_msg != null) {
                 alert(data.error_msg);
             } else {
-                var $hourglass = $sel_word.parent().next().children(":first");
+                let $hourglass = $sel_word.parent().next().children(":first");
                 $hourglass.removeClass().addClass("fas fa-hourglass-start status_forgotten");
                 $hourglass.attr("title", "Forgotten");
             }
@@ -215,8 +215,6 @@ $(document).ready(function() {
      * @param {event object} e
      */
     $("#btnremove").on("click", function(e) {
-        var sel_word_id = $sel_word.parent().prev().children(":first").children(":first").data("idword");
-
         $.ajax({
             url: "ajax/removeword.php",
             type: "POST",

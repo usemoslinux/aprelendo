@@ -29,7 +29,7 @@ $(document).ready(function() {
     $("#form-addvideo").on("submit", function(e) {
         e.preventDefault();
 
-        var form_data = $("#form-addvideo").serializeArray(); //serialize();
+        const form_data = $("#form-addvideo").serializeArray();
         form_data.push({ name: "shared-text", value: true });
 
         $.ajax({
@@ -58,12 +58,12 @@ $(document).ready(function() {
      * Fetches YouTube video, including title, channel & transcript
      */
     function fetch_url(url) {
-        video_id = extractYTId(url); //get YouTube video id
+        const video_id = extractYTId(url); //get YouTube video id
 
         emptyAll(); // empty all input boxes
 
         if (video_id != "") {
-            var embed_url = "https://www.youtube.com/embed/" + video_id;
+            const embed_url = "https://www.youtube.com/embed/" + video_id;
 
             $("#error-msg").addClass("d-none");
             $("#btn-fetch-img")
@@ -121,7 +121,7 @@ $(document).ready(function() {
                 "alert-danger"
             );
         }
-    }; // end fetch_url
+    } // end fetch_url
 
     /**
      * Shows custom message in the top section of the screen
@@ -163,21 +163,21 @@ $(document).ready(function() {
             return url.substr(17);
         } else {
             // check if user copied the url directly from the url bar (alternative method)
-            var yt_urls = new Array(
+            const yt_urls = new Array(
                 "https://www.youtube.com/watch",
                 "https://m.youtube.com/watch"
             );
 
-            var url_split = url.split("?");
-            var url_params = url_split[1].split("&");
+            const url_split = url.split("?");
+            const url_params = url_split[1].split("&");
 
             // check if it's a valid youtube URL
-            for (let i = 0; i < yt_urls.length; i++) {
-                if (url_split[0].lastIndexOf(yt_urls[i]) === 0) {
+            for (const yt_url of yt_urls) {
+                if (url_split[0].lastIndexOf(yt_url) === 0) {
                     // extract YouTube video id
-                    for (let z = 0; z < url_params.length; z++) {
-                        if (url_params[z].lastIndexOf("v=") === 0) {
-                            return url_params[z].substring(2);
+                    for (const url_param of url_params) {
+                        if (url_param.lastIndexOf("v=") === 0) {
+                            return url_param.substring(2);
                         }
                     }
                 }
@@ -195,7 +195,7 @@ $(document).ready(function() {
     });
 
     $("#url").on("paste", function(e) {
-        var pastedData = e.originalEvent.clipboardData.getData('text');
+        const pastedData = e.originalEvent.clipboardData.getData('text');
         fetch_url(pastedData);
     });
 });

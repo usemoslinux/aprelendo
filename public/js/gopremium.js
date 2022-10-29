@@ -19,7 +19,7 @@
 
 $(document).ready(function() {
     $("#btn-premium-1m, #btn-premium-3m, #btn-premium-6m, #btn-premium-1y").on("click", function () {
-        var $premium_period = $("#lbl-premium-period").clone();
+        const $premium_period = $("#lbl-premium-period").clone();
 
         $("#lbl-premium-price").text("$" + $(this).data("price"));
         $("#lbl-premium-price").append($premium_period);

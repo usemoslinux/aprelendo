@@ -31,14 +31,14 @@ $(document).ready(function() {
      */
     $("#mDelete").on("click", function() {
         if (confirm("Really delete?")) {
-            var ids = [];
+            let ids = [];
             $("input.chkbox-selrow:checked").each(function() {
                 ids.push($(this).attr("data-idText"));
             });
 
-            var uri_params = getCurrentURIParameters();
-            var is_archived = uri_params.sa == "1";
-            var cur_page = uri_params.p ? uri_params.p : "1";
+            const uri_params = getCurrentURIParameters();
+            const is_archived = uri_params.sa == "1";
+            const cur_page = uri_params.p ? uri_params.p : "1";
 
             /**
              * Deletes selected texts from the database (based on their ID).
@@ -54,7 +54,7 @@ $(document).ready(function() {
                 }
             })
                 .done(function() {
-                    var params = {  p: cur_page,
+                    const params = {  p: cur_page,
                                     ft: $("#ft").val(), // filter type
                                     fl: $("#fl").val(), // filter level
                                     s: $("#s").val(),   // search text
@@ -62,7 +62,7 @@ $(document).ready(function() {
                                     o: $("#o").val()    // order
                                 };
 
-                    var uri_str = parameterizeArray(params);
+                    const uri_str = parameterizeArray(params);
 
                     window.location.replace("/texts" + uri_str);
                 })
@@ -79,14 +79,14 @@ $(document).ready(function() {
      * Trigger: when user selects "Archive" in the action menu
      */
     $("#mArchive").on("click", function() {
-        var archivetxt = $(this).text() === "Archive";
-        var ids = [];
+        const archivetxt = $(this).text() === "Archive";
+        let ids = [];
         $("input.chkbox-selrow:checked").each(function() {
             ids.push($(this).attr("data-idText"));
         });
 
-        var uri_params = getCurrentURIParameters();
-        var cur_page = uri_params.p ? uri_params.p : "1";
+        const uri_params = getCurrentURIParameters();
+        const cur_page = uri_params.p ? uri_params.p : "1";
 
         /**
          * Moves selected texts from the "texts" table to the "archived_texts" table in the database (archive);
@@ -104,15 +104,15 @@ $(document).ready(function() {
             }
         })
             .done(function() {
-                var params = {  p: cur_page,
-                                ft: $("#ft").val(), // filter type
-                                fl: $("#fl").val(), // filter level
-                                s: $("#s").val(),   // search text
-                                sa: $("#sa").val(), // is shared
-                                o: $("#o").val()    // order
-                            };
+                const params = {    p: cur_page,
+                                    ft: $("#ft").val(), // filter type
+                                    fl: $("#fl").val(), // filter level
+                                    s: $("#s").val(),   // search text
+                                    sa: $("#sa").val(), // is shared
+                                    o: $("#o").val()    // order
+                                };
 
-                var uri_str = parameterizeArray(params);
+                const uri_str = parameterizeArray(params);
 
                 window.location.replace("/texts" + uri_str);
             })
@@ -143,7 +143,7 @@ $(document).ready(function() {
     $(document).on("click", "#chkbox-selall", function(e) {
         e.stopPropagation();
 
-        var $chkboxes = $(".chkbox-selrow");
+        const $chkboxes = $(".chkbox-selrow");
         $chkboxes.prop("checked", $(this).prop("checked"));
 
         toggleActionMenu();
@@ -153,14 +153,14 @@ $(document).ready(function() {
      * Shows selection in Filter menu
      */
     $("#btn-filter + div > a").on("click", function() {
-        var $item = $(this);
+        const $item = $(this);
 
         if ($item.is('.sa')) {
             $item.toggleClass("active");
         } else {
             $item.addClass("active");
 
-            var filter = '';
+            let filter = '';
             if ($item.is('.ft')) {
                 filter = '.ft';
             } else if ($item.is('.fl')) {
@@ -177,15 +177,15 @@ $(document).ready(function() {
      * Selects sorting
      */
     $("#dropdown-menu-sort").on("click", function(e) {
-        var filename = getCurrentFileName();
-        var params = {  ft: $("#ft").val(), // filter type
-                        fl: $("#fl").val(), // filter level
-                        s: $("#s").val(),   // search text
-                        sa: $("#sa").val(), // is shared
-                        o: $("#o").val()    // order
-                    };
+        const filename = getCurrentFileName();
+        const params = {    ft: $("#ft").val(), // filter type
+                            fl: $("#fl").val(), // filter level
+                            s: $("#s").val(),   // search text
+                            sa: $("#sa").val(), // is shared
+                            o: $("#o").val()    // order
+                        };
 
-        var uri_str = parameterizeArray(params);
+        const uri_str = parameterizeArray(params);
         window.location.replace(filename + uri_str);
     }); // end #dropdown-menu-sort.on.click
 
@@ -209,9 +209,9 @@ $(document).ready(function() {
      * Gets current page file name
      */
     function getCurrentFileName() {
-        var url = window.location.pathname;
+        const url = window.location.pathname;
 
-        var filename = "";
+        let filename = "";
         if (url.indexOf("&") > -1) {
             filename = url.substring(
                 url.lastIndexOf("/") + 1,
@@ -228,12 +228,12 @@ $(document).ready(function() {
      * Returns current URI parameters
      */
      function getCurrentURIParameters() {
-        var parts = window.location.search.substr(1).split("&");
-        var result = { p: "1" };
+        const parts = window.location.search.substr(1).split("&");
+        let result = { p: "1" };
 
         if (parts != "") {
-            for (var i = 0; i < parts.length; i++) {
-                var temp = parts[i].split("=");
+            for (const part of parts) {
+                const temp = part.split("=");
                 result[decodeURIComponent(temp[0])] = decodeURIComponent(
                     temp[1]
                 );

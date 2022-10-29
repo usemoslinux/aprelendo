@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -65,15 +65,15 @@ try {
                         
             if (!isset($text) || empty($text)) {
                 $errors[] = "<li>Text is a required field. Please enter one and try again. In case you
-                are uploading a video, enter a valid YouTube URL and fetch the correct transcript. 
+                are uploading a video, enter a valid YouTube URL and fetch the correct transcript.
                 Only videos with subtitles in your target language are supported.</li>";
             }
             
-            /*  For some reason new lines on the client side are counted by Jquery/JS as '\n', 
-                but on the server side the $_POST variable gets '\r\n' instead. 
+            /*  For some reason new lines on the client side are counted by Jquery/JS as '\n',
+                but on the server side the $_POST variable gets '\r\n' instead.
                 To make them both compatible, we need to eliminate all instances of '\r' */
             if ($_POST['mode'] == 'simple') {
-                $text = preg_replace('/\r/m', '', $text);
+                $text = str_replace("\r", '', $text);
             }
             
             // save text in db
@@ -84,7 +84,10 @@ try {
                 } else {
                     if ($texts_table->exists($source_url)) {
                         $msg = 'The text you are trying to add already exists. ';
-                        $msg .= $is_shared ? 'Look for it in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.' : 'Look for it in your <a class="alert-link" href="/texts">private library</a>. Remember that you may have <a class="alert-link" href="/texts?sa=1">archived</a> it.';
+                        $msg .= $is_shared
+                            ? 'Look for it in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.'
+                            : 'Look for it in your <a class="alert-link" href="/texts">private library</a>. '
+                            . 'Remember that you may have <a class="alert-link" href="/texts?sa=1">archived</a> it.';
 
                         throw new \Exception($msg);
                     }
@@ -93,11 +96,11 @@ try {
                     $text_added_successfully = true;
                 }
                 
-                // if everything goes fine return HTTP code 204 (No content), as nothing is returned 
+                // if everything goes fine return HTTP code 204 (No content), as nothing is returned
                 http_response_code(204);
             } else {
                 $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
-                throw new \Exception($error_str);    
+                throw new \Exception($error_str);
             }
         }
         break; // end of simple text or video
@@ -111,10 +114,10 @@ try {
             $type = 1; // article (assumes that all rss texts are articles)
             $text = $_POST['text'];
             
-            /*  For some reason new lines on the client side are counted by Jquery/JS as '\n', 
-            but on the server side the $_POST variable gets '\r\n' instead. 
+            /*  For some reason new lines on the client side are counted by Jquery/JS as '\n',
+            but on the server side the $_POST variable gets '\r\n' instead.
             To make them both compatible, we need to eliminate all instances of '\r' */
-            $text = preg_replace('/\r/m', '', $text);
+            $text = str_replace("\r", '', $text);
 
             $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
 
@@ -138,7 +141,7 @@ try {
         break; // end of rss
         
         case 'ebook':
-        if(!isset($_POST['title']) || !isset($_POST['author']) || !isset($_FILES['url'])) {
+        if (!isset($_POST['title']) || !isset($_POST['author']) || !isset($_FILES['url'])) {
             throw new \Exception('Please, complete all the required fields: name, author & epub file.');
         } else {
             $title = $_POST['title'];
@@ -159,7 +162,7 @@ try {
             $nr_of_uploads_today = $file_upload_log->countTodayRecords();
             $premium_user = $user->isPremium();
 
-            if ((!$premium_user) || ($premium_user && $nr_of_uploads_today >= 1)){
+            if ((!$premium_user) || ($premium_user && $nr_of_uploads_today >= 1)) {
                 throw new \Exception('Sorry, you have reached your file upload limit for today.');
             }
 
@@ -202,6 +205,3 @@ try {
     header('Content-Type: application/json');
     echo json_encode($error);
 }
-
-
-?>

@@ -1,48 +1,50 @@
-<?php 
+<?php
 /**
 * Copyright (C) 2019 Pablo Castagnino
-* 
+*
 * This file is part of aprelendo.
-* 
+*
 * aprelendo is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
-* 
+*
 * aprelendo is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
-* 
+*
 * You should have received a copy of the GNU General Public License
 * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 namespace Aprelendo\Includes\Classes;
 
-class Gems extends DBEntity {
+class Gems extends DBEntity
+{
     protected $id                 = 0;
     protected $user_id            = 0;
     protected $lang_id            = 0;
     protected $gems               = 0;
-    protected $last_study_session = NULL; // last study session date
+    protected $last_study_session = null; // last study session date
     protected $days_streak        = 0;    // study streak
     
     /**
     * Constructor
-    * 
+    *
     * Sets 3 basic variables used to identify any record: $pdo, $user_id & lang_id
     *
     * @param \PDO $pdo
     * @param int $user_id
     * @param int $lang_id
     */
-    public function __construct(\PDO $pdo, int $user_id, int $lang_id) {
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id)
+    {
         parent::__construct($pdo, $user_id);
         $this->lang_id = $lang_id;
         $this->table = 'gems';
         $this->loadUserRecord();
-    } // end __construct() 
+    } // end __construct()
 
     /**
      * Loads gems record data
@@ -50,7 +52,8 @@ class Gems extends DBEntity {
      * @param int $id
      * @return void
      */
-    private function loadUserRecord(): void {
+    private function loadUserRecord(): void
+    {
         try {
             $sql = "SELECT * FROM `{$this->table}` WHERE `lang_id` = ?";
             $stmt = $this->pdo->prepare($sql);
@@ -58,14 +61,14 @@ class Gems extends DBEntity {
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             
             if ($row) {
-                $this->id                 = $row['id']; 
-                $this->user_id            = $row['user_id']; 
-                $this->lang_id            = $row['lang_id']; 
+                $this->id                 = $row['id'];
+                $this->user_id            = $row['user_id'];
+                $this->lang_id            = $row['lang_id'];
                 $this->gems               = $row['gems'];
-                $this->last_study_session = $row['last_study_session']; 
+                $this->last_study_session = $row['last_study_session'];
                 
                 $diff_days = $this->calculateDaysFromLastStudy($row['last_study_session']);
-                $this->days_streak        = ($diff_days == -1 || $diff_days == 0) ? $row['days_streak'] : 0;  
+                $this->days_streak        = ($diff_days == -1 || $diff_days == 0) ? $row['days_streak'] : 0;
             }
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to load record from gems table.');
@@ -78,9 +81,10 @@ class Gems extends DBEntity {
     * Updates user gems score in database
     *
     * @param array $events Describes the events which will then be translated to "gems"
-    * @return int 
+    * @return int
     */
-    public function updateScore(array $events): int {
+    public function updateScore(array $events): int
+    {
         try {
             // calculate nr. of gems to add
             $gems = 0;
@@ -114,12 +118,12 @@ class Gems extends DBEntity {
             }
 
             // create record if it does not exist, else update
-            $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `gems`, `last_study_session`, `days_streak`) 
+            $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `gems`, `last_study_session`, `days_streak`)
                     VALUES (?,?,`gems` + ?, ?, ?)
-                    ON DUPLICATE KEY UPDATE 
+                    ON DUPLICATE KEY UPDATE
                     `user_id`=?, `lang_id`=?, `gems`=`gems` + ?, `last_study_session`=?, `days_streak`=?";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $gems, $this->last_study_session, $this->days_streak, 
+            $stmt->execute([$this->user_id, $this->lang_id, $gems, $this->last_study_session, $this->days_streak,
                             $this->user_id, $this->lang_id, $gems, $this->last_study_session, $this->days_streak]);
             
             return $gems;
@@ -136,7 +140,8 @@ class Gems extends DBEntity {
      * @param string|null $last_study_session
      * @return integer
      */
-    private function calculateDaysFromLastStudy(?string $last_study_session) : int {
+    private function calculateDaysFromLastStudy(?string $last_study_session) : int
+    {
         if (!isset($last_study_session) || empty($last_study_session)) {
             return -365;
         }
@@ -148,14 +153,12 @@ class Gems extends DBEntity {
         $last_study_session->setTime(0, 0, 0); // reset time part, to prevent partial comparison
         
         $diff = $today->diff($last_study_session);
-        $diffDays = (integer)$diff->format("%R%a"); // Extract days count in interval
-
-        return $diffDays;
+        return (integer)$diff->format("%R%a"); // Extract days count in interval
     }
     
     /**
      * Get the value of id
-     */ 
+     */
     public function getId(): int
     {
         return $this->id;
@@ -163,7 +166,7 @@ class Gems extends DBEntity {
 
     /**
      * Get the value of user_id
-     */ 
+     */
     public function getUserId(): int
     {
         return $this->user_id;
@@ -171,7 +174,7 @@ class Gems extends DBEntity {
 
     /**
      * Get the value of lang_id
-     */ 
+     */
     public function getLangId(): int
     {
         return $this->lang_id;
@@ -179,7 +182,7 @@ class Gems extends DBEntity {
 
     /**
      * Get the value of gems
-     */ 
+     */
     public function getGems(): int
     {
         return $this->gems;
@@ -187,7 +190,7 @@ class Gems extends DBEntity {
 
     /**
      * Get the value of last_study_session
-     */ 
+     */
     public function getLastStudySession(): ?string
     {
         return $this->last_study_session;
@@ -195,11 +198,9 @@ class Gems extends DBEntity {
     
     /**
      * Get the value of days_streak
-     */ 
+     */
     public function getDaysStreak(): ?int
     {
         return $this->days_streak;
     } // end getDaysStreak()
-} 
-    
-?>
+}

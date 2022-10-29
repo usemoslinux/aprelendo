@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,26 +33,35 @@ class SharedTexts extends Texts
      * @param int $user_id
      * @param int $lang_id
      */
-    public function __construct(\PDO $pdo, int $user_id, int $lang_id) {
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id)
+    {
         parent::__construct($pdo, $user_id, $lang_id);
         $this->table = 'shared_texts';
     } // end __construct()
 
     /**
      * Gets texts by using a search pattern ($search_text) and a filter ($search_filter).
-     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
+     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit
+     *
      * Values are returned using a sort pattern ($sort_by)
      *
-     * @param int $filter_type: 0 = All; 1 = Articles; 2 = Conversations; 3 = Letters; 4 = Lyrics; 6 = Ebooks; 7 = Others
-     * @param int $filter_level: 0 = All; 1 = Beginner; 2 = Intermediate; 3 = Advanced 
+     * @param int $filter_type: 0 = All; 1 = Article; 2 = Conversation; 3 = Letter; 4 = Lyric; 6 = Ebook; 7 = Other
+     * @param int $filter_level: 0 = All; 1 = Beginner; 2 = Intermediate; 3 = Advanced
      * @param string $search_text
      * @param int $offset
      * @param int $limit
      * @param int $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
-    public function getSearch(int $filter_type, int $filter_level, string $search_text, int $offset, 
-                              int $limit, int $sort_by): array {
+    public function getSearch(
+        int $filter_type,
+        int $filter_level,
+        string $search_text,
+        int $offset,
+        int $limit,
+        int $sort_by
+        ): array
+    {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
             $filter_type_sql = $filter_type == 0 ? 'AND t.type >= :filter_type' : 'AND t.type = :filter_type';
@@ -61,24 +70,25 @@ class SharedTexts extends Texts
             $lang = new Language($this->pdo, $this->user_id);
             $lang->loadRecord($this->lang_id);
 
-            $sql = "SELECT t.id, 
-                        (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
-                        t.title, 
-                        t.author, 
+            $sql = "SELECT t.id,
+                        (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`,
+                        t.title,
+                        t.author,
                         t.source_uri,
-                        t.type, 
-                        t.word_count, 
-                        t.level, 
-                        l.name, 
+                        t.type,
+                        t.word_count,
+                        t.level,
+                        l.name,
                         (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
-                        (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = :user_id) AS `user_liked` 
-                    FROM `{$this->table}` t 
+                        (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id
+                        AND `user_id` = :user_id) AS `user_liked`
+                    FROM `{$this->table}` t
                     INNER JOIN `languages` l ON t.lang_id = l.id
-                    WHERE `name`= :name 
-                    AND `title` LIKE :search_str 
-                    $filter_level_sql 
-                    $filter_type_sql 
-                    ORDER BY $sort_sql 
+                    WHERE `name`= :name
+                    AND `title` LIKE :search_str
+                    $filter_level_sql
+                    $filter_type_sql
+                    ORDER BY $sort_sql
                     LIMIT :offset, :limit";
 
             $stmt = $this->pdo->prepare($sql);
@@ -108,7 +118,7 @@ class SharedTexts extends Texts
 
     /**
      * Gets all the texts for the current user & language combination
-     * It returns only specific ranges by using an $offset (specifies where to start) 
+     * It returns only specific ranges by using an $offset (specifies where to start)
      * and a $limit (how many rows to get)
      * Values are returned using a sort pattern ($sort_by)
      *
@@ -117,7 +127,8 @@ class SharedTexts extends Texts
      * @param int $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
-    public function getAll(int $filter_level, int $offset, int $limit, int $sort_by): array {
+    public function getAll(int $filter_level, int $offset, int $limit, int $sort_by): array
+    {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
 
@@ -127,22 +138,22 @@ class SharedTexts extends Texts
             $filter_level = $lang->getLevel();
             $filter_level_sql = $filter_level == 0 ? 'AND t.level >= :filter_level' : 'AND t.level = :filter_level';
 
-            $sql = "SELECT t.id, 
-                    (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`, 
-                    t.title, 
-                    t.author, 
+            $sql = "SELECT t.id,
+                    (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`,
+                    t.title,
+                    t.author,
                     t.source_uri,
-                    t.type, 
-                    t.word_count, 
-                    t.level, 
+                    t.type,
+                    t.word_count,
+                    t.level,
                     l.name,
                     (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
                     (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id AND `user_id` = :user_id) AS `user_liked`
                     FROM `{$this->table}` t
                     INNER JOIN `languages` l ON t.lang_id = l.id
-                    WHERE `name` = :lang 
-                    $filter_level_sql 
-                    ORDER BY $sort_sql 
+                    WHERE `name` = :lang
+                    $filter_level_sql
+                    ORDER BY $sort_sql
                     LIMIT :offset, :limit";
 
             $stmt = $this->pdo->prepare($sql);
@@ -157,7 +168,8 @@ class SharedTexts extends Texts
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if (!$result || empty($result)) {
-                throw new \Exception('Oops! That\'s weird. It appears there are no shared texts for this language yet.');
+                throw new \Exception('Oops! That\'s weird. It appears there are no shared texts for this '
+                    . 'language yet.');
             }
 
             return $result;
@@ -175,7 +187,8 @@ class SharedTexts extends Texts
      * @param string $source_url
      * @return bool
      */
-    public function exists(string $source_url): bool {
+    public function exists(string $source_url): bool
+    {
         try {
             if (empty($source_url)) {
                 return false;
@@ -195,35 +208,28 @@ class SharedTexts extends Texts
         } finally {
             $stmt = null;
         }
-    } // end exists() 
+    } // end exists()
 
     /**
-     * Converts sorting patterns selected by user (expressed as an integer value in the sort menu) 
+     * Converts sorting patterns selected by user (expressed as an integer value in the sort menu)
      * to valid SQL strings
      *
      * @param int $sort_by
      * @return string
      */
-    protected function buildSortSQL(int $sort_by): string {
+    protected function buildSortSQL(int $sort_by): string
+    {
         $result = parent::buildSortSQL($sort_by);
 
         if (!empty($result)) {
             return $result;
         } else {
-            switch ($sort_by) {
-                case '2': // more likes first
-                    return '`total_likes` DESC';
-                    break;
-                case '3': // less likes first
-                    return '`total_likes`';
-                    break;
-                default:
-                    return '';
-                    break;
+            if ($sort_by == 2) { // more likes first
+                $result = '`total_likes` DESC';
+            } elseif ($sort_by == 3) { // less likes first
+                $result = '`total_likes`';
             }
+            return $result;
         }
     } // end buildSortSQL()
 }
-
-
-?>

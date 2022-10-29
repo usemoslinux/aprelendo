@@ -30,7 +30,7 @@ $(document).ready(function() {
     $("#form-addtext").on("submit", function(e) {
         e.preventDefault();
 
-        var form_data = new FormData(document.getElementById("form-addtext"));
+        const form_data = new FormData(document.getElementById("form-addtext"));
 
         $.ajax({
             type: "POST",
@@ -84,9 +84,9 @@ $(document).ready(function() {
      */
     function updateCharsLeft() {
         const MAX_CHARS = 10000;
-        var $textarea = $("#text");
-        var $msg_box = $("#span-chars-left");
-        var chars_left = MAX_CHARS - $textarea.val().length;
+        const $textarea = $("#text");
+        const $msg_box = $("#span-chars-left");
+        const chars_left = MAX_CHARS - $textarea.val().length;
 
         if (chars_left < 0) {
             $msg_box
@@ -108,10 +108,10 @@ $(document).ready(function() {
      * This is triggered when the user clicks the "upload" text button
      */
     $("#upload-text").on("change", function() {
-        var file = $(this)[0].files[0];
-        var reader = new FileReader();
+        const file = $(this)[0].files[0];
+        const reader = new FileReader();
         reader.onload = function(e) {
-            var text = e.target.result;
+            const text = e.target.result;
             $("#text").val($.trim(text));
             updateCharsLeft();
         };
@@ -125,7 +125,7 @@ $(document).ready(function() {
      */
     function validateUrl(str)
     {
-        var patt = new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
+        const patt = new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
         return patt.test(str);
     } 
 
@@ -150,15 +150,15 @@ $(document).ready(function() {
                         showMessage(data.error_msg, "alert-danger");
                     } else {
                         if (typeof data !== "undefined" && data.length != 0) {
-                            var doc = document.implementation.createHTMLDocument(
+                            const doc = document.implementation.createHTMLDocument(
                                 "New Document"
                             );
                             doc.body.parentElement.innerHTML = data;
-                            var article = new Readability(doc).parse();
+                            const article = new Readability(doc).parse();
                             $("#title").val($("<input>").html(article.title).text());
                             $("#author").val($("<input>").html(article.byline).text());
-                            var txt = "";
-                            var $tempDom = $("<output>").append(
+                            let txt = "";
+                            let $tempDom = $("<output>").append(
                                 $.parseHTML(article.content)
                             );
                             $("p, h1, h2, h3, h4, h5, h6", $tempDom).each(
@@ -211,10 +211,10 @@ $(document).ready(function() {
      * This is triggered when user pastes a URL 
      */
     $("#url").on("paste", function(e) {
-        var text = $("#text").val();
+        const text = $("#text").val();
         // only auto-fetch text if textarea is empty
         if (!text || /^\s*$/.test(text)) {
-            var pastedData = e.originalEvent.clipboardData.getData('text');
+            const pastedData = e.originalEvent.clipboardData.getData('text');
             fetch_url(pastedData);    
         }
     });

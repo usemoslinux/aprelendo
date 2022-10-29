@@ -50,7 +50,7 @@ if (!$user->isLoggedIn()) {
                     <div class="col-sm-12">
                         <section>
                             <h4>Our privacy policy</h4>
-                            <i>Last updated: December 2020</i>
+                            <em>Last updated: December 2020</em>
                             <p>Protecting the privacy of Aprelendo website users is important to us.</p> 
                             <p>Our Privacy Policy is designed to inform you about the personal information we collect on this website. From time to time, we may make changes to this Privacy Policy, so we encourage you to check back and review it regularly to ensure you are aware of current practices.</p>
                             <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to <a href="/support">contact us</a>.</p>

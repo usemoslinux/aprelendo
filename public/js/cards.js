@@ -18,14 +18,14 @@
  */
 
 $(document).ready(function() {
-    var dictionary_URI = "";            // user dictionary URI
-    var translator_URI = "";            // user dictionary URI
-    var $dic_frame = $("#dicFrame");    // dictionary iframe inside modal window
-    var $sel_word = $();                // jQuery object used to open dictionary modal
-    var words = [];                     // array containing all words user is learning
-    var max_cards = 10;                 // maximum nr. of cards
-    var cur_word_index = 0;             // current word index
-    var cur_card_index = 0;             // current word index
+    let dictionary_URI = "";            // user dictionary URI
+    let translator_URI = "";            // user dictionary URI
+    const $dic_frame = $("#dicFrame");  // dictionary iframe inside modal window
+    let $sel_word = $();                // jQuery object used to open dictionary modal
+    let words = [];                     // array containing all words user is learning
+    let max_cards = 10;                 // maximum nr. of cards
+    let cur_word_index = 0;             // current word index
+    let cur_card_index = 0;             // current word index
 
     // initialize modal dictionary window buttons
     // $("#btn-translate").hide();
@@ -75,8 +75,6 @@ $(document).ready(function() {
             dataType: "json"
             })
             .done(function(data) {
-                // words = data.slice(0,50);
-                
                 words = data.map(function(value,index) { 
                     return value.word; 
                 });
@@ -113,10 +111,8 @@ $(document).ready(function() {
             dataType: "json"
             })
             .done(function(data) {
-                // alert(data);
-                var examples = "";
-                var examples_count = 0;
-                // old sentence_regex '[^\\n.?!]*(?<=[.?\s!])' + word + '(?=[\\s.?!])[^\\n.?!]*[.?!\\n)]',
+                let examples = "";
+                let examples_count = 0;
                 const sentence_regex = new RegExp(
                                     '[^\\n.?!]*(?<![\\p{L}])' + word + '(?![\\p{L}])[^\\n.?!]*[.?!\\n)]',
                                     'gmiu'
@@ -125,6 +121,7 @@ $(document).ready(function() {
 
                 data.forEach(text => {                   
                     // extract example sentences from text
+                    let m;
                     while ((m = sentence_regex.exec(text.text)) !== null) {
                         // This is necessary to avoid infinite loops with zero-width matches
                         if (m.index === sentence_regex.lastIndex) {
@@ -135,7 +132,7 @@ $(document).ready(function() {
                             // create html for each example sentence, max 3 examples
                             m.forEach((match, groupIndex) => {
                                 match = match.replace(word_regex, function(match, g1) {
-                                    return g1 === undefined ? match : "<a class='word fw-bold'>" + match.replace(new RegExp('\\s\\s+', 'g'), ' ') + "</a>";
+                                    return g1 === undefined ? match : "<a class='word fw-bold'>" + match.replace(/\s\s+/g, ' ') + "</a>";
                                 });
                                 // make sure example sentence is unique, then add to the list
                                 examples += examples.search(escapeRegex(match)) > 0 ? "" : "<p>" + match + "</p>\n";
@@ -182,13 +179,13 @@ $(document).ready(function() {
     function lastCardReached() {
         if (max_cards == 0) { 
             $("#card-header").text("Sorry, no cards to practice");
-            $("#card-text").html("<i class='fas fa-exclamation-circle text-danger display-3'></i><br><br>It seems you don't have any cards left for learning.");
+            $("#card-text").html("<span class='fas fa-exclamation-circle text-danger display-3'></span><br><br>It seems you don't have any cards left for learning.");
             $("#card-footer").addClass("d-none");
             $("#card-loader").addClass("d-none");
             return true;
         } else if (cur_card_index > max_cards-1) {
             $("#card-header").text("Congratulations!");
-            $("#card-text").html("<i class='fa-solid fa-flag-checkered text-primary display-3'></i><br><br>You have reached the end of your study.<br><br><span class='small'>If you want to continue, you can refresh this page (F5).<br>However, we strongly recommend that you keep your study sessions short and take rest intervals.</span>");
+            $("#card-text").html("<span class='fa-solid fa-flag-checkered text-primary display-3'></span><br><br>You have reached the end of your study.<br><br><span class='small'>If you want to continue, you can refresh this page (F5).<br>However, we strongly recommend that you keep your study sessions short and take rest intervals.</span>");
             $("#card-footer").addClass("d-none");
             $("#card-loader").addClass("d-none");
             return true;
@@ -198,22 +195,13 @@ $(document).ready(function() {
     }
 
     /**
-     * Decodes HTML entities, this should be XSS safe
-     */
-    // function decodeEntities(encodedString) {
-    //     var textArea = document.createElement('textarea');
-    //     textArea.innerHTML = encodedString;
-    //     return textArea.value;
-    // }
-
-    /**
      * Open dictionary modal
      * Triggers when user clicks word
      * @param {event object} e
      */
     $("body").on("click", ".word", function(e) {
         $sel_word = $(this);
-        var url = dictionary_URI.replace("%s", encodeURI($sel_word.text()));
+        const url = dictionary_URI.replace("%s", encodeURI($sel_word.text()));
 
         // set up buttons
         $("#btnadd").text("Forgot");
@@ -242,8 +230,8 @@ $(document).ready(function() {
      */
     $(".btn-remember").click(function (e) { 
         e.preventDefault();
-        var word = $("#card").data('word');
-        var remember = e.currentTarget.id == "btn-remember-yes";
+        const word = $("#card").data('word');
+        const remember = e.currentTarget.id == "btn-remember-yes";
 
         // disable Yes/No buttons
         $(".btn-remember").prop('disabled', true);
@@ -268,7 +256,7 @@ $(document).ready(function() {
      * Builds translator link using the word object as a parameter
      */
     function buildTranslateParagraphLink($word) {
-        var sentence = $word.parent("p").text().trim();
+        const sentence = $word.parent("p").text().trim();
 
         return translator_URI.replace("%s", encodeURIComponent(sentence));
     } // end buildTranslateParagraphLink
@@ -287,7 +275,7 @@ $(document).ready(function() {
      $(document).on("contextmenu",function(e){
         // opens dictionary translator in case user right clicked on a word/phrase
         // but only on desktop browsers
-        var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         if (!isMobile && $(e.target).is(".word")) {
             window.open(buildTranslateParagraphLink($(e.target)));

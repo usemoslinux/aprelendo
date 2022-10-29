@@ -1,19 +1,19 @@
 <?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,7 +22,7 @@ namespace Aprelendo\Includes\Classes;
 
 require_once '../includes/dbinit.php'; // connect to database
 
-$no_redirect = TRUE; // used by checklogin.php; otherwise, would redirect to login page
+$no_redirect = true; // used by checklogin.php; otherwise, would redirect to login page
 
 require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
 
@@ -42,7 +42,7 @@ $paypalConfig = [
 
 try {
     if (empty($_POST)) {
-        throw new \Exception ("No IPN post information");
+        throw new \Exception("No IPN post information");
     }
 
     // Check if paypal request or response
@@ -113,9 +113,10 @@ try {
         $raw_post_array = explode('&', $raw_post_data);
         $post_array = [];
         foreach ($raw_post_array as $keyval) {
-            $keyval = explode ('=', $keyval);
-            if (count($keyval) == 2)
-            $post_array[$keyval[0]] = urldecode($keyval[1]);
+            $keyval = explode('=', $keyval);
+            if (count($keyval) == 2) {
+                $post_array[$keyval[0]] = urldecode($keyval[1]);
+            }
         }
 
         if (!is_array($post_array) || empty($post_array)) {
@@ -127,17 +128,21 @@ try {
         // database.
         $paypal = new Paypal($pdo, $post_array['custom'], PAYPAL_SANDBOX);
         
-        if (isset($post_array['txn_id']) && $paypal->verifyTransactionIPN($post_array) && $paypal->checkTxnId($post_array['txn_id'])) {
+        if (isset($post_array['txn_id'])
+            && $paypal->verifyTransactionIPN($post_array)
+            && $paypal->checkTxnId($post_array['txn_id'])) {
             $paypal->addIPNPayment($post_array);
             $user->upgradeToPremiumIPN($post_array);
         } else {
             if (!isset($post_array['amount3'])) {
-                throw new \Exception ('Transaction could not be verified. Payment Id might be wrong.');
+                throw new \Exception('Transaction could not be verified. Payment Id might be wrong.');
             }
         }
     }
 } catch (\Exception $e) {
-    file_put_contents("paypal.log", $e->getMessage() . "\n\n----post_array: " . print_r( $post_array, true ), FILE_APPEND );
+    file_put_contents(
+        "paypal.log",
+        $e->getMessage() . "\n\n----post_array: " . print_r($post_array, true),
+        FILE_APPEND
+    );
 }
-
-?>
