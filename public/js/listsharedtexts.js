@@ -22,9 +22,12 @@ $(document).ready(function() {
      * Toggles like for text
      * Triggers when user clicks on a heart
      */
-    $("i.fa-heart").on("click", function() {
-        const like_btn = $(this);
-        const text_id = like_btn.attr("data-idText");
+    $("span.fa-heart").on("click", function() {
+        const $like_btn = $(this);
+        const text_id = $like_btn.attr("data-idText");
+
+        toggleLike($like_btn);
+
         $.ajax({
             type: "POST",
             url: "ajax/togglelike.php",
@@ -33,20 +36,24 @@ $(document).ready(function() {
             .done(function(data) {
                 if (data.error_msg) {
                     alert("Oops! There was an unexpected error");
-                } else {
-                    like_btn.toggleClass("fas far");
-                    const total_likes = parseInt(
-                        like_btn.siblings("small").text()
-                    );
-                    if (like_btn.hasClass("fas")) {
-                        like_btn.siblings("small").text(total_likes + 1);
-                    } else {
-                        like_btn.siblings("small").text(total_likes - 1);
-                    }
+                    toggleLike($like_btn);
                 }
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
                 alert("Oops! There was an unexpected error");
+                toggleLike($like_btn);
             });
-    }); // end i.fa-heart.on.click
+    }); // end span.fa-heart.on.click
+
+    function toggleLike($like_btn) {
+        $like_btn.toggleClass("fas far");
+        const total_likes = parseInt(
+            $like_btn.siblings("small").text()
+        );
+        if ($like_btn.hasClass("fas")) {
+            $like_btn.siblings("small").text(total_likes + 1);
+        } else {
+            $like_btn.siblings("small").text(total_likes - 1);
+        }
+    }
 });

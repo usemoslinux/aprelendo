@@ -67,8 +67,7 @@ if ($available_langs) {
         $html .= "<button type='button' onclick='location.href=\"languages?act=$lg_id\"'"
                 . "class='btn btn-primary $btn_disabled'>Set as active</button>"
                 . "<button type='button' onclick='location.href=\"languages?chg=$lg_id\"'"
-                . " class='btn btn-secondary'>Edit</button>"
-                . "<span class='message'></span>"
+                . " class='btn btn-secondary ms-1'>Edit</button>"
                 . "</div></div></div>";
     }
     $html .= '</div>';

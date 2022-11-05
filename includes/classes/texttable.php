@@ -91,15 +91,15 @@ class TextTable extends Table
                 && isset($link) && !empty($link)) {
                 switch ($this->rows[$i]['type']) {
                     case 5: // videos
-                    $replace = str_replace('showtext', 'showvideo', $link);
-                    $link = empty($replace) ? '' : "<a href ='$replace?id=$text_id";
+                        $replace = str_replace('showtext', 'showvideo', $link);
+                        $link = empty($replace) ? '' : "<a href ='$replace?id=$text_id";
                     break;
                     case 6: // ebooks
-                    $replace = str_replace('showtext', 'showebook', $link);
-                    $link = empty($replace) ? '' : "<a href ='$replace?id=$text_id";
+                        $replace = str_replace('showtext', 'showebook', $link);
+                        $link = empty($replace) ? '' : "<a href ='$replace?id=$text_id";
                     break;
                     default:
-                    $link = empty($link) ? '' : "<a href ='{$link}?id=$text_id";
+                       $link = empty($link) ? '' : "<a href ='{$link}?id=$text_id";
                     break;
                 }
                 // determine if text is shared or private

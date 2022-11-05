@@ -457,7 +457,7 @@ class Texts extends DBEntity
             $sort_sql = $this->buildSortSQL($sort_by);
             $filter_level_sql = $filter_level == 0 ? 'AND `level`>= :level' : 'AND `level` = :level';
             $sql = "SELECT `id`,
-                    NULL,
+                    `title`,
                     `author`,
                     `source_uri`,
                     `type`,
