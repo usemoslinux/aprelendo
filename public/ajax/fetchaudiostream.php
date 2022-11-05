@@ -36,9 +36,8 @@ try {
 
     $stream_log = new LogAudioStreams($pdo, $user->getId());
     $nr_of_streams_today = $stream_log->countTodayRecords();
-    $premium_user = $user->isPremium();
 
-    if ((!$premium_user && $nr_of_streams_today >= 1) || ($premium_user && $nr_of_streams_today >= 3)) {
+    if ($nr_of_streams_today >= 3) {
         throw new \Exception('Forbidden', 403);
     }
 

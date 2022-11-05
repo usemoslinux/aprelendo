@@ -71,8 +71,7 @@ use Aprelendo\Includes\Classes\Texts;
             ?>
             <main>
                 <div id="alert-msg" class="d-none"></div>
-                <form id="form-addtext" data-premium="<?php echo $user->isPremium() ? 1 : 0; ?>" class="add-form"
-                    method="post" enctype="multipart/form-data">
+                <form id="form-addtext" class="add-form" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
                     <input type="hidden" name="mode" value="simple" />
                     <div class="row">

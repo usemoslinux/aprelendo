@@ -327,13 +327,13 @@ body.blue-gradient-wallpaper .navbar-light {
     font-size: 1rem;
 }
 
-.btn:hover,
+/* .btn:hover,
 .btn:focus,
 .btn.focus {
     color: #fff;
     outline: 0;
     box-shadow: none;
-}
+} */
 
 .btn-outline-secondary {
     border-color: #ced4da;
@@ -439,35 +439,6 @@ body.blue-gradient-wallpaper .navbar-light {
 
 .small.collapse a {
     color: #0275d8;
-}
-
-/* Main-Features Wrap */
-
-.main-features,
-.why-go-premium {
-    padding-top: 50px;
-    padding-bottom: 50px;
-}
-
-.main-features span {
-    color: #0275d8;
-    font-size: 60px;
-    padding: 15px;
-}
-
-.why-go-premium {
-    color: white;
-    font-size: 0.90rem;
-}
-
-.why-go-premium span {
-    color: white;
-    font-size: 60px;
-    padding: 15px;
-}
-
-.why-go-premium p>a:not(.btn) {
-    color: white;
 }
 
 /* FOOTER */

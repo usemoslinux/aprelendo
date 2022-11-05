@@ -272,7 +272,7 @@ class Reader extends Text
             // 2. get frequency list words
             if ($this->show_freq_words) {
                 $user = new User($this->pdo);
-                if ($user->isLoggedIn() && $user->isPremium()) {
+                if ($user->isLoggedIn()) {
                     $lang = new Language($this->pdo, $this->user_id);
                     $lang->loadRecord($this->lang_id);
                     $freq_words = WordFrequency::getHighFrequencyList($this->pdo, $lang->getName());

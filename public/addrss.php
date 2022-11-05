@@ -23,12 +23,6 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set
 
 use Aprelendo\Includes\Classes\User;
 
-// only premium users are allowed to visit this page
-if (!$user->isPremium()) {
-    header('Location:texts');
-    exit;
-}
-
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 ?>

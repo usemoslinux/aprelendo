@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -21,9 +21,7 @@
 require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
-$is_premium_user = $user->isPremium();
-
-if(empty($error_msg)) {
+if (empty($error_msg)) {
     echo '<div id="alert-msg" class="d-none"></div>';
 } else {
     echo '<div id="alert-msg" class="alert alert-danger">' . $error_msg .'</div>';
@@ -92,11 +90,9 @@ if(empty($error_msg)) {
         </div>
     </fieldset>
     <br>
-    <fieldset <?php echo $is_premium_user ? '' : 'disabled'; ?>>
+    <fieldset>
         <div class="card">
-            <div class="card-header">RSS feeds
-                <?php echo $is_premium_user ? '' : ' <a href="/gopremium" class="text-danger">(premium users only)</a>'; ?>
-            </div>
+            <div class="card-header">RSS feeds</div>
             <div class="card-body">
                 <div class="mb-3">
                     <label for="rss-feed1-uri">RSS feed URI 1:</label>
@@ -117,11 +113,9 @@ if(empty($error_msg)) {
         </div>
     </fieldset>
     <br>
-    <fieldset <?php echo $is_premium_user ? '' : 'disabled'; ?>>
+    <fieldset>
         <div class="card">
-            <div class="card-header">Frequency list
-                <?php echo $is_premium_user ? '' : ' <a href="/gopremium" class="text-danger">(premium users only)</a>'; ?>
-            </div>
+            <div class="card-header">Frequency list</div>
             <div class="card-body">
                 <div class="mb-3">
                     <label for="freq-list">Underline high frequency words:</label>

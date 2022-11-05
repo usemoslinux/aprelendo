@@ -25,11 +25,6 @@ use Aprelendo\Includes\Classes\User;
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\EbookFile;
 
-// only premium users are allowed to visit this page
-if (!$user->isPremium()) {
-    exit;
-}
-
 $user_id = $user->getId();
 $lang_id = $user->getLangId();
 $id = $_GET['id'];
@@ -40,7 +35,7 @@ try {
     $file_name = $text->getSourceUri();
 
     if (!empty($file_name)) {
-        $ebook_file = new EbookFile($file_name, $user->isPremium());
+        $ebook_file = new EbookFile($file_name);
         $ebook_content = $ebook_file->get();
         if ($ebook_content) {
             return $ebook_content;

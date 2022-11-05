@@ -20,7 +20,7 @@
 ?>
 
 <!-- FOOTER -->
-<div id="footerwrap" class="footer <?php echo $curpage == 'gopremium' ? 'text-white' : '' ?> ">
+<div id="footerwrap" class="footer <?php echo $curpage == 'donate'  ? 'text-white' : '' ?> ">
     <div class="container">
         <div class="row text-center">
             <div class="col-sm-12">

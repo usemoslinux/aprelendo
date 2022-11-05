@@ -27,16 +27,11 @@ class EbookFile extends File
     /**
      * Constructor
      * @param string $file_name
-     * @param bool $owned_by_premium_user
      */
-    public function __construct(string $file_name, bool $owned_by_premium_user)
+    public function __construct(string $file_name)
     {
         parent::__construct($file_name);
         $this->allowed_extensions = array('epub');
-        if ($owned_by_premium_user) {
-            $this->max_size = 2097152; // 2 MB
-        } else {
-            $this->max_size = 0; // ebook uploading is not allowed for non-premium users
-        }
+        $this->max_size = 2097152; // 2 MB
     } // end __construct()
 }

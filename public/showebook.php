@@ -23,12 +23,6 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set
 
 use Aprelendo\Includes\Classes\User;
 
-// only premium users are allowed to visit this page
-if (!$user->isPremium()) {
-    header('Location:texts');
-    exit;
-}
-
 use Aprelendo\Includes\Classes\Reader;
 
 function getCSS($class, $styles)

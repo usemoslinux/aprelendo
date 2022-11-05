@@ -28,11 +28,6 @@ if (!isset($_POST) || empty($_POST)) {
     exit;
 }
 
-// only premium users are allowed to visit this page
-if (!$user->isPremium()) {
-    exit;
-}
-
 try {
     $file_uri = APP_ROOT . 'uploads/' . $_POST['filename'];
 

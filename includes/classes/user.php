@@ -32,7 +32,6 @@ class User
     private $lang            = '';
     private $lang_id         = 0;
     private $native_lang     = '';
-    private $premium_until   = '';
     private $activation_hash = '';
     private $active          = false;
     private $google_id       = '';
@@ -75,7 +74,6 @@ class User
                 $this->email           = $row['email'];
                 $this->native_lang     = $row['native_lang_iso'];
                 $this->lang            = $row['learning_lang_iso'];
-                $this->premium_until   = $row['premium_until'];
                 $this->activation_hash = $row['activation_hash'];
                 $this->is_active       = $row['is_active'];
                 $this->google_id       = $row['google_id'];
@@ -113,7 +111,6 @@ class User
                 $this->email           = $row['email'];
                 $this->native_lang     = $row['native_lang_iso'];
                 $this->lang            = $row['learning_lang_iso'];
-                $this->premium_until   = $row['premium_until'];
                 $this->activation_hash = $row['activation_hash'];
                 $this->is_active       = $row['is_active'];
                 $this->google_id       = $row['google_id'];
@@ -329,88 +326,17 @@ class User
                 throw new \Exception('User does not exist.');
             }
 
-            $yesterday = date("Y-m-d", time() - 60 * 60 * 24);
             $sql = "UPDATE `{$this->table}`
-                    SET `is_active`=true, `premium_until`=?
+                    SET `is_active`=true
                     WHERE `name`=? AND `activation_hash`=?";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$yesterday, $username, $hash]);
+            $stmt->execute([$username, $hash]);
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to activate user.');
         } finally {
             $stmt = null;
         }
     } // activate()
-
-    /**
-     * Upgrades user to premium with IPN input
-     *
-     * @param array $data
-     * @return void
-     */
-    public function upgradeToPremiumIPN(array $data): void
-    {
-        try {
-            $today = date($this->time_fmt);
-
-            if ($data['mc_gross'] === '99.00' && $data['mc_currency'] === 'USD') {
-                $premium_until = date($this->time_fmt, strtotime($today . ' + 1 year'));
-            } elseif ($data['mc_gross'] === '10.00' && $data['mc_currency'] === 'USD') {
-                $premium_until = date($this->time_fmt, strtotime($today . ' + 1 month'));
-            }
-
-            if (!isset($premium_until)) {
-                throw new \Exception('There was an unexpected error trying to activate user.');
-            }
-            
-            $sql = "UPDATE `{$this->table}`
-                    SET `premium_until`=?
-                    WHERE `id`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$premium_until, $data['custom']]);
-        } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to upgrade user.');
-        } finally {
-            $stmt = null;
-        }
-    } // upgradeToPremium()
-
-    /**
-     * Upgrades user to premium with PDT input
-     *
-     * @param array $data
-     * @return void
-     */
-    public function upgradeToPremiumPDT(array $data): void
-    {
-        try {
-            $today = date($this->time_fmt);
-
-            if ($data['amt'] === '99.00' && $data['cc'] === 'USD') {
-                $premium_until = date($this->time_fmt, strtotime($today . ' + 1 year'));
-            } elseif ($data['amt'] === '50.00' && $data['cc'] === 'USD') {
-                $premium_until = date($this->time_fmt, strtotime($today . ' + 6 months'));
-            } elseif ($data['amt'] === '25.00' && $data['cc'] === 'USD') {
-                $premium_until = date($this->time_fmt, strtotime($today . ' + 3 months'));
-            } elseif ($data['amt'] === '10.00' && $data['cc'] === 'USD') {
-                $premium_until = date($this->time_fmt, strtotime($today . ' + 1 month'));
-            }
-
-            if (!isset($premium_until)) {
-                throw new \Exception('There was an unexpected error trying to activate user.');
-            }
-            
-            $sql = "UPDATE `{$this->table}`
-                    SET `premium_until`=?
-                    WHERE `id`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$premium_until, $data['cm']]);
-        } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to upgrade user.');
-        } finally {
-            $stmt = null;
-        }
-    } // upgradeToPremium()
 
     /**
      * Creates "remember me" cookie
@@ -512,16 +438,6 @@ class User
 
         return $result;
     } // end isLoggedIn()
-    
-    /**
-     * Checks if user has access to premium features
-     *
-     * @return boolean
-     */
-    public function isPremium(): bool
-    {
-        return $this->premium_until > date('Y-m-d');
-    } // end isPremium()
 
     /**
      * Updates user profile in db
@@ -864,15 +780,6 @@ class User
     public function getNativeLang(): string
     {
         return $this->native_lang;
-    }
-
-    /**
-     * Get the value of premium_until
-     * @return string
-     */
-    public function getPremiumUntil(): string
-    {
-        return is_null($this->premium_until) ? '' : $this->premium_until;
     }
 
     /**

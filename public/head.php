@@ -27,7 +27,7 @@ $show_pages = array('showtext', 'showvideo', 'showebook', 'showofflinevideo');
 $no_login_required_pages = array('index', 'register', 'login', 'accountactivation',
                                  'aboutus', 'privacy', 'attributions', 'extensions', 'support',
                                  'totalreading', 'compatibledics', 'error', 'forgotpassword',
-                                 'gopremium');
+                                 'donate');
 
 $use_google_login = false;
 
@@ -124,7 +124,7 @@ if ($this_is_show_page) {
 <?php
 // show wallpaper on every page, except those in $show_pages array
 if (!$this_is_show_page) {
-    echo $curpage == 'gopremium' ? '<body class="blue-gradient-wallpaper">' : '<body class="pattern-wallpaper">';
+    echo $curpage == 'donate' ? '<body class="blue-gradient-wallpaper">' : '<body class="pattern-wallpaper">';
 }
 
 ?>

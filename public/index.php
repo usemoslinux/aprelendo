@@ -141,8 +141,8 @@ require_once PUBLIC_PATH . 'head.php';
                     <div class="col-lg-4">
                         <h4>1. Add</h4>
                         <p>Add texts & YouTube videos to your Aprelendo library using our <a href="/extensions"
-                                    target="_blank" rel="noopener noreferrer">extensions</a>. Premium users
-                                    can also upload ebooks and texts from RSS feeds.</p>
+                                    target="_blank" rel="noopener noreferrer">extensions</a>. You can can also upload
+                                    ebooks and texts from RSS feeds.</p>
                     </div>
                     <div class="col-lg-4">
                         <h4>2. Read</h4>

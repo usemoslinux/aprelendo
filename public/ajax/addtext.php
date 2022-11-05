@@ -160,14 +160,13 @@ try {
             // check if user is allowed to upload file & does not exceed the daily upload limit
             $file_upload_log = new LogFileUploads($pdo, $user->getId());
             $nr_of_uploads_today = $file_upload_log->countTodayRecords();
-            $premium_user = $user->isPremium();
 
-            if ((!$premium_user) || ($premium_user && $nr_of_uploads_today >= 1)) {
+            if ($nr_of_uploads_today >= 1) {
                 throw new \Exception('Sorry, you have reached your file upload limit for today.');
             }
 
             // upload file & create unique file name
-            $ebook_file = new EbookFile($_FILES['url']['name'], $user->isPremium());
+            $ebook_file = new EbookFile($_FILES['url']['name']);
             $ebook_file->put($_FILES['url']);
             $target_file_name = $ebook_file->getName();
 

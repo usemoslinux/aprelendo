@@ -27,20 +27,16 @@ $user_id = $user->getId();
 $lang_id = $user->getLangId();
 
 try {
-    if ($user->isPremium()) {
-        // set search criteria, if any
-        $search_text = isset($_GET['s']) ? $_GET['s'] : '';
-        $order_by = isset($_GET['o']) ? $_GET['o'] : -1;
+    // set search criteria, if any
+    $search_text = isset($_GET['s']) ? $_GET['s'] : '';
+    $order_by = isset($_GET['o']) ? $_GET['o'] : -1;
 
-        // export to csv
-        $words_table = new Words($pdo, $user_id, $lang_id);
-        $result = $words_table->createCSVFile($search_text, $order_by);
+    // export to csv
+    $words_table = new Words($pdo, $user_id, $lang_id);
+    $result = $words_table->createCSVFile($search_text, $order_by);
 
-        if (!$result) {
-            throw new \Exception('There was an unexpected error trying to export your word list');
-        }
-    } else {
-        throw new \Exception('Only premium users are allowed to export word lists');
+    if (!$result) {
+        throw new \Exception('There was an unexpected error trying to export your word list');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

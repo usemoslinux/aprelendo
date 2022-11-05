@@ -105,7 +105,7 @@ class Language extends DBEntity
      * @param array $array
      * @return void
      */
-    public function editRecord(array $new_record, bool $is_premium_user): void
+    public function editRecord(array $new_record): void
     {
         try {
             // check for errors first
@@ -123,16 +123,13 @@ class Language extends DBEntity
 
             // if everything is fine, proceed editing the record
             
-            $this->dictionary_uri = $new_record['dict-uri'];
-            $this->translator_uri = $new_record['translator-uri'];
-            $this->level          = $new_record['level'];
-            
-            if ($is_premium_user) {
-                $this->rss_feed_1_uri = $new_record['rss-feed1-uri'];
-                $this->rss_feed_2_uri = $new_record['rss-feed2-uri'];
-                $this->rss_feed_3_uri = $new_record['rss-feed3-uri'];
-                $this->show_freq_words = $new_record['freq-list'];
-            }
+            $this->dictionary_uri  = $new_record['dict-uri'];
+            $this->translator_uri  = $new_record['translator-uri'];
+            $this->level           = $new_record['level'];
+            $this->rss_feed_1_uri  = $new_record['rss-feed1-uri'];
+            $this->rss_feed_2_uri  = $new_record['rss-feed2-uri'];
+            $this->rss_feed_3_uri  = $new_record['rss-feed3-uri'];
+            $this->show_freq_words = $new_record['freq-list'];
 
             $sql = "UPDATE `{$this->table}`
                     SET `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?,

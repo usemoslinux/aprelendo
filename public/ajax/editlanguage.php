@@ -32,7 +32,7 @@ if (isset($_POST['id'])) {
     try {
         $lang = new Language($pdo, $user->getId());
         $lang->loadRecord($_POST['id']);
-        $lang->editRecord($_POST, $user->isPremium());
+        $lang->editRecord($_POST);
     } catch (Exception $e) {
         $error = array('error_msg' => $e->getMessage());
         header('Content-Type: application/json');

@@ -115,15 +115,11 @@ $streak_days = (int)$gems->getDaysStreak();
                                 <a href="/userprofile" class="dropdown-item">My profile</a>
                                 <a href="/preferences" class="dropdown-item">Preferences</a>
                                 <div class="dropdown-divider"></div>
-
-                                <?php if (!$user->isPremium()): ?>
-                                <div class="dropdown-header text-primary" >
-                                    Premium
+                                <div class="dropdown-header" >
+                                    Support us
                                 </div>
-                                <a href="/gopremium.php" class="dropdown-item">Upgrade account</a>
+                                <a href="/donate.php" class="dropdown-item">Donate</a>
                                 <div class="dropdown-divider"></div>
-                                <?php endif; ?>
-
                                 <a href="/logout.php" onclick="signOut();" class="dropdown-item">Logout</a>
                                 <script>
                                     function signOut() {
