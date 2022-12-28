@@ -141,9 +141,9 @@ use Aprelendo\Includes\Classes\Texts;
                                 <span id="span-chars-left" class="text-success">10,000 chars left</span>
                             </div>
                             <textarea id="text" name="text" class="form-control" rows="16" cols="80"
-                                placeholder="Text goes here (required), max. length = 10,000 chars" required>
-                                <?php if (isset($art_content)) {echo $art_content;}?>
-                            </textarea>
+                                placeholder="Text goes here (required), max. length = 10,000 chars" required><?php
+                                    if (isset($art_content)) {echo $art_content;}
+                            ?></textarea>
                             <label for="upload-text" id="upload-txtfile-label">Upload txt file:</label>
                             <input id="upload-text" type="file" name="upload-text" accept=".txt">
                         </div>
