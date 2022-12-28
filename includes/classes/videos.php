@@ -90,7 +90,7 @@ class Videos extends DBEntity
                            'fr-be'    => 'French (Belgium)',
                            'fr-ca'    => 'French (Canada)',
                            'fr-ch'    => 'French (Switzerland)',
-                           'fr-lu'    => 'French (Luxembourg)	',
+                           'fr-lu'    => 'French (Luxembourg)',
                            'he'       => 'Hebrew',
                            'hi'       => 'Hindi',
                            'it'       => 'Italian (Standard)',
