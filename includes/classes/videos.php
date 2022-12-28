@@ -28,11 +28,88 @@ use Aprelendo\Includes\Classes\Conversion;
 class Videos extends DBEntity
 {
     private $lang_id        = 0;
+    private $lang           = '';
     private $title          = '';
     private $author         = '';
     private $youtube_id     = '';
     private $source_url     = '';
     private $transcript_xml = '';
+    private $lang_codes = [
+                           'ar'       => 'Arabic',
+                           'ar-dz'    => 'Arabic (Algeria)',
+                           'ar-bh'    => 'Arabic (Bahrain)',
+                           'ar-eg'    => 'Arabic (Egypt)',
+                           'ar-iq'    => 'Arabic (Iraq)',
+                           'ar-jo'    => 'Arabic (Jordan)',
+                           'ar-kw'    => 'Arabic (Kuwait)',
+                           'ar-lb'    => 'Arabic (Lebanon)',
+                           'ar-ly'    => 'Arabic (Libya)',
+                           'ar-ma'    => 'Arabic (Morocco)',
+                           'ar-om'    => 'Arabic (Oman)',
+                           'ar-qa'    => 'Arabic (Qatar)',
+                           'ar-sa'    => 'Arabic (Saudi Arabia)',
+                           'ar-sy'    => 'Arabic (Syria)',
+                           'ar-tn'    => 'Arabic (Tunisia)',
+                           'ar-ae'    => 'Arabic (U.A.E.)',
+                           'ar-ye'    => 'Arabic (Yemen)',
+                           'de'       => 'German (Standard)',
+                           'de-at'    => 'German (Austria)',
+                           'de-ch'    => 'German (Switzerland)',
+                           'de-lu'    => 'German (Luxembourg)',
+                           'de-li'    => 'German (Liechtenstein)',
+                           'el'       => 'Greek',
+                           'en'       => 'English',
+                           'en-GB'    => 'English (United Kingdom)',
+                           'en-US'    => 'English (United States)',
+                           'en-AU'    => 'English (Australia)',
+                           'en-BZ'    => 'English (Belize)',
+                           'en-CA'    => 'English (Canada)',
+                           'en-IE'    => 'English (Ireland)',
+                           'en-JM'    => 'English (Jamaica)',
+                           'en-NZ'    => 'English (New Zealand)',
+                           'en-ZA'    => 'English (South Africa)',
+                           'en-TT'    => 'English (Trinidad)',
+                           'es'       => 'Spanish (Spain)',
+                           'es-ar'    => 'Spanish (Argentina)',
+                           'es-bo'    => 'Spanish (Bolivia)',
+                           'es-cl'    => 'Spanish (Chile)',
+                           'es-co'    => 'Spanish (Colombia)',
+                           'es-cr'    => 'Spanish (Costa Rica)',
+                           'es-do'    => 'Spanish (Dominican Republic)',
+                           'es-ec'    => 'Spanish (Ecuador)',
+                           'es-sv'    => 'Spanish (El Salvador)',
+                           'es-gt'    => 'Spanish (Guatemala)',
+                           'es-hn'    => 'Spanish (Honduras)',
+                           'es-mx'    => 'Spanish (Mexico)',
+                           'es-ni'    => 'Spanish (Nicaragua)',
+                           'es-pa'    => 'Spanish (Panama)',
+                           'es-py'    => 'Spanish (Paraguay)',
+                           'es-pe'    => 'Spanish (Peru)',
+                           'es-pr'    => 'Spanish (Puerto Rico)',
+                           'fr'       => 'French (Standard)',
+                           'fr-be'    => 'French (Belgium)',
+                           'fr-ca'    => 'French (Canada)',
+                           'fr-ch'    => 'French (Switzerland)',
+                           'fr-lu'    => 'French (Luxembourg)	',
+                           'he'       => 'Hebrew',
+                           'hi'       => 'Hindi',
+                           'it'       => 'Italian (Standard)',
+                           'it-ch'    => 'Italian (Switzerland)',
+                           'ja'       => 'Japanese',
+                           'ko'       => 'Korean',
+                           'nl'       => 'Dutch (Standard)',
+                           'nl-be'    => 'Dutch (Belgium)',
+                           'es'       => 'Spanish',
+                           'pt'       => 'Portuguese (Portugal)',
+                           'pt-br'    => 'Portuguese (Brazil)',
+                           'ru'       => 'Russian',
+                           'ru-md'    => 'Russian (Republic of Moldova)',
+                           'zh'       => 'Chinese',
+                           'zh-cn'    => 'Chinese (PRC)',
+                           'zh-hk'    => 'Chinese (Hong Kong)',
+                           'zh-sg'    => 'Chinese (Singapore)',
+                           'zh-tw'    => 'Chinese (Taiwan)',
+                        ];
 
     /**
      * Constructor
@@ -62,13 +139,19 @@ class Videos extends DBEntity
     public function fetchVideo(string $lang, string $youtube_id): string
     {
         header('Content-Type: application/json');
+        $this->lang = $lang;
         $lang = urlencode($lang);
         $youtube_id = urlencode($youtube_id);
+
+        $list_lang = array_filter($this->lang_codes, function ($key) {
+                return $key==$this->lang || strpos($key, $this->lang . "-") === 0;
+            }, ARRAY_FILTER_USE_KEY);
+        $list_lang = array_keys($list_lang);
         
         // requires a python app called youtube_transcript_api
         // to install it run sudo pip install youtube_transcript_api
-        $output = shell_exec("youtube_transcript_api $youtube_id --languages $lang --format json "
-            . "--exclude-generated 2>&1");
+        $output = shell_exec("youtube_transcript_api $youtube_id --languages " . implode(" ", $list_lang)
+            . " --format json --exclude-generated 2>&1");
 
         $output_array = json_decode($output, true); // convert json to array
         // $transcript_xml = implode( "\n", $output_array[0]);
