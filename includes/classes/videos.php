@@ -108,7 +108,7 @@ class Videos extends DBEntity
                            'zh-cn'    => 'Chinese (PRC)',
                            'zh-hk'    => 'Chinese (Hong Kong)',
                            'zh-sg'    => 'Chinese (Singapore)',
-                           'zh-tw'    => 'Chinese (Taiwan)',
+                           'zh-tw'    => 'Chinese (Taiwan)'
                         ];
 
     /**
