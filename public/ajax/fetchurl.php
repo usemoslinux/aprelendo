@@ -25,9 +25,13 @@ use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\Curl;
 
 try {
+    $options = array(
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_USERAGENT => FICTIONAL_USER_AGENT
+    );
     if (isset($_GET['url']) && !empty($_GET['url'])) {
         $url = $_GET['url'];
-        $file_contents = Curl::getUrlContents($url);
+        $file_contents = Curl::getUrlContents($url, $options);
         echo $file_contents ? $file_contents : '';
     } else {
         throw new \Exception('There was a problem retrieving that URL. Please check it is not empty or malformed.');

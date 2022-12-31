@@ -17,50 +17,24 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
     // load rss feeds
     $.ajax({
         type: "GET",
         url: "ajax/fetchrssfeeds.php"
     })
-        .done(function(data) {
-            $(".lds-ellipsis").fadeOut(function() {
+        .done(function (data) {
+            $(".lds-ellipsis").fadeOut(function () {
                 $(this).after(data);
             });
         })
-        .fail(function(xhr, ajaxOptions, thrownError) {
-            $(".lds-ellipsis").fadeOut(function() {
+        .fail(function (xhr, ajaxOptions, thrownError) {
+            $(".lds-ellipsis").fadeOut(function () {
                 $(this).after(
                     '<div class="alert alert-danger">Oops! There was an error trying to retrieve your RSS feeds. Please try again later.</div>'
                 );
             });
         }); // end $.ajax
-
-    $(document).on("click", ".btn-link", function() {
-        let $accordion;
-        let $sel_card = $(".fas", this);
-
-        $sel_card
-            .toggleClass("fa-chevron-right")
-            .toggleClass("fa-chevron-down");
-
-        if ($(this).parents(".card-body").length > 0) {
-            $accordion = $(this).closest(".card-body");
-        } else {
-            $accordion = $(".subaccordion > .card > .card-header    ");
-        }
-
-        $(".fas", $accordion).each(function() {
-            if (
-                $(this).hasClass("fa-chevron-down") &&
-                $(this)[0] !== $sel_card[0]
-            ) {
-                $(this)
-                    .toggleClass("fa-chevron-right")
-                    .toggleClass("fa-chevron-down");
-            }
-        });
-    }); // end .btn-link.on.click
 
     /**
      * Escapes string
@@ -95,28 +69,28 @@ $(document).ready(function() {
             )
                 .append(
                     '<input type="hidden" name="art_title" value="' +
-                        art_title +
-                        '">'
+                    art_title +
+                    '">'
                 )
                 .append(
                     '<input type="hidden" name="art_author" value="' +
-                        htmlEscape(art_author) +
-                        '">'
+                    htmlEscape(art_author) +
+                    '">'
                 )
                 .append(
                     '<input type="hidden" name="art_url" value="' +
-                        htmlEscape(art_url) +
-                        '">'
+                    htmlEscape(art_url) +
+                    '">'
                 )
                 .append(
                     '<input type="hidden" name="art_pubdate" value="' +
-                        htmlEscape(art_pubdate) +
-                        '">'
+                    htmlEscape(art_pubdate) +
+                    '">'
                 )
                 .append(
                     '<input type="hidden" name="art_content" value="' +
-                        htmlEscape(art_content) +
-                        '">'
+                    htmlEscape(art_content) +
+                    '">'
                 )
                 .append(
                     '<input type="hidden" name="art_is_shared" value="true">'
@@ -137,7 +111,7 @@ $(document).ready(function() {
                     mode: "rss"
                 }
             })
-                .done(function(data) {
+                .done(function (data) {
                     if (data.error_msg != null) {
                         showMessage(
                             $entry_text,
@@ -156,8 +130,8 @@ $(document).ready(function() {
                             case "readnow":
                                 location.replace(
                                     "../showtext?id=" +
-                                        data.insert_id +
-                                        "&sh=1"
+                                    data.insert_id +
+                                    "&sh=1"
                                 );
                                 break;
                             default:
@@ -165,7 +139,7 @@ $(document).ready(function() {
                         }
                     }
                 })
-                .fail(function() {
+                .fail(function () {
                     showMessage(
                         $entry_text,
                         "There was an error trying to add this text to your library!",
@@ -194,56 +168,24 @@ $(document).ready(function() {
     } // end showMessage
 
     /**
-     * Triggers when user clicks the Add & Read Later button
+     * Triggers when user clicks the Edit, Add & Read now or Add & Read later buttons
      * @param e {Event}
      */
-    $(document).on("click", ".btn-readlater", function(e) {
+    $(document).on("click", ".btn-readlater, .btn-readnow, .btn-edit", function (e) {
         e.preventDefault();
         e.stopPropagation();
-        addTextToLibrary(
-            $(this)
-                .closest(".card")
-                .find(" .entry-info"),
-            $(this)
-                .parent()
-                .siblings(".entry-text"),
-            "readlater"
-        );
-    }); // end .btn-readlater.on.click
 
-    /**
-     * Triggers when user clicks the Add & Read Now button
-     * @param e {Event}
-     */
-    $(document).on("click", ".btn-readnow", function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+        const action = $(this).data("type");
         addTextToLibrary(
             $(this)
-                .closest(".card")
-                .find(" .entry-info"),
+                .closest(".accordion-item")
+                .find(".entry-info"),
             $(this)
                 .parent()
                 .siblings(".entry-text"),
-            "readnow"
+            action
         );
-    }); // end .btn-readnow.on.click
-
-    /**
-     * Triggers when user clicks the Add & Edit button
-     * @param e {Event}
-     */
-    $(document).on("click", ".btn-edit", function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        addTextToLibrary(
-            $(this)
-                .closest(".card")
-                .find(" .entry-info"),
-            $(this)
-                .parent()
-                .siblings(".entry-text"),
-            "edit"
-        );
-    }); // end .btn-edit.on.click
+    });
 });
+
+

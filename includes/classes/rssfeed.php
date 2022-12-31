@@ -28,6 +28,7 @@ class RSSFeed
     private $url      = '';
     private $xmlfeed  = '';
     private $articles = [];
+    private const MAX_NR_OF_ARTICLES = 10;
 
     /**
      * Constructor
@@ -50,7 +51,12 @@ class RSSFeed
     */
     public function fetchXMLFeed(string $url): void
     {
-        $this->xmlfeed = Curl::getUrlContents($url);
+        $options = array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_USERAGENT => FICTIONAL_USER_AGENT
+        );
+
+        $this->xmlfeed = Curl::getUrlContents($url, $options);
         
         if ($this->xmlfeed) {
             $this->xmlfeed = simplexml_load_string($this->xmlfeed);
@@ -87,7 +93,7 @@ class RSSFeed
                                 ? $article->pdotent
                                 : $article->description;
                             
-                            if ($itemindex >= 5) {
+                            if ($itemindex >= self::MAX_NR_OF_ARTICLES) {
                                 break;
                             } else {
                                 $itemindex++;

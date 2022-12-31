@@ -59,29 +59,25 @@ class RSSFeeds
     } // end __construct()
 
     /**
-     * Get the value of feed1
-     * @return RSSFeed
+     * Return array containing all feeds
+     * @return array
      */
-    public function getFeed1(): RSSFeed
+    public function get(): array
     {
-        return $this->feed1;
-    }
+        $feeds = [];
 
-    /**
-     * Get the value of feed2
-     * @return RSSFeed
-     */
-    public function getFeed2(): RSSFeed
-    {
-        return $this->feed2;
-    }
+        if (!empty($this->feed1->getUrl())) {
+            $feeds[] = $this->feed1;
+        }
 
-    /**
-     * Get the value of feed3
-     * @return RSSFeed
-     */
-    public function getFeed3(): RSSFeed
-    {
-        return $this->feed3;
+        if (!empty($this->feed2->getUrl())) {
+            $feeds[] = $this->feed2;
+        }
+
+        if (!empty($this->feed3->getUrl())) {
+            $feeds[] = $this->feed3;
+        }
+
+        return $feeds;
     }
 }
