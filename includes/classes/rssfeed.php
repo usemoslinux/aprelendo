@@ -53,7 +53,8 @@ class RSSFeed
     {
         $options = array(
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_USERAGENT => FICTIONAL_USER_AGENT
+            CURLOPT_USERAGENT => FICTIONAL_USER_AGENT,
+            CURLOPT_FOLLOWLOCATION => true
         );
 
         $this->xmlfeed = Curl::getUrlContents($url, $options);

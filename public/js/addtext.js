@@ -153,10 +153,11 @@ $(document).ready(function() {
                             const doc = document.implementation.createHTMLDocument(
                                 "New Document"
                             );
-                            doc.body.parentElement.innerHTML = data;
+                            doc.body.parentElement.innerHTML = data.file_contents;
                             const article = new Readability(doc).parse();
                             $("#title").val($("<input>").html(article.title).text());
                             $("#author").val($("<input>").html(article.byline).text());
+                            $("#url").val(data.url);
                             let txt = "";
                             let $tempDom = $("<output>").append(
                                 $.parseHTML(article.content)

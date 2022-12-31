@@ -27,12 +27,16 @@ use Aprelendo\Includes\Classes\Curl;
 try {
     $options = array(
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_USERAGENT => FICTIONAL_USER_AGENT
+        CURLOPT_USERAGENT => FICTIONAL_USER_AGENT,
+        CURLOPT_FOLLOWLOCATION => true
     );
     if (isset($_GET['url']) && !empty($_GET['url'])) {
         $url = $_GET['url'];
         $file_contents = Curl::getUrlContents($url, $options);
-        echo $file_contents ? $file_contents : '';
+        $url = Curl::getFinalUrl($url);
+        $result = $file_contents ? array('url' => $url, 'file_contents' => $file_contents) : '';
+        header('Content-Type: application/json');
+        echo json_encode($result);
     } else {
         throw new \Exception('There was a problem retrieving that URL. Please check it is not empty or malformed.');
     }
