@@ -72,12 +72,20 @@ class Curl
         return (strtolower($charset) == 'utf-8') ? $result : iconv($charset, 'utf-8', $result);
     } // end getUrlContents()
 
-    public static function getFinalUrl(string $url): string {
+    /**
+     * Gets final URL after HTTP redirects
+     *
+     * @param string $url
+     * @return string
+     */
+    public static function getFinalUrl(string $url): string
+    {
         $final_url = $url;
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         
