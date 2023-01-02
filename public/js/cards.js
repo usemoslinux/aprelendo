@@ -26,6 +26,7 @@ $(document).ready(function() {
     let max_cards = 10;                 // maximum nr. of cards
     let cur_word_index = 0;             // current word index
     let cur_card_index = 0;             // current word index
+    let words_recalled = 0;             // nr. of words recalled during practice
 
     // initialize modal dictionary window buttons
     // $("#btn-translate").hide();
@@ -85,7 +86,8 @@ $(document).ready(function() {
                 getExampleSentencesforCard(words[0]);
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
-                showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning in this language.", "alert-danger");
+                showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning "
+                    + "in this language.", "alert-danger");
             }); // end $.ajax
     }
 
@@ -132,7 +134,9 @@ $(document).ready(function() {
                             // create html for each example sentence, max 3 examples
                             m.forEach((match, groupIndex) => {
                                 match = match.replace(word_regex, function(match, g1) {
-                                    return g1 === undefined ? match : "<a class='word fw-bold'>" + match.replace(/\s\s+/g, ' ') + "</a>";
+                                    return g1 === undefined
+                                        ? match
+                                        : "<a class='word fw-bold'>" + match.replace(/\s\s+/g, ' ') + "</a>";
                                 });
                                 // make sure example sentence is unique, then add to the list
                                 examples += examples.search(escapeRegex(match)) > 0 ? "" : "<p>" + match + "</p>\n";
@@ -161,7 +165,8 @@ $(document).ready(function() {
                 cur_card_index++;
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
-                showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.", "alert-danger");
+                showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.", 
+                    "alert-danger");
             }); // end $.ajax
     }
 
@@ -179,13 +184,20 @@ $(document).ready(function() {
     function lastCardReached() {
         if (max_cards == 0) { 
             $("#card-header").text("Sorry, no cards to practice");
-            $("#card-text").html("<span class='fas fa-exclamation-circle text-danger display-3'></span><br><br>It seems you don't have any cards left for learning.");
+            $("#card-text").html("<div class='fas fa-exclamation-circle text-danger display-3'>"
+                + "</div><div class='mt-3'>It seems you don't have any cards left for learning.</div>");
             $("#card-footer").addClass("d-none");
             $("#card-loader").addClass("d-none");
             return true;
         } else if (cur_card_index > max_cards-1) {
             $("#card-header").text("Congratulations!");
-            $("#card-text").html("<span class='fa-solid fa-flag-checkered text-primary display-3'></span><br><br>You have reached the end of your study.<br><br><span class='small'>If you want to continue, you can refresh this page (F5).<br>However, we strongly recommend that you keep your study sessions short and take rest intervals.</span>");
+            $("#card-text").html("<div class='fa-solid fa-flag-checkered text-primary display-3 mt-3'></div>"
+                + "<div class='mt-3'>You have reached the end of your study.</div>"
+                + "<div class='mt-3'>You recalled " + words_recalled / max_cards * 100 + " % of the words ("
+                + words_recalled + " out of " + max_cards + ").</div>"
+                + "<div class='small mt-4'>If you want to continue, you can "
+                + "refresh this page (F5).<br>However, we strongly recommend that you keep your study sessions short "
+                + "and take rest intervals.</div>");
             $("#card-footer").addClass("d-none");
             $("#card-loader").addClass("d-none");
             return true;
@@ -232,6 +244,7 @@ $(document).ready(function() {
         e.preventDefault();
         const word = $("#card").data('word');
         const remember = e.currentTarget.id == "btn-remember-yes";
+        words_recalled = remember ? words_recalled + 1 : words_recalled;
 
         // disable Yes/No buttons
         $(".btn-remember").prop('disabled', true);

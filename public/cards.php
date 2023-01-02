@@ -58,8 +58,12 @@ require_once PUBLIC_PATH . 'header.php';
                                 <div id="card-footer" class="card-footer">
                                     <p id="card-counter" class="card-text"></p>
                                     <p class="card-text">Did you remember the meaning?</p>
-                                    <button id="btn-remember-yes" type="button" class="btn btn-success btn-remember">Yes</button>
-                                    <button id="btn-remember-no" type="button" class="btn btn-danger btn-remember">No</button>
+                                    <button id="btn-remember-yes" type="button" class="btn btn-success btn-remember">
+                                        Yes
+                                    </button>
+                                    <button id="btn-remember-no" type="button" class="btn btn-danger btn-remember">
+                                        No
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -71,11 +75,10 @@ require_once PUBLIC_PATH . 'header.php';
     </div>
 </div>
 
-<?php 
-
+<?php
 require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
-
 ?>
+
 <script defer src="js/cards-min.js"></script>
 
 <?php require_once 'footer.php' ?>

@@ -91,8 +91,8 @@ try {
                 . 'bookmarklets" target="_blank" rel="noopener noreferrer" class="alert-link">bookmarklet</a>.</li>'
                 . '<li>Go to any website containing an article or page written in the language you are trying '
                 . 'to learn. Make sure it fits your level of proficiency or a little higher. Press the '
-                . 'Aprelendo button, which  appeared after installing the extension/bookmarklet. This will add '
-                . 'the article to your Aprelendo library. </li>'
+                . 'Aprelendo button, which appeared after installing the extension/bookmarklet. This will add '
+                . 'the article to your Aprelendo library.</li>'
                 . '<li>Open the newly added article and follow the instructions for each learning phase.</li></ol>'
                 . '<p>For more info, check our video on <a href="https://www.youtube.com/watch?v=qimkPHrLkS4" '
                 . 'target="_blank" rel="noopener noreferrer" class="alert-link">how our assisted learning method works'
@@ -102,7 +102,9 @@ try {
             }
             
             $html .= '<div class="alert alert-info" role="alert">Your private library is empty. '
-                . 'Check out some <a href="/sources" class="alert-link">popular sources</a> for this language.</div>';
+                . 'Add texts using the green button above or using our extensions, as explained '
+                . '<a href="https://www.youtube.com/watch?v=qimkPHrLkS4" target="_blank" rel="noopener noreferrer"'
+                . 'class="alert-link">here</a>.';
     } else {
         $html = '<div class="alert alert-info" role="alert">' . $e->getMessage() . '</div>';
     }
