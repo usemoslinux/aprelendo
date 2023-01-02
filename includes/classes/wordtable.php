@@ -58,6 +58,11 @@ class WordTable extends Table
             $word_id = $this->rows[$i]['id'];
             $word = $this->rows[$i]['word'];
             $word_status = $this->rows[$i]['status'];
+            $diff_today_modif = $this->rows[$i]['diff_today_modif'];
+            $days_modif_str = $diff_today_modif !== null
+                ? ' - modified ' . $diff_today_modif . ' days ago'
+                : ' - never modified';
+
             // $status = 0 ("learned"), 1 ("learning"), 2 ("new"), 3 ("forgotten")
             $status = array('fa-hourglass-end status_learned', 'fa-hourglass-half status_learning',
                             'fa-hourglass-start status_new', 'fa-hourglass-start status_forgotten');
@@ -72,8 +77,8 @@ class WordTable extends Table
             $html .= '<td class="col-title"><a class="word word-list">'
                 . $word
                 . '</a></td><td class="col-status text-center">'
-                . '<span title="'. $status_text[$word_status] . '" class="fas '
-                . $status[$word_status] . '"></span></td></tr>';
+                . '<span title="' . $status_text[$word_status] . $days_modif_str
+                . '" class="fas ' . $status[$word_status] . '"></span></td></tr>';
         }
         return $html;
     }

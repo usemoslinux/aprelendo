@@ -55,7 +55,7 @@ class Achievements extends DBEntity
         
         // count words in user's vocabulary list for this particular language
         $words = new Words($this->pdo, $this->user_id, $this->lang_id);
-        $word_count = $words->countAllRows();
+        $word_count = $words->countSearchRows('');
         
         $gems_achievements = $this->checkByType(1, $nr_of_gems);
         $streak_achievements = $this->checkByType(2, $streak_days);

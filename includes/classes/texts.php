@@ -348,31 +348,6 @@ class Texts extends DBEntity
     } // end countSearchRows()
     
     /**
-    * Counts the number of rows (i.e. texts) for the current user & language combination
-    * It differs from countSearchRows in that this function does not apply any additional filter
-    *
-    * @return int
-    */
-    public function countAllRows(int $filter_level = 0): int
-    {
-        try {
-            $filter_level_sql = $filter_level == 0 ? 'AND `level`>=?' : 'AND `level`=?';
-            $sql = "SELECT COUNT(`id`) FROM `{$this->table}`
-                    WHERE `user_id`=? AND `lang_id`=? $filter_level_sql";
-
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $filter_level]);
-            $total_rows = $stmt->fetchColumn();
-
-            return (int)$total_rows;
-        } catch (\PDOException $e) {
-            return 0;
-        } finally {
-            $stmt = null;
-        }
-    } // end countAllRows()
-    
-    /**
     * Gets texts by using a search pattern ($search_text) and a filter ($filter_type + $filter_level).
     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
     * Values are returned using a sort pattern ($sort_by)
@@ -440,59 +415,6 @@ class Texts extends DBEntity
             $stmt = null;
         }
     } // end getSearch()
-    
-    /**
-    * Gets all the texts for the current user & language combination
-    * It returns only specific ranges by using an $offset (specifies where to start) and a $limit (how many rows to get)
-    * Values are returned using a sort pattern ($sort_by)
-    *
-    * @param int $offset
-    * @param int $limit
-    * @param int $sort_by Is converted to a string using buildSortSQL()
-    * @return array
-    */
-    public function getAll(int $filter_level, int $offset, int $limit, int $sort_by): array
-    {
-        try {
-            $sort_sql = $this->buildSortSQL($sort_by);
-            $filter_level_sql = $filter_level == 0 ? 'AND `level`>= :level' : 'AND `level` = :level';
-            $sql = "SELECT `id`,
-                    `title`,
-                    `author`,
-                    `source_uri`,
-                    `type`,
-                    `word_count`,
-                    `level`
-                    FROM `{$this->table}`
-                    WHERE `user_id` = :user_id
-                    AND `lang_id` = :lang_id
-                    $filter_level_sql
-                    ORDER BY $sort_sql
-                    LIMIT :offset, :limit";
-
-            $stmt = $this->pdo->prepare($sql);
-            
-            $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
-            $stmt->bindParam(':lang_id', $this->lang_id, \PDO::PARAM_INT);
-            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
-            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
-            $stmt->bindParam(':level', $filter_level, \PDO::PARAM_INT);
-
-            $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            if (!$result || empty($result)) {
-                throw new \Exception('Oops! There are no texts in your private library yet. '
-                    . 'Feel free to add one or access the <a href="/sharedtexts">shared texts</a> section.');
-            }
-
-            return $result;
-        } catch (\PDOException $e) {
-            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
-        } finally {
-            $stmt = null;
-        }
-    } // end getAll()
     
     /**
     * Determines if $text is valid XML code & extracts text from it

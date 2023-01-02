@@ -44,56 +44,41 @@ $sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
 
 $html = ''; // HTML output to print
 
-if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searched for something, show search results
-    // initialize pagination variables
-    if (isset($_GET['p'])) {
-        $page = isset($_GET['p']) && $_GET['p'] != '' ? $_GET['p'] : 1;
-    }
-    
-    $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
-    
-    $total_rows = $texts_table->countSearchRows($filter_type, $filter_level, $search_text);
-    $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
-    $offset = $pagination->getOffset();
-    
-    try {
-        // get search result
-        $rows = $texts_table->getSearch($filter_type, $filter_level, $search_text, $offset, $limit, $sort_by);
+// if the page is loaded because user searched for something, show search results
+// otherwise, show complete shared texts list
 
-        // print table
-        if ($rows) {
-            // if there are any results, show them
-            $table = new SharedTextTable($user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
-            $html = $table->print($sort_by);
-            // print pagination
-            $html .= $pagination->print('sharedtexts', $search_text, $sort_by, $filter_type, $filter_level);
-        }
-    } catch (\Exception $e) {
-        // if there are no texts to show, print a message
-        $html = '<p class="text-center">No shared texts found with that criteria. Try again.</p>';
-    }
-} else { // if page is loaded at startup, show start page
-    // initialize pagination variables
+// initialize pagination variables
+if (isset($_GET['p'])) {
     $page = isset($_GET['p']) && $_GET['p'] != '' ? $_GET['p'] : 1;
-    
-    $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
+}
 
-    $total_rows = $texts_table->countAllRows($filter_level);
-    $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
-    $offset = $pagination->getOffset();
-    
-    try {
-        $rows = $texts_table->getAll($filter_level, $offset, $limit, $sort_by);
-    
-        // print table
-        if ($rows) {
-            $table = new SharedTextTable($user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
-            $html = $table->print($sort_by);
-            $html .= $pagination->print('sharedtexts', '', $sort_by, $filter_type, $filter_level); // print pagination
-        }
-    } catch (\Exception $e) {
-        // if there are no texts to show, print a message
-        $html = '<p class="text-center">There are no shared texts yet. Be the first to add one!</p>';
+$search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';
+
+$texts_table = new SharedTexts($pdo, $user_id, $lang_id);
+
+$total_rows = $texts_table->countSearchRows($filter_type, $filter_level, $search_text);
+$pagination = new Pagination($page, $limit, $total_rows, $adjacents);
+$offset = $pagination->getOffset();
+
+try {
+    // get search result
+    $rows = $texts_table->getSearch($filter_type, $filter_level, $search_text, $offset, $limit, $sort_by);
+
+    // print table
+    if ($rows) {
+        // if there are any results, show them
+        $table = new SharedTextTable($user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
+        $html = $table->print($sort_by);
+        // print pagination
+        $html .= $pagination->print('sharedtexts', $search_text, $sort_by, $filter_type, $filter_level);
+    }
+} catch (\Exception $e) {
+    // if there are no texts to show, print a message
+    if (isset($_GET) && !empty($_GET)) {
+        $html = '<div class="alert alert-info" role="alert">No shared texts found with that criteria. Try again.</div>';
+    } else {
+        $html = '<div class="alert alert-info" role="alert">There are still no shared texts for this language. '
+            . 'Be the first to add one!</div>';
     }
 }
 

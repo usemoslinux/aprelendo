@@ -28,14 +28,14 @@ try {
     $sources = $pop_sources->getAllByLang($user->getLang());
     echo printSources($sources);
 } catch (\Exception $e) {
-    echo "<div class='text-center'>Hmm, that's weird. "
+    echo "<div class='alert alert-info' role='alert'>Hmm, that's weird. "
         . "We couldn't find any popular sources for the selected language.</div>";
 }
 
 function printSources($sources)
 {
     if (!isset($sources) || empty($sources)) {
-        echo "<div class='simple-text'>Hmm, that's weird. "
+        echo "<div class='alert alert-info' role='alert'>Hmm, that's weird. "
         . "We couldn't find any popular sources for the selected language.</div>";
     }
 

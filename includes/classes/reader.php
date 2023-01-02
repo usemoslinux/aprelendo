@@ -267,7 +267,7 @@ class Reader extends Text
             
             // 1. get user words & phrases
             $words_table = new Words($this->pdo, $this->user_id, $this->lang_id);
-            $result['user_words'] = $words_table->getAll(0, 1000000, 4);
+            $result['user_words'] = $words_table->getAll(4);
           
             // 2. get frequency list words
             if ($this->show_freq_words) {

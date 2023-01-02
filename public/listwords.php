@@ -43,19 +43,22 @@ $sort_menu = array('mSortNewFirst' => 'New first',
                    'mSortForgottenFirst' => 'Forgotten first');
 $sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
 
-if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searched for something, show search results
-    // initialize pagination variables
-    if (isset($_GET['p'])) {
-        $page = isset($_GET['p']) && !empty($_GET['p']) ? $_GET['p'] : 1;
-    }
-    
-    $search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';
-    
-    $words_table = new Words($pdo, $user_id, $lang_id);
-    $total_rows = $words_table->countSearchRows($search_text);
-    $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
-    $offset = $pagination->getOffset();
+// if the page is loaded because user searched for something, show search results
+// otherwise, show complete word list
 
+// initialize pagination variables
+if (isset($_GET['p'])) {
+    $page = isset($_GET['p']) && !empty($_GET['p']) ? $_GET['p'] : 1;
+}
+
+$search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';
+
+$words_table = new Words($pdo, $user_id, $lang_id);
+$total_rows = $words_table->countSearchRows($search_text);
+$pagination = new Pagination($page, $limit, $total_rows, $adjacents);
+$offset = $pagination->getOffset();
+
+try {
     // get search result
     $rows = $words_table->getSearch($search_text, $offset, $limit, $sort_by);
 
@@ -63,37 +66,20 @@ if (isset($_GET) && !empty($_GET)) { // if the page is loaded because user searc
     if (sizeof($rows) > 0) { // if there are any results, show them
         $table = new WordTable($headings, $col_widths, $rows, $action_menu, $sort_menu);
         echo $table->print($sort_by);
-    } else { // if there are not, show a message
-        echo '<p>No words found with that criteria. Try again.</p>';
     }
 
     // print pagination
     echo $pagination->print('words', $search_text, $sort_by);
-} else { // if page is loaded at startup, just show word list
-    // initialize pagination variables
-    $page = isset($_GET['page']) && $_GET['page'] != '' ? $_GET['page'] : 1;
-    $words_table = new Words($pdo, $user_id, $lang_id);
-    $total_rows = $words_table->countAllRows();
-    $pagination = new Pagination($page, $limit, $total_rows, $adjacents);
-    $offset = $pagination->getOffset();
-  
-    // get word list
-    $rows = $words_table->getAll($offset, $limit, $sort_by);
-
-    // print table
-    if ($rows && sizeof($rows) > 0) {
-        $table = new WordTable($headings, $col_widths, $rows, $action_menu, $sort_menu);
-        echo $table->print($sort_by);
+} catch (\Exception $e) {
+    if (isset($_GET) && !empty($_GET)) {
+        echo '<div class="alert alert-info" role="alert">No words found with that criteria. Try again.</div>';
     } else {
-        echo '<p>There are no words in your private library.</p>';
+        echo '<div class="alert alert-info" role="alert">There are no words in your private library.</div>';
     }
-
-    // print pagination
-    echo $pagination->print('words', '', $sort_by);
 }
 
 require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
 
 ?>
 
-  <script defer src="js/listwords-min.js"></script>
+<script defer src="js/listwords-min.js"></script>

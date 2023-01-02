@@ -199,29 +199,6 @@ class Words extends DBEntity
     } // end countSearchRows()
 
     /**
-     * Counts the number of rows (i.e. words) for the current user & language combination
-     * It differs from countSearchRows in that this function does not apply any additional filter
-     *
-     * @return int
-     */
-    public function countAllRows(): int
-    {
-        try {
-            $sql = "SELECT COUNT(word) AS `count_all`
-                    FROM `{$this->table}`
-                    WHERE `user_id`=? AND `lang_id`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id]);
-            $row = $stmt->fetch();
-            return $row['count_all'];
-        } catch (\PDOException $e) {
-            return 0;
-        } finally {
-            $stmt = null;
-        }
-    } // end countAllRows()
-
-    /**
      * Gets words by using a search pattern ($search_text).
      * It returns only specific ranges by using an $offset (specifies where to start) and a $limit
      * (how many rows to get)
@@ -238,7 +215,8 @@ class Words extends DBEntity
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
 
-            $sql = "SELECT `id`, `word`, `status`
+            $sql = "SELECT `id`, `word`, `status`,
+                    DATEDIFF(CURDATE(), `date_modified`) AS `diff_today_modif`
                     FROM `{$this->table}`
                     WHERE `user_id`=:user_id AND `lang_id`=:lang_id AND word LIKE :search_str
                     ORDER BY $sort_sql LIMIT :offset, :limit";
@@ -289,16 +267,12 @@ class Words extends DBEntity
 
     /**
      * Gets all the words for the current user & language combination
-     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit
-     * (how many rows to get)
      * Values are returned using a sort pattern ($sort_by)
      *
-     * @param int $offset
-     * @param int $limit
      * @param int $sort_by Is converted to a string using buildSortSQL()
      * @return array
      */
-    public function getAll(int $offset, int $limit, int $sort_by): array
+    public function getAll(int $sort_by): array
     {
         try {
             $sort_sql = $this->buildSortSQL($sort_by);
@@ -306,13 +280,11 @@ class Words extends DBEntity
             $sql = "SELECT `id`, `word`, `status`, `is_phrase`
                     FROM `{$this->table}`
                     WHERE `user_id`=:user_id AND `lang_id`=:lang_id
-                    ORDER BY $sort_sql LIMIT :offset, :limit";
+                    ORDER BY $sort_sql";
             $stmt = $this->pdo->prepare($sql);
 
             $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
             $stmt->bindParam(':lang_id', $this->lang_id, \PDO::PARAM_INT);
-            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
-            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
 
             $stmt->execute();
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
