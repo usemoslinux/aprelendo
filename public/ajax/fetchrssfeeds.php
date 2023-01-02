@@ -115,10 +115,10 @@ function printRSSFeed($feed, $groupindex): string
                           <div>
                             <button type='button' class='btn btn-secondary btn-edit' data-type='edit'>Edit</button>
                             <button type='button' class='btn btn-secondary btn-readnow' data-type='readnow'>
-                            Add & Read now
+                            Read now
                             </button>
                             <button type='button' class='btn btn-secondary btn-readlater' data-type='readlater'>
-                            Add & Read later
+                            Read later
                             </button>
                             <span class='message'></span>
                           </div></div></div></div>";

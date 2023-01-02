@@ -168,7 +168,7 @@ $(document).ready(function () {
     } // end showMessage
 
     /**
-     * Triggers when user clicks the Edit, Add & Read now or Add & Read later buttons
+     * Triggers when user clicks the Edit, Read now or Read later buttons
      * @param e {Event}
      */
     $(document).on("click", ".btn-readlater, .btn-readnow, .btn-edit", function (e) {
