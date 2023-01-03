@@ -173,25 +173,24 @@ require_once PUBLIC_PATH . 'head.php';
 
     <!-- MAIN-FEATURES -->
     <section>
-        <div id="main-features" class="main-features py-5">
+        <div id="main-features" class="main-features pb-5">
             <div class="container">
                 <div class="row text-center">
-                    <div class="col-lg-4">
-                        <span class="fab fa-osi"></span>
+                    <div class="col-lg-4 pt-5">
+                        <span class="fab fa-osi display-1 pb-3"></span>
                         <h4>Open source</h4>
                         <p>Aprelendo is open source software, meaning you can download and fiddle
                             with its source code. This allows us to be super transparent and build
                             a community of users and developers. With some technical knowledge, you
                             can even build your own Aprelendo environment.</p>
                         <p>
-                            <br>
                             <a href="https://github.com/usemoslinux/aprelendo" target="_blank" rel="noopener noreferrer"
                                 class="btn btn-theme">More
                                 Info</a>
                         </p>
                     </div>
-                    <div class="col-lg-4">
-                        <span class="fas fa-book-open"></span>
+                    <div class="col-lg-4 pt-5">
+                        <span class="fas fa-book-open display-1 pb-3"></span>
                         <h4>Total Reading</h4>
                         <p>Our language learning system is aimed especially (though not exclusively)
                             at users with a beginner-intermediate level upwards. Complete beginners
@@ -199,19 +198,17 @@ require_once PUBLIC_PATH . 'head.php';
                             for those who are on a learning "plateau" or anyone seeking to improve
                             their language skills.</p>
                         <p>
-                            <br>
                             <a href="/totalreading" class="btn btn-theme">More Info</a>
                         </p>
                     </div>
-                    <div class="col-lg-4">
-                        <span class="fas fa-mobile-alt"></span>
+                    <div class="col-lg-4 pt-5">
+                        <span class="fas fa-mobile-alt display-1 pb-3"></span>
                         <h4>Use it on any device</h4>
                         <p>You can use Aprelendo on mobile and desktop devices as long as they have
                             an Internet connection. We offer addons for Firefox and Chrome to easily
                             add texts to your library, as well as bookmarklets for those who prefer
                             a browser agnostic solution.</p>
                         <p>
-                            <br>
                             <a href="/extensions" class="btn btn-theme">More Info</a>
                         </p>
                     </div>
