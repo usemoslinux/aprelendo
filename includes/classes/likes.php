@@ -70,7 +70,7 @@ class Likes extends DBEntity
                 $stmt->execute([$this->text_id, $this->user_id, $this->lang_id]);
             }
 
-            if ($stmt->rowCount() == 0) {
+            if ($stmt->rowCount() === 0) {
                 throw new \Exception('There was an unexpected error trying to toggle like for this text.');
             }
         } catch (\PDOException $e) {
@@ -79,4 +79,62 @@ class Likes extends DBEntity
             $stmt = null;
         }
     } // end toggle()
+
+    /**
+     * Returns total likes for current text
+     *
+     * @return integer
+     */
+    public function get(): int
+    {
+        try {
+            $sql = "SELECT COUNT(`id`)
+                AS `total_likes`
+                FROM `{$this->table}`
+                WHERE `text_id` = ?";
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->text_id]);
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($stmt->rowCount() === 0) {
+                throw new \Exception('There was an unexpected error trying to retrieve likes for this text.');
+            }
+
+            return $result['total_likes'];
+        } catch (\PDOException $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end get()
+
+    /**
+     * Checks if user already gave like to current text
+     *
+     * @return boolean
+     */
+    public function userLiked(): bool
+    {
+        try {
+            $sql = "SELECT COUNT(`id`)
+                AS `user_liked`
+                FROM `{$this->table}`
+                WHERE `text_id` = ? AND `user_id` = ?";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->text_id, $this->user_id]);
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($stmt->rowCount() === 0) {
+                throw new \Exception('There was an unexpected error trying to retrieve likes for this text.');
+            }
+
+            return $result['user_liked'] === 1;
+        } catch (\PDOException $e) {
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    } // end userLiked()
 }

@@ -25,6 +25,7 @@ use Aprelendo\Includes\Classes\User;
 use Aprelendo\Includes\Classes\Language;
 use Aprelendo\Includes\Classes\Preferences;
 use Aprelendo\Includes\Classes\WordFrequency;
+use Aprelendo\Includes\Classes\Likes;
 use SimpleXMLElement;
 
 class Text
@@ -375,11 +376,13 @@ class Reader extends Text
     public function showVideo(string $yt_id): string
     {
         $yt_id = $yt_id ? $yt_id : '';
+        $likes = new Likes($this->pdo, $this->id, $this->user_id, $this->lang_id);
+        $user_liked_class = $likes->userLiked($this->user_id, $this->id) ? 'fas' : 'far';
 
         $html = '<div class="col-lg-6 offset-lg-3">' .
                     '<div id="main-container" style="height: 100vh; height: calc(var(--vh, 1vh) * 100);"
                         class="d-flex flex-column">';
-        
+
         $html .= '<div class="d-flex flex-row-reverse  my-2">
                         <button type="button" id="btn-save-ytvideo"
                             title="Close and save the learning status of your words" class="btn btn-sm btn-success">
@@ -387,6 +390,14 @@ class Reader extends Text
                         <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
                             class="btn btn-sm btn-secondary me-2" title="Reader settings">
                             <span class="fas fa-cog"></span>
+                        </button>
+                        <button type="button" title="Like" class="btn btn-sm btn-link me-2">
+                            <span title="Like">
+                                <span class="'
+                                    . $user_liked_class
+                                    . ' fa-heart" data-idText="' . $this->id .'"></span>
+                                <small>' . $likes->get($this->id) . '</small>
+                            </span>
                         </button>
                   </div>';
 
