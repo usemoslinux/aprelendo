@@ -25,8 +25,6 @@ require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Includes\Classes\Language;
 
-$sel = ' selected ';
-
 ?>
 
 <div class="container mtb d-flex flex-grow-1 flex-column">
@@ -117,37 +115,38 @@ $sel = ' selected ';
                             <div class="mb-3">
                                 <label for="src_lang">Your native language:</label>
                                 <select name="src_lang" class="form-control form-select" id="src_lang">
-                                    <?php $native_lang_index = Language::getIndex($user->getNativeLang()); ?>
-                                    <option value="en" <?php echo $native_lang_index==0 ? $sel : '' ; ?>>English
-                                    </option>
-                                    <option value="es" <?php echo $native_lang_index==1 ? $sel : '' ; ?>>Spanish
-                                    </option>
-                                    <option value="pt" <?php echo $native_lang_index==2 ? $sel : '' ; ?>>
-                                        Portuguese</option>
-                                    <option value="fr" <?php echo $native_lang_index==3 ? $sel : '' ; ?>>French
-                                    </option>
-                                    <option value="it" <?php echo $native_lang_index==4 ? $sel : '' ; ?>>Italian
-                                    </option>
-                                    <option value="de" <?php echo $native_lang_index==5 ? $sel : '' ; ?>>German
-                                    </option>
+                                    <?php
+                                        $iso_codes = Language::getIsoCodeArray();
+                                        $native_lang_iso = $user->getNativeLang();
+                                        $html = '';
+
+                                        foreach ($iso_codes as $iso_code => $iso_name) {
+                                            $selected = ($iso_code === $native_lang_iso) ? ' selected' : '';
+                                            $html .= '<option value="' . $iso_code . '"'
+                                                . $selected . '>'
+                                                . ucfirst($iso_name) . "</option>";
+                                        }
+
+                                        echo $html;
+                                    ?>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="to_lang">Active learning language:</label>
                                 <select name="to_lang" class="form-control form-select" id="to_lang">
-                                    <?php $lang_index = Language::getIndex($user->getLang()); ?>
-                                    <option value="en" <?php echo $lang_index==0 ? $sel : '' ; ?>>English
-                                    </option>
-                                    <option value="es" <?php echo $lang_index==1 ? $sel : '' ; ?>>Spanish
-                                    </option>
-                                    <option value="pt" <?php echo $lang_index==2 ? $sel : '' ; ?>>Portuguese
-                                    </option>
-                                    <option value="fr" <?php echo $lang_index==3 ? $sel : '' ; ?>>French
-                                    </option>
-                                    <option value="it" <?php echo $lang_index==4 ? $sel : '' ; ?>>Italian
-                                    </option>
-                                    <option value="de" <?php echo $lang_index==5 ? $sel : '' ; ?>>German
-                                    </option>
+                                    <?php
+                                        $learning_lang_iso = $user->getLang();
+                                        $html = '';
+
+                                        foreach ($iso_codes as $iso_code => $iso_name) {
+                                            $selected = ($iso_code === $learning_lang_iso) ? ' selected' : '';
+                                            $html .= '<option value="' . $iso_code . '"'
+                                                . $selected . '>'
+                                                . ucfirst($iso_name) . "</option>";
+                                        }
+
+                                        echo $html;
+                                    ?>
                                 </select>
                             </div>
                         </div>

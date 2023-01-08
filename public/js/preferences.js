@@ -41,6 +41,7 @@ $(document).ready(function() {
                     $("#msgbox")
                         .html(
                             "<strong>Great!</strong> Your preferences were successfully saved."
+                            + " You will soon be redirected to the main page."
                         )
                         .removeClass()
                         .addClass("alert alert-success");

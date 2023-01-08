@@ -43,7 +43,8 @@ try {
     // check password is valid
     $regex = '/(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}/';
     if (!preg_match($regex, $_POST['newpassword'])) {
-        throw new \Exception("Password must have at least 8 characters and contain letters, special characters and a digits. Please try again.");
+        throw new \Exception("Password must have at least 8 characters and contain letters, special characters"
+            . " and a digits. Please try again.");
     }
 
     // check password & password confirmation match
@@ -51,15 +52,16 @@ try {
         throw new \Exception("Passwords don't match. Please try again.");
     }
     
+    $user_data = [ 'username' => $_POST['username'],
+                   'email' => $_POST['email'],
+                   'password' => $_POST['newpassword'],
+                   'native_lang' => $_POST['native-lang'],
+                   'lang' => $_POST['learning-lang'],
+                   'time_zone' => $_POST['time-zone'],
+                   'send_email' => true];
+                    
     $user = new User($pdo);
-    $user->register(
-        $_POST['username'],
-        $_POST['email'],
-        $_POST['newpassword'],
-        $_POST['native-lang'],
-        $_POST['learning-lang'],
-        true
-    );
+    $user->register($user_data);
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());
     header('Content-Type: application/json');

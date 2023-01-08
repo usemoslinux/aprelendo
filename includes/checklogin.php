@@ -24,8 +24,10 @@ if (!isset($user)) {
     require_once 'dbinit.php'; // connect to database
 
     $user = new User($pdo);
+    $user_is_logged = $user->isLoggedIn();
+    $pdo->exec("SET time_zone='{$user->getTimeZone()}';"); // use user local time zone
 
-    if (!$user->isLoggedIn() && !isset($no_redirect)) {
+    if (!$user_is_logged && !isset($no_redirect)) {
         header('Location:/login.php');
         exit;
     }

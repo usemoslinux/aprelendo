@@ -41,11 +41,12 @@ $(document).ready(function() {
                     $("#msgbox")
                         .html(
                             "<strong>Great!</strong> Your user profile information was successfully saved."
+                            + " You will soon be redirected to the main page."
                         )
                         .removeClass()
                         .addClass("alert alert-success");
 
-                    window.location.replace("/texts");
+                    setTimeout(() => { window.location.replace("/texts"); }, 2000);
                 }
             })
             .fail(function() {

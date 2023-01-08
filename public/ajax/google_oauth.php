@@ -28,6 +28,7 @@ if (isset($_POST['id']) && !empty($_POST['id']) && !empty($_POST['email'])) {
         $google_email = $_POST['email']; //Email ID
         $google_name = $_POST['name']; //Name
         // $google_profile_pic = $_POST['pic']; //Profile Pic URL
+        $time_zone = $_POST['time_zone']; // browser time zone
 
         $user = new User($pdo);
 
@@ -39,7 +40,12 @@ if (isset($_POST['id']) && !empty($_POST['id']) && !empty($_POST['email'])) {
             $user->login($user->getName(), '', $google_id);
         } else {
             // new user
-            $user->register($google_name, $google_email, $google_id);
+            $user_data = [ 'username' => $google_name,
+                           'email' => $google_email,
+                           'password' => $google_id
+                         ];
+
+            $user->register($user_data);
             $user->login($google_name, $google_id);
         }
     } catch (\Exception $e) {

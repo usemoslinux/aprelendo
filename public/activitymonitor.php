@@ -56,7 +56,7 @@ $msg_progress_bar = "$nr_of_words_reviewed_today / 10";
 ?>
 
 <!-- Activity monitor -->
-<div class="row flex">
+<div id="activity-monitor" class="row flex">
     <div class="col-sm-12">
         <div class="card mb-3">
             <div class="card-body">

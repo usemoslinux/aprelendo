@@ -24,7 +24,8 @@ $(document).ready(function() {
     $("#form-register").on("submit", function(e) {
         e.preventDefault();
 
-        const form_data = $("#form-register").serialize();
+        const form_data = $("#form-register").serializeArray();
+        form_data.push({ name: "time-zone", value: Intl.DateTimeFormat().resolvedOptions().timeZone });
 
         showMessage("Processing...", "alert-info");
 
@@ -39,11 +40,8 @@ $(document).ready(function() {
                         "An email has been sent to your account with the activation link. Redirecting to login page...",
                         "alert-success"
                     );
-                    $("#form-register").fadeOut("fast", function() {
-                        $("#error-msg").fadeOut(4000, function() {
-                            window.location.replace("/login");
-                        });
-                    });
+                    
+                    setTimeout(() => { window.location.replace("/login"); }, 4000);
                 } else {
                     showMessage(data.error_msg, "alert-danger");
                 }

@@ -32,12 +32,11 @@ class User
     private $lang            = '';
     private $lang_id         = 0;
     private $native_lang     = '';
+    private $time_zone       = '';
     private $activation_hash = '';
     private $active          = false;
     private $google_id       = '';
-
-    private $time_fmt = 'Y-m-d H:i:s';
-    
+   
     private $error_msg = '';
     
     private $pdo;
@@ -74,6 +73,7 @@ class User
                 $this->email           = $row['email'];
                 $this->native_lang     = $row['native_lang_iso'];
                 $this->lang            = $row['learning_lang_iso'];
+                $this->time_zone       = $row['time_zone'];
                 $this->activation_hash = $row['activation_hash'];
                 $this->is_active       = $row['is_active'];
                 $this->google_id       = $row['google_id'];
@@ -111,6 +111,7 @@ class User
                 $this->email           = $row['email'];
                 $this->native_lang     = $row['native_lang_iso'];
                 $this->lang            = $row['learning_lang_iso'];
+                $this->time_zone       = $row['time_zone'];
                 $this->activation_hash = $row['activation_hash'];
                 $this->is_active       = $row['is_active'];
                 $this->google_id       = $row['google_id'];
@@ -192,29 +193,29 @@ class User
     /**
      * Creates new user & associated languages and reader preferences
      *
-     * @param string $username
-     * @param string $email
-     * @param string $password
-     * @param string $native_lang
-     * @param string $lang
+     * @param array $user_data
      * @return void
      */
-    public function register($username, $email, $password, $native_lang = 'en', $lang = 'en', $send_email = false): void
+    public function register(array $user_data): void
     {
-        $this->name = $username;
-        $this->email = $email;
-        $this->native_lang = $native_lang;
-        $this->lang = $lang;
+        // $username, $email, $password, $native_lang = 'en', $lang = 'en', $send_email = false
+        $this->name = $user_data['username'];
+        $this->email = $user_data['email'];
+        $password = $user_data['password'];
+        $this->native_lang = isset($user_data['native_lang']) ? $user_data['native_lang'] : 'en';
+        $this->lang = isset($user_data['lang']) ? $user_data['lang'] : 'en';
+        $this->time_zone = isset($user_data['time_zone']) ? $user_data['time_zone'] : 'UTC';
+        $send_email = isset($user_data['send_email']) ? $user_data['send_email'] : false;
         $this->active = false;
 
         try {
             // check if user already exists
-            if ($this->existsByName($username)) {
+            if ($this->existsByName($this->name)) {
                 throw new \Exception('Username already exists. Please try again.');
             }
             
             // check if email already exists
-            if ($this->existsByEmail($email)) {
+            if ($this->existsByEmail($this->email)) {
                 throw new \Exception('Email already exists. Did you <a class="alert-link" href="/forgotpassword">'
                     . 'forget</a> you username or password?');
             }
@@ -229,11 +230,11 @@ class User
             // save user data in db
             $user_active = !$send_email;
             $sql = "INSERT INTO `{$this->table}` (`name`, `password_hash`, `email`, `native_lang_iso`,
-                `learning_lang_iso`, `activation_hash`, `is_active`)
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
+                `learning_lang_iso`, `time_zone`, `activation_hash`, `is_active`)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$username, $password_hash, $email, $native_lang, $lang, $activation_hash,
-                (int)$user_active]);
+            $stmt->execute([$this->name, $password_hash, $this->email, $this->native_lang,
+                $this->lang, $this->time_zone, $activation_hash, (int)$user_active]);
 
             if ($stmt->rowCount() == 0) {
                 throw new \Exception('There was an unexpected error trying to create user record.');
@@ -243,7 +244,7 @@ class User
 
             // create & save default language preferences for user
             $lang = new Language($this->pdo, $user_id);
-            $lang->createInitialRecordsForUser($native_lang);
+            $lang->createInitialRecordsForUser($this->native_lang);
 
             $sql = "INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`,
                     `display_mode`, `assisted_learning`)
@@ -256,7 +257,7 @@ class User
             }
 
             if ($send_email) {
-                $this->sendActivationEmail($email, $username, $activation_hash);
+                $this->sendActivationEmail($this->email, $this->name, $activation_hash);
             }
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to register user.');
@@ -442,23 +443,18 @@ class User
     /**
      * Updates user profile in db
      *
-     * @param string $new_username
-     * @param string $new_email
-     * @param string $password
-     * @param string $new_password
-     * @param string $new_native_lang
-     * @param string $new_lang
+     * @param array $user_data
      * @return void
      */
-    public function updateUserProfile(
-        string $new_username,
-        string $new_email,
-        string $password,
-        string $new_password,
-        string $new_native_lang,
-        string $new_lang
-        ): void
+    public function updateUserProfile(array $user_data): void
     {
+        $new_username = $user_data['new_username'];
+        $new_email = $user_data['new_email'];
+        $password = $user_data['password'];
+        $new_password = $user_data['new_password'];
+        $new_native_lang = $user_data['new_native_lang'];
+        $new_lang = $user_data['new_lang'];
+
         try {
             // check if $password is correct, without it user would not have the right priviliges to update his profile
             $authorized = $this->checkPassword($password);
@@ -780,6 +776,15 @@ class User
     public function getNativeLang(): string
     {
         return $this->native_lang;
+    }
+
+    /**
+     * Get the value of time_zone
+     * @return string
+     */
+    public function getTimeZone(): string
+    {
+        return $this->time_zone;
     }
 
     /**
