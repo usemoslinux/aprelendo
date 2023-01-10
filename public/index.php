@@ -205,7 +205,7 @@ require_once PUBLIC_PATH . 'head.php';
                         <span class="fas fa-mobile-alt display-1 pb-3"></span>
                         <h4>Use it on any device</h4>
                         <p>You can use Aprelendo on mobile and desktop devices as long as they have
-                            an Internet connection. We offer addons for Firefox and Chrome to easily
+                            an Internet connection. We offer addons for Firefox, Chrome and Edge to easily
                             add texts to your library, as well as bookmarklets for those who prefer
                             a browser agnostic solution.</p>
                         <p>

@@ -49,22 +49,29 @@ if (!$user->isLoggedIn()) {
                 <div class="row flex simple-text">
                     <div class="col-sm-12">
                         <section>
-                            <h4>Extensions</h4>
+                            <h4 id="extensions">Extensions</h4>
                             <p>Install the extension that corresponds to your favorite Web browser by clicking on the
                                 matching button below.</p>
                             <div class="btn-group">
-                                <a href="https://chrome.google.com/webstore/detail/aprelendo/aocicejjgilfkeeklfcomejgphjhjonj/related?hl=en-US"
-                                    target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                                <btn type="button" class="btn btn-success"
+                                    onclick="window.open('//chrome.google.com/webstore/detail/aprelendo/aocicejjgilfkeeklfcomejgphjhjonj/related?hl=en-US', '_blank')">
                                     <span class="fab fa-chrome"></span>&nbsp;Install Chrome extension
-                                </a>
-                                <a href="https://addons.mozilla.org/en-US/firefox/addon/aprelendo/" target="_blank"
-                                    rel="noopener noreferrer" class="btn btn-danger">
+                                </btn>
+                                <btn type="button" class="btn btn-primary"
+                                    onclick="window.open('//microsoftedge.microsoft.com/addons/detail/aprelendo/ckgnfejigfdfppodkhfmdbockfilcefg', '_blank')">
+                                    <span class="fab fa-edge"></span>&nbsp;Install Edge extension
+                                </btn>
+                                <btn type="button" class="btn btn-danger"
+                                    onclick="window.open('//addons.mozilla.org/en-US/firefox/addon/aprelendo/', '_blank')">
                                     <span class="fab fa-firefox"></span>&nbsp;Install Firefox extension
-                                </a>
+                                </btn>
                             </div>
                             <p>Once installed, click the Aprelendo button (which should have been added to your
                                 browser's main toolbar) to import the content of the page being displayed in the
-                                active tab.</p>
+                                active tab. You can also use the extension's shortcut. By default, it is set to 
+                                <kbd>Shift</kbd>+<kbd>Ctrl</kbd>+<kbd>L</kbd>, but you may need to configure this
+                                manually.
+                            </p>
                             <p>For a step-by-step guide, we recommend you to watch the following video:</p>
                             <iframe width="560" height="315" style="max-width: 100%; text-align:center;"
                                 src="https://www.youtube.com/embed/6ShMD6uu1bk" title="YouTube video player"
@@ -73,7 +80,7 @@ if (!$user->isLoggedIn()) {
                         </section>
                         <br>
                         <section>
-                            <h4>Bookmarklets</h4>
+                            <h4 id="bookmarklets">Bookmarklets</h4>
                             <p>Bookmarklets are a "one-click" tool which add functionality to the browser. From a user
                                 perspective, they work very much like regular bookmarks.</p>
                             <p>For more information on bookmarklets, we suggest reading
