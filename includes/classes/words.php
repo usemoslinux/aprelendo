@@ -91,9 +91,9 @@ class Words extends DBEntity
         try {
             $in  = str_repeat('?,', count($words) - 1) . '?';
 
-            $sql = "UPDATE `{$this->table}` SET `status`=`status`-1, `date_modified`=NOW()
-                    WHERE `user_id`=? AND `lang_id`=? AND `word`
-                    IN ($in)";
+            $sql = "UPDATE `{$this->table}`
+                    SET `date_modified`=NOW(), `status`=CASE WHEN `status` > 0 THEN `status`-1 ELSE 0 END 
+                    WHERE `user_id`=? AND `lang_id`=? AND `word` IN ($in)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute(array_merge([$this->user_id, $this->lang_id], $words));
         } catch (\PDOException $e) {

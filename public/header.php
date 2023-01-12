@@ -35,7 +35,7 @@ if (isset($_GET['lang']) && !empty($_GET['lang'])) {
 
 $lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
 
-$gems = new Gems($pdo, $user->getId(), $user->getLangId());
+$gems = new Gems($pdo, $user->getId(), $user->getLangId(), $user->getTimeZone());
 $nr_of_gems  = (int)$gems->getGems();
 $streak_days = (int)$gems->getDaysStreak();
 

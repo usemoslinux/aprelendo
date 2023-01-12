@@ -113,7 +113,7 @@ use Aprelendo\Includes\Classes\Achievements;
             </dl>
         </section>
         <?php
-        $achievements = new Achievements($pdo, $user->getId(), $user->getLangId());
+        $achievements = new Achievements($pdo, $user->getId(), $user->getLangId(), $user->getTimeZone());
         $badges = $achievements->checkAll();
         $total_nr_of_badges = count($badges);
         

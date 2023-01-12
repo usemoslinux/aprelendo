@@ -20,6 +20,8 @@
 
 namespace Aprelendo\Includes\Classes;
 
+use Aprelendo\Includes\Classes\User;
+
 class Gems extends DBEntity
 {
     protected $id                 = 0;
@@ -28,6 +30,7 @@ class Gems extends DBEntity
     protected $gems               = 0;
     protected $last_study_session = null; // last study session date
     protected $days_streak        = 0;    // study streak
+    private   $time_zone          = '';
     
     /**
     * Constructor
@@ -38,11 +41,12 @@ class Gems extends DBEntity
     * @param int $user_id
     * @param int $lang_id
     */
-    public function __construct(\PDO $pdo, int $user_id, int $lang_id)
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id, string $time_zone)
     {
         parent::__construct($pdo, $user_id);
         $this->lang_id = $lang_id;
         $this->table = 'gems';
+        $this->time_zone = $time_zone;
         $this->loadUserRecord();
     } // end __construct()
 
@@ -112,7 +116,7 @@ class Gems extends DBEntity
                     $this->days_streak = 1;
                 }
 
-                $today = new \DateTime();  // current date/time
+                $today = new \DateTime("now", new \DateTimeZone($this->time_zone));  // current date/time
                 $today->setTime(0, 0, 0); // reset time part, to prevent partial comparison
                 $this->last_study_session = $today->format('Y-m-d H:i:s');
             }
@@ -146,7 +150,7 @@ class Gems extends DBEntity
             return -365;
         }
         
-        $today = new \DateTime();  // current date/time
+        $today = new \DateTime("now", new \DateTimeZone($this->time_zone));  // current date/time
         $today->setTime(0, 0, 0); // reset time part, to prevent partial comparison
         
         $last_study_session = \DateTime::createFromFormat('Y-m-d H:i:s', $last_study_session);

@@ -745,19 +745,19 @@ $(document).ready(function() {
      */
     function archiveTextAndSaveWords() {
         // build array with underlined words
-        let oldwords = [];
+        let unique_words = [];
         let id = [];
         let word = "";
         let archive_text = true;
         const is_shared = $("#is_shared").length > 0;
         let gems_earned = 0;
 
-        $(".learning").each(function() {
+        $(".learned, .learning").each(function() {
             word = $(this)
                 .text()
                 .toLowerCase();
-            if ($.inArray(word, oldwords) == -1) {
-                oldwords.push(word);
+            if ($.inArray(word, unique_words) == -1) {
+                unique_words.push(word);
             }
         });
 
@@ -772,7 +772,7 @@ $(document).ready(function() {
             type: "POST",
             url: "/ajax/archivetext.php",
             data: {
-                words: oldwords,
+                words: unique_words,
                 textIDs: JSON.stringify(id),
                 archivetext: archive_text
             }

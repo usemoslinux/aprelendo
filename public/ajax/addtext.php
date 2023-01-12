@@ -196,7 +196,7 @@ try {
                 'new' => 1
                 )
             );
-        $gems = new Gems($pdo, $user_id, $lang_id);
+        $gems = new Gems($pdo, $user_id, $lang_id, $user->getTimeZone());
         $new_gems = $gems->updateScore($events);
     }
 } catch (Exception $e) {

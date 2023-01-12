@@ -33,7 +33,7 @@ if (isset($_POST['words']) || isset($_POST['texts'])) {
     $lang_id = $user->getLangId();
     
     try {
-        $gems = new Gems($pdo, $user_id, $lang_id);
+        $gems = new Gems($pdo, $user_id, $lang_id, $user->getTimeZone());
         $new_gems = $gems->updateScore($_POST);
 
         $result = array('gems_earned' => $new_gems);

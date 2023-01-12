@@ -27,6 +27,7 @@ use Aprelendo\Includes\Classes\Words;
 class Achievements extends DBEntity
 {
     private $lang_id = 0;
+    private $time_zone = '';
     
     /**
     * Constructor
@@ -35,10 +36,11 @@ class Achievements extends DBEntity
     * @param int $user_id
     * @param int $lang_id
     */
-    public function __construct(\PDO $pdo, int $user_id, int $lang_id)
+    public function __construct(\PDO $pdo, int $user_id, int $lang_id, string $time_zone)
     {
         parent::__construct($pdo, $user_id);
         $this->lang_id = $lang_id;
+        $this->time_zone = $time_zone;
     } // end __construct()
     
     /**
@@ -49,7 +51,7 @@ class Achievements extends DBEntity
     public function checkAll(): ?array
     {
         // count gems & streak days
-        $gems = new Gems($this->pdo, $this->user_id, $this->lang_id);
+        $gems = new Gems($this->pdo, $this->user_id, $this->lang_id, $this->time_zone);
         $nr_of_gems  = (int)$gems->getGems();
         $streak_days = (int)$gems->getDaysStreak();
         

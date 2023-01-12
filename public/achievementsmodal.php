@@ -23,7 +23,7 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set
 
 use Aprelendo\Includes\Classes\Achievements;
 
-$achievements = new Achievements($pdo, $user->getId(), $user->getLangId());
+$achievements = new Achievements($pdo, $user->getId(), $user->getLangId(), $user->getTimeZone());
 
 $unnanounced_achievements = $achievements->checkUnannounced();
 $achievements->saveUnannounced($unnanounced_achievements);
