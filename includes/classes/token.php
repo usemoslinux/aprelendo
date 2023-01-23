@@ -110,7 +110,7 @@ class Token extends DBEntity
             
         // check if valid token is already in db
         if (!empty($this->token)) {
-            // a valid token is already in the db
+            // a valid token is already in the db (force use of https)
             if (!setcookie('user_token', $this->token, strtotime($this->expires), "/", $domain, true)) {
                 throw new \Exception('There was an unexpected error trying to create token cookie.');
             }

@@ -34,12 +34,12 @@ class Pagination
   /**
    * Constructor
    *
+   * @param int $total_rows Total amount of rows
    * @param int $page Current page number
    * @param int $limit How many rows to show
-   * @param int $total_rows Total amount of rows
    * @param int $adjacents How many adjacent pages to show in pagination
    */
-  public function __construct(int $page = 1, int $limit = 10, int $total_rows, int $adjacents = 2)
+  public function __construct(int $total_rows, int $page = 1, int $limit = 10, int $adjacents = 2)
   {
     $this->limit = $limit;
     $this->adjacents = $adjacents;

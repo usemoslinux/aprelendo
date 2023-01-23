@@ -57,7 +57,7 @@ $search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';
 $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
 
 $total_rows = $texts_table->countSearchRows($filter_type, $filter_level, $search_text);
-$pagination = new Pagination($page, $limit, $total_rows, $adjacents);
+$pagination = new Pagination($total_rows, $page, $limit, $adjacents);
 $offset = $pagination->getOffset();
 
 try {

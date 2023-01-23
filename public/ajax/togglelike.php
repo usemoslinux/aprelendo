@@ -29,9 +29,13 @@ if (!isset($_POST) || empty($_POST)) {
 use Aprelendo\Includes\Classes\Likes;
 
 try {
-    if ($_POST['id']) {
+    if ($_POST['id'] && $_POST['toggle_like']) {
         $like = new Likes($pdo, $_POST['id'], $user->getId(), $user->getLangId());
-        $like->toggle();
+        if ($_POST['toggle_like'] === "true") {
+            $like->toggle();
+        } else {
+            echo json_encode(array('user_liked' => $like->userLiked()));
+        }
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

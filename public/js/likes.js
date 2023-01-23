@@ -18,6 +18,27 @@
  */
 
 $(document).ready(function() {
+    
+    // if heart button is inside sidebar (then, it is appears in showtext or showvideo)
+    // check if user liked this text/video and toggle heart button accordingly
+    if ($('.sidebar .far.fa-heart').length) {
+        const $like_btn = $(this);
+        const text_id = $("#text-container").attr("data-textid");
+        $.ajax({
+            type: "POST",
+            url: "ajax/togglelike.php",
+            data: { id: text_id, toggle_like: false },
+        })
+        .done(function(data) {
+            if (data.user_liked === true) {
+                toggleLike($like_btn);
+            } 
+        })
+        .fail(function(xhr, ajaxOptions, thrownError) {
+            console.log("Oops! There was an unexpected error verifying if you liked this text/video");
+        });
+    }
+    
     /**
      * Toggles like for text
      * Triggers when user clicks on a heart
@@ -31,16 +52,16 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "ajax/togglelike.php",
-            data: { id: text_id }
+            data: { id: text_id, toggle_like: true }
         })
             .done(function(data) {
                 if (data.error_msg) {
-                    alert("Oops! There was an unexpected error");
+                    console.log("Oops! There was an unexpected error");
                     toggleLike($like_btn);
                 }
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
-                alert("Oops! There was an unexpected error");
+                console.log("Oops! There was an unexpected error");
                 toggleLike($like_btn);
             });
     }); // end span.fa-heart.on.click

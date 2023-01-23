@@ -32,14 +32,15 @@ class User
     private $lang            = '';
     private $lang_id         = 0;
     private $native_lang     = '';
-    private $time_zone       = '';
+    private $time_zone       = 'UTC';
     private $activation_hash = '';
-    private $active          = false;
+    private $is_active       = false;
     private $google_id       = '';
    
     private $error_msg = '';
     
     private $pdo;
+    private $table;
     
     /**
      * Constructor
@@ -206,7 +207,7 @@ class User
         $this->lang = isset($user_data['lang']) ? $user_data['lang'] : 'en';
         $this->time_zone = isset($user_data['time_zone']) ? $user_data['time_zone'] : 'UTC';
         $send_email = isset($user_data['send_email']) ? $user_data['send_email'] : false;
-        $this->active = false;
+        $this->is_active = false;
 
         try {
             // check if user already exists
@@ -797,12 +798,12 @@ class User
     }
 
     /**
-     * Get the value of active
+     * Get the value of is_active
      * @return bool
      */
-    public function getActive(): bool
+    public function getIsActive(): bool
     {
-        return $this->active;
+        return $this->is_active;
     }
 
     /**

@@ -42,7 +42,7 @@ require_once PUBLIC_PATH . 'head.php';
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h1>Improve your language skills<br>by reading<br> your favorite texts</h1>
+                            <h1>Learn a new language<br>one story at a time</h1>
                             <h5>Want to know more about our method?<br>
                             It&#39;s called
                                 <a href="/totalreading">

@@ -55,7 +55,7 @@ $search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';
 
 $words_table = new Words($pdo, $user_id, $lang_id);
 $total_rows = $words_table->countSearchRows($search_text);
-$pagination = new Pagination($page, $limit, $total_rows, $adjacents);
+$pagination = new Pagination($total_rows, $page, $limit, $adjacents);
 $offset = $pagination->getOffset();
 
 try {

@@ -60,7 +60,7 @@ if ($show_archived) {
 }
 
 $total_rows = $texts_table->countSearchRows($filter_type, $filter_level, $search_text);
-$pagination = new Pagination($page, $limit, $total_rows, $adjacents);
+$pagination = new Pagination($total_rows, $page, $limit, $adjacents);
 $offset = $pagination->getOffset();
 
 // get search result
