@@ -33,7 +33,7 @@ class Log extends DBEntity
             $sql = "SELECT COUNT(*) AS `exists`
                     FROM `{$this->table}`
                     WHERE `user_id` = ?
-                    AND DATE(`date_created`) = CURDATE()";
+                    AND `date_created` = CURDATE()";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id]);
@@ -56,17 +56,17 @@ class Log extends DBEntity
     public function addRecord(): void
     {
         try {
-            $today = date("Y-m-d H:i:s");
-
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `date_created`)
-                    VALUES (?, ?)";
+                    VALUES (?, CURDATE())";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $today]);
+            $stmt->execute([$this->user_id]);
                     
             if ($stmt->rowCount() == 0) {
                 throw new \Exception('There was an unexpected error trying to add log record.');
             }
+
+            $this->purge_old(); // if successful, purge old records
         } catch (\PDOException $e) {
             throw new \Exception('There was an unexpected error trying to add log record.');
         } finally {
@@ -76,12 +76,21 @@ class Log extends DBEntity
 
     /**
      * Remove old log records
-     * @todo Something
      *
      * @return void
      */
-    public function purge_old()
+    private function purge_old()
     {
+        try {
+            $sql = "DELETE FROM `{$this->table}`
+                    WHERE `date_created` < NOW() - INTERVAL 2 DAY";
 
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            throw new \Exception('There was an unexpected error trying to purge old log records.');
+        } finally {
+            $stmt = null;
+        }
     }
 }
