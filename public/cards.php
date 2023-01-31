@@ -46,25 +46,33 @@ require_once PUBLIC_PATH . 'header.php';
                         <div id="alert-msg" class="d-none"></div>
                     </div>
                     <div class="col-sm-12">
-                        <div class="d-flex justify-content-center">
-                            <div id="card" class="card text-center" style="min-width: 100%;">
-                                <div id="card-header" class="card-header"></div>
-                                <div class="card-body">
-                                    <div id="card-loader" class="lds-ellipsis m-auto">
-                                        <div></div><div></div><div></div><div></div>
-                                    </div>
-                                    <p id="card-text" class="card-text"></p>
+                        <div id="card" class="card text-center" style="min-width: 100%;">
+                            <div id="card-header" class="card-header fw-bold">...</div>
+                            <div class="card-body">
+                                <div id="card-loader" class="lds-ellipsis m-auto">
+                                    <div></div><div></div><div></div><div></div>
                                 </div>
-                                <div id="card-footer" class="card-footer">
-                                    <p id="card-counter" class="card-text"></p>
-                                    <p class="card-text">Did you remember the meaning?</p>
-                                    <button id="btn-remember-yes" type="button" class="btn btn-success btn-remember">
-                                        Yes
-                                    </button>
-                                    <button id="btn-remember-no" type="button" class="btn btn-danger btn-remember">
-                                        No
-                                    </button>
-                                </div>
+                                <p id="card-text" class="card-text"></p>
+                            </div>
+                            <div id="card-footer" class="card-footer">
+                                <p id="card-counter"></p>
+                                <p class="fw-bold">How well did you remember the meaning of this word?</p>
+                                <button id="btn-answer-no-recall" type="button" value="3" class="btn btn-lg btn-danger btn-answer mb-3"
+                                    title="I have absolutely no memory of the meaning of this word, even after reviewing the example phrases.">
+                                    No recall
+                                </button>
+                                <button id="btn-answer-fuzzy" type="button" value="2" class="btn btn-lg btn-warning btn-answer mb-3"
+                                    title="I have a general idea of what this word means, but my understanding is hazy and uncertain, even after seeing the example phrases.">
+                                    Fuzzy
+                                </button>
+                                <button id="btn-answer-partial" type="button" value="1" class="btn btn-lg btn-info btn-answer mb-3"
+                                    title="I have a good overall understanding of the meaning of this word, but I am unable to recall all the details or provide a complete and accurate definition, even after reviewing the example phrases.">
+                                    Partial
+                                </button>
+                                <button id="btn-answer-excellent" type="button" value="0" class="btn btn-lg btn-success btn-answer mb-3"
+                                    title="I have a clear and thorough understanding of the meaning of this word, which I have confirmed by reviewing the example phrases." >
+                                    Excellent
+                                </button>
                             </div>
                         </div>
                     </div>

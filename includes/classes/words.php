@@ -109,11 +109,10 @@ class Words extends DBEntity
      * @param array $words array containing all the words to update
      * @return void
      */
-    public function updateStatus(string $word, bool $forgot): void
+    public function updateStatus(string $word, int $status): void
     {
         try {
-            $forgot = $forgot ? "3" : "CASE WHEN `status` > 0 THEN `status` - 1 ELSE 0 END";
-            $sql = "UPDATE `{$this->table}` SET `status`=$forgot, `date_modified`=NOW()
+            $sql = "UPDATE `{$this->table}` SET `status`=$status, `date_modified`=NOW()
                     WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $word]);

@@ -26,7 +26,14 @@ $(document).ready(function() {
     let max_cards = 10;                 // maximum nr. of cards
     let cur_word_index = 0;             // current word index
     let cur_card_index = 0;             // current word index
-    let words_recalled = 0;             // nr. of words recalled during practice
+
+    // nr. of words recalled during practice
+    let answers = [
+        ["0", 0, "bg-success", "Excellent"],
+        ["1", 0, "bg-info", "Partial"],
+        ["2", 0, "bg-warning", "Fuzzy"],
+        ["3", 0, "bg-danger", "No recall"],
+    ];
 
     // initialize modal dictionary window buttons
     // $("#btn-translate").hide();
@@ -37,7 +44,7 @@ $(document).ready(function() {
     $(".modal-header").addClass("p-0");
 
     // disable Yes/No buttons
-    $(".btn-remember").prop('disabled', true);
+    $(".btn-answer").prop('disabled', true);
   
     // ajax call to get dictionary URI
     $.ajax({
@@ -104,7 +111,7 @@ $(document).ready(function() {
         // empty card and show spinner
         $("#card-loader").removeClass('d-none');
         $("#card-text").empty();
-        $("#card-header").html("<h3 class='m-0'>Looking for examples of <b>" + word + "</b>...</h3>");
+        $("#card-header").html("Looking for examples of " + word + "...");
 
         $.ajax({
             type: "POST",
@@ -148,7 +155,7 @@ $(document).ready(function() {
 
                 // if example sentence is empty, go to next card
                 if (examples == "") {
-                    $("#card-header").html("Skipped <b>" + word + "</b>. No examples found.");
+                    $("#card-header").html("Skipped. No examples found.");
                     cur_word_index++;
                     getExampleSentencesforCard(words[cur_word_index]);
                     return;
@@ -158,9 +165,9 @@ $(document).ready(function() {
                 $("#card").data('word', word);
                 $("#card-loader").addClass('d-none');
                 $("#card-counter").text((cur_card_index+1) + "/" + max_cards);
-                $("#card-header").html("<h3 class='m-0'>" + word + "</h3>");
+                $("#card-header").html(word);
                 $("#card-text").append(examples);
-                $(".btn-remember").prop('disabled', false);
+                $(".btn-answer").prop('disabled', false);
                 cur_word_index++;
                 cur_card_index++;
             })
@@ -191,10 +198,23 @@ $(document).ready(function() {
             return true;
         } else if (cur_card_index > max_cards-1) {
             $("#card-header").text("Congratulations!");
+
+            let progress_html = "";
+            for(let i = 0; i < answers.length; i++) {
+                let subtotal = answers[i][1];
+                let percentage = subtotal / max_cards * 100;
+                let bg_class = answers[i][2];
+                let title = answers[i][3];
+
+                progress_html += "<div class='progress-bar " + bg_class + "' role='progressbar' aria-valuenow='" + 
+                    percentage + "' aria-valuemin='0' aria-valuemax='100' style='width: " + percentage + "%' title='" +
+                    title + ": " + subtotal + " answer(s)'>" + percentage + " %</div>";
+            }
+
             $("#card-text").html("<div class='fa-solid fa-flag-checkered text-primary display-3 mt-3'></div>"
                 + "<div class='mt-3'>You have reached the end of your study.</div>"
-                + "<div class='mt-3'>You recalled " + words_recalled / max_cards * 100 + " % of the words ("
-                + words_recalled + " out of " + max_cards + ").</div>"
+                + "<div class='mt-3'>These were your results:</div>"
+                + "<div class='progress mt-3 fw-bold' style='height: 40px;'>" + progress_html + "</div>"
                 + "<div class='small mt-4'>If you want to continue, you can "
                 + "refresh this page (F5).<br>However, we strongly recommend that you keep your study sessions short "
                 + "and take rest intervals.</div>");
@@ -240,20 +260,21 @@ $(document).ready(function() {
     /**
      * Triggers when user clicks on answer (Yes/No) buttons
      */
-    $(".btn-remember").click(function (e) { 
+    $(".btn-answer").click(function (e) { 
         e.preventDefault();
         const word = $("#card").data('word');
-        const remember = e.currentTarget.id == "btn-remember-yes";
-        words_recalled = remember ? words_recalled + 1 : words_recalled;
+        const answer = $(this).attr("value");
+
+        answers[answer][1] = answers[answer][1] + 1;
 
         // disable Yes/No buttons
-        $(".btn-remember").prop('disabled', true);
+        $(".btn-answer").prop('disabled', true);
 
         // update card status
         $.ajax({
             type: "POST",
             url: "ajax/updatecard.php",
-            data: { word: word, remember: remember }
+            data: { word: word, answer: answer }
             // dataType: "json"
         })
         .done(function(data) {

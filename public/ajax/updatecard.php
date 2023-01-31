@@ -33,10 +33,9 @@ $lang_id = $user->getLangId();
 
 try {
     if (isset($_POST['word']) && !empty($_POST['word']) &&
-        isset($_POST['remember']) && !empty($_POST['remember'])) {
+        isset($_POST['answer'])) {
         $words_table = new Words($pdo, $user_id, $lang_id);
-        $forgot = $_POST['remember'] === "false";
-        $words_table->updateStatus($_POST['word'], $forgot);
+        $words_table->updateStatus($_POST['word'], (int)$_POST['answer']);
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());
