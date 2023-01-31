@@ -622,7 +622,7 @@ a[role="menuitem"] {
     padding: 15px;
 }
 
-/* RSS loader / spinner */
+/* Loader / spinner */
 .lds-ellipsis {
     /* display: inline-block; */
     position: relative;

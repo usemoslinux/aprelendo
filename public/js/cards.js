@@ -104,7 +104,7 @@ $(document).ready(function() {
         // empty card and show spinner
         $("#card-loader").removeClass('d-none');
         $("#card-text").empty();
-        $("#card-header").html("Looking for examples of <b>" + word + "</b>...");
+        $("#card-header").html("<h3 class='m-0'>Looking for examples of <b>" + word + "</b>...</h3>");
 
         $.ajax({
             type: "POST",
@@ -219,7 +219,7 @@ $(document).ready(function() {
         $("#btnadd").text("Forgot");
         
         // show loading spinner
-        $("#iframe-loader").attr('class','lds-ellipsis m-auto');
+        $("#loading-spinner").attr('class','lds-ellipsis m-auto');
         $dic_frame.attr('class','d-none');
 
         $dic_frame.get(0).contentWindow.location.replace(url);
@@ -233,7 +233,7 @@ $(document).ready(function() {
      * Hides loader spinner when dictionary iframe finished loading
      */
      $dic_frame.on("load", function() {
-        $("#iframe-loader").attr('class','d-none');
+        $("#loading-spinner").attr('class','d-none');
         $dic_frame.removeClass();
     }); // end $dic_frame.on.load()
 
