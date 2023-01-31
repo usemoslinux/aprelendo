@@ -130,7 +130,7 @@ class Likes extends DBEntity
                 throw new \Exception('There was an unexpected error trying to retrieve likes for this text.');
             }
 
-            return $result['user_liked'] === 1;
+            return $result['user_liked'] == 1;
         } catch (\PDOException $e) {
             return false;
         } finally {
