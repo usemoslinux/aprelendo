@@ -164,7 +164,7 @@ $(document).ready(function() {
         $("#btnremove").removeClass().addClass("btn btn-danger me-auto");
         
         // show loading spinner
-        $("#iframe-loader").attr('class','lds-ellipsis m-auto');
+        $("#loading-spinner").attr('class','lds-ellipsis m-auto');
         $dic_frame.attr('class','d-none');
 
         $dic_frame.get(0).contentWindow.location.replace(url);
@@ -178,7 +178,7 @@ $(document).ready(function() {
      * Hides loader spinner when dictionary iframe finished loading
      */
      $dic_frame.on("load", function() {
-        $("#iframe-loader").attr('class','d-none');
+        $("#loading-spinner").attr('class','d-none');
         $dic_frame.removeClass();
     }); // end $dic_frame.on.load()
 

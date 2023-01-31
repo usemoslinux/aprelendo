@@ -373,7 +373,7 @@ $(document).ready(function() {
         getWordFrequency($selword.text(), doclang);
         setAddDeleteButtons();
 
-        $doc.find("#iframe-loader").attr('class','lds-ellipsis m-auto');
+        $doc.find("#loading-spinner").attr('class','lds-ellipsis m-auto');
         $dic_frame.attr('class','d-none');
 
         // build translate sentence url
@@ -395,7 +395,7 @@ $(document).ready(function() {
      * Hides loader spinner when dictionary iframe finished loading
      */
     $dic_frame.on("load", function() {
-        $doc.find("#iframe-loader").attr('class','d-none');
+        $doc.find("#loading-spinner").attr('class','d-none');
         $dic_frame.removeClass();
     }); // end $dic_frame.on.load()
 

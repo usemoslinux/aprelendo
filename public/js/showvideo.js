@@ -380,7 +380,7 @@ $(document).ready(function() {
         getWordFrequency($selword.text(), doclang);
         setAddDeleteButtons();
 
-        $("#iframe-loader").attr('class','lds-ellipsis m-auto');
+        $("#loading-spinner").attr('class','lds-ellipsis m-auto');
         $("#dicFrame").attr('class','d-none');
 
         // build translate sentence url
@@ -597,7 +597,7 @@ $(document).ready(function() {
      * Hides loader spinner when dictionary iframe finished loading
      */
     $("#dicFrame").on("load", function() {
-        $("#iframe-loader").attr('class','d-none');
+        $("#loading-spinner").attr('class','d-none');
         $(this).removeClass();
     }); // end #dicFrame.on.load()
 
