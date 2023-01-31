@@ -35,7 +35,7 @@
             </div>
             <span id="bdgfreqlvl" class="badge d-none"></span>
             <div class="modal-body" id="definitions">
-                <div id="iframe-loader" class="lds-ellipsis m-auto">
+                <div id="loading-spinner" class="lds-ellipsis m-auto">
                     <div></div><div></div><div></div><div></div>
                 </div>
                 <iframe id="dicFrame" title="User dictionary" style="width:100%;border:none;"></iframe>
