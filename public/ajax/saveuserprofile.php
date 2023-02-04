@@ -26,6 +26,8 @@ if (!isset($_POST) || empty($_POST)) {
     exit;
 }
 
+use Aprelendo\Includes\Classes\AprelendoException;
+
 $user_id = $user->getId();
 
 // save user profile information
@@ -47,7 +49,7 @@ $user_data = [ 'new_username' => $username,
 try {
     if (empty($new_password1) && empty($new_password2)) {
         if (empty($password)) {
-            throw new \Exception('Please enter your current password and try again.');
+            throw new AprelendoException('Please enter your current password and try again.');
         } else {
             $user->updateUserProfile($user_data);
         }
@@ -56,10 +58,10 @@ try {
             if (mb_strlen($new_password1) >= 8) {
                 $user->updateUserProfile($user_data);
             } else {
-                throw new \Exception('New password should be at least 8 characters long. Please, try again.');
+                throw new AprelendoException('New password should be at least 8 characters long. Please, try again.');
             }
         } else {
-            throw new \Exception('Both new passwords should be identical. Please, try again.');
+            throw new AprelendoException('Both new passwords should be identical. Please, try again.');
         }
     }
 } catch (Exception $e) {

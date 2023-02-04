@@ -21,6 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\DBEntity;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class Preferences extends DBEntity
 {
@@ -34,7 +35,7 @@ class Preferences extends DBEntity
     /**
      * Constructor
      *
-     * @param PDO $pdo
+     * @param \PDO $pdo
      * @param int $user_id
      */
     public function __construct(\PDO $pdo, int $user_id)
@@ -90,11 +91,11 @@ class Preferences extends DBEntity
             $stmt->execute([$this->user_id, $this->font_family, $this->font_size, $this->line_height,
                 $this->text_alignment, $this->display_mode, $this->assisted_learning]);
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to save your preferences. '
+                throw new AprelendoException('There was an unexpected error trying to save your preferences. '
                     . 'Please, try again later.');
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to save your preferences. '
+            throw new AprelendoException('There was an unexpected error trying to save your preferences. '
                 . 'Please, try again later.');
         } finally {
             $stmt = null;
@@ -124,7 +125,7 @@ class Preferences extends DBEntity
                 $this->assisted_learning = $row['assisted_learning'];
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to load user preferences record.');
+            throw new AprelendoException('There was an unexpected error trying to load user preferences record.');
         } finally {
             $stmt = null;
         }

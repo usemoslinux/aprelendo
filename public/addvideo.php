@@ -62,7 +62,7 @@ require_once PUBLIC_PATH . 'header.php';
                         ?>
                             <div id="error-msg" class="d-none"></div>
                             <form id="form-addvideo" class="add-form" method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="mode" value="video" />
+                                <input type="hidden" name="mode" value="video">
                                 <input type="hidden" name="type" id="type" class="form-control" value="5">
                                 <div class="row">
                                     <div class="mb-3 col-sm-12">
@@ -107,6 +107,6 @@ require_once PUBLIC_PATH . 'header.php';
     </div>
 </div>
 
-<script defer src="js/addvideo-min.js"></script>
+<script defer src="js/addvideo.js"></script>
 
 <?php require_once 'footer.php'?>

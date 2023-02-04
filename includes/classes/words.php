@@ -20,9 +20,8 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\Connect;
 use Aprelendo\Includes\Classes\DBEntity;
-use Aprelendo\Includes\Classes\Conversion;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class Words extends DBEntity
 {
@@ -71,10 +70,10 @@ class Words extends DBEntity
                             $this->user_id, $this->lang_id, $word, $status]);
             
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to add record to words table.');
+                throw new AprelendoException('There was an unexpected error trying to add record to words table.');
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to add record to words table.');
+            throw new AprelendoException('There was an unexpected error trying to add record to words table.');
         } finally {
             $stmt = null;
         }
@@ -97,7 +96,7 @@ class Words extends DBEntity
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute(array_merge([$this->user_id, $this->lang_id], $words));
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to update record from words table.');
+            throw new AprelendoException('There was an unexpected error trying to update record from words table.');
         } finally {
             $stmt = null;
         }
@@ -117,7 +116,7 @@ class Words extends DBEntity
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $word]);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to update record from words table.');
+            throw new AprelendoException('There was an unexpected error trying to update record from words table.');
         } finally {
             $stmt = null;
         }
@@ -137,10 +136,10 @@ class Words extends DBEntity
             $stmt->execute([$this->user_id, $this->lang_id, $word]);
             
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to delete record from words table.');
+                throw new AprelendoException('There was an unexpected error trying to delete record from words table.');
             }
-        } catch (\Exception $e) {
-            throw new \Exception('There was an unexpected error trying to delete record from words table.');
+        } catch (\PDOException $e) {
+            throw new AprelendoException('There was an unexpected error trying to delete record from words table.');
         } finally {
             $stmt = null;
         }
@@ -162,10 +161,10 @@ class Words extends DBEntity
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute($ids_array);
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to delete record from words table.');
+                throw new AprelendoException('There was an unexpected error trying to delete record from words table.');
             }
-        } catch (\Exception $e) {
-            throw new \Exception('There was an unexpected error trying to delete record from words table.');
+        } catch (\PDOException $e) {
+            throw new AprelendoException('There was an unexpected error trying to delete record from words table.');
         } finally {
             $stmt = null;
         }
@@ -231,12 +230,12 @@ class Words extends DBEntity
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if (!$result || empty($result)) {
-                throw new \Exception('Oops! There are no words meeting your search criteria.');
+                throw new AprelendoException('Oops! There are no words meeting your search criteria.');
             }
 
             return $result;
         } catch (\PDOException $e) {
-            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
+            throw new AprelendoException('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }
@@ -288,7 +287,7 @@ class Words extends DBEntity
             $stmt->execute();
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
+            throw new AprelendoException('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }
@@ -310,7 +309,7 @@ class Words extends DBEntity
             $stmt->execute([$this->user_id, $this->lang_id]);
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
+            throw new AprelendoException('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }
@@ -332,7 +331,7 @@ class Words extends DBEntity
             $stmt->execute([$this->user_id, $this->lang_id]);
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
+            throw new AprelendoException('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }

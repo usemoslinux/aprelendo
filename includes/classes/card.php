@@ -21,7 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Language;
-use Aprelendo\Includes\Classes\Conversion;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class Card
 {
@@ -66,7 +66,7 @@ class Card
             $stmt->execute();
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to execute SQL query.');
+            throw new AprelendoException('There was an unexpected error trying to execute SQL query.');
         } finally {
             $stmt = null;
         }
@@ -109,7 +109,7 @@ class Card
             
             return $this->arrayUniqueMultidimensional($result); // avoid returning duplicate example sentences
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to execute SQL query.');
+            throw new AprelendoException('There was an unexpected error trying to execute SQL query.');
         } finally {
             $stmt = null;
         }

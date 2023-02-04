@@ -21,8 +21,8 @@
 require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
-use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\Curl;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 try {
     $options = array(
@@ -38,7 +38,7 @@ try {
         header('Content-Type: application/json');
         echo json_encode($result);
     } else {
-        throw new \Exception('There was a problem retrieving that URL. Please check it is not empty or malformed.');
+        throw new AprelendoException('There was a problem retrieving that URL. Please check it is not empty or malformed.');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

@@ -21,6 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Curl;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 require_once dirname(__DIR__) . '../../config/config.php';
 
@@ -37,7 +38,7 @@ class Paypal extends DBEntity
     /**
      * Constructor
      *
-     * @param PDO $pdo
+     * @param \PDO $pdo
      * @param int $user_id
      * @param boolean $enable_sandbox Paypal sandbox for testing purposes
      */
@@ -72,7 +73,7 @@ class Paypal extends DBEntity
                 $this->date_created    = $row['date_created'];
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to load payment record.');
+            throw new AprelendoException('There was an unexpected error trying to load payment record.');
         } finally {
             $stmt = null;
         }
@@ -112,14 +113,14 @@ class Paypal extends DBEntity
                                 
                 // check the payment_status is Completed
                 if ($response["payment_status"]!="Completed") {
-                    throw new \Exception('Payment not completed.');
+                    throw new AprelendoException('Payment not completed.');
                 }
             } else {
-                throw new \Exception('Oops! Your transaction could not be verified.');
+                throw new AprelendoException('Oops! Your transaction could not be verified.');
             }
 
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new AprelendoException($e->getMessage());
         }
 
         return $response;
@@ -148,10 +149,10 @@ class Paypal extends DBEntity
                             $today]);
 
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to add payment record. No rows added.');
+                throw new AprelendoException('There was an unexpected error trying to add payment record. No rows added.');
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to add payment record.');
+            throw new AprelendoException('There was an unexpected error trying to add payment record.');
         } finally {
             $stmt = null;
         }

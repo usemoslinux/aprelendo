@@ -20,7 +20,7 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class Gems extends DBEntity
 {
@@ -75,7 +75,7 @@ class Gems extends DBEntity
                 $this->days_streak        = ($diff_days == -1 || $diff_days == 0) ? $row['days_streak'] : 0;
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to load record from gems table.');
+            throw new AprelendoException('There was an unexpected error trying to load record from gems table.');
         } finally {
             $stmt = null;
         }
@@ -132,7 +132,7 @@ class Gems extends DBEntity
             
             return $gems;
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to update record from gems table.');
+            throw new AprelendoException('There was an unexpected error trying to update record from gems table.');
         } finally {
             $stmt = null;
         }

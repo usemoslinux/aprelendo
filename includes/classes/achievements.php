@@ -23,6 +23,7 @@ namespace Aprelendo\Includes\Classes;
 use Aprelendo\Includes\Classes\DBEntity;
 use Aprelendo\Includes\Classes\Gems;
 use Aprelendo\Includes\Classes\Words;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class Achievements extends DBEntity
 {
@@ -32,7 +33,7 @@ class Achievements extends DBEntity
     /**
     * Constructor
     *
-    * @param PDO $pdo
+    * @param \PDO $pdo
     * @param int $user_id
     * @param int $lang_id
     */
@@ -85,7 +86,7 @@ class Achievements extends DBEntity
         $stmt->execute([$this->user_id, $this->lang_id]);
         $db_achievements = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to insert new record in user '
+            throw new AprelendoException('There was an unexpected error trying to insert new record in user '
                 . 'achievements table.');
         } finally {
             $stmt = null;
@@ -129,7 +130,7 @@ class Achievements extends DBEntity
                 $stmt->execute([$this->user_id, $this->lang_id, $achievement['id']]);
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to insert new record in user '
+            throw new AprelendoException('There was an unexpected error trying to insert new record in user '
             . 'achievements table.');
         } finally {
             $stmt = null;

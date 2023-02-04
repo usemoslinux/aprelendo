@@ -59,7 +59,7 @@ require_once PUBLIC_PATH . 'header.php';
                     <div class="row">
                         <div class="mb-3 col-lg-6">
                             <label for="level">Level:</label>
-                            <select name="level" id="type" class="form-control form-select">
+                            <select name="level" id="level" class="form-control form-select">
                                 <option value="1">Beginner</option>
                                 <option value="2" selected>Intermediate</option>
                                 <option value="3">Advanced</option>

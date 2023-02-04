@@ -20,6 +20,8 @@
 
 namespace Aprelendo\Includes\Classes;
 
+use Aprelendo\Includes\Classes\AprelendoException;
+
 class File
 {
     protected $allowed_extensions = [];
@@ -53,7 +55,7 @@ class File
             return unlink($this->path);
         } else {
             if (!empty($this->name)) {
-                throw new \Exception('There was an error deleting the associated file.');
+                throw new AprelendoException('There was an error deleting the associated file.');
             }
         }
         return false;
@@ -103,14 +105,14 @@ class File
             try {
                 $this->move($temp_file_path, $this->path);
             } catch (\Exception $th) {
-                throw new \Exception('There was an unexpected error trying to move this file from the '
+                throw new AprelendoException('There was an unexpected error trying to move this file from the '
                 . 'temporary folder');
             }
 
             $this->name = $target_file_name;
         } else {
             $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
-            throw new \Exception($error_str);
+            throw new AprelendoException($error_str);
         }
     } // end put()
     
@@ -128,7 +130,7 @@ class File
         }
         // try to move file to uploads folder. If this fails, show error message
         if (!move_uploaded_file($source_path, $destination_path)) {
-            throw new \Exception("<li>Sorry, there was an error uploading your file.</li>");
+            throw new AprelendoException("<li>Sorry, there was an error uploading your file.</li>");
         }
     } // end move()
     

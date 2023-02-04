@@ -21,9 +21,9 @@
 require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
-use Aprelendo\Includes\Classes\User;
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\EbookFile;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 $user_id = $user->getId();
 $lang_id = $user->getLangId();
@@ -40,10 +40,10 @@ try {
         if ($ebook_content) {
             return $ebook_content;
         } else {
-            throw new \Exception(404);
+            throw new AprelendoException(404);
         }
     } else {
-        throw new \Exception(404);
+        throw new AprelendoException(404);
     }
 } catch (Exception $e) {
     http_response_code($e->getMessage());

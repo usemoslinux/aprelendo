@@ -21,7 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\DBEntity;
-use Aprelendo\Includes\Classes\Languages;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class PopularSources extends DBEntity
 {
@@ -70,7 +70,7 @@ class PopularSources extends DBEntity
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$lg_iso, $domain]);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to add record to the popular sources list.');
+            throw new AprelendoException('There was an unexpected error trying to add record to the popular sources list.');
         } finally {
             $stmt = null;
         }
@@ -100,7 +100,7 @@ class PopularSources extends DBEntity
                 $stmt->execute([$lg_iso, $domain]);
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to update record from the popular '
+            throw new AprelendoException('There was an unexpected error trying to update record from the popular '
                 . 'sources list.');
         } finally {
             $stmt = null;
@@ -117,7 +117,7 @@ class PopularSources extends DBEntity
     {
         try {
             if (!isset($lg_iso) || empty($lg_iso)) {
-                throw new \Exception('Wrong parameters provided to update record from the popular sources list.');
+                throw new AprelendoException('Wrong parameters provided to update record from the popular sources list.');
             }
 
             $sql = "SELECT * FROM `{$this->table}` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT 50";
@@ -127,12 +127,12 @@ class PopularSources extends DBEntity
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if (!$result || empty($result)) {
-                throw new \Exception('There was an unexpected error trying to get record from popular sources list.');
+                throw new AprelendoException('There was an unexpected error trying to get record from popular sources list.');
             }
 
             return $result;
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to get record from popular sources list.');
+            throw new AprelendoException('There was an unexpected error trying to get record from popular sources list.');
         } finally {
             $stmt = null;
         }

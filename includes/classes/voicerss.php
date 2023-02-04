@@ -21,6 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Curl;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class VoiceRSS
 {
@@ -45,16 +46,16 @@ class VoiceRSS
     private function validate($settings): void
     {
         if (!isset($settings) || empty($settings)) {
-            throw new \Exception('The settings are undefined');
+            throw new AprelendoException('The settings are undefined');
         }
         if (!isset($settings['key']) || empty($settings['key'])) {
-            throw new \Exception('The API key is undefined');
+            throw new AprelendoException('The API key is undefined');
         }
         if (!isset($settings['src']) || empty($settings['src'])) {
-            throw new \Exception('The text is undefined');
+            throw new AprelendoException('The text is undefined');
         }
         if (!isset($settings['hl']) || empty($settings['hl'])) {
-            throw new \Exception('The language is undefined');
+            throw new AprelendoException('The language is undefined');
         }
     } // end validate()
 

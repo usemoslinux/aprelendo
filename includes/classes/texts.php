@@ -24,6 +24,7 @@ use Aprelendo\Includes\Classes\File;
 use Aprelendo\Includes\Classes\PopularSources;
 use Aprelendo\Includes\Classes\Url;
 use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class Texts extends DBEntity
 {
@@ -35,7 +36,7 @@ class Texts extends DBEntity
     protected $audio_uri     = '';
     protected $source_uri    = '';
     protected $type          = 0;
-    protected $nr_of_words   = 0;
+    protected $word_count    = 0;
     protected $level         = 0;
     protected $date_created  = '';
     
@@ -70,7 +71,7 @@ class Texts extends DBEntity
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             
             if (!$row) {
-                throw new \Exception('There was an unexpected error trying to load record from texts table.');
+                throw new AprelendoException('There was an unexpected error trying to load record from texts table.');
             }
 
             $this->id            = $row['id'];
@@ -86,7 +87,7 @@ class Texts extends DBEntity
             $this->level         = $row['level'];
             $this->date_created  = $row['date_created'];
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to load record from texts table.');
+            throw new AprelendoException('There was an unexpected error trying to load record from texts table.');
         } finally {
             $stmt = null;
         }
@@ -122,7 +123,7 @@ class Texts extends DBEntity
         $xml_text = $this->extractFromXML($text);
 
         // count words in text
-        $nr_of_words = ($xml_text !== false)
+        $word_count = ($xml_text !== false)
             ? preg_match_all('/\w+/u', $xml_text, $words)
             : preg_match_all('/\w+/u', $text, $words);
 
@@ -141,11 +142,11 @@ class Texts extends DBEntity
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id,$this->lang_id, $title, $author, $text,
-                                      $source_url, $type, $nr_of_words, $level]);
+                                      $source_url, $type, $word_count, $level]);
             $insert_id = $this->pdo->lastInsertId();
 
             if ($stmt->rowCount() == 0 || $insert_id == 0) {
-                throw new \Exception('There was an unexpected error trying to add record to texts table.');
+                throw new AprelendoException('There was an unexpected error trying to add record to texts table.');
             }
 
             // add entry to popularsources
@@ -154,7 +155,7 @@ class Texts extends DBEntity
 
             return $insert_id;
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to add record to texts table.');
+            throw new AprelendoException('There was an unexpected error trying to add record to texts table.');
         } finally {
             $stmt = null;
         }
@@ -189,7 +190,7 @@ class Texts extends DBEntity
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $title, $author, $text, $source_url, $type, $id]);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to update record from texts table.');
+            throw new AprelendoException('There was an unexpected error trying to update record from texts table.');
         } finally {
             $stmt = null;
         }
@@ -221,7 +222,7 @@ class Texts extends DBEntity
             $stmt->execute($ids_array);
 
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to delete record from texts table.');
+                throw new AprelendoException('There was an unexpected error trying to delete record from texts table.');
             }
 
             // delete audio (mp3, oggs) & source files (epubs, etc.)
@@ -239,7 +240,7 @@ class Texts extends DBEntity
                 $pop_sources->update($lang->getName(), Url::getDomainName($uri['source_uri']));
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to delete record from texts table.');
+            throw new AprelendoException('There was an unexpected error trying to delete record from texts table.');
         } finally {
             $stmt = null;
         }
@@ -266,7 +267,7 @@ class Texts extends DBEntity
             $stmt->execute($ids_array);
             
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to insert record into texts table.');
+                throw new AprelendoException('There was an unexpected error trying to insert record into texts table.');
             }
 
             $delete_sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
@@ -274,11 +275,11 @@ class Texts extends DBEntity
             $stmt->execute($ids_array);
 
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to delete record from archived '
+                throw new AprelendoException('There was an unexpected error trying to delete record from archived '
                     . 'texts table.');
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to archive text.');
+            throw new AprelendoException('There was an unexpected error trying to archive text.');
         } finally {
             $stmt = null;
         }
@@ -405,12 +406,12 @@ class Texts extends DBEntity
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if (!$result || empty($result)) {
-                throw new \Exception('Oops! There are no texts meeting your search criteria.');
+                throw new AprelendoException('Oops! There are no texts meeting your search criteria.');
             }
 
             return $result;
         } catch (\PDOException $e) {
-            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
+            throw new AprelendoException('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }
@@ -480,8 +481,8 @@ class Texts extends DBEntity
             $frequency_list_words = [];     // array with all the words in the corresponding frequency list table
             $frequency_list_indexes = [];   // array with all the scores of the words in $frequency_list_words
             $words_in_text = [];            // array with all the valid words in $text
-            $sentences_in_text = [];        // array with all sentences in $text (only used to calculate $nr_of_words)
-            $nr_of_words = 0;               // number of words in $text
+            $sentences_in_text = [];        // array with all sentences in $text (only used to calculate $word_count)
+            $word_count = 0;               // number of words in $text
             $nr_of_sentences = 0;           // number of sentences in $text
             $score = 0;                     // readability score of $text
             $xml_text = '';                 // used to check if $text parameter is XML code
@@ -526,7 +527,7 @@ class Texts extends DBEntity
             }
 
             // calculate nr. of words & nr. of sentences in text
-            $nr_of_words = $this->countVocabTokens($lang_iso, $text, $words_in_text);
+            $word_count = $this->countVocabTokens($lang_iso, $text, $words_in_text);
             $nr_of_sentences = preg_match_all("/([?!.] \p{L}|^\s*?\p{L})/um", $text . ' ', $sentences_in_text);
 
             // check how many words in the frequency list where found in the "tokenized" list of words of the text
@@ -539,8 +540,8 @@ class Texts extends DBEntity
             }
             
             $nr_of_unknown_words = sizeof($words_in_text[0]) - sizeof($words_found);
-            $score = (0.6 * ($score + $nr_of_unknown_words * 100) / $nr_of_words)
-                + (2 * $nr_of_words / $nr_of_sentences);
+            $score = (0.6 * ($score + $nr_of_unknown_words * 100) / $word_count)
+                + (2 * $word_count / $nr_of_sentences);
 
             if ($score < 60) {
                 $result = 1; // beginner
@@ -552,7 +553,7 @@ class Texts extends DBEntity
             
             return $result;
         } catch (\PDOException $e) {
-            throw new \Exception('Oops! There was an unexpected error trying to calculate text difficulty level.');
+            throw new AprelendoException('Oops! There was an unexpected error trying to calculate text difficulty level.');
         } finally {
             $stmt = null;
         }
@@ -682,12 +683,12 @@ class Texts extends DBEntity
     } // getType()
 
     /**
-     * Get the value of nr_of_words
+     * Get the value of word_count
      */
-    public function getNrOfWords(): int
+    public function getWordCount(): int
     {
-        return $this->nr_of_words;
-    } // end getNrOfWords()
+        return $this->word_count;
+    } // end getWordCount()
 
     /**
      * Get the value of level

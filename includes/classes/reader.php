@@ -26,6 +26,7 @@ use Aprelendo\Includes\Classes\Language;
 use Aprelendo\Includes\Classes\Preferences;
 use Aprelendo\Includes\Classes\WordFrequency;
 use Aprelendo\Includes\Classes\Likes;
+use Aprelendo\Includes\Classes\AprelendoException;
 use SimpleXMLElement;
 
 class Text
@@ -74,8 +75,8 @@ class Text
             $this->author       = $row['author'];
             $this->source_uri   = $row['source_uri'];
             $this->is_long_text = mb_strlen($this->text) > self::MAX_TEXT_LENGTH;
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+        } catch (\PDOException $e) {
+            throw new AprelendoException($e->getMessage());
         } finally {
             $stmt = null;
         }
@@ -282,7 +283,7 @@ class Reader extends Text
             }
             return json_encode($result);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected problem loading the private list of words for this user.');
+            throw new AprelendoException('There was an unexpected problem loading the private list of words for this user.');
         }
     } // end getWordsForText()
 
@@ -433,9 +434,9 @@ class Reader extends Text
                     '<div style="height: 100vh; height: calc(var(--vh, 1vh) * 100);" class="d-flex flex-column">' .
                         '<div id="offline-video-container" class="ratio ratio-16x9 mt-1">' .
                         '<input id="video-file-input" type="file" name="video-file-input"
-                            accept="video/mp4,video/ogg,video/webm" style="display: none;" />' .
+                            accept="video/mp4,video/ogg,video/webm" style="display: none;">' .
                         '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt"
-                            style="display: none;" />' .
+                            style="display: none;">' .
                             '<video id="video-stream" controls controlsList="nofullscreen nodownload noremoteplayback"
                                 playsinline disablePictureInPicture>' .
                                 '<source src="' . $file . '"/>'.

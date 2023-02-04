@@ -23,6 +23,7 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in
 
 use Aprelendo\Includes\Classes\Reader;
 use Aprelendo\Includes\Classes\Likes;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 try {
     $html = '';
@@ -65,7 +66,7 @@ try {
         
         $html .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
-        throw new \Exception('Oops! There was an error trying to fetch that text.');
+        throw new AprelendoException('Oops! There was an error trying to fetch that text.');
     }
 } catch (Exception $e) {
     header('Location:/login');

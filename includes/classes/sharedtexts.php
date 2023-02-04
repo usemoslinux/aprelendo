@@ -20,9 +20,9 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\Connect;
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class SharedTexts extends Texts
 {
@@ -105,12 +105,12 @@ class SharedTexts extends Texts
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if (!$result || empty($result)) {
-                throw new \Exception('Oops! There are no texts meeting your search criteria.');
+                throw new AprelendoException('Oops! There are no texts meeting your search criteria.');
             }
 
             return $result;
         } catch (\PDOException $e) {
-            throw new \Exception('Oops! There was an unexpected error trying to process your search request.');
+            throw new AprelendoException('Oops! There was an unexpected error trying to process your search request.');
         } finally {
             $stmt = null;
         }

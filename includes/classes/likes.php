@@ -21,6 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\DBEntity;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class Likes extends DBEntity
 {
@@ -71,10 +72,10 @@ class Likes extends DBEntity
             }
 
             if ($stmt->rowCount() === 0) {
-                throw new \Exception('There was an unexpected error trying to toggle like for this text.');
+                throw new AprelendoException('There was an unexpected error trying to toggle like for this text.');
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to toggle like for this text.');
+            throw new AprelendoException('There was an unexpected error trying to toggle like for this text.');
         } finally {
             $stmt = null;
         }
@@ -98,7 +99,7 @@ class Likes extends DBEntity
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($stmt->rowCount() === 0) {
-                throw new \Exception('There was an unexpected error trying to retrieve likes for this text.');
+                throw new AprelendoException('There was an unexpected error trying to retrieve likes for this text.');
             }
 
             return $result['total_likes'];
@@ -127,7 +128,7 @@ class Likes extends DBEntity
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($stmt->rowCount() === 0) {
-                throw new \Exception('There was an unexpected error trying to retrieve likes for this text.');
+                throw new AprelendoException('There was an unexpected error trying to retrieve likes for this text.');
             }
 
             return $result['user_liked'] == 1;

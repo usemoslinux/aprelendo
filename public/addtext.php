@@ -72,8 +72,8 @@ use Aprelendo\Includes\Classes\Texts;
             <main>
                 <div id="alert-msg" class="d-none"></div>
                 <form id="form-addtext" class="add-form" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>" />
-                    <input type="hidden" name="mode" value="simple" />
+                    <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>">
+                    <input type="hidden" name="mode" value="simple">
                     <div class="row">
                         <div class="mb-3 col-lg-6">
                             <label for="type">Type:</label>
@@ -87,7 +87,7 @@ use Aprelendo\Includes\Classes\Texts;
                         </div>
                         <div class="mb-3 col-lg-6">
                             <label for="level">Level:</label>
-                            <select name="level" id="type" class="form-control form-select">
+                            <select name="level" id="level" class="form-control form-select">
                                 <option value="1">Beginner</option>
                                 <option value="2" selected>Intermediate</option>
                                 <option value="3">Advanced</option>
@@ -127,7 +127,7 @@ use Aprelendo\Includes\Classes\Texts;
                         <div class="col-12">
                             <div id="shared-text-wrapper-div">
                                 <input id="shared-text" class="form-check-input" type="checkbox" name="shared-text"
-                                    <?php if ($art_is_shared) {echo 'checked' ;}?>>
+                                    <?php if (!empty($art_is_shared)) {echo 'checked' ;}?>>
                                 <label class="form-check-label" for="shared-text" id="shared-text-label">
                                     &nbsp;Share text with our community
                                 </label>

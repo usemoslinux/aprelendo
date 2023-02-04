@@ -21,6 +21,8 @@
 require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
+use Aprelendo\Includes\Classes\AprelendoException;
+
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
     exit;
@@ -89,7 +91,7 @@ try {
                             : 'Look for it in your <a class="alert-link" href="/texts">private library</a>. '
                             . 'Remember that you may have <a class="alert-link" href="/texts?sa=1">archived</a> it.';
 
-                        throw new \Exception($msg);
+                        throw new AprelendoException($msg);
                     }
                     $level = $level == 0 ? $texts_table->calculateDifficulty($text) : $level;
                     $texts_table->add($title, $author, $text, $source_url, $audio_uri, $type, $level);
@@ -100,7 +102,7 @@ try {
                 http_response_code(204);
             } else {
                 $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
-                throw new \Exception($error_str);
+                throw new AprelendoException($error_str);
             }
         }
         break; // end of simple text or video
@@ -126,7 +128,7 @@ try {
                 $msg = 'The text you are trying to add already exists in our database. ';
                 $msg .= 'Look for it in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.';
 
-                throw new \Exception($msg);
+                throw new AprelendoException($msg);
             }
             
             // if successful, return insert_id in json format
@@ -142,7 +144,7 @@ try {
         
         case 'ebook':
         if (!isset($_POST['title']) || !isset($_POST['author']) || !isset($_FILES['url'])) {
-            throw new \Exception('Please, complete all the required fields: name, author & epub file.');
+            throw new AprelendoException('Please, complete all the required fields: name, author & epub file.');
         } else {
             $title = $_POST['title'];
             $author = $_POST['author'];
@@ -154,7 +156,7 @@ try {
 
             // check if file exists
             if (!isset($_FILES['url']) || $_FILES['url']['error'] === UPLOAD_ERR_NO_FILE) {
-                throw new \Exception('No file found. Please select a file to upload.');
+                throw new AprelendoException('No file found. Please select a file to upload.');
             }
 
             // check if user is allowed to upload file & does not exceed the daily upload limit
@@ -162,7 +164,7 @@ try {
             $nr_of_uploads_today = $file_upload_log->countTodayRecords();
 
             if ($nr_of_uploads_today >= 1) {
-                throw new \Exception('Sorry, you have reached your file upload limit for today.');
+                throw new AprelendoException('Sorry, you have reached your file upload limit for today.');
             }
 
             // upload file & create unique file name
@@ -182,7 +184,7 @@ try {
                 header('Content-Type: application/json');
                 echo json_encode($filename);
             } else { // in case of error, show message
-                throw new \Exception('Oops! There was an unexpected error when uploading this text.');
+                throw new AprelendoException('Oops! There was an unexpected error when uploading this text.');
             }
         }
         default:

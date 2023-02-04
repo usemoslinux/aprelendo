@@ -21,6 +21,8 @@
 require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
+use Aprelendo\Includes\Classes\AprelendoException;
+
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
     exit;
@@ -31,14 +33,14 @@ use Aprelendo\Includes\Classes\LogAudioStreams;
 
 try {
     if (!isset($_POST['text']) || empty($_POST['text'] || !isset($_POST['langiso']) || empty($_POST['langiso']))) {
-        throw new \Exception('Malformed request', 400);
+        throw new AprelendoException('Malformed request', 400);
     }
 
     $stream_log = new LogAudioStreams($pdo, $user->getId());
     $nr_of_streams_today = $stream_log->countTodayRecords();
 
     if ($nr_of_streams_today >= 3) {
-        throw new \Exception('Forbidden', 403);
+        throw new AprelendoException('Forbidden', 403);
     }
 
     $audiolang = array('ar' => 'ar-sa',
@@ -75,7 +77,7 @@ try {
     if ($voice['error'] === null && $voice['response']) {
         $stream_log->addRecord();
     } else {
-        throw new \Exception($voice['error'], 400);
+        throw new AprelendoException($voice['error'], 400);
     }
     
 } catch (\Exception $e) {

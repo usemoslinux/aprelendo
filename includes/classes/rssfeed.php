@@ -21,6 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Curl;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class RSSFeed
 {
@@ -103,10 +104,10 @@ class RSSFeed
                     }
                 }
             } else {
-                throw new \Exception('Oops! There was a problem trying to get this feed: ' . $url);
+                throw new AprelendoException('Oops! There was a problem trying to get this feed: ' . $url);
             }
         } else {
-            throw new \Exception('Oops! There was a problem trying to get this feed: ' . $url);
+            throw new AprelendoException('Oops! There was a problem trying to get this feed: ' . $url);
         }
     } // end fetchXMLFeed()
 

@@ -22,6 +22,7 @@ require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
 use Aprelendo\Includes\Classes\RSSFeeds;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 $user_id = $user->getId(); // get current user's ID
 $lang_id = $user->getLangId(); // get current language's ID
@@ -42,7 +43,7 @@ try {
         echo $html . '</div>';
     } else {
         // If all feeds are empty, throw exception with message
-        throw new \Exception('There are no RSS feeds to show. Please, add some in the <a class="alert-link" '
+        throw new AprelendoException('There are no RSS feeds to show. Please, add some in the <a class="alert-link" '
             . 'href="/languages.php">languages</a> section. You can add up to 3 feeds per language.');
     }
 } catch (Exception $e) {
@@ -128,7 +129,7 @@ function printRSSFeed($feed, $groupindex): string
         }
         $html .= '</div></div></div></div>';
     } else {
-        throw new \Exception("Oops! There was an error trying to fetch this feed:"
+        throw new AprelendoException("Oops! There was an error trying to fetch this feed:"
             . $feed->getUrl()
             . "\nIt is probably due to a malformed RSS feed.");
     }

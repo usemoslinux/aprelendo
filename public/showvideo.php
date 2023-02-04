@@ -23,6 +23,7 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in
 
 use Aprelendo\Includes\Classes\Reader;
 use Aprelendo\Includes\Classes\Videos;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 try {
     $id_is_set = isset($_GET['id']) && !empty($_GET['id']);
@@ -63,7 +64,7 @@ try {
         
         $body_css .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
-        throw new \Exception('Oops! There was an error trying to fetch that video.');
+        throw new AprelendoException('Oops! There was an error trying to fetch that video.');
     }
 } catch (Exception $e) {
     header('Location:/login');

@@ -20,8 +20,7 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\Connect;
-use Aprelendo\Includes\Classes\Conversion;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class ArchivedTexts extends Texts
 {
@@ -59,7 +58,7 @@ class ArchivedTexts extends Texts
             $stmt->execute($ids_array);
             
             if (!$stmt->rowCount()) {
-                throw new \Exception('There was an unexpected error trying to insert record into the texts table.');
+                throw new AprelendoException('There was an unexpected error trying to insert record into the texts table.');
             }
 
             $delete_sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
@@ -67,11 +66,11 @@ class ArchivedTexts extends Texts
             $stmt->execute($ids_array);
 
             if (!$stmt->rowCount()) {
-                throw new \Exception('There was an unexpected error trying to delete record from the archived '
+                throw new AprelendoException('There was an unexpected error trying to delete record from the archived '
                     . 'texts table.');
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to unarchive this text.');
+            throw new AprelendoException('There was an unexpected error trying to unarchive this text.');
         } finally {
             $stmt = null;
         }

@@ -20,6 +20,8 @@
 
 namespace Aprelendo\Includes\Classes;
 
+use Aprelendo\Includes\Classes\AprelendoException;
+
 class Log extends DBEntity
 {
     /**
@@ -40,11 +42,11 @@ class Log extends DBEntity
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$row) {
-                throw new \Exception('There was an unexpected error trying to get today\'s log records.');
+                throw new AprelendoException('There was an unexpected error trying to get today\'s log records.');
             }
             return $row['exists'];
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to get today\'s log records.');
+            throw new AprelendoException('There was an unexpected error trying to get today\'s log records.');
         }
     } // end countTodayRecords()
 
@@ -63,12 +65,12 @@ class Log extends DBEntity
             $stmt->execute([$this->user_id]);
                     
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to add log record.');
+                throw new AprelendoException('There was an unexpected error trying to add log record.');
             }
 
             $this->purge_old(); // if successful, purge old records
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to add log record.');
+            throw new AprelendoException('There was an unexpected error trying to add log record.');
         } finally {
             $stmt = null;
         }
@@ -88,7 +90,7 @@ class Log extends DBEntity
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute();
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to purge old log records.');
+            throw new AprelendoException('There was an unexpected error trying to purge old log records.');
         } finally {
             $stmt = null;
         }

@@ -26,13 +26,14 @@ if (!isset($_POST) || empty($_POST)) {
 }
 
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 try {
     if (isset($_POST['username']) && isset($_POST['password'])) {
         $user = new User($pdo);
         $user->login($_POST['username'], $_POST['password']);
     } else {
-        throw new \Exception('Either username, email or password were not provided. Please try again.');
+        throw new AprelendoException('Either username, email or password were not provided. Please try again.');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

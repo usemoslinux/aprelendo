@@ -22,6 +22,7 @@ require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
 use Aprelendo\Includes\Classes\Words;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 $user_id = $user->getId();
 $lang_id = $user->getLangId();
@@ -36,7 +37,7 @@ try {
     $result = $words_table->createCSVFile($search_text, $order_by);
 
     if (!$result) {
-        throw new \Exception('There was an unexpected error trying to export your word list');
+        throw new AprelendoException('There was an unexpected error trying to export your word list');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

@@ -22,6 +22,7 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\RSSFeed;
 use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class RSSFeeds
 {
@@ -54,7 +55,7 @@ class RSSFeeds
             $this->feed2 = new RSSFeed($feed2uri);
             $this->feed3 = new RSSFeed($feed3uri);
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new AprelendoException($e->getMessage());
         }
     } // end __construct()
 

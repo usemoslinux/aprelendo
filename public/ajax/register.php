@@ -26,30 +26,31 @@ if (!isset($_POST) || empty($_POST)) {
 }
 
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 try {
     // check username, email & password are set and not empty
     if (!isset($_POST['username']) || empty($_POST['username']) ||
         !isset($_POST['newpassword']) || empty($_POST['newpassword']) ||
         !isset($_POST['email'])    || empty($_POST['email'])) {
-        throw new \Exception('Either username, email or password were not provided. Please try again.');
+        throw new AprelendoException('Either username, email or password were not provided. Please try again.');
     }
 
     // check e-mail address is valid
     if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        throw new \Exception('Invalid e-mail address. Please try again.');
+        throw new AprelendoException('Invalid e-mail address. Please try again.');
     }
 
     // check password is valid
     $regex = '/(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}/';
     if (!preg_match($regex, $_POST['newpassword'])) {
-        throw new \Exception("Password must have at least 8 characters and contain letters, special characters"
+        throw new AprelendoException("Password must have at least 8 characters and contain letters, special characters"
             . " and a digits. Please try again.");
     }
 
     // check password & password confirmation match
     if ($_POST['newpassword'] != $_POST['newpassword-confirmation']) {
-        throw new \Exception("Passwords don't match. Please try again.");
+        throw new AprelendoException("Passwords don't match. Please try again.");
     }
     
     $user_data = [ 'username' => $_POST['username'],

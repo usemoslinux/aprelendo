@@ -28,6 +28,7 @@ if (!isset($_POST) || empty($_POST)) {
 
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\ArchivedTexts;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 try {
     if (isset($_POST['textIDs']) && isset($_POST['is_archived'])) {
@@ -45,7 +46,7 @@ try {
     
         $texts_table->delete($text_ids);
     } else {
-        throw new \Exception('There was an error in the parameters provided to remove this text');
+        throw new AprelendoException('There was an error in the parameters provided to remove this text');
     }
 } catch (\Exception $e) {
     $error = array('error_msg' => $e->getMessage());

@@ -22,6 +22,7 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\File;
 use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class User
 {
@@ -85,7 +86,7 @@ class User
                 $this->lang_id = $lang->getId();
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to load user record.');
+            throw new AprelendoException('There was an unexpected error trying to load user record.');
         } finally {
             $stmt = null;
         }
@@ -118,7 +119,7 @@ class User
                 $this->google_id       = $row['google_id'];
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to load user record.');
+            throw new AprelendoException('There was an unexpected error trying to load user record.');
         } finally {
             $stmt = null;
         }
@@ -212,12 +213,12 @@ class User
         try {
             // check if user already exists
             if ($this->existsByName($this->name)) {
-                throw new \Exception('Username already exists. Please try again.');
+                throw new AprelendoException('Username already exists. Please try again.');
             }
             
             // check if email already exists
             if ($this->existsByEmail($this->email)) {
-                throw new \Exception('Email already exists. Did you <a class="alert-link" href="/forgotpassword">'
+                throw new AprelendoException('Email already exists. Did you <a class="alert-link" href="/forgotpassword">'
                     . 'forget</a> you username or password?');
             }
             
@@ -238,7 +239,7 @@ class User
                 $this->lang, $this->time_zone, $activation_hash, (int)$user_active]);
 
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to create user record.');
+                throw new AprelendoException('There was an unexpected error trying to create user record.');
             }
 
             $user_id = $this->id = $this->pdo->lastInsertId();
@@ -254,14 +255,14 @@ class User
             $stmt->execute([$user_id]);
             
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to create default preferences for user.');
+                throw new AprelendoException('There was an unexpected error trying to create default preferences for user.');
             }
 
             if ($send_email) {
                 $this->sendActivationEmail($this->email, $this->name, $activation_hash);
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to register user.');
+            throw new AprelendoException('There was an unexpected error trying to register user.');
         } finally {
             $stmt = null;
         }
@@ -301,7 +302,7 @@ class User
         $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
         if (!$mail_sent) {
             $this->delete();
-            throw new \Exception('Oops! There was an unexpected error trying to send you an e-mail to activate '
+            throw new AprelendoException('Oops! There was an unexpected error trying to send you an e-mail to activate '
                 . 'your account. Please try again later.');
         }
     } // end sendActivationEmail()
@@ -325,7 +326,7 @@ class User
             $num_rows = $stmt->fetchColumn();
             
             if ($num_rows == 0) {
-                throw new \Exception('User does not exist.');
+                throw new AprelendoException('User does not exist.');
             }
 
             $sql = "UPDATE `{$this->table}`
@@ -334,7 +335,7 @@ class User
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$username, $hash]);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to activate user.');
+            throw new AprelendoException('There was an unexpected error trying to activate user.');
         } finally {
             $stmt = null;
         }
@@ -360,7 +361,7 @@ class User
                 
             // check if username exists
             if (!$exists) { // wrong username
-                throw new \Exception('Username and password combination is incorrect. Please try again.');
+                throw new AprelendoException('Username and password combination is incorrect. Please try again.');
             }
 
             $user_id = $row['id'];
@@ -368,7 +369,7 @@ class User
 
             // check if user account is active
             if ($row['is_active'] === false) {
-                throw new \Exception('You need to activate your account first. Check your email for the '
+                throw new AprelendoException('You need to activate your account first. Check your email for the '
                     . 'activation link.');
             }
             
@@ -376,10 +377,10 @@ class User
                 $token = new Token($this->pdo, $user_id);
                 $token->add();
             } else { // wrong password
-                throw new \Exception('Username and password combination is incorrect. Please try again.');
+                throw new AprelendoException('Username and password combination is incorrect. Please try again.');
             }
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new AprelendoException($e->getMessage());
         } finally {
             $stmt = null;
         }
@@ -465,12 +466,12 @@ class User
                 
                 // check if user already exists
                 if ($this->name != $new_username && $this->existsByName($new_username)) {
-                    throw new \Exception('Username already exists. Please try again.');
+                    throw new AprelendoException('Username already exists. Please try again.');
                 }
                 
                 // check if email already exists
                 if ($this->email != $new_email && $this->existsByEmail($new_email)) {
-                    throw new \Exception('Email already exists. Please try using another one.');
+                    throw new AprelendoException('Email already exists. Please try using another one.');
                 }
                 
                 // was a new password given? In that case, save new password and replace the old one
@@ -501,7 +502,7 @@ class User
                 }
             }
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new AprelendoException($e->getMessage());
         } finally {
             $stmt = null;
         }
@@ -521,7 +522,7 @@ class User
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$password_hash, $email]);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to update user record.');
+            throw new AprelendoException('There was an unexpected error trying to update user record.');
         } finally {
             $stmt = null;
         }
@@ -542,8 +543,8 @@ class User
                     WHERE `email`=?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$google_id, $google_email]);
-        } catch (\Exception $e) {
-            throw new \Exception('There was an unexpected error trying to update user record.');
+        } catch (\PDOException $e) {
+            throw new AprelendoException('There was an unexpected error trying to update user record.');
         } finally {
             $stmt = null;
         }
@@ -594,11 +595,11 @@ class User
             $stmt->execute([$this->id]);
 
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('Oops! There was an unexpected problem trying to delete your account. '
+                throw new AprelendoException('Oops! There was an unexpected problem trying to delete your account. '
                 . 'Please try again later.');
             }
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new AprelendoException($e->getMessage());
         } finally {
             $stmt = null;
         }
@@ -631,7 +632,7 @@ class User
             $this->lang_id = $lang_id;
             $this->lang = $lang_name;
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to set active language for user.');
+            throw new AprelendoException('There was an unexpected error trying to set active language for user.');
         } finally {
             $stmt = null;
         }
@@ -678,7 +679,7 @@ class User
             $num_rows = $stmt->fetchColumn();
             
             return (int)$num_rows > 0;
-        } catch (\Exception $e) {
+        } catch (\PDOException $e) {
             return false;
         } finally {
             $stmt = null;
@@ -706,10 +707,10 @@ class User
             if (password_verify($password, $hashedPassword)) {
                 return true;
             } else {
-                throw new \Exception('Username and password combination are incorrect. Please try again.');
+                throw new AprelendoException('Username and password combination are incorrect. Please try again.');
             }
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new AprelendoException($e->getMessage());
         } finally {
             $stmt = null;
         }

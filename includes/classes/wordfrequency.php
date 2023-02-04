@@ -20,8 +20,7 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\Connect;
-use Aprelendo\Includes\Classes\DBEntity;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class WordFrequency
 {
@@ -57,7 +56,7 @@ class WordFrequency
 
             return $row['frequency_index'];
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to load record from frequency list table.');
+            throw new AprelendoException('There was an unexpected error trying to load record from frequency list table.');
         } finally {
             $stmt = null;
         }
@@ -81,12 +80,12 @@ class WordFrequency
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if ($result === false) {
-                throw new \Exception('There was an unexpected error trying to load records from frequency list table.');
+                throw new AprelendoException('There was an unexpected error trying to load records from frequency list table.');
             }
 
             return $result;
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to load records from frequency list table.');
+            throw new AprelendoException('There was an unexpected error trying to load records from frequency list table.');
         } finally {
             $stmt = null;
         }

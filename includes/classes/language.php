@@ -21,6 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\DBEntity;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 class Language extends DBEntity
 {
@@ -93,7 +94,7 @@ class Language extends DBEntity
                 $this->level            = $row['level'];
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to load this record.');
+            throw new AprelendoException('There was an unexpected error trying to load this record.');
         } finally {
             $stmt = null;
         }
@@ -110,14 +111,14 @@ class Language extends DBEntity
         try {
             // check for errors first
             if (empty($new_record['dict-uri'])) {
-                throw new \Exception('You need to specify the URL of the dictionary you want to use.');
+                throw new AprelendoException('You need to specify the URL of the dictionary you want to use.');
             } elseif (strpos($new_record['dict-uri'], '%s') === false) {
-                throw new \Exception("The dictionary URL needs to include the position of the lookup word or phrase. '
+                throw new AprelendoException("The dictionary URL needs to include the position of the lookup word or phrase. '
                     . 'For this, use '%s' (without quotation marks).");
             } elseif (empty($new_record['translator-uri'])) {
-                throw new \Exception('You need to specify the URL of the translator you want to use.');
+                throw new AprelendoException('You need to specify the URL of the translator you want to use.');
             } elseif (strpos($new_record['translator-uri'], '%s') === false) {
-                throw new \Exception("The translator URL needs to include the position of the lookup word or phrase. '
+                throw new AprelendoException("The translator URL needs to include the position of the lookup word or phrase. '
                 . 'For this, use '%s' (without quotation marks).");
             }
 
@@ -140,7 +141,7 @@ class Language extends DBEntity
                             $this->rss_feed_2_uri, $this->rss_feed_3_uri, $this->show_freq_words,
                             $this->level, $this->user_id, $this->id]);
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to edit this record.');
+            throw new AprelendoException('There was an unexpected error trying to edit this record.');
         } finally {
             $stmt = null;
         }
@@ -172,10 +173,10 @@ class Language extends DBEntity
                 $stmt->execute([$this->user_id, $key, $dictionary_uri, $translator_uri]);
             }
             if ($stmt->rowCount() == 0) {
-                throw new \Exception('There was an unexpected error trying to create initial record for this user.');
+                throw new AprelendoException('There was an unexpected error trying to create initial record for this user.');
             }
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to create initial record for this user.');
+            throw new AprelendoException('There was an unexpected error trying to create initial record for this user.');
         } finally {
             $stmt = null;
         }
@@ -196,7 +197,7 @@ class Language extends DBEntity
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$row) {
-                throw new \Exception('The record does not exist.');
+                throw new AprelendoException('The record does not exist.');
             }
 
             $this->id               = $row['id'];
@@ -209,8 +210,8 @@ class Language extends DBEntity
             $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
             $this->show_freq_words  = $row['show_freq_words'];
             $this->level            = $row['level'];
-        } catch (\Exception $e) {
-            throw new \Exception('There was an unexpected error trying to load this record.');
+        } catch (\PDOException $e) {
+            throw new AprelendoException('There was an unexpected error trying to load this record.');
         } finally {
             $stmt = null;
         }
@@ -267,11 +268,11 @@ class Language extends DBEntity
             $stmt->execute([$this->user_id]);
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if (!$result || empty($result)) {
-                throw new \Exception('There was an unexpected error trying to get available languages for user.');
+                throw new AprelendoException('There was an unexpected error trying to get available languages for user.');
             }
             return $result;
         } catch (\PDOException $e) {
-            throw new \Exception('There was an unexpected error trying to get available languages for user.');
+            throw new AprelendoException('There was an unexpected error trying to get available languages for user.');
         } finally {
             $stmt = null;
         }

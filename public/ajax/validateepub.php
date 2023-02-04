@@ -21,7 +21,7 @@
 require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
-use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -33,14 +33,14 @@ try {
 
     // check file name & if file exists
     if (!isset($_POST['filename']) || empty($_POST['filename']) || !file_exists($file_uri)) {
-        throw new \Exception("Incorrect file name error.");
+        throw new AprelendoException("Incorrect file name error.");
     }
 
     // verify epub file structure & integrity ($return == non-zero in case of error)
     exec('java -jar ' . APP_ROOT . 'tools/epubcheck/epubcheck.jar ' . $file_uri, $output, $return);
     
     if ($return) {
-        throw new \Exception('Your ebook was uploaded, but it contains errors and may not render well. '
+        throw new AprelendoException('Your ebook was uploaded, but it contains errors and may not render well. '
             . 'For more info go to http://validator.idpf.org/');
     }
 } catch (\Exception $e) {

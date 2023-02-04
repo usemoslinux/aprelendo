@@ -21,7 +21,7 @@
 require_once '../../includes/dbinit.php'; // connect to database
 
 use Aprelendo\Includes\Classes\User;
-use Aprelendo\Includes\Classes\Curl;
+use Aprelendo\Includes\Classes\AprelendoException;
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -41,7 +41,7 @@ try {
             $user = new User($pdo);
             $user->updatePasswordHash($password_hash, $email);
         } else {
-            throw new \Exception('The passwords you entered are not identical. Please try again.');
+            throw new AprelendoException('The passwords you entered are not identical. Please try again.');
         }
     } elseif (isset($_POST['email'])) {
         if (!empty($_POST['email'])) {
@@ -75,14 +75,14 @@ try {
             
             $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
             if (!$mail_sent) {
-                throw new \Exception('There was an error trying to send you an e-mail with your new '
+                throw new AprelendoException('There was an error trying to send you an e-mail with your new '
                     . 'temporary password.');
             }
         } else { // if email address does not exist in db
-            throw new \Exception('No user registered with that email address. Please try again.');
+            throw new AprelendoException('No user registered with that email address. Please try again.');
         }
     } else {
-        throw new \Exception('Oops! There was an unexpected error when trying to reset your password.');
+        throw new AprelendoException('Oops! There was an unexpected error when trying to reset your password.');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());
