@@ -171,7 +171,7 @@ $(document).ready(function() {
                                 }
                             );
 
-                            txt = txt.replace(/(\n){3,}/g, "\n"); // remove multiple line breaks
+                            txt = txt.replace(/(\r\n|\n|\r)(\r\n|\n|\r)*/g, "\n\n"); // remove multiple line breaks
                             txt = txt.replace(/\t/g, ""); // remove tabs
                             // txt = txt.replace(/  /g, ' '); // remove multiple spaces
 
