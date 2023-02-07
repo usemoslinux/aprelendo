@@ -1063,7 +1063,7 @@ $(document).ready(function() {
         $(this).val($(this).val().replace(/[0-9]/gi, '')); // don't allow digits to get printed
 
         // if maxlength reached, switch focus to next input
-        if(maxLength == $(this).val().length) {
+        if(maxLength == $(this).val().length && !e.originalEvent.isComposing) {
             const index = $(".dict").index(this) + 1;
             $(".dict")
                 .eq(index)
