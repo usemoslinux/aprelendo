@@ -127,6 +127,7 @@ $(document).ready(function() {
                                     'gmiu'
                                 );
                 const word_regex = new RegExp('(?<![\\p{L}|\\d])' + word + '(?![\\p{L}|\\d])', 'gmiu');
+                const spaces_numbers_regex = new RegExp('^[\\s\\d]+|[\\s\\d]+$' , 'g');
 
                 data.forEach(text => {                   
                     // extract example sentences from text
@@ -140,6 +141,11 @@ $(document).ready(function() {
                         if (examples_count < 3) {
                             // create html for each example sentence, max 3 examples
                             m.forEach((match, groupIndex) => {
+                                // first, remove leading/trailing spaces and numbers from sentences
+                                match = match.replace(spaces_numbers_regex, '');
+                                // remove unclosed quotes
+                                match = removeUnclosedQuotes(match);
+                                // make the word user is studying clickable
                                 match = match.replace(word_regex, function(match, g1) {
                                     return g1 === undefined
                                         ? match
@@ -184,6 +190,19 @@ $(document).ready(function() {
         return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     }
 
+    function removeUnclosedQuotes(sentence) {
+        const count = (sentence.match(/"/g) || []).length;
+        
+        if (count % 2 !== 0) {
+          if (sentence.length <= 4) return sentence;
+            let firstFive = sentence.substring(0, 2).replace("\"", "");
+            let lastFive = sentence.substring(sentence.length - 2).replace("\"", "");
+            return firstFive + sentence.substring(2, sentence.length - 2) + lastFive;
+          }
+          
+        return sentence;
+    } 
+
     /**
      * Checks if there are any cards in deck or if end of practice was reached
      * In that case, show respective message to user
@@ -214,7 +233,7 @@ $(document).ready(function() {
             $("#card-text").html("<div class='fa-solid fa-flag-checkered text-primary display-3 mt-3'></div>"
                 + "<div class='mt-3'>You have reached the end of your study.</div>"
                 + "<div class='mt-3'>These were your results:</div>"
-                + "<div class='progress mt-3 fw-bold' style='height: 40px;'>" + progress_html + "</div>"
+                + "<div class='progress mx-auto mt-3 fw-bold' style='height: 25px;max-width: 550px'>" + progress_html + "</div>"
                 + "<div class='small mt-4'>If you want to continue, you can "
                 + "refresh this page (F5).<br>However, we strongly recommend that you keep your study sessions short "
                 + "and take rest intervals.</div>");
