@@ -79,7 +79,7 @@ use Aprelendo\Includes\Classes\Achievements;
                 <dt class="col-md-2">
                     <figure class="px-5 px-sm-0 mt-2">
                         <img src="/img/gamification/streak.svg" class="mx-auto d-block m-2 gamification-img"
-                            alt="Streak" title="Streak days">
+                            alt="Streak" title="Reading streak days">
                         <figcaption class="w-100 text-center fw-bold">
                             <span style="font-size:2rem"><?php echo $streak_days; ?></span>
                         </figcaption>

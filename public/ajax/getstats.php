@@ -24,6 +24,6 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check i
 use Aprelendo\Includes\Classes\Statistics;
 
 $stats = new Statistics($pdo, $user->getId(), $user->getLangId());
-$result = $stats->get((int)$_GET['days']); // get statistics
+$result = $stats->get((int)$_GET['days'], true); // get statistics
 
 echo json_encode($result);

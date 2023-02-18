@@ -24,34 +24,65 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check i
 use Aprelendo\Includes\Classes\Statistics;
 
 $stats = new Statistics($pdo, $user->getId(), $user->getLangId());
-$week_stats = $stats->get(7); // get weekly statistics
 
-$streak_days = 0;
-
-for ($i=6; $i >= 0; $i--) {
-    if ($week_stats['forgotten'][$i] + $week_stats['new'][$i]
-        + $week_stats['learning'][$i] + $week_stats['learned'][$i] < 10) {
-        break;
-    }
-    $streak_days++;
-}
-
-$message_html = '<span class="font-italic text-muted">';
-
-if ($streak_days > 0) {
-    $message_html .= $streak_days . ' day streak. Keep it up!';
-} else {
-    $message_html .= "You've been lazy lately.";
-}
-
-$message_html .= '</span>';
-
-$today_stats = $stats->get(1); // get today's statistics
+// get today's statistics
+$today_stats = $stats->get(1, false);
 $nr_of_words_reviewed_today = $today_stats['forgotten'][0] + $today_stats['new'][0]
     + $today_stats['learning'][0] + $today_stats['learned'][0];
 $per_of_words_learned_today = round($nr_of_words_reviewed_today * 100 / 10);
 $msg_progress_bar = "$nr_of_words_reviewed_today / 10";
 
+// get streak days
+$streak_days = 0;
+$nr_of_words_reviewed = 0;
+
+do {
+    // this loop will get the streak starting from yesterday
+    $streak_days++;
+    $day_stats = $stats->get($streak_days + 1, false);
+    $nr_of_words_reviewed = $day_stats['forgotten'][0] + $day_stats['new'][0]
+        + $day_stats['learning'][0] + $day_stats['learned'][0];
+} while ($nr_of_words_reviewed >= 10);
+
+// as the loop adds 1 to $streak_days no matter what, make this minor correction first
+$streak_days--;
+// then check if today is also a streak
+// this is because if he did streak in past days, but still not today, it should be considered a streak nonetheless
+if ($nr_of_words_reviewed_today >= 10) $streak_days++;
+
+$motivational_msg_no_streak = [ "Every day is a new opportunity to learn.",
+                                "The more you study, the more progress you'll make.",
+                                "Small steps lead to big achievements.",
+                                "Learning is the key to unlocking new opportunities.",
+                                "Consistency is the key to success.",
+                                "Don't give up on your goals, keep pushing forward.",
+                                "Learning a language takes time, but it's worth the effort.",
+                                "Every effort you make will bring you closer to your goal.",
+                                "One day at a time, you'll get there.",
+                                "The journey of a thousand miles begins with a single step."
+                            ];
+
+$motivational_msg_ongoing_streak = [ "You've taken a new step towards mastering a new language.",
+                                     "Keep up the great work and you'll see results.",
+                                     "Learning a language is a journey, enjoy the process.",
+                                     "Your dedication to studying is inspiring.",
+                                     "Learning a new language is a powerful tool for personal growth.",
+                                     "You're making progress every day, keep it up.",
+                                     "With every study session, you're one step closer to fluency.",
+                                     "Your efforts today will pay off in the future.",
+                                     "Learning is a lifelong journey, and you're on the right track.",
+                                     "Keep going, and soon you'll be able to speak with confidence."
+                                ];
+
+$message_html = '<span class="font-italic text-muted">';
+
+if ($streak_days > 0) {
+    $message_html .= $streak_days . ' day streak. ' . $motivational_msg_ongoing_streak[rand(0, 9)];
+} else {
+    $message_html .= $motivational_msg_no_streak[rand(0, 9)];
+}
+
+$message_html .= '</span>';
 
 ?>
 

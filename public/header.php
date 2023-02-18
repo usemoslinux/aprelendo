@@ -67,7 +67,7 @@ $streak_days = (int)$gems->getDaysStreak();
                     <ul class="navbar-nav ms-auto">
                         <li id="streak-days" class="nav-item gamification py-2 pe-md-2">
                             <img src="/img/gamification/streak.svg" class="me-3 me-md-1" alt="Streak"
-                            title="Streak days"> <?php echo $streak_days; ?>
+                            title="Reading streak days"> <?php echo $streak_days; ?>
                         </li>
                         <li id="gems" class="nav-item gamification py-2 pe-md-2">
                             <img src="/img/gamification/gems.svg" class="me-3 me-md-1 ms-md-2" alt="Gems"

@@ -31,7 +31,7 @@ class PopularSources extends DBEntity
      *
      * Sets basic variables
      *
-     * @param PDO $pdo
+     * @param \PDO $pdo
      * @return void
      */
     public function __construct(\PDO $pdo)
