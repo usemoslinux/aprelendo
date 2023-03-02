@@ -145,15 +145,18 @@ $(document).ready(function() {
                                 match = match.replace(spaces_numbers_regex, '');
                                 // remove unclosed quotes
                                 match = removeUnclosedQuotes(match);
-                                // make the word user is studying clickable
-                                match = match.replace(word_regex, function(match, g1) {
-                                    return g1 === undefined
-                                        ? match
-                                        : "<a class='word fw-bold'>" + match.replace(/\s\s+/g, ' ') + "</a>";
-                                });
-                                // make sure example sentence is unique, then add to the list
-                                examples += examples.search(escapeRegex(match)) > 0 ? "" : "<p>" + match + "</p>\n";
-                                examples_count++;
+                                // check that match is not the only word in current example sentence
+                                if (match !== word) {
+                                    // make the word user is studying clickable
+                                    match = match.replace(word_regex, function(match, g1) {
+                                        return g1 === undefined
+                                            ? match
+                                            : "<a class='word fw-bold'>" + match.replace(/\s\s+/g, ' ') + "</a>";
+                                    });
+                                    // make sure example sentence is unique, then add to the list
+                                    examples += examples.search(escapeRegex(match)) > 0 ? "" : "<p>" + match + "</p>\n";
+                                    examples_count++;    
+                                }
                             });
                         }
                     }
