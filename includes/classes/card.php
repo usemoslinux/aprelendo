@@ -81,25 +81,27 @@ class Card
      */
     public function getExampleSentencesForWord(string $word): array
     {
+        // old regex used (^|[[:punct:]]|[[:space:]])$word([[:space:]]|[[:punct:]]|$)
+
         $sql = "(SELECT texts.text
                 FROM texts
                 LEFT JOIN languages ON languages.id = texts.lang_id
                 WHERE languages.name = '{$this->lang_iso}' AND texts.user_id='{$this->user_id}' AND type <> 6 AND
-                texts.text regexp \"(^|[[:punct:]]|[[:space:]])$word([[:space:]]|[[:punct:]]|$)\"
+                texts.text regexp '[[:<:]]" . $word . "[[:>:]]'
                 LIMIT 3)
                 UNION
                 (SELECT archived_texts.text
                 FROM archived_texts
                 LEFT JOIN languages ON languages.id = archived_texts.lang_id
                 WHERE languages.name = '{$this->lang_iso}' AND archived_texts.user_id='{$this->user_id}' AND type <> 6 AND
-                archived_texts.text regexp \"(^|[[:punct:]]|[[:space:]])$word([[:space:]]|[[:punct:]]|$)\"
+                archived_texts.text regexp '[[:<:]]" . $word . "[[:>:]]'
                 LIMIT 3)
                 UNION
                 (SELECT shared_texts.text
                 FROM shared_texts
                 LEFT JOIN languages ON languages.id = shared_texts.lang_id
                 WHERE languages.name = '{$this->lang_iso}' AND type <> 5 AND
-                shared_texts.text regexp \"(^|[[:punct:]]|[[:space:]])$word([[:space:]]|[[:punct:]]|$)\"
+                shared_texts.text regexp '[[:<:]]" . $word . "[[:>:]]'
                 LIMIT 3)";
 
         try {

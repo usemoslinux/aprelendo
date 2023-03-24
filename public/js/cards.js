@@ -71,7 +71,7 @@ $(document).ready(function() {
             .removeClass()
             .addClass("alert " + type);
         $(window).scrollTop(0);
-    } // end showMessage
+    } // end showMessage()
 
     /**
      * Fetches list of words user is learning
@@ -84,9 +84,8 @@ $(document).ready(function() {
             })
             .done(function(data) {
                 words = data.map(function(value,index) { 
-                    return value.word; 
+                    return value.word.replace(/\r?\n|\r/g, " "); 
                 });
-
                 max_cards = words.length > max_cards ? max_cards : words.length;
 
                 $("#card-counter").text("1" + "/" + max_cards);
@@ -96,7 +95,7 @@ $(document).ready(function() {
                 showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning "
                     + "in this language.", "alert-danger");
             }); // end $.ajax
-    }
+    } // end getListofCards()
 
     /**
      * Fetches examples sentences for a specific word
@@ -184,14 +183,14 @@ $(document).ready(function() {
                 showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.", 
                     "alert-danger");
             }); // end $.ajax
-    }
+    } // end getExampleSentencesforCard()
 
     /**
      * Escapes regex strings
      */
     function escapeRegex(str) {
         return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-    }
+    } // end escapeRegex()
 
     function removeUnclosedQuotes(sentence) {
         const count = (sentence.match(/"/g) || []).length;
@@ -204,7 +203,7 @@ $(document).ready(function() {
           }
           
         return sentence;
-    } 
+    } // end removeUnclosedQuotes()
 
     /**
      * Checks if there are any cards in deck or if end of practice was reached
@@ -246,7 +245,7 @@ $(document).ready(function() {
         }
 
         return false;
-    }
+    } // end lastCardReached()
 
     /**
      * Open dictionary modal
@@ -306,7 +305,7 @@ $(document).ready(function() {
         .fail(function(xhr, ajaxOptions, thrownError) {
             showMessage("There was an unexpected error updating this word's status", "alert-danger");
         });
-    });
+    }); // end .btn-answer.on.click()
 
     /**
      * Builds translator link using the word object as a parameter
