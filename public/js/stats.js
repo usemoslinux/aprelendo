@@ -22,8 +22,6 @@ $(document).ready(function () {
     drawIntervalStats();
     drawTotalStats();
 
-
-
     function drawIntervalStats() {
         $.ajax({
             type: "GET",
@@ -32,10 +30,10 @@ $(document).ready(function () {
             dataType: "json"
         })
             .done(function (data) {
-                const learned   = data["learned"];
-                const learning  = data["learning"];
-                const created   = data["new"];
-                const forgotten = data["forgotten"];
+                const learned   = parseInt(data["learned"]);
+                const learning  = parseInt(data["learning"]);
+                const created   = parseInt(data["new"]);
+                const forgotten = parseInt(data["forgotten"]);
 
                 // build chart
                 // color scheme: { blue: new; green: learned; yellow: learning; red: forgotten }
@@ -109,10 +107,10 @@ $(document).ready(function () {
             dataType: "json"
         })
             .done(function (data) {
-                const nr_learned   = data[0]["count"];
-                const nr_learning  = data[1]["count"];
-                const nr_new       = data[2]["count"];
-                const nr_forgotten = data[3]["count"];
+                const nr_learned   = parseInt(data[0]["count"]);
+                const nr_learning  = parseInt(data[1]["count"]);
+                const nr_new       = parseInt(data[2]["count"]);
+                const nr_forgotten = parseInt(data[3]["count"]);
                 const nr_total     = nr_learned + nr_learning + nr_new + nr_forgotten;
 
                 // build chart

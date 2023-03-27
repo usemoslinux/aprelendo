@@ -198,6 +198,6 @@ use Aprelendo\Includes\Classes\Achievements;
         ?>
     </main>
 </div>
-<script defer src="js/stats.js"></script>
+<script defer src="js/stats-min.js"></script>
 
 <?php require_once 'footer.php'; ?>
