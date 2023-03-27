@@ -30,10 +30,10 @@ $(document).ready(function () {
             dataType: "json"
         })
             .done(function (data) {
-                const learned   = parseInt(data["learned"]);
-                const learning  = parseInt(data["learning"]);
-                const created   = parseInt(data["new"]);
-                const forgotten = parseInt(data["forgotten"]);
+                const learned   = data["learned"];
+                const learning  = data["learning"];
+                const created   = data["new"];
+                const forgotten = data["forgotten"];
 
                 // build chart
                 // color scheme: { blue: new; green: learned; yellow: learning; red: forgotten }
