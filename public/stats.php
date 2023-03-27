@@ -27,10 +27,12 @@ use Aprelendo\Includes\Classes\Achievements;
 
 ?>
 
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
-    integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.js"
+    integrity="sha512-vCUbejtS+HcWYtDHRF2T5B0BKwVG/CLeuew5uT2AiX4SJ2Wff52+kfgONvtdATqkqQMC9Ye5K+Td0OTaz+P7cw=="
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
@@ -52,21 +54,57 @@ use Aprelendo\Includes\Classes\Achievements;
             <div class="row">
                 <div class="col-12">
                     <h4 class="text-center py-2">Your progress this week</h4>
+                    <!-- <canvas id="interval-stats-canvas" width="100%" height="400px" ></canvas> -->
+                    <div class="d-flex flex-column">
+                        <canvas id="interval-stats-canvas" style="max-height:400px"></canvas>
+                    </div>
                 </div>
-                <div class="col-12">
-                    <canvas id="myChart" width="100%" height="400px"></canvas>
-                </div>
-                <div class="col-12">
-                    <p><strong class="word-description new">New</strong>: words you've just added to your
-                        learning list.</p>
-                    <p><strong class="word-description reviewed">Reviewed</strong>: words that you reviewed at least
-                        once but that still need additional reviews.</p>
-                    <p><strong class="word-description learned">Learned</strong>: words that the
-                        system thinks you have already reviewed enough times.</p>
-                    <p><strong class="word-description forgotten">Forgotten</strong>: words you reviewed or learned
-                        in the past, but that you marked for learning once again.</p>
-                    <p><small>Note: considering each text individually, if a word appeared more than once it will
-                        only count as one.</small></p>
+                <div class="col-12 my-4">
+                    <div class="row">
+                        <h4 class="text-center pt-2">Card counts</h4>
+                        <div class="col-lg-7 pt-4">
+                            <canvas id="total-stats-canvas" style="max-height:295px"></canvas>
+                        </div>
+                        <div class="col-lg-5 pt-4">
+                            <table class="table text-end small">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th>Status</th>
+                                        <th>Description</th>
+                                        <th>#</th>
+                                        <th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong class="word-description learned">Learned</strong></td>
+                                        <td>Words that the system thinks you have already reviewed enough times</td>
+                                        <td id="learned-count"></td>
+                                        <td id="learned-percentage"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong class="word-description reviewed">Learning</strong></td>
+                                        <td>Words that you are learning and that still need additional reviews</td>
+                                        <td id="learning-count"></td>
+                                        <td id="learning-percentage"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong class="word-description new">New</strong></td>
+                                        <td>Words you've just added to your learning list or that were once marked as
+                                            forgotten, were reviewed once and still need additional reviews</td>
+                                        <td id="new-count"></td>
+                                        <td id="new-percentage"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong class="word-description forgotten">Forgotten</strong></td>
+                                        <td>Words you reviewed or learned in the past, but that you marked for learning once again</td>
+                                        <td id="forgotten-count"></td>
+                                        <td id="forgotten-percentage"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -160,6 +198,6 @@ use Aprelendo\Includes\Classes\Achievements;
         ?>
     </main>
 </div>
-<script defer src="js/stats-min.js"></script>
+<script defer src="js/stats.js"></script>
 
 <?php require_once 'footer.php'; ?>

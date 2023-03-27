@@ -17,82 +17,167 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
     // get data to feed chart
-    let created = [],
-        reviewed = [],
-        learned = [],
-        forgotten = [];
+    drawIntervalStats();
+    drawTotalStats();
 
-    $.ajax({
-        type: "GET",
-        url: "ajax/getstats.php",
-        data: { days: 7 },
-        async: false,
-        dataType: "json"
-    })
-        .done(function(data) {
-            created = data["new"];
-            reviewed = data["learning"];
-            learned = data["learned"];
-            forgotten = data["forgotten"];
+
+
+    function drawIntervalStats() {
+        $.ajax({
+            type: "GET",
+            url: "ajax/getstats.php",
+            data: { type: "words", days: 7 },
+            dataType: "json"
         })
-        .fail(function() {});
+            .done(function (data) {
+                const learned   = data["learned"];
+                const learning  = data["learning"];
+                const created   = data["new"];
+                const forgotten = data["forgotten"];
 
-    // build chart
-    // color scheme: { blue: new; green: learned; yellow: learning; red: forgotten }
-    const ctx = document.getElementById("myChart").getContext("2d");
-    const myChart = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: [
-                "6 days ago",
-                "5 days ago",
-                "4 days ago",
-                "3 days ago",
-                "2 days ago",
-                "Yesterday",
-                "Today"
-            ],
-            datasets: [
-                {
-                    label: "New",
-                    data: created,
-                    backgroundColor: "#1e90ff", //"rgba(33,150,243,0.4)" // blue
-                    borderColor: "#1e90ff",
-                    fill: false
-                },
-                {
-                    label: "Reviewed",
-                    data: reviewed,
-                    backgroundColor: "#ffa500", //"rgba(255,235,59,0.4)" // yellow
-                    borderColor: "#ffa500",
-                    fill: false
-                },
-                {
-                    label: "Learned",
-                    data: learned,
-                    backgroundColor: "#3cb371", //"rgba(76,175,80,0.4)" // green
-                    borderColor: "#3cb371",
-                    fill: false
-                },
-                {
-                    label: "Forgotten",
-                    data: forgotten,
-                    backgroundColor: "#ff6347", //"rgba(244,67,54,0.4)" // red
-                    borderColor: "#ff6347",
-                    fill: false
-                }
-            ]
-        },
-        options: {
-            scales: {
-                y: {
-                  suggestedMin: 1,
-                  suggestedMax: 10,
-                }
-              },
-            maintainAspectRatio: false // Add to prevent default behaviour of full-width/height
-        }
-    });
+                // build chart
+                // color scheme: { blue: new; green: learned; yellow: learning; red: forgotten }
+                const ctx = document.getElementById("interval-stats-canvas").getContext("2d");
+                const interval_stats_chart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: [
+                            "6 days ago",
+                            "5 days ago",
+                            "4 days ago",
+                            "3 days ago",
+                            "2 days ago",
+                            "Yesterday",
+                            "Today"
+                        ],
+                        datasets: [
+                            {
+                                label: "Learned",
+                                data: learned,
+                                backgroundColor: "#3cb371",
+                                borderColor: "#3cb371",
+                                fill: false
+                            },
+                            {
+                                label: "Learning",
+                                data: learning,
+                                backgroundColor: "#ffa500",
+                                borderColor: "#ffa500",
+                                fill: false
+                            },
+                            {
+                                label: "New",
+                                data: created,
+                                backgroundColor: "#1e90ff",
+                                borderColor: "#1e90ff",
+                                fill: false
+                            },
+                            {
+                                label: "Forgotten",
+                                data: forgotten,
+                                backgroundColor: "#ff6347",
+                                borderColor: "#ff6347",
+                                fill: false
+                            }
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                suggestedMin: 1,
+                                suggestedMax: 10,
+                            }
+                        },
+                        maintainAspectRatio: false
+                    }
+                });
+            })
+            .fail(function () {
+                let error_div = "<div class='d-flex align-items-center justify-content-center' " +
+                    "style='min-height:400px;'><p class='text-danger'>Error: no data to display</p></div>";
+                $("#interval-stats-canvas").replaceWith(error_div);
+            });
+    }
+
+    function drawTotalStats() {
+        $.ajax({
+            type: "GET",
+            url: "ajax/getstats.php",
+            data: { type: "words", days: "all" },
+            dataType: "json"
+        })
+            .done(function (data) {
+                const nr_learned   = data[0]["count"];
+                const nr_learning  = data[1]["count"];
+                const nr_new       = data[2]["count"];
+                const nr_forgotten = data[3]["count"];
+                const nr_total     = nr_learned + nr_learning + nr_new + nr_forgotten;
+
+                // build chart
+                const ctx = document.getElementById("total-stats-canvas").getContext("2d");
+
+                //create Chart class object
+                const total_stats_chart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: ['Card counts'],
+                        datasets: [
+                            {
+                                label: 'Learned',
+                                data: [nr_learned],
+                                backgroundColor: '#3cb371'
+                            }, {
+                                label: 'Learning',
+                                data: [nr_learning],
+                                backgroundColor: '#ffa500'
+                            }, {
+                                label: 'New',
+                                data: [nr_new],
+                                backgroundColor: '#1e90ff'
+                            }, {
+                                label: 'Forgotten',
+                                data: [nr_forgotten],
+                                backgroundColor: '#ff6347'
+                            }
+                        ]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        scales: {
+                            x: {
+                                stacked: true
+                            },
+                            y: {
+                                stacked: true,
+                                display: false
+                            }
+                        }
+                    }                
+                });
+
+                // show legend in table
+                $("#learned-count").text(nr_learned);
+                $("#learned-percentage").text((nr_learned / nr_total * 100).toFixed(2).toLocaleString('en-US'));
+
+                $("#learning-count").text(nr_learning);
+                $("#learning-percentage").text((nr_learning / nr_total * 100).toFixed(2).toLocaleString('en-US'));
+
+                $("#new-count").text(nr_new);
+                $("#new-percentage").text((nr_new / nr_total * 100).toFixed(2).toLocaleString('en-US'));
+
+                $("#forgotten-count").text(nr_forgotten);
+                $("#forgotten-percentage").text((nr_forgotten / nr_total * 100).toFixed(2).toLocaleString('en-US'));
+
+            })
+            .fail(function () {
+                let error_div = "<div class='d-flex align-items-center justify-content-center' " +
+                    "style='min-height:400px;'><p class='text-danger'>Error: no data to display</p></div>";
+                $("#total-stats-canvas").replaceWith(error_div);
+            });
+
+    } // end drawTotalStats
+
 });

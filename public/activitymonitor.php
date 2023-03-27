@@ -22,8 +22,9 @@ require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check if user is logged in
 
 use Aprelendo\Includes\Classes\Statistics;
+use Aprelendo\Includes\Classes\wordStats;
 
-$stats = new Statistics($pdo, $user->getId(), $user->getLangId());
+$stats = new wordStats($pdo, $user->getId(), $user->getLangId());
 
 // get today's statistics
 $today_stats = $stats->get(1, false);
