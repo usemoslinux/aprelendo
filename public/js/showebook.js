@@ -128,7 +128,11 @@
     );
 
     $("body").on("click", "#btn-close-ebook", function() {
-        window.location.replace("/texts");
+        // save word status before closing
+        // 
+        $.when(SaveWords()).then(function() {
+            window.location.replace("/texts");
+        });
     }); // end #btn-close-ebook.on.click
 
     /**
