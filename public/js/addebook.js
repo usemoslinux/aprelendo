@@ -94,49 +94,13 @@ $(document).ready(function() {
                 }
                 // if upload succeeds, validate epub file structure & integrity
                 else {
-                    $progressbar.width("66%");
-                    $progressbar.text("Validating epub file...");
-
-                    $.ajax({
-                        type: "POST",
-                        url: "ajax/validateepub.php",
-                        data: { filename: data.filename }
-                    })
-                        // validate epub
-                        .done(function(data) {
-                            // if epub file fails integrity checks, show error message
-                            if (data.error_msg != null) {
-                                $progressbar.width("100%");
-                                $progressbar
-                                    .removeClass("progress-bar-success")
-                                    .addClass("progress-bar-danger");
-                                $progressbar.text(data.error_msg);
-                                $progressbar
-                                    .parent()
-                                    .delay(4000)
-                                    .fadeOut("slow", function() {
-                                        window.location.replace("/texts");
-                                    });
-                            }
-                            // if epub file has no errors...
-                            else {
-                                $progressbar.width("100%");
-                                $progressbar.text("Upload complete...");
-                                $progressbar
-                                    .parent()
-                                    .delay(1500)
-                                    .fadeOut("slow", function() {
-                                        window.location.replace("/texts");
-                                    });
-                            }
-                        })
-                        // if validation fails, show error message
-                        .fail(function(xhr, ajaxOptions, thrownError) {
-                            showMessage(
-                                "Oops! There was an unexpected error uploading this text.",
-                                "alert-danger"
-                            );
-                            resetControls(false);
+                    $progressbar.width("100%");
+                    $progressbar.text("Upload complete...");
+                    $progressbar
+                        .parent()
+                        .delay(1500)
+                        .fadeOut("slow", function() {
+                            window.location.replace("/texts");
                         });
                 }
             })
