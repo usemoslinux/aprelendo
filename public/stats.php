@@ -61,7 +61,7 @@ use Aprelendo\Includes\Classes\Achievements;
                 </div>
                 <div class="col-12 my-4">
                     <div class="row">
-                        <h4 class="text-center pt-2">Card counts</h4>
+                        <h4 class="text-center pt-2">Your word list</h4>
                         <div class="col-lg-7 pt-4">
                             <canvas id="total-stats-canvas" style="max-height:295px"></canvas>
                         </div>

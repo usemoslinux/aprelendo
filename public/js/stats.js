@@ -120,7 +120,7 @@ $(document).ready(function () {
                 const total_stats_chart = new Chart(ctx, {
                     type: "bar",
                     data: {
-                        labels: ['Card counts'],
+                        labels: ['Words'],
                         datasets: [
                             {
                                 label: 'Learned',
