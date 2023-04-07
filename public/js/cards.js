@@ -338,4 +338,28 @@ $(document).ready(function() {
         return false;
      }); // end document.contextmenu
 
+    /**
+     * Implements shortcuts for buttons
+     */
+    $(document).keypress(function (e) {
+        // only allow shortcuts if buttons are enabled
+        if (!$(".btn-answer").prop('disabled')) {
+            switch (e.which) {
+                case 49: // 49 is the keycode for "1" key
+                    $("#btn-answer-no-recall").click();
+                    break;
+                case 50: // 50 is the keycode for "2" key
+                    $("#btn-answer-fuzzy").click();
+                    break;
+                case 51: // 51 is the keycode for "3" key
+                    $("#btn-answer-partial").click();
+                    break;
+                case 52: // 52 is the keycode for "4" key
+                    $("#btn-answer-excellent").click();
+                    break;
+                default:
+                    break;
+            }
+        }
+    });
 });
