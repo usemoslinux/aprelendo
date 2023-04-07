@@ -129,7 +129,6 @@
 
     $("body").on("click", "#btn-close-ebook", function() {
         // save word status before closing
-        // 
         $.when(SaveWords()).then(function() {
             window.location.replace("/texts");
         });
