@@ -34,7 +34,7 @@ require_once PUBLIC_PATH . 'header.php';
                         <a href="/texts">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <span class="active">Cards</span>
+                        <span class="active">Study</span>
                     </li>
                 </ol>
             </nav>
@@ -87,6 +87,6 @@ require_once PUBLIC_PATH . 'header.php';
 require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
 ?>
 
-<script defer src="js/cards-min.js"></script>
+<script defer src="js/study-min.js"></script>
 
 <?php require_once 'footer.php' ?>
