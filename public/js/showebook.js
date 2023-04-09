@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
- $(document).ready(function() {
+$(document).ready(function() {
     const doclang = $("html").attr("lang");
-    const ebook_id = $("script[src*='showebook-min.js']").attr("data-id");
+    const ebook_id = $("script[src*='showebook.js']").attr("data-id");
     const book = ePub();
 
     window.parent.show_confirmation_dialog = false; // don't show confirmation dialog on close
@@ -267,10 +267,12 @@
 
     function display(item){
         let section = book.spine.get(item);
+        
         if(section) {
           section.render().then(function(ebook_html){
             let $parsed = $('<div/>').append(ebook_html);
             $parsed.find('*').removeAttr("class").removeAttr("style");
+            $parsed.find('link[rel="stylesheet"]').remove();
 
             // underline text
             $(".loading-spinner").fadeIn(1000);

@@ -24,16 +24,26 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set
 use Aprelendo\Includes\Classes\Reader;
 use Aprelendo\Includes\Classes\AprelendoException;
 
-function getCSS($class, $styles)
+function getCSS($styles)
 {
-    $class_str = "class='$class'";
-    $style_str = " style=\"";
+    // styles for P
+    $style_str = "#viewer p {";
     foreach ($styles as $style => $value) {
-        $style_str .= "$style: $value; ";
+        $style_str .= "$style: $value !important; ";
     }
-    $style_str .= "\"";
+    $style_str .= "margin: 0 0 1em 0 !important; padding: 0 !important; text-indent:1.5em !important;} ";
     
-    return $class_str . ' ' . $style_str;
+    // styles for headers
+    $style_str .= "#viewer h1, #viewer h2, #viewer h3, #viewer h4, #viewer h5, #viewer h6 {";
+
+    foreach ($styles as $style => $value) {
+        if ($style !== "text-align") {
+            $style_str .= "$style: $value !important; ";
+        }
+    }
+    $style_str .= "text-align:center !important; margin: 0 0 1em 0 !important; padding: 2.5em 0 !important; text-indent:0 !important;}";
+    
+    return $style_str;
 }
 
 $class = '';
@@ -51,6 +61,8 @@ try {
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
         $reader = new Reader($pdo, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
         $result = '';
+
+        // get user preferences & load classes and CSS for ebook
         $prefs = $reader->getPrefs();
 
         switch ($prefs->getDisplayMode()) {
@@ -140,9 +152,13 @@ try {
         integrity="sha512-5BqtYqlWfJemW5+v+TZUs22uigI8tXeVah5S/1Z6qBLVO7gakAOtkOzUtgq6dsIo5c0NJdmGPs0H9I+2OHUHVQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
+
+    <style id="userstyles">
+        <?php echo getCSS($styles); ?>
+    </style>
 </head>
 
-<body id="readerpage" <?php echo getCSS($class, $styles); ?>>
+<body id="readerpage" <?php echo ' class="'. $class . '"' ?>>
 
     <div class="offcanvas offcanvas-start <?php echo $class == 'darkmode' ? 'text-bg-dark' : ''; ?>"
         data-bs-scroll="true" tabindex="-1" id="navigation" aria-labelledby="navigation-title">
@@ -209,7 +225,7 @@ try {
 
     <script defer src="js/underlinewords-min.js"></script>
     <script defer src="js/showtext-min.js"></script>
-    <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook-min.js"></script>
+    <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook.js"></script>
 
 </body>
 

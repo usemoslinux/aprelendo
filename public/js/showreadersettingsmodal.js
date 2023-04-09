@@ -20,21 +20,44 @@
 $(document).ready(function() {
 
     $('#btn-save-reader-prefs').on('click', function () {
-        // apply changes
-        var className = $('#mode').val() + 'mode';
-
+        // apply color mode
+        const className = $('#mode').val() + 'mode';
         $doc = $(parent.document.body);
-        // change document styles and class
-        $doc.css({
-            'font-family' : $('#fontfamily').val(),
-            'font-size' : $('#fontsize').val(),
-            'text-align' : $('#alignment').val(),
-            'line-height': $('#lineheight').val()sss
-         });
-        
-        $('#text').css('line-height', $('#lineheight').val());
-
         $doc.removeClass().addClass(className);
+        
+        // apply CSS changes: font-family, font-size, text-align, text-height, etc.
+        if ($("#viewer").length > 0) {
+            let $userstyles = $("#userstyles");
+
+            let p_styles = "#viewer p {font-family: "
+            + $('#fontfamily').val() + " !important;"
+            + "font-size: " + $('#fontsize').val() + " !important;"
+            + "text-align: " + $('#alignment').val() + " !important;"
+            + "line-height: " + $('#lineheight').val() + " !important;"
+            + "margin: 0 0 1em 0 !important; padding: 0 !important; text-indent:1.5em !important;"
+            + "}";
+
+            let h_styles = " #viewer h1, #viewer h2, #viewer h3, #viewer h4, #viewer h5, #viewer h6 {font-family: "
+            + $('#fontfamily').val() + " !important;"
+            + "font-size: " + $('#fontsize').val() + " !important;"
+            + "text-align: center !important;"
+            + "line-height: " + $('#lineheight').val() + " !important;"
+            + "margin: 0 0 1em 0 !important; padding: 2.5em 0 !important; text-indent:0 !important;"
+            + "}";
+
+            $userstyles.html(p_styles + h_styles);
+        } else {
+            $doc.css({
+                'font-family' : $('#fontfamily').val(),
+                'font-size' : $('#fontsize').val(),
+                'text-align' : $('#alignment').val(),
+                'line-height': $('#lineheight').val()
+             });
+            
+            $('#text').css('line-height', $('#lineheight').val());    
+        }
+        
+        
 
         // change audioplayer class
         $doc.find("#audioplayer-container").removeClass().addClass(className);
