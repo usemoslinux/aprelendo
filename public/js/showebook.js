@@ -101,8 +101,7 @@ $(document).ready(function() {
         function(e) {
             e.preventDefault();
             $.when(SaveWords()).then(function() {
-                let url = next.href.substr(next.href.indexOf('/', 8) + 1); // remove domain name from url
-                url = url.replace(/OEBPS\//i, ""); // workaround to fix link url in some ebooks
+                let url = next.getAttribute("href");
                 display(url);
                 $("html, body").animate({
                     scrollTop: 0
@@ -117,8 +116,7 @@ $(document).ready(function() {
         "click",
         function(e) {
             e.preventDefault();
-            let url = prev.href.substr(prev.href.indexOf('/', 8) + 1); // remove domain name from url
-            url = url.replace(/OEBPS\//i, ""); // workaround to fix link url in some ebooks
+            let url = prev.getAttribute("href");
             display(url);
             $("html, body").animate({
                 scrollTop: 0
