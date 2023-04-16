@@ -71,9 +71,9 @@ function underlineWords(data, doclang) {
     Object.values(data.user_words).forEach(element => {
         if (element.is_phrase > 0) {
             if (element.status > 0) {
-                user_phrases_learning += element.word + '|';    
+                user_phrases_learning += escapeRegExp(element.word) + '|';    
             } else {
-                user_phrases_learned += element.word + '|';
+                user_phrases_learned += escapeRegExp(element.word) + '|';
             }
         } else {
             if (element.status > 0) {
@@ -159,4 +159,8 @@ function underlineWords(data, doclang) {
     }
 
     return addLinks(text, doclang);
+}
+
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
