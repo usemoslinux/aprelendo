@@ -45,7 +45,7 @@ try {
         if (isset($_POST['title']) && isset($_POST['text'])) {
             $title = $_POST['title'];
             $author = $_POST['author'];
-            $source_url = $_POST['url'];
+            $source_uri = $_POST['url'];
             $text = $_POST['text'];
             $type = $_POST['type'];
             $level = isset($_POST['level']) ? $_POST['level'] : 0;
@@ -82,9 +82,9 @@ try {
             if (empty($errors)) {
                 if (!empty($_POST['id'])) {
                     $id = $_POST['id'];
-                    $texts_table->update($id, $title, $author, $text, $source_url, $audio_uri, $type);
+                    $texts_table->update($id, [$title, $author, $text, $source_uri, $audio_uri, $type]);
                 } else {
-                    if ($texts_table->exists($source_url)) {
+                    if ($texts_table->exists($source_uri)) {
                         $msg = 'The text you are trying to add already exists. ';
                         $msg .= $is_shared
                             ? 'Look for it in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.'
@@ -94,7 +94,7 @@ try {
                         throw new AprelendoException($msg);
                     }
                     $level = $level == 0 ? $texts_table->calculateDifficulty($text) : $level;
-                    $texts_table->add($title, $author, $text, $source_url, $audio_uri, $type, $level);
+                    $texts_table->add($title, $author, $text, $source_uri, $audio_uri, $type, $level);
                     $text_added_successfully = true;
                 }
                 
@@ -111,7 +111,7 @@ try {
         if (isset($_POST['title']) && isset($_POST['text'])) {
             $title = $_POST['title'];
             $author = $_POST['author'];
-            $source_url = $_POST['url'];
+            $source_uri = $_POST['url'];
             $audio_uri = '';
             $type = 1; // article (assumes that all rss texts are articles)
             $text = $_POST['text'];
@@ -124,7 +124,7 @@ try {
             $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
 
             // if text is already in db, show error message
-            if ($texts_table->exists($source_url)) {
+            if ($texts_table->exists($source_uri)) {
                 $msg = 'The text you are trying to add already exists in our database. ';
                 $msg .= 'Look for it in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.';
 
@@ -133,7 +133,7 @@ try {
             
             // if successful, return insert_id in json format
             $level = $texts_table->calculateDifficulty($text);
-            $insert_id = $texts_table->add($title, $author, $text, $source_url, $audio_uri, $type, $level);
+            $insert_id = $texts_table->add($title, $author, $text, $source_uri, $audio_uri, $type, $level);
             if ($insert_id > 0) {
                 $text_added_successfully = true;
                 $arr = array('insert_id' => $insert_id);
@@ -150,7 +150,7 @@ try {
             $author = $_POST['author'];
             $type = 6; // 6 = ebook
             $level = isset($_POST['level']) && !empty($_POST['level']) ? $_POST['level'] : 0;
-            $audio_uri = '';
+            $audio_uri = $_POST['audio-uri'];
             $target_file_name = '';
             $text = '';
 

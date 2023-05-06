@@ -22,26 +22,15 @@ require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
 use Aprelendo\Includes\Classes\Texts;
-use Aprelendo\Includes\Classes\EbookFile;
 use Aprelendo\Includes\Classes\AprelendoException;
 
-$user_id = $user->getId();
-$lang_id = $user->getLangId();
-$id = $_GET['id'];
-
 try {
-    $text = new Texts($pdo, $user_id, $lang_id);
-    $text->loadRecord($id);
-    $file_name = $text->getSourceUri();
+    $text = new Texts($pdo, $user->getId(), $user->getLangId());
+    $text->loadRecord($_GET['id']);
+    $audio_uri = $text->getAudioUri();
 
-    if (!empty($file_name)) {
-        $ebook_file = new EbookFile($file_name);
-        $ebook_content = $ebook_file->get();
-        if ($ebook_content) {
-            return $ebook_content;
-        } else {
-            throw new AprelendoException(404);
-        }
+    if (!empty($audio_uri)) {
+        echo $audio_uri;
     } else {
         throw new AprelendoException(404);
     }

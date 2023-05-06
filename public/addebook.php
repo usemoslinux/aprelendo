@@ -83,6 +83,14 @@ require_once PUBLIC_PATH . 'header.php';
                                 placeholder="Author (required)" required
                                 value="<?php if (isset($art_author)) {echo $art_author;}?>">
                         </div>
+                        <div class="mb-3 col-12">
+                            <label for="audio-uri">Audio:</label>
+                            <input type="text" id="audio-uri" name="audio-uri" class="form-control" maxlength="200"
+                                placeholder="Google Drive link (optional)">
+                            <div class="form-text" id="audio-url-helptext"><i class="fa-brands fa-google-drive"></i> 
+                                Remember to allow access to this file to anyone with the link.
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="mb-3 col-sm-12 text-end">
@@ -105,6 +113,6 @@ require_once PUBLIC_PATH . 'header.php';
 
 <script defer src="js/epubjs/epub.min.js"></script>
 
-<script defer src="js/addebook-min.js"></script>
+<script defer src="js/addebook.js"></script>
 
 <?php require_once 'footer.php'?>

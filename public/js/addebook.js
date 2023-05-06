@@ -68,8 +68,15 @@ $(document).ready(function() {
         e.preventDefault();
         const $progressbar = $("#upload-progress-bar");
         const form_data = new FormData(document.getElementById("form-addebook"));
+        const audio_uri = $("#audio-uri").text();
 
         $('#alert-msg').addClass('d-none');
+
+        // validate audio URL
+        if (audio_uri != "" && !isValidHttpUrl(audio_uri)) {
+            showMessage("Invalid audio URL.", "alert-danger");
+            return;
+        }
 
         $progressbar.parent().removeClass("d-none");
         $("#btn-upload-epub").addClass("disabled");
@@ -165,4 +172,14 @@ $(document).ready(function() {
             book.destroy();
         });
     } // end openBook
+
+    function isValidHttpUrl(string) {
+        let url;
+        try {
+            url = new URL(string);
+        } catch (_) {
+            return false;
+        }
+        return url.protocol === "http:" || url.protocol === "https:";
+      }
 });

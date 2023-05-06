@@ -20,6 +20,7 @@ $(document).ready(function() {
     const doclang = $("html").attr("lang");
     const ebook_id = $("script[src*='showebook.js']").attr("data-id");
     const book = ePub();
+    let text_pos = "";
 
     window.parent.show_confirmation_dialog = false; // don't show confirmation dialog on close
     
@@ -79,14 +80,7 @@ $(document).ready(function() {
     rendition.themes.select(reader.className);
 
     book.opened.then(function(){
-        const key = book.key() + "-lastpos";
-        const last_pos = localStorage.getItem(key);
-
-        if (last_pos) {
-            display(last_pos);
-        } else {
-            display(1);
-        }
+        setTextAndAudioPos();
     });
 
     book.loaded.spine.then((spine) => {
@@ -328,8 +322,7 @@ $(document).ready(function() {
                 prev.textContent = "";
             }
 
-            // save book position to resume reading from there later
-            localStorage.setItem(book.key() + "-lastpos", item);
+            text_pos = item;
             updateToc(item);
           });
         }
@@ -349,4 +342,64 @@ $(document).ready(function() {
             $selector.classList.add('fw-bold');
         }
     }
+
+    function setTextAndAudioPos() {
+        // retrieve ebook & audio last reading position
+        $.ajax({
+            type: "POST",
+            url: "ajax/ebookposition.php",
+            data: { mode: "GET", id: ebook_id},
+            dataType: "json"
+        })
+        .done(function(data) {
+            const text_pos = data.text_pos;
+            const audio_pos = parseFloat(data.audio_pos);
+            const audio = document.getElementById("audioplayer");
+
+            // load text position, if available
+            if (text_pos) {
+                display(text_pos);
+            } else {
+                display(1);
+            }
+
+            // load audio position, if available
+            if (audio != null) {
+                if (!isNaN(audio_pos)) {
+                    audio.currentTime = audio_pos;
+                } else {
+                    audio.currentTime = 0;
+                }
+            }
+        })
+        .fail(function(xhr, ajaxOptions, thrownError) {
+            display(1);
+            if (audio != null) {
+                audio.currentTime = 0;
+            }
+        });
+    }
+    function saveTextAndAudioPos(text_pos, audio_pos) {
+        $.ajax({
+            type: "POST",
+            url: "ajax/ebookposition.php",
+            data: { mode: "SAVE", id: ebook_id, audio_pos: audio_pos, text_pos: text_pos },
+            dataType: "json",
+        })
+        .done(function(data) {
+            console.log("success");
+        })
+        .fail(function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError);
+        });
+    }
+
+    $(window).on('beforeunload', function() {
+        // save book position to resume reading from there later
+        let audio = document.getElementById("audioplayer");
+        let audio_pos = audio != null ? audio.currentTime : 0;
+    
+        saveTextAndAudioPos(text_pos, audio_pos);
+        return "Save text & audio positions?";
+    });
 });

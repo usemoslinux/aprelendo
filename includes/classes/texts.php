@@ -39,6 +39,8 @@ class Texts extends DBEntity
     protected $word_count    = 0;
     protected $level         = 0;
     protected $date_created  = '';
+    protected $text_pos      = '';
+    protected $audio_pos     = '';
     
     /**
     * Constructor
@@ -86,6 +88,8 @@ class Texts extends DBEntity
             $this->word_count    = $row['word_count'];
             $this->level         = $row['level'];
             $this->date_created  = $row['date_created'];
+            $this->text_pos      = $row['text_pos'];
+            $this->audio_pos     = $row['audio_pos'];
         } catch (\PDOException $e) {
             throw new AprelendoException('There was an unexpected error trying to load record from texts table.');
         } finally {
@@ -133,15 +137,15 @@ class Texts extends DBEntity
             $title =  mb_strtoupper(mb_substr($title, 0, 1)) . mb_strtolower(mb_substr($title, 1));
         }
 
-        $author =  mb_convert_case($author, MB_CASE_TITLE, 'UTF-8');
+        $author = $this->fixAuthorCase($author);
         
         try {
             // add text to table
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `title`, `author`,
-                        `text`, `source_uri`, `type`, `word_count`, `level`)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        `text`, `audio_uri`, `source_uri`, `type`, `word_count`, `level`)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id,$this->lang_id, $title, $author, $text,
+            $stmt->execute([$this->user_id,$this->lang_id, $title, $author, $text, $audio_url, 
                                       $source_url, $type, $word_count, $level]);
             $insert_id = $this->pdo->lastInsertId();
 
@@ -160,35 +164,33 @@ class Texts extends DBEntity
             $stmt = null;
         }
     } // end add()
-            
     /**
     * Updates existing text in database
     *
     * @param int $id
-    * @param string $title
-    * @param string $author
-    * @param string $text
-    * @param string $source_url
-    * @param string $audio_url
-    * @param int $type
+    * @param array $columns
     * @return void
     */
     public function update(
         int $id,
-        string $title,
-        string $author,
-        string $text,
-        string $source_url,
-        string $audio_url,
-        int $type
+        array $columns
         ): void
     {
+        // create sql string to use with all the columns to update
+        $sql = "";
+        foreach ($columns as $key => $value) {
+            $sql .= empty($sql) ? "`$key`=?" : ", `$key`=?";
+        }
+
         try {
             $sql = "UPDATE `{$this->table}`
-                    SET `user_id`=?, `lang_id`=?, `title`=?, `author`=?, `text`=?, `source_uri`=?, `type`=?
+                    SET $sql
                     WHERE `id`=?";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $title, $author, $text, $source_url, $type, $id]);
+            $params = array_values($columns);
+            $params[] = $id; // add $id last
+
+            $stmt->execute($params);
         } catch (\PDOException $e) {
             throw new AprelendoException('There was an unexpected error trying to update record from texts table.');
         } finally {
@@ -648,7 +650,7 @@ class Texts extends DBEntity
     public function getAuthor(): string
     {
         return $this->author;
-    } // getAuthor()
+    } // end getAuthor()
 
     /**
      * Get the value of text
@@ -664,7 +666,50 @@ class Texts extends DBEntity
     public function getAudioUri(): string
     {
         return $this->audio_uri;
-    } // getAudioUri()
+    } // end getAudioUri()
+
+    /**
+     * Get the value of audio_uri
+     */
+    public function getAudioUriForEmbbeding(): string
+    {
+        $url = "https://www.googleapis.com/drive/v3/files/";
+        $file_id = '';
+
+        $pattern = '/\/d\/([-\w]+)\//'; // regex to match the file id
+        if (preg_match($pattern, $this->getAudioUri(), $matches)) {
+            $file_id = $matches[1]; // return the first captured group (the id)
+        } 
+        
+        $url .= $file_id;
+        $url .= "?alt=media&key=" . GOOGLE_DRIVE_API_KEY;
+        return $url;
+    } // end getAudioUriForEmbbeding()
+
+
+    /**
+     * Convert author case to Title Case, except for acronyms in author names
+     * Input: 'j.r.r. tolkien' >> ouput 'J.R.R. Tolkien'
+     *
+     * @param string $author
+     * @return string
+     */
+    private function fixAuthorCase(string $author): string {
+        return preg_replace_callback(
+            '/\b([\p{L}]+(?:\.[\p{L}]+)*)\b/u',
+            function($matches) {
+                $word = $matches[1];
+                if (mb_strpos($word, '.') === false) {
+                    // Convert regular word to title case using mb_convert_case
+                    return mb_convert_case($word, MB_CASE_TITLE, 'UTF-8');
+                } else {
+                    // Convert acronym case using mb_convert_case
+                    return mb_convert_case($word, MB_CASE_UPPER, 'UTF-8');
+                }
+            },
+            $author
+        );
+    } // end fixAuthorCase
 
     /**
      * Get the value of source_uri
@@ -672,7 +717,7 @@ class Texts extends DBEntity
     public function getSourceUri(): string
     {
         return $this->source_uri;
-    } // getSourceUri()
+    } // end getSourceUri()
 
     /**
      * Get the value of type
@@ -680,7 +725,7 @@ class Texts extends DBEntity
     public function getType(): int
     {
         return $this->type;
-    } // getType()
+    } // end getType()
 
     /**
      * Get the value of word_count
@@ -696,7 +741,7 @@ class Texts extends DBEntity
     public function getLevel(): int
     {
         return $this->level;
-    } // getLevel()
+    } // end getLevel()
 
     /**
      * Get the value of date_created
@@ -704,5 +749,21 @@ class Texts extends DBEntity
     public function getDateCreated(): string
     {
         return $this->date_created;
+    } // end getDateCreated()
+
+    /**
+     * Get the value of date_created
+     */
+    public function getTextPos(): ?string
+    {
+        return $this->text_pos;
+    } // end getDateCreated()
+
+    /**
+     * Get the value of date_created
+     */
+    public function getAudioPos(): ?string
+    {
+        return $this->audio_pos;
     } // end getDateCreated()
 }

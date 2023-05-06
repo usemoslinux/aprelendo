@@ -22,6 +22,7 @@ require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
 
 use Aprelendo\Includes\Classes\Reader;
+use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\AprelendoException;
 
 function getCSS($styles)
@@ -90,6 +91,12 @@ try {
     header('Location:/login');
     exit;
 }
+
+// get audio uri, if any
+$text = new Texts($pdo, $user->getId(), $user->getLangId());
+$text->loadRecord($_GET['id']);
+$audio_uri = $text->getAudioUriForEmbbeding();
+
 ?>
 
 <!DOCTYPE html>
@@ -173,6 +180,13 @@ try {
             <h2 id="author">...</h2>
             <div id="toc"></div>
         </div>
+        <?php if(!empty($audio_uri)): ?>
+            <audio id="audioplayer" controls>
+                <source id="audioplayer" src="<?php echo $audio_uri; ?>" />
+                <!-- <source src="https://download.samplelib.com/mp3/sample-15s.mp3" /> -->
+                <p>Your browser doesn't support the audio HTML tag.</p>
+            </audio>
+        <?php endif; ?>
     </div>
 
     <div id="main">

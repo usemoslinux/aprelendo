@@ -66,7 +66,6 @@ if (!$user->isLoggedIn()) {
                                 <li>user_token: user token to enable auto-login</li>
                                 <li>accept_cookies: tells us you have accepted to use cookies</li>
                                 <li>hide_welcome_msg: hides welcome message, which introduces Aprelendo to new users</li>
-                                <li>[ebook_key]-lastpos: indicates ebook's last reading position</li>
                             </ul>
                             <br>
                             <strong>Third-party cookies</strong>
