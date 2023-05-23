@@ -66,11 +66,11 @@ $streak_days = (int)$gems->getDaysStreak();
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ms-auto">
                         <li id="streak-days" class="nav-item gamification py-2 pe-md-2">
-                            <img src="/img/gamification/streak.svg" class="me-3 me-md-1" alt="Streak"
+                            <img src="/img/gamification/streak.png" class="me-3 me-md-1" alt="Streak"
                             title="Reading streak days"> <?php echo $streak_days; ?>
                         </li>
                         <li id="gems" class="nav-item gamification py-2 pe-md-2">
-                            <img src="/img/gamification/gems.svg" class="me-3 me-md-1 ms-md-2" alt="Gems"
+                            <img src="/img/gamification/gems.png" class="me-3 me-md-1 ms-md-2" alt="Gems"
                             title="Gems earned"> <?php echo $nr_of_gems; ?>
                         </li>
                         <li id="language-dropdown" class="nav-item dropdown">

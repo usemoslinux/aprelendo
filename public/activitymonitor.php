@@ -21,35 +21,20 @@
 require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check if user is logged in
 
-use Aprelendo\Includes\Classes\Statistics;
 use Aprelendo\Includes\Classes\wordStats;
+use Aprelendo\Includes\Classes\WordDailyGoal;
 
 $stats = new wordStats($pdo, $user->getId(), $user->getLangId());
 
 // get today's statistics
-$today_stats = $stats->get(1, false);
-$nr_of_words_reviewed_today = $today_stats['forgotten'][0] + $today_stats['new'][0]
-    + $today_stats['learning'][0] + $today_stats['learned'][0];
+$nr_of_words_reviewed_today = $stats->getReviewedToday();
 $per_of_words_learned_today = round($nr_of_words_reviewed_today * 100 / 10);
+$today_is_streak = ($nr_of_words_reviewed_today >= 10);
 $msg_progress_bar = "$nr_of_words_reviewed_today / 10";
 
 // get streak days
-$streak_days = 0;
-$nr_of_words_reviewed = 0;
-
-do {
-    // this loop will get the streak starting from yesterday
-    $streak_days++;
-    $day_stats = $stats->get($streak_days + 1, false);
-    $nr_of_words_reviewed = $day_stats['forgotten'][0] + $day_stats['new'][0]
-        + $day_stats['learning'][0] + $day_stats['learned'][0];
-} while ($nr_of_words_reviewed >= 10);
-
-// as the loop adds 1 to $streak_days no matter what, make this minor correction first
-$streak_days--;
-// then check if today is also a streak
-// this is because if he did streak in past days, but still not today, it should be considered a streak nonetheless
-if ($nr_of_words_reviewed_today >= 10) $streak_days++;
+$daily_goal = new WordDailyGoal($pdo, $user->getId(), $user->getLangId(), $user->getTimeZone(), $today_is_streak);
+$daily_goal_streak_days = $daily_goal->getDaysStreak();
 
 $motivational_msg_no_streak = [ "Every day is a new opportunity to learn.",
                                 "The more you study, the more progress you'll make.",
@@ -77,8 +62,8 @@ $motivational_msg_ongoing_streak = [ "You've taken a new step towards mastering 
 
 $message_html = '<span class="font-italic text-muted">';
 
-if ($streak_days > 0) {
-    $message_html .= $streak_days . ' day streak. ' . $motivational_msg_ongoing_streak[rand(0, 9)];
+if ($daily_goal_streak_days > 0) {
+    $message_html .= $daily_goal_streak_days . ' day streak. ' . $motivational_msg_ongoing_streak[rand(0, 9)];
 } else {
     $message_html .= $motivational_msg_no_streak[rand(0, 9)];
 }

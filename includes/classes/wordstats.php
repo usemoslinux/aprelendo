@@ -20,7 +20,9 @@
 
 namespace Aprelendo\Includes\Classes;
 
-class wordStats extends Statistics {
+class wordStats extends DBEntity {
+    protected $lang_id = 0;
+
     /**
      * Constructor
      *
@@ -30,91 +32,33 @@ class wordStats extends Statistics {
      */
     public function __construct(\PDO $pdo, int $user_id, int $lang_id)
     {
-        parent::__construct($pdo, $user_id, $lang_id);
+        parent::__construct($pdo, $user_id);
         $this->table = 'words';
+        $this->lang_id = $lang_id;
     } // end __construct()
     
     /**
-     * Returns array with user word stats
+     * Returns nr. of words reviewed by user today, except those marked as forgotten
      *
-     * @param int $days the amount of days of the interval (7=1 week), or index of day to show stats (today=1, yesterday=2)
-     * @param bool $interval retrieve stats for an interval or 1 day only?
-     * @return array
+     * @return int
      */
-    public function get(int $days, bool $interval): array
+    public function getReviewedToday(): int
     {
-        --$days;
-
-        // get how many words acquired "learned" status in each of the last $days
-        for ($i=$days; $i >= 0; $i--) {
-            $sql = "SELECT COUNT(word) AS `learned`
+        try {
+            $sql = "SELECT COUNT(word) AS `reviewed_today`
                     FROM `{$this->table}`
-                    WHERE `user_id`=? AND `lang_id`=? AND `status`=0 AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY
-                    AND `date_modified` > CURDATE() - INTERVAL ? DAY";
+                    WHERE `user_id`=? AND `lang_id`=? AND `status` < 3
+                    AND `date_modified` > CURDATE() - INTERVAL 1 DAY";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
+            $stmt->execute([$this->user_id, $this->lang_id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-            $stats['learned'][] = $row['learned'];
-            
-            if (!$interval) break;
+
+            return $row['reviewed_today'];
+        } catch (\PDOException $e) {
+            throw new AprelendoException('There was an unexpected error trying to get word stats.');
+        } finally {
+            $stmt = null;
         }
-
-        // get how many words acquired "learning" status in each of the last $days
-        for ($i=$days; $i >= 0; $i--) {
-            $sql = "SELECT SUM(learning) learning
-                    FROM
-                    (SELECT COUNT(word) AS `learning`
-                        FROM `{$this->table}`
-                        WHERE `user_id`=? AND `lang_id`=? AND `status`=1
-                        AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY
-                        AND `date_modified` > CURDATE() - INTERVAL ? DAY
-                    UNION ALL
-                    SELECT COUNT(word) AS `learning`
-                        FROM `{$this->table}`
-                        WHERE `user_id`=? AND `lang_id`=? AND `status`=2
-                        AND `date_modified` > `date_created`
-                        AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY
-                        AND `date_modified` > CURDATE() - INTERVAL ? DAY) s";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $i, $i, $this->user_id, $this->lang_id, $i, $i]);
-            $row = $stmt->fetch();
-            $stats['learning'][] = $row['learning'];
-            
-            if (!$interval) break;
-        }
-
-        // get how many words acquired "new" status in each of the last $days
-        for ($i=$days; $i >= 0; $i--) {
-            $sql = "SELECT COUNT(word) AS `new`
-                    FROM `{$this->table}`
-                    WHERE `user_id`=? AND `lang_id`=? AND `status`=2
-                    AND `date_modified` = `date_created`
-                    AND `date_created` < CURDATE() - INTERVAL ?-1 DAY
-                    AND `date_created` > CURDATE() - INTERVAL ? DAY";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
-            $row = $stmt->fetch();
-            $stats['new'][] = $row['new'];
-
-            if (!$interval) break;
-        }
-
-        // get how many learned words acquired "forgotten" status in each of the last $days
-        for ($i=$days; $i >= 0; $i--) {
-            $sql = "SELECT COUNT(word) AS `forgotten`
-                    FROM `{$this->table}`
-                    WHERE `user_id`=? AND `lang_id`=? AND `status`=3
-                    AND `date_modified` < CURDATE() - INTERVAL ?-1 DAY
-                    AND `date_modified` > CURDATE() - INTERVAL ? DAY";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $i, $i]);
-            $row = $stmt->fetch();
-            $stats['forgotten'][] = $row['forgotten'];
-
-            if (!$interval) break;
-        }
-        
-        return $stats;
     } // end get()
 
     /**

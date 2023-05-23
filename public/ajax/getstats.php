@@ -25,11 +25,7 @@ use Aprelendo\Includes\Classes\wordStats;
 
 if ($_GET['type'] === "words") {
     $stats = new wordStats($pdo, $user->getId(), $user->getLangId());
-    if ($_GET['days'] === "all") {
-        $result = $stats->getTotals();
-    } else {
-        $result = $stats->get((int)$_GET['days'], true);
-    }
+    $result = $stats->getTotals();
 }
 
 echo json_encode($result);

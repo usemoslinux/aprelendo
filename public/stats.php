@@ -24,7 +24,8 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Includes\Classes\Achievements;
-
+use Aprelendo\Includes\Classes\wordStats;
+use Aprelendo\Includes\Classes\WordDailyGoal;
 ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.js"
@@ -52,13 +53,6 @@ use Aprelendo\Includes\Classes\Achievements;
     <main>
         <section>
             <div class="row">
-                <div class="col-12">
-                    <h4 class="text-center py-2">Your progress this week</h4>
-                    <!-- <canvas id="interval-stats-canvas" width="100%" height="400px" ></canvas> -->
-                    <div class="d-flex flex-column">
-                        <canvas id="interval-stats-canvas" style="max-height:400px"></canvas>
-                    </div>
-                </div>
                 <div class="col-12 my-4">
                     <div class="row">
                         <h4 class="text-center pt-2">Your word list</h4>
@@ -78,13 +72,13 @@ use Aprelendo\Includes\Classes\Achievements;
                                 <tbody>
                                     <tr>
                                         <td><strong class="word-description learned">Learned</strong></td>
-                                        <td>Words that the system thinks you have already reviewed enough times</td>
+                                        <td>Words that have been reviewed enough times</td>
                                         <td id="learned-count"></td>
                                         <td id="learned-percentage"></td>
                                     </tr>
                                     <tr>
                                         <td><strong class="word-description reviewed">Learning</strong></td>
-                                        <td>Words that you are learning and that still need additional reviews</td>
+                                        <td>Words that still need additional reviews</td>
                                         <td id="learning-count"></td>
                                         <td id="learning-percentage"></td>
                                     </tr>
@@ -97,9 +91,15 @@ use Aprelendo\Includes\Classes\Achievements;
                                     </tr>
                                     <tr>
                                         <td><strong class="word-description forgotten">Forgotten</strong></td>
-                                        <td>Words you reviewed or learned in the past, but that you marked for learning once again</td>
+                                        <td>Words that you marked as forgotten and were not yet reviewed again</td>
                                         <td id="forgotten-count"></td>
                                         <td id="forgotten-percentage"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total</strong></td>
+                                        <td></td>
+                                        <td id="total-count"></td>
+                                        <td id="total-percentage"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -109,6 +109,64 @@ use Aprelendo\Includes\Classes\Achievements;
             </div>
         </section>
         <hr>
+        <?php
+            // get today's statistics
+            $stats = new wordStats($pdo, $user->getId(), $user->getLangId());
+            $nr_of_words_reviewed_today = $stats->getReviewedToday();
+            $today_is_streak = ($nr_of_words_reviewed_today >= 10);
+
+            // get streak days
+            $daily_goal = new WordDailyGoal($pdo, $user->getId(), $user->getLangId(), $user->getTimeZone(), $today_is_streak);
+            $daily_goal_streak_days = $daily_goal->getDaysStreak();
+        ?>
+        <section>
+            <dl class="row">
+                <dt class="col-12">
+                    <h4 class="text-center py-4">Daily goal</h4>
+                </dt>
+                <dt class="col-md-2">
+                    <figure class="px-5 px-sm-0 mt-2">
+                        <img src="/img/gamification/daily_goal_streak.png" class="mx-auto d-block m-2"
+                            alt="Daily goal streak" title="Daily goal streak days">
+                        <figcaption class="w-100 text-center fw-bold">
+                            <span style="font-size:2rem"><?php echo $daily_goal_streak_days; ?></span>
+                        </figcaption>
+                    </figure>
+                </dt>
+                <dd class="col-md-10">
+                    <p>Behold the count of successive days you conquered the challenge of 
+                        reviewing <?php echo $daily_goal->getDailyGoal() ?> words daily.</p>
+                    <p>Streaks possess formidable power in repetition. With each accomplished action, they bestow
+                        rewards, increasing the odds of your unwavering commitment. In due time, this fresh routine
+                        shall metamorphose into an indomitable habit.</p>
+                    <p>Streaks also allow you to view your progress. You know what they say, if you can envisage
+                        your goal, then you’re halfway to achieving it.</p>
+                </dd>
+                <dt class="col-md-2">
+                    <figure class="px-5 px-sm-0 mt-2">
+                        <img src="/img/gamification/words_today.png" class="mx-auto d-block m-2"
+                            alt="Words practiced today" title="Words practiced today">
+                        <figcaption class="w-100 text-center fw-bold">
+                            <span style="font-size:2rem"><?php echo $nr_of_words_reviewed_today; ?></span>
+                    </figure>
+                </dt>
+                <dd class="col-md-10">
+                    <p>This is the total number of words in your learning list that you reviewed today.</p>
+                    <p>It includes all the words in your learning list (except those that you marked
+                        as forgotten) that you reviewed either during a study or while reading an article, ebook or
+                        video transcript.
+                    </p>
+                    <p><?php if ($today_is_streak) {
+                        echo "Bravo! Your consistent commitment to reviewing words each day has propelled you"
+                            . " to new linguistic heights. You're on a remarkable path of progress!";
+                    } else {
+                        echo "Stay positive and keep pushing forward! While today may not have been the day you"
+                            . " reached your goal, every step you take brings you closer to achieving it. Keep going!";
+                    }?></p>
+                </dd>
+            </dl>
+        </section>
+        <hr>
         <section>
             <dl class="row">
                 <dt class="col-12">
@@ -116,7 +174,7 @@ use Aprelendo\Includes\Classes\Achievements;
                 </dt>
                 <dt class="col-md-2">
                     <figure class="px-5 px-sm-0 mt-2">
-                        <img src="/img/gamification/streak.svg" class="mx-auto d-block m-2 gamification-img"
+                        <img src="/img/gamification/streak.png" class="mx-auto d-block m-2"
                             alt="Streak" title="Reading streak days">
                         <figcaption class="w-100 text-center fw-bold">
                             <span style="font-size:2rem"><?php echo $streak_days; ?></span>
@@ -129,12 +187,13 @@ use Aprelendo\Includes\Classes\Achievements;
                     <p>Streaks are a robust repetition tool. They reward you each time you complete an action,
                         meaning you’re more likely to keep doing it. After a while, this new routine will become
                         a new habit.</p>
-                    <p>Streaks also allow you to view your progress. You know what they say, if you can envisage
-                        your goal, then you’re halfway to achieving it.</p>
+                    <p>Streaks not only provide a window into your progress but also serve as a powerful motivator.
+                        As the saying goes, by visualizing your goal, you have already embarked on a transformative
+                        journey towards its attainment.</p>
                 </dd>
                 <dt class="col-md-2">
                     <figure class="px-5 px-sm-0 mt-2">
-                        <img src="/img/gamification/gems.svg" class="mx-auto d-block m-2 gamification-img"
+                        <img src="/img/gamification/gems.png" class="mx-auto d-block m-2"
                             alt="Gems" title="Gems earned">
                         <figcaption class="w-100 text-center fw-bold">
                             <span style="font-size:2rem"><?php echo $nr_of_gems; ?></span>
