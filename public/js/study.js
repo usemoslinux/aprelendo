@@ -121,10 +121,21 @@ $(document).ready(function() {
             .done(function(data) {
                 let examples = "";
                 let examples_count = 0;
-                const sentence_regex = new RegExp(
-                                    '[^\\n.?!]*(?<![\\p{L}])' + word + '(?![\\p{L}])[^\\n.?!]*[.?!\\n)]',
-                                    'gmiu'
-                                );
+                const lang_iso = $("#card").data("lang");
+                let sentence_regex = new RegExp(
+                    '[^\\n.?!]*(?<!\\p{L})' + word + '(?!\\p{L})[^\\n.?!]*[\\n.?!)]',
+                    'gmiu'
+                );
+
+                // different sentence separator for Japanese and Chinese, as
+                // they don't separate words and finish sentences with 。
+                if (lang_iso == "ja" || lang_iso == "zh") {
+                    sentence_regex = new RegExp(
+                        '[^\\n.?!。]*' + word + '[^\\n.?!。]*[\\n.?!。)]',
+                        'gmiu'
+                    );    
+                } 
+
                 const word_regex = new RegExp('(?<![\\p{L}|\\d])' + word + '(?![\\p{L}|\\d])', 'gmiu');
                 const spaces_numbers_regex = new RegExp('^[\\s\\d]+|[\\s\\d]+$' , 'g');
 

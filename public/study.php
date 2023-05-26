@@ -46,7 +46,7 @@ require_once PUBLIC_PATH . 'header.php';
                         <div id="alert-msg" class="d-none"></div>
                     </div>
                     <div class="col-sm-12">
-                        <div id="card" class="card text-center" style="min-width: 100%;">
+                        <div id="card" class="card text-center" style="min-width: 100%;" data-lang="<?php echo $user->getLang();?>">
                             <div id="card-header" class="card-header fw-bold">...</div>
                             <div class="card-body">
                                 <div id="card-loader" class="lds-ellipsis m-auto">
