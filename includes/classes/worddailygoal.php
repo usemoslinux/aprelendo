@@ -60,16 +60,11 @@ class WordDailyGoal extends DBEntity
     private function loadRecord(bool $today_is_streak): void
     {
         try {
+            // load record
             $sql = "SELECT * FROM `{$this->table}` WHERE `lang_id` = ?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->lang_id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-            
-            // if $today_is_streak, but still not saved, then update record
-            $needs_update = ($row === false) || ($row['days_streak'] < 0);
-            if ($today_is_streak && $needs_update) {
-                $this->update();
-            }
 
             if ($row) {
                 $this->id                 = $row['id'];
@@ -81,6 +76,11 @@ class WordDailyGoal extends DBEntity
                 $this->diff_days = $this->calculateDaysFromLastStreak($this->last_streak);
                 // if $this->diff_days = yesterday (-1) or today (0)
                 $this->days_streak        = ($this->diff_days == -1 || $this->diff_days == 0) ? $row['days_streak'] : 0;
+            }
+
+            // if $today_is_streak, but still not saved, then update record
+            if ($today_is_streak) {
+                $this->update();
             }
         } catch (\PDOException $e) {
             throw new AprelendoException('There was an unexpected error trying to load record from word daily goal table.');
@@ -107,6 +107,7 @@ class WordDailyGoal extends DBEntity
             $today = new \DateTime("now", new \DateTimeZone($this->time_zone));  // current date/time
             $today->setTime(0, 0, 0); // reset time part, to prevent partial comparison
             $this->last_streak = $today->format('Y-m-d H:i:s');
+            $this->diff_days = 0;
 
             // create record if it does not exist, else update
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `last_streak`, `days_streak`)
