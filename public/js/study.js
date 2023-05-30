@@ -123,7 +123,7 @@ $(document).ready(function() {
                 let examples_count = 0;
                 const lang_iso = $("#card").data("lang");
                 let sentence_regex = new RegExp(
-                    '[^\\n.?!]*(?<!\\p{L})' + word + '(?!\\p{L})[^\\n.?!]*[\\n.?!)]',
+                    '([^\\n.?!]|[\\d][.][\\d])*(?<![\\p{L}])' + word + '(?![\\p{L}])([^\\n.?!]|[.][\\d])*[\\n.?!]',
                     'gmiu'
                 );
 
@@ -131,14 +131,14 @@ $(document).ready(function() {
                 // they don't separate words and finish sentences with 。
                 if (lang_iso == "ja" || lang_iso == "zh") {
                     sentence_regex = new RegExp(
-                        '[^\\n.?!。]*' + word + '[^\\n.?!。]*[\\n.?!。)]',
+                        '[^\n?!。]*' + word + '[^\n?!。]*[\n?!。]',
                         'gmiu'
                     );    
                 } 
 
                 const word_regex = new RegExp('(?<![\\p{L}|\\d])' + word + '(?![\\p{L}|\\d])', 'gmiu');
-                const spaces_numbers_regex = new RegExp('^[\\s\\d]+|[\\s\\d]+$' , 'g');
-
+                const spaces_symbols_regex = new RegExp('^[\\s\\d\\p{P}]+|[\\s]+$' , 'g');
+                
                 data.forEach(text => {                   
                     // extract example sentences from text
                     let m;
@@ -150,24 +150,23 @@ $(document).ready(function() {
                         
                         if (examples_count < 3) {
                             // create html for each example sentence, max 3 examples
-                            m.forEach((match, groupIndex) => {
-                                // first, remove leading/trailing spaces and numbers from sentences
-                                match = match.replace(spaces_numbers_regex, '');
-                                // remove unclosed quotes
-                                match = removeUnclosedQuotes(match);
-                                // check that match is not the only word in current example sentence
-                                if (match !== word) {
-                                    // make the word user is studying clickable
-                                    match = match.replace(word_regex, function(match, g1) {
-                                        return g1 === undefined
-                                            ? match
-                                            : "<a class='word fw-bold'>" + match.replace(/\s\s+/g, ' ') + "</a>";
-                                    });
-                                    // make sure example sentence is unique, then add to the list
-                                    examples += examples.search(escapeRegex(match)) > 0 ? "" : "<p>" + match + "</p>\n";
-                                    examples_count++;    
-                                }
-                            });
+                            let match = m[0];
+                            // first, remove leading/trailing spaces and leading symbols/numbers from sentences
+                            match = match.replace(spaces_symbols_regex, '');
+                            // remove unclosed quotes
+                            match = removeUnclosedQuotes(match);
+                            // check that match is not the only word in current example sentence
+                            if (match !== word) {
+                                // make the word user is studying clickable
+                                match = match.replace(word_regex, function(match, g1) {
+                                    return g1 === undefined
+                                        ? match
+                                        : "<a class='word fw-bold'>" + match.replace(/\s\s+/g, ' ') + "</a>";
+                                });
+                                // make sure example sentence is unique, then add to the list
+                                examples += examples.search(escapeRegex(match)) > 0 ? "" : "<p>" + match + "</p>\n";
+                                examples_count++;    
+                            }
                         }
                     }
                 });
