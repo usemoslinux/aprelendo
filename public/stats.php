@@ -211,7 +211,7 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
         </section>
         <?php
         $achievements = new Achievements($pdo, $user->getId(), $user->getLangId(), $user->getTimeZone());
-        $badges = $achievements->checkAll();
+        $badges = $achievements->checkSaved();
         $total_nr_of_badges = count($badges);
         
         if ($total_nr_of_badges > 0) {

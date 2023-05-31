@@ -65,7 +65,7 @@ class Achievements extends DBEntity
         $word_achievements = $this->checkByType(3, $word_count);
 
         return array_merge($gems_achievements, $streak_achievements, $word_achievements);
-    }
+    } // end checkAll()
 
     /**
      * Verifies which user achievements were not yet saved in the db
@@ -76,21 +76,7 @@ class Achievements extends DBEntity
     {
         // get all user achievements
         $all_achievements = $this->checkAll();
-        
-        try {
-            // get user achievements already saved in db
-        $sql = "SELECT *
-                FROM `user_achievements`
-                WHERE `user_id`=? AND `lang_id`=?";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$this->user_id, $this->lang_id]);
-        $db_achievements = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to insert new record in user '
-                . 'achievements table.');
-        } finally {
-            $stmt = null;
-        }
+        $db_achievements = $this->checkSaved();
         
         // create a new array only with the differences between the previously created arrays
         // this new array will hold user achievements that were still not saved to the db
@@ -112,7 +98,7 @@ class Achievements extends DBEntity
         }
 
         return $diff_array;
-    }
+    } // end checkUnannounced()
 
     /**
      * Saves in the db the achievements that are passed as a parameter
@@ -135,7 +121,33 @@ class Achievements extends DBEntity
         } finally {
             $stmt = null;
         }
-    }
+    } // end saveUnannounced()
+
+    /**
+     * Gets user achievements already saved in db
+     *
+     * @return array|null
+     */
+    public function checkSaved(): ?array {
+        try {
+            // get user achievements already saved in db
+            $sql = "SELECT ua.id, ua.user_id, ua.lang_id, ua.achievement_id, ua.date_created, a.description, a.img_uri
+                    FROM `user_achievements` ua
+                    LEFT JOIN `achievements` a
+                    ON ua.achievement_id = a.id
+                    WHERE ua.user_id = ? AND ua.lang_id = ?
+                    ORDER BY ua.achievement_id ASC";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$this->user_id, $this->lang_id]);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new AprelendoException('There was an unexpected error trying to get record in user '
+                . 'achievements table.');
+        } finally {
+            $stmt = null;
+        }
+    } // end checkSaved()
 
     /**
      * Returns achievements by $type_id and $threshold
@@ -154,4 +166,4 @@ class Achievements extends DBEntity
         $stmt->execute([$type_id, $threshold]);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
-}
+} // end checkByType()
