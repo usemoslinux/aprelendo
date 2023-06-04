@@ -214,7 +214,7 @@ class Words extends DBEntity
             $sort_sql = $this->buildSortSQL($sort_by);
 
             $sql = "SELECT `id`, `word`, `status`,
-                    DATEDIFF(CURDATE(), `date_modified`) AS `diff_today_modif`
+                    DATEDIFF(CURRENT_DATE(), `date_modified`) AS `diff_today_modif`
                     FROM `{$this->table}`
                     WHERE `user_id`=:user_id AND `lang_id`=:lang_id AND word LIKE :search_str
                     ORDER BY $sort_sql LIMIT :offset, :limit";

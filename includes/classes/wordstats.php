@@ -48,12 +48,12 @@ class wordStats extends DBEntity {
             $sql = "SELECT COUNT(word) AS `reviewed_today`
                     FROM `{$this->table}`
                     WHERE `user_id`=? AND `lang_id`=? AND `status` < 3
-                    AND `date_modified` > CURDATE() - INTERVAL 1 DAY";
+                    AND `date_modified` > CURRENT_DATE()";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            return $row['reviewed_today'];
+            return $row ? $row['reviewed_today'] : 0;
         } catch (\PDOException $e) {
             throw new AprelendoException('There was an unexpected error trying to get word stats.');
         } finally {

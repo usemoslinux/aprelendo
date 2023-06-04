@@ -35,7 +35,7 @@ class Log extends DBEntity
             $sql = "SELECT COUNT(*) AS `exists`
                     FROM `{$this->table}`
                     WHERE `user_id` = ?
-                    AND `date_created` = CURDATE()";
+                    AND `date_created` = CURRENT_DATE()";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id]);
@@ -59,7 +59,7 @@ class Log extends DBEntity
     {
         try {
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `date_created`)
-                    VALUES (?, CURDATE())";
+                    VALUES (?, CURRENT_DATE())";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id]);
