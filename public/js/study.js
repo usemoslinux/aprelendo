@@ -123,7 +123,7 @@ $(document).ready(function() {
                 let examples_count = 0;
                 const lang_iso = $("#card").data("lang");
                 let sentence_regex = new RegExp(
-                    '([^\\n.?!]|[\\d][.][\\d])*(?<![\\p{L}])' + word + '(?![\\p{L}])([^\\n.?!]|[.][\\d])*[\\n.?!]',
+                    '([^\\n.?!]|[\\d][.][\\d]|\\p{L}[.])*(?<![\\p{L}])' + word + '(?![\\p{L}])([^\\n.?!]|[.][\\d]|[.]\\p{L})*[\\n.?!]',
                     'gmiu'
                 );
 
