@@ -665,7 +665,7 @@ class Texts extends DBEntity
      */
     public function getAudioUri(): string
     {
-        return $this->audio_uri;
+        return $this->audio_uri ?? '';
     } // end getAudioUri()
 
     /**
@@ -673,16 +673,21 @@ class Texts extends DBEntity
      */
     public function getAudioUriForEmbbeding(): string
     {
-        $url = "https://www.googleapis.com/drive/v3/files/";
-        $file_id = '';
+        $url = '';
+        $audio_uri = $this->getAudioUri();
 
-        $pattern = '/\/d\/([-\w]+)\//'; // regex to match the file id
-        if (preg_match($pattern, $this->getAudioUri(), $matches)) {
-            $file_id = $matches[1]; // return the first captured group (the id)
-        } 
+        if (!empty($audio_uri)) {
+            $url = "https://www.googleapis.com/drive/v3/files/";
+            $file_id = '';
+            $pattern = '/\/d\/([-\w]+)\//'; // regex to match the file id
+            if (preg_match($pattern, $audio_uri, $matches)) {
+                $file_id = $matches[1]; // return the first captured group (the id)
+            } 
+            
+            $url .= $file_id;
+            $url .= "?alt=media&key=" . GOOGLE_DRIVE_API_KEY;
+        }
         
-        $url .= $file_id;
-        $url .= "?alt=media&key=" . GOOGLE_DRIVE_API_KEY;
         return $url;
     } // end getAudioUriForEmbbeding()
 

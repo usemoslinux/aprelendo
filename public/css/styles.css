@@ -818,6 +818,7 @@ a[role="menuitem"] {
 
 audio {
     width: 100%;
+    min-height: 40px;
 }
 
 #audioplayer-container {

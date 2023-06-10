@@ -239,7 +239,7 @@ $audio_uri = $text->getAudioUriForEmbbeding();
 
     <script defer src="js/underlinewords-min.js"></script>
     <script defer src="js/showtext-min.js"></script>
-    <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook.js"></script>
+    <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook-min.js"></script>
 
 </body>
 

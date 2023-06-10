@@ -1111,7 +1111,8 @@ $(document).ready(function() {
      */
     function loadAudio() {
         let $audio_player = $("#audioplayer");
-        if ($audio_player.length > 0) {
+        // if audio player is found and not an ebook...
+        if ($audio_player.length > 0 && !$('#readerpage > :first').is('#navigation')) {
             const txt = $("#text").text();
 
             $.ajax({
