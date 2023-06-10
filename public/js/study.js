@@ -164,8 +164,14 @@ $(document).ready(function() {
                                         : "<a class='word fw-bold'>" + match.replace(/\s\s+/g, ' ') + "</a>";
                                 });
                                 // make sure example sentence is unique, then add to the list
-                                examples += examples.search(escapeRegex(match)) > 0 ? "" : "<p>" + match + "</p>\n";
-                                examples_count++;    
+                                if (examples.search(escapeRegex(match)) == -1) {
+                                    examples += "<blockquote cite='" + text.source_uri + "'>";
+                                    examples += "<p>" + match + "</p>";
+                                    examples += "<cite>" + (text.author == "" ? "Anonymous" : text.author);
+                                    examples += ", <a href='" + text.source_uri + "' target='_blank'>" + text.title + "</a></cite>"
+                                    examples += "</blockquote>"
+                                    examples_count++;    
+                                }
                             }
                         }
                     }

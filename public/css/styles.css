@@ -1408,7 +1408,11 @@ small>a:not(.btn):hover {
 
 /* STUDY */
 
-.card-text p:not(:last-child) {
+.card-text blockquote:not(:last-child) {
     border-bottom: solid 1px lightgrey;
     padding-bottom: .5rem;
+}
+
+.card-text cite {
+	font-size: small;
 }
