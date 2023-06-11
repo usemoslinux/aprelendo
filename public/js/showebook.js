@@ -347,7 +347,7 @@ $(document).ready(function() {
         // retrieve ebook & audio last reading position
         $.ajax({
             type: "POST",
-            url: "ajax/ebookposition.php",
+            url: "/ajax/ebookposition.php",
             data: { mode: "GET", id: ebook_id},
             dataType: "json"
         })
@@ -382,7 +382,7 @@ $(document).ready(function() {
     function saveTextAndAudioPos(text_pos, audio_pos) {
         $.ajax({
             type: "POST",
-            url: "ajax/ebookposition.php",
+            url: "/ajax/ebookposition.php",
             data: { mode: "SAVE", id: ebook_id, audio_pos: audio_pos, text_pos: text_pos },
             dataType: "json",
         })
