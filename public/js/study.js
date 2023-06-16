@@ -137,7 +137,7 @@ $(document).ready(function() {
                 } 
 
                 const word_regex = new RegExp('(?<![\\p{L}|\\d])' + word + '(?![\\p{L}|\\d])', 'gmiu');
-                const spaces_symbols_regex = new RegExp('^[\\s\\d\\p{P}]+|[\\s]+$' , 'g');
+                const spaces_symbols_regex = new RegExp('^[\\s\\d]+|[\\s\\d]+$' , 'g');
                 
                 data.forEach(text => {                   
                     // extract example sentences from text
