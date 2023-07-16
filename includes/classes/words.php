@@ -367,6 +367,12 @@ class Words extends DBEntity
             case '5': // less frequent first (higher creation date - modification date)
                 $result = '`frequency` DESC';
                 break;
+            case '6': // words first
+                $result = '`is_phrase` DESC';
+                break;
+            case '7': // phrases first
+                $result = '`is_phrase`';
+                break;
             default:
                 $result = '';
                 break;
