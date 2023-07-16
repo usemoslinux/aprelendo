@@ -59,7 +59,7 @@ $(document).ready(function() {
         dataType: "json"
     })
     .done(function(data) {
-        $('#text-container').html(underlineWords(data, doclang));
+        $('#text-container').html(underlineWords(data, doclang, false));
     })
     .fail(function(xhr, ajaxOptions, thrownError) {
         console.log("There was an unexpected error trying to underline words in this text")
@@ -435,7 +435,7 @@ $(document).ready(function() {
                     // also, the case of the word/phrase in the text has to be respected
                     // for phrases, we need to make sure that new underlining is added for each word
 
-                    let $result = $(underlineWords(data, doclang));
+                    let $result = $(underlineWords(data, doclang, false));
                     let $cur_filter = {};
                     let cur_word = /""/;
 

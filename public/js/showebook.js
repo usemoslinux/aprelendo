@@ -275,7 +275,7 @@ $(document).ready(function() {
                 dataType: "json"
             })
             .done(function(data) {
-                $viewer.innerHTML = underlineWords(data, doclang);
+                $viewer.innerHTML = underlineWords(data, doclang, false);
                 $(".loading-spinner").fadeOut(1000);
             })
             .fail(function(xhr, ajaxOptions, thrownError) {

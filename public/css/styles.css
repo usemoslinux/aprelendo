@@ -902,6 +902,12 @@ audio {
     width: initial;
 }
 
+.dict-answer:hover,
+.dict-answer:active {
+    color: #0a58ca;
+    cursor: pointer;
+}
+
 .dict-wronganswer {
     background-color: inherit;
     border: 0;
@@ -1036,8 +1042,6 @@ input {
 
 .btn-link:hover,
 .btn-link:active,
-.btn-link.active,
-.btn-link:focus,
 .btn-link.focus {
     text-decoration: none;
     color: inherit;

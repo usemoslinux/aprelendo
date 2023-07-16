@@ -52,7 +52,7 @@ $(document).ready(function() {
             dataType: "json"
         })
         .done(function(data) {
-            $('#text').html(underlineWords(data, doclang));
+            $('#text').html(underlineWords(data, doclang, false));
         })
         .fail(function(xhr, ajaxOptions, thrownError) {
             console.log("There was an unexpected error trying to underline words in this text");  
@@ -235,6 +235,12 @@ $(document).ready(function() {
             }
         }
     }); // end .word.on.mouseover/touchmove
+
+    $(document).on("click", ".dict-answer", function(e) {
+        e.stopPropagation();
+        $selword = $(this).parent().prev();
+        showModal();
+    });
 
     // ajax call to get dictionary & translator URIs
     $.ajax({
@@ -423,6 +429,7 @@ $(document).ready(function() {
         })
             .done(function() {
                 const no_prev_underlined_words = $(".learning, .new, .forgotten").length == 0;
+                const hide_elem_if_dictation_is_on = next_phase == 5 ? "style='display: none;'" : "";
 
                 // if successful, underline word or phrase
                 if (is_phrase) {
@@ -462,7 +469,8 @@ $(document).ready(function() {
                             sel_text.toLowerCase()
                         ) {
                             $phrase.wrapAll(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal'></a>"
+                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal' " +
+                                hide_elem_if_dictation_is_on + "></a>"
                             );
 
                             $phrase.contents().unwrap();
@@ -487,11 +495,13 @@ $(document).ready(function() {
                         let $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
-                                "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#myModal'></a>"
+                                "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#myModal' " +
+                                hide_elem_if_dictation_is_on + "></a>"
                             );
                         } else {
                             $word.wrap(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal'></a>"
+                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal' " +
+                                hide_elem_if_dictation_is_on + "></a>"
                             );
                         }
                     });
@@ -557,7 +567,8 @@ $(document).ready(function() {
                     // also, the case of the word/phrase in the text has to be respected
                     // for phrases, we need to make sure that new underlining is added for each word
 
-                    let $result = $(underlineWords(data, doclang));
+                    const hide_elem =  next_phase == 5;
+                    let $result = $(underlineWords(data, doclang, hide_elem));
                     let $cur_filter = {};
                     let cur_word = /""/;
 
@@ -692,7 +703,10 @@ $(document).ready(function() {
                         '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
                         + '<h5 class="alert-heading">Assisted learning - Phase 4: Writing</h5><span class="small">'
                         + 'Fill in the blanks as you listen to the dictation. To toggle audio playback press '
-                        + '<kbd>2</kbd>. To rewind or fast-forward 1 second, use <kbd>1</kbd> and <kbd>3</kbd>.</span>'
+                        + '<kbd>2</kbd>. To rewind or fast-forward 1 second, use <kbd>1</kbd> and <kbd>3</kbd>. '
+                        + 'You can also click on the hint beside any misspelled word to include it in '
+                        + 'your word list. We recommend you do this once the dictation is complete and you are '
+                        + 'reviewing your mistakes.</span>'
                     );
 
                 toggleDictation();
@@ -906,7 +920,7 @@ $(document).ready(function() {
             let $original_elems = $(".word");
 
             if ($(".dict-answer").length == 0) {
-                // if user is no words are underlined don't allow phase 5 (reviewing) & jump to phase 6 (save changes)
+                // if no words are underlined don't allow phase 5 (reviewing) & jump to phase 6 (save changes)
                 if ($(".learning, .new, .forgotten").length == 0) {
                     $("#btn-next-phase").attr('title',
                         'Finish & Save - 5 (reviewing): no underlined words'
@@ -921,21 +935,25 @@ $(document).ready(function() {
                     const length = $elem.text().length;
                     const width = $original_elems.eq(index).width();
                     const line_height = $original_elems.eq(index).css("font-size");
+                    let border_color = '';
+                    
+                    if ($elem.hasClass('learned')) {
+                        border_color = 'green'
+                    } else if ($elem.hasClass('learning')) {
+                        border_color = 'orange'
+                    } else if ($elem.hasClass('new')) {
+                        border_color = 'DodgerBlue'
+                    } else if ($elem.hasClass('forgotten')) {
+                        border_color = 'crimson'
+                    }
+
                     $elem
                         .hide()
                         .after(
                             '<div class="input-group dict-input-group"><input type="text" class="dict" ' +
-                            'style="width:' +
-                            width +
-                            "px; line-height:" +
-                            line_height +
-                            ';" ' +
-                            'maxlength="' +
-                            length +
-                            '" data-text="' +
-                            $elem.text() +
-                            '">' +
-                            '<span class="dict-answer d-none"></span></div>'
+                            'style="width:' + width + "px; line-height:" + line_height + "; border-color:" + 
+                            border_color + ';" ' + 'maxlength="' + length + '" data-text="' + $elem.text() + '">' +
+                            '<span data-toggle="modal" data-bs-target="#myModal" class="dict-answer d-none"></span></div>'
                         );
                 });
 

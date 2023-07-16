@@ -26,10 +26,11 @@ const langs_with_no_word_separator = ['zh', 'ja', 'ko'];
  * @param {string} text 
  * @returns string
  */
-function addLinks(text, doclang) {
+function addLinks(text, doclang, hide_elem) {
     // add a to unknown words, but use different regex for languages with no word separators, such as Chinese
     let pattern = '';
     let result = '';
+    const hide_elem_str = hide_elem ? "style='display: none;'" : "";
     
     if (langs_with_no_word_separator.includes(doclang)) {
         pattern = new RegExp(/(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(\p{L})/iug);    
@@ -38,7 +39,9 @@ function addLinks(text, doclang) {
     }
     
     result = text.replace(pattern, function(match, g1) {
-        return g1 === undefined ? match : '<a class="word" data-toggle="modal" data-bs-target="#myModal">' + g1 + '</a>';
+        return g1 === undefined
+        ? match
+        : '<a class="word" data-toggle="modal" data-bs-target="#myModal" ' + hide_elem_str + ">"  + g1 + '</a>';
     });
 
     // add a to whitespaces
@@ -57,7 +60,7 @@ function addLinks(text, doclang) {
  * @param {object} data  
  * @returns string 
  */
-function underlineWords(data, doclang) {
+function underlineWords(data, doclang, hide_elem) {
     let text = data.text;
     let pattern = '';
     let user_phrases_learning = '';
@@ -65,6 +68,7 @@ function underlineWords(data, doclang) {
     let user_words_learning = '';
     let user_words_learned = '';
     let high_freq = '';
+    const hide_elem_str = hide_elem ? "style='display: none;'" : "";
 
     // 1. underline phrases & words
 
@@ -82,8 +86,6 @@ function underlineWords(data, doclang) {
                 user_words_learned += element.word + '|';
             }
         }
-
-        console.log("word: " + element.word);
     });
 
         if (user_phrases_learning) {
@@ -96,7 +98,9 @@ function underlineWords(data, doclang) {
             }
 
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<a class='word reviewing learning' data-toggle='modal' data-bs-target='#myModal'>" + g1 + "</a>";
+                return g1 === undefined 
+                ? match
+                : "<a class='word reviewing learning' data-toggle='modal' data-bs-target='#myModal' " + hide_elem_str + ">" + g1 + "</a>";
             });
         }
 
@@ -110,7 +114,9 @@ function underlineWords(data, doclang) {
             }
 
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<a class='word learned' data-toggle='modal' data-bs-target='#myModal'>" + g1 + "</a>";
+                return g1 === undefined
+                ? match
+                : "<a class='word learned' data-toggle='modal' data-bs-target='#myModal' " + hide_elem_str + ">" + g1 + "</a>";
             });
         }
 
@@ -124,7 +130,9 @@ function underlineWords(data, doclang) {
             }
 
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<a class='word reviewing learning' data-toggle='modal' data-bs-target='#myModal'>" + g1 + "</a>";
+                return g1 === undefined
+                ? match
+                : "<a class='word reviewing learning' data-toggle='modal' data-bs-target='#myModal' " + hide_elem_str + ">" + g1 + "</a>";
             });
         }
 
@@ -138,7 +146,9 @@ function underlineWords(data, doclang) {
             }
             
             text = text.replace(pattern, function(match, g1) {
-                return g1 === undefined ? match : "<a class='word learned' data-toggle='modal' data-bs-target='#myModal'>" + g1 + "</a>";
+                return g1 === undefined
+                ? match
+                : "<a class='word learned' data-toggle='modal' data-bs-target='#myModal' " + hide_elem_str + ">" + g1 + "</a>";
             });
         }
 
@@ -154,11 +164,13 @@ function underlineWords(data, doclang) {
         }
 
         text = text.replace(pattern, function(match, p1, offset, string) {
-            return p1 === undefined ? match : "<a class='word frequency-list' data-toggle='modal' data-bs-target='#myModal'>" + p1 + "</a>";
+            return p1 === undefined
+            ? match
+            : "<a class='word frequency-list' data-toggle='modal' data-bs-target='#myModal' " + hide_elem_str + ">" + p1 + "</a>";
         });
     }
 
-    return addLinks(text, doclang);
+    return addLinks(text, doclang, hide_elem);
 }
 
 function escapeRegExp(string) {
