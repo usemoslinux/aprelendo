@@ -1012,17 +1012,21 @@ $(document).ready(function() {
             return;
         }
 
-        // if backspace, move focus to previous input
-        if (keyCode == 8) {
-            // backspace
-            if (!$(this).val()) {
+        // if input is empty...
+        if (!$(this).val()) {
+            if (keyCode == 8) {
+                // if backspace is pressed, move focus to previous input
                 const index = $(".dict").index(this) - 1;
                 e.preventDefault();
                 $(".dict")
                     .eq(index)
                     .focus();    
-            }
+            } else if (keyCode == 32) {
+                // if space key is pressed, prevent default behavior
+                e.preventDefault();
+            }    
         }
+        
     }); // end .dict.on.keydown
 
     /**
