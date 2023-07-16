@@ -214,7 +214,8 @@ class Words extends DBEntity
             $sort_sql = $this->buildSortSQL($sort_by);
 
             $sql = "SELECT `id`, `word`, `status`,
-                    DATEDIFF(CURRENT_DATE(), `date_modified`) AS `diff_today_modif`
+                    DATEDIFF(CURRENT_DATE(), `date_modified`) AS `diff_today_modif`,
+                    DATEDIFF(`date_modified`, `date_created`) AS `frequency`
                     FROM `{$this->table}`
                     WHERE `user_id`=:user_id AND `lang_id`=:lang_id AND word LIKE :search_str
                     ORDER BY $sort_sql LIMIT :offset, :limit";
@@ -360,11 +361,11 @@ class Words extends DBEntity
             case '3': // learning first
                 $result = '`status` DESC';
                 break;
-            case '4': // words first
-                $result = '`is_phrase` DESC';
+            case '4': // more frequent first (smaller creation date - modification date)
+                $result = '`frequency`';
                 break;
-            case '5': // phrases first
-                $result = '`is_phrase`';
+            case '5': // less frequent first (higher creation date - modification date)
+                $result = '`frequency` DESC';
                 break;
             default:
                 $result = '';

@@ -37,10 +37,12 @@ $adjacents = 2; // adjacent page numbers
 $headings = array('Word', 'Status');
 $col_widths = array('33px', '', '60px');
 $action_menu = array('mDelete' => 'Delete');
-$sort_menu = array('mSortNewFirst' => 'New first',
-                   'mSortOldFirst' => 'Old first',
-                   'mSortLearnedFirst' => 'Learned first',
-                   'mSortForgottenFirst' => 'Forgotten first');
+$sort_menu = array('mSortNewFirst'       => 'New first',
+                   'mSortOldFirst'       => 'Old first',
+                   'mSortLearnedFirst'   => 'Learned first',
+                   'mSortForgottenFirst' => 'Forgotten first',
+                   'mSortHighFrequency'  => 'More frequent first',
+                   'mSortLowFrequency'   => 'Less frequent first');
 $sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
 
 // if the page is loaded because user searched for something, show search results
