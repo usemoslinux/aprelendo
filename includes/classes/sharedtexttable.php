@@ -28,11 +28,11 @@ class SharedTextTable extends TextTable
      * Constructor
      *
      * @param int $user_id
-     * @param string $headings
-     * @param string $col_widths
+     * @param array $headings
+     * @param array $col_widths
      * @param array $rows
-     * @param string $action_menu HTML to create action menu
-     * @param string $sort_menu HTML to create sort menu
+     * @param array $action_menu HTML to create action menu
+     * @param array $sort_menu HTML to create sort menu
      */
     public function __construct(
         int $user_id,

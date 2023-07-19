@@ -49,21 +49,6 @@ class Conversion
     } // end arrayToCsv()
 
     /**
-     * Converts XML string to Array
-     *
-     * @param string $xmlObject
-     * @return array
-     */
-    public static function xmlToArray(string $xmlObject): array
-    {
-        $out = array ();
-        foreach ((array)$xmlObject as $index => $node) {
-            $out[$index] = (is_object($node)) ? xmlToArray($node) : $node;
-        }
-        return $out;
-    } // end xmlToArray()
-
-    /**
      * Convert an array to XML
      * @param array $array
      * @param SimpleXMLElement $xml

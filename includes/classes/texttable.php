@@ -31,12 +31,12 @@ class TextTable extends Table
     /**
     * Constructor
     *
-    * @param string $headings
-    * @param string $col_widths
+    * @param array $headings
+    * @param array $col_widths
     * @param array $rows
     * @param boolean $show_archived
-    * @param string $action_menu HTML to create action menu
-    * @param string $sort_menu HTML to create sort menu
+    * @param array $action_menu HTML to create action menu
+    * @param array $sort_menu HTML to create sort menu
     */
     public function __construct(
         array $headings,

@@ -22,22 +22,22 @@ namespace Aprelendo\Includes\Classes;
 
 abstract class Table
 {
-    protected $headings     = [];
-    protected $col_count    = 0;
-    protected $col_widths   = [];
-    protected $rows         = [];
-    protected $action_menu  = [];
-    protected $sort_menu    = [];
-    protected $has_chkbox   = false;
+    protected array $headings     = [];
+    protected int $col_count      = 0;
+    protected array $col_widths   = [];
+    protected array $rows         = [];
+    protected array $action_menu  = [];
+    protected array $sort_menu    = [];
+    protected bool $has_chkbox    = false;
 
     /**
      * Constructor
      *
-     * @param string $headings
-     * @param string $col_widths
+     * @param array $headings
+     * @param array $col_widths
      * @param array $rows
-     * @param string $action_menu HTML to create action menu
-     * @param string $sort_menu HTML to create sort menu
+     * @param array $action_menu HTML to create action menu
+     * @param array $sort_menu HTML to create sort menu
      */
     public function __construct(
         array $headings,

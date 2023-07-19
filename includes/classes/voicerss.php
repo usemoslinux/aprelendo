@@ -70,7 +70,6 @@ class VoiceRSS
         $url = ((isset($settings['ssl']) && $settings['ssl']) ? 'https' : 'http') . '://api.voicerss.org/';
         
         $curl_options = array(CURLOPT_RETURNTRANSFER => 1,
-                                 CURLOPT_BINARYTRANSFER => (isset($settings['b64']) && $settings['b64']) ? 0 : 1,
                               CURLOPT_HTTPHEADER => array('Content-Type: application/x-www-form-urlencoded; '
                                 . 'charset=UTF-8; Expect: 100-continue'),
                               CURLOPT_POST => 1,
