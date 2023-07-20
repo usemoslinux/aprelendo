@@ -28,8 +28,9 @@ class Gems extends DBEntity
     protected $user_id            = 0;
     protected $lang_id            = 0;
     protected $gems               = 0;
-    protected $last_study_session = null; // last study session date
-    protected $days_streak        = 0;    // study streak
+    protected $last_study_session = null;  // last study session date
+    protected $days_streak        = 0;     // study streak
+    protected $today_is_streak    = false; // indicates if user continued his streak today or not yet
     private   $time_zone          = '';
     
     /**
@@ -72,7 +73,9 @@ class Gems extends DBEntity
                 $this->last_study_session = $row['last_study_session'];
                 
                 $diff_days = $this->calculateDaysFromLastStudy($row['last_study_session']);
+                
                 $this->days_streak        = ($diff_days == -1 || $diff_days == 0) ? $row['days_streak'] : 0;
+                $this->today_is_streak    = $this->days_streak > 0 || $diff_days == 0;
             }
         } catch (\PDOException $e) {
             throw new AprelendoException('There was an unexpected error trying to load record from gems table.');
@@ -207,4 +210,12 @@ class Gems extends DBEntity
     {
         return $this->days_streak;
     } // end getDaysStreak()
+
+    /**
+     * Get the value of today_is_streak
+     */
+    public function getTodayIsStreak(): bool
+    {
+        return $this->today_is_streak;
+    } // end getTodayIsStreak()
 }

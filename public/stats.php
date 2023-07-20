@@ -174,7 +174,9 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
                 </dt>
                 <dt class="col-md-2">
                     <figure class="px-5 px-sm-0 mt-2">
-                        <img src="/img/gamification/streak.png" class="mx-auto d-block m-2"
+                        <img src="/img/gamification/streak.png"
+                            style="<?php echo $today_is_reading_streak ? '' : 'filter: grayscale(1);'; ?>"
+                            class="mx-auto d-block m-2"
                             alt="Streak" title="Reading streak days">
                         <figcaption class="w-100 text-center fw-bold">
                             <span style="font-size:2rem"><?php echo $streak_days; ?></span>
