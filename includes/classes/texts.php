@@ -382,9 +382,11 @@ class Texts extends DBEntity
                             NULL,
                             `title`,
                             `author`,
+                            `audio_uri`,
                             `source_uri`,
                             `type`,
                             `word_count`,
+                            CHAR_LENGTH(`text`) AS `char_length`,
                             `level`
                     FROM `{$this->table}`
                     WHERE `user_id` = :user_id

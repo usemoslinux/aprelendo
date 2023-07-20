@@ -41,8 +41,8 @@ $sort_menu = array('mSortNewFirst'       => 'New first',
                    'mSortOldFirst'       => 'Old first',
                    'mSortLearnedFirst'   => 'Learned first',
                    'mSortForgottenFirst' => 'Forgotten first',
-                   'mSortHighFrequency'  => 'More frequent first',
-                   'mSortLowFrequency'   => 'Less frequent first');
+                   'mSortHighFrequency'  => 'More frequently modified first',
+                   'mSortLowFrequency'   => 'Less frequently modified first');
 $sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
 
 // if the page is loaded because user searched for something, show search results

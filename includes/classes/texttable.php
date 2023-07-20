@@ -22,6 +22,7 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Table;
 use Aprelendo\Includes\Classes\Url;
+use Aprelendo\Includes\Classes\Reader;
 
 class TextTable extends Table
 {
@@ -85,7 +86,12 @@ class TextTable extends Table
                 : 'by Unkown' . $source_uri;
             
             $link = $this->show_archived ? '' : 'showtext';
-            
+
+            // check if text has audio file or if it supports TTS (less than MAX_LENGTH of characters)
+            $audio = !empty($this->rows[$i]['audio_uri']) || ($this->rows[$i]['char_length'] < Reader::MAX_TEXT_LENGTH + 1 && ($this->rows[$i]['type'] < 5 || $this->rows[$i]['type'] > 6))
+                ? '<span title="Has audio" class="fa-solid fa-headphones"></span>'
+                : '';
+
             // if it's a video, then change link accordinly
             if ($this->rows[$i]['type'] && !empty($this->rows[$i]['type'])
                 && isset($link) && !empty($link)) {
@@ -128,7 +134,7 @@ class TextTable extends Table
                     . "data-idText='$text_id'></span><br><small>$total_likes</small></span></td>";
             }
             
-            $html .= '<td class="col-title">' . $type_array[$this->rows[$i]['type']-1][1] . ' ' . $link
+            $html .= '<td class="col-title">' . $type_array[$this->rows[$i]['type']-1][1] . ' ' . $audio . ' ' . $link
                 . $text_title . '</a><br><small>' . $text_author . $shared_by . $text_level . $nr_of_words
                 . '</small></td></tr>';
         }

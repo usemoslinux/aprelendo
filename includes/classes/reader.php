@@ -43,7 +43,7 @@ class Text
     protected $level      = 0;
     protected $is_shared  = false;
     protected $is_long_text = false;
-    private const MAX_TEXT_LENGTH = 10000;
+    public const MAX_TEXT_LENGTH = 10000;
     
     /**
      * Constructor
