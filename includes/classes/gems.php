@@ -75,7 +75,7 @@ class Gems extends DBEntity
                 $diff_days = $this->calculateDaysFromLastStudy($row['last_study_session']);
                 
                 $this->days_streak        = ($diff_days == -1 || $diff_days == 0) ? $row['days_streak'] : 0;
-                $this->today_is_streak    = $this->days_streak > 0 || $diff_days == 0;
+                $this->today_is_streak    = $diff_days >= 0;
             }
         } catch (\PDOException $e) {
             throw new AprelendoException('There was an unexpected error trying to load record from gems table.');
