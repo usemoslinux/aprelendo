@@ -58,7 +58,7 @@ use Aprelendo\Includes\Classes\User;
                             </div>
                             <br>
                             <div class="text-center">Try again later or <a
-                            href="https://www.aprelendo.com/support">contact support</a> for help.</div><br>';
+                            href="https://www.aprelendo.com/contact">contact support</a> for help.</div><br>';
                         }
                     } else { // $_GET parameters not set or empty
                         echo "<div id='alert_msg_2' class='alert alert-danger'>The activation link seems to be

@@ -25,7 +25,7 @@ $show_pages = array('showtext', 'showvideo', 'showebook', 'showofflinevideo');
 
 // these are the same pages that use simpleheader.php instead of header.php
 $no_login_required_pages = array('index', 'register', 'login', 'accountactivation',
-                                 'aboutus', 'privacy', 'attributions', 'extensions', 'support',
+                                 'aboutus', 'privacy', 'attributions', 'extensions', 'contact',
                                  'totalreading', 'compatibledics', 'error', 'forgotpassword',
                                  'donate');
 

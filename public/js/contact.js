@@ -31,7 +31,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "ajax/support.php",
+            url: "ajax/contact.php",
             data: form_data
         })
             .done(function(data) {
