@@ -252,7 +252,7 @@ $(document).ready(function() {
                             sel_text.toLowerCase()
                         ) {
                             phrase.wrapAll(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal'></a>"
+                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#dic-modal'></a>"
                             );
 
                             phrase.contents().unwrap();
@@ -272,11 +272,11 @@ $(document).ready(function() {
                         let $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
-                                "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#myModal'></a>"
+                                "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#dic-modal'></a>"
                             );
                         } else {
                             $word.wrap(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal'></a>"
+                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#dic-modal'></a>"
                             );
                         }
                     });
@@ -386,7 +386,7 @@ $(document).ready(function() {
         // as this one does: $('#dicFrame').attr('src', url);
 
         $(parent.document)
-            .find("#myModal")
+            .find("#dic-modal")
             .modal("show");
     } // end showModal
 
@@ -575,7 +575,7 @@ $(document).ready(function() {
     /**
      * Resumes video when modal window is closed
      */
-    $("#myModal").on("hidden.bs.modal", function() {
+    $("#dic-modal").on("hidden.bs.modal", function() {
         if (resume_video) {
             player.play();
             resume_video = false;
@@ -583,7 +583,7 @@ $(document).ready(function() {
 
         // removes word selection
         $selword.removeClass("highlighted");
-    }); // end #myModal.on.hidden.bs.modal
+    }); // end #dic-modal.on.hidden.bs.modal
 
     /**
      * Hides loader spinner when dictionary iframe finished loading

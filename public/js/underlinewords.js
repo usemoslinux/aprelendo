@@ -41,7 +41,7 @@ function addLinks(text, doclang, hide_elem) {
     result = text.replace(pattern, function(match, g1) {
         return g1 === undefined
         ? match
-        : '<a class="word" data-toggle="modal" data-bs-target="#myModal" ' + hide_elem_str + ">"  + g1 + '</a>';
+        : '<a class="word" data-toggle="modal" data-bs-target="#dic-modal" ' + hide_elem_str + ">"  + g1 + '</a>';
     });
 
     // add a to whitespaces
@@ -100,7 +100,7 @@ function underlineWords(data, doclang, hide_elem) {
             text = text.replace(pattern, function(match, g1) {
                 return g1 === undefined 
                 ? match
-                : "<a class='word reviewing learning' data-toggle='modal' data-bs-target='#myModal' " + hide_elem_str + ">" + g1 + "</a>";
+                : "<a class='word reviewing learning' data-toggle='modal' data-bs-target='#dic-modal' " + hide_elem_str + ">" + g1 + "</a>";
             });
         }
 
@@ -116,7 +116,7 @@ function underlineWords(data, doclang, hide_elem) {
             text = text.replace(pattern, function(match, g1) {
                 return g1 === undefined
                 ? match
-                : "<a class='word learned' data-toggle='modal' data-bs-target='#myModal' " + hide_elem_str + ">" + g1 + "</a>";
+                : "<a class='word learned' data-toggle='modal' data-bs-target='#dic-modal' " + hide_elem_str + ">" + g1 + "</a>";
             });
         }
 
@@ -132,7 +132,7 @@ function underlineWords(data, doclang, hide_elem) {
             text = text.replace(pattern, function(match, g1) {
                 return g1 === undefined
                 ? match
-                : "<a class='word reviewing learning' data-toggle='modal' data-bs-target='#myModal' " + hide_elem_str + ">" + g1 + "</a>";
+                : "<a class='word reviewing learning' data-toggle='modal' data-bs-target='#dic-modal' " + hide_elem_str + ">" + g1 + "</a>";
             });
         }
 
@@ -148,7 +148,7 @@ function underlineWords(data, doclang, hide_elem) {
             text = text.replace(pattern, function(match, g1) {
                 return g1 === undefined
                 ? match
-                : "<a class='word learned' data-toggle='modal' data-bs-target='#myModal' " + hide_elem_str + ">" + g1 + "</a>";
+                : "<a class='word learned' data-toggle='modal' data-bs-target='#dic-modal' " + hide_elem_str + ">" + g1 + "</a>";
             });
         }
 
@@ -166,7 +166,7 @@ function underlineWords(data, doclang, hide_elem) {
         text = text.replace(pattern, function(match, p1, offset, string) {
             return p1 === undefined
             ? match
-            : "<a class='word frequency-list' data-toggle='modal' data-bs-target='#myModal' " + hide_elem_str + ">" + p1 + "</a>";
+            : "<a class='word frequency-list' data-toggle='modal' data-bs-target='#dic-modal' " + hide_elem_str + ">" + p1 + "</a>";
         });
     }
 

@@ -394,7 +394,7 @@ $(document).ready(function() {
         // the previous line loads iframe content without adding it to browser history,
         // as this one does: $dic_frame.attr('src', url);
 
-        $doc.find("#myModal").modal("show");
+        $doc.find("#dic-modal").modal("show");
     } // end showModal
 
     /**
@@ -469,7 +469,7 @@ $(document).ready(function() {
                             sel_text.toLowerCase()
                         ) {
                             $phrase.wrapAll(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal' " +
+                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#dic-modal' " +
                                 hide_elem_if_dictation_is_on + "></a>"
                             );
 
@@ -495,12 +495,12 @@ $(document).ready(function() {
                         let $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
-                                "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#myModal' " +
+                                "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#dic-modal' " +
                                 hide_elem_if_dictation_is_on + "></a>"
                             );
                         } else {
                             $word.wrap(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#myModal' " +
+                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#dic-modal' " +
                                 hide_elem_if_dictation_is_on + "></a>"
                             );
                         }
@@ -878,7 +878,7 @@ $(document).ready(function() {
     /**
      * Triggered when modal dictionary window is closed
      */
-    $doc.on("hidden.bs.modal", "#myModal", function() {
+    $doc.on("hidden.bs.modal", "#dic-modal", function() {
         let $audioplayer = $("#audioplayer");
 
         // Resumes playing if audio was paused when clicking on a word
@@ -888,7 +888,7 @@ $(document).ready(function() {
 
         // removes word selection
         $selword.removeClass("highlighted");
-    }); // end #myModal.on.hidden.bs.modal
+    }); // end #dic-modal.on.hidden.bs.modal
 
     /**
      * Changes playback speed when user moves slider
@@ -953,7 +953,7 @@ $(document).ready(function() {
                             '<div class="input-group dict-input-group"><input type="text" class="dict" ' +
                             'style="width:' + width + "px; line-height:" + line_height + "; border-color:" + 
                             border_color + ';" ' + 'maxlength="' + length + '" data-text="' + $elem.text() + '">' +
-                            '<span data-toggle="modal" data-bs-target="#myModal" class="dict-answer d-none"></span></div>'
+                            '<span data-toggle="modal" data-bs-target="#dic-modal" class="dict-answer d-none"></span></div>'
                         );
                 });
 

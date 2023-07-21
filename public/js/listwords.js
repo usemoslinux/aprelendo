@@ -171,7 +171,7 @@ $(document).ready(function() {
         // the previous line loads iframe content without adding it to browser history,
         // as this one does: $dic_frame.attr('src', url);
 
-        $("#myModal").modal("show");
+        $("#dic-modal").modal("show");
     }); // end #.word.on.click
 
     /**

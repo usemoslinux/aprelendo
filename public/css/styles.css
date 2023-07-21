@@ -923,7 +923,7 @@ input {
 
 /* MODAL DIALOG (TO ADD NEW WORDS) */
 
-#myModal .modal-dialog {
+#dic-modal .modal-dialog {
     color: black;
     display: flex;
     flex: 1;
@@ -935,17 +935,17 @@ input {
     z-index: 4;
 }
 
-#myModal .modal-content {
+#dic-modal .modal-content {
     display: flex;
     flex: 1;
     flex-direction: column;
 }
 
-#myModal .modal-header {
+#dic-modal .modal-header {
     padding-bottom: 2px;
 }
 
-#myModal .modal-body {
+#dic-modal .modal-body {
     display: flex;
     flex: 1;
     padding: 0;
