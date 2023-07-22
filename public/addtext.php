@@ -162,7 +162,10 @@ use Aprelendo\Includes\Classes\Texts;
     </div>
 </div>
 
-<script defer src="js/readability/Readability-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/readability/0.4.4/Readability.min.js"
+    integrity="sha384-YqVytsOEvlLnJ+cNHmbexthfaZ482cPdQ+GQuIZngy2l0P+HIKE7wpmcUC6Ni5iw"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+</script>
 <script defer src="js/addtext-min.js"></script>
 
 <?php require_once 'footer.php'?>
