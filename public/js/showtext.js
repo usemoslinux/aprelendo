@@ -258,13 +258,19 @@ $(document).ready(function() {
      * Builds translator link including the paragraph to translate as a parameter
      */
     function buildTranslateParagraphLink() {
-        let $start_obj = $selword.prevUntil(":contains('.')").last();
+        let $start_obj = $selword.prevUntil(":contains('.'), :contains('!'), :contains('?'), :contains('\n')").last();
         $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
-        let $end_obj = $selword
-            .prev()
-            .nextUntil(":contains('.')")
-            .last()
-            .next();
+        
+        let $end_obj = $start_obj.prev().length == 0
+            ? $selword
+                .nextUntil(":contains('.'), :contains('。'), :contains('!'), :contains('?'), :contains('\n')")
+                .last()
+                .next()
+            : $selword
+                .prev()
+                .nextUntil(":contains('.'), :contains('。'), :contains('!'), :contains('?'), :contains('\n')")
+                .last()
+                .next();
         $end_obj =
             $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
         let $sentence = $start_obj
