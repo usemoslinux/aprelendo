@@ -432,7 +432,7 @@ class Reader extends Text
     {
         $html = '<div class="col-xl-8 offset-xl-2">' .
                     '<div style="height: 100vh; height: calc(var(--vh, 1vh) * 100);" class="d-flex flex-column">' .
-                        '<div id="offline-video-container" class="ratio ratio-16x9 mt-1">' .
+                        '<div id="offline-video-container" class="ratio ratio-16x9 bg-dark mt-1">' .
                         '<input id="video-file-input" type="file" name="video-file-input"
                             accept="video/mp4,video/ogg,video/webm" style="display: none;">' .
                         '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt"
@@ -445,9 +445,9 @@ class Reader extends Text
                         '</div>';
 
         $html .= '<div class="d-flex flex-wrap">'.
-                    '<button type="button" id="btn-selvideo" title="Select video" class="btn btn-sm btn-primary
-                        me-2 my-2"><span class="fa-solid fa-video"></span></button>'.
-                    '<button type="button" id="btn-selsubs" title="Select subtitles" class="btn btn-sm btn-primary
+                    '<button type="button" id="btn-selvideo" title="Select video (MP4/OGG/WEBM)" class="btn btn-sm 
+                        btn-primary me-2 my-2"><span class="fa-solid fa-video"></span></button>'.
+                    '<button type="button" id="btn-selsubs" title="Select subtitles (SRT)" class="btn btn-sm btn-primary
                         me-2 my-2"><span class="fa-solid fa-closed-captioning"></span></button>'.
                     '<button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
                         class="btn btn-sm btn-secondary me-2 my-2" title="Reader settings">
