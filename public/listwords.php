@@ -84,4 +84,4 @@ require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
 
 ?>
 
-<script defer src="js/listwords-min.js"></script>
+<script defer src="js/listwords.min.js"></script>

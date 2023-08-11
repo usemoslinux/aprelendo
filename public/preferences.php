@@ -243,5 +243,5 @@ $sel = ' selected ';
     </div>
 </div>
 
-<script defer src="js/preferences-min.js"></script>
+<script defer src="js/preferences.min.js"></script>
 <?php require_once 'footer.php'; ?>

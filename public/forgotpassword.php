@@ -130,7 +130,7 @@ use Aprelendo\Includes\Classes\User;
     </div>
 </main>
 
-<script defer src="js/forgotpassword-min.js"></script>
-<script defer src="js/password-min.js"></script>
+<script defer src="js/forgotpassword.min.js"></script>
+<script defer src="js/password.min.js"></script>
 
 <?php require_once 'footer.php'?>

@@ -98,6 +98,6 @@ if (!$user->isLoggedIn()) {
     </div>
 </div>
 
-<script defer src="js/contact-min.js"></script>
+<script defer src="js/contact.min.js"></script>
 
 <?php require_once 'footer.php';?>

@@ -192,7 +192,7 @@ use Aprelendo\Includes\Classes\Language;
     </div>
 </aside>
 
-<script defer src="js/userprofile-min.js"></script>
-<script defer src="js/password-min.js"></script>
+<script defer src="js/userprofile.min.js"></script>
+<script defer src="js/password.min.js"></script>
 
 <?php require_once 'footer.php'; ?>

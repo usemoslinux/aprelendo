@@ -94,6 +94,6 @@ require_once PUBLIC_PATH . 'simpleheader.php';
 </main>
 
 <script defer src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
-<script defer src="js/login-min.js"></script>
+<script defer src="js/login.min.js"></script>
 
 <?php require_once 'footer.php'?>

@@ -18,7 +18,7 @@
  */
 $(document).ready(function() {
     const doclang = $("html").attr("lang");
-    const ebook_id = $("script[src*='showebook-min.js']").attr("data-id");
+    const ebook_id = $("script[src*='showebook.min.js']").attr("data-id");
     const book = ePub();
     let text_pos = "";
 

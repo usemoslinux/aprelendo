@@ -110,5 +110,5 @@ try {
 echo $html;
 ?>
 
-<script defer src="js/cookies-min.js"></script>
-<script defer src="js/listtexts-min.js"></script>
+<script defer src="js/cookies.min.js"></script>
+<script defer src="js/listtexts.min.js"></script>

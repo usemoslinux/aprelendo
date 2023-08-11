@@ -54,6 +54,6 @@ if(isset($unnanounced_achievements) && !empty($unnanounced_achievements)):
     </div>
 </div>
 
-<script defer src="js/achievementsmodal-min.js"></script>
+<script defer src="js/achievementsmodal.min.js"></script>
 
 <?php endif; ?>

@@ -166,6 +166,6 @@ use Aprelendo\Includes\Classes\Texts;
     integrity="sha384-YqVytsOEvlLnJ+cNHmbexthfaZ482cPdQ+GQuIZngy2l0P+HIKE7wpmcUC6Ni5iw"
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
-<script defer src="js/addtext-min.js"></script>
+<script defer src="js/addtext.min.js"></script>
 
 <?php require_once 'footer.php'?>

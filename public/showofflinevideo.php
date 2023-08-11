@@ -78,8 +78,8 @@ require_once PUBLIC_PATH . 'head.php';
             require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
         ?>
 
-        <script defer src="js/underlinewords-min.js"></script>
-        <script defer src="js/showofflinevideo-min.js"></script>
+        <script defer src="js/underlinewords.min.js"></script>
+        <script defer src="js/showofflinevideo.min.js"></script>
         <script defer src="js/subtitles-parser/subtitles.parser.min.js"></script>
     </body>
 </html>

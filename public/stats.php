@@ -259,6 +259,6 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
         ?>
     </main>
 </div>
-<script defer src="js/stats-min.js"></script>
+<script defer src="js/stats.min.js"></script>
 
 <?php require_once 'footer.php'; ?>

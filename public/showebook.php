@@ -237,9 +237,9 @@ $audio_uri = $text->getAudioUriForEmbbeding();
         require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
     ?>
 
-    <script defer src="js/underlinewords-min.js"></script>
-    <script defer src="js/showtext-min.js"></script>
-    <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook-min.js"></script>
+    <script defer src="js/underlinewords.min.js"></script>
+    <script defer src="js/showtext.min.js"></script>
+    <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook.min.js"></script>
 
 </body>
 

@@ -85,5 +85,5 @@ try {
 echo $html;
 ?>
 
-<script defer src="js/listtexts-min.js"></script>
-<script defer src="js/likes-min.js"></script>
+<script defer src="js/listtexts.min.js"></script>
+<script defer src="js/likes.min.js"></script>

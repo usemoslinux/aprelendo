@@ -132,9 +132,9 @@ require_once PUBLIC_PATH . 'head.php';
         require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
     ?>
 
-    <script defer src="js/underlinewords-min.js"></script>
-    <script defer src="js/showtext-min.js"></script>
-    <script defer src="js/likes-min.js"></script>
+    <script defer src="js/underlinewords.min.js"></script>
+    <script defer src="js/showtext.min.js"></script>
+    <script defer src="js/likes.min.js"></script>
 </body>
 
 </html>

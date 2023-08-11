@@ -77,5 +77,5 @@ if (isset($_GET['chg'])) {
         </div>
     </div>
 
-    <script defer src="js/languages-min.js"></script>
+    <script defer src="js/languages.min.js"></script>
     <?php require_once 'footer.php'; ?>
