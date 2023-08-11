@@ -174,7 +174,7 @@ $audio_uri = $text->getAudioUriForEmbbeding();
             <h1 id="title">...</h1>
             <button id="close-offcanvas" type="button"
                 class="btn-close text-reset <?php echo $class == 'darkmode' ? 'btn-close-white' : ''; ?>"
-                data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                data-bs-dismiss="offcanvas" aria-label="Close & Save reading position"></button>
         </div>
         <div class="offcanvas-body">
             <image id="cover" width="150px">
@@ -184,7 +184,6 @@ $audio_uri = $text->getAudioUriForEmbbeding();
         <?php if(!empty($audio_uri)): ?>
             <audio id="audioplayer" controls>
                 <source id="audioplayer" src="<?php echo $audio_uri; ?>" />
-                <!-- <source src="https://download.samplelib.com/mp3/sample-15s.mp3" /> -->
                 <p>Your browser doesn't support the audio HTML tag.</p>
             </audio>
         <?php endif; ?>

@@ -400,6 +400,5 @@ $(document).ready(function() {
         let audio_pos = audio != null ? audio.currentTime : 0;
     
         saveTextAndAudioPos(text_pos, audio_pos);
-        return "Save text & audio positions?";
     });
 });
