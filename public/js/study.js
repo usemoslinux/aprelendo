@@ -326,18 +326,18 @@ $(document).ready(function() {
     /**
      * Builds translator link using the word object as a parameter
      */
-    function buildTranslateParagraphLink($word) {
+    function buildTranslationLink($word) {
         const sentence = $word.parent("p").text().trim();
 
         return translator_URI.replace("%s", encodeURIComponent(sentence));
-    } // end buildTranslateParagraphLink
+    } // end buildTranslationLink
 
     /**
      * Opens translator in new window. 
      * Triggers when user click in translate button in modal window
      */
      $("#btn-translate").on("click", function() {
-        window.open(buildTranslateParagraphLink($sel_word));
+        window.open(buildTranslationLink($sel_word));
     }); // end #btn-translate.on.click()
 
     /**
@@ -349,7 +349,7 @@ $(document).ready(function() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         if (!isMobile && $(e.target).is(".word")) {
-            window.open(buildTranslateParagraphLink($(e.target)));
+            window.open(buildTranslationLink($(e.target)));
         }
         return false;
      }); // end document.contextmenu

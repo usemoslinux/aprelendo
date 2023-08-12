@@ -406,7 +406,7 @@ class Reader extends Text
                   '<div data-ytid="' . $yt_id . '" id="player"></div>' .
                '</div>';
 
-        $html .= "<div id='text-container' class='overflow-auto mb-1' data-type='video' data-textID='"
+        $html .= "<div id='text-container' class='overflow-auto text-center mb-1' data-type='video' data-textID='"
             . $this->id . "'>";
         $xml = new SimpleXMLElement($this->text);
 
@@ -414,7 +414,7 @@ class Reader extends Text
             $start = (string)$xml->e[$i]->start;
             $dur = (string)$xml->e[$i]->duration;
             $text = html_entity_decode((string)$xml->e[$i]->text, ENT_QUOTES | ENT_XML1, 'UTF-8');
-            $html .= "<div class='text-center' data-start='$start' data-dur='$dur' >". $text .'</div>';
+            $html .= "<div data-start='$start' data-dur='$dur' >". $text .'</div>';
         }
         
         $html .= '</div></div></div>';

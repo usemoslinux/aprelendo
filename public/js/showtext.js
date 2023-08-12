@@ -113,7 +113,7 @@ $(document).ready(function() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         if (!isMobile && $(e.target).is(".word")) {
-            window.open(buildTranslateParagraphLink());
+            window.open(buildTranslationLink());
         }
         return false;
      }); // end document.contextmenu
@@ -257,11 +257,11 @@ $(document).ready(function() {
     /**
      * Builds translator link including the paragraph to translate as a parameter
      */
-    function buildTranslateParagraphLink() {
+    function buildTranslationLink() {
         let $start_obj = $selword.prevUntil(":contains('.'), :contains('!'), :contains('?'), :contains('\n')").last();
         $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
         
-        let $end_obj = $start_obj.prev().length == 0
+        let $end_obj = $selword.prev().length == 0
             ? $selword
                 .nextUntil(":contains('.'), :contains('。'), :contains('!'), :contains('?'), :contains('\n')")
                 .last()
@@ -273,15 +273,22 @@ $(document).ready(function() {
                 .next();
         $end_obj =
             $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
-        let $sentence = $start_obj
+        
+        let end_obj_length = $end_obj.text().length;
+
+        let $sentence_obj = $start_obj
             .nextUntil($end_obj)
             .addBack()
             .next()
             .addBack();
-        const sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
+        let sentence = $sentence_obj.text().replace(/(\r\n|\n|\r)/gm, " ");
+        if (end_obj_length > 1) {
+            sentence.slice(0,-end_obj_length+1);
+        }
+        sentence.trim();
 
         return translator_URI.replace("%s", encodeURI(sentence));
-    } // end buildTranslateParagraphLink
+    } // end buildTranslationLink
 
     /**
      * Disables scrolling without making text jump around
@@ -389,7 +396,7 @@ $(document).ready(function() {
         $dic_frame.attr('class','d-none');
 
         // build translate sentence url
-        translate_paragraph_link = buildTranslateParagraphLink();
+        translate_paragraph_link = buildTranslationLink();
 
         // show dictionary
         const search_text = $selword.text().replace(/\r?\n|\r/gm, " ");

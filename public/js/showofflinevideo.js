@@ -86,7 +86,7 @@ $(document).ready(function() {
         } else if (e.which == 3) {
             // on right click show translation of the whole sentence
             $selword = $(this);
-            window.open(buildTranslateParagraphLink());
+            window.open(buildTranslationLink());
         }
     }); // end .word.on.mousedown/touchstart
     
@@ -185,29 +185,6 @@ $(document).ready(function() {
     }); // end .word.on.mouseover/touchmove
 
     /**
-     * Sets Add & Delete buttons depending on whether selection exists in database
-     */
-    function setAddDeleteButtons() {
-        let $btnremove = $("#btnremove");
-        let $btnadd = $("#btnadd");
-
-        let underlined_words_in_selection = $selword.filter(
-            ".learning, .new, .forgotten, .learned"
-        ).length;
-        let words_in_selection = $selword.filter(".word").length;
-
-        if (words_in_selection == underlined_words_in_selection) {
-            if ($btnremove.is(":visible") === false) {
-                $btnremove.show();
-                $btnadd.text("Forgot");
-            }
-        } else {
-            $btnremove.hide();
-            $btnadd.text("Add");
-        }
-    } // end setAddDeleteButtons
-
-    /**
      * Adds selected word or phrase to the database and underlines it in the text
      */
     $("#btnadd").on("click", function() {
@@ -294,7 +271,7 @@ $(document).ready(function() {
     /**
      * Builds translator link including the paragraph to translate as a parameter
      */
-    function buildTranslateParagraphLink() {
+    function buildTranslationLink() {
         let $start_obj = $selword.prevUntil(":contains('.')").last();
         $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
         let $end_obj = $selword
@@ -304,51 +281,15 @@ $(document).ready(function() {
             .next();
         $end_obj =
             $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
-        let $sentence = $start_obj
+        let $sentence_obj = $start_obj
             .nextUntil($end_obj)
             .addBack()
             .next()
             .addBack();
-        const sentence = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
+        const sentence_obj = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
 
         return translator_URI.replace("%s", encodeURIComponent(sentence));
-    } // end buildTranslateParagraphLink
-
-    /**
-     * Shows message for high & medium frequency words in dictionary modal window
-     * @param {string} word
-     * @param {string} lg_iso
-     */
-    function getWordFrequency(word, lg_iso) {
-        let $freqlvl = $("#bdgfreqlvl");
-
-        // ajax call to get word frequency
-        $.ajax({
-            type: "GET",
-            url: "/ajax/getwordfreq.php",
-            data: { word: word, lg_iso: lg_iso }
-        }).done(function(data) {
-            if (data == 0){
-                $freqlvl.hide();
-            } else if (data < 81) {
-                $freqlvl
-                    .hide()
-                    .text("High frequency word")
-                    .removeClass()
-                    .addClass("badge text-bg-danger")
-                    .show();
-            } else if (data < 97){
-                $freqlvl
-                    .hide()
-                    .text("Medium frequency word")
-                    .removeClass()
-                    .addClass("badge text-bg-warning")
-                    .show();
-            }
-        }).fail(function() {
-            $freqlvl.hide();
-        });
-    } // end getWordFrequency
+    } // end buildTranslationLink
 
     /**
      * Updates vh value on window resize
@@ -371,7 +312,7 @@ $(document).ready(function() {
         $("#dicFrame").attr('class','d-none');
 
         // build translate sentence url
-        translate_paragraph_link = buildTranslateParagraphLink();
+        translate_paragraph_link = buildTranslationLink();
 
         // show dictionary
         const selword_text = $selword.text().replace(/(\r\n|\n|\r)/gm, " ");
