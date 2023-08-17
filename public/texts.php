@@ -122,7 +122,7 @@ $lvl_active_dropdown_class = ' class="dropdown-item fl active" ';
                                     <a id="show_archived"
                                         onclick="var show_archived = $('#sa');
                                         show_archived.val(1 - show_archived.val());"
-                                        <?php echo $show_archived==true ? 'class="dropdown-item sa active"' :
+                                        <?php echo $show_archived ? 'class="dropdown-item sa active"' :
                                         'class="dropdown-item sa"' ; ?>>
                                         Archived
                                     </a>

@@ -22,6 +22,7 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Includes\Classes\SearchTextParameters;
 use Aprelendo\Includes\Classes\AprelendoException;
 
 class SharedTexts extends Texts
@@ -40,32 +41,17 @@ class SharedTexts extends Texts
     } // end __construct()
 
     /**
-     * Gets texts by using a search pattern ($search_text) and a filter ($search_filter).
-     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit
-     *
-     * Values are returned using a sort pattern ($sort_by)
-     *
-     * @param int $filter_type: 0 = All; 1 = Article; 2 = Conversation; 3 = Letter; 4 = Lyric; 6 = Ebook; 7 = Other
-     * @param int $filter_level: 0 = All; 1 = Beginner; 2 = Intermediate; 3 = Advanced
-     * @param string $search_text
-     * @param int $offset
-     * @param int $limit
-     * @param int $sort_by Is converted to a string using buildSortSQL()
-     * @return array
-     */
-    public function getSearch(
-        int $filter_type,
-        int $filter_level,
-        string $search_text,
-        int $offset,
-        int $limit,
-        int $sort_by
-        ): array
+    * Returns the search results for a text using the parameters chosen by the user
+    *
+    * @param SearchTextsParameters $search_params
+    * @return array
+    */
+    public function search(SearchTextsParameters $search_params): array
     {
         try {
-            $sort_sql = $this->buildSortSQL($sort_by);
-            $filter_type_sql = $filter_type == 0 ? 'AND t.type >= :filter_type' : 'AND t.type = :filter_type';
-            $filter_level_sql = $filter_level == 0 ? 'AND t.level >= :filter_level' : 'AND t.level = :filter_level';
+            $sort_sql = $search_params->buildSortSQL();
+            $filter_type_sql = $search_params->buildFilterTypeSQL();
+            $filter_level_sql = $search_params->buildFilterLevelSQL();
 
             $lang = new Language($this->pdo, $this->user_id);
             $lang->loadRecord($this->lang_id);
@@ -87,9 +73,9 @@ class SharedTexts extends Texts
                     FROM `{$this->table}` t
                     INNER JOIN `languages` l ON t.lang_id = l.id
                     WHERE `name`= :name
-                    AND `title` LIKE :search_str
-                    $filter_level_sql
-                    $filter_type_sql
+                    AND `title` LIKE :search_text
+                    AND t.level $filter_level_sql
+                    AND t.type $filter_type_sql
                     ORDER BY $sort_sql
                     LIMIT :offset, :limit";
 
@@ -97,11 +83,11 @@ class SharedTexts extends Texts
 
             $stmt->bindParam(':user_id', $this->user_id);
             $stmt->bindValue(':name', $lang->getName());
-            $stmt->bindParam(':filter_level', $filter_level, \PDO::PARAM_INT);
-            $stmt->bindParam(':filter_type', $filter_type, \PDO::PARAM_INT);
-            $stmt->bindValue(':search_str', "%$search_text%");
-            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
-            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+            $stmt->bindParam(':filter_level', $search_params->filter_level, \PDO::PARAM_INT);
+            $stmt->bindParam(':filter_type', $search_params->filter_type, \PDO::PARAM_INT);
+            $stmt->bindValue(':search_text', '%' . $search_params->search_text . '%');
+            $stmt->bindParam(':offset', $search_params->offset, \PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $search_params->limit, \PDO::PARAM_INT);
 
             $stmt->execute();
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -112,11 +98,11 @@ class SharedTexts extends Texts
 
             return $result;
         } catch (\PDOException $e) {
-            throw new AprelendoException('Oops! There was an unexpected error trying to process your search request.');
+            throw new AprelendoException('Error processing your search request.');
         } finally {
             $stmt = null;
         }
-    } // end getSearch()
+    } // end search()
 
     /**
      * Checks if text was already exists in database, to avoid duplicate entries.
@@ -147,27 +133,4 @@ class SharedTexts extends Texts
             $stmt = null;
         }
     } // end exists()
-
-    /**
-     * Converts sorting patterns selected by user (expressed as an integer value in the sort menu)
-     * to valid SQL strings
-     *
-     * @param int $sort_by
-     * @return string
-     */
-    protected function buildSortSQL(int $sort_by): string
-    {
-        $result = parent::buildSortSQL($sort_by);
-
-        if (!empty($result)) {
-            return $result;
-        } else {
-            if ($sort_by == 2) { // more likes first
-                $result = '`total_likes` DESC';
-            } elseif ($sort_by == 3) { // less likes first
-                $result = '`total_likes`';
-            }
-            return $result;
-        }
-    } // end buildSortSQL()
 }

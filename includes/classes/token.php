@@ -52,7 +52,7 @@ class Token extends DBEntity
         try {
             $this->pdo->query("DELETE FROM `{$this->table}` WHERE `expires` < NOW()");
         } catch (\Exception $e) {
-            throw new AprelendoException('There was an unexpected error trying to delete old token records.');
+            throw new AprelendoException('Error deleting old token records.');
         }
     } // end deleteOld()
 
@@ -79,7 +79,7 @@ class Token extends DBEntity
                 $this->expires  = $row['expires'];
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to load token record.');
+            throw new AprelendoException('Error loading token record.');
         } finally {
             $stmt = null;
         }
@@ -114,7 +114,7 @@ class Token extends DBEntity
         if (!empty($this->token)) {
             // a valid token is already in the db (force use of https)
             if (!setcookie('user_token', $this->token, strtotime($this->expires), "/", $domain, true)) {
-                throw new AprelendoException('There was an unexpected error trying to create token cookie.');
+                throw new AprelendoException('Error creating token cookie.');
             }
         } else {
             // create new token, insert it in db & set cookie
@@ -128,10 +128,10 @@ class Token extends DBEntity
                 $stmt->execute([$token, $user_id, $expires]);
 
                 if (!setcookie('user_token', $token, $time_stamp, "/", $domain, true)) {
-                    throw new AprelendoException('There was an unexpected error trying to create token cookie.');
+                    throw new AprelendoException('Error creating token cookie.');
                 }
             } catch (\PDOException $e) {
-                throw new AprelendoException('There was an unexpected error trying to add token record.');
+                throw new AprelendoException('Error adding token record.');
             } finally {
                 $stmt = null;
             }

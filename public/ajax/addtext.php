@@ -156,7 +156,7 @@ try {
 
             // check if file exists
             if (!isset($_FILES['url']) || $_FILES['url']['error'] === UPLOAD_ERR_NO_FILE) {
-                throw new AprelendoException('No file found. Please select a file to upload.');
+                throw new AprelendoException('File not found. Please select a file to upload.');
             }
 
             // check if user is allowed to upload file & does not exceed the daily upload limit
@@ -184,7 +184,7 @@ try {
                 header('Content-Type: application/json');
                 echo json_encode($filename);
             } else { // in case of error, show message
-                throw new AprelendoException('Oops! There was an unexpected error when uploading this text.');
+                throw new AprelendoException('There was an error uploading this text.');
             }
         }
         default:

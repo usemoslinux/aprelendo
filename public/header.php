@@ -18,7 +18,7 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('../includes/dbinit.php'); // connect to database
+require_once '../includes/dbinit.php'; // connect to database
 use Aprelendo\Includes\Classes\Language;
 use Aprelendo\Includes\Classes\Gems;
 
@@ -68,7 +68,7 @@ $today_is_reading_streak = $gems->getTodayIsStreak();
                     <ul class="navbar-nav ms-auto">
                         <li id="streak-days" class="nav-item gamification py-2 pe-md-2">
                             <img src="/img/gamification/streak.png"
-                            style="<?php echo $today_is_reading_streak ? '' : 'filter: grayscale(1);'; ?>" 
+                            style="<?php echo $today_is_reading_streak ? '' : 'filter: grayscale(1);'; ?>"
                             class="me-3 me-md-1" alt="Streak"
                             title="Reading streak days"> <?php echo $streak_days; ?>
                         </li>

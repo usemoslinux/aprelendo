@@ -37,7 +37,7 @@ class User
     private $activation_hash = '';
     private $is_active       = false;
     private $google_id       = '';
-   
+
     private $error_msg = '';
     
     private $pdo;
@@ -67,7 +67,7 @@ class User
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-           
+
             if ($row) {
                 $this->id              = $row['id'];
                 $this->name            = $row['name'];
@@ -86,7 +86,7 @@ class User
                 $this->lang_id = $lang->getId();
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to load user record.');
+            throw new AprelendoException('Error loading user record.');
         } finally {
             $stmt = null;
         }
@@ -119,7 +119,7 @@ class User
                 $this->google_id       = $row['google_id'];
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to load user record.');
+            throw new AprelendoException('Error loading user record.');
         } finally {
             $stmt = null;
         }
@@ -138,7 +138,7 @@ class User
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$name]);
             $num_rows = $stmt->fetchColumn();
-           
+            
             return ($num_rows) && ($num_rows > 0) ? true : false;
         } catch (\PDOException $e) {
             return false;
@@ -160,7 +160,7 @@ class User
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$email]);
             $num_rows = $stmt->fetchColumn();
-           
+
             return ($num_rows) && ($num_rows > 0) ? true : false;
         } catch (\PDOException $e) {
             return false;
@@ -183,7 +183,7 @@ class User
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$email, $password_hash]);
             $num_rows = $stmt->fetchColumn();
-           
+
             return ($num_rows) && ($num_rows > 0) ? true : false;
         } catch (\PDOException $e) {
             return false;
@@ -218,8 +218,8 @@ class User
             
             // check if email already exists
             if ($this->existsByEmail($this->email)) {
-                throw new AprelendoException('Email already exists. Did you <a class="alert-link" href="/forgotpassword">'
-                    . 'forget</a> you username or password?');
+                throw new AprelendoException('Email already exists. Did you <a class="alert-link" '
+                    . 'href="/forgotpassword">forget</a> you username or password?');
             }
             
             // create password hash
@@ -239,7 +239,7 @@ class User
                 $this->lang, $this->time_zone, $activation_hash, (int)$user_active]);
 
             if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('There was an unexpected error trying to create user record.');
+                throw new AprelendoException('Error creating user record.');
             }
 
             $user_id = $this->id = $this->pdo->lastInsertId();
@@ -255,14 +255,14 @@ class User
             $stmt->execute([$user_id]);
             
             if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('There was an unexpected error trying to create default preferences for user.');
+                throw new AprelendoException('Error creating default preferences for user.');
             }
 
             if ($send_email) {
                 $this->sendActivationEmail($this->email, $this->name, $activation_hash);
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to register user.');
+            throw new AprelendoException('Error registering new user.');
         } finally {
             $stmt = null;
         }
@@ -335,7 +335,7 @@ class User
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$username, $hash]);
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to activate user.');
+            throw new AprelendoException('Error activating user.');
         } finally {
             $stmt = null;
         }
@@ -522,7 +522,7 @@ class User
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$password_hash, $email]);
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to update user record.');
+            throw new AprelendoException('Error updating user record.');
         } finally {
             $stmt = null;
         }
@@ -544,7 +544,7 @@ class User
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$google_id, $google_email]);
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to update user record.');
+            throw new AprelendoException('Error updating user record.');
         } finally {
             $stmt = null;
         }
@@ -632,7 +632,7 @@ class User
             $this->lang_id = $lang_id;
             $this->lang = $lang_name;
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to set active language for user.');
+            throw new AprelendoException('Error setting active language for user.');
         } finally {
             $stmt = null;
         }

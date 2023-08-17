@@ -24,7 +24,7 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Includes\Classes\Achievements;
-use Aprelendo\Includes\Classes\wordStats;
+use Aprelendo\Includes\Classes\WordStats;
 use Aprelendo\Includes\Classes\WordDailyGoal;
 ?>
 
@@ -33,7 +33,9 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
+    integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
@@ -111,12 +113,13 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
         <hr>
         <?php
             // get today's statistics
-            $stats = new wordStats($pdo, $user->getId(), $user->getLangId());
+            $stats = new WordStats($pdo, $user->getId(), $user->getLangId());
             $nr_of_words_reviewed_today = $stats->getReviewedToday();
             $today_is_streak = ($nr_of_words_reviewed_today >= 10);
 
             // get streak days
-            $daily_goal = new WordDailyGoal($pdo, $user->getId(), $user->getLangId(), $user->getTimeZone(), $today_is_streak);
+            $daily_goal = new WordDailyGoal($pdo, $user->getId(),
+                $user->getLangId(), $user->getTimeZone(), $today_is_streak);
             $daily_goal_streak_days = $daily_goal->getDaysStreak();
         ?>
         <section>
@@ -134,7 +137,7 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
                     </figure>
                 </dt>
                 <dd class="col-md-10">
-                    <p>Behold the count of successive days you conquered the challenge of 
+                    <p>Behold the count of successive days you conquered the challenge of
                         reviewing <?php echo $daily_goal->getDailyGoal() ?> words daily.</p>
                     <p>Streaks possess formidable power in repetition. With each accomplished action, they bestow
                         rewards, increasing the odds of your unwavering commitment. In due time, this fresh routine
@@ -176,8 +179,7 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
                     <figure class="px-5 px-sm-0 mt-2">
                         <img src="/img/gamification/streak.png"
                             style="<?php echo $today_is_reading_streak ? '' : 'filter: grayscale(1);'; ?>"
-                            class="mx-auto d-block m-2"
-                            alt="Streak" title="Reading streak days">
+                            class="mx-auto d-block m-2" alt="Streak" title="Reading streak days">
                         <figcaption class="w-100 text-center fw-bold">
                             <span style="font-size:2rem"><?php echo $streak_days; ?></span>
                         </figcaption>
@@ -195,8 +197,8 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
                 </dd>
                 <dt class="col-md-2">
                     <figure class="px-5 px-sm-0 mt-2">
-                        <img src="/img/gamification/gems.png" class="mx-auto d-block m-2"
-                            alt="Gems" title="Gems earned">
+                        <img src="/img/gamification/gems.png" class="mx-auto d-block m-2" alt="Gems"
+                            title="Gems earned">
                         <figcaption class="w-100 text-center fw-bold">
                             <span style="font-size:2rem"><?php echo $nr_of_gems; ?></span>
                     </figure>

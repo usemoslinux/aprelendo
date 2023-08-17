@@ -66,14 +66,14 @@ class Card
             $stmt->execute();
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to execute SQL query.');
+            throw new AprelendoException('Error getting words user is learning.');
         } finally {
             $stmt = null;
         }
     } // end getAllWordsUserIsLearning()
 
     /**
-     * Gets example sentences in private texts (both active and archived), except ebooks, as well as 
+     * Gets example sentences in private texts (both active and archived), except ebooks, as well as
      * shared texts, except for video transcripts
      * To improve results, it includes all texts in the db, not only those uploaded by user
      *
@@ -92,8 +92,8 @@ class Card
                 (SELECT archived_texts.title, archived_texts.author, archived_texts.text, archived_texts.source_uri
                 FROM archived_texts
                 LEFT JOIN languages ON languages.id = archived_texts.lang_id
-                WHERE languages.name = '{$this->lang_iso}' AND archived_texts.user_id='{$this->user_id}' AND type <> 6 AND
-                archived_texts.text regexp '[[:<:]]" . $word . "[[:>:]]'
+                WHERE languages.name = '{$this->lang_iso}' AND archived_texts.user_id='{$this->user_id}'
+                AND type <> 6 AND archived_texts.text regexp '[[:<:]]" . $word . "[[:>:]]'
                 LIMIT 3)
                 UNION
                 (SELECT shared_texts.title, shared_texts.author, shared_texts.text, shared_texts.source_uri
@@ -110,7 +110,7 @@ class Card
             
             return $this->arrayUniqueMultidimensional($result); // avoid returning duplicate example sentences
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to execute SQL query.');
+            throw new AprelendoException('Error getting example sentences.');
         } finally {
             $stmt = null;
         }

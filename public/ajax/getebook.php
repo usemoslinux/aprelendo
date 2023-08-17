@@ -37,14 +37,13 @@ try {
     if (!empty($file_name)) {
         $ebook_file = new EbookFile($file_name);
         $ebook_content = $ebook_file->get();
-        if ($ebook_content) {
-            return $ebook_content;
-        } else {
-            throw new AprelendoException(404);
+        if (!$ebook_content) {
+            throw new AprelendoException('Book content is empty.', 404);
         }
     } else {
-        throw new AprelendoException(404);
+        throw new AprelendoException('Empty file name.', 404);
     }
-} catch (AprelendoException $e) {
-    http_response_code($e->getMessage());
+} catch (\Exception $e) {
+    // catches AprelendoException but also possible Exceptions from fileread() in $ebook_file->get()
+    http_response_code($e->getCode());
 }

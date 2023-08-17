@@ -66,7 +66,7 @@ try {
         
         $html .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
-        throw new AprelendoException('Oops! There was an error trying to fetch that text.');
+        throw new AprelendoException('Error fetching this text.');
     }
 } catch (Exception $e) {
     header('Location:/login');

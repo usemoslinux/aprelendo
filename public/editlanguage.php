@@ -120,8 +120,8 @@ if (empty($error_msg)) {
                 <div class="mb-3">
                     <label for="freq-list">Underline high frequency words:</label>
                     <select name="freq-list" id="freq-list" class="form-control form-select">
-                        <option value="1" <?php echo $lang->getShowFreqWords()==true ? 'selected' : ''; ?>>Yes</option>
-                        <option value="0" <?php echo $lang->getShowFreqWords()==false ? 'selected' : ''; ?>>No</option>
+                        <option value="1" <?php echo $lang->getShowFreqWords() ? 'selected' : ''; ?>>Yes</option>
+                        <option value="0" <?php echo !$lang->getShowFreqWords() ? 'selected' : ''; ?>>No</option>
                     </select>
                 </div>
             </div>

@@ -73,7 +73,7 @@ class Paypal extends DBEntity
                 $this->date_created    = $row['date_created'];
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to load payment record.');
+            throw new AprelendoException('Error loading payment record.');
         } finally {
             $stmt = null;
         }
@@ -116,7 +116,7 @@ class Paypal extends DBEntity
                     throw new AprelendoException('Payment not completed.');
                 }
             } else {
-                throw new AprelendoException('Oops! Your transaction could not be verified.');
+                throw new AprelendoException('Error verifying transaction.');
             }
 
         } catch (\Exception $e) {
@@ -149,10 +149,10 @@ class Paypal extends DBEntity
                             $today]);
 
             if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('There was an unexpected error trying to add payment record. No rows added.');
+                throw new AprelendoException('Error adding payment record.');
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to add payment record.');
+            throw new AprelendoException('Error adding payment record.');
         } finally {
             $stmt = null;
         }

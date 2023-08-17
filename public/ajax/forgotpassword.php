@@ -82,7 +82,7 @@ try {
             throw new AprelendoException('No user registered with that email address. Please try again.');
         }
     } else {
-        throw new AprelendoException('Oops! There was an unexpected error when trying to reset your password.');
+        throw new AprelendoException('There was an error resetting your password.');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

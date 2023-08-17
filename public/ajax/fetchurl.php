@@ -38,7 +38,7 @@ try {
         header('Content-Type: application/json');
         echo json_encode($result);
     } else {
-        throw new AprelendoException('There was a problem retrieving that URL. Please check it is not empty or malformed.');
+        throw new AprelendoException('Error retrieving that URL. Please check it is not empty or malformed.');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

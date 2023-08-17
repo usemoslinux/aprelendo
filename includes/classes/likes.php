@@ -72,10 +72,10 @@ class Likes extends DBEntity
             }
 
             if ($stmt->rowCount() === 0) {
-                throw new AprelendoException('There was an unexpected error trying to toggle like for this text.');
+                throw new AprelendoException('Error toggling like for this text.');
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to toggle like for this text.');
+            throw new AprelendoException('Error toggling like for this text.');
         } finally {
             $stmt = null;
         }
@@ -99,7 +99,7 @@ class Likes extends DBEntity
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($stmt->rowCount() === 0) {
-                throw new AprelendoException('There was an unexpected error trying to retrieve likes for this text.');
+                throw new AprelendoException('Error getting number of likes for this text.');
             }
 
             return $result['total_likes'];
@@ -128,7 +128,7 @@ class Likes extends DBEntity
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($stmt->rowCount() === 0) {
-                throw new AprelendoException('There was an unexpected error trying to retrieve likes for this text.');
+                throw new AprelendoException('Error getting like for this text.');
             }
 
             return $result['user_liked'] == 1;

@@ -55,7 +55,7 @@ class File
             return unlink($this->path);
         } else {
             if (!empty($this->name)) {
-                throw new AprelendoException('There was an error deleting the associated file.');
+                throw new AprelendoException('Error deleting the associated file.');
             }
         }
         return false;
@@ -105,8 +105,7 @@ class File
             try {
                 $this->move($temp_file_path, $this->path);
             } catch (\Exception $th) {
-                throw new AprelendoException('There was an unexpected error trying to move this file from the '
-                . 'temporary folder');
+                throw new AprelendoException('Error moving file from the temporary folder');
             }
 
             $this->name = $target_file_name;
@@ -130,7 +129,7 @@ class File
         }
         // try to move file to uploads folder. If this fails, show error message
         if (!move_uploaded_file($source_path, $destination_path)) {
-            throw new AprelendoException("<li>Sorry, there was an error uploading your file.</li>");
+            throw new AprelendoException("<li>There was an error uploading your file.</li>");
         }
     } // end move()
     
@@ -140,18 +139,16 @@ class File
      */
     public function get(): string
     {
+        $file = realpath($this->folder . $this->name);
+
         // make sure it exists
-        if (!$file = realpath($this->folder . $this->name)) {
-            return $this->error(404);
-        }
-            
-        if (!is_file($file)) {
-            return $this->error(404);
+        if (!$file || !is_file($file)) {
+            throw new AprelendoException('File does not exist.', 404);
         }
 
         // check for cheaters
         if (substr($file, 0, strlen($this->folder)) !== $this->folder) {
-            return $this->error(401);
+            throw new AprelendoException('Unauthorized access.', 401);
         }
 
         return readfile($file);
@@ -165,28 +162,4 @@ class File
     {
         return $this->name;
     }
-    
-    /**
-     * Creates error header
-     * @param int $code HTML error code
-     * @param string $msg Error message
-     * @return string HTML header
-     */
-    private function error(int $code = 401, string $msg = null): string
-    {
-        $msgs = array(
-            400 => 'Bad Request',
-            401 => 'Unauthorized',
-            402 => 'Payment Required',
-            403 => 'Forbidden',
-            404 => 'Not Found',
-        );
-
-        if (!$msg) {
-            $msg = $msgs[$code];
-        }
-
-        header(sprintf('HTTP/1.0 %s %s', $code, $msg));
-        return "<html><head><title>$code $msg</title></head><body><h1>$msg</h1></body></html>";
-    } // end error()
 }

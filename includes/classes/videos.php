@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -36,83 +37,83 @@ class Videos extends DBEntity
     private $source_url     = '';
     private $transcript_xml = '';
     private $lang_codes = [
-                           'ar'       => 'Arabic',
-                           'ar-DZ'    => 'Arabic (Algeria)',
-                           'ar-BH'    => 'Arabic (Bahrain)',
-                           'ar-EG'    => 'Arabic (Egypt)',
-                           'ar-IQ'    => 'Arabic (Iraq)',
-                           'ar-JO'    => 'Arabic (Jordan)',
-                           'ar-KW'    => 'Arabic (Kuwait)',
-                           'ar-LB'    => 'Arabic (Lebanon)',
-                           'ar-LY'    => 'Arabic (Libya)',
-                           'ar-MA'    => 'Arabic (Morocco)',
-                           'ar-OM'    => 'Arabic (Oman)',
-                           'ar-QA'    => 'Arabic (Qatar)',
-                           'ar-SA'    => 'Arabic (Saudi Arabia)',
-                           'ar-SY'    => 'Arabic (Syria)',
-                           'ar-TN'    => 'Arabic (Tunisia)',
-                           'ar-AE'    => 'Arabic (U.A.E.)',
-                           'ar-YE'    => 'Arabic (Yemen)',
-                           'de'       => 'German (Standard)',
-                           'de-AT'    => 'German (Austria)',
-                           'de-CH'    => 'German (Switzerland)',
-                           'de-LUX'    => 'German (Luxembourg)',
-                           'de-LI'    => 'German (Liechtenstein)',
-                           'el'       => 'Greek',
-                           'en'       => 'English',
-                           'en-GB'    => 'English (United Kingdom)',
-                           'en-US'    => 'English (United States)',
-                           'en-AU'    => 'English (Australia)',
-                           'en-BZ'    => 'English (Belize)',
-                           'en-CA'    => 'English (Canada)',
-                           'en-IN'    => 'English (India)',
-                           'en-IE'    => 'English (Ireland)',
-                           'en-JM'    => 'English (Jamaica)',
-                           'en-NZ'    => 'English (New Zealand)',
-                           'en-ZA'    => 'English (South Africa)',
-                           'en-TT'    => 'English (Trinidad)',
-                           'es'       => 'Spanish (Spain)',
-                           'es-419'   => 'Spanish (Latin America)',
-                           'es-AR'    => 'Spanish (Argentina)',
-                           'es-BO'    => 'Spanish (Bolivia)',
-                           'es-CL'    => 'Spanish (Chile)',
-                           'es-CO'    => 'Spanish (Colombia)',
-                           'es-CR'    => 'Spanish (Costa Rica)',
-                           'es-DO'    => 'Spanish (Dominican Republic)',
-                           'es-EC'    => 'Spanish (Ecuador)',
-                           'es-SV'    => 'Spanish (El Salvador)',
-                           'es-GT'    => 'Spanish (Guatemala)',
-                           'es-HN'    => 'Spanish (Honduras)',
-                           'es-MX'    => 'Spanish (Mexico)',
-                           'es-NI'    => 'Spanish (Nicaragua)',
-                           'es-PA'    => 'Spanish (Panama)',
-                           'es-PY'    => 'Spanish (Paraguay)',
-                           'es-PE'    => 'Spanish (Peru)',
-                           'es-PR'    => 'Spanish (Puerto Rico)',
-                           'fr'       => 'French (Standard)',
-                           'fr-BE'    => 'French (Belgium)',
-                           'fr-CA'    => 'French (Canada)',
-                           'fr-CH'    => 'French (Switzerland)',
-                           'fr-LU'    => 'French (Luxembourg)',
-                           'he'       => 'Hebrew',
-                           'hi'       => 'Hindi',
-                           'it'       => 'Italian (Standard)',
-                           'it-CH'    => 'Italian (Switzerland)',
-                           'ja'       => 'Japanese',
-                           'ko'       => 'Korean',
-                           'nl'       => 'Dutch (Standard)',
-                           'nl-BE'    => 'Dutch (Belgium)',
-                           'es'       => 'Spanish',
-                           'pt'       => 'Portuguese (Portugal)',
-                           'pt-BR'    => 'Portuguese (Brazil)',
-                           'ru'       => 'Russian',
-                           'ru-MD'    => 'Russian (Republic of Moldova)',
-                           'zh'       => 'Chinese',
-                           'zh-CN'    => 'Chinese (PRC)',
-                           'zh-HK'    => 'Chinese (Hong Kong)',
-                           'zh-SG'    => 'Chinese (Singapore)',
-                           'zh-TW'    => 'Chinese (Taiwan)'
-                        ];
+        'ar'       => 'Arabic',
+        'ar-DZ'    => 'Arabic (Algeria)',
+        'ar-BH'    => 'Arabic (Bahrain)',
+        'ar-EG'    => 'Arabic (Egypt)',
+        'ar-IQ'    => 'Arabic (Iraq)',
+        'ar-JO'    => 'Arabic (Jordan)',
+        'ar-KW'    => 'Arabic (Kuwait)',
+        'ar-LB'    => 'Arabic (Lebanon)',
+        'ar-LY'    => 'Arabic (Libya)',
+        'ar-MA'    => 'Arabic (Morocco)',
+        'ar-OM'    => 'Arabic (Oman)',
+        'ar-QA'    => 'Arabic (Qatar)',
+        'ar-SA'    => 'Arabic (Saudi Arabia)',
+        'ar-SY'    => 'Arabic (Syria)',
+        'ar-TN'    => 'Arabic (Tunisia)',
+        'ar-AE'    => 'Arabic (U.A.E.)',
+        'ar-YE'    => 'Arabic (Yemen)',
+        'de'       => 'German (Standard)',
+        'de-AT'    => 'German (Austria)',
+        'de-CH'    => 'German (Switzerland)',
+        'de-LUX'    => 'German (Luxembourg)',
+        'de-LI'    => 'German (Liechtenstein)',
+        'el'       => 'Greek',
+        'en'       => 'English',
+        'en-GB'    => 'English (United Kingdom)',
+        'en-US'    => 'English (United States)',
+        'en-AU'    => 'English (Australia)',
+        'en-BZ'    => 'English (Belize)',
+        'en-CA'    => 'English (Canada)',
+        'en-IN'    => 'English (India)',
+        'en-IE'    => 'English (Ireland)',
+        'en-JM'    => 'English (Jamaica)',
+        'en-NZ'    => 'English (New Zealand)',
+        'en-ZA'    => 'English (South Africa)',
+        'en-TT'    => 'English (Trinidad)',
+        'es'       => 'Spanish (Spain)',
+        'es-419'   => 'Spanish (Latin America)',
+        'es-AR'    => 'Spanish (Argentina)',
+        'es-BO'    => 'Spanish (Bolivia)',
+        'es-CL'    => 'Spanish (Chile)',
+        'es-CO'    => 'Spanish (Colombia)',
+        'es-CR'    => 'Spanish (Costa Rica)',
+        'es-DO'    => 'Spanish (Dominican Republic)',
+        'es-EC'    => 'Spanish (Ecuador)',
+        'es-SV'    => 'Spanish (El Salvador)',
+        'es-GT'    => 'Spanish (Guatemala)',
+        'es-HN'    => 'Spanish (Honduras)',
+        'es-MX'    => 'Spanish (Mexico)',
+        'es-NI'    => 'Spanish (Nicaragua)',
+        'es-PA'    => 'Spanish (Panama)',
+        'es-PY'    => 'Spanish (Paraguay)',
+        'es-PE'    => 'Spanish (Peru)',
+        'es-PR'    => 'Spanish (Puerto Rico)',
+        'fr'       => 'French (Standard)',
+        'fr-BE'    => 'French (Belgium)',
+        'fr-CA'    => 'French (Canada)',
+        'fr-CH'    => 'French (Switzerland)',
+        'fr-LU'    => 'French (Luxembourg)',
+        'he'       => 'Hebrew',
+        'hi'       => 'Hindi',
+        'it'       => 'Italian (Standard)',
+        'it-CH'    => 'Italian (Switzerland)',
+        'ja'       => 'Japanese',
+        'ko'       => 'Korean',
+        'nl'       => 'Dutch (Standard)',
+        'nl-BE'    => 'Dutch (Belgium)',
+        'es'       => 'Spanish',
+        'pt'       => 'Portuguese (Portugal)',
+        'pt-BR'    => 'Portuguese (Brazil)',
+        'ru'       => 'Russian',
+        'ru-MD'    => 'Russian (Republic of Moldova)',
+        'zh'       => 'Chinese',
+        'zh-CN'    => 'Chinese (PRC)',
+        'zh-HK'    => 'Chinese (Hong Kong)',
+        'zh-SG'    => 'Chinese (Singapore)',
+        'zh-TW'    => 'Chinese (Taiwan)'
+    ];
 
     /**
      * Constructor
@@ -126,114 +127,128 @@ class Videos extends DBEntity
     public function __construct(\PDO $pdo, int $user_id, int $lang_id)
     {
         parent::__construct($pdo, $user_id);
-        
+
         $this->lang_id = $lang_id;
         $this->table = 'shared_texts';
     } // end __construct()
 
     /**
-     * Fetches video from youtube
+     * Fetches video from YouTube
      *
      * @param string $lang ISO representation of the video's language
      * @param string $youtube_id YouTube video ID
-     * @return string JSON string representation of video's $title, $author and subtitles ($transcript_xml)
-     *
+     * @return string JSON string representation of video's metadata and subtitles
      */
     public function fetchVideo(string $lang, string $youtube_id): string
     {
         header('Content-Type: application/json');
         $this->lang = $lang;
-        $lang = urlencode($lang);
-        $youtube_id = urlencode($youtube_id);
 
-        $list_lang = array_filter($this->lang_codes, function ($key) {
-                return $key==$this->lang || strpos($key, $this->lang . "-") === 0;
-            }, ARRAY_FILTER_USE_KEY);
-        $list_lang = array_keys($list_lang);
-        
-        // requires a python app called youtube_transcript_api
-        // to install it run sudo pip install youtube_transcript_api
-        $output = shell_exec("youtube_transcript_api $youtube_id --languages " . implode(" ", $list_lang)
-            . " --format json --exclude-generated 2>&1");
+        $available_subs = $this->getAvailableSubs();
+        $transcript_xml = $this->fetchTranscript($youtube_id, $available_subs);
+        $metadata = $this->fetchVideoMetadata($youtube_id);
 
-        $output_array = json_decode($output, true); // convert json to array
-        // $transcript_xml = implode( "\n", $output_array[0]);
+        // Combine metadata & transcript in a single array for response
+        $result = array_merge($metadata, array('text' => $transcript_xml->asXML()));
+
+        return json_encode($result);
+    }
+
+    /**
+     * Get list of available subtitles based on provided language
+     *
+     * @return array List of language codes
+     */
+    private function getAvailableSubs(): array
+    {
+        $available_langs = array_filter($this->lang_codes, function ($key) {
+            return $key == $this->lang || strpos($key, $this->lang . "-") === 0;
+        }, ARRAY_FILTER_USE_KEY);
+
+        return array_keys($available_langs);
+    }
+
+    /**
+     * Fetch transcript XML for the given YouTube video ID and supported languages
+     *
+     * @param string $youtube_id YouTube video ID
+     * @param array $available_subs List of supported languages
+     * @return \SimpleXMLElement Transcript XML
+     */
+    private function fetchTranscript(string $youtube_id, array $available_subs): \SimpleXMLElement
+    {
+        // Fetch transcript using shell_exec
+        $command = "youtube_transcript_api $youtube_id"
+            . " --languages " . implode(" ", $available_subs)
+            . " --format json --exclude-generated 2>&1";
+        $output = shell_exec($command);
+
+        $output_array = json_decode($output, true);
+
+        if (!$output_array) {
+            throw new AprelendoException("The video might lack subtitles or they're unavailable in the desired "
+                . "language. Auto-generated Google subtitles are of low quality and won't work. Consider trying a "
+                . "different video or using the <a href='" . $this->getFilmotUrl() . "' "
+                . "target='_blank' class='alert-link'>Filmot search engine</a>  to find manually created subtitles.");
+        }
+
+        // Convert transcript to XML
         $transcript_xml = new \SimpleXMLElement('<root/>');
         if (isset($output_array)) {
             Conversion::arrayToXml($output_array[0], $transcript_xml);
         }
-        
-        // if subtitle exists, get video title & author
-        if (empty($transcript_xml)) {
-            throw new AprelendoException("Subtitles fetch error: video may have no subs, they are not available in the "
-                . "desired language, or are auto-generated by Google (low quality). Try another video or use "
-                . "<a href='https://filmot.com/captionLanguageSearch?capLangExactMatch=1' target='_blank' "
-                . "class='alert-link'>Filmot search engine</a> for manually created subs.");
-        } else {
-            $transcript_xml = array ('text' => $transcript_xml->asXML());
-        
-            $file = Curl::getUrlContents("https://www.googleapis.com/youtube/v3/videos?id=$youtube_id&key="
-                . YOUTUBE_API_KEY . "&part=snippet");
-            $file = json_decode($file, true);
 
-            if (isset($file['error']) && !empty($file['error'])) {
-                throw new AprelendoException('Oops! There was a problem trying to fetch author & title information for '
-                    . 'this video.');
-            } else {
-                if (count($file['items']) == 0) {
-                    throw new AprelendoException('Oops! There are no YouTube videos with this URL. Check and try again.');
-                }
+        return $transcript_xml;
+    }
 
-                $title = array('title' => $file['items'][0]['snippet']['title']);
-                $author = array('author' => $file['items'][0]['snippet']['channelTitle']);
+    /**
+     * Get Filmot DB URL for the current language
+     *
+     * @return string
+     */
+    private function getFilmotUrl(): string
+    {
+        return "https://filmot.com/captionLanguageSearch?captionLanguages=" . $this->lang
+            . "&sortField=viewcount&sortOrder=desc&capLangExactMatch=1";
+    } // end getFilmotUrl()
 
-                $result = array_merge($title, $author, $transcript_xml);
-            }
+    /**
+     * Fetch video metadata (title and author) using YouTube API
+     *
+     * @param string $youtube_id YouTube video ID
+     * @return array Video metadata (title & channel title, used as author)
+     */
+    private function fetchVideoMetadata(string $youtube_id): array
+    {
+        $metadata = [];
+
+        $file = Curl::getUrlContents("https://www.googleapis.com/youtube/v3/videos?id=$youtube_id&key="
+            . YOUTUBE_API_KEY . "&part=snippet");
+        $file = json_decode($file, true);
+
+        if (isset($file['items'][0]['snippet'])) {
+            $metadata['title'] = $file['items'][0]['snippet']['title'];
+            $metadata['author'] = $file['items'][0]['snippet']['channelTitle'];
         }
-        
-        return json_encode($result);
-    } // end fetchVideo()
+
+        return $metadata;
+    }
 
     /**
      * Extract YouTube Id from a given URL
      *
      * @param string $url
-     * @return string string representation of YT Id or false if $url has wrong format
+     * @return string YouTube Id string
      */
     public function extractYTId(string $url): string
     {
-        // check if user copied the url by right-clicking the video (Google's recommended method)
-        $result = '';
-
-        if (strpos($url, 'https://youtu.be/') === 0) {
-            $result = substr($url, 17);
-            if ($result === false) {
-                throw new AprelendoException('Malformed YouTube link');
-            }
+        if (preg_match('#^(https?://)?(www\.|m\.)?youtube\.com/watch\?v=([^&]+)#', $url, $matches)) {
+            return $matches[3];
+        } elseif (preg_match('#^https?://youtu\.be/([^?]+)#', $url, $matches)) {
+            return $matches[1];
         } else {
-            // check if user copied the url directly from the url bar (alternative method)
-            $yt_urls = array('https://www.youtube.com/watch',
-                'https://m.youtube.com/watch');
-
-            $url_split = explode('?', $url);
-            $url_params =  explode('&', $url_split[1]);
-            
-            // check if it's a valid youtube URL
-            foreach ($yt_urls as $yt_url) {
-                if (strpos($url_split[0], $yt_url) === 0) {
-                    // extract YouTube video id
-                    foreach ($url_params as $url_param) {
-                        if (strpos($url_param, 'v=') === 0) {
-                            $result = substr($url_param, 2);
-                            break;
-                        } else {
-                            throw new AprelendoException('Malformed YouTube link');
-                        }
-                    }
-                }
-            }
+            throw new AprelendoException('Malformed YouTube link');
         }
-        return $result;
     } // end extractYTId()
 
     /**
@@ -262,7 +277,7 @@ class Videos extends DBEntity
                 $this->youtube_id     = $this->extractYTId($this->source_url);
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to load record from texts table.');
+            throw new AprelendoException('Error loading record from texts table.');
         } finally {
             $stmt = null;
         }

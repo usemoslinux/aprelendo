@@ -270,7 +270,7 @@ class Reader extends Text
             // 1. get user words & phrases
             $words_table = new Words($this->pdo, $this->user_id, $this->lang_id);
             $result['user_words'] = $words_table->getAll(6);
-          
+        
             // 2. get frequency list words
             if ($this->show_freq_words) {
                 $user = new User($this->pdo);
@@ -283,7 +283,7 @@ class Reader extends Text
             }
             return json_encode($result);
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected problem loading the private list of words for this user.');
+            throw new AprelendoException('Error loading list of words for this user.');
         }
     } // end getWordsForText()
 
@@ -310,7 +310,7 @@ class Reader extends Text
         if (!empty($this->author)) {
             $html .= '<div class="author">' . $this->author . '</div>';
         }
-       
+        
         if ($this->prefs->getAssistedLearning() && !$this->getIsLongText()) {
             // display audio player
             $html .= '<hr>';
@@ -400,11 +400,11 @@ class Reader extends Text
                                 <small>' . $likes->get($this->id) . '</small>
                             </span>
                         </button>
-                  </div>';
+                    </div>';
 
         $html .= '<div class="ratio ratio-16x9" style="max-height: 60%;">' .
-                  '<div data-ytid="' . $yt_id . '" id="player"></div>' .
-               '</div>';
+                    '<div data-ytid="' . $yt_id . '" id="player"></div>' .
+                '</div>';
 
         $html .= "<div id='text-container' class='overflow-auto text-center mb-1' data-type='video' data-textID='"
             . $this->id . "'>";
@@ -445,7 +445,7 @@ class Reader extends Text
                         '</div>';
 
         $html .= '<div class="d-flex flex-wrap">'.
-                    '<button type="button" id="btn-selvideo" title="Select video (MP4/OGG/WEBM)" class="btn btn-sm 
+                    '<button type="button" id="btn-selvideo" title="Select video (MP4/OGG/WEBM)" class="btn btn-sm
                         btn-primary me-2 my-2"><span class="fa-solid fa-video"></span></button>'.
                     '<button type="button" id="btn-selsubs" title="Select subtitles (SRT)" class="btn btn-sm btn-primary
                         me-2 my-2"><span class="fa-solid fa-closed-captioning"></span></button>'.
@@ -455,8 +455,8 @@ class Reader extends Text
                     </button>' .
                     '<button type="button" id="btn-save-offline-video" title="Save the learning status of your words"
                         class="btn btn-sm btn-success ms-auto my-2">Save</button>'.
-                 '</div>'.
-                 '<div id="text-container" class="overflow-auto mb-1"></div>';
+                '</div>'.
+                '<div id="text-container" class="overflow-auto mb-1"></div>';
 
         $html .= '</div></div>';
 

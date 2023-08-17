@@ -113,7 +113,7 @@ function printRSSFeed($feed, $groupindex): string
                 $html .= '<div class="entry-text">' . strip_tags($art_content, '<p>') . '</div>';
                 
                 $html .= "<hr>
-                          <div>
+                            <div>
                             <button type='button' class='btn btn-secondary btn-edit' data-type='edit'>Edit</button>
                             <button type='button' class='btn btn-secondary btn-readnow' data-type='readnow'>
                             Read now
@@ -122,7 +122,7 @@ function printRSSFeed($feed, $groupindex): string
                             Read later
                             </button>
                             <span class='message'></span>
-                          </div></div></div></div>";
+                            </div></div></div></div>";
 
                 $itemindex++;
             }

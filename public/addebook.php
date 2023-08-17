@@ -87,7 +87,7 @@ require_once PUBLIC_PATH . 'header.php';
                             <label for="audio-uri">Audio:</label>
                             <input type="text" id="audio-uri" name="audio-uri" class="form-control" maxlength="200"
                                 placeholder="Google Drive link (optional)">
-                            <div class="form-text" id="audio-url-helptext"><i class="fa-brands fa-google-drive"></i> 
+                            <div class="form-text" id="audio-url-helptext"><i class="fa-brands fa-google-drive"></i>
                                 Remember to allow access to this file to anyone with the link.
                             </div>
                         </div>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -21,6 +22,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\DBEntity;
+use Aprelendo\Includes\Classes\SearchWordsParameters;
 use Aprelendo\Includes\Classes\AprelendoException;
 
 class Words extends DBEntity
@@ -66,14 +68,16 @@ class Words extends DBEntity
                     `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `date_modified`=NOW()";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $word, $status, (int)$is_phrase,
-                            $this->user_id, $this->lang_id, $word, $status]);
-            
+            $stmt->execute([
+                $this->user_id, $this->lang_id, $word, $status, (int)$is_phrase,
+                $this->user_id, $this->lang_id, $word, $status
+            ]);
+
             if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('There was an unexpected error trying to add record to words table.');
+                throw new AprelendoException('Error adding record to words table.');
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to add record to words table.');
+            throw new AprelendoException('Error adding record to words table.');
         } finally {
             $stmt = null;
         }
@@ -91,12 +95,12 @@ class Words extends DBEntity
             $in  = str_repeat('?,', count($words) - 1) . '?';
 
             $sql = "UPDATE `{$this->table}`
-                    SET `date_modified`=NOW(), `status`=CASE WHEN `status` > 0 THEN `status`-1 ELSE 0 END 
+                    SET `date_modified`=NOW(), `status`=CASE WHEN `status` > 0 THEN `status`-1 ELSE 0 END
                     WHERE `user_id`=? AND `lang_id`=? AND `word` IN ($in)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute(array_merge([$this->user_id, $this->lang_id], $words));
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to update record from words table.');
+            throw new AprelendoException('Error updating record in words table.');
         } finally {
             $stmt = null;
         }
@@ -116,7 +120,7 @@ class Words extends DBEntity
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $word]);
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to update record from words table.');
+            throw new AprelendoException('Error updating record in words table.');
         } finally {
             $stmt = null;
         }
@@ -134,12 +138,12 @@ class Words extends DBEntity
             $sql = "DELETE FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id, $word]);
-            
+
             if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('There was an unexpected error trying to delete record from words table.');
+                throw new \PDOException();
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to delete record from words table.');
+            throw new AprelendoException('Error deleting record from words table.');
         } finally {
             $stmt = null;
         }
@@ -155,16 +159,16 @@ class Words extends DBEntity
     {
         try {
             $ids_array = json_decode($ids);
-            $id_params = str_repeat("?,", count($ids_array)-1) . "?";
+            $id_params = str_repeat("?,", count($ids_array) - 1) . "?";
 
             $sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute($ids_array);
             if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('There was an unexpected error trying to delete record from words table.');
+                throw new \PDOException();
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to delete record from words table.');
+            throw new AprelendoException('Error deleting record from words table.');
         } finally {
             $stmt = null;
         }
@@ -180,7 +184,7 @@ class Words extends DBEntity
     {
         try {
             $like_str = '%' . $search_text . '%';
-            
+
             $sql = "SELECT COUNT(`word`) AS `count_search`
                     FROM `{$this->table}`
                     WHERE `user_id`=? AND `lang_id`=?
@@ -197,35 +201,29 @@ class Words extends DBEntity
     } // end countSearchRows()
 
     /**
-     * Gets words by using a search pattern ($search_text).
-     * It returns only specific ranges by using an $offset (specifies where to start) and a $limit
-     * (how many rows to get)
-     * Values are returned using a sort pattern ($sort_by)
-     *
-     * @param string $search_text
-     * @param int $offset
-     * @param int $limit
-     * @param int $sort_by Is converted to a string using buildSortSQL()
-     * @return array
-     */
-    public function getSearch(string $search_text, int $offset, int $limit, int $sort_by): array
+    * Returns the search results for a text using the parameters chosen by the user
+    *
+    * @param SearchWordsParameters $search_params
+    * @return array
+    */
+    public function search(SearchWordsParameters $search_params): array
     {
         try {
-            $sort_sql = $this->buildSortSQL($sort_by);
+            $sort_sql = $search_params->buildSortSQL();
 
             $sql = "SELECT `id`, `word`, `status`,
                     DATEDIFF(CURRENT_DATE(), `date_modified`) AS `diff_today_modif`,
                     DATEDIFF(`date_modified`, `date_created`) AS `frequency`
                     FROM `{$this->table}`
-                    WHERE `user_id`=:user_id AND `lang_id`=:lang_id AND word LIKE :search_str
+                    WHERE `user_id`=:user_id AND `lang_id`=:lang_id AND word LIKE :search_text
                     ORDER BY $sort_sql LIMIT :offset, :limit";
             $stmt = $this->pdo->prepare($sql);
 
             $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
             $stmt->bindParam(':lang_id', $this->lang_id, \PDO::PARAM_INT);
-            $stmt->bindValue(':search_str', "%$search_text%");
-            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
-            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+            $stmt->bindValue(':search_text', '%' . $search_params->search_text . '%', \PDO::PARAM_STR);
+            $stmt->bindParam(':offset', $search_params->offset, \PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $search_params->limit, \PDO::PARAM_INT);
 
             $stmt->execute();
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -236,13 +234,13 @@ class Words extends DBEntity
 
             return $result;
         } catch (\PDOException $e) {
-            throw new AprelendoException('Oops! There was an unexpected error trying to process your search request.');
+            throw new AprelendoException('Error processing your search request.');
         } finally {
             $stmt = null;
         }
-    } // end getSearch()
+    } // end search()
 
-     /**
+    /**
      * Checks if word exists
      *
      * @param string $word
@@ -255,7 +253,7 @@ class Words extends DBEntity
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$word]);
             $num_rows = $stmt->fetchColumn();
-           
+
             return ($num_rows) && ($num_rows > 0) ? true : false;
         } catch (\PDOException $e) {
             return false;
@@ -274,8 +272,9 @@ class Words extends DBEntity
     public function getAll(int $sort_by): array
     {
         try {
-            $sort_sql = $this->buildSortSQL($sort_by);
-            
+            $search_params = new SearchWordsParameters('', $sort_by);
+            $sort_sql = $search_params->buildSortSQL();
+
             $sql = "SELECT `id`, `word`, `status`, `is_phrase`
                     FROM `{$this->table}`
                     WHERE `user_id`=:user_id AND `lang_id`=:lang_id
@@ -288,7 +287,7 @@ class Words extends DBEntity
             $stmt->execute();
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new AprelendoException('Oops! There was an unexpected error trying to process your search request.');
+            throw new AprelendoException('Error getting all words for this user.');
         } finally {
             $stmt = null;
         }
@@ -310,7 +309,7 @@ class Words extends DBEntity
             $stmt->execute([$this->user_id, $this->lang_id]);
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new AprelendoException('Oops! There was an unexpected error trying to process your search request.');
+            throw new AprelendoException('Error getting words user is learning.');
         } finally {
             $stmt = null;
         }
@@ -332,109 +331,11 @@ class Words extends DBEntity
             $stmt->execute([$this->user_id, $this->lang_id]);
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new AprelendoException('Oops! There was an unexpected error trying to process your search request.');
+            throw new AprelendoException('Error getting words user learned.');
         } finally {
             $stmt = null;
         }
     } // end getLearned()
-
-    /**
-     * Converts sorting patterns selected by user (expressed as an integer value in the sort menu)
-     * to valid SQL strings
-     *
-     * @param int $sort_by
-     * @return string
-     */
-    private function buildSortSQL(int $sort_by): string
-    {
-        $result = '';
-        switch ($sort_by) {
-            case '0': // new first
-                $result = '`id` DESC';
-                break;
-            case '1': // old first
-                $result = '`id`';
-                break;
-            case '2': // learned first
-                $result = '`status`';
-                break;
-            case '3': // learning first
-                $result = '`status` DESC';
-                break;
-            case '4': // more frequent first (smaller creation date - modification date)
-                $result = '`frequency`';
-                break;
-            case '5': // less frequent first (higher creation date - modification date)
-                $result = '`frequency` DESC';
-                break;
-            case '6': // words first
-                $result = '`is_phrase` DESC';
-                break;
-            case '7': // phrases first
-                $result = '`is_phrase`';
-                break;
-            default:
-                $result = '';
-                break;
-        }
-        return $result;
-    } // end buildSortSQL()
-
-    /**
-     * Exports words to a CSV file
-     *
-     * It exports either the whole set of words corresponding to a user & language combination,
-     * or the specific subset that results from applying additional filters (e.g. $search_text).
-     * Results are ordered using $order_by.
-     *
-     * @param string $search_text
-     * @param int $order_by Is converted to a string using buildSortSQL()
-     * @return boolean
-     */
-    public function createCSVFile(string $search_text, int $order_by): bool
-    {
-        try {
-            $sort_sql = $this->buildSortSQL($order_by);
-            
-            $filter = !empty($search_text) ? "AND word LIKE '%$search_text%' " : '';
-            $filter .= $order_by !== -1 ? "ORDER BY $sort_sql" : '';
-
-            $sql = "SELECT `word`
-                    FROM `{$this->table}`
-                    WHERE `user_id`=? AND `lang_id`=? $filter";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id]);
-
-            $num_fields = $stmt->columnCount();
-            $headers = [];
-
-            for ($i = 0; $i < $num_fields; $i++) {
-                $h = $stmt->getColumnMeta($i);
-                $headers[] = $h['name'];
-            }
-
-            $fp = fopen('php://output', 'w');
-            
-            if ($fp) {
-                header('Content-Type: text/csv');
-                header('Content-Disposition: attachment; filename="export.csv"');
-                header('Pragma: no-cache');
-                header('Expires: 0');
-                fputcsv($fp, $headers);
-
-                while ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-                    fputcsv($fp, array_values($row));
-                }
-
-                return true;
-            }
-            return false;
-        } catch (\Exception $e) {
-            return false;
-        } finally {
-            $stmt = null;
-        }
-    } // end createCSVFile()
 
     /**
      * Get the value of id

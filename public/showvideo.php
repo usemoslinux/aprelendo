@@ -64,7 +64,7 @@ try {
         
         $body_css .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
-        throw new AprelendoException('Oops! There was an error trying to fetch that video.');
+        throw new AprelendoException('Error fetching that video.');
     }
 } catch (Exception $e) {
     header('Location:/login');

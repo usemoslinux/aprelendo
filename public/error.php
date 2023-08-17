@@ -48,7 +48,7 @@ $error_msg = isset($_GET['message']) ? $_GET['message'] : '';
 
     <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
 
-    <link rel="stylesheet" type="text/css" href="/css/500-min.css">
+    <link rel="stylesheet" type="text/css" href="/css/500.min.css">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">

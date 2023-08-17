@@ -228,7 +228,7 @@ $(document).ready(function() {
      * Returns current URI parameters
      */
      function getCurrentURIParameters() {
-        const parts = window.location.search.substr(1).split("&");
+        const parts = window.location.search.slice(1).split("&");
         let result = { p: "1" };
 
         if (parts != "") {

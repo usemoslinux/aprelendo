@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -20,7 +21,8 @@
 
 namespace Aprelendo\Includes\Classes;
 
-class wordStats extends DBEntity {
+class WordStats extends DBEntity
+{
     protected $lang_id = 0;
 
     /**
@@ -36,7 +38,7 @@ class wordStats extends DBEntity {
         $this->table = 'words';
         $this->lang_id = $lang_id;
     } // end __construct()
-    
+
     /**
      * Returns nr. of words reviewed by user today, except those marked as forgotten
      *
@@ -55,7 +57,7 @@ class wordStats extends DBEntity {
 
             return $row ? $row['reviewed_today'] : 0;
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to get word stats.');
+            throw new AprelendoException('Error getting number of words reviewed by user.');
         } finally {
             $stmt = null;
         }
@@ -66,18 +68,18 @@ class wordStats extends DBEntity {
      *
      * @return array
      */
-    public function getTotals(): array {
+    public function getTotals(): array
+    {
         try {
             $sql = "SELECT COUNT(*) as count
-                 FROM `{$this->table}`
-                 WHERE `user_id`=? AND `lang_id`=?
-                 GROUP BY `status`";
+                FROM `{$this->table}`
+                WHERE `user_id`=? AND `lang_id`=?
+                GROUP BY `status`";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id, $this->lang_id]);
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            return $result;
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to get word stats.');
+            throw new AprelendoException('Error getting word stats grouped by status.');
         } finally {
             $stmt = null;
         }

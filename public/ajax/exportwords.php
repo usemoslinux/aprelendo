@@ -22,6 +22,8 @@ require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
 
 use Aprelendo\Includes\Classes\Words;
+use Aprelendo\Includes\Classes\SearchWordsParameters;
+use Aprelendo\Includes\Classes\WordsUtilities;
 use Aprelendo\Includes\Classes\AprelendoException;
 
 $user_id = $user->getId();
@@ -30,17 +32,15 @@ $lang_id = $user->getLangId();
 try {
     // set search criteria, if any
     $search_text = isset($_GET['s']) ? $_GET['s'] : '';
-    $order_by = isset($_GET['o']) ? $_GET['o'] : -1;
+    $sort_by = isset($_GET['o']) ? $_GET['o'] : 0;
 
     // export to csv
     $words_table = new Words($pdo, $user_id, $lang_id);
-    $result = $words_table->createCSVFile($search_text, $order_by);
+    $search_params = new SearchWordsParameters($search_text, $sort_by);
+    $words = $words_table->search($search_params);
+    
+    WordsUtilities::exportToCSV($words);
 
-    if (!$result) {
-        throw new AprelendoException('There was an unexpected error trying to export your word list');
-    }
-} catch (Exception $e) {
-    $error = array('error_msg' => $e->getMessage());
-    header('Content-Type: application/json');
-    echo json_encode($error);
+} catch (AprelendoException $e) {
+    http_response_code($e->getCode());
 }

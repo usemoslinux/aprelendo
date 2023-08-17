@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -43,22 +44,24 @@ try {
         throw new AprelendoException('Forbidden', 403);
     }
 
-    $audiolang = array('ar' => 'ar-sa',
-                       'zh' => 'zh-cn',
-                       'nl' => 'nl-nl',
-                       'en' => 'en-us',
-                       'fr' => 'fr-fr',
-                       'de' => 'de-de',
-                       'el' => 'el-gr',
-                       'he' => 'he-il',
-                       'hi' => 'hi-in',
-                       'it' => 'it-it',
-                       'ja' => 'ja-jp',
-                       'ko' => 'ko-kr',
-                       'pt' => 'pt-br',
-                       'ru' => 'ru-ru',
-                       'es' => 'es-es');
-    
+    $audiolang = [
+        'ar' => 'ar-sa',
+        'zh' => 'zh-cn',
+        'nl' => 'nl-nl',
+        'en' => 'en-us',
+        'fr' => 'fr-fr',
+        'de' => 'de-de',
+        'el' => 'el-gr',
+        'he' => 'he-il',
+        'hi' => 'hi-in',
+        'it' => 'it-it',
+        'ja' => 'ja-jp',
+        'ko' => 'ko-kr',
+        'pt' => 'pt-br',
+        'ru' => 'ru-ru',
+        'es' => 'es-es'
+    ];
+
     $tts = new VoiceRSS;
     $voice = $tts->speech([
         'key' => VOICERSS_API_KEY,
@@ -70,7 +73,7 @@ try {
         'ssml' => 'false',
         'b64' => 'true'
     ]);
-    
+
     echo json_encode($voice);
 
     // if no errors, log audio stream
@@ -79,7 +82,6 @@ try {
     } else {
         throw new AprelendoException($voice['error'], 400);
     }
-    
 } catch (\Exception $e) {
     http_response_code($e->getCode());
 }

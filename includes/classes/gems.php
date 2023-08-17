@@ -78,7 +78,7 @@ class Gems extends DBEntity
                 $this->today_is_streak    = $diff_days >= 0;
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to load record from gems table.');
+            throw new AprelendoException('Error loading record from gems table.');
         } finally {
             $stmt = null;
         }
@@ -135,7 +135,7 @@ class Gems extends DBEntity
             
             return $gems;
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to update record from gems table.');
+            throw new AprelendoException('Error updating record in gems table.');
         } finally {
             $stmt = null;
         }

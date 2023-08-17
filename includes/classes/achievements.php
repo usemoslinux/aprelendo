@@ -116,8 +116,7 @@ class Achievements extends DBEntity
                 $stmt->execute([$this->user_id, $this->lang_id, $achievement['id']]);
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to insert new record in user '
-            . 'achievements table.');
+            throw new AprelendoException('Error inserting new record in user achievements table.');
         } finally {
             $stmt = null;
         }
@@ -142,8 +141,7 @@ class Achievements extends DBEntity
             $stmt->execute([$this->user_id, $this->lang_id]);
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to get record in user '
-                . 'achievements table.');
+            throw new AprelendoException('Error getting record in user achievements table.');
         } finally {
             $stmt = null;
         }

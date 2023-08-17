@@ -21,29 +21,28 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\TextTable;
-
-class SharedTextTable extends TextTable
+abstract class SearchParameters
 {
+    public string $search_text;
+    public int $offset;
+    public int $limit;
+    public int $sort_by;
+
     /**
      * Constructor
      *
-     * @param array $rows
+     * @param string $text
      */
     public function __construct(
-        array $rows,
+        string $search_text,
+        int $offset,
+        int $limit,
+        int $sort_by
     ) {
-        $this->headings = array('Title');
-        $this->col_widths = array('69px', '');
-        $this->action_menu = [];
-        $this->sort_menu = array(
-            'mSortByNew' => 'New first',
-            'mSortByOld' => 'Old first',
-            'mSortByMoreLikes' => 'More likes first',
-            'mSortByLessLikes' => 'Less likes first'
-        );
-        $this->is_shared = true;
-        $this->has_chkbox = false;
-        parent::__construct($rows, false);
-    } // end __construct()
+        $this->search_text = $search_text;
+        $this->offset = $offset;
+        $this->limit = $limit;
+        $this->sort_by = $sort_by;
+    }
 }
+

@@ -21,10 +21,10 @@
 require_once '../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check if user is logged in
 
-use Aprelendo\Includes\Classes\wordStats;
+use Aprelendo\Includes\Classes\WordStats;
 use Aprelendo\Includes\Classes\WordDailyGoal;
 
-$stats = new wordStats($pdo, $user->getId(), $user->getLangId());
+$stats = new WordStats($pdo, $user->getId(), $user->getLangId());
 
 // get today's statistics
 $nr_of_words_reviewed_today = $stats->getReviewedToday();

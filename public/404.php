@@ -23,7 +23,7 @@
 
     <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
 
-    <link rel="stylesheet" type="text/css" href="/css/404-min.css">
+    <link rel="stylesheet" type="text/css" href="/css/404.min.css">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">

@@ -17,20 +17,20 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
     let dictionary_URI = "";
     const $dic_frame = $("#dicFrame");
     let $sel_word = $();
 
     $("#search").focus();
     $("input:checkbox").prop("checked", false);
-    
+
     // ajax call to get dictionary URI
     $.ajax({
         url: "/ajax/getdicuris.php",
         type: "GET",
         dataType: "json"
-    }).done(function(data) {
+    }).done(function (data) {
         if (data.error_msg == null) {
             dictionary_URI = data.dictionary_uri;
         }
@@ -42,10 +42,10 @@ $(document).ready(function() {
      * Deletes selected words from the database
      * Trigger: when user selects "Delete" in the action menu
      */
-    $("#mDelete").on("click", function() {
+    $("#mDelete").on("click", function () {
         if (confirm("Really delete?")) {
             let ids = [];
-            $("input.chkbox-selrow:checked").each(function() {
+            $("input.chkbox-selrow:checked").each(function () {
                 ids.push($(this).attr("data-idWord"));
             });
 
@@ -61,12 +61,12 @@ $(document).ready(function() {
                     wordIDs: JSON.stringify(ids)
                 }
             })
-                .done(function() {
+                .done(function () {
                     window.location.replace(
                         "words" + parameterizeArray(getCurrentURIParameters())
                     );
                 })
-                .fail(function(request, status, error) {
+                .fail(function (request, status, error) {
                     alert(
                         "There was an error when trying to delete the selected words. Refresh the page and try again."
                     );
@@ -90,7 +90,7 @@ $(document).ready(function() {
      * Returns current URI parameters
      */
     function getCurrentURIParameters() {
-        const parts = window.location.search.substr(1).split("&");
+        const parts = window.location.search.slice(1).split("&");
         let result = { p: "1" };
 
         if (parts != "") {
@@ -101,7 +101,7 @@ $(document).ready(function() {
                 );
             }
         }
-        
+
         return result; // remove trailing '&'
     } // end getCurrentURIParameters
 
@@ -112,14 +112,14 @@ $(document).ready(function() {
      */
     function parameterizeArray(arr) {
         let result = '?';
-                        
+
         for (const key in arr) {
             if (arr[key]) {
                 result += key + '=' + encodeURIComponent(arr[key]) + '&';
             }
         }
 
-        return result.slice(0,-1);
+        return result.slice(0, -1);
     } // end parameterizeArray
 
     $(document).on("change", ".chkbox-selrow", toggleActionMenu);
@@ -127,7 +127,7 @@ $(document).ready(function() {
     /**
      * Selects/Unselects all texts from the list
      */
-    $(document).on("click", "#chkbox-selall", function(e) {
+    $(document).on("click", "#chkbox-selall", function (e) {
         e.stopPropagation();
 
         const $chkboxes = $(".chkbox-selrow");
@@ -139,12 +139,14 @@ $(document).ready(function() {
     /**
      * Selects sorting
      */
-    $("#dropdown-menu-sort").on("click", function(e) {
-        const params = { s: $("#s").val(), 
-                       o: $("#o").val() };
+    $("#dropdown-menu-sort").on("click", function (e) {
+        const params = {
+            s: $("#s").val(),
+            o: $("#o").val()
+        };
 
         const uri_str = parameterizeArray(params);
-        
+
         window.location.replace("/words" + uri_str);
     }); // end #dropdown-menu-sort.on.click
 
@@ -154,7 +156,7 @@ $(document).ready(function() {
      * Triggers when user clicks word
      * @param {event object} e
      */
-    $(".word").on("click", function(e) {
+    $(".word").on("click", function (e) {
         $sel_word = $(this);
         const url = dictionary_URI.replace("%s", encodeURI($sel_word.text()));
 
@@ -162,10 +164,10 @@ $(document).ready(function() {
         $("#btnadd").text("Forgot");
         $("#btn-translate").hide();
         $("#btnremove").removeClass().addClass("btn btn-danger me-auto");
-        
+
         // show loading spinner
-        $("#loading-spinner").attr('class','lds-ellipsis m-auto');
-        $dic_frame.attr('class','d-none');
+        $("#loading-spinner").attr('class', 'lds-ellipsis m-auto');
+        $dic_frame.attr('class', 'd-none');
 
         $dic_frame.get(0).contentWindow.location.replace(url);
         // the previous line loads iframe content without adding it to browser history,
@@ -177,8 +179,8 @@ $(document).ready(function() {
     /**
      * Hides loader spinner when dictionary iframe finished loading
      */
-     $dic_frame.on("load", function() {
-        $("#loading-spinner").attr('class','d-none');
+    $dic_frame.on("load", function () {
+        $("#loading-spinner").attr('class', 'd-none');
         $dic_frame.removeClass();
     }); // end $dic_frame.on.load()
 
@@ -186,7 +188,7 @@ $(document).ready(function() {
      * Updates status of forgotten words
      * Triggers when user click in Forgot button in dictionary modal
      */
-    $("#btnadd").on("click", function(e) {
+    $("#btnadd").on("click", function (e) {
         // add selection to "words" table
         $.ajax({
             type: "POST",
@@ -194,7 +196,7 @@ $(document).ready(function() {
             data: {
                 word: $sel_word.text()
             }
-        }).done(function(data) {
+        }).done(function (data) {
             if (data.error_msg != null) {
                 alert(data.error_msg);
             } else {
@@ -202,7 +204,7 @@ $(document).ready(function() {
                 $hourglass.removeClass().addClass("fas fa-hourglass-start status_forgotten");
                 $hourglass.attr("title", "Forgotten");
             }
-        }).fail(function() {
+        }).fail(function () {
             alert(
                 "Oops! There was an error updating this words' status."
             );
@@ -214,7 +216,7 @@ $(document).ready(function() {
      * Triggers when user selects Delete button in dictionary modal
      * @param {event object} e
      */
-    $("#btnremove").on("click", function(e) {
+    $("#btnremove").on("click", function (e) {
         $.ajax({
             url: "ajax/removeword.php",
             type: "POST",
@@ -222,12 +224,12 @@ $(document).ready(function() {
                 word: $sel_word.text() //JSON.stringify(ids)
             }
         })
-            .done(function() {
+            .done(function () {
                 window.location.replace(
                     "words" + parameterizeArray(getCurrentURIParameters())
                 );
             })
-            .fail(function(request, status, error) {
+            .fail(function (request, status, error) {
                 alert(
                     "There was an error when trying to delete the selected words. Refresh the page and try again."
                 );

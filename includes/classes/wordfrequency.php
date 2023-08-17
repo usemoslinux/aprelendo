@@ -56,7 +56,7 @@ class WordFrequency
 
             return $row['frequency_index'];
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to load record from frequency list table.');
+            throw new AprelendoException('Error loading record from frequency list table.');
         } finally {
             $stmt = null;
         }
@@ -80,12 +80,12 @@ class WordFrequency
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if ($result === false) {
-                throw new AprelendoException('There was an unexpected error trying to load records from frequency list table.');
+                throw new AprelendoException('Error loading records from frequency list table.');
             }
 
             return $result;
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to load records from frequency list table.');
+            throw new AprelendoException('Error loading records from frequency list table.');
         } finally {
             $stmt = null;
         }

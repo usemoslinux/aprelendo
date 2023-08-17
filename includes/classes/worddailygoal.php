@@ -83,7 +83,7 @@ class WordDailyGoal extends DBEntity
                 $this->update();
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to load record from word daily goal table.');
+            throw new AprelendoException('Error loading record from word daily goal table.');
         } finally {
             $stmt = null;
         }
@@ -118,7 +118,7 @@ class WordDailyGoal extends DBEntity
             $stmt->execute([$this->user_id, $this->lang_id, $this->last_streak, $this->days_streak,
                             $this->user_id, $this->lang_id, $this->last_streak, $this->days_streak]);
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to update record from word daily goal table.');
+            throw new AprelendoException('Error updating record from word daily goal table.');
         } finally {
             $stmt = null;
         }

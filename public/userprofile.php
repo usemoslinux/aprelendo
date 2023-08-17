@@ -73,7 +73,7 @@ use Aprelendo\Includes\Classes\Language;
                                         autocomplete="off" required>
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide current password" tabindex="-1">
-                                            <span class="fas fa-eye-slash" aria-hidden="true"></span></button>
+                                        <span class="fas fa-eye-slash" aria-hidden="true"></span></button>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -184,7 +184,7 @@ use Aprelendo\Includes\Classes\Language;
                     learning using Aprelendo.</p>
             </div>
             <div class="modal-footer">
-            <button id="btn-cancel" type="button" data-bs-dismiss="modal" class="btn btn-link">Cancel</button>
+                <button id="btn-cancel" type="button" data-bs-dismiss="modal" class="btn btn-link">Cancel</button>
                 <button id="btn-confirm-delete-account" type="button" data-bs-dismiss="modal"
                     class="btn btn-danger">Delete Account</button>
             </div>

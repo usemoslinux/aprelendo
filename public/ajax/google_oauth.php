@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -40,10 +41,11 @@ if (isset($_POST['id']) && !empty($_POST['id']) && !empty($_POST['email'])) {
             $user->login($user->getName(), '', $google_id);
         } else {
             // new user
-            $user_data = [ 'username' => $google_name,
-                           'email' => $google_email,
-                           'password' => $google_id
-                         ];
+            $user_data = [
+                'username' => $google_name,
+                'email' => $google_email,
+                'password' => $google_id
+            ];
 
             $user->register($user_data);
             $user->login($google_name, $google_id);

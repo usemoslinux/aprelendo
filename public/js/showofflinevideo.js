@@ -17,7 +17,7 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
     let player = document.querySelector('video');
     let highlighting = false;
     let $sel_start, $sel_end;
@@ -45,7 +45,7 @@ $(document).ready(function() {
         url: "ajax/getdicuris.php",
         type: "GET",
         dataType: "json"
-    }).done(function(data) {
+    }).done(function (data) {
         if (data.error_msg == null) {
             dictionary_URI = data.dictionary_uri;
             translator_URI = data.translator_uri;
@@ -55,7 +55,7 @@ $(document).ready(function() {
     /**
      * Disable right click context menu 
      */
-    $(document).on("contextmenu", ".word", function(e) {
+    $(document).on("contextmenu", ".word", function (e) {
         e.preventDefault();
         return false;
     }); // end .word.on.contextmenu
@@ -64,7 +64,7 @@ $(document).ready(function() {
      * Word/Phrase selection start
      * @param {event object} e
      */
-    $(document).on("mousedown touchstart", ".word", function(e) {
+    $(document).on("mousedown touchstart", ".word", function (e) {
         e.stopPropagation();
 
         video_paused = player.paused;
@@ -89,12 +89,12 @@ $(document).ready(function() {
             window.open(buildTranslationLink());
         }
     }); // end .word.on.mousedown/touchstart
-    
+
     /**
      * Word/Phrase selection end
      * @param {event object} e
      */
-    $(document).on("mouseup touchend", ".word", function(e) {
+    $(document).on("mouseup touchend", ".word", function (e) {
         e.stopPropagation();
 
         end_sel_time = new Date();
@@ -103,7 +103,7 @@ $(document).ready(function() {
             if (!swiping) {
                 highlighting = (end_sel_time - start_sel_time) > 1000;
             }
-            $('html').css({'overflow':'visible'});    
+            $('html').css({ 'overflow': 'visible' });
             swiping = false;
         }
 
@@ -123,7 +123,7 @@ $(document).ready(function() {
      * Determines if an element is after another one
      * @param {Jquery object} sel
      */
-    $.fn.isAfter = function(sel) {
+    $.fn.isAfter = function (sel) {
         return this.prevUntil(sel).length !== this.prevAll().length;
     }; // end $.fn.isAfter
 
@@ -134,7 +134,7 @@ $(document).ready(function() {
      * Here we build the selected phrase & change its background color to gray
      * @param {event object} e
      */
-    $(document).on("mouseover touchmove", ".word", function(e) {
+    $(document).on("mouseover touchmove", ".word", function (e) {
         e.stopPropagation();
 
         end_sel_time = new Date();
@@ -146,22 +146,22 @@ $(document).ready(function() {
             if (!swiping) {
                 highlighting = (end_sel_time - start_sel_time) > 1000;
             }
-        } 
+        }
 
         if (highlighting) {
             if (e.type == "touchmove") {
-                $('html').css({'overflow':'hidden'});
+                $('html').css({ 'overflow': 'hidden' });
             }
-            
+
             $(".word").removeClass("highlighted");
 
             $sel_end =
                 e.type === "mouseover" ? $(this) : $(
-                          document.elementFromPoint(
-                              e.originalEvent.touches[0].clientX,
-                              e.originalEvent.touches[0].clientY
-                          )
-                      );
+                    document.elementFromPoint(
+                        e.originalEvent.touches[0].clientX,
+                        e.originalEvent.touches[0].clientY
+                    )
+                );
 
             // if $sel_start & $sel_end are on the same line, then...
             if ($sel_start.parent().get(0) === $sel_end.parent().get(0)) {
@@ -187,9 +187,9 @@ $(document).ready(function() {
     /**
      * Adds selected word or phrase to the database and underlines it in the text
      */
-    $("#btnadd").on("click", function() {
+    $("#btnadd").on("click", function () {
         const sel_text = $selword.text();
-        const is_phrase = $selword.length > 1 ? 1: 0;
+        const is_phrase = $selword.length > 1 ? 1 : 0;
         // add selection to "words" table
         $.ajax({
             type: "POST",
@@ -199,13 +199,13 @@ $(document).ready(function() {
                 is_phrase: is_phrase
             }
         })
-            .done(function() {
+            .done(function () {
                 // if successful, underline word or phrase
                 if (is_phrase) {
                     // if it's a phrase
                     const firstword = $selword.eq(0).text();
                     const phraseext = $selword.filter(".word").length;
-                    let $filterphrase = $("a.word").filter(function() {
+                    let $filterphrase = $("a.word").filter(function () {
                         return (
                             $(this)
                                 .text()
@@ -213,7 +213,7 @@ $(document).ready(function() {
                         );
                     });
 
-                    $filterphrase.each(function() {
+                    $filterphrase.each(function () {
                         let lastword = $(this)
                             .nextAll("a.word")
                             .slice(0, phraseext - 1)
@@ -237,7 +237,7 @@ $(document).ready(function() {
                     });
                 } else {
                     // if it's a word
-                    let $filterword = $("a.word").filter(function() {
+                    let $filterword = $("a.word").filter(function () {
                         return (
                             $(this)
                                 .text()
@@ -245,7 +245,7 @@ $(document).ready(function() {
                         );
                     });
 
-                    $filterword.each(function() {
+                    $filterword.each(function () {
                         let $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
@@ -261,7 +261,7 @@ $(document).ready(function() {
                     $filterword.contents().unwrap();
                 }
             })
-            .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
                 alert(
                     "Oops! There was an error adding this word or phrase to the database."
                 );
@@ -295,11 +295,11 @@ $(document).ready(function() {
      * Updates vh value on window resize
      * Fix for mobile devices where vh includes hidden address bar
      */
-     $(window).on('resize', function () {
+    $(window).on('resize', function () {
         vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
     });
-        
+
     /**
      * Shows dictionary when user clicks a word
      * All words are enclosed in a.word tags
@@ -308,8 +308,8 @@ $(document).ready(function() {
         getWordFrequency($selword.text(), doclang);
         setAddDeleteButtons();
 
-        $("#loading-spinner").attr('class','lds-ellipsis m-auto');
-        $("#dicFrame").attr('class','d-none');
+        $("#loading-spinner").attr('class', 'lds-ellipsis m-auto');
+        $("#dicFrame").attr('class', 'd-none');
 
         // build translate sentence url
         translate_paragraph_link = buildTranslationLink();
@@ -334,7 +334,7 @@ $(document).ready(function() {
     /**
      * Remove selected word or phrase from database
      */
-    $("#btnremove").on("click", function() {
+    $("#btnremove").on("click", function () {
         $.ajax({
             type: "POST",
             url: "ajax/removeword.php",
@@ -342,8 +342,8 @@ $(document).ready(function() {
                 word: $selword.text().toLowerCase()
             }
         })
-            .done(function() {
-                let $filter = $("a.word").filter(function() {
+            .done(function () {
+                let $filter = $("a.word").filter(function () {
                     return (
                         $(this)
                             .text()
@@ -358,56 +358,57 @@ $(document).ready(function() {
                     data: { txt: $selword.text() },
                     dataType: "json"
                 })
-                .done(function(data) {
-                    // if everything went fine, remove the underlining and underline once again the whole selection
-                    // also, the case of the word/phrase in the text has to be respected
-                    // for phrases, we need to make sure that new underlining is added for each word
+                    .done(function (data) {
+                        // if everything went fine, remove the underlining and underline once again the whole selection
+                        // also, the case of the word/phrase in the text has to be respected
+                        // for phrases, we need to make sure that new underlining is added for each word
 
-                    let $result = $(underlineWords(data, doclang, false));
-                    let $cur_filter = {};
-                    let cur_word = /""/;
+                        let $result = $(underlineWords(data, doclang, false));
+                        let $cur_filter = {};
+                        let cur_word = /""/;
 
-                    $filter.each(function() {
-                        $cur_filter = $(this);
+                        $filter.each(function () {
+                            $cur_filter = $(this);
 
-                        $result.filter(".word").each(function(key) {
-                            if (langs_with_no_word_separator.includes(doclang)) {
-                                cur_word = new RegExp(
-                                    "(?<![^])" + $(this).text() + "(?![$])",
-                                    "iug"
-                                ).exec($cur_filter.text());                            } 
-                            else {
-                                cur_word = new RegExp(
-                                    "(?<![\\p{L}|^])" + $(this).text() + "(?![\\p{L}|$])",
-                                    "iug"
-                                ).exec($cur_filter.text());
-                            }
+                            $result.filter(".word").each(function (key) {
+                                if (langs_with_no_word_separator.includes(doclang)) {
+                                    cur_word = new RegExp(
+                                        "(?<![^])" + $(this).text() + "(?![$])",
+                                        "iug"
+                                    ).exec($cur_filter.text());
+                                }
+                                else {
+                                    cur_word = new RegExp(
+                                        "(?<![\\p{L}|^])" + $(this).text() + "(?![\\p{L}|$])",
+                                        "iug"
+                                    ).exec($cur_filter.text());
+                                }
 
-                            $(this).text(cur_word);
-                            
-                            // check if any word marked by PHP as .learning should be marked as .new instead
-                            const word = $(this).text().toLowerCase();
-                            const user_word = data.user_words.find(function (element) {
-                                return element.word == word;    
+                                $(this).text(cur_word);
+
+                                // check if any word marked by PHP as .learning should be marked as .new instead
+                                const word = $(this).text().toLowerCase();
+                                const user_word = data.user_words.find(function (element) {
+                                    return element.word == word;
+                                });
+
+                                if (user_word !== undefined) {
+                                    if (user_word.status == 2) {
+                                        $(this).removeClass("learning").addClass("new");
+                                    } else if (user_word.status == 3) {
+                                        $(this).removeClass("learning").addClass("forgotten");
+                                    }
+                                }
                             });
 
-                            if (user_word !== undefined) {
-                                if (user_word.status == 2) {
-                                    $(this).removeClass("learning").addClass("new");                                    
-                                } else if (user_word.status == 3) {
-                                    $(this).removeClass("learning").addClass("forgotten");
-                                }
-                            }
+                            $cur_filter.replaceWith($result.clone());
                         });
-                        
-                        $cur_filter.replaceWith($result.clone());
-                    });
-                })
-                .fail(function(xhr, ajaxOptions, thrownError) {
-                    console.log("There was an unexpected error trying to underline words in this text")
-                }); // end $.ajax    
+                    })
+                    .fail(function (xhr, ajaxOptions, thrownError) {
+                        console.log("There was an unexpected error trying to underline words in this text")
+                    }); // end $.ajax    
             })
-            .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
                 alert(
                     "Oops! There was an error removing the word from the database."
                 );
@@ -428,7 +429,7 @@ $(document).ready(function() {
         let oldwords = [];
         let ids = [];
         let word = "";
-        $(".learning").each(function() {
+        $(".learning").each(function () {
             word = $(this)
                 .text()
                 .toLowerCase();
@@ -447,14 +448,16 @@ $(document).ready(function() {
                 textIDs: JSON.stringify(ids)
             }
         })
-            .done(function(data) {
+            .done(function (data) {
                 if (data.error_msg == null) {
                     // update user score (gems)
                     const review_data = {
-                        words : { new:       $(".reviewing.new").length, 
-                                  learning:  $(".reviewing.learning").length, 
-                                  forgotten: $(".reviewing.forgotten").length },
-                        texts : { reviewed:  1 }
+                        words: {
+                            new: $(".reviewing.new").length,
+                            learning: $(".reviewing.learning").length,
+                            forgotten: $(".reviewing.forgotten").length
+                        },
+                        texts: { reviewed: 1 }
                     };
 
                     $.ajax({
@@ -462,16 +465,16 @@ $(document).ready(function() {
                         url: "ajax/updateuserscore.php",
                         data: review_data
                     })
-                    .done(function(data) {
-                        // show text review stats
-                        if (data.error_msg == null) {
-                            gems_earned = data.gems_earned;
-                            show_confirmation_dialog = false;
-                            const url = "/textstats";
-                            const total_words =
-                                Number($(".word").length) + Number($(".phrase").length);
-                            const form = $(
-                                '<form action="' +
+                        .done(function (data) {
+                            // show text review stats
+                            if (data.error_msg == null) {
+                                gems_earned = data.gems_earned;
+                                show_confirmation_dialog = false;
+                                const url = "/textstats";
+                                const total_words =
+                                    Number($(".word").length) + Number($(".phrase").length);
+                                const form = $(
+                                    '<form action="' +
                                     url +
                                     '" method="post">' +
                                     '<input type="hidden" name="created" value="' +
@@ -494,21 +497,21 @@ $(document).ready(function() {
                                     '" />' +
                                     '<input type="hidden" name="is_shared" value="1" />' +
                                     "</form>"
-                            );
-                            $("body").append(form);
-                            form.submit();
-                        } else {
+                                );
+                                $("body").append(form);
+                                form.submit();
+                            } else {
+                                alert("Oops! There was an unexpected error.");
+                            }
+                        })
+                        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
                             alert("Oops! There was an unexpected error.");
-                        }
-                    })
-                    .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                        alert("Oops! There was an unexpected error.");
-                    });
+                        });
                 } else {
                     alert("Oops! There was an unexpected error.");
                 }
             })
-            .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("Oops! There was an error updating the database.");
             });
     } // end #btn-save-offline-video.on.click
@@ -516,7 +519,7 @@ $(document).ready(function() {
     /**
      * Resumes video when modal window is closed
      */
-    $("#dic-modal").on("hidden.bs.modal", function() {
+    $("#dic-modal").on("hidden.bs.modal", function () {
         if (resume_video) {
             player.play();
             resume_video = false;
@@ -529,19 +532,19 @@ $(document).ready(function() {
     /**
      * Hides loader spinner when dictionary iframe finished loading
      */
-    $("#dicFrame").on("load", function() {
-        $("#loading-spinner").attr('class','d-none');
+    $("#dicFrame").on("load", function () {
+        $("#loading-spinner").attr('class', 'd-none');
         $(this).removeClass();
     }); // end #dicFrame.on.load()
 
-    $("#btn-translate").on("click", function() {
+    $("#btn-translate").on("click", function () {
         window.open(translate_paragraph_link);
     }); // end #btn-translate.on.click()
 
     /**
      * Removes word highlighting when user opens dictionary for word
      */
-    $("#text-container").on("click", function(e) {
+    $("#text-container").on("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
 
@@ -564,7 +567,7 @@ $(document).ready(function() {
      */
     $("#video-file-input").on("change", function () {
         if (this.files[0]) {
-            const file = this.files[0];    
+            const file = this.files[0];
             const type = file.type;
             if (player.canPlayType(type)) {
                 const fileURL = URL.createObjectURL(file);
@@ -576,7 +579,7 @@ $(document).ready(function() {
     /**
      * Open subtitle selection dialog
      */
-     $("#btn-selsubs").on("click", function (e) {
+    $("#btn-selsubs").on("click", function (e) {
         e.preventDefault();
         $("#subs-file-input").trigger('click');
     });
@@ -586,7 +589,7 @@ $(document).ready(function() {
      */
     $("#subs-file-input").on("change", function () {
         if (this.files[0]) {
-            const file = this.files[0];    
+            const file = this.files[0];
             const reader = new FileReader();
 
             reader.addEventListener('load', (event) => {
@@ -596,28 +599,28 @@ $(document).ready(function() {
 
                 for (const element of data) {
                     let line = '<div class="text-center"';
-                    
-                    for (let key in element){
-                      let value = element[key];
-                      switch (key) {
-                          case 'startTime':
-                              line += ' data-start="' + value + '"';
-                              break;
-                          case 'endTime':
-                              line += ' data-end="' + value + '"';
-                              break;
-                          case 'text':
-                              line += '>' + value;
-                              break;
-                          default:
-                              break;
-                      }
+
+                    for (let key in element) {
+                        let value = element[key];
+                        switch (key) {
+                            case 'startTime':
+                                line += ' data-start="' + value + '"';
+                                break;
+                            case 'endTime':
+                                line += ' data-end="' + value + '"';
+                                break;
+                            case 'text':
+                                line += '>' + value;
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                    
+
                     line += '</div>';
                     text += line;
                 }
-                
+
                 document.getElementById('text-container').innerHTML = text;
 
                 // ajax call to underline text
@@ -627,15 +630,15 @@ $(document).ready(function() {
                     data: { txt: $('#text-container').html() },
                     dataType: "json"
                 })
-                .done(function(data) {
-                    $('#text-container').html(underlineWords(data, doclang, false));
-                })
-                .fail(function(xhr, ajaxOptions, thrownError) {
-                    console.log("There was an unexpected error trying to underline words in this text")
-                }); // end $.ajax    
+                    .done(function (data) {
+                        $('#text-container').html(underlineWords(data, doclang, false));
+                    })
+                    .fail(function (xhr, ajaxOptions, thrownError) {
+                        console.log("There was an unexpected error trying to underline words in this text")
+                    }); // end $.ajax    
                 // document.getElementById('text-container').innerText = JSON.stringify(data);
             });
-            
+
             reader.readAsText(file);
         }
     });
@@ -647,17 +650,17 @@ $(document).ready(function() {
         const video_time = document.getElementById('video-stream').currentTime * 1000;
         let $obj = $("div.text-center", "#text-container");
         let $next_obj = $obj
-                        .filter(function() {
-                            return $(this).attr("data-start") < video_time;
-                        })
-                        .last();
+            .filter(function () {
+                return $(this).attr("data-start") < video_time;
+            })
+            .last();
         if (
             $next_obj.length > 0 &&
             !$next_obj.hasClass("video-reading-line")
         ) {
             $obj.removeClass("video-reading-line");
             $next_obj.addClass("video-reading-line");
-            
+
             $next_obj[0].scrollIntoView({
                 behavior: 'auto',
                 block: 'center',
@@ -669,7 +672,7 @@ $(document).ready(function() {
     /**
      * Shows dialog message reminding users to save changes before leaving
      */
-    $(window).on("beforeunload", function() {
+    $(window).on("beforeunload", function () {
         if (show_confirmation_dialog) {
             return "To save your progress, please click the Save button before you go. Otherwise, your changes will be lost. Are you sure you want to exit this page?";
         }

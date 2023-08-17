@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -45,71 +46,64 @@ class RSSFeed
     } // end __construct()
 
     /**
-    * Get RSS feed elements and initialize class variables
-    *
-    * @param string $url Url of the feed to parse
-    * @return void
-    */
+     * Get RSS feed elements and initialize class variables
+     *
+     * @param string $url Url of the feed to parse
+     * @throws AprelendoException If there's a problem fetching or parsing the feed
+     * @return void
+     */
     public function fetchXMLFeed(string $url): void
     {
-        $options = array(
+        $options = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_USERAGENT => FICTIONAL_USER_AGENT,
-            CURLOPT_FOLLOWLOCATION => true
-        );
+            CURLOPT_FOLLOWLOCATION => true,
+        ];
 
-        $this->xmlfeed = Curl::getUrlContents($url, $options);
-        
-        if ($this->xmlfeed) {
-            $this->xmlfeed = simplexml_load_string($this->xmlfeed);
+        $feed_contents = Curl::getUrlContents($url, $options);
 
-            if ($this->xmlfeed) {
-                $isatom = isset($this->xmlfeed->entry);
-                $isrss = isset($this->xmlfeed->channel);
-                
-                if ($isatom || $isrss) {
-                    // ATOM: feed>title; RSS: rss>channel>title
-                    $this->title = $isatom
-                        ? $this->xmlfeed->title
-                        : $this->xmlfeed->channel->title;
-                    // ATOM: feed>entry; RSS: rss>channel>item
-                    $entry = $isatom
-                        ? $this->xmlfeed->entry
-                        : $this->xmlfeed->channel->item;
-                    
-                    if (isset($this->title) && isset($entry)) {
-                        $itemindex = 1;
-                        foreach ($entry as $article) {
-                            // ATOM: feed>entry>updated; RSS: rss>channel>item>pubDate
-                            $artdate = $isatom ? $article->updated : $article->pubDate;
-                            $this->articles[$itemindex]['title'] = $article->title;
-                            $this->articles[$itemindex]['date'] = date("d/m/Y - H:i", strtotime($artdate));
-                            // ATOM: feed>entry>author; RSS: rss>channel>item>author
-                            $this->articles[$itemindex]['author'] = $article->author;
-                            // ATOM: feed>entry>link>href attr; RSS: rss>channel>item>link
-                            $this->articles[$itemindex]['src'] = $isatom
-                                ? $article->link->attributes()->href
-                                : $article->link;
-                            // ATOM: feed>entry>content; rss>channel>item>description
-                            $this->articles[$itemindex]['content'] = $isatom
-                                ? $article->pdotent
-                                : $article->description;
-                            
-                            if ($itemindex >= self::MAX_NR_OF_ARTICLES) {
-                                break;
-                            } else {
-                                $itemindex++;
-                            }
-                        }
-                    }
-                }
-            } else {
-                throw new AprelendoException('Oops! There was a problem trying to get this feed: ' . $url);
-            }
+        if (!$feed_contents) {
+            throw new AprelendoException('Error fetching the feed: ' . $url);
+        }
+
+        $xml_feed = simplexml_load_string($feed_contents);
+
+        if (!$xml_feed) {
+            throw new AprelendoException('Error parsing the feed: ' . $url);
+        }
+
+        if (isset($xml_feed->entry)) {
+            $feed_type = 'atom';
+            $entries = $xml_feed->entry;
+        } elseif (isset($xml_feed->channel)) {
+            $feed_type = 'rss';
+            $entries = $xml_feed->channel->item;
         } else {
-            throw new AprelendoException('Oops! There was a problem trying to get this feed: ' . $url);
+            throw new AprelendoException('Unknown feed format for: ' . $url);
+        }
+
+        $this->title = ($feed_type === 'atom') ? $xml_feed->title : $xml_feed->channel->title;
+        $itemIndex = 1;
+
+        foreach ($entries as $article) {
+            $articleDate = ($feed_type === 'atom') ? $article->updated : $article->pubDate;
+
+            $this->articles[$itemIndex] = [
+                'title' => $article->title,
+                'date' => date("d/m/Y - H:i", strtotime($articleDate)),
+                'author' => $article->author,
+                'src' => ($feed_type === 'atom') ? $article->link->attributes()->href : $article->link,
+                'content' => ($feed_type === 'atom') ? $article->pdotent : $article->description,
+            ];
+
+            if ($itemIndex >= self::MAX_NR_OF_ARTICLES) {
+                break;
+            }
+
+            $itemIndex++;
         }
     } // end fetchXMLFeed()
+
 
     /**
      * Get the value of title

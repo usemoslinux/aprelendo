@@ -91,12 +91,10 @@ class Preferences extends DBEntity
             $stmt->execute([$this->user_id, $this->font_family, $this->font_size, $this->line_height,
                 $this->text_alignment, $this->display_mode, $this->assisted_learning]);
             if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('There was an unexpected error trying to save your preferences. '
-                    . 'Please, try again later.');
+                throw new AprelendoException('Error saving user preferences.');
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to save your preferences. '
-                . 'Please, try again later.');
+            throw new AprelendoException('Error saving user preferences.');
         } finally {
             $stmt = null;
         }
@@ -115,7 +113,7 @@ class Preferences extends DBEntity
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$this->user_id]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-           
+            
             if ($row) {
                 $this->font_family       = $row['font_family'];
                 $this->font_size         = $row['font_size'];
@@ -125,7 +123,7 @@ class Preferences extends DBEntity
                 $this->assisted_learning = $row['assisted_learning'];
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to load user preferences record.');
+            throw new AprelendoException('Error loading user preferences record.');
         } finally {
             $stmt = null;
         }

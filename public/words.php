@@ -31,7 +31,7 @@ if (!empty($_GET)) {
     $sort_by = isset($_GET['o']) ? $_GET['o'] : 0;
 }
 
-$query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '';
+$query_str = '?s=' . $search_text . '&o=0';
 
 ?>
 
@@ -68,8 +68,9 @@ $query_str = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])
                                     <span class="fas fa-file-export"></span> Export
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a href="ajax/exportwords" class="dropdown-item">Export all</a>
-                                    <a href="ajax/exportwords<?php echo !empty($query_str) ? $query_str : '' ?>"
+                                    <a id="export-all" href="ajax/exportwords" class="dropdown-item">Export all</a>
+                                    <a id="export-search"
+                                        href="ajax/exportwords<?php echo !empty($query_str) ? $query_str : '' ?>"
                                         class="dropdown-item">
                                         Export search results
                                     </a>

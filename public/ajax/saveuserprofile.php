@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -39,13 +40,15 @@ $new_password2 = isset($_POST['newpassword-confirmation']) ? $_POST['newpassword
 $src_lang = isset($_POST['src_lang']) ? $_POST['src_lang'] : '';
 $to_lang = isset($_POST['to_lang']) ? $_POST['to_lang'] : '';
 
-$user_data = [ 'new_username' => $username,
-               'new_email' => $email,
-               'password' => $password,
-               'new_password' => $new_password1,
-               'new_native_lang' => $src_lang,
-               'new_lang' => $to_lang];
-               
+$user_data = [
+    'new_username' => $username,
+    'new_email' => $email,
+    'password' => $password,
+    'new_password' => $new_password1,
+    'new_native_lang' => $src_lang,
+    'new_lang' => $to_lang
+];
+
 try {
     if (empty($new_password1) && empty($new_password2)) {
         if (empty($password)) {

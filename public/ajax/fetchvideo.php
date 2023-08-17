@@ -35,7 +35,7 @@ try {
         $video = new Videos($pdo, $user->getId(), $user->getLangId());
         echo $video->fetchVideo($user->getLang(), $video_id);
     } else {
-        throw new AprelendoException('There was a problem retrieving that URL. Please check it is not empty or malformed');
+        throw new AprelendoException('Error retrieving that URL. Please check it is not empty or malformed');
     }
     
 } catch (AprelendoException $e) {

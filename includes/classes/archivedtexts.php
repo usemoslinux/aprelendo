@@ -58,7 +58,7 @@ class ArchivedTexts extends Texts
             $stmt->execute($ids_array);
             
             if (!$stmt->rowCount()) {
-                throw new AprelendoException('There was an unexpected error trying to insert record into the texts table.');
+                throw new AprelendoException('Error inserting record in texts table.');
             }
 
             $delete_sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
@@ -66,11 +66,10 @@ class ArchivedTexts extends Texts
             $stmt->execute($ids_array);
 
             if (!$stmt->rowCount()) {
-                throw new AprelendoException('There was an unexpected error trying to delete record from the archived '
-                    . 'texts table.');
+                throw new AprelendoException('Error deleting record from archived texts table.');
             }
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to unarchive this text.');
+            throw new AprelendoException('Error trying to unarchive this text.');
         } finally {
             $stmt = null;
         }

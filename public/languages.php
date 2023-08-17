@@ -65,11 +65,11 @@ if (isset($_GET['chg'])) {
                 <?php
 
                 if (isset($_GET['chg'])) { // chg parameter = show edit language page
-                    include_once('editlanguage.php');
+                    include_once 'editlanguage.php';
                 } elseif (isset($_GET['act'])) { // act parameter = set active language
-                    include_once('listlanguages.php');
+                    include_once 'listlanguages.php';
                 } else { // just show list of languages
-                    include_once('listlanguages.php');
+                    include_once 'listlanguages.php';
                 }
                 ?>
                 </main>

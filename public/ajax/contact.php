@@ -67,10 +67,10 @@ try {
         
         $mail_sent = mail(SUPPORT_EMAIL, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
         if (!$mail_sent) {
-            throw new AprelendoException('There was an unexpected error trying to send your query. Please try again later.');
+            throw new AprelendoException('Error sending your query. Please try again later.');
         }
     } else {
-        throw new AprelendoException('You need to complete all form fields in order to send your query. Please try again.');
+        throw new AprelendoException('You need to complete all required form fields. Please try again.');
     }
 } catch (Exception $e) {
     $error = array('error_msg' => $e->getMessage());

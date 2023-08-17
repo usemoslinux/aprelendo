@@ -23,7 +23,6 @@ namespace Aprelendo\Includes\Classes;
 abstract class Table
 {
     protected array $headings     = [];
-    protected int $col_count      = 0;
     protected array $col_widths   = [];
     protected array $rows         = [];
     protected array $action_menu  = [];
@@ -32,27 +31,10 @@ abstract class Table
 
     /**
      * Constructor
-     *
-     * @param array $headings
-     * @param array $col_widths
-     * @param array $rows
-     * @param array $action_menu HTML to create action menu
-     * @param array $sort_menu HTML to create sort menu
      */
-    public function __construct(
-        array $headings,
-        array $col_widths,
-        array $rows,
-        array $action_menu,
-        array $sort_menu
-        )
+    public function __construct()
     {
-        $this->headings = $headings;
-        $this->col_count = sizeof($headings);
-        $this->col_widths = $col_widths;
-        $this->rows = $rows;
-        $this->action_menu = $action_menu;
-        $this->sort_menu = $sort_menu;
+        // empty
     } // end __construct()
 
     /**

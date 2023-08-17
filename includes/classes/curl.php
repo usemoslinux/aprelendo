@@ -60,7 +60,7 @@ class Curl
         // Check the http response
         $httpCode = $info['http_code'];
         if ($httpCode != 200) {
-            throw new AprelendoException("Oops! The URL $url returned HTTP error $httpCode");
+            throw new AprelendoException("The URL $url returned HTTP error $httpCode");
         }
 
         curl_close($ch);

@@ -35,7 +35,9 @@ try {
 
             echo json_encode($result);
         } elseif ($_POST['mode'] == "SAVE") {
-            $result['audio_pos'] = isset($_POST['audio_pos']) && !empty($_POST['audio_pos']) ? $_POST['audio_pos'] : null;
+            $result['audio_pos'] = isset($_POST['audio_pos']) && !empty($_POST['audio_pos'])
+                ? $_POST['audio_pos']
+                : null;
             $result['text_pos'] = isset($_POST['text_pos']) && !empty($_POST['text_pos']) ? $_POST['text_pos'] : null;
 
             $text->update($_POST['id'], $result);

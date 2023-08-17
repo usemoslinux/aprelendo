@@ -32,8 +32,8 @@ try {
     if (!empty($audio_uri)) {
         echo $audio_uri;
     } else {
-        throw new AprelendoException(404);
+        throw new AprelendoException("File not found", 404);
     }
 } catch (AprelendoException $e) {
-    http_response_code($e->getMessage());
+    http_response_code($e->getCode());
 }

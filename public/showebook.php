@@ -23,6 +23,7 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set
 
 use Aprelendo\Includes\Classes\Reader;
 use Aprelendo\Includes\Classes\Texts;
+use Aprelendo\Includes\Classes\TextsUtilities;
 use Aprelendo\Includes\Classes\AprelendoException;
 
 function getCSS($styles)
@@ -42,7 +43,10 @@ function getCSS($styles)
             $style_str .= "$style: $value !important; ";
         }
     }
-    $style_str .= "text-align:center !important; margin: 0 0 1em 0 !important; padding: 2.5em 0 !important; text-indent:0 !important;}";
+    $style_str .= "text-align:center !important;
+        margin: 0 0 1em 0 !important;
+        padding: 2.5em 0 !important;
+        text-indent:0 !important;}";
     
     return $style_str;
 }
@@ -85,7 +89,7 @@ try {
         $styles['text-align'] = $prefs->getTextAlignment();
         $styles['line-height'] = $prefs->getLineHeight();
     } else {
-        throw new AprelendoException('Oops! There was an error trying to fetch that ebook.');
+        throw new AprelendoException('Oops! There was an unexpected error trying to fetch that ebook.');
     }
 } catch (Exception $e) {
     header('Location:/login');
@@ -95,7 +99,7 @@ try {
 // get audio uri, if any
 $text = new Texts($pdo, $user->getId(), $user->getLangId());
 $text->loadRecord($_GET['id']);
-$audio_uri = $text->getAudioUriForEmbbeding();
+$audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->getAudioUri());
 
 ?>
 
@@ -130,15 +134,15 @@ $audio_uri = $text->getAudioUriForEmbbeding();
         crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <!-- Extra style sheets -->
-    <link rel="stylesheet" type="text/css" href="/css/ebooks-min.css">
-    <link rel="stylesheet" type="text/css" href="/css/styles-min.css">
+    <link rel="stylesheet" type="text/css" href="/css/ebooks.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.min.css">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Font awesome icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0"
         crossorigin="anonymous" referrerpolicy="no-referrer">
 
@@ -239,7 +243,7 @@ $audio_uri = $text->getAudioUriForEmbbeding();
 
     <script defer src="js/underlinewords.min.js"></script>
     <script defer src="js/showtext.min.js"></script>
-    <script data-id="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>" defer src="js/showebook.min.js"></script>
+    <script data-id="<?php echo isset($_GET['id2']) ? $_GET['id'] : '' ?>" defer src="js/showebook.min.js"></script>
 
 </body>
 

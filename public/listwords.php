@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -23,7 +24,9 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks 
 
 use Aprelendo\Includes\Classes\Words;
 use Aprelendo\Includes\Classes\WordTable;
+use Aprelendo\Includes\Classes\SearchWordsParameters;
 use Aprelendo\Includes\Classes\Pagination;
+use Aprelendo\Includes\Classes\Url;
 
 $user_id = $user->getId();
 $lang_id = $user->getLangId();
@@ -33,16 +36,6 @@ $page = 1;
 $limit = 10; // number of rows per page
 $adjacents = 2; // adjacent page numbers
 
-// set variables used for creating the table
-$headings = array('Word', 'Status');
-$col_widths = array('33px', '', '60px');
-$action_menu = array('mDelete' => 'Delete');
-$sort_menu = array('mSortNewFirst'       => 'New first',
-                   'mSortOldFirst'       => 'Old first',
-                   'mSortLearnedFirst'   => 'Learned first',
-                   'mSortForgottenFirst' => 'Forgotten first',
-                   'mSortHighFrequency'  => 'More frequently modified first',
-                   'mSortLowFrequency'   => 'Less frequently modified first');
 $sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
 
 // if the page is loaded because user searched for something, show search results
@@ -62,16 +55,19 @@ $offset = $pagination->getOffset();
 
 try {
     // get search result
-    $rows = $words_table->getSearch($search_text, $offset, $limit, $sort_by);
+    $search_params = new SearchWordsParameters($search_text, $sort_by, $offset, $limit);
+    $rows = $words_table->search($search_params);
 
     // print table
     if (sizeof($rows) > 0) { // if there are any results, show them
-        $table = new WordTable($headings, $col_widths, $rows, $action_menu, $sort_menu);
+        $table = new WordTable($rows);
         echo $table->print($sort_by);
     }
 
     // print pagination
-    echo $pagination->print('words', $search_text, $sort_by);
+    $url_query_options = compact("search_text", "sort_by");
+    $page_url = new Url('words', $url_query_options);
+    echo $pagination->print($page_url);
 } catch (\Exception $e) {
     if (isset($_GET) && !empty($_GET)) {
         echo '<div class="alert alert-info" role="alert">No words found with that criteria. Try again.</div>';
@@ -84,4 +80,4 @@ require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
 
 ?>
 
-<script defer src="js/listwords.min.js"></script>
+<script defer src="js/listwords.js"></script>

@@ -52,7 +52,7 @@ if (!$user->isLoggedIn()) {
                             <h4>Fluency</h4>
                             <p>Language proficiency can be grouped into three dimensions of academic literacy:
                                 linguistic, cognitive, and sociocultural. In addition, there are <strong>four
-                                language domains</strong>: listening, speaking, reading, and writing. A person must
+                                    language domains</strong>: listening, speaking, reading, and writing. A person must
                                 be knowledgable in each of these domains in order to be language proficient.</p>
                             <p>During the process of learning a second language, it may seem logical to segment your
                                 efforts and even prioritize these domains. In this line of reasoning, you might be
@@ -65,12 +65,12 @@ if (!$user->isLoggedIn()) {
                                 domains is more important than the other, as all are equally required to be proficient
                                 in a language.</p>
                             <p>In fact, all these domains are so intrinsically interconnected that <strong>it is
-                                better to study them together</strong>. So, how do you achieve this objective?</p>
+                                    better to study them together</strong>. So, how do you achieve this objective?</p>
                             <br>
 
                             <h4>Immersion is the answer</h4>
                             <figure class="d-none d-sm-block img-fluid">
-                                    <img src="/img/other/immersion-banner.jpg" class="w-100" alt="Immersion banner">
+                                <img src="/img/other/immersion-banner.jpg" class="w-100" alt="Immersion banner">
                             </figure>
                             <p>Language immersion is the process of learning a language using only the target language
                                 for a specified time frame. That means no native language skills are used for
@@ -83,8 +83,8 @@ if (!$user->isLoggedIn()) {
                                 the language you are trying to learn. For example, language learning platforms that
                                 allow you to hire language teachers or speak with foreign people tend to focus on
                                 improving your speaking skills. Other tools, especially those that use cards and <a
-                                href="https://en.wikipedia.org/wiki/Spaced_repetition">spaced repetition
-                                algorithms</a>, target vocabulary acquisition.</p>
+                                    href="https://en.wikipedia.org/wiki/Spaced_repetition">spaced repetition
+                                    algorithms</a>, target vocabulary acquisition.</p>
                             <p>Aprelendo was designed to overcome this as well as other limitations associated with
                                 flashcards and spaced repetition software. Let's analyze them in detail before delving
                                 into the concept of total reading.</p>
@@ -121,14 +121,16 @@ if (!$user->isLoggedIn()) {
                             <p><strong>Reading</strong> alone has some nice <strong>benefits</strong>. It allows us to
                                 acquire <strong>vocabulary in context</strong>, by presenting words and phrases as they
                                 are used, including grammar, spelling, inflections, etc. Also, the importance of
-                                commonly used words or phrases is more evident while we read them.<p>
-                                    <p>These benefits are enhaced whenever we are interested in the topic of the text.
-                                        In that case, the context of the words or phrases we are trying to learn becomes
-                                        <strong>more relevant and memorable</strong>, therefore facilitating vocabulary
-                                        acquisition. Learning vocabulary that we know we will often want to use
-                                        ourselves creates a hidden need to incorporate it in our long term memory.</p>
-                                    <p>Reading has one final advantage: we already do it a lot every day as we surf the
-                                        Web. We only need to take advantage of this to learn new languages.</p>
+                                commonly used words or phrases is more evident while we read them.
+                            <p>
+                            <p>These benefits are enhaced whenever we are interested in the topic of the text.
+                                In that case, the context of the words or phrases we are trying to learn becomes
+                                <strong>more relevant and memorable</strong>, therefore facilitating vocabulary
+                                acquisition. Learning vocabulary that we know we will often want to use
+                                ourselves creates a hidden need to incorporate it in our long term memory.
+                            </p>
+                            <p>Reading has one final advantage: we already do it a lot every day as we surf the
+                                Web. We only need to take advantage of this to learn new languages.</p>
                         </section>
                         <br>
                         <section>
@@ -184,16 +186,17 @@ if (!$user->isLoggedIn()) {
                                         <li><strong>Dictation</strong>: type the words you marked for learning as
                                             they are spoken.</li>
                                         <li><strong>Review</strong>: this is the most
-                                        <a href="https://en.wikipedia.org/wiki/Testing_effect" target="_blank"
-                                        rel="noopener noreferrer">critical phase</a> for long-term language
-                                        acquisition. Review all the underlined words. Make an effort to remember
-                                        their meaning and pronunciation, while also paying attention to their
-                                        spelling. Try to come up with alternative phrases in which you could use
-                                        them. The latter is essential to turn your
-                                        <a href="https://en.wiktionary.org/wiki/passive_vocabulary" target="_blank"
-                                        rel="noopener noreferrer">passive vocabulary</a> into
-                                        <a href="https://en.wiktionary.org/wiki/active_vocabulary" target="_blank"
-                                        rel="noopener noreferrer">active vocabulary</a>.</li>
+                                            <a href="https://en.wikipedia.org/wiki/Testing_effect" target="_blank"
+                                                rel="noopener noreferrer">critical phase</a> for long-term language
+                                            acquisition. Review all the underlined words. Make an effort to remember
+                                            their meaning and pronunciation, while also paying attention to their
+                                            spelling. Try to come up with alternative phrases in which you could use
+                                            them. The latter is essential to turn your
+                                            <a href="https://en.wiktionary.org/wiki/passive_vocabulary" target="_blank"
+                                                rel="noopener noreferrer">passive vocabulary</a> into
+                                            <a href="https://en.wiktionary.org/wiki/active_vocabulary" target="_blank"
+                                                rel="noopener noreferrer">active vocabulary</a>.
+                                        </li>
                                     </ol>
                                     <p>As you see, by using Aprelendo you will be practicing all four dimensions of
                                         the language you want to learn at the same time, in a systematic and
@@ -201,12 +204,12 @@ if (!$user->isLoggedIn()) {
                                 </div>
                                 <div class="col-12 col-lg-6 mt-lg-3">
                                     <div class="ratio ratio-16x9">
-                                            <iframe src="https://www.youtube.com/embed/qimkPHrLkS4"
-                                                    title="YouTube video player"
-                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media;gyroscope; picture-in-picture"
-                                                    allowfullscreen></iframe>
-                                        </div>
+                                        <iframe src="https://www.youtube.com/embed/qimkPHrLkS4"
+                                            title="YouTube video player"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media;gyroscope; picture-in-picture"
+                                            allowfullscreen></iframe>
                                     </div>
+                                </div>
                             </div>
                         </section>
                         <br>
@@ -214,16 +217,18 @@ if (!$user->isLoggedIn()) {
                             <h4>Is total reading a good method for complete beginners?</h4>
                             <p>Our method has proven to be very beneficial, particularly for those who are on a learning
                                 "plateau" or anyone seeking to improve their language skills. It is true that <strong>
-                                complete beginners may encounter some difficulties</strong> with this system, as their
+                                    complete beginners may encounter some difficulties</strong> with this system, as
+                                their
                                 initial vocabulary is very limited and due to the fact that there are not many curated
                                 texts adapted to their level freely available online.</p>
                             <p>In any case, a good recommendation to keep in mind is to <strong>
-                                practice using texts that are at your level (or slightly above it)</strong>. Thus, if
+                                    practice using texts that are at your level (or slightly above it)</strong>. Thus,
+                                if
                                 you are a beginner you should try to use very short texts, with very basic
                                 vocabulary. Intermediate and advanced users, on the other hand, can try using longer
                                 and more complex texts.
                             <p>To alleviate the lack of curated texts, we created the "<a href="/sharedtexts">shared
-                                texts</a>" section, which allows our community to add and share texts that fit
+                                    texts</a>" section, which allows our community to add and share texts that fit
                                 different levels of learning.
                             </p>
                         </section>

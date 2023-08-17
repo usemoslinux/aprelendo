@@ -1,19 +1,19 @@
-<?php 
+<?php
 /**
  * Copyright (C) 2019 Pablo Castagnino
- * 
+ *
  * This file is part of aprelendo.
- * 
+ *
  * aprelendo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * aprelendo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -68,7 +68,8 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/arabic-english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/arabic-english/%s</a></li>
+                                        rel="noopener noreferrer">https://en.bab.la/dictionary/arabic-english/%s</a>
+                                </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/aren/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/aren/%s</a></li>
                                 <small><em>To make them work in your native language make sure to replace "en" or
@@ -86,8 +87,11 @@ if (!$user->isLoggedIn()) {
                             <ul>
                                 <li>Google Translator: <a href="https://translate.google.com/#ar/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://translate.google.com/#ar/en/%s</a></li>
-                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=ar&to=en&text=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=ar&to=en&text=%s</a></li>
+                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=ar&to=en&text=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=ar&to=en&text=%s</a>
+                                </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=ar-en&text=%s"
                                         target="_blank"
                                         rel="noopener noreferrer">https://translate.yandex.com/?lang=ar-en&text=%s</a>
@@ -116,10 +120,12 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/chinese-english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/chinese-english/%s</a></li>
+                                        rel="noopener noreferrer">https://en.bab.la/dictionary/chinese-english/%s</a>
+                                </li>
                                 <li>Linguee: <a href="https://mobile.linguee.com/chinese-english/search?query=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://mobile.linguee.com/chinese-english/search?query=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://mobile.linguee.com/chinese-english/search?query=%s</a>
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/zhen/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/zhen/%s</a></li>
@@ -141,8 +147,11 @@ if (!$user->isLoggedIn()) {
                             <ul>
                                 <li>Google Translator: <a href="https://translate.google.com/#zh/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://translate.google.com/#zh/en/%s</a></li>
-                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=zh&to=en&text=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=zh&to=en&text=%s</a></li>
+                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=zh&to=en&text=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=zh&to=en&text=%s</a>
+                                </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=zh-en&text=%s"
                                         target="_blank"
                                         rel="noopener noreferrer">https://translate.yandex.com/?lang=zh-en&text=%s</a>
@@ -179,12 +188,14 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://en.bab.la/dictionary/dutch-english/%s</a></li>
                                 <li>Linguee: <a href="https://mobile.linguee.com/dutch-english/search?query=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://mobile.linguee.com/dutch-english/search?query=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://mobile.linguee.com/dutch-english/search?query=%s</a>
                                 </li>
                                 <li>Cambridge dictionary: <a
                                         href="https://dictionary.cambridge.org/dictionary/dutch-english/%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/dutch-english/%s</a>
+                                        rel="noopener noreferrer">
+                                        https://dictionary.cambridge.org/dictionary/dutch-english/%s</a>
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/nlen/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/nlen/%s</a></li>
@@ -193,16 +204,19 @@ if (!$user->isLoggedIn()) {
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
                                             rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
-                                The following have been reported not to work: <a href="https://mobile.reverso.net" target="_blank"
-                                    rel="noopener noreferrer">Reverso</a> (no modal support).
+                                The following have been reported not to work: <a href="https://mobile.reverso.net"
+                                    target="_blank" rel="noopener noreferrer">Reverso</a> (no modal support).
                             </ul>
                             <strong>Translation (*)</strong>
                             <br>
                             <ul>
                                 <li>Google Translator: <a href="https://translate.google.com/#nl/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://translate.google.com/#nl/en/%s</a></li>
-                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=nl&to=en&text=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=nl&to=en&text=%s</a></li>
+                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=nl&to=en&text=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=nl&to=en&text=%s</a>
+                                </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=nl-en&text=%s"
                                         target="_blank"
                                         rel="noopener noreferrer">https://translate.yandex.com/?lang=nl-en&text=%s</a>
@@ -226,7 +240,8 @@ if (!$user->isLoggedIn()) {
                             <ul>
                                 <li>Wiktionary: <a href="https://en.m.wiktionary.org/wiki/%s" target="_blank"
                                         rel="noopener noreferrer">https://en.m.wiktionary.org/wiki/%s</a></li>
-                                <li>Word Reference: <a href="https://www.wordreference.com/definition/%s" target="_blank"
+                                <li>Word Reference: <a href="https://www.wordreference.com/definition/%s"
+                                        target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/definition/%s</a></li>
                                 <li>Dictionary.com: <a href="https://www.dictionary.com/browse/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.dictionary.com/browse/%s</a></li>
@@ -235,14 +250,19 @@ if (!$user->isLoggedIn()) {
                                 <li>Meriam Webster: <a href="https://www.merriam-webster.com/dictionary/%s"
                                         target="_blank"
                                         rel="noopener noreferrer">https://www.merriam-webster.com/dictionary/%s</a></li>
-                                <li>Cambridge Dictionary: <a href="https://dictionary.cambridge.org/us/dictionary/english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://dictionary.cambridge.org/us/dictionary/english/%s</a></li>
+                                <li>Cambridge Dictionary: <a
+                                        href="https://dictionary.cambridge.org/us/dictionary/english/%s" target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://dictionary.cambridge.org/us/dictionary/english/%s</a>
+                                </li>
                                 <li>Forvo: <a href="https://forvo.com/search/%s/en/" target="_blank"
                                         rel="noopener noreferrer">https://forvo.com/search/%s/en/</a></li>
                                 <li>Vocabulary.com: <a href="https://www.vocabulary.com/dictionary/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.vocabulary.com/dictionary/%s</a></li>
-                                <li>Urban Dictionary: <a href="https://www.urbandictionary.com/define.php?term=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.urbandictionary.com/define.php?term=%s</a></li>
+                                <li>Urban Dictionary: <a href="https://www.urbandictionary.com/define.php?term=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">https://www.urbandictionary.com/define.php?term=%s</a>
+                                </li>
                                 <li>Visuwords: <a href="https://visuwords.com/%s" target="_blank"
                                         rel="noopener noreferrer">https://visuwords.com/%s</a></li>
                                 <li>Google: <a href="https://www.google.com/search?q=define:%s" target="_blank"
@@ -266,20 +286,25 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/english-spanish/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/english-spanish/%s</a></li>
+                                        rel="noopener noreferrer">
+                                        https://en.bab.la/dictionary/english-spanish/%s</a>
+                                </li>
                                 <li>Linguee: <a href="https://mobile.linguee.com/english-spanish/search?query=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://mobile.linguee.com/english-spanish/search?query=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://mobile.linguee.com/english-spanish/search?query=%s</a>
                                 </li>
                                 <li>Cambridge dictionary: <a
                                         href="https://dictionary.cambridge.org/dictionary/english-spanish/%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/english-spanish/%s</a>
+                                        rel="noopener noreferrer">
+                                        https://dictionary.cambridge.org/dictionary/english-spanish/%s</a>
                                 </li>
                                 <li>Word Reference: <a
                                         href="https://www.wordreference.com/es/translation.asp?tranword=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://www.wordreference.com/es/translation.asp?tranword=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://www.wordreference.com/es/translation.asp?tranword=%s</a>
                                 </li>
                                 <small><em>To make them work in your native language make sure to replace "es" or
                                         "spanish" with the <a
@@ -287,8 +312,8 @@ if (!$user->isLoggedIn()) {
                                             rel="noopener noreferrer">ISO code</a> or
                                         name .</em></small>
                                 <br><br>
-                                The following have been reported not to work: <a
-                                    href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
+                                The following have been reported not to work: <a href="https://mobile.pons.com"
+                                    target="_blank" rel="noopener noreferrer">PONS</a>
                                 (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                                     rel="noopener noreferrer">Reverso</a> (no modal support).
                             </ul>
@@ -297,14 +322,19 @@ if (!$user->isLoggedIn()) {
                             <ul>
                                 <li>Google Translator: <a href="https://translate.google.com/#en/es/%s" target="_blank"
                                         rel="noopener noreferrer">https://translate.google.com/#en/es/%s</a></li>
-                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=en&to=en&text=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=en&to=en&text=%s</a></li>
+                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=en&to=en&text=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=en&to=en&text=%s</a>
+                                </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=en-es&text=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://translate.yandex.com/?lang=en-es&text=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://translate.yandex.com/?lang=en-es&text=%s</a>
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#en/es/%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.deepl.com/translator#en/es/%s</a></li>
+                                        rel="noopener noreferrer">
+                                        https://www.deepl.com/translator#en/es/%s</a></li>
                                 <small><em>To make them work in your native language make sure to replace "es" or
                                         "spanish" with the <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
@@ -337,25 +367,30 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/french-english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/french-english/%s</a></li>
+                                        rel="noopener noreferrer">
+                                        https://en.bab.la/dictionary/french-english/%s</a>
+                                </li>
                                 <li>Linguee: <a href="https://mobile.linguee.com/french-english/search?query=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://mobile.linguee.com/french-english/search?query=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://mobile.linguee.com/french-english/search?query=%s</a>
                                 </li>
                                 <li>Cambridge dictionary: <a
                                         href="https://dictionary.cambridge.org/dictionary/french-english/%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/french-english/%s</a>
+                                        rel="noopener noreferrer">
+                                        https://dictionary.cambridge.org/dictionary/french-english/%s</a>
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/fren/%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.wordreference.com/fren/%s</a></li>
+                                        rel="noopener noreferrer">
+                                        https://www.wordreference.com/fren/%s</a></li>
                                 <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
                                             rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
-                                The following have been reported not to work: <a
-                                    href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
+                                The following have been reported not to work: <a href="https://mobile.pons.com"
+                                    target="_blank" rel="noopener noreferrer">PONS</a>
                                 (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                                     rel="noopener noreferrer">Reverso</a> (no modal support).
                             </ul>
@@ -364,8 +399,11 @@ if (!$user->isLoggedIn()) {
                             <ul>
                                 <li>Google Translator: <a href="https://translate.google.com/#fr/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://translate.google.com/#fr/en/%s</a></li>
-                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=fr&to=en&text=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=fr&to=en&text=%s</a></li>
+                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=fr&to=en&text=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=fr&to=en&text=%s</a>
+                                </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=fr-en&text=%s"
                                         target="_blank"
                                         rel="noopener noreferrer">https://translate.yandex.com/?lang=fr-en&text=%s</a>
@@ -400,15 +438,18 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/german-english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/german-english/%s</a></li>
+                                        rel="noopener noreferrer">https://en.bab.la/dictionary/german-english/%s</a>
+                                </li>
                                 <li>Linguee: <a href="https://mobile.linguee.com/german-english/search?query=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://mobile.linguee.com/german-english/search?query=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://mobile.linguee.com/german-english/search?query=%s</a>
                                 </li>
                                 <li>Cambridge dictionary: <a
                                         href="https://dictionary.cambridge.org/dictionary/german-english/%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/german-english/%s</a>
+                                        rel="noopener noreferrer">
+                                        https://dictionary.cambridge.org/dictionary/german-english/%s</a>
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/deen/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/deen/%s</a></li>
@@ -419,8 +460,8 @@ if (!$user->isLoggedIn()) {
                                         corresponding <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
                                             target="_blank" rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
-                                The following have been reported not to work: <a
-                                    href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
+                                The following have been reported not to work: <a href="https://mobile.pons.com"
+                                    target="_blank" rel="noopener noreferrer">PONS</a>
                                 (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                                     rel="noopener noreferrer">Reverso</a> (no modal support).
                             </ul>
@@ -428,15 +469,21 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Google Translator: <a href="https://translate.google.com/#de/en/%s" target="_blank"
-                                        rel="noopener noreferrer">https://translate.google.com/#de/en/%s</a></li>
-                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=de&to=en&text=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=de&to=en&text=%s</a></li>
+                                        rel="noopener noreferrer">
+                                        https://translate.google.com/#de/en/%s</a></li>
+                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=de&to=en&text=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=de&to=en&text=%s</a>
+                                </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=de-en&text=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://translate.yandex.com/?lang=de-en&text=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://translate.yandex.com/?lang=de-en&text=%s</a>
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#de/en/%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.deepl.com/translator#de/en/%s</a></li>
+                                        rel="noopener noreferrer">
+                                        https://www.deepl.com/translator#de/en/%s</a></li>
                                 <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the
                                         corresponding <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
@@ -461,33 +508,39 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/greek-english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/greek-english/%s</a></li>
+                                        rel="noopener noreferrer">
+                                        https://en.bab.la/dictionary/greek-english/%s</a></li>
                                 <li>Linguee: <a href="https://mobile.linguee.com/greek-english/search?query=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://mobile.linguee.com/greek-english/search?query=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://mobile.linguee.com/greek-english/search?query=%s</a>
                                 </li>
-                                <li>Dict.com: <a href="https://www.dict.com/?t=gr&set=_engr&w=%s"
-                                        target="_blank"
-                                        rel="noopener noreferrer">https://www.dict.com/?t=gr&set=_engr&w=%s</a>
+                                <li>Dict.com: <a href="https://www.dict.com/?t=gr&set=_engr&w=%s" target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://www.dict.com/?t=gr&set=_engr&w=%s</a>
                                 </li>
                                 <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the
                                         corresponding <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
                                             target="_blank" rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
-                                The following have been reported not to work: <a href="https://mobile.reverso.net" target="_blank"
-                                    rel="noopener noreferrer">Reverso</a> (no modal support).
+                                The following have been reported not to work: <a href="https://mobile.reverso.net"
+                                    target="_blank" rel="noopener noreferrer">Reverso</a> (no modal support).
                             </ul>
                             <strong>Translation (*)</strong>
                             <br>
                             <ul>
                                 <li>Google Translator: <a href="https://translate.google.com/#el/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://translate.google.com/#el/en/%s</a></li>
-                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=el&to=en&text=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=el&to=en&text=%s</a></li>
+                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=el&to=en&text=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=el&to=en&text=%s</a>
+                                </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=el-en&text=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://translate.yandex.com/?lang=el-en&text=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://translate.yandex.com/?lang=el-en&text=%s</a>
                                 </li>
                                 <li>DeepL: <a href="https://www.deepl.com/translator#el/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.deepl.com/translator#el/en/%s</a></li>
@@ -537,7 +590,8 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://translate.google.com/#he/en/%s</a></li>
                                 <li>Bing Translator: <a href="https://www.bing.com/translator/?from=he&to=en&text=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=he&to=en&text=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=he&to=en&text=%s</a>
                                 </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=he-en&text=%s"
                                         target="_blank"
@@ -567,7 +621,8 @@ if (!$user->isLoggedIn()) {
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/hindi-english/%s" target="_blank"
                                         rel="noopener noreferrer">https://en.bab.la/dictionary/hindi-english/%s</a></li>
                                 <li>Bolti: <a href="https://www.boltidictionary.com/en/search?s=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.boltidictionary.com/en/search?s=%s</a></li>
+                                        rel="noopener noreferrer">https://www.boltidictionary.com/en/search?s=%s</a>
+                                </li>
                                 <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
@@ -575,8 +630,8 @@ if (!$user->isLoggedIn()) {
                                 <br><br>
                                 The following have been reported not to work: <a href="https://www.shabdkosh.com/"
                                     target="_blank" rel="noopener noreferrer">Shabdkosh</a>
-                                (no modal support), <a href="https://en.glosbe.com/"
-                                    target="_blank" rel="noopener noreferrer">Glosbe</a>
+                                (no modal support), <a href="https://en.glosbe.com/" target="_blank"
+                                    rel="noopener noreferrer">Glosbe</a>
                                 (no modal support).
                             </ul>
                             <strong>Translation (*)</strong>
@@ -586,7 +641,8 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://translate.google.com/#hi/en/%s</a></li>
                                 <li>Bing Translator: <a href="https://www.bing.com/translator/?from=hi&to=en&text=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=hi&to=en&text=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=hi&to=en&text=%s</a>
                                 </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=hi-en&text=%s"
                                         target="_blank"
@@ -619,15 +675,18 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/italian-english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/italian-english/%s</a></li>
+                                        rel="noopener noreferrer">https://en.bab.la/dictionary/italian-english/%s</a>
+                                </li>
                                 <li>Linguee: <a href="https://mobile.linguee.com/italian-english/search?query=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://mobile.linguee.com/italian-english/search?query=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://mobile.linguee.com/italian-english/search?query=%s</a>
                                 </li>
                                 <li>Cambridge dictionary: <a
                                         href="https://dictionary.cambridge.org/dictionary/italian-english/%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/italian-english/%s</a>
+                                        rel="noopener noreferrer">
+                                        https://dictionary.cambridge.org/dictionary/italian-english/%s</a>
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/iten/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/iten/%s</a></li>
@@ -636,8 +695,8 @@ if (!$user->isLoggedIn()) {
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
                                             rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
-                                The following have been reported not to work: <a
-                                    href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
+                                The following have been reported not to work: <a href="https://mobile.pons.com"
+                                    target="_blank" rel="noopener noreferrer">PONS</a>
                                 (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                                     rel="noopener noreferrer">Reverso</a> (no modal support).
                             </ul>
@@ -646,8 +705,11 @@ if (!$user->isLoggedIn()) {
                             <ul>
                                 <li>Google Translator: <a href="https://translate.google.com/#it/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://translate.google.com/#it/en/%s</a></li>
-                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=it&to=en&text=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=it&to=en&text=%s</a></li>
+                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=it&to=en&text=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=it&to=en&text=%s</a>
+                                </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=it-en&text=%s"
                                         target="_blank"
                                         rel="noopener noreferrer">https://translate.yandex.com/?lang=it-en&text=%s</a>
@@ -676,10 +738,12 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/japanese-english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/japanese-english/%s</a></li>
+                                        rel="noopener noreferrer">https://en.bab.la/dictionary/japanese-english/%s</a>
+                                </li>
                                 <li>Linguee: <a href="https://mobile.linguee.com/japanese-english/search?query=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://mobile.linguee.com/japanese-english/search?query=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://mobile.linguee.com/japanese-english/search?query=%s</a>
                                 </li>
                                 <li>Dict.com: <a href="https://www.dict.com/japanese-english/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.dict.com/japanese-english/%s</a></li>
@@ -692,10 +756,10 @@ if (!$user->isLoggedIn()) {
                                 <br><br>
                                 The following have been reported not to work: <a href="https://tangorin.com/"
                                     target="_blank" rel="noopener noreferrer">Tangorin</a>
-                                (no modal support), <a href="https://dictionary.goo.ne.jp/"
-                                    target="_blank" rel="noopener noreferrer">Goo</a>
-                                (no modal support), <a href="https://en.glosbe.com/"
-                                    target="_blank" rel="noopener noreferrer">Glosbe</a>
+                                (no modal support), <a href="https://dictionary.goo.ne.jp/" target="_blank"
+                                    rel="noopener noreferrer">Goo</a>
+                                (no modal support), <a href="https://en.glosbe.com/" target="_blank"
+                                    rel="noopener noreferrer">Glosbe</a>
                                 (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                                     rel="noopener noreferrer">Reverso</a> (no modal support).
                             </ul>
@@ -706,7 +770,8 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://translate.google.com/#ja/en/%s</a></li>
                                 <li>Bing Translator: <a href="https://www.bing.com/translator/?from=ja&to=en&text=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=ja&to=en&text=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=ja&to=en&text=%s</a>
                                 </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=ja-en&text=%s"
                                         target="_blank"
@@ -736,11 +801,15 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/korean-english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/korean-english/%s</a></li>
+                                        rel="noopener noreferrer">https://en.bab.la/dictionary/korean-english/%s</a>
+                                </li>
                                 <li>Naver: <a href="https://en.dict.naver.com/#/search?query=%s" target="_blank"
                                         rel="noopener noreferrer">https://en.dict.naver.com/#/search?query=%s</a></li>
-                                <li>ZKorean: <a href="https://zkorean.com/dictionary/search_results?word=%s" target="_blank"
-                                        rel="noopener noreferrer">https://zkorean.com/dictionary/search_results?word=%s</a></li>
+                                <li>ZKorean: <a href="https://zkorean.com/dictionary/search_results?word=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://zkorean.com/dictionary/search_results?word=%s</a>
+                                </li>
                                 <small><em>To make them work in your native language make sure to replace "en" or
                                         "english" with the corresponding <a
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
@@ -757,7 +826,8 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://translate.google.com/#ko/en/%s</a></li>
                                 <li>Bing Translator: <a href="https://www.bing.com/translator/?from=ko&to=en&text=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=ko&to=en&text=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=ko&to=en&text=%s</a>
                                 </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=ko-en&text=%s"
                                         target="_blank"
@@ -784,7 +854,8 @@ if (!$user->isLoggedIn()) {
                                         target="_blank" rel="noopener noreferrer">https://www.dicio.com.br/%s</a></li>
                                 <li>Infopédia: <a href="https://www.infopedia.pt/dicionarios/lingua-portuguesa/%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://www.infopedia.pt/dicionarios/lingua-portuguesa/%s</a>
+                                        rel="noopener noreferrer">
+                                        https://www.infopedia.pt/dicionarios/lingua-portuguesa/%s</a>
                                 </li>
                                 <li>The Free Dictionary: <a href="https://pt.thefreedictionary.com/%s" target="_blank"
                                         rel="noopener noreferrer">https://pt.thefreedictionary.com/%s</a></li>
@@ -794,15 +865,18 @@ if (!$user->isLoggedIn()) {
                             <strong>Bilingual dictionaries (*)</strong>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/portuguese-english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/portuguese-english/%s</a></li>
+                                        rel="noopener noreferrer">https://en.bab.la/dictionary/portuguese-english/%s</a>
+                                </li>
                                 <li>Linguee: <a href="https://mobile.linguee.com/portuguese-english/search?query=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://mobile.linguee.com/portuguese-english/search?query=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://mobile.linguee.com/portuguese-english/search?query=%s</a>
                                 </li>
                                 <li>Cambridge dictionary: <a
                                         href="https://dictionary.cambridge.org/dictionary/portuguese-english/%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/portuguese-english/%s</a>
+                                        rel="noopener noreferrer">
+                                        https://dictionary.cambridge.org/dictionary/portuguese-english/%s</a>
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/pten/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/pten/%s</a></li>
@@ -811,8 +885,8 @@ if (!$user->isLoggedIn()) {
                                         corresponding <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
                                             target="_blank" rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
-                                The following have been reported not to work: <a
-                                    href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
+                                The following have been reported not to work: <a href="https://mobile.pons.com"
+                                    target="_blank" rel="noopener noreferrer">PONS</a>
                                 (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                                     rel="noopener noreferrer">Reverso</a> (no modal support).
                             </ul>
@@ -820,8 +894,11 @@ if (!$user->isLoggedIn()) {
                             <ul>
                                 <li>Google Translator: <a href="https://translate.google.com/#pt/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://translate.google.com/#pt/en/%s</a></li>
-                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=pt&to=en&text=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=pt&to=en&text=%s</a></li>
+                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=pt&to=en&text=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=pt&to=en&text=%s</a>
+                                </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=pt-en&text=%s"
                                         target="_blank"
                                         rel="noopener noreferrer">https://translate.yandex.com/?lang=pt-en&text=%s</a>
@@ -850,10 +927,12 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/russian-english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/russian-english/%s</a></li>
+                                        rel="noopener noreferrer">https://en.bab.la/dictionary/russian-english/%s</a>
+                                </li>
                                 <li>Linguee: <a href="https://mobile.linguee.com/russian-english/search?query=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://mobile.linguee.com/russian-english/search?query=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://mobile.linguee.com/russian-english/search?query=%s</a>
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/ruen/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/ruen/%s</a></li>
@@ -870,8 +949,8 @@ if (!$user->isLoggedIn()) {
                                 <br><br>
                                 The following have been reported not to work: <a href="https://www.russiandict.net/"
                                     target="_blank" rel="noopener noreferrer">Russiandict</a>
-                                (no modal support), <a href="https://en.glosbe.com/"
-                                    target="_blank" rel="noopener noreferrer">Glosbe</a>
+                                (no modal support), <a href="https://en.glosbe.com/" target="_blank"
+                                    rel="noopener noreferrer">Glosbe</a>
                                 (no modal support), <a href="https://mobile.pons.com" target="_blank"
                                     rel="noopener noreferrer">PONS</a>
                                 (no modal support), <a href="https://mobile.reverso.net" target="_blank"
@@ -884,7 +963,8 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://translate.google.com/#ru/en/%s</a></li>
                                 <li>Bing Translator: <a href="https://www.bing.com/translator/?from=ru&to=en&text=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=ru&to=en&text=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=ru&to=en&text=%s</a>
                                 </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=ru-en&text=%s"
                                         target="_blank"
@@ -909,7 +989,8 @@ if (!$user->isLoggedIn()) {
                                         rel="noopener noreferrer">https://es.m.wiktionary.org/wiki/%s</a></li>
                                 <li>Diccionario Real Academia Española: <a href="https://dle.rae.es/%s" target="_blank"
                                         rel="noopener noreferrer">https://dle.rae.es/%s</a></li>
-                                <li>Word Reference: <a href="https://www.wordreference.com/definicion/%s" target="_blank"
+                                <li>Word Reference: <a href="https://www.wordreference.com/definicion/%s"
+                                        target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/definicion/%s</a></li>
                                 <li>The Free Dictionary: <a href="https://es.thefreedictionary.com/%s" target="_blank"
                                         rel="noopener noreferrer">https://es.thefreedictionary.com/%s</a></li>
@@ -924,15 +1005,18 @@ if (!$user->isLoggedIn()) {
                             <br>
                             <ul>
                                 <li>Bab.la: <a href="https://en.bab.la/dictionary/spanish-english/%s" target="_blank"
-                                        rel="noopener noreferrer">https://en.bab.la/dictionary/spanish-english/%s</a></li>
+                                        rel="noopener noreferrer">https://en.bab.la/dictionary/spanish-english/%s</a>
+                                </li>
                                 <li>Linguee: <a href="https://mobile.linguee.com/spanish-english/search?query=%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://mobile.linguee.com/spanish-english/search?query=%s</a>
+                                        rel="noopener noreferrer">
+                                        https://mobile.linguee.com/spanish-english/search?query=%s</a>
                                 </li>
                                 <li>Cambridge dictionary: <a
                                         href="https://dictionary.cambridge.org/dictionary/spanish-english/%s"
                                         target="_blank"
-                                        rel="noopener noreferrer">https://dictionary.cambridge.org/dictionary/spanish-english/%s</a>
+                                        rel="noopener noreferrer">
+                                        https://dictionary.cambridge.org/dictionary/spanish-english/%s</a>
                                 </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/esen/%s" target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/esen/%s</a></li>
@@ -941,8 +1025,8 @@ if (!$user->isLoggedIn()) {
                                             href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"
                                             rel="noopener noreferrer">ISO code</a> or name.</em></small>
                                 <br><br>
-                                The following have been reported not to work: <a
-                                    href="https://mobile.pons.com" target="_blank" rel="noopener noreferrer">PONS</a>
+                                The following have been reported not to work: <a href="https://mobile.pons.com"
+                                    target="_blank" rel="noopener noreferrer">PONS</a>
                                 (no modal support), <a href="https://mobile.reverso.net" target="_blank"
                                     rel="noopener noreferrer">Reverso</a> (no modal support).
                             </ul>
@@ -951,8 +1035,11 @@ if (!$user->isLoggedIn()) {
                             <ul>
                                 <li>Google Translator: <a href="https://translate.google.com/#es/en/%s" target="_blank"
                                         rel="noopener noreferrer">https://translate.google.com/#es/en/%s</a></li>
-                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=es&to=en&text=%s" target="_blank"
-                                        rel="noopener noreferrer">https://www.bing.com/translator/?from=es&to=en&text=%s</a></li>
+                                <li>Bing Translator: <a href="https://www.bing.com/translator/?from=es&to=en&text=%s"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        https://www.bing.com/translator/?from=es&to=en&text=%s</a>
+                                </li>
                                 <li>Yandex Translator: <a href="https://translate.yandex.com/?lang=es-en&text=%s"
                                         target="_blank"
                                         rel="noopener noreferrer">https://translate.yandex.com/?lang=es-en&text=%s</a>

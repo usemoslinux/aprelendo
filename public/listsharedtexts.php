@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -19,27 +20,19 @@
  */
 
 require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php';
 
-use Aprelendo\Includes\Classes\Texts;
-use Aprelendo\Includes\Classes\TextTable;
 use Aprelendo\Includes\Classes\SharedTexts;
 use Aprelendo\Includes\Classes\SharedTextTable;
+use Aprelendo\Includes\Classes\SearchTextsParameters;
 use Aprelendo\Includes\Classes\Pagination;
+use Aprelendo\Includes\Classes\Url;
 
 // set variables used for pagination
 $page = 1;
 $limit = 10; // number of rows per page
 $adjacents = 2; // adjacent page numbers
 
-// set variables used for creating the table
-$headings = array('Title');
-$col_widths = array('69px', '');
-$action_menu = [];
-$sort_menu = array('mSortByNew' => 'New first',
-                   'mSortByOld' => 'Old first',
-                   'mSortByMoreLikes' => 'More likes first',
-                   'mSortByLessLikes' => 'Less likes first');
 $sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
 
 $html = ''; // HTML output to print
@@ -62,15 +55,18 @@ $offset = $pagination->getOffset();
 
 try {
     // get search result
-    $rows = $texts_table->getSearch($filter_type, $filter_level, $search_text, $offset, $limit, $sort_by);
+    $search_params = new SearchTextsParameters($filter_type, $filter_level, $search_text, $offset, $limit, $sort_by);
+    $rows = $texts_table->search($search_params);
 
     // print table
     if ($rows) {
         // if there are any results, show them
-        $table = new SharedTextTable($user_id, $headings, $col_widths, $rows, $action_menu, $sort_menu);
+        $table = new SharedTextTable($rows);
         $html = $table->print($sort_by);
         // print pagination
-        $html .= $pagination->print('sharedtexts', $search_text, $sort_by, $filter_type, $filter_level);
+        $url_query_options = compact("search_text", "sort_by", "filter_type", "filter_level");
+        $page_url = new Url('sharedtexts', $url_query_options);
+        $html .= $pagination->print($page_url);
     }
 } catch (\Exception $e) {
     // if there are no texts to show, print a message

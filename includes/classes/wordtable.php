@@ -24,24 +24,38 @@ use Aprelendo\Includes\Classes\Table;
 
 class WordTable extends Table
 {
-    
+    private const STATUS_ICONS = [
+        'fa-hourglass-end status_learned',
+        'fa-hourglass-half status_learning',
+        'fa-hourglass-start status_new',
+        'fa-hourglass-start status_forgotten',
+    ];
+
+    private const STATUS_TEXT = [
+        'Learned',
+        'Learning',
+        'New',
+        'Forgotten',
+    ];
+
     /**
      * Constructor
      *
-     * @param array $headings
-     * @param array $col_widths
      * @param array $rows
-     * @param array $action_menu HTML to create action menu
-     * @param array $sort_menu HTML to create sort menu
      */
-    public function __construct(
-        array $headings,
-        array $col_widths,
-        array $rows,
-        array $action_menu,
-        array $sort_menu
-        ) {
-        parent::__construct($headings, $col_widths, $rows, $action_menu, $sort_menu);
+    public function __construct(array $rows) {
+        $this->headings = array('Word', 'Status');
+        $this->col_widths = array('33px', '', '60px');
+        $this->action_menu = array('mDelete' => 'Delete');
+        $this->sort_menu = array(
+            'mSortNewFirst'       => 'New first',
+            'mSortOldFirst'       => 'Old first',
+            'mSortLearnedFirst'   => 'Learned first',
+            'mSortForgottenFirst' => 'Forgotten first',
+            'mSortHighFrequency'  => 'More frequently modified first',
+            'mSortLowFrequency'   => 'Less frequently modified first'
+        );
+        $this->rows = $rows;
         $this->has_chkbox = true;
     }
 
@@ -53,33 +67,78 @@ class WordTable extends Table
     protected function printContent(): string
     {
         $html = '';
-            
-        for ($i=0; $i < sizeof($this->rows); $i++) {
-            $word_id = $this->rows[$i]['id'];
-            $word = $this->rows[$i]['word'];
-            $word_status = $this->rows[$i]['status'];
-            $diff_today_modif = $this->rows[$i]['diff_today_modif'];
-            $days_modif_str = $diff_today_modif !== null
-                ? ' - modified ' . $diff_today_modif . ' days ago'
-                : ' - never modified';
 
-            // $status = 0 ("learned"), 1 ("learning"), 2 ("new"), 3 ("forgotten")
-            $status = array('fa-hourglass-end status_learned', 'fa-hourglass-half status_learning',
-                            'fa-hourglass-start status_new', 'fa-hourglass-start status_forgotten');
-            $status_text = array('Learned', 'Learning', 'New', 'Forgotten');
-
-            if ($this->has_chkbox) {
-                $html .= "<tr><td class='col-checkbox'><div><input id='row-$word_id'
-                    class='form-check-input chkbox-selrow' type='checkbox' aria-label='Select row'
-                    data-idWord='$word_id'><label class='form-check-label' for='row-$word_id'></label></div></td>";
-            }
-            
-            $html .= '<td class="col-title"><a class="word word-list">'
-                . $word
-                . '</a></td><td class="col-status text-center">'
-                . '<span title="' . $status_text[$word_status] . $days_modif_str
-                . '" class="fas ' . $status[$word_status] . '"></span></td></tr>';
+        foreach ($this->rows as $row) {
+            $html .= $this->generateTableRow($row);
         }
+
         return $html;
     }
+
+    /**
+     * Generates the HTML for a single table row
+     *
+     * @param array $row
+     * @return string
+     */
+    private function generateTableRow(array $row): string
+    {
+        $html  = "<tr>";
+        $html .= $this->generateCheckboxCell($row);
+        $html .= $this->generateLink($row);
+        $html .= $this->generateStatusIcon($row);
+        $html .= "</tr>";
+
+        return $html;
+    } // end generateTableRow()
+
+    /**
+     * Generates the HTML for the checkbox cell
+     *
+     * @param array $row
+     * @return string
+     */
+    private function generateCheckboxCell(array $row): string
+    {
+        $word_id = $row['id'];
+
+        return $this->has_chkbox
+            ? '<td class="col-checkbox"><div><input id="row-' . $word_id .'" class="form-check-input '
+                . 'chkbox-selrow" type="checkbox" aria-label="Select row" data-idWord="' . $word_id
+                . '"><label class="form-check-label" for="row-' . $word_id . '"></label></div></td>'
+            : '';
+    } // end generateCheckboxCell()
+
+    /**
+     * Generates the HTML link for a row
+     *
+     * @param array $row
+     * @return string
+     */
+    private function generateLink(array $row): string
+    {
+        $word = $row['word'];
+        return "<td class='col-title'><a class='word word-list'>$word</a></td>";
+    } // end generateLink()
+
+    /**
+     * Generates the status icon HTML for a row
+     *
+     * @param array $row
+     * @return string
+     */
+    private function generateStatusIcon(array $row): string
+    {
+        $word_status = $row['status'];
+        $diff_today_modif = $row['diff_today_modif'];
+        $days_modif_str = $diff_today_modif !== null
+            ? ' - modified ' . $diff_today_modif . ' days ago'
+            : ' - never modified';
+
+        $statusIconClass = self::STATUS_ICONS[$word_status];
+        $statusText = self::STATUS_TEXT[$word_status];
+
+        return '<td class="col-status text-center"><span title="' . $statusText . $days_modif_str
+            . '" class="fas ' . $statusIconClass . '"></span></td>';
+    } // end generateStatusIcon()
 }

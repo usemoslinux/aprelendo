@@ -42,11 +42,11 @@ class Log extends DBEntity
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$row) {
-                throw new AprelendoException('There was an unexpected error trying to get today\'s log records.');
+                throw new AprelendoException('Error getting today\'s log records.');
             }
             return $row['exists'];
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to get today\'s log records.');
+            throw new AprelendoException('Error getting today\'s log records.');
         }
     } // end countTodayRecords()
 
@@ -65,12 +65,12 @@ class Log extends DBEntity
             $stmt->execute([$this->user_id]);
                     
             if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('There was an unexpected error trying to add log record.');
+                throw new AprelendoException('Error adding log record.');
             }
 
-            $this->purge_old(); // if successful, purge old records
+            $this->purgeOldRecords(); // if successful, purge old records
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to add log record.');
+            throw new AprelendoException('Error adding log record.');
         } finally {
             $stmt = null;
         }
@@ -81,7 +81,7 @@ class Log extends DBEntity
      *
      * @return void
      */
-    private function purge_old()
+    private function purgeOldRecords()
     {
         try {
             $sql = "DELETE FROM `{$this->table}`
@@ -90,9 +90,9 @@ class Log extends DBEntity
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute();
         } catch (\PDOException $e) {
-            throw new AprelendoException('There was an unexpected error trying to purge old log records.');
+            throw new AprelendoException('Error purging old log records.');
         } finally {
             $stmt = null;
         }
-    }
+    } // end purgeOldRecords()
 }

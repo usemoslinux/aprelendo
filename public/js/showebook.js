@@ -63,9 +63,9 @@ $(document).ready(function() {
     // theming
     let reader = document.getElementById("readerpage");
 
-    rendition.themes.register("darkmode", "/css/ebooks-min.css");
-    rendition.themes.register("lightmode", "/css/ebooks-min.css");
-    rendition.themes.register("sepiamode", "/css/ebooks-min.css");
+    rendition.themes.register("darkmode", "/css/ebooks.min.css");
+    rendition.themes.register("lightmode", "/css/ebooks.min.css");
+    rendition.themes.register("sepiamode", "/css/ebooks.min.css");
 
     rendition.themes.default({
         body: {
@@ -399,6 +399,8 @@ $(document).ready(function() {
         let audio = document.getElementById("audioplayer");
         let audio_pos = audio != null ? audio.currentTime : 0;
     
-        saveTextAndAudioPos(text_pos, audio_pos);
+        if (text_pos) {
+            saveTextAndAudioPos(text_pos, audio_pos);
+        }
     });
 });
