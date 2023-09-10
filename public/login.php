@@ -65,14 +65,21 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         </div>
                         <div class="mb-3">
                             <label for="password">Password:</label>
-                            <input type="password" id="password" name="password" class="form-control"
-                                pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                title="Password must have at least 8 characters and contain letters, special characters and a digits"
-                                autocomplete="off">
+                            <small>
+                                <em>at least 8 characters (including letters, numbers &amp; special characters)</em>
+                            </small>
+                            <div class="input-group">
+                                <input type="password" id="password" name="password" class="form-control"
+                                    pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
+                                    title="Password must have at least 8 characters and contain letters, special characters and a digits"
+                                    autocomplete="off" required>
+                                <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
+                                    aria-label="Show/hide password" tabindex="-1"><span class="fas fa-eye-slash"
+                                        aria-hidden="true"></span></button>
+                            </div>
+                            <small id="password-strength-text"></small>
                         </div>
-                        <p>
-
-                        </p>
+                        <p></p>
                         <div class="d-grid gap-2">
                             <button type="submit" id="btn_login" class="btn btn-success">Sign in</button>
                         </div>
@@ -97,5 +104,6 @@ require_once PUBLIC_PATH . 'simpleheader.php';
 
 <script defer src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
 <script defer src="/js/login.min.js"></script>
+<script defer src="/js/password.min.js"></script>
 
 <?php require_once 'footer.php'?>
