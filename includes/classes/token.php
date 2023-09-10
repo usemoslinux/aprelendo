@@ -20,14 +20,15 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 class Token extends DBEntity
 {
-    
-    private $id      = 0;
-    private $token   = '';
-    private $expires = '';
+    public int $id      = 0;
+    public int $user_id = 0;
+    public string $token   = '';
+    public string $expires = '';
     
     /**
      * Constructor
@@ -35,10 +36,9 @@ class Token extends DBEntity
      * @param \PDO $pdo
      * @param int $user_id
      */
-    public function __construct(\PDO $pdo, int $user_id)
+    public function __construct(\PDO $pdo)
     {
-        $this->pdo = $pdo;
-        $this->user_id = $user_id;
+        parent::__construct($pdo);
         $this->table = 'auth_tokens';
     } // end __construct()
 
@@ -49,11 +49,7 @@ class Token extends DBEntity
      */
     private function deleteOld(): void
     {
-        try {
-            $this->pdo->query("DELETE FROM `{$this->table}` WHERE `expires` < NOW()");
-        } catch (\Exception $e) {
-            throw new AprelendoException('Error deleting old token records.');
-        }
+        $this->pdo->query("DELETE FROM `{$this->table}` WHERE `expires` < NOW()");
     } // end deleteOld()
 
     /**
@@ -64,26 +60,41 @@ class Token extends DBEntity
      */
     public function loadRecord(int $id): void
     {
-        try {
-            $sql = "SELECT *
-                    FROM `{$this->table}`
-                    WHERE `user_id`=? AND `expires` >= NOW()";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$id]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-            
-            if ($row) {
-                $this->id       = $row['id'];
-                $this->user_id  = $row['user_id'];
-                $this->token    = $row['token'];
-                $this->expires  = $row['expires'];
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error loading token record.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT * FROM `{$this->table}` WHERE `user_id`=? AND `expires` >= NOW()";
+        $row = $this->sqlFetch($sql, [$id]);
+        
+        $this->loadObject($row);
     } // end loadRecord()
+
+    /**
+     * Loads Record data in object properties (looks record in db by token)
+     *
+     * @param string $token_cookie
+     * @return void
+     */
+    public function loadRecordByCookieString(string $token_cookie): void
+    {
+        $sql = "SELECT * FROM `{$this->table}` WHERE `token`=?";
+        $row = $this->sqlFetch($sql, [$token_cookie]);
+        
+        $this->loadObject($row);
+    } // end loadRecordByCookieString()
+
+    /**
+     * Loads Record data in object properties
+     *
+     * @param array $record
+     * @return void
+     */
+    private function loadObject(array $record): void
+    {
+        if ($record) {
+            $this->id       = $record['id'];
+            $this->user_id  = $record['user_id'];
+            $this->token    = $record['token'];
+            $this->expires  = $record['expires'];
+        }
+    } // end loadObject()
 
     /**
      * Generate token to store in cookie
@@ -99,12 +110,13 @@ class Token extends DBEntity
     /**
      * Adds token to db
      *
+     * @param int $user_id
      * @return void
      */
-    public function add(): void
+    public function add(int $user_id): void
     {
-        $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : "";
-        $user_id = $this->user_id;
+        $domain = parse_url($_SERVER['HTTP_HOST'], PHP_URL_HOST);
+        $domain = $domain ?? "";
 
         // first, remove old tokens from auth_tokens table
         $this->deleteOld();
@@ -114,7 +126,7 @@ class Token extends DBEntity
         if (!empty($this->token)) {
             // a valid token is already in the db (force use of https)
             if (!setcookie('user_token', $this->token, strtotime($this->expires), "/", $domain, true)) {
-                throw new AprelendoException('Error creating token cookie.');
+                throw new UserException('Error creating token cookie.');
             }
         } else {
             // create new token, insert it in db & set cookie
@@ -122,18 +134,11 @@ class Token extends DBEntity
             $time_stamp = time() + 31536000; // 1 year
             $expires = date('Y-m-d H:i:s', $time_stamp);
             
-            try {
-                $sql = "INSERT INTO `{$this->table}` (`token`, `user_id`, `expires`) VALUES (?, ?, ?)";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([$token, $user_id, $expires]);
+            $sql = "INSERT INTO `{$this->table}` (`token`, `user_id`, `expires`) VALUES (?, ?, ?)";
+            $this->sqlExecute($sql, [$token, $user_id, $expires]);
 
-                if (!setcookie('user_token', $token, $time_stamp, "/", $domain, true)) {
-                    throw new AprelendoException('Error creating token cookie.');
-                }
-            } catch (\PDOException $e) {
-                throw new AprelendoException('Error adding token record.');
-            } finally {
-                $stmt = null;
+            if (!setcookie('user_token', $token, $time_stamp, "/", $domain, true)) {
+                throw new UserException('Error creating token cookie.');
             }
         }
     } // end add()

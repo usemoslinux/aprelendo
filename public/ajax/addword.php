@@ -19,7 +19,7 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -27,25 +27,25 @@ if (!isset($_POST) || empty($_POST)) {
 }
 
 use Aprelendo\Includes\Classes\Words;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
-if (isset($_POST['word'])) {
-    $user_id = $user->getId();
-    $lang_id = $user->getLangId();
-    
-    try {
+try {
+    if (isset($_POST['word'])) {
+        $user_id = $user->id;
+        $lang_id = $user->lang_id;
+
         $word = $_POST['word'];
-        $is_phrase =  (isset($_POST['is_phrase']) && !empty($_POST['is_phrase'])) ? $_POST['is_phrase'] : false;
-        
+        $is_phrase =  (!empty($_POST['is_phrase'])) ? $_POST['is_phrase'] : false;
+
         $words_table = new Words($pdo, $user_id, $lang_id);
- 
+
         // if word already exists in table, status = 3 ("forgotten")
         // otherwise, $status = 2 ("new")
         $status = $words_table->exists($word) ? 3 : 2;
-        
+
         $words_table->add($word, $status, $is_phrase);
-    } catch (Exception $e) {
-        $error = array('error_msg' => $e->getMessage());
-        header('Content-Type: application/json');
-        echo json_encode($error);
     }
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

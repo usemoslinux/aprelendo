@@ -22,10 +22,12 @@ require_once '../includes/dbinit.php'; // connect to database
 require_once PUBLIC_PATH . 'head.php';
 
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\UserAuth;
 
 $user = new User($pdo);
+$user_auth = new UserAuth($user);
 
-if (!$user->isLoggedIn()) {
+if (!$user_auth->isLoggedIn()) {
     require_once PUBLIC_PATH . 'simpleheader.php';
 } else {
     require_once PUBLIC_PATH . 'header.php';

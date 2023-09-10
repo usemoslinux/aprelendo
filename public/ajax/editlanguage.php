@@ -19,7 +19,7 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -27,16 +27,15 @@ if (!isset($_POST) || empty($_POST)) {
 }
 
 use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
-if (isset($_POST['id'])) {
-    try {
-        $lang = new Language($pdo, $user->getId());
-        $lang->loadRecord($_POST['id']);
+try {
+    if (isset($_POST['id'])) {
+        $lang = new Language($pdo, $user->id);
+        $lang->loadRecordById($_POST['id']);
         $lang->editRecord($_POST);
-    } catch (Exception $e) {
-        $error = array('error_msg' => $e->getMessage());
-        header('Content-Type: application/json');
-        echo json_encode($error);
     }
-    
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

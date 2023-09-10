@@ -19,17 +19,38 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
     exit;
 }
 
-use Aprelendo\Includes\Classes\Reader;
+use Aprelendo\Includes\Classes\Words;
+use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Includes\Classes\WordFrequency;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
-$reader = new Reader($pdo, $user->getId(), $user->getLangId());
+try {
+    if (isset($_POST['txt'])) {
+        $text = html_entity_decode($_POST['txt']);
+        $result['text'] = $text;
 
-if (isset($_POST['txt'])) {
-    echo $reader->getWordsForText(html_entity_decode($_POST['txt']));
+        $user_words = new Words($pdo, $user->id, $user->lang_id);
+        $result['user_words'] = $user_words->getAll(10); // 10 = words first, then phrases
+
+        $lang = new Language($pdo, $user->id);
+        $lang->loadRecordById($user->lang_id);
+
+        if ($lang->show_freq_words) {
+            $word_freq = new WordFrequency($pdo);
+            $freq_words = $word_freq->getHighFrequencyList($lang->name);
+            $result['high_freq'] = \array_column($freq_words, 'word');
+        }
+
+        echo json_encode($result);
+    }
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

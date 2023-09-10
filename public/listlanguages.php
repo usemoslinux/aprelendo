@@ -19,11 +19,11 @@
  */
 
 require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Includes\Classes\Language;
 
-$lang = new Language($pdo, $user->getId());
+$lang = new Language($pdo, $user->id);
 $available_langs = $lang->getAvailableLangs();
         
 if ($available_langs) {
@@ -48,7 +48,7 @@ if ($available_langs) {
         $heading_id = 'heading-' . $lg_iso_code;
         $lgname = $lang_record['long_name'];
         
-        $is_active = $lg_id == $user->getLangId();
+        $is_active = $lg_id == $user->lang_id;
         $html .= "<div class='accordion-item'>"
             . "<div class='accordion-header' id='$heading_id'>"
             . "<button class='accordion-button "
@@ -63,7 +63,7 @@ if ($available_langs) {
             . "' aria-labelledby='$lgname' data-bs-parent='#accordion'>"
             . "<div class='accordion-body'>";
 
-        $btn_disabled = $lg_id == $user->getLangId() ? 'disabled' : '';
+        $btn_disabled = $lg_id == $user->lang_id ? 'disabled' : '';
         $html .= "<button type='button' onclick='location.href=\"languages?act=$lg_id\"'"
                 . "class='btn btn-primary $btn_disabled'>Set as active</button>"
                 . "<button type='button' onclick='location.href=\"languages?chg=$lg_id\"'"

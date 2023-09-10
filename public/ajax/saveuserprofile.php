@@ -20,55 +20,54 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
     exit;
 }
 
-use Aprelendo\Includes\Classes\AprelendoException;
-
-$user_id = $user->getId();
-
-// save user profile information
-$username = isset($_POST['username']) ? $_POST['username'] : '';
-$email = isset($_POST['email']) ? $_POST['email'] : '';
-$password = isset($_POST['password']) ? $_POST['password'] : '';
-$new_password1 = isset($_POST['newpassword']) ? $_POST['newpassword'] : '';
-$new_password2 = isset($_POST['newpassword-confirmation']) ? $_POST['newpassword-confirmation'] : '';
-$src_lang = isset($_POST['src_lang']) ? $_POST['src_lang'] : '';
-$to_lang = isset($_POST['to_lang']) ? $_POST['to_lang'] : '';
-
-$user_data = [
-    'new_username' => $username,
-    'new_email' => $email,
-    'password' => $password,
-    'new_password' => $new_password1,
-    'new_native_lang' => $src_lang,
-    'new_lang' => $to_lang
-];
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
+    $user_id = $user->id;
+
+    // save user profile information
+    $username = isset($_POST['username']) ? $_POST['username'] : '';
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
+    $new_password1 = isset($_POST['newpassword']) ? $_POST['newpassword'] : '';
+    $new_password2 = isset($_POST['newpassword-confirmation']) ? $_POST['newpassword-confirmation'] : '';
+    $src_lang = isset($_POST['src_lang']) ? $_POST['src_lang'] : '';
+    $to_lang = isset($_POST['to_lang']) ? $_POST['to_lang'] : '';
+
+    $user_data = [
+        'new_username' => $username,
+        'new_email' => $email,
+        'password' => $password,
+        'new_password' => $new_password1,
+        'new_native_lang' => $src_lang,
+        'new_lang' => $to_lang
+    ];
+
     if (empty($new_password1) && empty($new_password2)) {
         if (empty($password)) {
-            throw new AprelendoException('Please enter your current password and try again.');
+            throw new UserException('Please enter your current password and try again.');
         } else {
-            $user->updateUserProfile($user_data);
+            $user->updateProfile($user_data);
         }
     } else {
         if ($new_password1 === $new_password2) {
             if (mb_strlen($new_password1) >= 8) {
-                $user->updateUserProfile($user_data);
+                $user->updateProfile($user_data);
             } else {
-                throw new AprelendoException('New password should be at least 8 characters long. Please, try again.');
+                throw new UserException('New password should be at least 8 characters long. Please, try again.');
             }
         } else {
-            throw new AprelendoException('Both new passwords should be identical. Please, try again.');
+            throw new UserException('Both new passwords should be identical. Please, try again.');
         }
     }
-} catch (Exception $e) {
-    $error = array('error_msg' => $e->getMessage());
-    header('Content-Type: application/json');
-    echo json_encode($error);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

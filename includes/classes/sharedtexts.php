@@ -23,7 +23,7 @@ namespace Aprelendo\Includes\Classes;
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\Language;
 use Aprelendo\Includes\Classes\SearchTextParameters;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 class SharedTexts extends Texts
 {
@@ -48,60 +48,40 @@ class SharedTexts extends Texts
     */
     public function search(SearchTextsParameters $search_params): array
     {
-        try {
-            $sort_sql = $search_params->buildSortSQL();
-            $filter_type_sql = $search_params->buildFilterTypeSQL();
-            $filter_level_sql = $search_params->buildFilterLevelSQL();
+        $sort_sql = $search_params->buildSortSQL();
+        $filter_type_sql = $search_params->buildFilterTypeSQL();
+        $filter_level_sql = $search_params->buildFilterLevelSQL();
+        $search_sql = !empty($search_params->search_text) ? '"%' . $search_params->search_text . '%"' : '"%"';
 
-            $lang = new Language($this->pdo, $this->user_id);
-            $lang->loadRecord($this->lang_id);
+        $lang = new Language($this->pdo, $this->user_id);
+        $lang->loadRecordById($this->lang_id);
 
-            $sql = "SELECT t.id,
-                        (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`,
-                        t.title,
-                        t.author,
-                        t.audio_uri,
-                        t.source_uri,
-                        t.type,
-                        t.word_count,
-                        CHAR_LENGTH(t.text) AS `char_length`,
-                        t.level,
-                        l.name,
-                        (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
-                        (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id
-                        AND `user_id` = :user_id) AS `user_liked`
-                    FROM `{$this->table}` t
-                    INNER JOIN `languages` l ON t.lang_id = l.id
-                    WHERE `name`= :name
-                    AND `title` LIKE :search_text
-                    AND t.level $filter_level_sql
-                    AND t.type $filter_type_sql
-                    ORDER BY $sort_sql
-                    LIMIT :offset, :limit";
+        $sql = "SELECT t.id,
+                    (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`,
+                    t.title,
+                    t.author,
+                    t.audio_uri,
+                    t.source_uri,
+                    t.type,
+                    t.word_count,
+                    CHAR_LENGTH(t.text) AS `char_length`,
+                    t.level,
+                    l.name,
+                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
+                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id
+                    AND `user_id` = ?) AS `user_liked`
+                FROM `{$this->table}` t
+                INNER JOIN `languages` l ON t.lang_id = l.id
+                WHERE `name`= ?
+                AND t.level $filter_level_sql
+                AND t.type $filter_type_sql
+                AND `title` LIKE $search_sql
+                ORDER BY $sort_sql
+                LIMIT {$search_params->offset}, {$search_params->limit}";
 
-            $stmt = $this->pdo->prepare($sql);
-
-            $stmt->bindParam(':user_id', $this->user_id);
-            $stmt->bindValue(':name', $lang->getName());
-            $stmt->bindParam(':filter_level', $search_params->filter_level, \PDO::PARAM_INT);
-            $stmt->bindParam(':filter_type', $search_params->filter_type, \PDO::PARAM_INT);
-            $stmt->bindValue(':search_text', '%' . $search_params->search_text . '%');
-            $stmt->bindParam(':offset', $search_params->offset, \PDO::PARAM_INT);
-            $stmt->bindParam(':limit', $search_params->limit, \PDO::PARAM_INT);
-
-            $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            if (!$result || empty($result)) {
-                throw new AprelendoException('Oops! There are no texts meeting your search criteria.');
-            }
-
-            return $result;
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error processing your search request.');
-        } finally {
-            $stmt = null;
-        }
+        return $this->sqlFetchAll($sql, [
+            $this->user_id, $lang->name, $search_params->filter_level, $search_params->filter_type
+        ]);
     } // end search()
 
     /**
@@ -113,24 +93,14 @@ class SharedTexts extends Texts
      */
     public function exists(string $source_url): bool
     {
-        try {
-            if (empty($source_url)) {
-                return false;
-            }
-    
-            $sql = "SELECT COUNT(*) AS `exists`
-                    FROM `{$this->table}`
-                    WHERE `source_uri` = ?";
-            
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$source_url]);
-            $row = $stmt->fetch();
-                
-            return ($row) && ($row['exists'] > 0);
-        } catch (\PDOException $e) {
+        if (empty($source_url)) {
             return false;
-        } finally {
-            $stmt = null;
         }
+
+        $sql = "SELECT COUNT(*) AS `exists`
+                FROM `{$this->table}`
+                WHERE `source_uri` = ?";
+
+        return $this->sqlCount($sql, [$source_url]) > 0;
     } // end exists()
 }

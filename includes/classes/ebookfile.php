@@ -31,7 +31,7 @@ class EbookFile extends File
     public function __construct(string $file_name)
     {
         parent::__construct($file_name);
-        $this->allowed_extensions = array('epub');
+        $this->allowed_extensions = ['epub'];
         $this->max_size = 2097152; // 2 MB
     } // end __construct()
 }

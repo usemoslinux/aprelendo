@@ -47,7 +47,7 @@ require_once PUBLIC_PATH . 'header.php';
                     </div>
                     <div class="col-sm-12">
                         <div id="card" class="card text-center" style="min-width: 100%;"
-                            data-lang="<?php echo $user->getLang();?>">
+                            data-lang="<?php echo $user->lang;?>">
                             <div id="card-header" class="card-header fw-bold">...</div>
                             <div class="card-body">
                                 <div id="card-loader" class="lds-ellipsis m-auto">
@@ -95,6 +95,7 @@ require_once PUBLIC_PATH . 'header.php';
 require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
 ?>
 
-<script defer src="js/study.min.js"></script>
+<script defer src="/js/study.min.js"></script>
+<script defer src="/js/helpers.min.js"></script>
 
 <?php require_once 'footer.php' ?>

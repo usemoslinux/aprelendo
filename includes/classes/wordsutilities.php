@@ -21,9 +21,9 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
-abstract class WordsUtilities extends DBEntity
+abstract class WordsUtilities
 {
     /**
      * Exports words to a CSV file
@@ -37,7 +37,7 @@ abstract class WordsUtilities extends DBEntity
      */
     public static function exportToCSV(array $words): void
     {
-        $headers = array('Words', 'Status');
+        $headers = ['Words', 'Status'];
 
         $fp = fopen('php://output', 'w');
 
@@ -49,8 +49,7 @@ abstract class WordsUtilities extends DBEntity
             fputcsv($fp, $headers);
 
             foreach ($words as $word) {
-                fputcsv($fp, array($word['word'], $word['status']));
-                throw new AprelendoException("Error exporting words to CSV file", 500);
+                fputcsv($fp, [$word['word'], $word['status']]);
             }
 
             fclose($fp);

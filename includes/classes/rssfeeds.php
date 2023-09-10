@@ -22,7 +22,7 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\RSSFeed;
 use Aprelendo\Includes\Classes\Language;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 class RSSFeeds
 {
@@ -45,17 +45,17 @@ class RSSFeeds
     {
         try {
             $lang = new Language($pdo, $user_id);
-            $lang->loadRecord($lang_id);
+            $lang->loadRecordById($lang_id);
 
-            $feed1uri = $lang->getRssFeed1Uri();
-            $feed2uri = $lang->getRssFeed2Uri();
-            $feed3uri = $lang->getRssFeed3Uri();
+            $feed1uri = $lang->rss_feed1_uri;
+            $feed2uri = $lang->rss_feed2_uri;
+            $feed3uri = $lang->rss_feed3_uri;
 
             $this->feed1 = new RSSFeed($feed1uri);
             $this->feed2 = new RSSFeed($feed2uri);
             $this->feed3 = new RSSFeed($feed3uri);
         } catch (\Exception $e) {
-            throw new AprelendoException($e->getMessage());
+            throw new UserException($e->getMessage());
         }
     } // end __construct()
 
@@ -67,15 +67,15 @@ class RSSFeeds
     {
         $feeds = [];
 
-        if (!empty($this->feed1->getUrl())) {
+        if (!empty($this->feed1->url)) {
             $feeds[] = $this->feed1;
         }
 
-        if (!empty($this->feed2->getUrl())) {
+        if (!empty($this->feed2->url)) {
             $feeds[] = $this->feed2;
         }
 
-        if (!empty($this->feed3->getUrl())) {
+        if (!empty($this->feed3->url)) {
             $feeds[] = $this->feed3;
         }
 

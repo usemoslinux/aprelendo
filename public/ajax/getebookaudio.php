@@ -19,21 +19,22 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Includes\Classes\Texts;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
-    $text = new Texts($pdo, $user->getId(), $user->getLangId());
+    $text = new Texts($pdo, $user->id, $user->lang_id);
     $text->loadRecord($_GET['id']);
-    $audio_uri = $text->getAudioUri();
+    $audio_uri = $text->audio_uri;
 
     if (!empty($audio_uri)) {
         echo $audio_uri;
     } else {
-        throw new AprelendoException("File not found", 404);
+        throw new UserException("File not found", 404);
     }
-} catch (AprelendoException $e) {
+} catch (UserException $e) {
     http_response_code($e->getCode());
 }

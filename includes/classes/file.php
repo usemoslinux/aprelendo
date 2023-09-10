@@ -20,17 +20,17 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 class File
 {
-    protected $allowed_extensions = [];
+    public $name               = '';
+    public $folder             = '';
+    public $path               = '';
+    public $extension          = '';
+    public $size               = 0;
     protected $max_size           = 0;
-    protected $name               = '';
-    protected $folder             = '';
-    protected $path               = '';
-    protected $extension          = '';
-    protected $size               = 0;
+    protected $allowed_extensions = [];
 
     /**
      * Constructor
@@ -55,7 +55,7 @@ class File
             return unlink($this->path);
         } else {
             if (!empty($this->name)) {
-                throw new AprelendoException('Error deleting the associated file.');
+                throw new UserException('Error deleting the associated file.');
             }
         }
         return false;
@@ -105,13 +105,13 @@ class File
             try {
                 $this->move($temp_file_path, $this->path);
             } catch (\Exception $th) {
-                throw new AprelendoException('Error moving file from the temporary folder');
+                throw new UserException('Error moving file from the temporary folder');
             }
 
             $this->name = $target_file_name;
         } else {
             $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
-            throw new AprelendoException($error_str);
+            throw new UserException($error_str);
         }
     } // end put()
     
@@ -129,7 +129,7 @@ class File
         }
         // try to move file to uploads folder. If this fails, show error message
         if (!move_uploaded_file($source_path, $destination_path)) {
-            throw new AprelendoException("<li>There was an error uploading your file.</li>");
+            throw new UserException("<li>There was an error uploading your file.</li>");
         }
     } // end move()
     
@@ -143,23 +143,14 @@ class File
 
         // make sure it exists
         if (!$file || !is_file($file)) {
-            throw new AprelendoException('File does not exist.', 404);
+            throw new UserException('File does not exist.', 404);
         }
 
         // check for cheaters
         if (substr($file, 0, strlen($this->folder)) !== $this->folder) {
-            throw new AprelendoException('Unauthorized access.', 401);
+            throw new UserException('Unauthorized access.', 401);
         }
 
         return readfile($file);
     } // end get()
-
-    /**
-     * Gets file name
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
 }

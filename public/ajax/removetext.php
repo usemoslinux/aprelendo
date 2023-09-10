@@ -19,7 +19,7 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -28,14 +28,15 @@ if (!isset($_POST) || empty($_POST)) {
 
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\ArchivedTexts;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
     if (isset($_POST['textIDs']) && isset($_POST['is_archived'])) {
         $text_ids = $_POST['textIDs'];
         $is_archived = $_POST['is_archived'];
-        $user_id = $user->getId();
-        $lang_id = $user->getLangId();
+        $user_id = $user->id;
+        $lang_id = $user->lang_id;
     
         // decide wether we are deleting an archived text or not
         if ($is_archived) {
@@ -46,10 +47,8 @@ try {
     
         $texts_table->delete($text_ids);
     } else {
-        throw new AprelendoException('There was an error in the parameters provided to remove this text');
+        throw new UserException('There was an error in the parameters provided to remove this text');
     }
-} catch (\Exception $e) {
-    $error = array('error_msg' => $e->getMessage());
-    header('Content-Type: application/json');
-    echo json_encode($error);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

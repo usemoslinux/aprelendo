@@ -19,7 +19,7 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -27,18 +27,17 @@ if (!isset($_POST) || empty($_POST)) {
 }
 
 use Aprelendo\Includes\Classes\Words;
-
-$user_id = $user->getId();
-$lang_id = $user->getLangId();
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
-    if (isset($_POST['word']) && !empty($_POST['word']) &&
-        isset($_POST['answer'])) {
+    $user_id = $user->id;
+    $lang_id = $user->lang_id;
+
+    if (!empty($_POST['word']) && isset($_POST['answer'])) {
         $words_table = new Words($pdo, $user_id, $lang_id);
         $words_table->updateStatus($_POST['word'], (int)$_POST['answer']);
     }
-} catch (Exception $e) {
-    $error = array('error_msg' => $e->getMessage());
-    header('Content-Type: application/json');
-    echo json_encode($error);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

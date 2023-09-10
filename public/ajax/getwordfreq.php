@@ -19,7 +19,7 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 // check that $_POST is set & not empty
 if (!isset($_GET) || empty($_GET)) {
@@ -27,7 +27,14 @@ if (!isset($_GET) || empty($_GET)) {
 }
 
 use Aprelendo\Includes\Classes\WordFrequency;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
-$user_id = $user->getId();
+try {
+    $user_id = $user->id;
 
-echo WordFrequency::get($pdo, $_GET['word'], $user->getLang());
+    $word_freq = new WordFrequency($pdo);
+    echo $word_freq->get($_GET['word'], $user->lang);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
+}

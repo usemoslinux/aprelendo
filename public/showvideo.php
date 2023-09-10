@@ -23,10 +23,10 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in
 
 use Aprelendo\Includes\Classes\Reader;
 use Aprelendo\Includes\Classes\Videos;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
-    $id_is_set = isset($_GET['id']) && !empty($_GET['id']);
+    $id_is_set = !empty($_GET['id']);
     $body_css = '';
     if ($id_is_set) {
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
@@ -37,15 +37,15 @@ try {
             exit;
         }
         
-        $reader = new Reader($pdo, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
-        $prefs = $reader->getPrefs();
+        $reader = new Reader($pdo, $user->id, $user->lang_id, $_GET['id'], $is_shared);
+        $prefs = $reader->prefs;
 
-        $video = new Videos($pdo, $user->getId(), $user->getLangId());
+        $video = new Videos($pdo, $user->id, $user->lang_id);
         $video->loadRecord($_GET['id']);
 
-        $yt_id = $video->getYoutubeId();
+        $yt_id = $video->youtube_id;
 
-        switch ($prefs->getDisplayMode()) {
+        switch ($prefs->display_mode) {
             case 'light':
             $body_css = "class='lightmode'";
             break;
@@ -58,13 +58,13 @@ try {
             default:
             break;
         }
-        $font_family = $prefs->getFontFamily();
-        $font_size = $prefs->getFontSize();
-        $text_align = $prefs->getTextAlignment();
+        $font_family = $prefs->font_family;
+        $font_size = $prefs->font_size;
+        $text_align = $prefs->text_alignment;
         
         $body_css .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
-        throw new AprelendoException('Error fetching that video.');
+        throw new UserException('Error fetching that video.');
     }
 } catch (Exception $e) {
     header('Location:/login');
@@ -91,10 +91,10 @@ require_once PUBLIC_PATH . 'head.php';
             require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
         ?>
 
-        <script defer src="js/underlinewords.min.js"></script>
-        <script defer src="js/showvideo.min.js"></script>
-        <script defer src="js/dictionary.min.js"></script>
-        <script defer src="js/ytvideo.min.js"></script>
-        <script defer src="js/likes.min.js"></script>
+        <script defer src="/js/underlinewords.min.js"></script>
+        <script defer src="/js/showvideo.min.js"></script>
+        <script defer src="/js/dictionary.min.js"></script>
+        <script defer src="/js/ytvideo.min.js"></script>
+        <script defer src="/js/likes.min.js"></script>
     </body>
 </html>

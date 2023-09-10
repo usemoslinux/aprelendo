@@ -33,30 +33,16 @@ $(document).ready(function() {
         })
             .done(function(data) {
                 if (data.error_msg) {
-                    $("#msgbox")
-                        .html(data.error_msg)
-                        .removeClass()
-                        .addClass("alert alert-danger");
+                    showMessage(data.error_msg, "alert-danger");
                 } else {
-                    $("#msgbox")
-                        .html(
-                            "<strong>Great!</strong> Your preferences were successfully saved."
-                            + " You will soon be redirected to the main page."
-                        )
-                        .removeClass()
-                        .addClass("alert alert-success");
+                    showMessage("<strong>Great!</strong> Your preferences were successfully saved."
+                    + " You will soon be redirected to the main page.", "alert-success");
                     
-                    $(window).scrollTop(0); 
                     setTimeout(() => { window.location.replace("/texts"); }, 2000);
                 }
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
-                $("#msgbox")
-                    .html(
-                        "<strong>Oops!</strong> Something went wrong when trying to save your preferences."
-                    )
-                    .removeClass()
-                    .addClass("alert alert-danger");
+                showMessage("<strong>Oops!</strong> Something went wrong when trying to save your preferences.", "alert-danger");
             });
     }); // end #prefs-form.submit
 });

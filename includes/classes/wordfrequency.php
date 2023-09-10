@@ -20,9 +20,7 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\AprelendoException;
-
-class WordFrequency
+class WordFrequency extends DBEntity
 {
     
     /**
@@ -39,27 +37,20 @@ class WordFrequency
      * @param string $lg_iso
      * @return int
      */
-    public static function get(\PDO $pdo, string $word, string $lg_iso): int
+    public function get(string $word, string $lg_iso): int
     {
-        try {
-            $table = 'frequency_list_' . $lg_iso;
-            $word = mb_strtolower($word);
+        $table = 'frequency_list_' . $lg_iso;
+        $word = mb_strtolower($word);
 
-            $sql = "SELECT * FROM {$table} WHERE word=?";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$word]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM {$table} WHERE word=?";
 
-            if (!$row) {
-                return 0;
-            }
+        $row = self::sqlFetch($sql, [$word]);
 
-            return $row['frequency_index'];
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error loading record from frequency list table.');
-        } finally {
-            $stmt = null;
+        if (!$row) {
+            return 0;
         }
+
+        return $row['frequency_index'];
     } // end get()
 
     /**
@@ -68,26 +59,12 @@ class WordFrequency
      * @param string $lg_iso
      * @return array
      */
-    public static function getHighFrequencyList(\PDO $pdo, string $lg_iso): array
+    public function getHighFrequencyList(string $lg_iso): array
     {
-        try {
-            $table = 'frequency_list_' . $lg_iso;
-            $sql = "SELECT `word`, `frequency_index`
-                    FROM `$table`
-                    WHERE `frequency_index` < 81";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            if ($result === false) {
-                throw new AprelendoException('Error loading records from frequency list table.');
-            }
-
-            return $result;
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error loading records from frequency list table.');
-        } finally {
-            $stmt = null;
-        }
+        $table = 'frequency_list_' . $lg_iso;
+        $sql = "SELECT `word`, `frequency_index`
+                FROM `$table`
+                WHERE `frequency_index` < 81";
+        return self::sqlFetchAll($sql, []);
     } // end getHighFrequencyList()
 }

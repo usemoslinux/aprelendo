@@ -21,7 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use PDO;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 class Connect
 {
@@ -67,7 +67,7 @@ class Connect
             $pdo = new \PDO($dsn, $this->user, $this->password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {
-            throw new AprelendoException($e->getMessage());
+            throw new UserException($e->getMessage());
         }
 
         return $pdo;

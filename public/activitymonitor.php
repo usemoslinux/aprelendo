@@ -24,7 +24,7 @@ require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check i
 use Aprelendo\Includes\Classes\WordStats;
 use Aprelendo\Includes\Classes\WordDailyGoal;
 
-$stats = new WordStats($pdo, $user->getId(), $user->getLangId());
+$stats = new WordStats($pdo, $user->id, $user->lang_id);
 
 // get today's statistics
 $nr_of_words_reviewed_today = $stats->getReviewedToday();
@@ -33,10 +33,10 @@ $today_is_streak = ($nr_of_words_reviewed_today >= 10);
 $msg_progress_bar = "$nr_of_words_reviewed_today / 10";
 
 // get streak days
-$daily_goal = new WordDailyGoal($pdo, $user->getId(), $user->getLangId(), $user->getTimeZone(), $today_is_streak);
-$daily_goal_streak_days = $daily_goal->getDaysStreak();
+$daily_goal = new WordDailyGoal($pdo, $user->id, $user->lang_id, $user->time_zone, $today_is_streak);
+$daily_goal_streak_days = $daily_goal->days_streak;
 
-$motivational_msg_no_streak = [ "Every day is a new opportunity to learn.",
+$motivational_msg_no_streak = ["Every day is a new opportunity to learn.",
                                 "The more you study, the more progress you'll make.",
                                 "Small steps lead to big achievements.",
                                 "Learning is the key to unlocking new opportunities.",
@@ -48,7 +48,7 @@ $motivational_msg_no_streak = [ "Every day is a new opportunity to learn.",
                                 "The journey of a thousand miles begins with a single step."
                             ];
 
-$motivational_msg_ongoing_streak = [ "You've taken a new step towards mastering a new language.",
+$motivational_msg_ongoing_streak = ["You've taken a new step towards mastering a new language.",
                                      "Keep up the great work and you'll see results.",
                                      "Learning a language is a journey, enjoy the process.",
                                      "Your dedication to studying is inspiring.",

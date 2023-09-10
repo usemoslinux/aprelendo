@@ -60,19 +60,6 @@ $(document).ready(function() {
     }); // end #form-addtext.on.submit
 
     /**
-     * Shows custom message in the top section of the screen
-     * @param {string} html
-     * @param {string} type
-     */
-    function showMessage(html, type) {
-        $("#alert-msg")
-            .html(html)
-            .removeClass()
-            .addClass("alert " + type);
-        $(window).scrollTop(0);
-    } // end showMessage
-
-    /**
      * Checks how many characters are left for user input
      */
     $("#text").on("input", function() {

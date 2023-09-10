@@ -19,7 +19,7 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -29,11 +29,13 @@ if (!isset($_POST) || empty($_POST)) {
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\ArchivedTexts;
 use Aprelendo\Includes\Classes\Words;
-
-$user_id = $user->getId();
-$lang_id = $user->getLangId();
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
+    $user_id = $user->id;
+    $lang_id = $user->lang_id;
+
     // if text is archived using green button at the end, update learning status of words first
     if (isset($_POST['words'])) {
         $words_table = new Words($pdo, $user_id, $lang_id);
@@ -41,8 +43,7 @@ try {
     }
 
     // if text is not shared, then archive or unarchive text accordingly
-    if (isset($_POST['textIDs']) && !empty($_POST['textIDs']) &&
-        isset($_POST['archivetext']) && !empty($_POST['archivetext'])) {
+    if (!empty($_POST['textIDs']) && !empty($_POST['archivetext'])) {
         if ($_POST['archivetext'] === 'true') { //archive text
             $texts_table = new Texts($pdo, $user_id, $lang_id);
             $texts_table->archive($_POST['textIDs']);
@@ -51,8 +52,6 @@ try {
             $texts_table->unarchive($_POST['textIDs']);
         }
     }
-} catch (Exception $e) {
-    $error = array('error_msg' => $e->getMessage());
-    header('Content-Type: application/json');
-    echo json_encode($error);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

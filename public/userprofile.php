@@ -41,7 +41,7 @@ use Aprelendo\Includes\Classes\Language;
                 </ol>
             </nav>
             <main>
-                <div id="msgbox"></div>
+                <div id="alert-msg"></div>
                 <form id="userprofile-form" class="" method="post">
                     <div class="card">
                         <div class="card-header">User details</div>
@@ -49,12 +49,12 @@ use Aprelendo\Includes\Classes\Language;
                             <div class="mb-3">
                                 <label for="username">Username:</label>
                                 <input type="text" id="username" name="username" class="form-control"
-                                    value="<?php echo $user->getName();?>" maxlength="20" required>
+                                    value="<?php echo $user->name;?>" maxlength="20" required>
                             </div>
                             <div class="mb-3">
                                 <label for="email">E-mail address:</label>
                                 <input type="email" id="email" name="email" class="form-control"
-                                    value="<?php echo $user->getEmail();?>" maxlength="50" required>
+                                    value="<?php echo $user->email;?>" maxlength="50" required>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@ use Aprelendo\Includes\Classes\Language;
                                 <select name="src_lang" class="form-control form-select" id="src_lang">
                                     <?php
                                         $iso_codes = Language::getIsoCodeArray();
-                                        $native_lang_iso = $user->getNativeLang();
+                                        $native_lang_iso = $user->native_lang;
                                         $html = '';
 
                                         foreach ($iso_codes as $iso_code => $iso_name) {
@@ -135,7 +135,7 @@ use Aprelendo\Includes\Classes\Language;
                                 <label for="to_lang">Active learning language:</label>
                                 <select name="to_lang" class="form-control form-select" id="to_lang">
                                     <?php
-                                        $learning_lang_iso = $user->getLang();
+                                        $learning_lang_iso = $user->lang;
                                         $html = '';
 
                                         foreach ($iso_codes as $iso_code => $iso_name) {
@@ -192,7 +192,8 @@ use Aprelendo\Includes\Classes\Language;
     </div>
 </aside>
 
-<script defer src="js/userprofile.min.js"></script>
-<script defer src="js/password.min.js"></script>
+<script defer src="/js/userprofile.min.js"></script>
+<script defer src="/js/password.min.js"></script>
+<script defer src="/js/helpers.min.js"></script>
 
 <?php require_once 'footer.php'; ?>

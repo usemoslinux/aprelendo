@@ -32,8 +32,8 @@ $filter_level   = 0;
 $show_archived  = false;
 $sort_by        = 0;
 
-$user_id = $user->getId();
-$lang_id = $user->getLangId();
+$user_id = $user->id;
+$lang_id = $user->lang_id;
 
 // re-initialize variables in case $_GET is set
 if (!empty($_GET)) {
@@ -45,8 +45,8 @@ if (!empty($_GET)) {
 } else {
     // set default language level
     $lang = new Language($pdo, $user_id);
-    $lang->loadRecord($lang_id);
-    $filter_level = $lang->getLevel();
+    $lang->loadRecordById($lang_id);
+    $filter_level = $lang->level;
 }
 
 $type_dropdown_class = 'class="dropdown-item ft"';

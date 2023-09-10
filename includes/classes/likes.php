@@ -21,17 +21,15 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\DBEntity;
-use Aprelendo\Includes\Classes\AprelendoException;
 
 class Likes extends DBEntity
 {
-    private $text_id = 0;
-    private $lang_id = 0;
+    private int $user_id = 0;
+    private int $text_id = 0;
+    private int $lang_id = 0;
     
     /**
      * Constructor
-     *
-     * Sets 3 basic variables used to identify any text: $pdo, $user_id & lang_id
      *
      * @param \PDO $pdo
      * @param int $text_id
@@ -41,10 +39,11 @@ class Likes extends DBEntity
      */
     public function __construct(\PDO $pdo, int $text_id, int $user_id, int $lang_id)
     {
-        parent::__construct($pdo, $user_id);
+        parent::__construct($pdo);
+        $this->table = 'likes';
+        $this->user_id = $user_id;
         $this->text_id = $text_id;
         $this->lang_id = $lang_id;
-        $this->table = 'likes';
     } // end __construct()
 
     /**
@@ -54,30 +53,14 @@ class Likes extends DBEntity
      */
     public function toggle(): void
     {
-        try {
-            $sql = "SELECT `text_id` FROM `{$this->table}` WHERE `text_id`=? AND `user_id`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->text_id, $this->user_id]);
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            
-            if (count($result) > 0) {
-                $sql = "DELETE FROM `{$this->table}` WHERE `text_id`=? AND `user_id`=?";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([$this->text_id, $this->user_id]);
-                
-            } else {
-                $sql = "INSERT INTO `{$this->table}` (`text_id`, `user_id`, `lang_id`) VALUES (?, ?, ?)";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([$this->text_id, $this->user_id, $this->lang_id]);
-            }
+        $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `text_id`=? AND `user_id`=?";
 
-            if ($stmt->rowCount() === 0) {
-                throw new AprelendoException('Error toggling like for this text.');
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error toggling like for this text.');
-        } finally {
-            $stmt = null;
+        if ($this->sqlCount($sql, [$this->text_id, $this->user_id]) === 0) {
+            $sql = "DELETE FROM `{$this->table}` WHERE `text_id`=? AND `user_id`=?";
+            $this->sqlExecute($sql, [$this->text_id, $this->user_id]);
+        } else {
+            $sql = "INSERT INTO `{$this->table}` (`text_id`, `user_id`, `lang_id`) VALUES (?, ?, ?)";
+            $this->sqlExecute($sql, [$this->text_id, $this->user_id, $this->lang_id]);
         }
     } // end toggle()
 
@@ -88,54 +71,18 @@ class Likes extends DBEntity
      */
     public function get(): int
     {
-        try {
-            $sql = "SELECT COUNT(`id`)
-                AS `total_likes`
-                FROM `{$this->table}`
-                WHERE `text_id` = ?";
-            
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->text_id]);
-            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            if ($stmt->rowCount() === 0) {
-                throw new AprelendoException('Error getting number of likes for this text.');
-            }
-
-            return $result['total_likes'];
-        } catch (\PDOException $e) {
-            return false;
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `text_id` = ?";
+        return $this->sqlCount($sql, [$this->text_id]);
     } // end get()
 
     /**
      * Checks if user already gave like to current text
      *
-     * @return boolean
+     * @return bool
      */
     public function userLiked(): bool
     {
-        try {
-            $sql = "SELECT COUNT(`id`)
-                AS `user_liked`
-                FROM `{$this->table}`
-                WHERE `text_id` = ? AND `user_id` = ?";
-
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->text_id, $this->user_id]);
-            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            if ($stmt->rowCount() === 0) {
-                throw new AprelendoException('Error getting like for this text.');
-            }
-
-            return $result['user_liked'] == 1;
-        } catch (\PDOException $e) {
-            return false;
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT COUNT(*) AS `user_liked` FROM `{$this->table}` WHERE `text_id` = ? AND `user_id` = ?";
+        return $this->sqlCount($sql, [$this->text_id, $this->user_id]) === 1;
     } // end userLiked()
 }

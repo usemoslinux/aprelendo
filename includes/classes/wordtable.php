@@ -43,18 +43,17 @@ class WordTable extends Table
      *
      * @param array $rows
      */
-    public function __construct(array $rows) {
-        $this->headings = array('Word', 'Status');
-        $this->col_widths = array('33px', '', '60px');
-        $this->action_menu = array('mDelete' => 'Delete');
-        $this->sort_menu = array(
+    public function __construct(array $rows)
+    {
+        $this->headings = ['Word', 'Status'];
+        $this->col_widths = ['33px', '', '60px'];
+        $this->action_menu = ['mDelete' => 'Delete'];
+        $this->sort_menu = [
             'mSortNewFirst'       => 'New first',
             'mSortOldFirst'       => 'Old first',
             'mSortLearnedFirst'   => 'Learned first',
-            'mSortForgottenFirst' => 'Forgotten first',
-            'mSortHighFrequency'  => 'More frequently modified first',
-            'mSortLowFrequency'   => 'Less frequently modified first'
-        );
+            'mSortForgottenFirst' => 'Forgotten first'
+        ];
         $this->rows = $rows;
         $this->has_chkbox = true;
     }

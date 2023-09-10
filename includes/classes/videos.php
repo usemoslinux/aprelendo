@@ -24,19 +24,21 @@ namespace Aprelendo\Includes\Classes;
 use Aprelendo\Includes\Classes\DBEntity;
 use Aprelendo\Includes\Classes\Curl;
 use Aprelendo\Includes\Classes\Conversion;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 class Videos extends DBEntity
 {
-    private $id             = '';
-    private $lang_id        = 0;
-    private $lang           = '';
-    private $title          = '';
-    private $author         = '';
-    private $youtube_id     = '';
-    private $source_url     = '';
-    private $transcript_xml = '';
-    private $lang_codes = [
+    public $id                = '';
+    public $user_id           = 0;
+    public $lang_id           = 0;
+    public $lang              = '';
+    public $title             = '';
+    public $author            = '';
+    public $transcript_xml    = '';
+    public $source_url        = '';
+    public $date_created      = '';
+    public $youtube_id        = '';
+    private const SUPPORTED_VIDEO_LANGUAGES = [
         'ar'       => 'Arabic',
         'ar-DZ'    => 'Arabic (Algeria)',
         'ar-BH'    => 'Arabic (Bahrain)',
@@ -126,10 +128,10 @@ class Videos extends DBEntity
      */
     public function __construct(\PDO $pdo, int $user_id, int $lang_id)
     {
-        parent::__construct($pdo, $user_id);
-
-        $this->lang_id = $lang_id;
+        parent::__construct($pdo);
         $this->table = 'shared_texts';
+        $this->user_id = $user_id;
+        $this->lang_id = $lang_id;
     } // end __construct()
 
     /**
@@ -149,7 +151,7 @@ class Videos extends DBEntity
         $metadata = $this->fetchVideoMetadata($youtube_id);
 
         // Combine metadata & transcript in a single array for response
-        $result = array_merge($metadata, array('text' => $transcript_xml->asXML()));
+        $result = array_merge($metadata, ['text' => $transcript_xml->asXML()]);
 
         return json_encode($result);
     }
@@ -161,7 +163,7 @@ class Videos extends DBEntity
      */
     private function getAvailableSubs(): array
     {
-        $available_langs = array_filter($this->lang_codes, function ($key) {
+        $available_langs = array_filter(self::SUPPORTED_VIDEO_LANGUAGES, function ($key) {
             return $key == $this->lang || strpos($key, $this->lang . "-") === 0;
         }, ARRAY_FILTER_USE_KEY);
 
@@ -186,7 +188,7 @@ class Videos extends DBEntity
         $output_array = json_decode($output, true);
 
         if (!$output_array) {
-            throw new AprelendoException("The video might lack subtitles or they're unavailable in the desired "
+            throw new UserException("The video might lack subtitles or they're unavailable in the desired "
                 . "language. Auto-generated Google subtitles are of low quality and won't work. Consider trying a "
                 . "different video or using the <a href='" . $this->getFilmotUrl() . "' "
                 . "target='_blank' class='alert-link'>Filmot search engine</a>  to find manually created subtitles.");
@@ -247,7 +249,7 @@ class Videos extends DBEntity
         } elseif (preg_match('#^https?://youtu\.be/([^?]+)#', $url, $matches)) {
             return $matches[1];
         } else {
-            throw new AprelendoException('Malformed YouTube link');
+            throw new UserException('Malformed YouTube link');
         }
     } // end extractYTId()
 
@@ -259,75 +261,19 @@ class Videos extends DBEntity
      */
     public function loadRecord(int $id): void
     {
-        try {
-            $sql = "SELECT *
-                    FROM `{$this->table}`
-                    WHERE `id`=?";
+        $sql = "SELECT * FROM `{$this->table}` WHERE `id`=?";
+        $row = $this->sqlFetch($sql, [$id]);
 
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$id]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            if ($row) {
-                $this->id             = $row['id'];
-                $this->lang_id        = $row['lang_id'];
-                $this->author         = $row['author'];
-                $this->source_url     = $row['source_uri'];
-                $this->transcript_xml = $row['text'];
-                $this->youtube_id     = $this->extractYTId($this->source_url);
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error loading record from texts table.');
-        } finally {
-            $stmt = null;
+        if ($row) {
+            $this->id             = $row['id'];
+            $this->user_id        = $row['user_id'];
+            $this->lang_id        = $row['lang_id'];
+            $this->title          = $row['title'];
+            $this->author         = $row['author'];
+            $this->transcript_xml = $row['text'];
+            $this->source_url     = $row['source_uri'];
+            $this->date_created   = $row['date_created'];
+            $this->youtube_id     = $this->extractYTId($this->source_url);
         }
     } // end loadRecord()
-
-    /**
-     * Get the value of lang_id
-     */
-    public function getLangId(): int
-    {
-        return $this->lang_id;
-    }
-
-    /**
-     * Get the value of title
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    /**
-     * Get the value of author
-     */
-    public function getAuthor(): string
-    {
-        return $this->author;
-    }
-
-    /**
-     * Get the value of youtube_id
-     */
-    public function getYoutubeId(): string
-    {
-        return $this->youtube_id;
-    }
-
-    /**
-     * Get the value of source_url
-     */
-    public function getSourceUrl(): string
-    {
-        return $this->source_url;
-    }
-
-    /**
-     * Get the value of transcript_xml
-     */
-    public function getTranscriptXml(): string
-    {
-        return $this->transcript_xml;
-    }
 }

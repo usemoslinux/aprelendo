@@ -788,7 +788,7 @@ $(document).ready(function() {
             }
         });
 
-        id.push($("#text-container").attr("data-textID")); // get text ID
+        id.push($("#text-container").attr("data-IdText")); // get text ID
 
         if (is_shared) {
             id = undefined;

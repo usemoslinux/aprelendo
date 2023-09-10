@@ -70,7 +70,8 @@ class TextsUtilities
      * @param string $author
      * @return string
      */
-    public static function formatAuthorCase(string $author): string {
+    public static function formatAuthorCase(string $author): string
+    {
         return preg_replace_callback(
             '/\b([\p{L}]+(?:\.[\p{L}]+)*)\b/u',
             function($matches) {
@@ -85,6 +86,5 @@ class TextsUtilities
             },
             $author
         );
-    } // end formatAuthorCase
-
+    } // end formatAuthorCase()
 }

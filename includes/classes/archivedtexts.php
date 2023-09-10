@@ -20,8 +20,6 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\AprelendoException;
-
 class ArchivedTexts extends Texts
 {
     /**
@@ -45,33 +43,13 @@ class ArchivedTexts extends Texts
      */
     public function unarchive(string $ids): void
     {
-        try {
-            $ids_array = json_decode($ids);
-            $id_params = str_repeat("?,", count($ids_array)-1) . "?";
+        $ids_array = json_decode($ids);
+        $id_params = str_repeat("?,", count($ids_array)-1) . "?";
 
-            $insert_sql = "INSERT INTO `texts`
-                           SELECT *
-                           FROM `{$this->table}`
-                           WHERE `id` IN ($id_params)";
-            
-            $stmt = $this->pdo->prepare($insert_sql);
-            $stmt->execute($ids_array);
-            
-            if (!$stmt->rowCount()) {
-                throw new AprelendoException('Error inserting record in texts table.');
-            }
+        $sql = "INSERT INTO `texts` SELECT * FROM `{$this->table}` WHERE `id` IN ($id_params)";
+        $this->sqlExecute($sql, $ids_array);
 
-            $delete_sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
-            $stmt = $this->pdo->prepare($delete_sql);
-            $stmt->execute($ids_array);
-
-            if (!$stmt->rowCount()) {
-                throw new AprelendoException('Error deleting record from archived texts table.');
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error trying to unarchive this text.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
+        $this->sqlExecute($sql, $ids_array);
     }
 } // end unarchive()

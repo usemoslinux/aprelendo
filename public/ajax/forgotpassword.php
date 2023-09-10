@@ -21,7 +21,9 @@
 require_once '../../includes/dbinit.php'; // connect to database
 
 use Aprelendo\Includes\Classes\User;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserPassword;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -31,17 +33,13 @@ if (!isset($_POST) || empty($_POST)) {
 try {
     if (isset($_POST['email']) && isset($_POST['newpassword']) && isset($_POST['newpassword-confirmation'])) {
         if ($_POST['newpassword'] === $_POST['newpassword-confirmation']) {
-            // create password hash
-            $options = [
-                'cost' => 11,
-            ];
+            $password_hash = UserPassword::createHash($_POST['newpassword']);
             $email = $_POST['email'];
-            $password_hash = password_hash($_POST['newpassword'], PASSWORD_BCRYPT, $options);
 
             $user = new User($pdo);
             $user->updatePasswordHash($password_hash, $email);
         } else {
-            throw new AprelendoException('The passwords you entered are not identical. Please try again.');
+            throw new UserException('The passwords you entered are not identical. Please try again.');
         }
     } elseif (isset($_POST['email'])) {
         if (!empty($_POST['email'])) {
@@ -51,8 +49,8 @@ try {
             $user->loadRecordByEmail($email);
             
             // get password hash associated to that email address
-            $username = $user->getName();
-            $password_hash = $user->getPasswordHash();
+            $username = $user->name;
+            $password_hash = $user->password_hash;
             
             // create reset link & send email
             $reset_link = "https://www.aprelendo.com/forgotpassword.php?email=$email&reset=$password_hash";
@@ -75,17 +73,15 @@ try {
             
             $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
             if (!$mail_sent) {
-                throw new AprelendoException('There was an error trying to send you an e-mail with your new '
+                throw new UserException('There was an error trying to send you an e-mail with your new '
                     . 'temporary password.');
             }
         } else { // if email address does not exist in db
-            throw new AprelendoException('No user registered with that email address. Please try again.');
+            throw new UserException('No user registered with that email address. Please try again.');
         }
     } else {
-        throw new AprelendoException('There was an error resetting your password.');
+        throw new UserException('There was an error resetting your password.');
     }
-} catch (Exception $e) {
-    $error = array('error_msg' => $e->getMessage());
-    header('Content-Type: application/json');
-    echo json_encode($error);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

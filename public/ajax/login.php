@@ -26,17 +26,18 @@ if (!isset($_POST) || empty($_POST)) {
 }
 
 use Aprelendo\Includes\Classes\User;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserAuth;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
     if (isset($_POST['username']) && isset($_POST['password'])) {
         $user = new User($pdo);
-        $user->login($_POST['username'], $_POST['password']);
+        $user_auth = new UserAuth($user);
+        $user_auth->login($_POST['username'], $_POST['password']);
     } else {
-        throw new AprelendoException('Either username, email or password were not provided. Please try again.');
+        throw new UserException('Either username, email or password were not provided. Please try again.');
     }
-} catch (Exception $e) {
-    $error = array('error_msg' => $e->getMessage());
-    header('Content-Type: application/json');
-    echo json_encode($error);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

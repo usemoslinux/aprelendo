@@ -23,6 +23,7 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'simpleheader.php';
 
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\UserRegistrationManager;
 
 ?>
 
@@ -33,12 +34,12 @@ use Aprelendo\Includes\Classes\User;
             <div class="col-sm-12 col-sm-10 col-lg-6">
                 <main>
                     <?php
-                    if (isset($_GET['username']) && !empty($_GET['username']) && isset($_GET['hash'])
-                        && !empty($_GET['hash'])) {
+                    if (!empty($_GET['username']) && !empty($_GET['hash'])) {
                         // check if username & hash values passed by the reset link are set
-                        $user = new User($pdo);
                         try {
-                            $user->activate($_GET['username'], $_GET['hash']);
+                            $user = new User($pdo);
+                            $user_reg = new UserRegistrationManager($user);
+                            $user_reg->activate($_GET['username'], $_GET['hash']);
                             echo '<div class="text-success text-center">
                                 <div class="display-1">
                                 <span class="far fa-check-circle"></span>
@@ -72,6 +73,5 @@ use Aprelendo\Includes\Classes\User;
         </div>
     </div>
 </div>
-
 
 <?php require_once 'footer.php'?>

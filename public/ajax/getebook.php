@@ -19,31 +19,31 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\EbookFile;
-use Aprelendo\Includes\Classes\AprelendoException;
-
-$user_id = $user->getId();
-$lang_id = $user->getLangId();
-$id = $_GET['id'];
+use Aprelendo\Includes\Classes\UserException;
 
 try {
+    $user_id = $user->id;
+    $lang_id = $user->lang_id;
+    $id = (int)$_GET['id'];
+    
     $text = new Texts($pdo, $user_id, $lang_id);
     $text->loadRecord($id);
-    $file_name = $text->getSourceUri();
+    $file_name = $text->source_uri;
 
     if (!empty($file_name)) {
         $ebook_file = new EbookFile($file_name);
         $ebook_content = $ebook_file->get();
         if (!$ebook_content) {
-            throw new AprelendoException('Book content is empty.', 404);
+            throw new UserException('Book content is empty.', 404);
         }
     } else {
-        throw new AprelendoException('Empty file name.', 404);
+        throw new UserException('Empty file name.', 404);
     }
 } catch (\Exception $e) {
-    // catches AprelendoException but also possible Exceptions from fileread() in $ebook_file->get()
+    // catches UserException but also possible Exceptions from fileread() in $ebook_file->get()
     http_response_code($e->getCode());
 }

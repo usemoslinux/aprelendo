@@ -22,14 +22,13 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Curl;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 class RSSFeed
 {
-    private $title    = '';
-    private $url      = '';
-    private $xmlfeed  = '';
-    private $articles = [];
+    public $title    = '';
+    public $url      = '';
+    public $articles = [];
     private const MAX_NR_OF_ARTICLES = 10;
 
     /**
@@ -49,7 +48,7 @@ class RSSFeed
      * Get RSS feed elements and initialize class variables
      *
      * @param string $url Url of the feed to parse
-     * @throws AprelendoException If there's a problem fetching or parsing the feed
+     * @throws UserException If there's a problem fetching or parsing the feed
      * @return void
      */
     public function fetchXMLFeed(string $url): void
@@ -63,13 +62,13 @@ class RSSFeed
         $feed_contents = Curl::getUrlContents($url, $options);
 
         if (!$feed_contents) {
-            throw new AprelendoException('Error fetching the feed: ' . $url);
+            throw new UserException('Error fetching the feed: ' . $url);
         }
 
         $xml_feed = simplexml_load_string($feed_contents);
 
         if (!$xml_feed) {
-            throw new AprelendoException('Error parsing the feed: ' . $url);
+            throw new UserException('Error parsing the feed: ' . $url);
         }
 
         if (isset($xml_feed->entry)) {
@@ -79,7 +78,7 @@ class RSSFeed
             $feed_type = 'rss';
             $entries = $xml_feed->channel->item;
         } else {
-            throw new AprelendoException('Unknown feed format for: ' . $url);
+            throw new UserException('Unknown feed format for: ' . $url);
         }
 
         $this->title = ($feed_type === 'atom') ? $xml_feed->title : $xml_feed->channel->title;
@@ -103,41 +102,4 @@ class RSSFeed
             $itemIndex++;
         }
     } // end fetchXMLFeed()
-
-
-    /**
-     * Get the value of title
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    /**
-     * Get the value of url
-     * @return string
-     */
-    public function getUrl(): string
-    {
-        return $this->url;
-    }
-
-    /**
-     * Get the value of xmlfeed
-     * @return string
-     */
-    public function getXmlfeed(): string
-    {
-        return $this->xmlfeed;
-    }
-
-    /**
-     * Get the value of articles
-     * @return string
-     */
-    public function getArticles(): array
-    {
-        return $this->articles;
-    }
 }

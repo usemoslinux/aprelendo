@@ -19,15 +19,16 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Includes\Classes\Words;
 use Aprelendo\Includes\Classes\SearchWordsParameters;
 use Aprelendo\Includes\Classes\WordsUtilities;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
-$user_id = $user->getId();
-$lang_id = $user->getLangId();
+$user_id = $user->id;
+$lang_id = $user->lang_id;
 
 try {
     // set search criteria, if any
@@ -41,6 +42,6 @@ try {
     
     WordsUtilities::exportToCSV($words);
 
-} catch (AprelendoException $e) {
+} catch (UserException $e) {
     http_response_code($e->getCode());
 }

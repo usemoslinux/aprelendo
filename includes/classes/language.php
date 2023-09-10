@@ -21,21 +21,22 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\DBEntity;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 class Language extends DBEntity
 {
-    private $id              = 0;
-    private $name            = '';
-    private $dictionary_uri  = '';
-    private $translator_uri  = '';
-    private $rss_feed_1_uri  = '';
-    private $rss_feed_2_uri  = '';
-    private $rss_feed_3_uri  = '';
-    private $show_freq_words = false;
-    private $level           = 0;
+    public int $id                  = 0;
+    public int $user_id             = 0;
+    public string $name             = '';
+    public string $dictionary_uri   = '';
+    public ?string $translator_uri  = null;
+    public ?string $rss_feed1_uri  = null;
+    public ?string $rss_feed2_uri  = null;
+    public ?string $rss_feed3_uri  = null;
+    public bool $show_freq_words    = false;
+    public int $level               = 0;
 
-    private static $iso_code = array(
+    private static $iso_code = [
         'ar' => 'arabic',
         'zh' => 'chinese',
         'nl' => 'dutch',
@@ -51,7 +52,7 @@ class Language extends DBEntity
         'pt' => 'portuguese',
         'ru' => 'russian',
         'es' => 'spanish'
-        );
+    ];
 
     /**
      * Constructor
@@ -63,42 +64,56 @@ class Language extends DBEntity
      */
     public function __construct(\PDO $pdo, int $user_id)
     {
-        parent::__construct($pdo, $user_id);
+        parent::__construct($pdo);
         $this->table = 'languages';
+        $this->user_id = $user_id;
     } // end __construct()
 
     /**
-     * Loads Record data in object properties (looks record in db by id)
+     * Loads record data in object
+     *
+     * @param array $record
+     * @return void
+     */
+    private function loadRecord(array $record): void
+    {
+        if ($record) {
+            $this->id               = $record['id'];
+            $this->user_id          = $record['user_id'];
+            $this->name             = $record['name'];
+            $this->dictionary_uri   = $record['dictionary_uri'];
+            $this->translator_uri   = $this->setUri($record['translator_uri']);
+            $this->rss_feed1_uri   = $this->setUri($record['rss_feed1_uri']);
+            $this->rss_feed2_uri   = $this->setUri($record['rss_feed2_uri']);
+            $this->rss_feed3_uri   = $this->setUri($record['rss_feed3_uri']);
+            $this->show_freq_words  = $record['show_freq_words'];
+            $this->level            = $record['level'];
+        }
+    } // end loadRecord()
+
+    /**
+     * Loads record data in object properties by id
      *
      * @param int $id
      * @return void
      */
-    public function loadRecord(int $id): void
+    public function loadRecordById(int $id): void
     {
-        try {
-            $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ? AND `user_id` = ?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$id, $this->user_id]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-            
-            if ($row) {
-                $this->id               = $row['id'];
-                $this->user_id          = $row['user_id'];
-                $this->name             = $row['name'];
-                $this->dictionary_uri   = $row['dictionary_uri'];
-                $this->translator_uri   = $row['translator_uri'];
-                $this->rss_feed_1_uri   = $row['rss_feed1_uri'];
-                $this->rss_feed_2_uri   = $row['rss_feed2_uri'];
-                $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
-                $this->show_freq_words  = $row['show_freq_words'];
-                $this->level            = $row['level'];
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error loading language record.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ?";
+        $this->loadRecord($this->sqlFetch($sql, [$id]));
     } // end loadRecord()
+
+    /**
+     * Loads record data in object properties by name
+     *
+     * @param string $lang
+     * @return void
+     */
+    public function loadRecordByName(string $lang): void
+    {
+        $sql = "SELECT * FROM `{$this->table}` WHERE `user_id`=? AND `name`=?";
+        $this->loadRecord($this->sqlFetch($sql, [$this->user_id, $lang]));
+    } // end loadRecordByName()
 
     /**
      * Updates language settings in db
@@ -108,43 +123,38 @@ class Language extends DBEntity
      */
     public function editRecord(array $new_record): void
     {
-        try {
-            // check for errors first
-            if (empty($new_record['dict-uri'])) {
-                throw new AprelendoException('You need to specify the URL of the dictionary you want to use.');
-            } elseif (strpos($new_record['dict-uri'], '%s') === false) {
-                throw new AprelendoException("The dictionary URL needs to include the position of the lookup word '
-                . 'or phrase. For this, use '%s' (without quotation marks).");
-            } elseif (empty($new_record['translator-uri'])) {
-                throw new AprelendoException('You need to specify the URL of the translator you want to use.');
-            } elseif (strpos($new_record['translator-uri'], '%s') === false) {
-                throw new AprelendoException("The translator URL needs to include the position of the lookup word '
-                . 'or phrase. For this, use '%s' (without quotation marks).");
-            }
-
-            // if everything is fine, proceed editing the record
-            
-            $this->dictionary_uri  = $new_record['dict-uri'];
-            $this->translator_uri  = $new_record['translator-uri'];
-            $this->level           = $new_record['level'];
-            $this->rss_feed_1_uri  = $new_record['rss-feed1-uri'];
-            $this->rss_feed_2_uri  = $new_record['rss-feed2-uri'];
-            $this->rss_feed_3_uri  = $new_record['rss-feed3-uri'];
-            $this->show_freq_words = $new_record['freq-list'];
-
-            $sql = "UPDATE `{$this->table}`
-                    SET `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?,
-                        `rss_feed3_uri`=?, `show_freq_words`=?, `level`=?
-                    WHERE `user_id`=? AND `id`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->dictionary_uri, $this->translator_uri, $this->rss_feed_1_uri,
-                            $this->rss_feed_2_uri, $this->rss_feed_3_uri, $this->show_freq_words,
-                            $this->level, $this->user_id, $this->id]);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error editing language record.');
-        } finally {
-            $stmt = null;
+        // check for errors first
+        if (empty($new_record['dict-uri'])) {
+            throw new UserException('You need to specify the URL of the dictionary you want to use.');
+        } elseif (strpos($new_record['dict-uri'], '%s') === false) {
+            throw new UserException("The dictionary URL needs to include the position of the lookup word '
+            . 'or phrase. For this, use '%s' (without quotation marks).");
+        } elseif (empty($new_record['translator-uri'])) {
+            throw new UserException('You need to specify the URL of the translator you want to use.');
+        } elseif (strpos($new_record['translator-uri'], '%s') === false) {
+            throw new UserException("The translator URL needs to include the position of the lookup word '
+            . 'or phrase. For this, use '%s' (without quotation marks).");
         }
+
+        // if everything is fine, proceed editing the record
+
+        $this->dictionary_uri  = $new_record['dict-uri'];
+        $this->translator_uri  = $this->setUri($new_record['translator-uri']);
+        $this->level           = $new_record['level'];
+        $this->rss_feed1_uri  = $this->setUri($new_record['rss-feed1-uri']);
+        $this->rss_feed2_uri  = $this->setUri($new_record['rss-feed2-uri']);
+        $this->rss_feed3_uri  = $this->setUri($new_record['rss-feed3-uri']);
+        $this->show_freq_words = (bool)$new_record['show-freq-words'];
+
+        $sql = "UPDATE `{$this->table}`
+                SET `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?,
+                    `rss_feed3_uri`=?, `show_freq_words`=?, `level`=?
+                WHERE `user_id`=? AND `id`=?";
+        $this->sqlExecute($sql, [
+            $this->dictionary_uri, $this->translator_uri, $this->rss_feed1_uri,
+            $this->rss_feed2_uri, $this->rss_feed3_uri, (int)$this->show_freq_words,
+            $this->level, $this->user_id, $this->id
+        ]);
     } // end editRecord()
 
     /**
@@ -155,67 +165,22 @@ class Language extends DBEntity
      */
     public function createInitialRecordsForUser(string $native_lang): void
     {
-        try {
-            // create & save default language preferences for user
-            foreach (self::$iso_code as $key => $value) {
-                $translator_uri = 'https://translate.google.com/?hl='
-                    . $native_lang
-                    . '&sl='
-                    . $key
-                    . '&tl='
-                    . $native_lang
-                    . '&text=%s';
-                $dictionary_uri = 'https://' . $key . '.m.wiktionary.org/wiki/%s';
+        // create & save default language preferences for user
+        foreach (self::$iso_code as $key => $value) {
+            $translator_uri = 'https://translate.google.com/?hl='
+                . $native_lang
+                . '&sl='
+                . $key
+                . '&tl='
+                . $native_lang
+                . '&text=%s';
+            $dictionary_uri = 'https://' . $key . '.m.wiktionary.org/wiki/%s';
 
-                $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`, `translator_uri`)
-                        VALUES (?, ?, ?, ?)";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([$this->user_id, $key, $dictionary_uri, $translator_uri]);
-            }
-            if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('Error creating initial user record.');
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error creating initial user record.');
-        } finally {
-            $stmt = null;
+            $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`, `translator_uri`)
+                    VALUES (?, ?, ?, ?)";
+            $this->sqlExecute($sql, [$this->user_id, $key, $dictionary_uri, $translator_uri]);
         }
     } // end createInitialRecordsForUser()
-
-    /**
-     * Loads Record data in object properties (looks record in db by name)
-     *
-     * @param string $lang
-     * @return void
-     */
-    public function loadRecordByName(string $lang): void
-    {
-        try {
-            $sql = "SELECT * FROM `{$this->table}` WHERE `user_id`=? AND `name`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $lang]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            if (!$row) {
-                throw new AprelendoException('Language record does not exist.');
-            }
-
-            $this->id               = $row['id'];
-            $this->user_id          = $row['user_id'];
-            $this->name             = $row['name'];
-            $this->dictionary_uri   = $row['dictionary_uri'];
-            $this->translator_uri   = $row['translator_uri'];
-            $this->rss_feed_1_uri   = $row['rss_feed1_uri'];
-            $this->rss_feed_2_uri   = $row['rss_feed2_uri'];
-            $this->rss_feed_3_uri   = $row['rss_feed3_uri'];
-            $this->show_freq_words  = $row['show_freq_words'];
-            $this->level            = $row['level'];
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error loading language record.');
-        } finally {
-            $stmt = null;
-        }
-    } // end loadRecordByName()
 
     /**
      * Converts 639-1 iso codes to full language names (ie. 'en' => 'English')
@@ -262,110 +227,17 @@ class Language extends DBEntity
      */
     public function getAvailableLangs(): array
     {
-        try {
-            $sql = "SELECT `id`, `name` FROM `{$this->table}` WHERE `user_id`=? ORDER BY `name` ASC";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id]);
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            if (!$result || empty($result)) {
-                throw new AprelendoException('Error getting available languages for user.');
-            }
-            return $result;
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error getting available languages for user.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT `id`, `name` FROM `{$this->table}` WHERE `user_id`=? ORDER BY `name` ASC";
+        return $this->sqlFetchAll($sql, [$this->user_id]);
     } // end getAvailableLangs()
 
     /**
-     * Id getter
-     *
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    } // end getId()
-
-    /**
-     * Name getter
+     * Save URI as string, even if null
      *
      * @return string
      */
-    public function getName(): string
+    private function setUri(?string $uri): string
     {
-        return $this->name;
-    } // end getName()
-
-    /**
-     * Dictionary URI getter
-     *
-     * @return string
-     */
-    public function getDictionaryUri(): string
-    {
-        return $this->dictionary_uri;
-    } // end getDictionaryUri()
-
-    /**
-     * Translator URI getter
-     *
-     * @return string
-     */
-    public function getTranslatorUri(): string
-    {
-        return is_null($this->translator_uri) ? '' : $this->translator_uri;
-    } // end getTranslatorUri()
-
-    /**
-     * RSS Feed 1 URI getter
-     *
-     * @return string
-     */
-    public function getRssFeed1Uri(): string
-    {
-        return is_null($this->rss_feed_1_uri) ? '' : $this->rss_feed_1_uri;
-    } // end getRssFeed1Uri()
-
-    /**
-     * RSS Feed 2 URI getter
-     *
-     * @return string
-     */
-    public function getRssFeed2Uri(): string
-    {
-        return is_null($this->rss_feed_2_uri) ? '' : $this->rss_feed_2_uri;
-    } // end getRssFeed2Uri()
-
-    /**
-     * RSS Feed 3 URI getter
-     *
-     * @return string
-     */
-    public function getRssFeed3Uri(): string
-    {
-        return is_null($this->rss_feed_3_uri) ? '' :  $this->rss_feed_3_uri;
-    } // end getRssFeed3Uri()
-
-    /**
-     * Show Frequency Words getter
-     *
-     * @return bool
-     */
-    public function getShowFreqWords(): bool
-    {
-        return $this->show_freq_words;
-    } // end getShowFreqWords()
-
-    /**
-     * Language learning level getter
-     *
-     * @return bool
-     */
-    public function getLevel(): int
-    {
-        return $this->level;
-    } // end getShowFreqWords()
-
+        return is_null($uri) ? '' : $uri;
+    } // end setUri()
 }

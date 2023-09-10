@@ -25,15 +25,15 @@ require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Includes\Classes\Reader;
 
-$reader = new Reader($pdo, $user->getId(), $user->getLangId());
-$prefs = $reader->getPrefs();
+$reader = new Reader($pdo, $user->id, $user->lang_id);
+$prefs = $reader->prefs;
 
-$font_family       = $prefs->getFontFamily();
-$font_size         = $prefs->getFontSize();
-$line_height       = $prefs->getLineHeight();
-$text_align        = $prefs->getTextAlignment();
-$display_mode      = $prefs->getDisplayMode();
-$assisted_learning = $prefs->getAssistedLearning();
+$font_family       = $prefs->font_family;
+$font_size         = $prefs->font_size;
+$line_height       = $prefs->line_height;
+$text_align        = $prefs->text_alignment;
+$display_mode      = $prefs->display_mode;
+$assisted_learning = $prefs->assisted_learning;
 
 $sel = ' selected ';
 
@@ -55,7 +55,7 @@ $sel = ' selected ';
             <main>
                 <div class="row">
                     <div class="col-12">
-                        <div id="msgbox"></div>
+                        <div id="alert-msg"></div>
                         <form id="prefs-form" method="post">
                             <div class="card">
                                 <div class="card-header">Reader</div>
@@ -243,5 +243,7 @@ $sel = ' selected ';
     </div>
 </div>
 
-<script defer src="js/preferences.min.js"></script>
+<script defer src="/js/preferences.min.js"></script>
+<script defer src="/js/helpers.min.js"></script>
+
 <?php require_once 'footer.php'; ?>

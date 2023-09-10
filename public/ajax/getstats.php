@@ -22,10 +22,16 @@ require_once '../../includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check if user is logged in
 
 use Aprelendo\Includes\Classes\WordStats;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
-if ($_GET['type'] === "words") {
-    $stats = new WordStats($pdo, $user->getId(), $user->getLangId());
-    $result = $stats->getTotals();
+try {
+    if ($_GET['type'] === "words") {
+        $stats = new WordStats($pdo, $user->id, $user->lang_id);
+        $result = $stats->getTotals();
+    }
+    
+    echo json_encode($result);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }
-
-echo json_encode($result);

@@ -24,7 +24,7 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set
 use Aprelendo\Includes\Classes\Reader;
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\TextsUtilities;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 function getCSS($styles)
 {
@@ -53,10 +53,10 @@ function getCSS($styles)
 
 $class = '';
 $styles = [];
-$doclang = $user->getLang();
+$doclang = $user->lang;
 
 try {
-    if (isset($_GET['id']) && !empty($_GET['id'])) {
+    if (!empty($_GET['id'])) {
         // check if user has access to view this text
         if (!$user->isAllowedToAccessElement('texts', (int)$_GET['id'])) {
             header("HTTP/1.1 401 Unauthorized");
@@ -64,13 +64,13 @@ try {
         }
 
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
-        $reader = new Reader($pdo, $is_shared, $_GET['id'], $user->getId(), $user->getLangId());
+        $reader = new Reader($pdo, $user->id, $user->lang_id, $_GET['id'], $is_shared);
         $result = '';
 
         // get user preferences & load classes and CSS for ebook
-        $prefs = $reader->getPrefs();
+        $prefs = $reader->prefs;
 
-        switch ($prefs->getDisplayMode()) {
+        switch ($prefs->display_mode) {
             case 'light':
                 $class = 'lightmode';
                 break;
@@ -84,12 +84,12 @@ try {
                 break;
         }
 
-        $styles['font-family'] = $prefs->getFontFamily();
-        $styles['font-size'] = $prefs->getFontSize();
-        $styles['text-align'] = $prefs->getTextAlignment();
-        $styles['line-height'] = $prefs->getLineHeight();
+        $styles['font-family'] = $prefs->font_family;
+        $styles['font-size'] = $prefs->font_size;
+        $styles['text-align'] = $prefs->text_alignment;
+        $styles['line-height'] = $prefs->line_height;
     } else {
-        throw new AprelendoException('Oops! There was an unexpected error trying to fetch that ebook.');
+        throw new UserException('Oops! There was an unexpected error trying to fetch that ebook.');
     }
 } catch (Exception $e) {
     header('Location:/login');
@@ -97,9 +97,9 @@ try {
 }
 
 // get audio uri, if any
-$text = new Texts($pdo, $user->getId(), $user->getLangId());
+$text = new Texts($pdo, $user->id, $user->lang_id);
 $text->loadRecord($_GET['id']);
-$audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->getAudioUri());
+$audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
 
 ?>
 
@@ -151,7 +151,7 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->getAudioUri());
         integrity="sha384-+mbV2IY1Zk/X1p/nWllGySJSUN8uMs+gUAN10Or95UBH0fpj6GfKgPmgC5EXieXG"
         crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
-    <script defer src="js/epubjs/epub.min.js"></script>
+    <script defer src="/js/epubjs/epub.min.js"></script>
 
     <!-- JQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
@@ -231,7 +231,9 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->getAudioUri());
         </div>
 
         <a id="prev" href="#prev" class="navlink"></a>
-        <div id="viewer" class="py-0 px-5 scrolled"></div>
+        <div id="viewer" class="py-0 px-5 scrolled"
+            data-idText="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
+        </div>
         <a id="next" href="#next" class="navlink"></a>
 
     </div>
@@ -241,9 +243,9 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->getAudioUri());
         require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
     ?>
 
-    <script defer src="js/underlinewords.min.js"></script>
-    <script defer src="js/showtext.min.js"></script>
-    <script data-id="<?php echo isset($_GET['id2']) ? $_GET['id'] : '' ?>" defer src="js/showebook.min.js"></script>
+    <script defer src="/js/underlinewords.min.js"></script>
+    <script defer src="/js/showtext.min.js"></script>
+    <script defer src="/js/showebook.min.js"></script>
 
 </body>
 

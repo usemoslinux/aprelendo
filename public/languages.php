@@ -30,13 +30,13 @@ require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Includes\Classes\Language;
 
-$user_id = $user->getId();
+$user_id = $user->id;
 $lang = new Language($pdo, $user_id);
 
 if (isset($_GET['chg'])) {
-    $lang->loadRecord($_GET['chg']);
+    $lang->loadRecordById($_GET['chg']);
 } elseif (isset($_GET['act'])) {
-    $lang->loadRecord($_GET['act']);
+    $lang->loadRecordById($_GET['act']);
 }
 
 ?>
@@ -55,7 +55,7 @@ if (isset($_GET['chg'])) {
                         <?php
                             if (isset($_GET['chg'])) {
                                 echo '<li class="breadcrumb-item"><span class="active">'
-                                . ucfirst(Language::getNameFromIso($lang->getName())) . '</span></li>';
+                                . ucfirst(Language::getNameFromIso($lang->name)) . '</span></li>';
                             }
                         ?>
                     </ol>
@@ -77,5 +77,7 @@ if (isset($_GET['chg'])) {
         </div>
     </div>
 
-    <script defer src="js/languages.min.js"></script>
+    <script defer src="/js/languages.min.js"></script>
+    <script defer src="/js/helpers.min.js"></script>
+
     <?php require_once 'footer.php'; ?>

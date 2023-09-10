@@ -22,26 +22,25 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\File;
 use Aprelendo\Includes\Classes\Language;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserAuth;
+use Aprelendo\Includes\Classes\UserPassword;
+use Aprelendo\Includes\Classes\UserException;
 
-class User
+class User extends DBEntity
 {
-    private $id              = 0;
-    private $name            = '';
-    private $password_hash   = '';
-    private $email           = '';
-    private $lang            = '';
-    private $lang_id         = 0;
-    private $native_lang     = '';
-    private $time_zone       = 'UTC';
-    private $activation_hash = '';
-    private $is_active       = false;
-    private $google_id       = '';
+    public int    $id;
+    public string $name;
+    public string $password_hash;
+    public string $email;
+    public string $lang;
+    public int    $lang_id;
+    public string $native_lang;
+    public string $time_zone;
+    public string $activation_hash;
+    public bool   $is_active;
+    public string $google_id;
 
-    private $error_msg = '';
-    
-    private $pdo;
-    private $table;
+    public string $error_msg;
     
     /**
      * Constructor
@@ -50,47 +49,63 @@ class User
      */
     public function __construct(\PDO $pdo)
     {
-        $this->pdo = $pdo;
+        parent::__construct($pdo);
         $this->table = 'users';
+
+        $this->id              = 0;
+        $this->name            = '';
+        $this->password_hash   = '';
+        $this->email           = '';
+        $this->lang            = '';
+        $this->lang_id         = 0;
+        $this->native_lang     = '';
+        $this->time_zone       = 'UTC';
+        $this->activation_hash = '';
+        $this->is_active       = false;
+        $this->google_id       = '';
+    
+        $this->error_msg       = '';
     } // end __construct()
 
     /**
-     * Loads user record data
+     * Loads user record data in current object
+     *
+     * @param array $record
+     * @return void
+     * @throws UserException
+     */
+    private function loadRecord(array $record): void
+    {
+        if ($record) {
+            $this->id              = $record['id'];
+            $this->name            = $record['name'];
+            $this->password_hash   = $record['password_hash'];
+            $this->email           = $record['email'];
+            $this->native_lang     = $record['native_lang_iso'];
+            $this->lang            = $record['learning_lang_iso'];
+            $this->time_zone       = $record['time_zone'];
+            $this->activation_hash = $record['activation_hash'];
+            $this->is_active       = $record['is_active'];
+            $this->google_id       = $record['google_id'];
+
+            // get active language id (lang_id)
+            $lang = new Language($this->pdo, $this->id);
+            $lang->loadRecordByName($this->lang);
+            $this->lang_id = $lang->id;
+        }
+    }
+
+    /**
+     * Loads user record data by id
      *
      * @param int $id
      * @return void
      */
-    public function loadRecord(int $id): void
+    public function loadRecordById(int $id): void
     {
-        try {
-            $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$id]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            if ($row) {
-                $this->id              = $row['id'];
-                $this->name            = $row['name'];
-                $this->password_hash   = $row['password_hash'];
-                $this->email           = $row['email'];
-                $this->native_lang     = $row['native_lang_iso'];
-                $this->lang            = $row['learning_lang_iso'];
-                $this->time_zone       = $row['time_zone'];
-                $this->activation_hash = $row['activation_hash'];
-                $this->is_active       = $row['is_active'];
-                $this->google_id       = $row['google_id'];
-
-                // get active language id (lang_id)
-                $lang = new Language($this->pdo, $this->id);
-                $lang->loadRecordByName($this->lang);
-                $this->lang_id = $lang->getId();
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error loading user record.');
-        } finally {
-            $stmt = null;
-        }
-    } // end loadRecord()
+        $sql = "SELECT * FROM `{$this->table}` WHERE `id`=?";
+        $this->loadRecord($this->sqlFetch($sql, [$id]));
+    }
 
     /**
      * Loads user record data by email
@@ -100,52 +115,21 @@ class User
      */
     public function loadRecordByEmail(string $email): void
     {
-        try {
-            $sql = "SELECT * FROM `{$this->table}` WHERE `email`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$email]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            if ($row) {
-                $this->id              = $row['id'];
-                $this->name            = $row['name'];
-                $this->password_hash   = $row['password_hash'];
-                $this->email           = $row['email'];
-                $this->native_lang     = $row['native_lang_iso'];
-                $this->lang            = $row['learning_lang_iso'];
-                $this->time_zone       = $row['time_zone'];
-                $this->activation_hash = $row['activation_hash'];
-                $this->is_active       = $row['is_active'];
-                $this->google_id       = $row['google_id'];
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error loading user record.');
-        } finally {
-            $stmt = null;
-        }
-    } // end loadRecordByEmail()
+        $sql = "SELECT * FROM `{$this->table}` WHERE `email`=?";
+        $this->loadRecord($this->sqlFetch($sql, [$email]));
+    }
 
     /**
-     * Checks if user exists
+     * Checks if user exists by name
      *
      * @param string $name
      * @return bool
      */
     public function existsByName(string $name): bool
     {
-        try {
-            $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `name`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$name]);
-            $num_rows = $stmt->fetchColumn();
-            
-            return ($num_rows) && ($num_rows > 0) ? true : false;
-        } catch (\PDOException $e) {
-            return false;
-        } finally {
-            $stmt = null;
-        }
-    } // end existsByName()
+        $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `name`=?";
+        return $this->sqlCount($sql, [$name]) > 0;
+    }
 
     /**
      * Checks if email exists
@@ -155,300 +139,30 @@ class User
      */
     public function existsByEmail(string $email): bool
     {
-        try {
-            $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `email`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$email]);
-            $num_rows = $stmt->fetchColumn();
-
-            return ($num_rows) && ($num_rows > 0) ? true : false;
-        } catch (\PDOException $e) {
-            return false;
-        } finally {
-            $stmt = null;
-        }
-    } // end existsByEmail()
+        $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `email`=?";
+        return $this->sqlCount($sql, [$email]) > 0;
+    }
 
     /**
-     * Checks if user exists, by name and password
+     * Checks if user exists by email and password hash
      *
-     * @param string $name
+     * @param string $email
      * @param string $password_hash
      * @return bool
      */
     public function existsByEmailAndPasswordHash(string $email, string $password_hash): bool
     {
-        try {
-            $sql = "SELECT COUNT(*) AS `exists` FROM `users` WHERE `email`=? AND `password_hash`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$email, $password_hash]);
-            $num_rows = $stmt->fetchColumn();
-
-            return ($num_rows) && ($num_rows > 0) ? true : false;
-        } catch (\PDOException $e) {
-            return false;
-        } finally {
-            $stmt = null;
-        }
-    } // end existsByEmailAndPasswordHash()
+        $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `email`=? AND `password_hash`=?";
+        return $this->sqlCount($sql, [$email, $password_hash]) > 0;
+    }
     
-    /**
-     * Creates new user & associated languages and reader preferences
-     *
-     * @param array $user_data
-     * @return void
-     */
-    public function register(array $user_data): void
-    {
-        // $username, $email, $password, $native_lang = 'en', $lang = 'en', $send_email = false
-        $this->name = $user_data['username'];
-        $this->email = $user_data['email'];
-        $password = $user_data['password'];
-        $this->native_lang = isset($user_data['native_lang']) ? $user_data['native_lang'] : 'en';
-        $this->lang = isset($user_data['lang']) ? $user_data['lang'] : 'en';
-        $this->time_zone = isset($user_data['time_zone']) ? $user_data['time_zone'] : 'UTC';
-        $send_email = isset($user_data['send_email']) ? $user_data['send_email'] : false;
-        $this->is_active = false;
-
-        try {
-            // check if user already exists
-            if ($this->existsByName($this->name)) {
-                throw new AprelendoException('Username already exists. Please try again.');
-            }
-            
-            // check if email already exists
-            if ($this->existsByEmail($this->email)) {
-                throw new AprelendoException('Email already exists. Did you <a class="alert-link" '
-                    . 'href="/forgotpassword">forget</a> you username or password?');
-            }
-            
-            // create password hash
-            $options = ['cost' => 11];
-            $password_hash = password_hash($password, PASSWORD_BCRYPT, $options);
-
-            // create account activation hash
-            $activation_hash = $this->activation_hash = md5(rand(0, 1000));
-
-            // save user data in db
-            $user_active = !$send_email;
-            $sql = "INSERT INTO `{$this->table}` (`name`, `password_hash`, `email`, `native_lang_iso`,
-                `learning_lang_iso`, `time_zone`, `activation_hash`, `is_active`)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->name, $password_hash, $this->email, $this->native_lang,
-                $this->lang, $this->time_zone, $activation_hash, (int)$user_active]);
-
-            if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('Error creating user record.');
-            }
-
-            $user_id = $this->id = $this->pdo->lastInsertId();
-
-            // create & save default language preferences for user
-            $lang = new Language($this->pdo, $user_id);
-            $lang->createInitialRecordsForUser($this->native_lang);
-
-            $sql = "INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`,
-                    `display_mode`, `assisted_learning`)
-                    VALUES (?, 'Helvetica', '12pt', '1.5', 'left', 'light', '1')";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$user_id]);
-            
-            if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('Error creating default preferences for user.');
-            }
-
-            if ($send_email) {
-                $this->sendActivationEmail($this->email, $this->name, $activation_hash);
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error registering new user.');
-        } finally {
-            $stmt = null;
-        }
-    } // end register()
-    
-    /**
-     * Send activation email to user.
-     * Without completing this step, the account should be considered inactive.
-     *
-     * @param string $email
-     * @param string $username
-     * @param string $hash
-     * @return void
-     */
-    public function sendActivationEmail(string $email, string $username, string $hash): void
-    {
-        // create activation link
-        $reset_link = "https://www.aprelendo.com/accountactivation?username=$username&hash=$hash";
-
-        // create email html
-        $to = $email;
-        $subject = 'Aprelendo - Account activation';
-        
-        // get template
-        $message = file_get_contents(APP_ROOT . 'templates/welcome.html');
-        
-        // edit template
-        $message = str_replace('{{action_url}}', $reset_link, $message);
-        $message = str_replace('{{name}}', $username, $message);
-        $message = str_replace('{{current_year}}', date("Y"), $message);
-        
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type: text/html;charset=UTF-8" . "\r\n";
-        $headers .= 'From: Aprelendo <' . EMAIL_SENDER . ">\r\n";
-        
-        // send email
-        $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
-        if (!$mail_sent) {
-            $this->delete();
-            throw new AprelendoException('Oops! There was an unexpected error trying to send you an e-mail to activate '
-                . 'your account. Please try again later.');
-        }
-    } // end sendActivationEmail()
-
-    /**
-     * Activates user
-     *
-     * @param string $username
-     * @param string $hash
-     * @return void
-     */
-    public function activate(string $username, string $hash): void
-    {
-        try {
-            // check if user name & hash exist in db
-            $sql = "SELECT COUNT(*)
-                    FROM `{$this->table}`
-                    WHERE `name`=? AND `activation_hash`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$username, $hash]);
-            $num_rows = $stmt->fetchColumn();
-            
-            if ($num_rows == 0) {
-                throw new AprelendoException('User does not exist.');
-            }
-
-            $sql = "UPDATE `{$this->table}`
-                    SET `is_active`=true
-                    WHERE `name`=? AND `activation_hash`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$username, $hash]);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error activating user.');
-        } finally {
-            $stmt = null;
-        }
-    } // activate()
-
-    /**
-     * Creates "remember me" cookie
-     *
-     * @param string $username
-     * @param string $password
-     * @return void
-     */
-    public function login($username = "", $password = "", $google_id = ""): void
-    {
-        try {
-            $sql = "SELECT *
-                    FROM `{$this->table}`
-                    WHERE `name`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$username]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-            $exists = !empty($row);
-                
-            // check if username exists
-            if (!$exists) { // wrong username
-                throw new AprelendoException('Username and password combination is incorrect. Please try again.');
-            }
-
-            $user_id = $row['id'];
-            $hashedPassword = $row['password_hash'];
-
-            // check if user account is active
-            if ($row['is_active'] === false) {
-                throw new AprelendoException('You need to activate your account first. Check your email for the '
-                    . 'activation link.');
-            }
-            
-            if (password_verify($password, $hashedPassword) || $google_id !== "") { // login successful, remember me
-                $token = new Token($this->pdo, $user_id);
-                $token->add();
-            } else { // wrong password
-                throw new AprelendoException('Username and password combination is incorrect. Please try again.');
-            }
-        } catch (\Exception $e) {
-            throw new AprelendoException($e->getMessage());
-        } finally {
-            $stmt = null;
-        }
-    } // end login()
-    
-    /**
-     * Logout user
-     *
-     * @param boolean $deleted_account
-     * @return void
-     */
-    public function logout($deleted_account): void
-    {
-        $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;
-
-        if ($deleted_account || $this->isLoggedIn()) {
-            setcookie('user_token', '', time() - 3600, "/", $domain, true); // delete user_token cookie
-        }
-        
-        header('Location:/index.php');
-    } // end logout()
-        
-    /**
-     * Checks if user is logged
-     *
-     * @return boolean
-     */
-    public function isLoggedIn(): bool
-    {
-        $result = false;
-
-        try {
-            if (isset($_COOKIE['user_token'])) {
-                $token = $_COOKIE['user_token'];
-                
-                // get user id
-                $sql = "SELECT `user_id`
-                        FROM `auth_tokens`
-                        WHERE `token`=?";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([$token]);
-                $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-                
-                if (!$row) {
-                    $result = false;
-                }
-
-                // get username & other user data
-                $this->loadRecord($row['user_id']);
-
-                $result = true;
-            }
-        } catch (\PDOException $e) {
-            $result = false;
-        } finally {
-            $stmt = null;
-        }
-
-        return $result;
-    } // end isLoggedIn()
-
     /**
      * Updates user profile in db
      *
      * @param array $user_data
      * @return void
      */
-    public function updateUserProfile(array $user_data): void
+    public function updateProfile(array $user_data): void
     {
         $new_username = $user_data['new_username'];
         $new_email = $user_data['new_email'];
@@ -457,56 +171,54 @@ class User
         $new_native_lang = $user_data['new_native_lang'];
         $new_lang = $user_data['new_lang'];
 
-        try {
-            // check if $password is correct, without it user would not have the right priviliges to update his profile
-            $authorized = $this->checkPassword($password);
+        // check if $password is correct, without it user would not have the right priviliges to update his profile
+        $hashed_password = $this->password_hash;
+        $authorized = UserPassword::verify($password, $hashed_password);
 
-            if ($authorized) {
-                $user_id = $this->id;
-                
-                // check if user already exists
-                if ($this->name != $new_username && $this->existsByName($new_username)) {
-                    throw new AprelendoException('Username already exists. Please try again.');
-                }
-                
-                // check if email already exists
-                if ($this->email != $new_email && $this->existsByEmail($new_email)) {
-                    throw new AprelendoException('Email already exists. Please try using another one.');
-                }
-                
-                // was a new password given? In that case, save new password and replace the old one
-                if (empty($new_password)) {
-                    $sql = "UPDATE `{$this->table}`
-                            SET `name`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?
-                            WHERE `id`=?";
-                    $stmt = $this->pdo->prepare($sql);
-                    $stmt->execute([$new_username, $new_email, $new_native_lang, $new_lang, $user_id]);
-                } else {
-                    $new_password_hash = password_hash($new_password, PASSWORD_BCRYPT, ['cost' => 11]);
-                    $sql = "UPDATE `{$this->table}`
-                            SET `name`=?, `password_hash`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?
-                            WHERE `id`=?";
-                    $stmt = $this->pdo->prepare($sql);
-                    $stmt->execute([$new_username, $new_password_hash, $new_email, $new_native_lang, $new_lang,
-                        $user_id]);
-                }
-                
-                $this->name = $new_username;
-                $this->email = $new_email;
-                $this->native_lang = $new_native_lang;
-                $this->lang = $new_lang;
-                
-                // if new password was set, then create new rememberme cookie
-                if (!empty($new_password)) {
-                    $this->login($new_username, $new_password);
-                }
+        if ($authorized) {
+            $user_id = $this->id;
+            
+            // check if user already exists
+            if ($this->name != $new_username && $this->existsByName($new_username)) {
+                throw new UserException('Username already exists. Please try again.');
             }
-        } catch (\Exception $e) {
-            throw new AprelendoException($e->getMessage());
-        } finally {
-            $stmt = null;
+            
+            // check if email already exists
+            if ($this->email != $new_email && $this->existsByEmail($new_email)) {
+                throw new UserException('Email already exists. Please try using another one.');
+            }
+            
+            // was a new password given? In that case, save new password and replace the old one
+            if (empty($new_password)) {
+                $sql = "UPDATE `{$this->table}`
+                        SET `name`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?
+                        WHERE `id`=?";
+                $this->sqlExecute($sql, [$new_username, $new_email, $new_native_lang, $new_lang, $user_id]);
+            } else {
+                $new_password_hash = UserPassword::createHash($new_password);
+
+                $sql = "UPDATE `{$this->table}`
+                        SET `name`=?, `password_hash`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?
+                        WHERE `id`=?";
+                $this->sqlExecute($sql, [
+                    $new_username, $new_password_hash, $new_email, $new_native_lang,
+                    $new_lang, $user_id
+                ]);
+            }
+            
+            // TODO: remove this lines?
+            $this->name = $new_username;
+            $this->email = $new_email;
+            $this->native_lang = $new_native_lang;
+            $this->lang = $new_lang;
+            
+            // if new password was set, then create new rememberme cookie
+            if (!empty($new_password)) {
+                $user_auth = new UserAuth($this);
+                $user_auth->login($new_username, $new_password);
+            }
         }
-    } // updateUserProfile()
+    } // updateProfile()
 
     /**
      * Updates password hash in db
@@ -517,15 +229,8 @@ class User
      */
     public function updatePasswordHash(string $password_hash, string $email): void
     {
-        try {
-            $sql = "UPDATE `users` SET `password_hash`=? WHERE `email`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$password_hash, $email]);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error updating user record.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "UPDATE `users` SET `password_hash`=? WHERE `email`=?";
+        $this->sqlExecute($sql, [$password_hash, $email]);
     } // end updatePasswordHash()
 
     /**
@@ -537,17 +242,8 @@ class User
      */
     public function updateGoogleId(string $google_id, string $google_email): void
     {
-        try {
-            $sql = "UPDATE `users`
-                    SET `google_id`=?
-                    WHERE `email`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$google_id, $google_email]);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error updating user record.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "UPDATE `users` SET `google_id`=? WHERE `email`=?";
+        $this->sqlExecute($sql, [$google_id, $google_email]);
     } // end updateGoogleId()
 
     /**
@@ -557,53 +253,41 @@ class User
      */
     public function delete(): void
     {
-        if ($this->isLoggedIn()) {
-            $this->logout(true);
+        $user = new UserAuth($this);
+        
+        if ($user->isLoggedIn()) {
+            $user->logout(true);
         }
 
-        try {
-            // delete files uploaded by user
-            $table_names = array('texts', 'archived_texts');
-            
-            // delete epub or audio files uploaded by user
-            foreach ($table_names as $table) {
-                $user_id_col_name = 'user_id';
-                $source_uri_col_name = 'source_uri';
-                
-                $sql = "SELECT $source_uri_col_name
-                        FROM $table
-                        WHERE $user_id_col_name=?";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([$this->id]);
-                            
-                $filename = '';
-                $file_extensions = array('.epub', '.mp3', '.ogg');
-
-                while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-                    $filename = $row[$source_uri_col_name];
-                    if (in_array(substr($filename, -5), $file_extensions)) {
-                        $file = new File($filename);
-                        $file->delete();
-                    }
-                }
-            }
-            
-            // delete user from db
-            $sql = "DELETE FROM `{$this->table}`
-                    WHERE `id`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->id]);
-
-            if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('Oops! There was an unexpected problem trying to delete your account. '
-                . 'Please try again later.');
-            }
-        } catch (\Exception $e) {
-            throw new AprelendoException($e->getMessage());
-        } finally {
-            $stmt = null;
-        }
+        $this->deleteFiles();
+        
+        $sql = "DELETE FROM `{$this->table}` WHERE `id`=?";
+        $this->sqlExecute($sql, [$this->id]);
     } // end delete()
+
+    /**
+     * Delete user files
+     *
+     * @return void
+     */
+    private function deleteFiles(): void
+    {
+        $sql = "SELECT `source_uri` FROM `texts` WHERE `user_id`=?
+                UNION ALL
+                SELECT `source_uri` FROM `archived_texts` WHERE `user_id`=?";
+        $rows = $this->sqlFetchAll($sql, [$this->id]);
+                    
+        $filename = '';
+        $file_extensions = ['.epub', '.mp3', '.ogg'];
+
+        foreach ($rows as $row) {
+            $filename = $row['source_uri'];
+            if (in_array(substr($filename, -5), $file_extensions)) {
+                $file = new File($filename);
+                $file->delete();
+            }
+        }
+    } // end deleteFiles()
     
     /**
      * Update active language in db
@@ -613,29 +297,15 @@ class User
      */
     public function setActiveLang(int $lang_id): void
     {
-        try {
-            $sql = "SELECT `name`
-                    FROM `languages`
-                    WHERE `id`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$lang_id]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-            $lang_name = $row['name'];
-            $user_id = $this->id;
-            
-            $sql = "UPDATE `{$this->table}`
-                    SET `learning_lang_iso`=?
-                    WHERE `id`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$lang_name, $user_id]);
+        $lang = new Language($this->pdo, $this->id);
+        $lang->loadRecordById($lang_id);
+        $lang_name = $lang->name;
 
-            $this->lang_id = $lang_id;
-            $this->lang = $lang_name;
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error setting active language for user.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "UPDATE `{$this->table}` SET `learning_lang_iso`=? WHERE `id`=?";
+        $this->sqlExecute($sql, [$lang_name, $this->id]);
+
+        $this->lang_id = $lang_id;
+        $this->lang = $lang_name;
     } // end setActiveLang()
 
     /**
@@ -655,12 +325,12 @@ class User
             return true;
         }
         
-        $col_names = array(
-            array('texts', 'id', 'user_id'),
-            array('archived_texts', 'id', 'user_id'),
-            array('shared_texts', 'id', 'user_id'),
-            array('words', 'id', 'user_id')
-        );
+        $col_names = [
+            ['texts', 'id', 'user_id'],
+            ['archived_texts', 'id', 'user_id'],
+            ['shared_texts', 'id', 'user_id'],
+            ['words', 'id', 'user_id']
+        ];
 
         foreach ($col_names as $col_name) {
             if ($col_name[0] == $table) {
@@ -670,159 +340,7 @@ class User
             }
         }
 
-        try {
-            $sql = "SELECT COUNT(*)
-                    FROM `$table`
-                    WHERE `$id_col_name`=? AND `$user_id_col_name`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$id, $this->id]);
-            $num_rows = $stmt->fetchColumn();
-            
-            return (int)$num_rows > 0;
-        } catch (\PDOException $e) {
-            return false;
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT COUNT(*) FROM `$table` WHERE `$id_col_name`=? AND `$user_id_col_name`=?";
+        return $this->sqlCount($sql, [$id, $this->id]) > 0;
     } // end isAllowedToAccessElement()
-    
-    /**
-     * Check if $password = user password
-     *
-     * @param string $password
-     * @return boolean
-     */
-    private function checkPassword(string $password): bool
-    {
-        try {
-            $user_id = $this->id;
-
-            $sql = "SELECT `password_hash`
-                    FROM `{$this->table}`
-                    WHERE `id`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$user_id]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-            $hashedPassword = $row['password_hash'];
-            if (password_verify($password, $hashedPassword)) {
-                return true;
-            } else {
-                throw new AprelendoException('Username and password combination are incorrect. Please try again.');
-            }
-        } catch (\Exception $e) {
-            throw new AprelendoException($e->getMessage());
-        } finally {
-            $stmt = null;
-        }
-    } // end checkPassword()
-
-
-    /**
-     * Get the value of id
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * Get the value of name
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * Get the value of password_hash
-     * @return string
-     */
-    public function getPasswordHash(): string
-    {
-        return $this->password_hash;
-    }
-
-    /**
-     * Get the value of email
-     * @return string
-     */
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    /**
-     * Get the value of lang
-     * @return string
-     */
-    public function getLang(): string
-    {
-        return $this->lang;
-    }
-
-    /**
-     * Get the value of lang_id
-     * @return int
-     */
-    public function getLangId(): int
-    {
-        return $this->lang_id;
-    }
-
-    /**
-     * Get the value of native_lang
-     * @return string
-     */
-    public function getNativeLang(): string
-    {
-        return $this->native_lang;
-    }
-
-    /**
-     * Get the value of time_zone
-     * @return string
-     */
-    public function getTimeZone(): string
-    {
-        return $this->time_zone;
-    }
-
-    /**
-     * Get the value of activation_hash
-     * @return string
-     */
-    public function getActivationHash(): string
-    {
-        return $this->activation_hash;
-    }
-
-    /**
-     * Get the value of is_active
-     * @return bool
-     */
-    public function getIsActive(): bool
-    {
-        return $this->is_active;
-    }
-
-    /**
-     * Get the value of google_id
-     * @return string
-     */
-    public function getGoogleId(): string
-    {
-        return $this->google_id;
-    }
-
-    /**
-     * Get the value of error_msg
-     * @return string
-     */
-    public function getErrorMsg(): string
-    {
-        return $this->error_msg;
-    }
-
 }

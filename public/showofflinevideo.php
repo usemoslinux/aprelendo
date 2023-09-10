@@ -31,10 +31,10 @@ try {
     //     exit;
     // }
     
-    $reader = new Reader($pdo, $user->getId(), $user->getLangId());
-    $prefs = $reader->getPrefs();
+    $reader = new Reader($pdo, $user->id, $user->lang_id);
+    $prefs = $reader->prefs;
 
-    switch ($prefs->getDisplayMode()) {
+    switch ($prefs->display_mode) {
         case 'light':
         $body_css = "class='lightmode'";
         break;
@@ -47,9 +47,9 @@ try {
         default:
         break;
     }
-    $font_family = $prefs->getFontFamily();
-    $font_size = $prefs->getFontSize();
-    $text_align = $prefs->getTextAlignment();
+    $font_family = $prefs->font_family;
+    $font_size = $prefs->font_size;
+    $text_align = $prefs->text_alignment;
     
     $body_css .= ' style="font-family:' . $font_family . ';font-size:' . $font_size . ';text-align:'
         . $text_align . ';position:fixed;width:100%;';
@@ -78,9 +78,9 @@ require_once PUBLIC_PATH . 'head.php';
             require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
         ?>
 
-        <script defer src="js/underlinewords.min.js"></script>
-        <script defer src="js/showofflinevideo.min.js"></script>
-        <script defer src="js/dictionary.min.js"></script>
-        <script defer src="js/subtitles-parser/subtitles.parser.min.js"></script>
+        <script defer src="/js/underlinewords.min.js"></script>
+        <script defer src="/js/showofflinevideo.min.js"></script>
+        <script defer src="/js/dictionary.min.js"></script>
+        <script defer src="/js/subtitles-parser/subtitles.parser.min.js"></script>
     </body>
 </html>

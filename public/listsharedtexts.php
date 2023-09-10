@@ -33,7 +33,7 @@ $page = 1;
 $limit = 10; // number of rows per page
 $adjacents = 2; // adjacent page numbers
 
-$sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
+$sort_by = !empty($_GET['o']) ? $_GET['o'] : 0;
 
 $html = ''; // HTML output to print
 
@@ -42,35 +42,33 @@ $html = ''; // HTML output to print
 
 // initialize pagination variables
 if (isset($_GET['p'])) {
-    $page = isset($_GET['p']) && $_GET['p'] != '' ? $_GET['p'] : 1;
+    $page = !empty($_GET['p']) ? $_GET['p'] : 1;
 }
 
-$search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';
+$search_text = !empty($_GET['s']) ? $_GET['s'] : '';
 
 $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
 
 $total_rows = $texts_table->countSearchRows($filter_type, $filter_level, $search_text);
 $pagination = new Pagination($total_rows, $page, $limit, $adjacents);
-$offset = $pagination->getOffset();
+$offset = $pagination->offset;
 
-try {
-    // get search result
-    $search_params = new SearchTextsParameters($filter_type, $filter_level, $search_text, $offset, $limit, $sort_by);
-    $rows = $texts_table->search($search_params);
+// get search result
+$search_params = new SearchTextsParameters($filter_type, $filter_level, $search_text, $offset, $limit, $sort_by);
+$rows = $texts_table->search($search_params);
 
-    // print table
-    if ($rows) {
-        // if there are any results, show them
-        $table = new SharedTextTable($rows);
-        $html = $table->print($sort_by);
-        // print pagination
-        $url_query_options = compact("search_text", "sort_by", "filter_type", "filter_level");
-        $page_url = new Url('sharedtexts', $url_query_options);
-        $html .= $pagination->print($page_url);
-    }
-} catch (\Exception $e) {
+// print table
+if ($rows) {
+    // if there are any results, show them
+    $table = new SharedTextTable($rows);
+    $html = $table->print($sort_by);
+    // print pagination
+    $url_query_options = compact("search_text", "sort_by", "filter_type", "filter_level");
+    $page_url = new Url('sharedtexts', $url_query_options);
+    $html .= $pagination->print($page_url);
+} else {
     // if there are no texts to show, print a message
-    if (isset($_GET) && !empty($_GET)) {
+    if (!empty($_GET)) {
         $html = '<div class="alert alert-info" role="alert">No shared texts found with that criteria. Try again.</div>';
     } else {
         $html = '<div class="alert alert-info" role="alert">There are still no shared texts for this language. '
@@ -81,5 +79,5 @@ try {
 echo $html;
 ?>
 
-<script defer src="js/listtexts.min.js"></script>
-<script defer src="js/likes.min.js"></script>
+<script defer src="/js/listtexts.min.js"></script>
+<script defer src="/js/likes.min.js"></script>

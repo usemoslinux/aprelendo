@@ -21,11 +21,13 @@
 require_once '../includes/dbinit.php';
 
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\UserAuth;
 
 $user = new User($pdo);
+$user_auth = new UserAuth($user);
 
 // if user is already logged in, go to "My Texts" section
-if ($user->isLoggedIn()) {
+if ($user_auth->isLoggedIn()) {
     header('Location:texts');
     exit;
 }

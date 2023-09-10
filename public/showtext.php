@@ -23,11 +23,11 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in
 
 use Aprelendo\Includes\Classes\Reader;
 use Aprelendo\Includes\Classes\Likes;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
     $html = '';
-    if (isset($_GET['id']) && !empty($_GET['id'])) {
+    if (!empty($_GET['id'])) {
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
 
         $text_id = (int)$_GET['id'];
@@ -38,11 +38,11 @@ try {
             exit;
         }
 
-        $reader = new Reader($pdo, $is_shared, $text_id, $user->getId(), $user->getLangId());
-        $is_long_text = $reader->getIsLongText();
-        $prefs = $reader->getPrefs();
+        $reader = new Reader($pdo, $user->id, $user->lang_id, $text_id, $is_shared);
+        $is_long_text = $reader->is_long_text;
+        $prefs = $reader->prefs;
 
-        switch ($prefs->getDisplayMode()) {
+        switch ($prefs->display_mode) {
             case 'light':
                 $html = "class='lightmode'";
                 break;
@@ -55,18 +55,18 @@ try {
             default:
                 break;
         }
-        $font_family = $prefs->getFontFamily();
-        $font_size = $prefs->getFontSize();
-        $text_align = $prefs->getTextAlignment();
-        $assisted_learning = $prefs->getAssistedLearning();
+        $font_family = $prefs->font_family;
+        $font_size = $prefs->font_size;
+        $text_align = $prefs->text_alignment;
+        $assisted_learning = $prefs->assisted_learning;
 
-        $likes = new Likes($pdo, $text_id, $user->getId(), $user->getLangId());
-        $user_liked_class = $likes->userLiked($user->getId(), $text_id) ? 'fas' : 'far';
+        $likes = new Likes($pdo, $text_id, $user->id, $user->lang_id);
+        $user_liked_class = $likes->userLiked($user->id, $text_id) ? 'fas' : 'far';
         $nr_of_likes = $likes->get($text_id);
         
         $html .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
-        throw new AprelendoException('Error fetching this text.');
+        throw new UserException('Error fetching this text.');
     }
 } catch (Exception $e) {
     header('Location:/login');
@@ -132,9 +132,9 @@ require_once PUBLIC_PATH . 'head.php';
         require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
     ?>
 
-    <script defer src="js/underlinewords.min.js"></script>
-    <script defer src="js/showtext.min.js"></script>
-    <script defer src="js/likes.min.js"></script>
+    <script defer src="/js/underlinewords.min.js"></script>
+    <script defer src="/js/showtext.min.js"></script>
+    <script defer src="/js/likes.min.js"></script>
 </body>
 
 </html>

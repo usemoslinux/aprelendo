@@ -23,7 +23,8 @@ namespace Aprelendo\Includes\Classes;
 
 class WordStats extends DBEntity
 {
-    protected $lang_id = 0;
+    protected int $user_id = 0;
+    protected int $lang_id = 0;
 
     /**
      * Constructor
@@ -34,8 +35,9 @@ class WordStats extends DBEntity
      */
     public function __construct(\PDO $pdo, int $user_id, int $lang_id)
     {
-        parent::__construct($pdo, $user_id);
+        parent::__construct($pdo);
         $this->table = 'words';
+        $this->user_id = $user_id;
         $this->lang_id = $lang_id;
     } // end __construct()
 
@@ -46,21 +48,12 @@ class WordStats extends DBEntity
      */
     public function getReviewedToday(): int
     {
-        try {
-            $sql = "SELECT COUNT(word) AS `reviewed_today`
-                    FROM `{$this->table}`
-                    WHERE `user_id`=? AND `lang_id`=? AND `status` < 3
-                    AND `date_modified` > CURRENT_DATE()";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $sql = "SELECT COUNT(word) AS `reviewed_today`
+                FROM `{$this->table}`
+                WHERE `user_id`=? AND `lang_id`=? AND `status` < 3
+                AND `date_modified` > CURRENT_DATE()";
 
-            return $row ? $row['reviewed_today'] : 0;
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error getting number of words reviewed by user.');
-        } finally {
-            $stmt = null;
-        }
+        return $this->sqlCount($sql, [$this->user_id, $this->lang_id]);
     } // end get()
 
     /**
@@ -70,18 +63,11 @@ class WordStats extends DBEntity
      */
     public function getTotals(): array
     {
-        try {
-            $sql = "SELECT COUNT(*) as count
-                FROM `{$this->table}`
-                WHERE `user_id`=? AND `lang_id`=?
-                GROUP BY `status`";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id]);
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error getting word stats grouped by status.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT COUNT(*) as count
+            FROM `{$this->table}`
+            WHERE `user_id`=? AND `lang_id`=?
+            GROUP BY `status`";
+
+        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
     } // end getTotals()
 }

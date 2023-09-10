@@ -21,28 +21,28 @@
 require_once '../includes/dbinit.php';  // connect to database
 
 $curpage = basename($_SERVER['PHP_SELF'], '.php'); // returns the current file Name
-$show_pages = array('showtext', 'showvideo', 'showebook', 'showofflinevideo');
+$show_pages = ['showtext', 'showvideo', 'showebook', 'showofflinevideo'];
 
 // these are the same pages that use simpleheader.php instead of header.php
-$no_login_required_pages = array('index', 'register', 'login', 'accountactivation',
-                                 'aboutus', 'privacy', 'attributions', 'extensions', 'contact',
-                                 'totalreading', 'compatibledics', 'error', 'forgotpassword',
-                                 'donate');
+$no_login_required_pages = [
+    'index', 'register', 'login', 'accountactivation', 'aboutus', 'privacy', 'attributions', 'extensions', 'contact',
+    'totalreading', 'compatibledics', 'error', 'forgotpassword', 'donate'
+];
 
 $use_google_login = false;
 
 // check if login is required to access page
 if (!in_array($curpage, $no_login_required_pages)) {
     require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in and set $user object
-    $google_id = $user->getGoogleId();
-    $use_google_login = isset($google_id) && !empty($google_id);
+    $google_id = $user->google_id;
+    $use_google_login = !empty($google_id);
 }
 
 // check if user is allowed to view this page
 $this_is_show_page = in_array($curpage, $show_pages);
 
 if ($this_is_show_page) {
-    $doclang = $user->getLang();
+    $doclang = $user->lang;
 
     $table = isset($_GET['sh']) && $_GET['sh'] != 0 ? 'shared_texts' : 'texts';
     

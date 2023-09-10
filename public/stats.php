@@ -113,14 +113,14 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
         <hr>
         <?php
             // get today's statistics
-            $stats = new WordStats($pdo, $user->getId(), $user->getLangId());
+            $stats = new WordStats($pdo, $user->id, $user->lang_id);
             $nr_of_words_reviewed_today = $stats->getReviewedToday();
             $today_is_streak = ($nr_of_words_reviewed_today >= 10);
 
             // get streak days
-            $daily_goal = new WordDailyGoal($pdo, $user->getId(),
-                $user->getLangId(), $user->getTimeZone(), $today_is_streak);
-            $daily_goal_streak_days = $daily_goal->getDaysStreak();
+            $daily_goal = new WordDailyGoal($pdo, $user->id,
+                $user->lang_id, $user->time_zone, $today_is_streak);
+            $daily_goal_streak_days = $daily_goal->days_streak;
         ?>
         <section>
             <dl class="row">
@@ -138,7 +138,7 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
                 </dt>
                 <dd class="col-md-10">
                     <p>Behold the count of successive days you conquered the challenge of
-                        reviewing <?php echo $daily_goal->getDailyGoal() ?> words daily.</p>
+                        reviewing <?php echo $daily_goal->daily_goal; ?> words daily.</p>
                     <p>Streaks possess formidable power in repetition. With each accomplished action, they bestow
                         rewards, increasing the odds of your unwavering commitment. In due time, this fresh routine
                         shall metamorphose into an indomitable habit.</p>
@@ -214,7 +214,7 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
             </dl>
         </section>
         <?php
-        $achievements = new Achievements($pdo, $user->getId(), $user->getLangId(), $user->getTimeZone());
+        $achievements = new Achievements($pdo, $user->id, $user->lang_id, $user->time_zone);
         $badges = $achievements->checkSaved();
         $total_nr_of_badges = count($badges);
         
@@ -261,6 +261,6 @@ use Aprelendo\Includes\Classes\WordDailyGoal;
         ?>
     </main>
 </div>
-<script defer src="js/stats.min.js"></script>
+<script defer src="/js/stats.min.js"></script>
 
 <?php require_once 'footer.php'; ?>

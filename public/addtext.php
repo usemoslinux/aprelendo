@@ -45,13 +45,13 @@ use Aprelendo\Includes\Classes\Texts;
                 // modify text
                 $id = $_GET['id'];
                 
-                $text = new Texts($pdo, $user->getId(), $user->getLangId());
+                $text = new Texts($pdo, $user->id, $user->lang_id);
                 $text->loadRecord($id);
                 
-                $art_title = $text->getTitle();
-                $art_author = $text->getAuthor();
-                $art_url = $text->getSourceUri();
-                $art_content = $text->getText();
+                $art_title = $text->title;
+                $art_author = $text->author;
+                $art_url = $text->source_uri;
+                $art_content = $text->text;
             } elseif (isset($_POST['art_title'])) {
                 // rss
                 $art_title = $_POST['art_title'];
@@ -166,6 +166,8 @@ use Aprelendo\Includes\Classes\Texts;
     integrity="sha384-YqVytsOEvlLnJ+cNHmbexthfaZ482cPdQ+GQuIZngy2l0P+HIKE7wpmcUC6Ni5iw"
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
-<script defer src="js/addtext.min.js"></script>
+<script defer src="/js/addtext.min.js"></script>
+<script defer src="/js/helpers.min.js"></script>
+
 
 <?php require_once 'footer.php'?>

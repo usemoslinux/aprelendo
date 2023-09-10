@@ -23,12 +23,12 @@ namespace Aprelendo\Includes\Classes;
 use Aprelendo\Includes\Classes\DBEntity;
 use Aprelendo\Includes\Classes\Gems;
 use Aprelendo\Includes\Classes\Words;
-use Aprelendo\Includes\Classes\AprelendoException;
 
 class Achievements extends DBEntity
 {
-    private $lang_id = 0;
-    private $time_zone = '';
+    private int $user_id = 0;
+    private int $lang_id = 0;
+    private string $time_zone = '';
     
     /**
     * Constructor
@@ -39,7 +39,9 @@ class Achievements extends DBEntity
     */
     public function __construct(\PDO $pdo, int $user_id, int $lang_id, string $time_zone)
     {
-        parent::__construct($pdo, $user_id);
+        parent::__construct($pdo);
+        $this->table = 'user_achievements';
+        $this->user_id = $user_id;
         $this->lang_id = $lang_id;
         $this->time_zone = $time_zone;
     } // end __construct()
@@ -53,8 +55,8 @@ class Achievements extends DBEntity
     {
         // count gems & streak days
         $gems = new Gems($this->pdo, $this->user_id, $this->lang_id, $this->time_zone);
-        $nr_of_gems  = (int)$gems->getGems();
-        $streak_days = (int)$gems->getDaysStreak();
+        $nr_of_gems  = (int)$gems->gems;
+        $streak_days = (int)$gems->days_streak;
         
         // count words in user's vocabulary list for this particular language
         $words = new Words($this->pdo, $this->user_id, $this->lang_id);
@@ -108,17 +110,10 @@ class Achievements extends DBEntity
      */
     public function saveUnannounced(?array $achievements): void
     {
-        try {
-            foreach ($achievements as $achievement) {
-                $sql = "INSERT INTO `user_achievements` (`user_id`, `lang_id`, `achievement_id`)
-                    VALUES (?, ?, ?); ";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([$this->user_id, $this->lang_id, $achievement['id']]);
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error inserting new record in user achievements table.');
-        } finally {
-            $stmt = null;
+        foreach ($achievements as $achievement) {
+            $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `achievement_id`)
+                VALUES (?, ?, ?); ";
+            $this->sqlExecute($sql, [$this->user_id, $this->lang_id, $achievement['id']]);
         }
     } // end saveUnannounced()
 
@@ -127,24 +122,16 @@ class Achievements extends DBEntity
      *
      * @return array|null
      */
-    public function checkSaved(): ?array {
-        try {
-            // get user achievements already saved in db
-            $sql = "SELECT ua.id, ua.user_id, ua.lang_id, ua.achievement_id, ua.date_created, a.description, a.img_uri
-                    FROM `user_achievements` ua
-                    LEFT JOIN `achievements` a
-                    ON ua.achievement_id = a.id
-                    WHERE ua.user_id = ? AND ua.lang_id = ?
-                    ORDER BY ua.achievement_id ASC";
+    public function checkSaved(): ?array
+    {
+        $sql = "SELECT ua.id, ua.user_id, ua.lang_id, ua.achievement_id, ua.date_created, a.description, a.img_uri
+                FROM `{$this->table}` ua
+                LEFT JOIN `achievements` a
+                ON ua.achievement_id = a.id
+                WHERE ua.user_id = ? AND ua.lang_id = ?
+                ORDER BY ua.achievement_id ASC";
 
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id]);
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error getting record in user achievements table.');
-        } finally {
-            $stmt = null;
-        }
+        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
     } // end checkSaved()
 
     /**
@@ -160,8 +147,7 @@ class Achievements extends DBEntity
                 FROM `achievements`
                 WHERE `type_id`=? AND `threshold`<=?
                 ORDER BY `threshold` ASC";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$type_id, $threshold]);
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $this->sqlFetchAll($sql, [$type_id, $threshold]);
     }
 } // end checkByType()

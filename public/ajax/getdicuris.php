@@ -19,19 +19,20 @@
 */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
-    $lang = new Language($pdo, $user->getId());
-    $lang->loadRecord($user->getLangId());
+    $lang = new Language($pdo, $user->id);
+    $lang->loadRecordById($user->lang_id);
 
-    $result['dictionary_uri'] = $lang->getDictionaryUri();
-    $result['translator_uri'] = $lang->getTranslatorUri();
+    $result['dictionary_uri'] = $lang->dictionary_uri;
+    $result['translator_uri'] = $lang->translator_uri;
 
     echo json_encode($result);
-} catch (\Exception $e) {
-    $result['error_msg'] = $e->getMessage();
-    echo json_encode($result);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

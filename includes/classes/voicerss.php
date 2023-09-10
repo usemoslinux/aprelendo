@@ -21,7 +21,7 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Curl;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 class VoiceRSS
 {
@@ -46,16 +46,16 @@ class VoiceRSS
     private function validate($settings): void
     {
         if (!isset($settings) || empty($settings)) {
-            throw new AprelendoException('The settings are undefined');
+            throw new UserException('The settings are undefined');
         }
         if (!isset($settings['key']) || empty($settings['key'])) {
-            throw new AprelendoException('The API key is undefined');
+            throw new UserException('The API key is undefined');
         }
         if (!isset($settings['src']) || empty($settings['src'])) {
-            throw new AprelendoException('The text is undefined');
+            throw new UserException('The text is undefined');
         }
         if (!isset($settings['hl']) || empty($settings['hl'])) {
-            throw new AprelendoException('The language is undefined');
+            throw new UserException('The language is undefined');
         }
     } // end validate()
 
@@ -69,20 +69,21 @@ class VoiceRSS
     {
         $url = ((isset($settings['ssl']) && $settings['ssl']) ? 'https' : 'http') . '://api.voicerss.org/';
         
-        $curl_options = array(CURLOPT_RETURNTRANSFER => 1,
-                              CURLOPT_HTTPHEADER => array('Content-Type: application/x-www-form-urlencoded; '
-                                . 'charset=UTF-8; Expect: 100-continue'),
-                              CURLOPT_POST => 1,
-                              CURLOPT_POSTFIELDS => $this->buildRequest($settings)
-                             );
+        $curl_options = [
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded; '
+                . 'charset=UTF-8; Expect: 100-continue'],
+            CURLOPT_POST => 1,
+            CURLOPT_POSTFIELDS => $this->buildRequest($settings)
+        ];
 
         $resp = Curl::getUrlContents($url, $curl_options);
         $is_error = strpos($resp, 'ERROR') === 0;
         
-        return array(
+        return [
             'error' => ($is_error) ? $resp : null,
             'response' => (!$is_error) ? $resp: null
-        );
+        ];
     } // end request()
 
     /**
@@ -93,15 +94,17 @@ class VoiceRSS
      */
     private function buildRequest(array $settings): string
     {
-        return http_build_query(array(
-            'key' => isset($settings['key']) ? $settings['key'] : '',
-            'src' => isset($settings['src']) ? $settings['src'] : '',
-            'hl' => isset($settings['hl']) ? $settings['hl'] : '',
-            'r' => isset($settings['r']) ? $settings['r'] : '',
-            'c' => isset($settings['c']) ? $settings['c'] : '',
-            'f' => isset($settings['f']) ? $settings['f'] : '',
-            'ssml' => isset($settings['ssml']) ? $settings['ssml'] : '',
-            'b64' => isset($settings['b64']) ? $settings['b64'] : ''
-        ));
+        return http_build_query(
+            [
+                'key' => $settings['key'] ?? '',
+                'src' => $settings['src'] ?? '',
+                'hl' => $settings['hl'] ?? '',
+                'r' => $settings['r'] ?? '',
+                'c' => $settings['c'] ?? '',
+                'f' => $settings['f'] ?? '',
+                'ssml' => $settings['ssml'] ?? '',
+                'b64' => $settings['b64'] ?? ''
+            ]
+        );
     } // end buildRequest()
 }

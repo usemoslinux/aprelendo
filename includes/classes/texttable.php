@@ -32,13 +32,14 @@ class TextTable extends Table
      * @param array $rows
      * @param boolean $show_archived
      */
-    public function __construct(array $rows, bool $show_archived) {
-        $this->headings = array('Title');
-        $this->col_widths = array('33px', '');
+    public function __construct(array $rows, bool $show_archived)
+    {
+        $this->headings = ['Title'];
+        $this->col_widths = ['33px', ''];
         $this->action_menu = $show_archived
-            ? array('mArchive' => 'Unarchive', 'mDelete' => 'Delete')
-            : array('mArchive' => 'Archive', 'mDelete' => 'Delete');
-        $this->sort_menu = array('mSortByNew' => 'New first', 'mSortByOld' => 'Old first');
+            ? ['mArchive' => 'Unarchive', 'mDelete' => 'Delete']
+            : ['mArchive' => 'Archive', 'mDelete' => 'Delete'];
+        $this->sort_menu = ['mSortByNew' => 'New first', 'mSortByOld' => 'Old first'];
         $this->rows = $rows;
         $this->has_chkbox = true;
         $this->is_shared = false;
@@ -50,7 +51,8 @@ class TextTable extends Table
      *
      * @return string
      */
-    protected function printContent(): string {
+    protected function printContent(): string
+    {
         $html = '';
     
         foreach ($this->rows as $row) {
@@ -66,7 +68,8 @@ class TextTable extends Table
      * @param array $row
      * @return string
      */
-    private function generateTableRow(array $row): string {
+    private function generateTableRow(array $row): string
+    {
         $type_icon = $this->generateTypeIcon($row);
         $audio_icon = $this->generateAudioIcon($row);
         $link = $this->generateLink($row);
@@ -91,7 +94,8 @@ class TextTable extends Table
      * @param array $row
      * @return string
      */
-    private function generateAudioIcon(array $row): string {
+    private function generateAudioIcon(array $row): string
+    {
         $has_audio = $this->hasAudio($row);
         return $has_audio ? '<span title="Has audio" class="fa-solid fa-headphones"></span>' : '';
     } // end generateAudioIcon()
@@ -102,13 +106,12 @@ class TextTable extends Table
      * @param array $row
      * @return boolean
      */
-    private function hasAudio(array $row): bool {
-        return
-            !empty($row['audio_uri']) ||
-            (
-                $row['char_length'] < Reader::MAX_TEXT_LENGTH + 1 &&
-                ($row['type'] < 5 || $row['type'] > 6)
-            );
+    private function hasAudio(array $row): bool
+    {
+        $adequate_text_length = $row['char_length'] < Reader::MAX_TEXT_LENGTH + 1;
+        $not_video_or_ebook = $row['type'] < 5 || $row['type'] > 6;
+
+        return !empty($row['audio_uri']) || ($adequate_text_length && $not_video_or_ebook);
     } // end hasAudio()
     
     /**
@@ -121,7 +124,7 @@ class TextTable extends Table
     {
         $title = $row['title'];
         $link_html = '';
-        if ($row['type'] && !empty($row['type'])) {
+        if (!empty($row['type'])) {
             switch ($row['type']) {
                 case 5:
                     $link_url = 'showvideo?id=' . $row['id'];
@@ -152,7 +155,7 @@ class TextTable extends Table
      */
     private function formatWordCount(array $row): string
     {
-        return isset($row['word_count']) && !empty($row['word_count'])
+        return !empty($row['word_count'])
             ? ' - ' . number_format($row['word_count']) . ' words'
             : '';
     } // end formatWordCount()
@@ -167,8 +170,8 @@ class TextTable extends Table
     {
         $levels = ['Beginner', 'Intermediate', 'Advanced'];
 
-        return isset($row['level']) && !empty($row['level'])
-            ? ' - ' . $levels[$row['level'] - 1] . '"'
+        return !empty($row['level'])
+            ? ' - ' . $levels[$row['level'] - 1]
             : '';
     } // end formatTextLevel()
     
@@ -188,7 +191,7 @@ class TextTable extends Table
                 . 'chkbox-selrow" type="checkbox" aria-label="Select row" data-idText="' . $text_id . '">'
                 . '<label class="form-check-label" for="row-' . $text_id . '"></label></div></td>';
         } else {
-            $total_likes = isset($this->rows['total_likes']) ? $this->rows['total_likes'] : 0;
+            $total_likes = $row['total_likes'] ?? 0;
             $user_liked = $row['user_liked'] ? 'fas' : 'far';
     
             return '<tr><td class="text-center"><span title="Like"><span class="' . $user_liked . ' fa-heart" '
@@ -202,7 +205,8 @@ class TextTable extends Table
      * @param array $row
      * @return string
      */
-    private function generateTypeIcon(array $row): string {
+    private function generateTypeIcon(array $row): string
+    {
         $type_icons = [
             'Article' => '<span title="Article" class="far fa-newspaper"></span>',
             'Conversation' => '<span title="Conversation" class="far fa-comments"></span>',
@@ -227,14 +231,14 @@ class TextTable extends Table
     private function formatTextAuthor(array $row): string
     {
         $shared_by = '';
-        if (isset($row[1]) && !empty($row[1])) {
+        if (!empty($row[1])) {
             $shared_by = " via {$row[1]}";
         }
     
-        if (isset($row['author']) && !empty($row['author'])) {
+        if (!empty($row['author'])) {
             $text_author = "by {$row['author']}";
         } else {
-            $source_uri = isset($row['source_uri']) && !empty($row['source_uri'])
+            $source_uri = !empty($row['source_uri'])
                 ? ' (' . Url::getDomainName($row['source_uri']) . ')'
                 : '';
             $text_author = "by Unknown{$source_uri}";
@@ -251,6 +255,6 @@ class TextTable extends Table
      */
     private function formatSharedBy(array $row): string
     {
-        return isset($row[1]) && !empty($row[1]) ? " via {$row[1]}" : '';
+        return !empty($row[1]) ? " via {$row[1]}" : '';
     } // end formatSharedBy()
 }

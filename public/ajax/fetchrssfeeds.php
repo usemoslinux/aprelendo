@@ -19,13 +19,14 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Includes\Classes\RSSFeeds;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
-$user_id = $user->getId(); // get current user's ID
-$lang_id = $user->getLangId(); // get current language's ID
+$user_id = $user->id; // get current user's ID
+$lang_id = $user->lang_id; // get current language's ID
 
 try {
     $rssfeeds = new RSSFeeds($pdo, $user_id, $lang_id);
@@ -43,11 +44,11 @@ try {
         echo $html . '</div>';
     } else {
         // If all feeds are empty, throw exception with message
-        throw new AprelendoException('There are no RSS feeds to show. Please, add some in the <a class="alert-link" '
+        throw new UserException('There are no RSS feeds to show. Please, add some in the <a class="alert-link" '
             . 'href="/languages.php">languages</a> section. You can add up to 3 feeds per language.');
     }
-} catch (Exception $e) {
-    echo '<div class="alert alert-danger">' . $e->getMessage() . '</div>';
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }
 
 /**
@@ -60,10 +61,10 @@ try {
 function printRSSFeed($feed, $groupindex): string
 {
     // Get feed's title and articles
-    $feed_title = $feed->getTitle();
-    $feed_articles = $feed->getArticles();
+    $feed_title = $feed->title;
+    $feed_articles = $feed->articles;
 
-    if (isset($feed_title) && !empty($feed_title)) {
+    if (!empty($feed_title)) {
         // Initialize variables for accordion
         $accordion_id = 'accordion-' . $groupindex;
         $heading_id = 'heading-' . $groupindex;
@@ -82,7 +83,7 @@ function printRSSFeed($feed, $groupindex): string
             . "<div class='accordion-body'>"
             . "<div id='$accordion_id' class='accordion'>";
 
-        if (isset($feed_articles) && !empty($feed_articles)) {
+        if (!empty($feed_articles)) {
             $itemindex = 1; // initialize counter for accordion items
             foreach ($feed_articles as $article) {
                 // Get article data
@@ -129,8 +130,8 @@ function printRSSFeed($feed, $groupindex): string
         }
         $html .= '</div></div></div></div>';
     } else {
-        throw new AprelendoException("Oops! There was an error trying to fetch this feed:"
-            . $feed->getUrl()
+        throw new UserException("Oops! There was an error trying to fetch this feed:"
+            . $feed->url
             . "\nIt is probably due to a malformed RSS feed.");
     }
     return $html;

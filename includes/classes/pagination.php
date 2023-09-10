@@ -25,14 +25,12 @@ use Aprelendo\Includes\Classes\Url;
 
 class Pagination
 {
-    private $limit        = 0; // number of rows per page
     private $adjacents    = 0; // adjacent page numbers
-    private $total_rows   = 0; // total number of rows
     private $total_pages  = 0; // total number of pages
     private $page         = 0; // current page
-    private $offset       = 0; // offset used to retrieve rows
     private $start        = 0; // beginning of range
     private $end          = 0; // end of range
+    public $offset        = 0; // offset used to retrieve rows
 
     /**
      * Constructor
@@ -44,12 +42,10 @@ class Pagination
      */
     public function __construct(int $total_rows, int $page = 1, int $limit = 10, int $adjacents = 2)
     {
-        $this->limit = $limit;
         $this->adjacents = $adjacents;
-        $this->total_rows = $total_rows;
         $this->total_pages = ceil($total_rows / $limit);
 
-        if (isset($page) && $page != '') {
+        if (!empty($page)) {
             $this->page = $page;
             $this->offset = ($page - 1) * $limit;
         }
@@ -205,15 +201,5 @@ class Pagination
      */
     private function createPaginationFooter(): string {
         return "</ul></div></nav>";
-    }
-
-
-    /**
-     * Get the value of offset
-     * @return int
-     */
-    public function getOffset(): int
-    {
-        return $this->offset;
     }
 }

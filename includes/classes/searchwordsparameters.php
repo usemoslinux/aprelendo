@@ -59,16 +59,10 @@ class SearchWordsParameters extends SearchParameters
             case '3': // learning first
                 $result = '`status` DESC';
                 break;
-            case '4': // more frequent first (smaller creation date - modification date)
-                $result = '`frequency`';
-                break;
-            case '5': // less frequent first (higher creation date - modification date)
-                $result = '`frequency` DESC';
-                break;
-            case '6': // words first
+            case '10': // words first
                 $result = '`is_phrase` DESC';
                 break;
-            case '7': // phrases first
+            case '11': // phrases first
                 $result = '`is_phrase`';
                 break;
             default:

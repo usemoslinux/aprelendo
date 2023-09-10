@@ -19,9 +19,7 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
-
-use Aprelendo\Includes\Classes\AprelendoException;
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -33,11 +31,13 @@ use Aprelendo\Includes\Classes\SharedTexts;
 use Aprelendo\Includes\Classes\EbookFile;
 use Aprelendo\Includes\Classes\LogFileUploads;
 use Aprelendo\Includes\Classes\Gems;
-
-$user_id = $user->getId();
-$lang_id = $user->getLangId();
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
+    $user_id = $user->id;
+    $lang_id = $user->lang_id;
+
     $text_added_successfully = false;
     switch ($_POST['mode']) {
         case 'simple':
@@ -48,7 +48,7 @@ try {
             $source_uri = $_POST['url'];
             $text = $_POST['text'];
             $type = $_POST['type'];
-            $level = isset($_POST['level']) ? $_POST['level'] : 0;
+            $level = isset($_POST['level']) ? $_POST['level'] : 2;  // default to 2 (intermediate) if not set
             $is_shared = $_POST['mode'] == 'video' || isset($_POST['shared-text']) ? true : false;
             $audio_uri = '';
             $errors = [];
@@ -91,9 +91,8 @@ try {
                             : 'Look for it in your <a class="alert-link" href="/texts">private library</a>. '
                             . 'Remember that you may have <a class="alert-link" href="/texts?sa=1">archived</a> it.';
 
-                        throw new AprelendoException($msg);
+                        throw new UserException($msg);
                     }
-                    $level = $level == 0 ? $texts_table->calculateDifficulty($text) : $level;
                     $texts_table->add($title, $author, $text, $source_uri, $audio_uri, $type, $level);
                     $text_added_successfully = true;
                 }
@@ -102,7 +101,7 @@ try {
                 http_response_code(204);
             } else {
                 $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
-                throw new AprelendoException($error_str);
+                throw new UserException($error_str);
             }
         }
         break; // end of simple text or video
@@ -113,7 +112,8 @@ try {
             $author = $_POST['author'];
             $source_uri = $_POST['url'];
             $audio_uri = '';
-            $type = 1; // article (assumes that all rss texts are articles)
+            $type = 1; // assumes that all rss texts are "articles"
+            $level = !empty($_POST['level']) ? $_POST['level'] : 2; // if not set, mark as "intermediate"
             $text = $_POST['text'];
             
             /*  For some reason new lines on the client side are counted by Jquery/JS as '\n',
@@ -128,15 +128,14 @@ try {
                 $msg = 'The text you are trying to add already exists in our database. ';
                 $msg .= 'Look for it in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.';
 
-                throw new AprelendoException($msg);
+                throw new UserException($msg);
             }
             
             // if successful, return insert_id in json format
-            $level = $texts_table->calculateDifficulty($text);
             $insert_id = $texts_table->add($title, $author, $text, $source_uri, $audio_uri, $type, $level);
             if ($insert_id > 0) {
                 $text_added_successfully = true;
-                $arr = array('insert_id' => $insert_id);
+                $arr = ['insert_id' => $insert_id];
                 echo json_encode($arr);
             }
         }
@@ -144,33 +143,33 @@ try {
         
         case 'ebook':
         if (!isset($_POST['title']) || !isset($_POST['author']) || !isset($_FILES['url'])) {
-            throw new AprelendoException('Please, complete all the required fields: name, author & epub file.');
+            throw new UserException('Please, complete all the required fields: name, author & epub file.');
         } else {
             $title = $_POST['title'];
             $author = $_POST['author'];
             $type = 6; // 6 = ebook
-            $level = isset($_POST['level']) && !empty($_POST['level']) ? $_POST['level'] : 0;
+            $level = !empty($_POST['level']) ? $_POST['level'] : 2; // if not set, mark as "intermediate"
             $audio_uri = $_POST['audio-uri'];
             $target_file_name = '';
             $text = '';
 
             // check if file exists
             if (!isset($_FILES['url']) || $_FILES['url']['error'] === UPLOAD_ERR_NO_FILE) {
-                throw new AprelendoException('File not found. Please select a file to upload.');
+                throw new UserException('File not found. Please select a file to upload.');
             }
 
             // check if user is allowed to upload file & does not exceed the daily upload limit
-            $file_upload_log = new LogFileUploads($pdo, $user->getId());
+            $file_upload_log = new LogFileUploads($pdo, $user->id);
             $nr_of_uploads_today = $file_upload_log->countTodayRecords();
 
             if ($nr_of_uploads_today >= 1) {
-                throw new AprelendoException('Sorry, you have reached your file upload limit for today.');
+                throw new UserException('Sorry, you have reached your file upload limit for today.');
             }
 
             // upload file & create unique file name
             $ebook_file = new EbookFile($_FILES['url']['name']);
             $ebook_file->put($_FILES['url']);
-            $target_file_name = $ebook_file->getName();
+            $target_file_name = $ebook_file->name;
 
             // save text in db
             $texts_table = new Texts($pdo, $user_id, $lang_id);
@@ -180,11 +179,11 @@ try {
                 // if everything goes fine log upload
                 $text_added_successfully = true;
                 $file_upload_log->addRecord();
-                $filename = array('filename' => $target_file_name);
+                $filename = ['filename' => $target_file_name];
                 header('Content-Type: application/json');
                 echo json_encode($filename);
             } else { // in case of error, show message
-                throw new AprelendoException('There was an error uploading this text.');
+                throw new UserException('There was an error uploading this text.');
             }
         }
         default:
@@ -193,16 +192,10 @@ try {
 
     // if text was added with success, update user score (gems)
     if ($text_added_successfully) {
-        $events = array(
-            'texts' => array (
-                'new' => 1
-                )
-            );
-        $gems = new Gems($pdo, $user_id, $lang_id, $user->getTimeZone());
+        $events = ['texts' => ['new' => 1]];
+        $gems = new Gems($pdo, $user_id, $lang_id, $user->time_zone);
         $new_gems = $gems->updateScore($events);
     }
-} catch (Exception $e) {
-    $error = array('error_msg' => $e->getMessage());
-    header('Content-Type: application/json');
-    echo json_encode($error);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

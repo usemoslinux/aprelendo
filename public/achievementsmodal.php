@@ -23,12 +23,12 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set
 
 use Aprelendo\Includes\Classes\Achievements;
 
-$achievements = new Achievements($pdo, $user->getId(), $user->getLangId(), $user->getTimeZone());
+$achievements = new Achievements($pdo, $user->id, $user->lang_id, $user->time_zone);
 
 $unnanounced_achievements = $achievements->checkUnannounced();
 $achievements->saveUnannounced($unnanounced_achievements);
 
-if(isset($unnanounced_achievements) && !empty($unnanounced_achievements)):
+if (!empty($unnanounced_achievements)):
 ?>
 
 <!-- ACHIEVEMENTS MODAL WINDOW -->
@@ -55,6 +55,6 @@ if(isset($unnanounced_achievements) && !empty($unnanounced_achievements)):
     </div>
 </div>
 
-<script defer src="js/achievementsmodal.min.js"></script>
+<script defer src="/js/achievementsmodal.min.js"></script>
 
 <?php endif; ?>

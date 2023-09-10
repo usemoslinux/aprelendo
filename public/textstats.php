@@ -28,14 +28,14 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
-$total = isset($_POST['total']) && !empty($_POST['total']) ? $_POST['total'] : 0;
-$created = isset($_POST['created']) && !empty($_POST['created']) ? $_POST['created'] : 0;
-$reviewed = isset($_POST['reviewed']) && !empty($_POST['reviewed']) ? $_POST['reviewed'] : 0;
-$learned = isset($_POST['learned']) && !empty($_POST['learned']) ? $_POST['learned'] : 0;
-$forgotten = isset($_POST['forgotten']) && !empty($_POST['forgotten']) ? $_POST['forgotten'] : 0;
+$total = !empty($_POST['total']) ? $_POST['total'] : 0;
+$created = !empty($_POST['created']) ? $_POST['created'] : 0;
+$reviewed = !empty($_POST['reviewed']) ? $_POST['reviewed'] : 0;
+$learned = !empty($_POST['learned']) ? $_POST['learned'] : 0;
+$forgotten = !empty($_POST['forgotten']) ? $_POST['forgotten'] : 0;
 $other = $total - $created - $reviewed - $learned - $forgotten;
 
-$gems_earned = isset($_POST['gems_earned']) && !empty($_POST['gems_earned']) ? (int)$_POST['gems_earned'] : 0;
+$gems_earned = !empty($_POST['gems_earned']) ? (int)$_POST['gems_earned'] : 0;
 $gems_message = '';
 $gems_message = ($gems_earned > 0)
     ? ' You earned ' . $gems_earned . ' gems! Keep it up!'
@@ -46,51 +46,29 @@ $gems_message = ($gems_earned < 0)
 
 const TWO_DECIMALS = "%.2f%%";
 
-$array_table1 = array(
-                    array(
-                        'New',
-                        $created, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($created / $total) * 100)
-                    ),
-                    array(
-                        'Reviewed',
-                        $reviewed, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($reviewed / $total) * 100)
-                    ),
-                    array(
-                        'Learned',
-                        $learned, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($learned / $total) * 100)
-                    ),
-                    array(
-                        'Forgotten',
-                        $forgotten, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($forgotten / $total) * 100)
-                    ),
-                    array(
-                        'Other',
-                        $other, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($other / $total) * 100)
-                    ),
-                    array(
-                        'Total',
-                        $total, '100%'
-                    )
-                );
+$array_table1 = [
+    ['New', $created, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($created / $total) * 100)],
+    ['Reviewed', $reviewed, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($reviewed / $total) * 100)],
+    ['Learned', $learned, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($learned / $total) * 100)],
+    ['Forgotten', $forgotten, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($forgotten / $total) * 100)],
+    ['Other', $other, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($other / $total) * 100)],
+    ['Total', $total, '100%']
+];
 
 $learning_group = $created + $forgotten + $reviewed;
 $learned_group = $learned + $other;
 
-$array_table2 = array(
-                    array(
-                        'Learning (new &#43; forgotten &#43; reviewed)',
-                        $learning_group, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($learning_group / $total) * 100)
-                    ),
-                    array(
-                        'Already learned (learned &#43; other)',
-                        $learned_group, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($learned_group / $total) * 100)
-                    ),
-                    array(
-                        'Total',
-                        $total,
-                        '100%'
-                    )
-                );
+$array_table2 = [
+    [
+        'Learning (new &#43; forgotten &#43; reviewed)',
+        $learning_group, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($learning_group / $total) * 100)
+    ],
+    [
+        'Already learned (learned &#43; other)',
+        $learned_group, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($learned_group / $total) * 100)
+    ],
+    ['Total', $total, '100%']
+];
 
 function printTableRows($array_table_rows)
 {

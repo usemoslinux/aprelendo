@@ -26,45 +26,48 @@ if (!isset($_POST) || empty($_POST)) {
 }
 
 use Aprelendo\Includes\Classes\User;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserRegistrationManager;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
     // check username, email & password are set and not empty
     if (!isset($_POST['username']) || empty($_POST['username']) ||
         !isset($_POST['newpassword']) || empty($_POST['newpassword']) ||
         !isset($_POST['email'])    || empty($_POST['email'])) {
-        throw new AprelendoException('Either username, email or password were not provided. Please try again.');
+        throw new UserException('Either username, email or password were not provided. Please try again.');
     }
 
     // check e-mail address is valid
     if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        throw new AprelendoException('Invalid e-mail address. Please try again.');
+        throw new UserException('Invalid e-mail address. Please try again.');
     }
 
     // check password is valid
     $regex = '/(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}/';
     if (!preg_match($regex, $_POST['newpassword'])) {
-        throw new AprelendoException("Password must have at least 8 characters and contain letters, special characters"
-            . " and a digits. Please try again.");
+        throw new UserException("Password must have at least 8 characters and contain letters, special characters"
+            . " and digits. Please try again.");
     }
 
     // check password & password confirmation match
     if ($_POST['newpassword'] != $_POST['newpassword-confirmation']) {
-        throw new AprelendoException("Passwords don't match. Please try again.");
+        throw new UserException("Passwords don't match. Please try again.");
     }
     
-    $user_data = [ 'username' => $_POST['username'],
-                   'email' => $_POST['email'],
-                   'password' => $_POST['newpassword'],
-                   'native_lang' => $_POST['native-lang'],
-                   'lang' => $_POST['learning-lang'],
-                   'time_zone' => $_POST['time-zone'],
-                   'send_email' => true];
+    $user_data = [
+        'username' => $_POST['username'],
+        'email' => $_POST['email'],
+        'password' => $_POST['newpassword'],
+        'native_lang' => $_POST['native-lang'],
+        'lang' => $_POST['learning-lang'],
+        'time_zone' => $_POST['time-zone'],
+        'send_email' => true
+    ];
                     
     $user = new User($pdo);
-    $user->register($user_data);
-} catch (Exception $e) {
-    $error = array('error_msg' => $e->getMessage());
-    header('Content-Type: application/json');
-    echo json_encode($error);
+    $user_reg = new UserRegistrationManager($user);
+    $user_reg->register($user_data);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

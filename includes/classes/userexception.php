@@ -18,27 +18,12 @@
 * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\Card;
 use Aprelendo\Includes\Classes\InternalException;
-use Aprelendo\Includes\Classes\UserException;
 
-try {
-    // initialize variables
-    $user_id = $user->id;
-    $lang_id = $user->lang_id;
-
-    $card = new Card($pdo, $user_id, $lang_id);
-
-    if (!isset($_POST['word']) || empty($_POST['word'])) {
-        $result = $card->getWordsUserIsLearning();
-    } else {
-        $result = $card->getExampleSentencesForWord($_POST['word']);
+class UserException extends InternalException {
+    public function getJsonError(): string {
+        return $this->encodeJsonError($this->getMessage());
     }
-
-    echo json_encode($result);
-} catch (InternalException | UserException $e) {
-    echo $e->getJsonError();
 }

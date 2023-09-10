@@ -423,7 +423,7 @@ $(document).ready(function () {
             }
         });
 
-        ids.push($("#text-container").attr("data-textID")); // get text ID
+        ids.push($("#text-container").attr("data-IdText")); // get text ID
 
         $.ajax({
             type: "POST",

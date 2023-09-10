@@ -22,4 +22,20 @@ namespace Aprelendo\Includes\Classes;
 
 use Exception;
 
-class AprelendoException extends Exception {}
+class InternalException extends Exception {
+    public function getJsonError(): string
+    {
+        return $this->encodeJsonError('Oops! There was an unexpected error processing your request.');
+    }
+
+    protected function encodeJsonError(string $error_msg): string
+    {
+        $error = ['error_msg' => $error_msg];
+    
+        // Set the JSON content type header
+        header('Content-Type: application/json');
+    
+        // Encode the error array as JSON and return it
+        return json_encode($error);
+    }
+}

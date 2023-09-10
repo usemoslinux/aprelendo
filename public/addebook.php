@@ -111,8 +111,9 @@ require_once PUBLIC_PATH . 'header.php';
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
 
-<script defer src="js/epubjs/epub.min.js"></script>
+<script defer src="/js/epubjs/epub.min.js"></script>
 
-<script defer src="js/addebook.js"></script>
+<script defer src="/js/addebook.min.js"></script>
+<script defer src="/js/helpers.min.js"></script>
 
 <?php require_once 'footer.php'?>

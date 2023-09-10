@@ -19,13 +19,15 @@
  */
 
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\UserAuth;
 
 if (!isset($user)) {
     require_once 'dbinit.php'; // connect to database
 
     $user = new User($pdo);
-    $user_is_logged = $user->isLoggedIn();
-    $pdo->exec("SET time_zone='{$user->getTimeZone()}';"); // use user local time zone
+    $user_auth = new UserAuth($user);
+    $user_is_logged = $user_auth->isLoggedIn();
+    $pdo->exec("SET time_zone='{$user->time_zone}';"); // use user local time zone
 
     if (!$user_is_logged && !isset($no_redirect)) {
         header('Location:/login.php');

@@ -19,9 +19,11 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Includes\Classes\Preferences;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -30,7 +32,7 @@ if (!isset($_POST) || empty($_POST)) {
 
 // save preferences to database
 try {
-    $pref = new Preferences($pdo, $user->getId());
+    $pref = new Preferences($pdo, $user->id);
     $pref->edit(
         $_POST['fontfamily'],
         $_POST['fontsize'],
@@ -39,8 +41,6 @@ try {
         $_POST['mode'],
         $_POST['assistedlearning']
     );
-} catch (Exception $e) {
-    $error = array('error_msg' => $e->getMessage());
-    header('Content-Type: application/json');
-    echo json_encode($error);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

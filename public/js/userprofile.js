@@ -33,29 +33,16 @@ $(document).ready(function() {
         })
             .done(function(data) {
                 if (data.error_msg) {
-                    $("#msgbox")
-                        .html(data.error_msg)
-                        .removeClass()
-                        .addClass("alert alert-danger");
+                    showMessage(data.error_msg, "alert-danger");
                 } else {
-                    $("#msgbox")
-                        .html(
-                            "<strong>Great!</strong> Your user profile information was successfully saved."
-                            + " You will soon be redirected to the main page."
-                        )
-                        .removeClass()
-                        .addClass("alert alert-success");
+                    showMessage("<strong>Great!</strong> Your user profile information was successfully saved."
+                        + " You will soon be redirected to the main page.", "alert-success");
 
                     setTimeout(() => { window.location.replace("/texts"); }, 2000);
                 }
             })
             .fail(function() {
-                $("#msgbox")
-                    .html(
-                        "<strong>Oops!</strong> Something went wrong when trying to save your user profile information."
-                    )
-                    .removeClass()
-                    .addClass("alert alert-danger");
+                showMessage("<strong>Oops!</strong> Something went wrong when trying to save your user profile information.", "alert-danger");
             })
             .always(function() {
                 $("#password, #newpassword, #newpassword-confirmation").val("");
@@ -82,21 +69,13 @@ $(document).ready(function() {
         })
             .done(function(data) {
                 if (data.error_msg) {
-                    $("#msgbox")
-                        .html(data.error_msg)
-                        .removeClass()
-                        .addClass("alert alert-danger");
+                    showMessage(data.error_msg, "alert-danger");
                 } else {
                     window.location.replace("/index");
                 }
             })
             .fail(function() {
-                $("#msgbox")
-                    .html(
-                        "<strong>Oops!</strong> Something went wrong when trying to delete your user account."
-                    )
-                    .removeClass()
-                    .addClass("alert alert-danger");
+                showMessage("<strong>Oops!</strong> Something went wrong when trying to delete your user account.", "alert-danger");
             });
     }); // #btn-confirm-delete-account.on.click
 });

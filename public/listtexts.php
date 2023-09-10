@@ -19,7 +19,7 @@
  */
 
 require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Includes\Classes\Texts;
 use Aprelendo\Includes\Classes\TextTable;
@@ -33,7 +33,7 @@ $page = 1;
 $limit = 10; // number of rows per page
 $adjacents = 2; // adjacent page numbers
 
-$sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
+$sort_by = !empty($_GET['o']) ? $_GET['o'] : 0;
 
 $html = ''; // HTML output to print
 
@@ -45,7 +45,7 @@ if (isset($_GET['p'])) {
     $page = !empty($_GET['p']) ? $_GET['p'] : 1;
 }
 
-$search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';
+$search_text = !empty($_GET['s']) ? $_GET['s'] : '';
 
 // calculate page count for pagination
 if ($show_archived) {
@@ -56,28 +56,26 @@ if ($show_archived) {
 
 $total_rows = $texts_table->countSearchRows($filter_type, $filter_level, $search_text);
 $pagination = new Pagination($total_rows, $page, $limit, $adjacents);
-$offset = $pagination->getOffset();
+$offset = $pagination->offset;
 
 // get search result
-try {
-    $search_params = new SearchTextsParameters($filter_type, $filter_level, $search_text, $offset, $limit, $sort_by);
-    $rows = $texts_table->search($search_params);
+$search_params = new SearchTextsParameters($filter_type, $filter_level, $search_text, $offset, $limit, $sort_by);
+$rows = $texts_table->search($search_params);
 
-    // print table
-    if ($rows) { // if there are any results, show them
-        $table = new TextTable($rows, $show_archived);
-        $html = $table->print($sort_by);
+// print table
+if ($rows) { // if there are any results, show them
+    $table = new TextTable($rows, $show_archived);
+    $html = $table->print($sort_by);
 
-        // print pagination
-        $url_query_options = compact("search_text", "sort_by", "filter_type", "filter_level", "show_archived");
-        $page_url = new Url('texts', $url_query_options);
-        $html .= $pagination->print($page_url);
-    }
-} catch (\Exception $e) {
+    // print pagination
+    $url_query_options = compact("search_text", "sort_by", "filter_type", "filter_level", "show_archived");
+    $page_url = new Url('texts', $url_query_options);
+    $html .= $pagination->print($page_url);
+} else {
     if (!isset($_GET) || empty($_GET)) {
         if (!isset($_COOKIE['hide_welcome_msg'])) {
             $html = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                .'<p>Welcome! It seems this is your first time using Aprelendo. '
+                . '<p>Welcome! It seems this is your first time using Aprelendo. '
                 . 'Follow these instructions to get started:</p>'
                 . '<ol>'
                 . '<li>Download and install our <a href="/extensions#extensions" target="_blank" '
@@ -94,20 +92,21 @@ try {
                 . 'target="_blank" rel="noopener noreferrer" class="alert-link">how our assisted learning method works'
                 . '</a>.<p>'
                 . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-                .'</div>';
-            }
-            
-            $html .= '<div class="alert alert-info" role="alert">Your private library is empty. '
-                . 'Add texts using the green button above or using our extensions, as explained '
-                . '<a href="https://www.youtube.com/watch?v=qimkPHrLkS4" target="_blank" rel="noopener noreferrer"'
-                . 'class="alert-link">here</a>.';
+                . '</div>';
+        }
+
+        $html .= '<div class="alert alert-info" role="alert">Your private library is empty. '
+            . 'Add texts using the green button above or using our extensions, as explained '
+            . '<a href="https://www.youtube.com/watch?v=qimkPHrLkS4" target="_blank" rel="noopener noreferrer"'
+            . 'class="alert-link">here</a>.';
     } else {
-        $html = '<div class="alert alert-info" role="alert">' . $e->getMessage() . '</div>';
+        $html = '<div class="alert alert-info" role="alert">'
+            . 'Oops! There are no texts meeting your search criteria.</div>';
     }
 }
 
 echo $html;
 ?>
 
-<script defer src="js/cookies.min.js"></script>
-<script defer src="js/listtexts.min.js"></script>
+<script defer src="/js/cookies.min.js"></script>
+<script defer src="/js/listtexts.min.js"></script>

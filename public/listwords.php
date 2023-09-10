@@ -20,7 +20,7 @@
  */
 
 require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Includes\Classes\Words;
 use Aprelendo\Includes\Classes\WordTable;
@@ -28,56 +28,56 @@ use Aprelendo\Includes\Classes\SearchWordsParameters;
 use Aprelendo\Includes\Classes\Pagination;
 use Aprelendo\Includes\Classes\Url;
 
-$user_id = $user->getId();
-$lang_id = $user->getLangId();
+$user_id = $user->id;
+$lang_id = $user->lang_id;
 
 // set variables used for pagination
 $page = 1;
 $limit = 10; // number of rows per page
 $adjacents = 2; // adjacent page numbers
 
-$sort_by = isset($_GET['o']) && !empty($_GET['o']) ? $_GET['o'] : 0;
+$sort_by = !empty($_GET['o']) ? $_GET['o'] : 0;
 
 // if the page is loaded because user searched for something, show search results
 // otherwise, show complete word list
 
 // initialize pagination variables
 if (isset($_GET['p'])) {
-    $page = isset($_GET['p']) && !empty($_GET['p']) ? $_GET['p'] : 1;
+    $page = !empty($_GET['p']) ? $_GET['p'] : 1;
 }
 
-$search_text = isset($_GET['s']) && !empty($_GET['s']) ? $_GET['s'] : '';
+$search_text = !empty($_GET['s']) ? $_GET['s'] : '';
 
 $words_table = new Words($pdo, $user_id, $lang_id);
 $total_rows = $words_table->countSearchRows($search_text);
 $pagination = new Pagination($total_rows, $page, $limit, $adjacents);
-$offset = $pagination->getOffset();
+$offset = $pagination->offset;
 
-try {
-    // get search result
-    $search_params = new SearchWordsParameters($search_text, $sort_by, $offset, $limit);
-    $rows = $words_table->search($search_params);
+// get search result
+$search_params = new SearchWordsParameters($search_text, $sort_by, $offset, $limit);
+$rows = $words_table->search($search_params);
 
-    // print table
-    if (sizeof($rows) > 0) { // if there are any results, show them
-        $table = new WordTable($rows);
-        echo $table->print($sort_by);
-    }
+// print table
+if ($rows) { // if there are any results, show them
+    $table = new WordTable($rows);
+    $html = $table->print($sort_by);
 
     // print pagination
     $url_query_options = compact("search_text", "sort_by");
     $page_url = new Url('words', $url_query_options);
-    echo $pagination->print($page_url);
-} catch (\Exception $e) {
-    if (isset($_GET) && !empty($_GET)) {
-        echo '<div class="alert alert-info" role="alert">No words found with that criteria. Try again.</div>';
+    $html .= $pagination->print($page_url);
+} else {
+    if (!empty($_GET)) {
+        $html = '<div class="alert alert-info" role="alert">No words found with that criteria. Try again.</div>';
     } else {
-        echo '<div class="alert alert-info" role="alert">There are no words in your private library.</div>';
+        $html = '<div class="alert alert-info" role="alert">There are no words in your private library.</div>';
     }
 }
+
+echo $html;
 
 require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
 
 ?>
 
-<script defer src="js/listwords.js"></script>
+<script defer src="/js/listwords.js"></script>

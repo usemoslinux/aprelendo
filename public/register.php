@@ -31,22 +31,23 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <header>
                         <h1 class="text-center">
                             <?php
-                            $title_array =  array('Arabic'  => array('ar', 'أهلا بك!'),
-                                                  'Chinese' => array('zh', '欢迎！'),
-                                                  'Dutch'   => array('nl', 'Welkom!'),
-                                                  'English' => array('en', 'Welcome!'),
-                                                  'French' => array('fr', 'Bienvenue!'),
-                                                  'German' => array('de', 'Willkommen!'),
-                                                  'Greek' => array('el', 'Καλως ΗΡΘΑΤΕ!'),
-                                                  'Hebrew' => array('he', 'ברוך הבא!'),
-                                                  'Hindi' => array('hi', 'स्वागत हे!'),
-                                                  'Italian' => array('it', 'Benvenuto!'),
-                                                  'Japanese' => array('ja', 'ようこそ！'),
-                                                  'Korean' => array('ko', '어서 오십시오!'),
-                                                  'Portuguese' => array('pt', 'Bemvindo!'),
-                                                  'Russian' => array('ru', 'Добро пожаловать!'),
-                                                  'Spanish' => array('es', '¡Bienvenido!')
-                                            );
+                            $title_array = [
+                                'Arabic'  => ['ar', 'أهلا بك!'],
+                                'Chinese' => ['zh', '欢迎！'],
+                                'Dutch'   => ['nl', 'Welkom!'],
+                                'English' => ['en', 'Welcome!'],
+                                'French' => ['fr', 'Bienvenue!'],
+                                'German' => ['de', 'Willkommen!'],
+                                'Greek' => ['el', 'Καλως ΗΡΘΑΤΕ!'],
+                                'Hebrew' => ['he', 'ברוך הבא!'],
+                                'Hindi' => ['hi', 'स्वागत हे!'],
+                                'Italian' => ['it', 'Benvenuto!'],
+                                'Japanese' => ['ja', 'ようこそ！'],
+                                'Korean' => ['ko', '어서 오십시오!'],
+                                'Portuguese' => ['pt', 'Bemvindo!'],
+                                'Russian' => ['ru', 'Добро пожаловать!'],
+                                'Spanish' => ['es', '¡Bienvenido!']
+                            ];
 
                             $to_lang = isset($_GET['tolang'])
                                 ? htmlspecialchars(ucfirst($_GET['tolang']), ENT_QUOTES, 'UTF-8')
@@ -197,7 +198,8 @@ require_once PUBLIC_PATH . 'simpleheader.php';
     </div>
 </div>
 
-<script defer src="js/register.min.js"></script>
-<script defer src="js/password.min.js"></script>
+<script defer src="/js/register.min.js"></script>
+<script defer src="/js/password.min.js"></script>
+<script defer src="/js/helpers.min.js"></script>
 
 <?php require_once 'footer.php'; ?>

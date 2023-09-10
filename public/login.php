@@ -21,11 +21,13 @@
 require_once '../includes/dbinit.php'; // connect to database
 
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\UserAuth;
 
 $user = new User($pdo);
+$user_auth = new UserAuth($user);
 
 // if user is already logged in, go to "My Texts" section
-if ($user->isLoggedIn()) {
+if ($user_auth->isLoggedIn()) {
     header('Location:/texts');
     exit;
 }
@@ -94,6 +96,6 @@ require_once PUBLIC_PATH . 'simpleheader.php';
 </main>
 
 <script defer src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
-<script defer src="js/login.min.js"></script>
+<script defer src="/js/login.min.js"></script>
 
 <?php require_once 'footer.php'?>

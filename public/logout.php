@@ -21,7 +21,9 @@
 require_once '../includes/dbinit.php'; // connect to database
 
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\UserAuth;
 
 $user = new User($pdo);
+$user_auth = new UserAuth($user);
 
-$user->logout(false);
+$user_auth->logout(false);

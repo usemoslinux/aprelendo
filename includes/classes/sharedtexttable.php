@@ -30,20 +30,19 @@ class SharedTextTable extends TextTable
      *
      * @param array $rows
      */
-    public function __construct(
-        array $rows,
-    ) {
-        $this->headings = array('Title');
-        $this->col_widths = array('69px', '');
+    public function __construct(array $rows)
+    {
+        parent::__construct($rows, false);
+        $this->headings = ['Title'];
+        $this->col_widths = ['69px', ''];
         $this->action_menu = [];
-        $this->sort_menu = array(
+        $this->sort_menu = [
             'mSortByNew' => 'New first',
             'mSortByOld' => 'Old first',
             'mSortByMoreLikes' => 'More likes first',
             'mSortByLessLikes' => 'Less likes first'
-        );
+        ];
         $this->is_shared = true;
         $this->has_chkbox = false;
-        parent::__construct($rows, false);
     } // end __construct()
 }

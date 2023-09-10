@@ -22,23 +22,23 @@ require_once '../includes/dbinit.php'; // connect to database
 use Aprelendo\Includes\Classes\Language;
 use Aprelendo\Includes\Classes\Gems;
 
-if (isset($_GET['lang']) && !empty($_GET['lang'])) {
+if (!empty($_GET['lang'])) {
     try {
-        $lang = new Language($pdo, $user->getId());
+        $lang = new Language($pdo, $user->id);
         $lang->loadRecordByName($_GET['lang']);
-        $user->setActiveLang($lang->getId());
+        $user->setActiveLang($lang->id);
     } catch (\Throwable $th) {
         header("Location: index.php");
         exit;
     }
 }
 
-$lang_full = ucfirst(Language::getNameFromIso($user->getLang()));
+$lang_full = ucfirst(Language::getNameFromIso($user->lang));
 
-$gems = new Gems($pdo, $user->getId(), $user->getLangId(), $user->getTimeZone());
-$nr_of_gems  = (int)$gems->getGems();
-$streak_days = (int)$gems->getDaysStreak();
-$today_is_reading_streak = $gems->getTodayIsStreak();
+$gems = new Gems($pdo, $user->id, $user->lang_id, $user->time_zone);
+$nr_of_gems  = (int)$gems->gems;
+$streak_days = (int)$gems->days_streak;
+$today_is_reading_streak = $gems->today_is_streak;
 
 ?>
 
@@ -80,7 +80,7 @@ $today_is_reading_streak = $gems->getTodayIsStreak();
                             <a href="javascript:;" id="language-menu" class="nav-link dropdown-toggle" role="button"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img id="img-language-flag" class="me-3 me-md-0"
-                                    src="/img/flags/<?php echo $user->getLang() . '.svg';?>"
+                                    src="/img/flags/<?php echo $user->lang . '.svg';?>"
                                     alt="<?php echo $lang_full; ?> flag">
                                 <span id="learning-lang-span">
                                     <?php echo $lang_full; ?>
@@ -88,7 +88,7 @@ $today_is_reading_streak = $gems->getTodayIsStreak();
                                 <strong class="caret"></strong>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="language-menu">
-                                <a class="dropdown-item" href="<?php echo 'languages?chg=' . $user->getLangId(); ?>">
+                                <a class="dropdown-item" href="<?php echo 'languages?chg=' . $user->lang_id; ?>">
                                     <?php echo $lang_full; ?> settings</a>
                                 <a class="dropdown-item" href="/languages">Change current language</a>
                             </div>
@@ -98,7 +98,7 @@ $today_is_reading_streak = $gems->getTodayIsStreak();
                             <a id="user-menu" href="javascript:;" class="nav-link dropdown-toggle" role="button"
                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="fas fa-user-circle me-3 me-md-1"></span>
-                                <?php echo ucfirst($user->getName()); ?>
+                                <?php echo ucfirst($user->name); ?>
                                 <strong class="caret"></strong>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu">

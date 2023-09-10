@@ -19,7 +19,7 @@
  */
 
 if (!isset($_COOKIE['accept_cookies'])) { ?>
-    <script defer src="js/cookies.min.js"></script>
+    <script defer src="/js/cookies.min.js"></script>
 <?php } ?>
 
 <?php
@@ -28,5 +28,5 @@ if (!isset($_COOKIE['accept_cookies'])) { ?>
         <p>We use cookies. <a href="/privacy" id="more-privacy-policy">Learn more</a>.</p>
         <button id="removecookie" class="btn btn-success">OK</button>
     </div>
-    <script defer src="js/eucookies.min.js"></script>
+    <script defer src="/js/eucookies.min.js"></script>
 <?php } ?>

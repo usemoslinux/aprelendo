@@ -20,7 +20,7 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 require_once dirname(__DIR__) . '../../config/config.php';
 
@@ -37,13 +37,14 @@ class Curl
         
         if (!isset($options) || empty($options)) {
             $referer = 'https://www.aprelendo.com';
-            $options = array(CURLOPT_RETURNTRANSFER => 1,
-                             CURLOPT_CONNECTTIMEOUT => 5,
-                             CURLOPT_REFERER => $referer,
-                             CURLOPT_SSL_VERIFYPEER => false,
-                             CURLOPT_SSL_VERIFYHOST => false,
-                             CURLOPT_FOLLOWLOCATION => true
-                            );
+            $options = [
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_CONNECTTIMEOUT => 5,
+                CURLOPT_REFERER => $referer,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => false,
+                CURLOPT_FOLLOWLOCATION => true
+            ];
         }
 
         $options[CURLOPT_URL] = $url;
@@ -60,7 +61,7 @@ class Curl
         // Check the http response
         $httpCode = $info['http_code'];
         if ($httpCode != 200) {
-            throw new AprelendoException("The URL $url returned HTTP error $httpCode");
+            throw new UserException("The URL $url returned HTTP error $httpCode");
         }
 
         curl_close($ch);

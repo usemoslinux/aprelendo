@@ -17,15 +17,17 @@
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 require_once '../includes/dbinit.php'; // connect to database
 require_once PUBLIC_PATH . 'head.php';
 
 use Aprelendo\Includes\Classes\User;
+use Aprelendo\Includes\Classes\UserAuth;
 
 $user = new User($pdo);
+$user_auth = new UserAuth($user);
 
-if (!$user->isLoggedIn()) {
+if (!$user_auth->isLoggedIn()) {
     require_once PUBLIC_PATH . 'simpleheader.php';
 } else {
     require_once PUBLIC_PATH . 'header.php';

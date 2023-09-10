@@ -23,17 +23,18 @@ namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\DBEntity;
 use Aprelendo\Includes\Classes\SearchWordsParameters;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 class Words extends DBEntity
 {
-    private $id            = 0;
-    private $lang_id       = 0;
-    private $word          = '';
-    private $status        = 0;
-    private $is_phrase     = false;
-    private $date_created  = '';
-    private $date_modified = '';
+    public $id            = 0;
+    public $user_id       = 0;
+    public $lang_id       = 0;
+    public $word          = '';
+    public $status        = 0;
+    public $is_phrase     = false;
+    public $date_created  = '';
+    public $date_modified = '';
 
     /**
      * Constructor
@@ -46,9 +47,10 @@ class Words extends DBEntity
      */
     public function __construct(\PDO $pdo, int $user_id, int $lang_id)
     {
-        parent::__construct($pdo, $user_id);
-        $this->lang_id = $lang_id;
+        parent::__construct($pdo);
         $this->table = 'words';
+        $this->user_id = $user_id;
+        $this->lang_id = $lang_id;
     } // end __construct()
 
     /**
@@ -61,26 +63,16 @@ class Words extends DBEntity
      */
     public function add(string $word, int $status, bool $is_phrase): void
     {
-        try {
-            $word = mb_strtolower($word);
-            $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`)
-                    VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
-                    `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `date_modified`=NOW()";
+        $word = mb_strtolower($word);
+        
+        $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`)
+                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
+                `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `date_modified`=NOW()";
 
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([
-                $this->user_id, $this->lang_id, $word, $status, (int)$is_phrase,
-                $this->user_id, $this->lang_id, $word, $status
-            ]);
-
-            if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('Error adding record to words table.');
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error adding record to words table.');
-        } finally {
-            $stmt = null;
-        }
+        $this->sqlExecute($sql, [
+            $this->user_id, $this->lang_id, $word, $status, (int)$is_phrase,
+            $this->user_id, $this->lang_id, $word, $status
+        ]);
     } // end add()
 
     /**
@@ -91,19 +83,13 @@ class Words extends DBEntity
      */
     public function updateByName(array $words): void
     {
-        try {
-            $in  = str_repeat('?,', count($words) - 1) . '?';
+        $in  = str_repeat('?,', count($words) - 1) . '?';
 
-            $sql = "UPDATE `{$this->table}`
-                    SET `date_modified`=NOW(), `status`=CASE WHEN `status` > 0 THEN `status`-1 ELSE 0 END
-                    WHERE `user_id`=? AND `lang_id`=? AND `word` IN ($in)";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute(array_merge([$this->user_id, $this->lang_id], $words));
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error updating record in words table.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "UPDATE `{$this->table}`
+                SET `date_modified`=NOW(), `status`=CASE WHEN `status` > 0 THEN `status`-1 ELSE 0 END
+                WHERE `user_id`=? AND `lang_id`=? AND `word` IN ($in)";
+        
+        $this->sqlExecute($sql, array_merge([$this->user_id, $this->lang_id], $words));
     } // end updateByName()
 
     /**
@@ -114,16 +100,10 @@ class Words extends DBEntity
      */
     public function updateStatus(string $word, int $status): void
     {
-        try {
-            $sql = "UPDATE `{$this->table}` SET `status`=$status, `date_modified`=NOW()
-                    WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $word]);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error updating record in words table.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "UPDATE `{$this->table}` SET `status`=$status, `date_modified`=NOW()
+                WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
+
+        $this->sqlExecute($sql, [$this->user_id, $this->lang_id, $word]);
     } // end updateByName()
 
     /**
@@ -134,19 +114,8 @@ class Words extends DBEntity
      */
     public function deleteByName(string $word): void
     {
-        try {
-            $sql = "DELETE FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $word]);
-
-            if ($stmt->rowCount() == 0) {
-                throw new \PDOException();
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error deleting record from words table.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "DELETE FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
+        $this->sqlExecute($sql, [$this->user_id, $this->lang_id, $word]);
     } // end deleteByName()
 
     /**
@@ -157,21 +126,11 @@ class Words extends DBEntity
      */
     public function delete(string $ids): void
     {
-        try {
-            $ids_array = json_decode($ids);
-            $id_params = str_repeat("?,", count($ids_array) - 1) . "?";
+        $ids_array = json_decode($ids);
+        $id_params = str_repeat("?,", count($ids_array) - 1) . "?";
 
-            $sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($ids_array);
-            if ($stmt->rowCount() == 0) {
-                throw new \PDOException();
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error deleting record from words table.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
+        $this->sqlExecute($sql, $ids_array);
     } // delete()
 
     /**
@@ -182,22 +141,14 @@ class Words extends DBEntity
      */
     public function countSearchRows(string $search_text): int
     {
-        try {
-            $like_str = '%' . $search_text . '%';
+        $like_str = '%' . $search_text . '%';
 
-            $sql = "SELECT COUNT(`word`) AS `count_search`
-                    FROM `{$this->table}`
-                    WHERE `user_id`=? AND `lang_id`=?
-                    AND `word` LIKE ?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id, $like_str]);
-            $row = $stmt->fetch();
-            return $row['count_search'];
-        } catch (\PDOException $e) {
-            return 0;
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT COUNT(`word`) AS `count_search`
+                FROM `{$this->table}`
+                WHERE `user_id`=? AND `lang_id`=?
+                AND `word` LIKE ?";
+        $row = $this->sqlFetch($sql, [$this->user_id, $this->lang_id, $like_str]);
+        return $row['count_search'];
     } // end countSearchRows()
 
     /**
@@ -208,36 +159,19 @@ class Words extends DBEntity
     */
     public function search(SearchWordsParameters $search_params): array
     {
-        try {
-            $sort_sql = $search_params->buildSortSQL();
+        $sort_sql = $search_params->buildSortSQL();
+        $search_sql = !empty($search_params->search_text) ? '"%' . $search_params->search_text . '%"' : '"%"';
 
-            $sql = "SELECT `id`, `word`, `status`,
-                    DATEDIFF(CURRENT_DATE(), `date_modified`) AS `diff_today_modif`,
-                    DATEDIFF(`date_modified`, `date_created`) AS `frequency`
-                    FROM `{$this->table}`
-                    WHERE `user_id`=:user_id AND `lang_id`=:lang_id AND word LIKE :search_text
-                    ORDER BY $sort_sql LIMIT :offset, :limit";
-            $stmt = $this->pdo->prepare($sql);
+        $sql = "SELECT `id`, `word`, `status`,
+                DATEDIFF(CURRENT_DATE(), `date_modified`) AS `diff_today_modif`,
+                DATEDIFF(`date_modified`, `date_created`) AS `frequency`
+                FROM `{$this->table}`
+                WHERE `user_id`=? AND `lang_id`=? AND word LIKE $search_sql
+                ORDER BY $sort_sql LIMIT {$search_params->offset}, {$search_params->limit}";
 
-            $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
-            $stmt->bindParam(':lang_id', $this->lang_id, \PDO::PARAM_INT);
-            $stmt->bindValue(':search_text', '%' . $search_params->search_text . '%', \PDO::PARAM_STR);
-            $stmt->bindParam(':offset', $search_params->offset, \PDO::PARAM_INT);
-            $stmt->bindParam(':limit', $search_params->limit, \PDO::PARAM_INT);
-
-            $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            if (!$result || empty($result)) {
-                throw new AprelendoException('Oops! There are no words meeting your search criteria.');
-            }
-
-            return $result;
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error processing your search request.');
-        } finally {
-            $stmt = null;
-        }
+        return $this->sqlFetchAll($sql, [
+            $this->user_id, $this->lang_id
+        ]);
     } // end search()
 
     /**
@@ -248,18 +182,8 @@ class Words extends DBEntity
      */
     public function exists(string $word): bool
     {
-        try {
-            $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `word`=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$word]);
-            $num_rows = $stmt->fetchColumn();
-
-            return ($num_rows) && ($num_rows > 0) ? true : false;
-        } catch (\PDOException $e) {
-            return false;
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `word`=?";
+        return $this->sqlCount($sql, [$word]) === 0;
     } // end exists()
 
     /**
@@ -271,26 +195,14 @@ class Words extends DBEntity
      */
     public function getAll(int $sort_by): array
     {
-        try {
-            $search_params = new SearchWordsParameters('', $sort_by);
-            $sort_sql = $search_params->buildSortSQL();
+        $search_params = new SearchWordsParameters('', $sort_by);
+        $sort_sql = $search_params->buildSortSQL();
 
-            $sql = "SELECT `id`, `word`, `status`, `is_phrase`
-                    FROM `{$this->table}`
-                    WHERE `user_id`=:user_id AND `lang_id`=:lang_id
-                    ORDER BY $sort_sql";
-            $stmt = $this->pdo->prepare($sql);
-
-            $stmt->bindParam(':user_id', $this->user_id, \PDO::PARAM_INT);
-            $stmt->bindParam(':lang_id', $this->lang_id, \PDO::PARAM_INT);
-
-            $stmt->execute();
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error getting all words for this user.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT `id`, `word`, `status`, `is_phrase`
+                FROM `{$this->table}`
+                WHERE `user_id`=? AND `lang_id`=?
+                ORDER BY $sort_sql";
+        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
     } // end getAll()
 
     /**
@@ -300,19 +212,11 @@ class Words extends DBEntity
      */
     public function getLearning(): array
     {
-        try {
-            $sql = "SELECT `word`
-                    FROM `words`
-                    WHERE `user_id`=? AND `lang_id`=? AND `status`>0
-                    ORDER BY `is_phrase` ASC";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id]);
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error getting words user is learning.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT `word`
+                FROM `words`
+                WHERE `user_id`=? AND `lang_id`=? AND `status`>0
+                ORDER BY `is_phrase` ASC";
+        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
     } // end getLearned()
 
     /**
@@ -322,74 +226,11 @@ class Words extends DBEntity
      */
     public function getLearned(): array
     {
-        try {
-            $sql = "SELECT `word`
-                    FROM `words`
-                    WHERE `user_id`=? AND `lang_id`=? AND `status`=0
-                    ORDER BY `is_phrase` ASC";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id, $this->lang_id]);
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error getting words user learned.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "SELECT `word`
+                FROM `words`
+                WHERE `user_id`=? AND `lang_id`=? AND `status`=0
+                ORDER BY `is_phrase` ASC";
+        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
     } // end getLearned()
 
-    /**
-     * Get the value of id
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    } // end getId()
-
-    /**
-     * Get the value of lang_id
-     */
-    public function getLangId(): int
-    {
-        return $this->lang_id;
-    } // end getLangId()
-
-    /**
-     * Get the value of word
-     */
-    public function getWord(): string
-    {
-        return $this->word;
-    } // end getWord()
-
-    /**
-     * Get the value of status
-     */
-    public function getStatus(): int
-    {
-        return $this->status;
-    } // end getStatus()
-
-    /**
-     * Get the value of is_phrase
-     */
-    public function getIsPhrase(): bool
-    {
-        return $this->is_phrase;
-    } // end getIsPhrase()
-
-    /**
-     * Get the value of date_created
-     */
-    public function getDateCreated(): string
-    {
-        return $this->date_created;
-    } // end getDateCreated()
-
-    /**
-     * Get the value of date_modified
-     */
-    public function getDateModified(): string
-    {
-        return is_null($this->date_modified) ? '' : $this->date_modified;
-    } // end getDateModified()
 }

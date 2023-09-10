@@ -20,10 +20,25 @@
 
 namespace Aprelendo\Includes\Classes;
 
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
-class Log extends DBEntity
+abstract class Log extends DBEntity
 {
+    private int $user_id = 0;
+
+    /**
+     * Constructor
+     *
+     * @param \PDO $pdo
+     * @param int $user_id
+     *
+     */
+    public function __construct(\PDO $pdo, int $user_id)
+    {
+        parent::__construct($pdo);
+        $this->user_id = $user_id;
+    } // end __construct()
+
     /**
      * Gets today's records for the current user in the log table
      *
@@ -31,23 +46,14 @@ class Log extends DBEntity
      */
     public function countTodayRecords(): int
     {
-        try {
-            $sql = "SELECT COUNT(*) AS `exists`
-                    FROM `{$this->table}`
-                    WHERE `user_id` = ?
-                    AND `date_created` = CURRENT_DATE()";
+        $sql = "SELECT COUNT(*) AS `exists`
+                FROM `{$this->table}`
+                WHERE `user_id` = ?
+                AND `date_created` = CURRENT_DATE()";
 
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $row = $this->sqlFetch($sql, [$this->user_id]);
 
-            if (!$row) {
-                throw new AprelendoException('Error getting today\'s log records.');
-            }
-            return $row['exists'];
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error getting today\'s log records.');
-        }
+        return $row['exists'];
     } // end countTodayRecords()
 
     /**
@@ -57,23 +63,10 @@ class Log extends DBEntity
      */
     public function addRecord(): void
     {
-        try {
-            $sql = "INSERT INTO `{$this->table}` (`user_id`, `date_created`)
-                    VALUES (?, CURRENT_DATE())";
-
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$this->user_id]);
-                    
-            if ($stmt->rowCount() == 0) {
-                throw new AprelendoException('Error adding log record.');
-            }
-
-            $this->purgeOldRecords(); // if successful, purge old records
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error adding log record.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "INSERT INTO `{$this->table}` (`user_id`, `date_created`) VALUES (?, CURRENT_DATE())";
+        $this->sqlExecute($sql, [$this->user_id]);
+        
+        $this->purgeOldRecords(); // if successful, purge old records
     } // end addRecord()
 
     /**
@@ -83,16 +76,7 @@ class Log extends DBEntity
      */
     private function purgeOldRecords()
     {
-        try {
-            $sql = "DELETE FROM `{$this->table}`
-                    WHERE `date_created` < NOW() - INTERVAL 2 DAY";
-
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error purging old log records.');
-        } finally {
-            $stmt = null;
-        }
+        $sql = "DELETE FROM `{$this->table}` WHERE `date_created` < NOW() - INTERVAL 2 DAY";
+        $this->sqlExecute($sql, []);
     } // end purgeOldRecords()
 }

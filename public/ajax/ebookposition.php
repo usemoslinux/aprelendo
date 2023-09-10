@@ -19,31 +19,30 @@
 */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Includes\Classes\Texts;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
 try {
-    if (isset($_POST['mode']) && !empty($_POST['mode'])) {
-        $text = new Texts($pdo, $user->getId(), $user->getLangId());
+    if (!empty($_POST['mode'])) {
+        $text = new Texts($pdo, $user->id, $user->lang_id);
 
         if ($_POST['mode'] == "GET") {
             $text->loadRecord($_POST['id']);
             
-            $result['audio_pos'] = $text->getAudioPos();
-            $result['text_pos'] = $text->getTextPos();
+            $result['audio_pos'] = $text->audio_pos;
+            $result['text_pos'] = $text->text_pos;
 
             echo json_encode($result);
         } elseif ($_POST['mode'] == "SAVE") {
-            $result['audio_pos'] = isset($_POST['audio_pos']) && !empty($_POST['audio_pos'])
-                ? $_POST['audio_pos']
-                : null;
-            $result['text_pos'] = isset($_POST['text_pos']) && !empty($_POST['text_pos']) ? $_POST['text_pos'] : null;
+            $result['audio_pos'] = !empty($_POST['audio_pos']) ? $_POST['audio_pos'] : null;
+            $result['text_pos'] = !empty($_POST['text_pos']) ? $_POST['text_pos'] : null;
 
             $text->update($_POST['id'], $result);
         }
     }
-} catch (\Exception $e) {
-    $result['error_msg'] = $e->getMessage();
-    echo json_encode($result);
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

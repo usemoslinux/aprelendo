@@ -85,7 +85,7 @@ require_once PUBLIC_PATH . 'header.php';
                                     <div class="input-group">
                                         <input type="url" id="url" name="url" class="form-control"
                                             placeholder="Source URL (required) >> start here: copy URL & press fetch button"
-                                            value="<?php if (isset($_GET['url']) && !empty($_GET['url'])) { echo $_GET['url']; } ?>"
+                                            value="<?php if (!empty($_GET['url'])) { echo $_GET['url']; } ?>"
                                             required>
                                         <button id="btn-fetch" class="btn btn-secondary" type="button">
                                             <i id="btn-fetch-img" class="fas fa-arrow-down text-warning"></i>
@@ -117,6 +117,7 @@ require_once PUBLIC_PATH . 'header.php';
     </div>
 </div>
 
-<script defer src="js/addvideo.min.js"></script>
+<script defer src="/js/addvideo.min.js"></script>
+<script defer src="/js/helpers.min.js"></script>
 
 <?php require_once 'footer.php'?>

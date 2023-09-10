@@ -19,7 +19,7 @@
  */
 
 require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -27,22 +27,21 @@ if (!isset($_POST) || empty($_POST)) {
 }
 
 use Aprelendo\Includes\Classes\Gems;
+use Aprelendo\Includes\Classes\InternalException;
+use Aprelendo\Includes\Classes\UserException;
 
-if (isset($_POST['words']) || isset($_POST['texts'])) {
-    $user_id = $user->getId();
-    $lang_id = $user->getLangId();
-    
-    try {
-        $gems = new Gems($pdo, $user_id, $lang_id, $user->getTimeZone());
+try {
+    if (isset($_POST['words']) || isset($_POST['texts'])) {
+        $user_id = $user->id;
+        $lang_id = $user->lang_id;
+
+        $gems = new Gems($pdo, $user_id, $lang_id, $user->time_zone);
         $new_gems = $gems->updateScore($_POST);
 
-        $result = array('gems_earned' => $new_gems);
+        $result = ['gems_earned' => $new_gems];
         header('Content-Type: application/json');
         echo json_encode($result);
-    } catch (Exception $e) {
-        $error = array('error_msg' => $e->getMessage());
-        header('Content-Type: application/json');
-        echo json_encode($error);
     }
-    
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
 }

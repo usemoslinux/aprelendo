@@ -90,7 +90,7 @@ class SearchTextsParameters extends SearchParameters
      */
     public function buildFilterTypeSQL(): string
     {
-        return $this->filter_type == 0 ? '>= :filter_type' : '= :filter_type';
+        return $this->filter_type == 0 ? '>= ?' : '= ?';
     } // end buildFilterTypeSQL()
 
     /**
@@ -101,6 +101,6 @@ class SearchTextsParameters extends SearchParameters
      */
     public function buildFilterLevelSQL(): string
     {
-        return $this->filter_level == 0 ? '>= :filter_level' : '= :filter_level';
+        return $this->filter_level == 0 ? '>= ?' : '= ?';
     } // end buildFilterLevelSQL()
 }

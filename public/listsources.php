@@ -19,13 +19,13 @@
  */
 
 require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & checks if user is logged in
+require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Includes\Classes\PopularSources;
 
 try {
     $pop_sources = new PopularSources($pdo);
-    $sources = $pop_sources->getAllByLang($user->getLang());
+    $sources = $pop_sources->getAllByLang($user->lang);
     echo printSources($sources);
 } catch (\Exception $e) {
     echo "<div class='alert alert-info' role='alert'>Hmm, that's weird. "

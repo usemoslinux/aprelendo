@@ -21,11 +21,10 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\DBEntity;
-use Aprelendo\Includes\Classes\AprelendoException;
+use Aprelendo\Includes\Classes\UserException;
 
 class PopularSources extends DBEntity
 {
-    
     /**
      * Constructor
      *
@@ -36,7 +35,7 @@ class PopularSources extends DBEntity
      */
     public function __construct(\PDO $pdo)
     {
-        $this->pdo = $pdo;
+        parent::__construct($pdo);
         $this->table = 'popular_sources';
     } // end __construct()
 
@@ -49,31 +48,26 @@ class PopularSources extends DBEntity
      */
     public function add(string $lg_iso, string $domain): void
     {
-        try {
-            $invalid_sources = array('feedproxy.google.com',
-                                     'www.youtube.com',
-                                     'm.youtube.com',
-                                     'youtu.be');
+        $invalid_sources = [
+            'feedproxy.google.com',
+            'www.youtube.com',
+            'm.youtube.com',
+            'youtu.be'
+        ];
 
-            if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain)) {
-                return;
-            }
-
-            $domain = mb_strtolower($domain);
-            // if text belongs to an invalid source or is an ebook, avoid adding it to popular_sources table
-            if (in_array($domain, $invalid_sources) || pathinfo($domain, PATHINFO_EXTENSION) === '.epub') {
-                return;
-            }
-
-            $sql = "INSERT INTO `{$this->table}` (`lang_iso`, `times_used`, `domain`)
-                    VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$lg_iso, $domain]);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error adding record to the popular sources list.');
-        } finally {
-            $stmt = null;
+        if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain)) {
+            return;
         }
+
+        $domain = mb_strtolower($domain);
+        // if text belongs to an invalid source or is an ebook, avoid adding it to popular_sources table
+        if (in_array($domain, $invalid_sources) || pathinfo($domain, PATHINFO_EXTENSION) === '.epub') {
+            return;
+        }
+
+        $sql = "INSERT INTO `{$this->table}` (`lang_iso`, `times_used`, `domain`)
+                VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE `times_used` = `times_used` + 1";
+        $this->sqlExecute($sql, [$lg_iso, $domain]);
     } // end add()
 
     /**
@@ -85,25 +79,15 @@ class PopularSources extends DBEntity
      */
     public function update(string $lg_iso, string $domain): void
     {
-        try {
-            if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain)) {
-                return;
-            }
-    
-            $sql = "DELETE FROM `{$this->table}` WHERE `lang_iso`=? AND `domain`=? AND `times_used` = 1";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$lg_iso, $domain]);
-                    
-            if ($stmt->rowCount() <= 0) {
-                $sql = "UPDATE `{$this->table}` SET `times_used`=`times_used` - 1 WHERE `lang_iso`=? AND `domain`=?";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([$lg_iso, $domain]);
-            }
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error updating record from the popular sources list.');
-        } finally {
-            $stmt = null;
+        if (!isset($lg_iso) || empty($lg_iso) || !isset($domain) || empty($domain)) {
+            return;
         }
+
+        $sql = "DELETE FROM `{$this->table}` WHERE `lang_iso`=? AND `domain`=? AND `times_used` = 1";
+        $this->sqlExecute($sql, [$lg_iso, $domain]);
+                
+        $sql = "UPDATE `{$this->table}` SET `times_used`=`times_used` - 1 WHERE `lang_iso`=? AND `domain`=?";
+        $this->sqlExecute($sql, [$lg_iso, $domain]);
     } // end update()
 
     /**
@@ -114,26 +98,12 @@ class PopularSources extends DBEntity
      */
     public function getAllByLang(string $lg_iso): array
     {
-        try {
-            if (!isset($lg_iso) || empty($lg_iso)) {
-                throw new AprelendoException('Wrong parameters provided to update record in the popular sources list.');
-            }
-
-            $sql = "SELECT * FROM `{$this->table}` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT 50";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$lg_iso]);
-                    
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            if (!$result || empty($result)) {
-                throw new AprelendoException('Error getting record from popular sources list.');
-            }
-
-            return $result;
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error getting record from popular sources list.');
-        } finally {
-            $stmt = null;
+        if (!isset($lg_iso) || empty($lg_iso)) {
+            throw new UserException('Wrong parameters provided to update record in the popular sources list.');
         }
+
+        $sql = "SELECT * FROM `{$this->table}` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT 50";
+        
+        return $this->sqlFetchAll($sql, [$lg_iso]);
     } // end getAllByLang()
 }

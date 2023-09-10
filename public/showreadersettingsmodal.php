@@ -23,17 +23,17 @@ require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set
 
 use Aprelendo\Includes\Classes\Reader;
 
-$reader = new Reader($pdo, $user->getId(), $user->getLangId());
-$prefs = $reader->getPrefs();
+$reader = new Reader($pdo, $user->id, $user->lang_id);
+$prefs = $reader->prefs;
 
-$font_family = $prefs->getFontFamily();
-$font_size = $prefs->getFontSize();
-$line_height = $prefs->getLineHeight();
-$text_align = $prefs->getTextAlignment();
-$display_mode = $prefs->getDisplayMode();
-$assisted_learning = $prefs->getAssistedLearning();
+$font_family = $prefs->font_family;
+$font_size = $prefs->font_size;
+$line_height = $prefs->line_height;
+$text_align = $prefs->text_alignment;
+$display_mode = $prefs->display_mode;
+$assisted_learning = $prefs->assisted_learning;
 
-$video_pages = array('showvideo', 'showofflinevideo');
+$video_pages = ['showvideo', 'showofflinevideo'];
 $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
 
 $sel = ' selected ';
@@ -159,4 +159,4 @@ $sel = ' selected ';
     </div>
 </div>
 
-<script defer src="js/showreadersettingsmodal.min.js"></script>
+<script defer src="/js/showreadersettingsmodal.min.js"></script>

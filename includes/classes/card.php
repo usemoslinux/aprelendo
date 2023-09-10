@@ -21,14 +21,12 @@
 namespace Aprelendo\Includes\Classes;
 
 use Aprelendo\Includes\Classes\Language;
-use Aprelendo\Includes\Classes\AprelendoException;
 
-class Card
+class Card extends DBEntity
 {
-    protected $pdo;
     protected $user_id = 0;
     protected $lang_id = 0;
-    protected $lang_iso;
+    protected $lang_iso = '';
 
     /**
      * Constructor
@@ -39,13 +37,14 @@ class Card
      */
     public function __construct(\PDO $pdo, int $user_id, int $lang_id)
     {
-        $this->pdo = $pdo;
+        parent::__construct($pdo);
+        $this->table = 'words';
         $this->user_id = $user_id;
         $this->lang_id = $lang_id;
 
         $lang = new Language($pdo, $user_id);
-        $lang->loadRecord($lang_id);
-        $this->lang_iso = $lang->getName();
+        $lang->loadRecordById($lang_id);
+        $this->lang_iso = $lang->name;
     } // end __construct()
 
     /**
@@ -55,22 +54,14 @@ class Card
      *
      * @return array
      */
-    public function getAllWordsUserIsLearning(): array
+    public function getWordsUserIsLearning(): array
     {
-        $sql = "SELECT `word`, `status` FROM `words`
-                WHERE `user_id`={$this->user_id} AND `lang_id`={$this->lang_id} AND `status`>0
+        $sql = "SELECT `word`, `status` FROM `{$this->table}`
+                WHERE `user_id`=? AND `lang_id`=? AND `status`>0
                 ORDER BY `status` DESC, `date_created` DESC";
-
-        try {
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error getting words user is learning.');
-        } finally {
-            $stmt = null;
-        }
-    } // end getAllWordsUserIsLearning()
+        
+        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
+    } // end getWordsUserIsLearning()
 
     /**
      * Gets example sentences in private texts (both active and archived), except ebooks, as well as
@@ -82,38 +73,33 @@ class Card
      */
     public function getExampleSentencesForWord(string $word): array
     {
+        $search_sql = "'[[:<:]]" . $word . "[[:>:]]'";
+                
         $sql = "(SELECT texts.title, texts.author, texts.text, texts.source_uri
                 FROM texts
                 LEFT JOIN languages ON languages.id = texts.lang_id
-                WHERE languages.name = '{$this->lang_iso}' AND texts.user_id='{$this->user_id}' AND type <> 6 AND
-                texts.text regexp '[[:<:]]" . $word . "[[:>:]]'
+                WHERE languages.name = ? AND texts.user_id = ? AND type <> 6 AND
+                texts.text regexp $search_sql
                 LIMIT 3)
                 UNION
                 (SELECT archived_texts.title, archived_texts.author, archived_texts.text, archived_texts.source_uri
                 FROM archived_texts
                 LEFT JOIN languages ON languages.id = archived_texts.lang_id
-                WHERE languages.name = '{$this->lang_iso}' AND archived_texts.user_id='{$this->user_id}'
-                AND type <> 6 AND archived_texts.text regexp '[[:<:]]" . $word . "[[:>:]]'
+                WHERE languages.name = ? AND archived_texts.user_id = ?
+                AND type <> 6 AND archived_texts.text regexp $search_sql
                 LIMIT 3)
                 UNION
                 (SELECT shared_texts.title, shared_texts.author, shared_texts.text, shared_texts.source_uri
                 FROM shared_texts
                 LEFT JOIN languages ON languages.id = shared_texts.lang_id
-                WHERE languages.name = '{$this->lang_iso}' AND type <> 5 AND
-                shared_texts.text regexp '[[:<:]]" . $word . "[[:>:]]'
+                WHERE languages.name = ? AND type <> 5 AND shared_texts.text regexp $search_sql
                 LIMIT 3)";
 
-        try {
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            
-            return $this->arrayUniqueMultidimensional($result); // avoid returning duplicate example sentences
-        } catch (\PDOException $e) {
-            throw new AprelendoException('Error getting example sentences.');
-        } finally {
-            $stmt = null;
-        }
+        $result = $this->sqlFetchAll($sql, [
+            $this->lang_iso, $this->user_id, $this->lang_iso, $this->user_id, $this->lang_iso
+        ]);
+        
+        return $this->arrayUniqueMultidimensional($result); // avoid returning duplicate example sentences
     } // end getExampleSentencesForWord()
 
     /**
