@@ -25,8 +25,10 @@ if (!isset($_COOKIE['accept_cookies'])) { ?>
 <?php
 if (!isset($_COOKIE['accept_cookies'])) { ?>
     <div id="eucookielaw">
-        <p>We use cookies. <a href="/privacy" id="more-privacy-policy">Learn more</a>.</p>
-        <button id="removecookie" class="btn btn-success">OK</button>
+        <img src="/img/other/cookie-dude.gif" class="d-none d-md-block float-start" alt="Cookie Gif">
+        <p class="px-3">This site uses cookies. By continuing, you're agreeing to the use of cookies outlined
+            in our <a href="/privacy" id="more-privacy-policy">Privacy Policy</a>.</p>
+        <button id="removecookie" class="btn btn-success">Close</button>
     </div>
     <script defer src="/js/eucookies.min.js"></script>
 <?php } ?>
