@@ -65,7 +65,6 @@ $(document).ready(function() {
         if (video_id != "") {
             const embed_url = "https://www.youtube.com/embed/" + video_id;
 
-            $("#error-msg").addClass("d-none");
             $("#btn-fetch-img")
                 .removeClass()
                 .addClass("fas fa-sync fa-spin text-warning");

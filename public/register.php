@@ -65,7 +65,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             <?php echo $to_lang; ?>.</div>
                     </header>
                     <br>
-                    <div id="error-msg" class="d-none"></div>
+                    <div id="alert-msg" class="d-none"></div>
                     <form id="form-register">
                         <div class="mb-3">
                             <label for="native-lang">Native language:</label>

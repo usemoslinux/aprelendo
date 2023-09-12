@@ -45,7 +45,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <h3 class="text-center">Sign in</h3>
                     </header>
                     <br>
-                    <div id="error-msg" class="d-none"></div>
+                    <div id="alert-msg" class="d-none"></div>
                     <div id="g_id_onload"
                         data-client_id="913422235077-p01j7jbo80c7vpbesb4uuvl10vemfl13.apps.googleusercontent.com"
                         data-callback="googleSignIn">
@@ -105,5 +105,6 @@ require_once PUBLIC_PATH . 'simpleheader.php';
 <script defer src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
 <script defer src="/js/login.min.js"></script>
 <script defer src="/js/password.min.js"></script>
+<script defer src="/js/helpers.min.js"></script>
 
 <?php require_once 'footer.php'?>

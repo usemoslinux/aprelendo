@@ -63,7 +63,6 @@ require_once PUBLIC_PATH . 'header.php';
                                 $external_call = true;
                             }
                         ?>
-                        <div id="error-msg" class="d-none"></div>
                         <form id="form-addvideo" class="add-form" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="mode" value="video">
                             <input type="hidden" name="type" id="type" class="form-control" value="5">
