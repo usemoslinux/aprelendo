@@ -1,13 +1,8 @@
 .vscode/
 vendor/
 config/config.php
-public/test/
-tests/
+public/tests/
 uploads/
-php-info.php
-jsconfig.json
-.stylelintrc
 todo.md
-sitemap.xml
+.rsyncignore
 **/*.log
-public/test.php
