@@ -18,18 +18,13 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php';  // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in and set $user object
+require_once '../Includes/dbinit.php';  // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if user is logged in and set $user object
 
-use Aprelendo\Includes\Classes\Reader;
+use Aprelendo\Reader;
 
 try {
     $body_css = '';
-    // check if user has access to view this text
-    // if (!$user->isAllowedToAccessElement('shared_texts', (int)$_GET['id'])) {
-    //     header("HTTP/1.1 401 Unauthorized");
-    //     exit;
-    // }
     
     $reader = new Reader($pdo, $user->id, $user->lang_id);
     $prefs = $reader->prefs;

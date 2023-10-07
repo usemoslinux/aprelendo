@@ -32,7 +32,7 @@ $(document).ready(function() {
      * Triggers after user selects the file to upload
      */
     $("#url").on("change", function() {
-        $("#alert-msg").addClass("d-none");
+        $("#alert-box").addClass("d-none");
 
         const $epub_file = $(this);
         const file_name = $epub_file[0].files[0].name.split(".");
@@ -70,7 +70,7 @@ $(document).ready(function() {
         const form_data = new FormData(document.getElementById("form-addebook"));
         const audio_uri = $("#audio-uri").text();
 
-        $('#alert-msg').addClass('d-none');
+        $('#alert-box').addClass('d-none');
 
         // validate audio URL
         if (audio_uri != "" && !isValidHttpUrl(audio_uri)) {

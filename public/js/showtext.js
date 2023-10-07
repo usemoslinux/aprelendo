@@ -390,7 +390,7 @@ $(document).ready(function() {
         }
 
         getWordFrequency($selword.text(), doclang);
-        setAddDeleteButtons();
+        setAddDeleteButtons($selword);
 
         $doc.find("#loading-spinner").attr('class','lds-ellipsis m-auto');
         $dic_frame.attr('class','d-none');
@@ -637,7 +637,7 @@ $(document).ready(function() {
      */
     $("body").on("click", "#btn-next-phase", function() {
         const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
-        let $msg_phase = $("#alert-msg-phase");
+        let $msg_phase = $("#alert-box-phase");
 
         if (next_phase < 6 && !audio_is_loaded) {
             skipAudioPhases();
@@ -1113,7 +1113,7 @@ $(document).ready(function() {
      */
     $doc.on("click", "#retry-audio-load", function(e) {
         e.preventDefault();
-        $("#alert-msg-audio").addClass("d-none");
+        $("#alert-box-audio").addClass("d-none");
         $("#audioplayer-loader").removeClass("d-none");
         loadAudio();
     }); // end #retry-audio-load.on.click
@@ -1159,7 +1159,7 @@ $(document).ready(function() {
                 .done(function(e) {
                     if (e.error != null || !e.response) {
                         $("#audioplayer-loader").addClass("d-none");
-                        $("#alert-msg-audio")
+                        $("#alert-box-audio")
                             .removeClass("d-none")
                             .empty()
                             .append('There was an unexpected error trying to create audio from this text. '
@@ -1184,13 +1184,13 @@ $(document).ready(function() {
                 .fail(function(xhr) {
                     if (xhr.status == 403) {
                         $("#audioplayer-loader").addClass("d-none");
-                        $("#alert-msg-audio")
+                        $("#alert-box-audio")
                             .removeClass("d-none")
                             .empty()
                             .append('You have reached your audio streaming limit. Try again tomorrow.');
                     } else {
                         $("#audioplayer-loader").addClass("d-none");
-                        $("#alert-msg-audio")
+                        $("#alert-box-audio")
                             .removeClass("d-none")
                             .empty()
                             .append('There was an unexpected error trying to create audio from this text. '
@@ -1223,10 +1223,11 @@ $(document).ready(function() {
     /**
      * Shows confirmation message before closing/unloading tab/window
      */
-    $(window.parent).on("beforeunload", function() {
+    $(window.parent).on("beforeunload", function(e) {
+
         if (window.parent.show_confirmation_dialog) {
-            return "To save your progress, please click the Save button before you go. Otherwise, your changes will "
-                + "be lost. Are you sure you want to exit this page?";
+            e.preventDefault(); // To show a dialog we need this preventDefault()
+            return "To save your progress, please click the Save button before you go.";
         }
     }); // end window.parent.on.beforeunload
 });

@@ -18,12 +18,14 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
-use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Language;
+
+$password_title = 'Password must have at least 8 characters and contain letters, special characters and a digits';
 
 ?>
 
@@ -41,7 +43,7 @@ use Aprelendo\Includes\Classes\Language;
                 </ol>
             </nav>
             <main>
-                <div id="alert-msg"></div>
+                <div id="alert-box" class="d-none"></div>
                 <form id="userprofile-form" class="" method="post">
                     <div class="card">
                         <div class="card-header">User details</div>
@@ -69,7 +71,7 @@ use Aprelendo\Includes\Classes\Language;
                                 </small>
                                 <div class="input-group">
                                     <input type="password" id="password" name="password" class="form-control"
-                                        title="Password must have at least 8 characters and contain letters, special characters and a digits"
+                                        title="<?php echo $password_title; ?>"
                                         autocomplete="off" required>
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide current password" tabindex="-1">
@@ -84,7 +86,7 @@ use Aprelendo\Includes\Classes\Language;
                                 <div class="input-group">
                                     <input type="password" id="newpassword" name="newpassword" class="form-control"
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                        title="Password must have at least 8 characters and contain letters, special characters and a digits"
+                                        title="<?php echo $password_title; ?>"
                                         autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide new password" tabindex="-1">
@@ -98,7 +100,7 @@ use Aprelendo\Includes\Classes\Language;
                                     <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
                                         class="form-control"
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                        title="Password must have at least 8 characters and contain letters, special characters and a digits"
+                                        title="<?php echo $password_title; ?>"
                                         autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide new password confirmation" tabindex="-1">
@@ -176,7 +178,16 @@ use Aprelendo\Includes\Classes\Language;
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p class="alert alert-danger">Deleting you account is an irreversible action.</p>
+                <div id="modal-alert-box" class="alert alert-warning">
+                    <div class="alert-flag fs-5">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Careful
+                    </div>
+                    <div class="alert-msg">
+                        Deleting your account is an irreversible action.
+                    </div>
+                </div>
+
                 <p>Before you delete your account, be aware that all your profile information will be deleted from
                     our servers, thus your user name will be available to anyone else who is willing to subscribe.</p>
                 <p>Also, all the files (e.g., epub files) you uploaded to our servers will be deleted, as well as your

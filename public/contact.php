@@ -18,11 +18,11 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
+require_once '../Includes/dbinit.php'; // connect to database
 require_once PUBLIC_PATH . 'head.php';
 
-use Aprelendo\Includes\Classes\User;
-use Aprelendo\Includes\Classes\UserAuth;
+use Aprelendo\User;
+use Aprelendo\UserAuth;
 
 $user = new User($pdo);
 $user_auth = new UserAuth($user);
@@ -57,7 +57,7 @@ if (!$user_auth->isLoggedIn()) {
                                     will be stored.
                                 </small>
                             </p>
-                            <div id="alert-msg" class="d-none"></div>
+                            <div id="alert-box" class="d-none"></div>
                             <form id="form-support" class="add-form" method="post" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="mb-3 col-sm-12">
@@ -100,7 +100,7 @@ if (!$user_auth->isLoggedIn()) {
     </div>
 </div>
 
-<script defer src="/js/contact.min.js"></script>
+<script defer src="/js/contact.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 
 <?php require_once 'footer.php';?>

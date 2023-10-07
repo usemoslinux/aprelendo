@@ -306,7 +306,7 @@ $(document).ready(function () {
      */
     function showModal() {
         getWordFrequency($selword.text(), doclang);
-        setAddDeleteButtons();
+        setAddDeleteButtons($selword);
 
         $("#loading-spinner").attr('class', 'lds-ellipsis m-auto');
         $("#dicFrame").attr('class', 'd-none');
@@ -674,7 +674,8 @@ $(document).ready(function () {
      */
     $(window).on("beforeunload", function () {
         if (show_confirmation_dialog) {
-            return "To save your progress, please click the Save button before you go. Otherwise, your changes will be lost. Are you sure you want to exit this page?";
+            return "To save your progress, please click the Save button before you go. Otherwise, your changes will "
+                + "be lost. Are you sure you want to exit this page?";
         }
     }); // end window.on.beforeunload
 });

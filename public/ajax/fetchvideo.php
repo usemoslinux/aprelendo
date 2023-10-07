@@ -18,17 +18,17 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../../includes/dbinit.php';  // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in and set $user object
+require_once '../../Includes/dbinit.php';  // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if user is logged in and set $user object
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
     exit;
 }
 
-use Aprelendo\Includes\Classes\Videos;
-use Aprelendo\Includes\Classes\InternalException;
-use Aprelendo\Includes\Classes\UserException;
+use Aprelendo\Videos;
+use Aprelendo\InternalException;
+use Aprelendo\UserException;
 
 try {
     if (!empty($_POST['video_id'])) {

@@ -18,12 +18,12 @@
 * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once '../../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
-use Aprelendo\Includes\Classes\Language;
-use Aprelendo\Includes\Classes\InternalException;
-use Aprelendo\Includes\Classes\UserException;
+use Aprelendo\Language;
+use Aprelendo\InternalException;
+use Aprelendo\UserException;
 
 try {
     $lang = new Language($pdo, $user->id);

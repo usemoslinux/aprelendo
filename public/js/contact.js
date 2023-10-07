@@ -58,7 +58,7 @@ $(document).ready(function() {
      * Empties form input fields
      */
     function resetControls() {
-        $("#alert-msg").addClass("d-none");
+        $("#alert-box").addClass("d-none");
         $("#name").val("");
         $("#email").val("");
         $("#message").val("");

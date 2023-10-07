@@ -18,14 +18,14 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once '../../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
-use Aprelendo\Includes\Classes\Words;
-use Aprelendo\Includes\Classes\SearchWordsParameters;
-use Aprelendo\Includes\Classes\WordsUtilities;
-use Aprelendo\Includes\Classes\InternalException;
-use Aprelendo\Includes\Classes\UserException;
+use Aprelendo\Words;
+use Aprelendo\SearchWordsParameters;
+use Aprelendo\WordsUtilities;
+use Aprelendo\InternalException;
+use Aprelendo\UserException;
 
 $user_id = $user->id;
 $lang_id = $user->lang_id;

@@ -18,12 +18,12 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
-use Aprelendo\Includes\Classes\Texts;
+use Aprelendo\Texts;
 
 ?>
 
@@ -70,7 +70,7 @@ use Aprelendo\Includes\Classes\Texts;
             }
             ?>
             <main>
-                <div id="alert-msg" class="d-none"></div>
+                <div id="alert-box" class="d-none"></div>
                 <form id="form-addtext" class="add-form" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>">
                     <input type="hidden" name="mode" value="simple">

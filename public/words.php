@@ -18,8 +18,8 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
     

@@ -18,14 +18,14 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
-use Aprelendo\Includes\Classes\Achievements;
-use Aprelendo\Includes\Classes\WordStats;
-use Aprelendo\Includes\Classes\WordDailyGoal;
+use Aprelendo\Achievements;
+use Aprelendo\WordStats;
+use Aprelendo\WordDailyGoal;
 ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.js"

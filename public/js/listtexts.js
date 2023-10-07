@@ -199,7 +199,7 @@ $(document).ready(function() {
     /**
      * Hides welcome message for this and future sessions
      */
-    $(".close").on("click", function(e) {
+    $("#welcome-close").on("click", function(e) {
         e.preventDefault();
 
         setCookie("hide_welcome_msg", true, 365 * 10);

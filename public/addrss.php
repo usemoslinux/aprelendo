@@ -18,10 +18,10 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-use Aprelendo\Includes\Classes\User;
+use Aprelendo\User;
 
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
@@ -41,10 +41,10 @@ require_once PUBLIC_PATH . 'header.php';
                     </ol>
                 </nav>
                 <div class="alert alert-info">
-                    <span class="fas fa-info-circle"></span>
-                    &nbsp;All RSS texts you add to Aprelendo will be shared with the rest of our community.
-                    You will find them in the "<a class="alert-link" href="/sharedtexts">shared texts</a>" section.
+                    All RSS texts you add to Aprelendo will be shared with the rest of our community.
+                    You will find them in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.
                 </div>
+                <div id="alert-box" class="d-none"></div>
             </div>
             <div class="col-12">
                 <div class="row flex">
@@ -62,4 +62,5 @@ require_once PUBLIC_PATH . 'header.php';
     </div>
 
     <script defer src="/js/addrss.min.js"></script>
+    <script defer src="/js/helpers.min.js"></script>
     <?php require_once 'footer.php'; ?>

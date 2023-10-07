@@ -18,7 +18,7 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php';  // connect to database
+require_once '../Includes/dbinit.php';  // connect to database
 
 $curpage = basename($_SERVER['PHP_SELF'], '.php'); // returns the current file Name
 $show_pages = ['showtext', 'showvideo', 'showebook', 'showofflinevideo'];
@@ -33,29 +33,13 @@ $use_google_login = false;
 
 // check if login is required to access page
 if (!in_array($curpage, $no_login_required_pages)) {
-    require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in and set $user object
+    require_once APP_ROOT . 'Includes/checklogin.php'; // check if user is logged in and set $user object
     $google_id = $user->google_id;
     $use_google_login = !empty($google_id);
 }
 
-// check if user is allowed to view this page
 $this_is_show_page = in_array($curpage, $show_pages);
-
-if ($this_is_show_page) {
-    $doclang = $user->lang;
-
-    $table = isset($_GET['sh']) && $_GET['sh'] != 0 ? 'shared_texts' : 'texts';
-    
-    if ($curpage != 'showofflinevideo' &&
-        (!isset($_GET['id']) || empty($_GET['id']) || !$user->isAllowedToAccessElement($table, (int)$_GET['id']))) {
-        header("HTTP/1.1 401 Unauthorized");
-        exit;
-    }
-
-    $is_shared = $table == 'shared_texts' ? true : false;
-} else {
-    $doclang = 'en';
-}
+$doclang = $this_is_show_page ? $user->lang : 'en';
 
 ?>
 

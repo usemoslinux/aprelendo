@@ -18,12 +18,12 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php';  // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if user is logged in and set $user object
+require_once '../Includes/dbinit.php';  // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if user is logged in and set $user object
 
-use Aprelendo\Includes\Classes\Reader;
-use Aprelendo\Includes\Classes\Likes;
-use Aprelendo\Includes\Classes\UserException;
+use Aprelendo\Reader;
+use Aprelendo\Likes;
+use Aprelendo\UserException;
 
 try {
     $html = '';
@@ -32,9 +32,11 @@ try {
 
         $text_id = (int)$_GET['id'];
 
+        $text_table = $is_shared ? 'shared_texts' : 'texts';
+
         // check if user has access to view this text
-        if (!$user->isAllowedToAccessElement('shared_texts', $text_id)) {
-            header("HTTP/1.1 401 Unauthorized");
+        if (!$user->isAllowedToAccessElement($text_table, $text_id)) {
+            http_response_code(403);
             exit;
         }
 

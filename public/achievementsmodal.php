@@ -18,10 +18,10 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-use Aprelendo\Includes\Classes\Achievements;
+use Aprelendo\Achievements;
 
 $achievements = new Achievements($pdo, $user->id, $user->lang_id, $user->time_zone);
 

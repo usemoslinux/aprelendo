@@ -18,25 +18,24 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
+require_once '../Includes/dbinit.php'; // connect to database
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'simpleheader.php';
 
-use Aprelendo\Includes\Classes\User;
+use Aprelendo\User;
 
 ?>
 
-<main>
-    <div class="container mtb d-flex flex-grow-1 flex-column">
+<main class="d-flex flex-grow-1 flex-column">
+    <div class="container mtb">
         <div class="row">
             <div class="col-sm-0 col-sm-1 col-lg-3"></div>
             <div class="col-sm-12 col-sm-10 col-lg-6">
                 <section>
                     <header>
-                        <h1 class="text-center">Restore password</h1>
+                        <h3 class="text-center">Restore password</h3>
                     </header>
                     <br>
-                    
 
                     <?php
                     // 1. check if email & password values passed by the reset link are set
@@ -50,7 +49,16 @@ use Aprelendo\Includes\Classes\User;
                         if ($user->existsByEmailAndPasswordHash($email, $password_hash)) {
                     ?>
 
-                    <div id="alert-msg" class="alert alert-info">Enter your new password twice.</div>
+                    <div id="alert-box" class="alert alert-info">
+                        <div class="alert-flag fs-5">
+                            <i class="fa-solid fa-circle-info"></i>
+                            Information
+                        </div>
+                        <div class="alert-msg">
+                            Enter your new password twice.
+                        </div>
+                    </div>
+
                     <form id="form_create_new_password">
                         <input type="hidden" id="email" name="email" value="<?php echo $email ; ?>">
                         <div class="mb-3">
@@ -94,16 +102,33 @@ use Aprelendo\Includes\Classes\User;
                         } else { // 1.2. if email & password are set but not found in db, then ...
                     ?>
 
-                    <div id="alert-msg" class="alert alert-danger">Can't reset user password. Possibly the recovery
-                        link has expired.</div>
+                    <div id="alert-box" class="alert alert-danger">
+                        <div class="alert-flag fs-5">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            Information
+                        </div>
+                        <div class="alert-msg">
+                            Can't reset user password. Possibly the recovery link has expired.
+                        </div>
+                    </div>
 
                     <?php
                         }
                     } else { // 2. if email & password are NOT set, show form to send the reset password link
                     ?>
 
-                    <div id="alert-msg" class="alert alert-info">Enter your email address to receive a link to
-                        reset your password.</div>
+                    <div id="alert-box" class="alert alert-info">
+                        <div class="alert-flag fs-5">
+                            <i class="fa-solid fa-circle-info"></i>
+                            Information
+                        </div>
+                        <div class="alert-msg">
+                            Please provide your email address below, and we will send you a secure link that will
+                            allow you to reset your password. This link will be sent to the email address associated
+                            with your account, so please make sure it's accurate.
+                        </div>
+                    </div>
+
                     <form id="form_forgot_password">
                         <div class="mb-3">
                             <label for="email">E-mail address:</label>

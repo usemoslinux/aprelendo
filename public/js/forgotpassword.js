@@ -39,7 +39,10 @@ $(document).ready(function() {
             .done(function(data) {
                 if (data.error_msg == null) {
                     showMessage(
-                        "An email was sent. Access the link and create a new password.",
+                        "We've just sent an email to the address you provided. It might take a few minutes for the "
+                        + "email to arrive in your inbox, so please be patient. If you don't see it in your inbox, "
+                        + "be sure to check your spam or junk folder, as sometimes emails can end up there. Once you "
+                        + "receive the email, click on the link provided to create your new password.",
                         "alert-success"
                     );
                 } else {
@@ -48,7 +51,7 @@ $(document).ready(function() {
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
                 showMessage(
-                    "Oops! There was an unexpected error when trying to register you. Please try again later.",
+                    "Oops! There was an unexpected error when trying to replace your password. Please try again later.",
                     "alert-danger"
                 );
             });
@@ -77,7 +80,8 @@ $(document).ready(function() {
                 .done(function(data) {
                     if (data.error_msg == null) {
                         showMessage(
-                            "Your new password was successfully saved!<br>You will soon be redirected to the login page",
+                            "Your new password has been successfully saved! Please wait a moment, and you will be "
+                            + "automatically redirected to the home page shortly.",
                             "alert-success"
                         );
                         setTimeout(function() {

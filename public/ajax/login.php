@@ -18,17 +18,17 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../../includes/dbinit.php'; // connect to database
+require_once '../../Includes/dbinit.php'; // connect to database
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
     exit;
 }
 
-use Aprelendo\Includes\Classes\User;
-use Aprelendo\Includes\Classes\UserAuth;
-use Aprelendo\Includes\Classes\InternalException;
-use Aprelendo\Includes\Classes\UserException;
+use Aprelendo\User;
+use Aprelendo\UserAuth;
+use Aprelendo\InternalException;
+use Aprelendo\UserException;
 
 try {
     if (isset($_POST['username']) && isset($_POST['password'])) {

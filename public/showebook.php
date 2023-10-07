@@ -18,13 +18,13 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-use Aprelendo\Includes\Classes\Reader;
-use Aprelendo\Includes\Classes\Texts;
-use Aprelendo\Includes\Classes\TextsUtilities;
-use Aprelendo\Includes\Classes\UserException;
+use Aprelendo\Reader;
+use Aprelendo\Texts;
+use Aprelendo\TextsUtilities;
+use Aprelendo\UserException;
 
 function getCSS($styles)
 {
@@ -59,7 +59,7 @@ try {
     if (!empty($_GET['id'])) {
         // check if user has access to view this text
         if (!$user->isAllowedToAccessElement('texts', (int)$_GET['id'])) {
-            header("HTTP/1.1 401 Unauthorized");
+            http_response_code(403);
             exit;
         }
 
@@ -178,7 +178,7 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
             <h1 id="title">...</h1>
             <button id="close-offcanvas" type="button"
                 class="btn-close text-reset <?php echo $class == 'darkmode' ? 'btn-close-white' : ''; ?>"
-                data-bs-dismiss="offcanvas" aria-label="Close & Save reading position"></button>
+                data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
             <image id="cover" width="150px">
@@ -196,7 +196,7 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
     <div id="main">
         <div id="header">
             <span class="d-flex flex-row-reverse">
-                <button class="basic btn btn-link me-n2" title="Close" id="btn-close-ebook">
+                <button class="basic btn btn-link me-n2" title="Close & Save reading position" id="btn-close-ebook">
                     <span class="fas fa-times"></span></button>
                 <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
                     class="basic btn btn-sm btn-secondary me-2" title="Reader settings">

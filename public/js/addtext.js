@@ -166,7 +166,7 @@ $(document).ready(function() {
                             $("#text").trigger("input");
                         } else {
                             showMessage(
-                                "Oops! There was an error trying to fetch this text.",
+                                "There was an unexpected error trying to fetch this text.",
                                 "alert-danger"
                             );
                         }
@@ -174,7 +174,7 @@ $(document).ready(function() {
                 })
                 .fail(function(xhr, ajaxOptions, thrownError) {
                     showMessage(
-                        "Oops! There was an error trying to fetch this text.",
+                        "There was an unexpected error trying to fetch this text.",
                         "alert-danger"
                     );
                 })
@@ -212,7 +212,7 @@ $(document).ready(function() {
      * @param {string} exceptSourceURI 
      */
     function resetControls(exceptSourceURI) {
-        $("#alert-msg").addClass("d-none");
+        $("#alert-box").addClass("d-none");
         $("#type").prop("selectedIndex", 0);
         $("#title").val("");
         $("#author").val("");

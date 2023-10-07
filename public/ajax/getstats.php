@@ -18,12 +18,12 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check if user is logged in
+require_once '../../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // loads User class & check if user is logged in
 
-use Aprelendo\Includes\Classes\WordStats;
-use Aprelendo\Includes\Classes\InternalException;
-use Aprelendo\Includes\Classes\UserException;
+use Aprelendo\WordStats;
+use Aprelendo\InternalException;
+use Aprelendo\UserException;
 
 try {
     if ($_GET['type'] === "words") {

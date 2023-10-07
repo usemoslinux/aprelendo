@@ -18,8 +18,8 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 ?>
@@ -42,10 +42,10 @@ require_once PUBLIC_PATH . 'header.php';
             <main>
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="alert alert-info"><span class="fas fa-info-circle"></span> All YouTube videos you
+                        <div class="alert alert-info">All YouTube videos you
                             add to Aprelendo will be shared with the rest of our community. You will find them in the
-                            "<a href="/sharedtexts">shared texts</a>" section.</div>
-                        <div id="alert-msg" class="d-none"></div>
+                            <a href="/sharedtexts" class="alert-link">shared texts</a> section.</div>
+                        <div id="alert-box" class="d-none"></div>
                     </div>
                     <!-- VIDEO CONTAINER -->
                     <div class="col-lg-6 mb-3">

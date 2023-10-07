@@ -18,13 +18,13 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
+require_once '../Includes/dbinit.php'; // connect to database
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'simpleheader.php';
 ?>
 
-<div>
-    <div class="container mtb d-flex flex-grow-1 flex-column">
+<div class="d-flex flex-grow-1 flex-column">
+    <div class="container mtb">
         <div class="row">
             <div class="col-12 col-lg-6 offset-lg-3">
                 <section>
@@ -65,7 +65,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             <?php echo $to_lang; ?>.</div>
                     </header>
                     <br>
-                    <div id="alert-msg" class="d-none"></div>
+                    <div id="alert-box" class="d-none"></div>
                     <form id="form-register">
                         <div class="mb-3">
                             <label for="native-lang">Native language:</label>

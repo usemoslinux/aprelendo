@@ -18,12 +18,13 @@
 * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once '../../includes/dbinit.php'; // connect to database
+require_once '../../Includes/dbinit.php'; // connect to database
 
-use Aprelendo\Includes\Classes\User;
-use Aprelendo\Includes\Classes\UserPassword;
-use Aprelendo\Includes\Classes\InternalException;
-use Aprelendo\Includes\Classes\UserException;
+use Aprelendo\User;
+use Aprelendo\UserPassword;
+use Aprelendo\EmailSender;
+use Aprelendo\InternalException;
+use Aprelendo\UserException;
 
 // check that $_POST is set & not empty
 if (!isset($_POST) || empty($_POST)) {
@@ -47,6 +48,12 @@ try {
             $email = $_POST['email'];
             $user = new User($pdo);
             $user->loadRecordByEmail($email);
+
+            if (!$user->id) {
+                throw new UserException('The email address you provided is not in our database of registered users.'
+                    . ' Please double-check your email address or consider <a href="/register" class="alert-link">'
+                    . 'signing up</a> if you are new to our platform.');
+            }
             
             // get password hash associated to that email address
             $username = $user->name;
@@ -67,21 +74,23 @@ try {
             $message = str_replace('{{device}}', $_SERVER['HTTP_USER_AGENT'], $message);
             $message = str_replace('{{current_year}}', date("Y"), $message);
             
-            $headers = "MIME-Version: 1.0" . "\r\n";
-            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-            $headers .= 'From:' . EMAIL_SENDER;
-            
-            $mail_sent = mail($to, $subject, $message, $headers, '-f ' . EMAIL_SENDER);
-            if (!$mail_sent) {
-                throw new UserException('There was an error trying to send you an e-mail with your new '
-                    . 'temporary password.');
-            }
+            $email_sender = new EmailSender();
+
+            $email_sender->mail->addAddress($to);
+            $email_sender->mail->Subject = $subject;
+            $email_sender->mail->Body = $message;
+            $email_sender->mail->isHTML(true);
+
+            $email_sender->mail->send();
         } else { // if email address does not exist in db
             throw new UserException('No user registered with that email address. Please try again.');
         }
     } else {
-        throw new UserException('There was an error resetting your password.');
+        throw new UserException('There was an unexpected error resetting your password.');
     }
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+} catch (Exception $e) {
+    $exception = new InternalException($e);
+    echo $exception->getJsonError();
 }

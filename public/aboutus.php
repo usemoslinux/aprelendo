@@ -18,11 +18,11 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
+require_once '../Includes/dbinit.php'; // connect to database
 require_once PUBLIC_PATH . 'head.php';
 
-use Aprelendo\Includes\Classes\User;
-use Aprelendo\Includes\Classes\UserAuth;
+use Aprelendo\User;
+use Aprelendo\UserAuth;
 
 $user = new User($pdo);
 $user_auth = new UserAuth($user);

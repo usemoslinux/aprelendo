@@ -18,12 +18,12 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once '../../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
-use Aprelendo\Includes\Classes\RSSFeeds;
-use Aprelendo\Includes\Classes\InternalException;
-use Aprelendo\Includes\Classes\UserException;
+use Aprelendo\RSSFeeds;
+use Aprelendo\InternalException;
+use Aprelendo\UserException;
 
 $user_id = $user->id; // get current user's ID
 $lang_id = $user->lang_id; // get current language's ID
@@ -44,8 +44,10 @@ try {
         echo $html . '</div>';
     } else {
         // If all feeds are empty, throw exception with message
-        throw new UserException('There are no RSS feeds to show. Please, add some in the <a class="alert-link" '
-            . 'href="/languages.php">languages</a> section. You can add up to 3 feeds per language.');
+        throw new UserException('<p>There are no RSS feeds available for display in this section.</p><p>To '
+            . 'get started, head over to the <a class="alert-link" href="/languages.php">languages</a> section and add '
+            . 'up to 3 feeds per language to start enjoying <a href="https://en.wikipedia.org/wiki/RSS"'
+            . 'target="_blank" rel="noopener noreferrer" class="alert-link">RSS content</a>.</p>');
     }
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();

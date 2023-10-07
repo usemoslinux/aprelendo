@@ -18,11 +18,11 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // loads User class & check if user is logged in
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // loads User class & check if user is logged in
 
-use Aprelendo\Includes\Classes\WordStats;
-use Aprelendo\Includes\Classes\WordDailyGoal;
+use Aprelendo\WordStats;
+use Aprelendo\WordDailyGoal;
 
 $stats = new WordStats($pdo, $user->id, $user->lang_id);
 

@@ -18,8 +18,8 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
 if (isset($_GET['act'])) {
     $user->setActiveLang($_GET['act']);
@@ -28,7 +28,7 @@ if (isset($_GET['act'])) {
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
-use Aprelendo\Includes\Classes\Language;
+use Aprelendo\Language;
 
 $user_id = $user->id;
 $lang = new Language($pdo, $user_id);

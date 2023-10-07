@@ -19,8 +19,8 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 ?>
@@ -43,7 +43,7 @@ require_once PUBLIC_PATH . 'header.php';
             <main>
                 <div class="row">
                     <div class="col-sm-12">
-                        <div id="alert-msg" class="d-none"></div>
+                        <div id="alert-box" class="d-none"></div>
                     </div>
                     <div class="col-sm-12">
                         <div id="card" class="card text-center" style="min-width: 100%;"

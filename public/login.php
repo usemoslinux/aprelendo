@@ -18,10 +18,10 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
+require_once '../Includes/dbinit.php'; // connect to database
 
-use Aprelendo\Includes\Classes\User;
-use Aprelendo\Includes\Classes\UserAuth;
+use Aprelendo\User;
+use Aprelendo\UserAuth;
 
 $user = new User($pdo);
 $user_auth = new UserAuth($user);
@@ -36,8 +36,8 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'simpleheader.php';
 ?>
 
-<main>
-    <div class="container mtb d-flex flex-grow-1 flex-column">
+<main class="d-flex flex-grow-1 flex-column">
+    <div class="container mtb">
         <div class="row">
             <div class="col-sm-12 col-md-10 offset-md-1 col-lg-6 offset-lg-3">
                 <section>
@@ -45,7 +45,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <h3 class="text-center">Sign in</h3>
                     </header>
                     <br>
-                    <div id="alert-msg" class="d-none"></div>
+                    <div id="alert-box" class="d-none"></div>
                     <div id="g_id_onload"
                         data-client_id="913422235077-p01j7jbo80c7vpbesb4uuvl10vemfl13.apps.googleusercontent.com"
                         data-callback="googleSignIn">

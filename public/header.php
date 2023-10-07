@@ -18,9 +18,9 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-use Aprelendo\Includes\Classes\Language;
-use Aprelendo\Includes\Classes\Gems;
+require_once '../Includes/dbinit.php'; // connect to database
+use Aprelendo\Language;
+use Aprelendo\Gems;
 
 if (!empty($_GET['lang'])) {
     try {

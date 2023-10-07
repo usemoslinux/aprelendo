@@ -35,7 +35,7 @@ $(document).ready(function() {
                 if (data.error_msg) {
                     showMessage(data.error_msg, "alert-danger");
                 } else {
-                    showMessage("<strong>Great!</strong> Your user profile information was successfully saved."
+                    showMessage("Your user profile information was successfully saved."
                         + " You will soon be redirected to the main page.", "alert-success");
 
                     setTimeout(() => { window.location.replace("/texts"); }, 2000);

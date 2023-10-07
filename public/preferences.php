@@ -18,12 +18,12 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
-use Aprelendo\Includes\Classes\Reader;
+use Aprelendo\Reader;
 
 $reader = new Reader($pdo, $user->id, $user->lang_id);
 $prefs = $reader->prefs;
@@ -55,7 +55,7 @@ $sel = ' selected ';
             <main>
                 <div class="row">
                     <div class="col-12">
-                        <div id="alert-msg"></div>
+                        <div id="alert-box" class="d-none"></div>
                         <form id="prefs-form" method="post">
                             <div class="card">
                                 <div class="card-header">Reader</div>

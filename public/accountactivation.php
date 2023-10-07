@@ -18,17 +18,17 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
+require_once '../Includes/dbinit.php'; // connect to database
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'simpleheader.php';
 
-use Aprelendo\Includes\Classes\User;
-use Aprelendo\Includes\Classes\UserRegistrationManager;
+use Aprelendo\User;
+use Aprelendo\UserRegistrationManager;
 
 ?>
 
-<div>
-    <div class="container mtb d-flex flex-grow-1 flex-column">
+<div class="d-flex flex-grow-1 flex-column">
+    <div class="container mtb">
         <div class="row">
             <div class="col-sm-0 col-sm-1 col-lg-3"></div>
             <div class="col-sm-12 col-sm-10 col-lg-6">

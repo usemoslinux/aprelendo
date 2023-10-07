@@ -520,8 +520,7 @@ ol {
 /* CUSTOM ALERT BOXES */
 
 .alert {
-    padding: 20px;
-    border-left: 3px solid #eee;
+    box-shadow: 0 .10rem .10rem 0 rgba(0,0,0,.1);
     font-family: "Roboto", sans-serif;
 }
 
@@ -553,9 +552,50 @@ ol {
     margin-bottom: 0;
 }
 
-.alert-dismissible .close {
-    right: 0 !important;
-    padding: .75rem .75rem;
+.alert p {
+    margin: 0;
+}
+
+.alert p:not(:last-of-type),
+.alert ul:not(:last-child) {
+    padding-bottom: 1rem;
+}
+
+.alert .alert-flag {
+    margin: -1rem -1rem auto -1rem;
+}
+
+.alert-dismissible .alert-flag {
+    margin: -1rem -3rem auto -1rem;
+}
+
+.alert .alert-flag > i {
+    margin: 1rem;
+}
+
+.alert .alert-msg {
+    /* padding: 1rem; */
+    margin: 1rem auto auto auto;
+}
+
+.alert-success .alert-flag {
+    background-color: #3C763D;
+    color: #F4FDF0;
+}
+
+.alert-danger .alert-flag {
+    background-color: #d9534f;
+    color: #fdf7f7;
+}
+
+.alert-warning .alert-flag {
+    background-color: #f0ad4e;
+    color: #fcf8f2;
+}
+
+.alert-info .alert-flag {
+    background-color: #5bc0de;
+    color: #f4f8fa;
 }
 
 /* COOKIES */
@@ -867,7 +907,7 @@ audio {
     flex-shrink: 0;
 }
 
-#alert-msg-phase {
+#alert-box-phase {
     white-space: normal;
 }
 

@@ -18,10 +18,10 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once '../includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/dbinit.php'; // connect to database
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-use Aprelendo\Includes\Classes\User;
+use Aprelendo\User;
 
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
@@ -42,10 +42,10 @@ require_once PUBLIC_PATH . 'header.php';
             </nav>
             <main>
                 <div class="alert alert-info">
-                    <span class="fas fa-info-circle"></span>
-                    &nbsp;Ebooks will remain in your "private" library. Only you will be able to access to them.
+                    Ebooks will remain in your <a href="/texts" class="alert-link">private library</a>. Only you
+                    will be able to access to them.
                 </div>
-                <div id="alert-msg" class="d-none"></div>
+                <div id="alert-box" class="d-none"></div>
                 <div class="progress d-none">
                     <div id="upload-progress-bar"
                         class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated"
@@ -88,7 +88,7 @@ require_once PUBLIC_PATH . 'header.php';
                             <input type="text" id="audio-uri" name="audio-uri" class="form-control" maxlength="200"
                                 placeholder="Google Drive link (optional)">
                             <div class="form-text" id="audio-url-helptext"><i class="fa-brands fa-google-drive"></i>
-                                Remember to allow access to this file to anyone with the link.
+                                Remember to <a href="https://support.google.com/drive/answer/2494822?hl=en&co=GENIE.Platform%3DDesktop#zippy=%2Cshare-a-file-publicly" target="_blank" rel="noopener noreferrer" class="alert-link">share this file publicly</a>, allowing access to anyone with the link.
                             </div>
                         </div>
                     </div>

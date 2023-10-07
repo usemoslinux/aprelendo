@@ -56,7 +56,7 @@ $(document).ready(function() {
             if (typeof data != "undefined" && data !== "") {
                 showMessage(data.error_msg, "alert-danger");
             } else {
-                showMessage("<strong>Great!</strong> Your language information was successfully saved."
+                showMessage("Your language information was successfully saved."
                     + " You will soon be redirected to the main page.", "alert-success");
                 setTimeout(() => { window.location.replace("/texts"); }, 2000);
             }

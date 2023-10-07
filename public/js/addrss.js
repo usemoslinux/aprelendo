@@ -25,14 +25,17 @@ $(document).ready(function () {
     })
         .done(function (data) {
             $(".lds-ellipsis").fadeOut(function () {
-                $(this).after(data);
+                if (data.error_msg != null) {
+                    showMessage(data.error_msg, 'alert-danger');
+                } else {
+                    $(this).after(data);
+                }
             });
         })
         .fail(function (xhr, ajaxOptions, thrownError) {
             $(".lds-ellipsis").fadeOut(function () {
-                $(this).after(
-                    '<div class="alert alert-danger">Oops! There was an error trying to retrieve your RSS feeds. Please try again later.</div>'
-                );
+                showMessage('There was an error trying to retrieve your RSS feeds. Please try again later.',
+                'alert-danger');
             });
         }); // end $.ajax
 
@@ -113,7 +116,7 @@ $(document).ready(function () {
             })
                 .done(function (data) {
                     if (data.error_msg != null) {
-                        showMessage(
+                        showRSSMessage(
                             $entry_text,
                             data.error_msg,
                             "alert-danger"
@@ -121,7 +124,7 @@ $(document).ready(function () {
                     } else {
                         switch (add_mode) {
                             case "readlater":
-                                showMessage(
+                                showRSSMessage(
                                     $entry_text,
                                     "Text was successfully added to the shared texts library",
                                     "alert-success"
@@ -140,7 +143,7 @@ $(document).ready(function () {
                     }
                 })
                 .fail(function () {
-                    showMessage(
+                    showRSSMessage(
                         $entry_text,
                         "There was an error trying to add this text to your library!",
                         "alert-danger"
@@ -155,7 +158,7 @@ $(document).ready(function () {
      * @param {string} html
      * @param {string} type
      */
-    function showMessage($entry_text, html, type) {
+    function showRSSMessage($entry_text, html, type) {
         html = '<p class="alert ' + type + '">' + html + "</p>";
         $entry_text
             .siblings()
@@ -165,7 +168,7 @@ $(document).ready(function () {
             .next()
             .show()
             .fadeOut(3000);
-    } // end showMessage
+    } // end showRSSMessage
 
     /**
      * Triggers when user clicks the Edit, Read now or Read later buttons

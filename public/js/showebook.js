@@ -22,8 +22,8 @@ $(document).ready(function() {
     const book = ePub();
     let text_pos = "";
 
-    window.parent.show_confirmation_dialog = false; // don't show confirmation dialog on close
-    
+    window.parent.show_confirmation_dialog = true; // show confirmation dialog on close
+
     let $viewer = document.getElementById("viewer");
 
     let formData = new FormData();
@@ -51,7 +51,7 @@ $(document).ready(function() {
         .then(fetchStatusHandler)
         .then(response => response.arrayBuffer())
         .then(arraybuffer => book.open(arraybuffer))
-        .catch(function(e) {
+        .catch(function (e) {
             alert('There was an unexpected problem opening this ebook file. Try again later.');
             window.location.replace("/texts");
         });
@@ -79,7 +79,7 @@ $(document).ready(function() {
 
     rendition.themes.select(reader.className);
 
-    book.opened.then(function(){
+    book.opened.then(function () {
         setTextAndAudioPos();
     });
 
@@ -92,9 +92,9 @@ $(document).ready(function() {
     let next = document.getElementById("next");
     next.addEventListener(
         "click",
-        function(e) {
+        function (e) {
             e.preventDefault();
-            $.when(SaveWords()).then(function() {
+            $.when(SaveWords()).then(function () {
                 let url = next.getAttribute("href");
                 display(url);
                 $("html, body").animate({
@@ -104,11 +104,11 @@ $(document).ready(function() {
         },
         false
     );
-        
+
     let prev = document.getElementById("prev");
     prev.addEventListener(
         "click",
-        function(e) {
+        function (e) {
             e.preventDefault();
             let url = prev.getAttribute("href");
             display(url);
@@ -119,9 +119,9 @@ $(document).ready(function() {
         false
     );
 
-    $("body").on("click", "#btn-close-ebook", function() {
+    $("body").on("click", "#btn-close-ebook", function () {
         // save word status before closing
-        $.when(SaveWords()).then(function() {
+        $.when(SaveWords()).then(function () {
             window.location.replace("/texts");
         });
     }); // end #btn-close-ebook.on.click
@@ -136,7 +136,7 @@ $(document).ready(function() {
 
         $(document)
             .find(".learning")
-            .each(function() {
+            .each(function () {
                 word = $(this)
                     .text()
                     .toLowerCase();
@@ -146,21 +146,23 @@ $(document).ready(function() {
             });
 
         $.ajax({
-                type: "POST",
-                url: "/ajax/archivetext.php",
-                async: false,
-                data: {
-                    words: oldwords
-                }
-            })
-            .done(function(data) {
+            type: "POST",
+            url: "/ajax/archivetext.php",
+            async: false,
+            data: {
+                words: oldwords
+            }
+        })
+            .done(function (data) {
                 if (data.error_msg == null) {
                     // update user score (gems)
                     const review_data = {
-                        words : { new:       $(".reviewing.new").length, 
-                                  learning:  $(".reviewing.learning").length, 
-                                  forgotten: $(".reviewing.forgotten").length },
-                        texts : { reviewed:  1 }
+                        words: {
+                            new: $(".reviewing.new").length,
+                            learning: $(".reviewing.learning").length,
+                            forgotten: $(".reviewing.forgotten").length
+                        },
+                        texts: { reviewed: 1 }
                     };
 
                     $.ajax({
@@ -168,38 +170,37 @@ $(document).ready(function() {
                         url: "/ajax/updateuserscore.php",
                         data: review_data
                     })
-                    .done(function(data) {
-                        if (data.error_msg != null) {
+                        .done(function (data) {
+                            if (data.error_msg != null) {
+                                alert("Oops! There was an unexpected error updating user score.");
+                            }
+                        })
+                        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
                             alert("Oops! There was an unexpected error updating user score.");
-                        } 
-                    })
-                    .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                        alert("Oops! There was an unexpected error updating user score.");
-                    });
+                        });
                 } else {
                     alert("Oops! There was an error unexpected error archiving text.");
                 }
             })
-            .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("Oops! There was an error unexpected error archiving text.");
             });
 
         // don't show confirmation dialog when closing window
         window.parent.show_confirmation_dialog = false;
-
     } // end SaveWords
 
-    parent.window.addEventListener("unload", function() {
+    parent.window.addEventListener("unload", function () {
         book.destroy();
     }); // end parent.window.unload
 
-    book.loaded.navigation.then(function(toc) {
+    book.loaded.navigation.then(function (toc) {
         let $nav = document.getElementById("toc"),
             docfrag = document.createDocumentFragment();
-        
-        const addTocItems = function(parent, tocItems) {
+
+        const addTocItems = function (parent, tocItems) {
             let $ul = document.createElement("ul");
-            tocItems.forEach(function(chapter) {
+            tocItems.forEach(function (chapter) {
                 let item = document.createElement("li");
                 let link = document.createElement("a");
                 link.textContent = chapter.label;
@@ -211,11 +212,11 @@ $(document).ready(function() {
                     addTocItems(item, chapter.subitems);
                 }
 
-                link.onclick = function() {
+                link.onclick = function () {
                     const url = link.getAttribute("href");
-                    
+
                     document.getElementById("opener").click();
-                    
+
                     display(url);
                     $("html, body").animate({
                         scrollTop: 0
@@ -237,7 +238,7 @@ $(document).ready(function() {
         }
     }); // end book.loaded.navigation
 
-    book.loaded.metadata.then(function(meta) {
+    book.loaded.metadata.then(function (meta) {
         let $title = document.getElementById("title");
         let $book_title = document.getElementById("book-title");
         let $author = document.getElementById("author");
@@ -248,7 +249,7 @@ $(document).ready(function() {
             $book_title.textContent = meta.title;
             $author.textContent = meta.creator;
             if (book.archive) {
-                book.archive.createUrl(book.cover).then(function(url) {
+                book.archive.createUrl(book.cover).then(function (url) {
                     $cover.src = url;
                 });
             } else {
@@ -257,74 +258,74 @@ $(document).ready(function() {
         }
     }); // book.loaded.metadata
 
-    function display(item){
+    function display(item) {
         let section = book.spine.get(item);
-        
-        if(section) {
-          section.render().then(function(ebook_html){
-            let $parsed = $('<div/>').append(ebook_html);
-            $parsed.find('*').removeAttr("class").removeAttr("style");
-            $parsed.find('link[rel="stylesheet"]').remove();
 
-            // underline text
-            $(".loading-spinner").fadeIn(1000);
-            $.ajax({
-                type: "POST",
-                url: "/ajax/getuserwords.php",
-                data: { txt: $parsed.html() },
-                dataType: "json"
-            })
-            .done(function(data) {
-                $viewer.innerHTML = underlineWords(data, doclang, false);
-                $(".loading-spinner").fadeOut(1000);
-            })
-            .fail(function(xhr, ajaxOptions, thrownError) {
-                alert(
-                    "There was an unexpected error when trying to underline words for this ebook!"
-                );
-            }); // end $.ajax  
+        if (section) {
+            section.render().then(function (ebook_html) {
+                let $parsed = $('<div/>').append(ebook_html);
+                $parsed.find('*').removeAttr("class").removeAttr("style");
+                $parsed.find('link[rel="stylesheet"]').remove();
 
-            // create previous and next links on top and bottom of page
-            let nextSection = section.next();
-            let prevSection = section.prev();
-    
-            if (nextSection) {
-                const nextNav = book.navigation.get(nextSection.href);
-                let nextLabel = '';
-                
-                if (nextNav) {
-                    nextLabel = nextNav.label;
+                // underline text
+                $(".loading-spinner").fadeIn(1000);
+                $.ajax({
+                    type: "POST",
+                    url: "/ajax/getuserwords.php",
+                    data: { txt: $parsed.html() },
+                    dataType: "json"
+                })
+                    .done(function (data) {
+                        $viewer.innerHTML = underlineWords(data, doclang, false);
+                        $(".loading-spinner").fadeOut(1000);
+                    })
+                    .fail(function (xhr, ajaxOptions, thrownError) {
+                        alert(
+                            "There was an unexpected error when trying to underline words for this ebook!"
+                        );
+                    }); // end $.ajax  
+
+                // create previous and next links on top and bottom of page
+                let nextSection = section.next();
+                let prevSection = section.prev();
+
+                if (nextSection) {
+                    const nextNav = book.navigation.get(nextSection.href);
+                    let nextLabel = '';
+
+                    if (nextNav) {
+                        nextLabel = nextNav.label;
+                    } else {
+                        nextLabel = "next";
+                    }
+
+                    next.textContent = nextLabel + " »";
+                    next.href = nextSection.href;
+                    next.title = "Go to next chapter & update word status";
                 } else {
-                    nextLabel = "next";
+                    next.textContent = "";
                 }
-    
-                next.textContent = nextLabel + " »";
-                next.href = nextSection.href;
-                next.title = "Go to next chapter & update word status";
-            } else {
-                next.textContent = "";
-            }
-    
-            if (prevSection) {
-                const prevNav = book.navigation.get(prevSection.href);
-                let prevLabel = '';
-    
-                if (prevNav) {
-                    prevLabel = prevNav.label;
-                } else {
-                    prevLabel = "previous";
-                }
-                
-                prev.textContent = "« " + prevLabel;
-                prev.href = prevSection.href;
-                prev.title = "Go to previous chapter";
-            } else {
-                prev.textContent = "";
-            }
 
-            text_pos = item;
-            updateToc(item);
-          });
+                if (prevSection) {
+                    const prevNav = book.navigation.get(prevSection.href);
+                    let prevLabel = '';
+
+                    if (prevNav) {
+                        prevLabel = prevNav.label;
+                    } else {
+                        prevLabel = "previous";
+                    }
+
+                    prev.textContent = "« " + prevLabel;
+                    prev.href = prevSection.href;
+                    prev.title = "Go to previous chapter";
+                } else {
+                    prev.textContent = "";
+                }
+
+                text_pos = item;
+                updateToc(item);
+            });
         }
 
         return section;
@@ -334,12 +335,12 @@ $(document).ready(function() {
         let $nav = document.getElementById('toc');
         let $selector = $nav.querySelector('.fw-bold');
         if ($selector !== null) {
-            $selector.classList.remove('fw-bold');
+            $selector.classList.remove('fw-bold', 'text-primary');
         }
 
         $selector = $nav.querySelector('a[href*="' + current_chapter_url + '"]');
         if ($selector !== null) {
-            $selector.classList.add('fw-bold');
+            $selector.classList.add('fw-bold', 'text-primary');
         }
     }
 
@@ -394,7 +395,7 @@ $(document).ready(function() {
         });
     }
 
-    $(window).on('beforeunload', function() {
+    $("#btn-close-ebook").on('click', function() {
         // save book position to resume reading from there later
         let audio = document.getElementById("audioplayer");
         let audio_pos = audio != null ? audio.currentTime : 0;
@@ -402,5 +403,8 @@ $(document).ready(function() {
         if (text_pos) {
             saveTextAndAudioPos(text_pos, audio_pos);
         }
+
+        // don't show confirmation dialog when closing window
+        show_confirmation_dialog = false;
     });
 });
