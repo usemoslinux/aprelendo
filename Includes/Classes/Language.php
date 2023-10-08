@@ -190,7 +190,7 @@ class Language extends DBEntity
      */
     public static function getNameFromIso(string $iso_code): string
     {
-        return self::$iso_code[$iso_code];
+        return array_key_exists($iso_code, self::$iso_code) ? self::$iso_code[$iso_code] : '';
     } // end getNameFromIso()
 
     /**
