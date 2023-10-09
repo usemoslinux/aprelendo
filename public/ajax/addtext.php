@@ -46,11 +46,11 @@ try {
             $title = $_POST['title'];
             $author = $_POST['author'];
             $source_uri = $_POST['url'];
+            $audio_uri = $_POST['audio-url'];
             $text = $_POST['text'];
             $type = $_POST['type'];
             $level = isset($_POST['level']) ? $_POST['level'] : 2;  // default to 2 (intermediate) if not set
             $is_shared = $_POST['mode'] == 'video' || isset($_POST['shared-text']) ? true : false;
-            $audio_uri = '';
             $errors = [];
             
             // initialize text table
@@ -69,6 +69,14 @@ try {
                 $errors[] = "<li>Text is a required field. Please enter one and try again. In case you
                 are uploading a video, enter a valid YouTube URL and fetch the correct transcript.
                 Only videos with subtitles in your target language are supported.</li>";
+            }
+
+            // check if audio file exists or is accessible
+            if (isset($audio_uri)) {
+                $headers = get_headers($audio_uri);
+                if (stripos($headers[0], '200 OK') === false) {
+                    $errors[] = "<li>The provided audio file cannot be accessed. Try another URL address.</li>";
+                }
             }
             
             /*  For some reason new lines on the client side are counted by Jquery/JS as '\n',

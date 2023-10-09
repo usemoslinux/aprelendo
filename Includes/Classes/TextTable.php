@@ -96,24 +96,21 @@ class TextTable extends Table
      */
     private function generateAudioIcon(array $row): string
     {
-        $has_audio = $this->hasAudio($row);
-        return $has_audio ? '<span title="Has audio" class="fa-solid fa-headphones"></span>' : '';
-    } // end generateAudioIcon()
+        $result = '';
 
-    /**
-     * Checks if a row has audio
-     *
-     * @param array $row
-     * @return boolean
-     */
-    private function hasAudio(array $row): bool
-    {
         $adequate_text_length = $row['char_length'] < Reader::MAX_TEXT_LENGTH + 1;
         $not_video_or_ebook = $row['type'] < 5 || $row['type'] > 6;
 
-        return !empty($row['audio_uri']) || ($adequate_text_length && $not_video_or_ebook);
-    } // end hasAudio()
-    
+        if (!empty($row['audio_uri'])) {
+            $result = '<span title="Has audio (provided by user)" class="fa-solid fa-headphones"></span>';
+        } elseif ($adequate_text_length && $not_video_or_ebook) {
+            $result = '<span title="Has audio (created by TTS engine - only works in assisted learning mode)" '
+                . 'class="fa-solid fa-volume-high"></span>';
+        }
+        
+        return $result;
+    } // end generateAudioIcon()
+
     /**
      * Generates the HTML link for a row
      *

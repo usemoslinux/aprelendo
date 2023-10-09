@@ -89,11 +89,11 @@ function printRSSFeed($feed, $groupindex): string
             $itemindex = 1; // initialize counter for accordion items
             foreach ($feed_articles as $article) {
                 // Get article data
-                $art_title = $article['title'];
+                $text_title = $article['title'];
                 $art_date = $article['date'];
-                $art_author = $article['author'];
+                $text_author = $article['author'];
                 $art_src = $article['src'];
-                $art_content = $article['content'];
+                $text_content = $article['content'];
                 
                 // Initialize variables for accordion item
                 $heading_id     = 'heading-' . $groupindex . '-' . $itemindex;
@@ -104,16 +104,16 @@ function printRSSFeed($feed, $groupindex): string
                 $html .= "<div class='accordion-item'>"
                     . "<h2 class='accordion-header' id='$heading_id'>"
                     . "<button id='$label_id' class='accordion-button collapsed entry-info' data-bs-toggle='collapse' "
-                    . "data-bs-target='#$item_id' data-pubdate='$art_date' data-author='$art_author' "
+                    . "data-bs-target='#$item_id' data-pubdate='$art_date' data-author='$text_author' "
                     . "data-src='$art_src' aria-expanded='false' aria-controls='$item_id'>"
-                    . "$art_title"
+                    . "$text_title"
                     . "</button>"
                     . "</h2>"
                     . "<div id='$item_id' class='accordion-collapse collapse' aria-labelledby='$label_id' "
                     . "data-bs-parent='#$accordion_id'>"
                     . "<div class='accordion-body'>";
 
-                $html .= '<div class="entry-text">' . strip_tags($art_content, '<p>') . '</div>';
+                $html .= '<div class="entry-text">' . strip_tags($text_content, '<p>') . '</div>';
                 
                 $html .= "<hr>
                             <div>

@@ -59,11 +59,11 @@ $(document).ready(function () {
      * @param {string} add_mode three possibilities, each corresponding to one button: 'edit', 'readlater', 'readnow'
      */
     function addTextToLibrary($entry_info, $entry_text, add_mode) {
-        const art_title = $.trim($entry_info.text());
-        const art_author = $entry_info.attr("data-author");
-        const art_url = $entry_info.attr("data-src");
+        const text_title = $.trim($entry_info.text());
+        const text_author = $entry_info.attr("data-author");
+        const text_url = $entry_info.attr("data-src");
         const art_pubdate = $entry_info.attr("data-pubdate");
-        const art_content = $entry_text[0].innerText;
+        const text_content = $entry_text[0].innerText;
 
         if (add_mode == "edit") {
             // create a hidden form and submit it
@@ -71,18 +71,18 @@ $(document).ready(function () {
                 '<form id="form_add_audio" action="../addtext" method="post"></form>'
             )
                 .append(
-                    '<input type="hidden" name="art_title" value="' +
-                    art_title +
+                    '<input type="hidden" name="text_title" value="' +
+                    text_title +
                     '">'
                 )
                 .append(
-                    '<input type="hidden" name="art_author" value="' +
-                    htmlEscape(art_author) +
+                    '<input type="hidden" name="text_author" value="' +
+                    htmlEscape(text_author) +
                     '">'
                 )
                 .append(
-                    '<input type="hidden" name="art_url" value="' +
-                    htmlEscape(art_url) +
+                    '<input type="hidden" name="text_url" value="' +
+                    htmlEscape(text_url) +
                     '">'
                 )
                 .append(
@@ -91,12 +91,12 @@ $(document).ready(function () {
                     '">'
                 )
                 .append(
-                    '<input type="hidden" name="art_content" value="' +
-                    htmlEscape(art_content) +
+                    '<input type="hidden" name="text_content" value="' +
+                    htmlEscape(text_content) +
                     '">'
                 )
                 .append(
-                    '<input type="hidden" name="art_is_shared" value="true">'
+                    '<input type="hidden" name="text_is_shared" value="true">'
                 );
             $("body").append(form);
             form.submit();
@@ -106,11 +106,11 @@ $(document).ready(function () {
                 url: "ajax/addtext.php",
                 dataType: "JSON",
                 data: {
-                    title: art_title,
-                    author: art_author,
-                    url: art_url,
+                    title: text_title,
+                    author: text_author,
+                    url: text_url,
                     pubdate: art_pubdate,
-                    text: art_content,
+                    text: text_content,
                     mode: "rss"
                 }
             })

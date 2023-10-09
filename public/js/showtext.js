@@ -1146,8 +1146,10 @@ $(document).ready(function() {
      */
     function loadAudio() {
         let $audio_player = $("#audioplayer");
+        let audio_player_src = $("#audio-source").attr('src');
         // if audio player is found and not an ebook...
-        if ($audio_player.length > 0 && !$('#readerpage > :first').is('#navigation')) {
+        if ($audio_player.length > 0 && typeof audio_player_src === 'undefined' 
+            && !$('#readerpage > :first').is('#navigation')) {
             const txt = $("#text").text();
 
             $.ajax({
@@ -1167,7 +1169,7 @@ $(document).ready(function() {
                         skipAudioPhases();
                         return false;
                     }
-                    $("#audio-mp3").attr("src", e.response);
+                    $("#audio-source").attr("src", e.response);
                     $audio_player[0].load();
                     $("#audioplayer-loader").addClass("d-none");
                     $("#audioplayer").removeClass("d-none");

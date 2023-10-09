@@ -43,36 +43,37 @@ use Aprelendo\Texts;
             <?php
             if (isset($_GET['id'])) {
                 // modify text
-                $id = $_GET['id'];
+                $text_id = $_GET['id'];
                 
                 $text = new Texts($pdo, $user->id, $user->lang_id);
-                $text->loadRecord($id);
+                $text->loadRecord($text_id);
                 
-                $art_title = $text->title;
-                $art_author = $text->author;
-                $art_url = $text->source_uri;
-                $art_content = $text->text;
-            } elseif (isset($_POST['art_title'])) {
+                $text_title = $text->title;
+                $text_author = $text->author;
+                $text_url = $text->source_uri;
+                $text_audio_url = $text->audio_uri;
+                $text_content = $text->text;
+            } elseif (isset($_POST['text_title'])) {
                 // rss
-                $art_title = $_POST['art_title'];
-                $art_author = $_POST['art_author'];
-                $art_url = $_POST['art_url'];
-                $art_content = $_POST['art_content'];
-                $art_is_shared = $_POST['art_is_shared'];
+                $text_title = $_POST['text_title'];
+                $text_author = $_POST['text_author'];
+                $text_url = $_POST['text_url'];
+                $text_content = $_POST['text_content'];
+                $text_is_shared = $_POST['text_is_shared'];
             } elseif (isset($_GET['sh'])) {
                 // shared text
-                $art_is_shared = true;
+                $text_is_shared = true;
             } elseif (isset($_GET['url'])) {
                 // external call (bookmarklet, addon)
-                $art_url = $_GET['url'];
-                $art_is_shared = true;
+                $text_url = $_GET['url'];
+                $text_is_shared = true;
                 $external_call = true;
             }
             ?>
             <main>
                 <div id="alert-box" class="d-none"></div>
                 <form id="form-addtext" class="add-form" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="id" value="<?php if (isset($id)) {echo $id;}?>">
+                    <input type="hidden" name="id" value="<?php if (isset($text_id)) {echo $text_id;}?>">
                     <input type="hidden" name="mode" value="simple">
                     <div class="row">
                         <div class="mb-3 col-lg-6">
@@ -99,13 +100,13 @@ use Aprelendo\Texts;
                             <label for="title">Title:</label>
                             <input type="text" id="title" name="title" class="form-control"
                                 maxlength="200" placeholder="Text title (required)"
-                                autofocus required value="<?php if (isset($art_title)) {echo $art_title;}?>">
+                                autofocus required value="<?php if (isset($text_title)) {echo $text_title;}?>">
                         </div>
                         <div class="mb-3 col-lg-6">
                             <label for="author">Author:</label>
                             <input type="text" id="author" name="author" class="form-control"
                                 maxlength="100" placeholder="Author full name (optional)"
-                                value="<?php if (isset($art_author)) {echo $art_author;}?>">
+                                value="<?php if (isset($text_author)) {echo $text_author;}?>">
                         </div>
                     </div>
                     <div class="row">
@@ -115,7 +116,7 @@ use Aprelendo\Texts;
 
                                 <input type="url" id="url" name="url" class="form-control"
                                     placeholder="Source URL (optional)"
-                                    value="<?php if (isset($art_url)) {echo $art_url;}?>">
+                                    value="<?php if (isset($text_url)) {echo $text_url;}?>">
                                 <button id="btn-fetch" class="btn btn-secondary" type="button">
                                     <span id="btn-fetch-img" class="fas fa-arrow-down text-warning"></span>
                                     &nbsp;Fetch
@@ -123,11 +124,19 @@ use Aprelendo\Texts;
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="mb-3 col-12">
+                            <label class="me-2 mt-2" for="audio-url">Audio URL:</label>
+                            <input type="text" id="audio-url" name="audio-url" class="form-control"
+                                placeholder="Audio URL (optional)"
+                                value="<?php if (isset($text_audio_url)) {echo $text_audio_url;}?>">
+                        </div>
+                    </div>
                     <div class="row mb-2">
                         <div class="col-12">
                             <div id="shared-text-wrapper-div">
                                 <input id="shared-text" class="form-check-input" type="checkbox" name="shared-text"
-                                    <?php if (!empty($art_is_shared)) {echo 'checked' ;}?>>
+                                    <?php if (!empty($text_is_shared)) {echo 'checked' ;}?>>
                                 <label class="form-check-label" for="shared-text" id="shared-text-label">
                                     &nbsp;Share text with our community
                                 </label>
@@ -142,7 +151,7 @@ use Aprelendo\Texts;
                             </div>
                             <textarea id="text" name="text" class="form-control" rows="16" cols="80"
                                 placeholder="Text goes here (required), max. length = 10,000 chars" required><?php
-                                    if (isset($art_content)) {echo $art_content;}
+                                    if (isset($text_content)) {echo $text_content;}
                             ?></textarea>
                             <label for="upload-text" id="upload-txtfile-label">Upload txt file:</label>
                             <input id="upload-text" type="file" name="upload-text" accept=".txt">

@@ -75,13 +75,13 @@ require_once PUBLIC_PATH . 'header.php';
                             <label for="title">Title:</label>
                             <input type="text" id="title" name="title" class="form-control" maxlength="200"
                                 placeholder="Book title (required)" autofocus required
-                                value="<?php if (isset($art_title)) {echo $art_title;}?>">
+                                value="<?php if (isset($text_title)) {echo $text_title;}?>">
                         </div>
                         <div class="mb-3 col-lg-6">
                             <label for="author">Author:</label>
                             <input type="text" id="author" name="author" class="form-control" maxlength="100"
                                 placeholder="Author (required)" required
-                                value="<?php if (isset($art_author)) {echo $art_author;}?>">
+                                value="<?php if (isset($text_author)) {echo $text_author;}?>">
                         </div>
                         <div class="mb-3 col-12">
                             <label for="audio-uri">Audio:</label>

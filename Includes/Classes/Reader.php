@@ -92,40 +92,16 @@ class Reader
             $html .= '<div class="author">' . $this->text->author . '</div>';
         }
         
-        if ($this->prefs->assisted_learning && !$this->is_long_text) {
-            // display audio player
-            $html .= '<hr>';
+        // display audio player, if necessary
+        if (!empty($this->text->audio_uri)) {
+            $html .= $this->showAudioPlayer(false);
+        }
 
-            $html .=   '<div id="alert-box-audio" class="alert alert-danger d-none"></div>';
+        if ($this->prefs->assisted_learning) {
+            if (!$this->is_long_text && empty($this->text->audio_uri)) {
+                $html .= $this->showAudioPlayer(true);
+            }
 
-            $html .=   '<div id="audioplayer-loader" class="lds-facebook mx-auto" title="Loading audio...">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>';
-
-            $display_mode_css = $this->prefs->display_mode . 'mode';
-
-            $html .=   '<div id="audioplayer-container" class="' . $display_mode_css . '">' .
-                            '<audio controls id="audioplayer" class="d-none">
-                                    <source id="audio-mp3" src="" type="audio/mpeg">
-                                    Your browser does not support the audio element.
-                                </audio>
-                                <form id="audioplayer-speedbar" class="d-none">
-                                    <div id="audioplayer-speedbar-container">
-                                        <label id="label-speed" class="basic" for="range-speed">
-                                            Speed: <span id="currentpbr">1.0</span> x</label>
-                                        <input id="range-speed" type="range" class="form-range" value="1" min="0.5"
-                                            max="2" step="0.1">
-                                        <label id="label-abloop" class="px-1 basic">A-B Loop:</label>
-                                        <button id="btn-abloop" class="btn btn-outline-secondary btn-sm"
-                                            title="Toggle A-B Loop">A</button>
-                                    </div>
-                                </form>
-                            </div>';
-            
-            $html .= '<hr>';
-            
             // display assisted learning message
             $html .=   '<div id="alert-box-phase" class="alert alert-info alert-dismissible show" role="alert">
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
@@ -148,6 +124,82 @@ class Reader
         $html .= '<p></p></div>';
         return $html;
     } // end showText()
+
+    /**
+     * Prints audio player html
+     *
+     * @param string $audio_url
+     * @return string
+     */
+    private function showAudioPlayer(bool $show_loading): string
+    {
+        $audio_url = $this->text->audio_uri;
+        $audio_mime_type = $this->getAudioMimeType();
+
+        $html = '<hr>';
+
+        $html .= '<div id="alert-box-audio" class="alert alert-danger d-none"></div>';
+
+        if ($show_loading) {
+            $html .= '<div id="audioplayer-loader" class="lds-facebook mx-auto" title="Loading audio...">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>';
+        }
+        
+        $display_mode_css = $this->prefs->display_mode . 'mode';
+        $audio_controls_class = $show_loading ? 'class="d-none"' : '';
+
+        $html .= <<<AUDIOPLAYER_CONTAINER
+            <div id="audioplayer-container" class="$display_mode_css">
+                <audio controls id="audioplayer" $audio_controls_class>
+                    <source id="audio-source" src="$audio_url" type="$audio_mime_type">
+                    Your browser does not support the audio element.
+                </audio>
+                <form id="audioplayer-speedbar" class="d-none">
+                    <div id="audioplayer-speedbar-container">
+                        <label id="label-speed" class="basic" for="range-speed">
+                            Speed: <span id="currentpbr">1.0</span> x</label>
+                        <input id="range-speed" type="range" class="form-range" value="1" min="0.5"
+                            max="2" step="0.1">
+                        <label id="label-abloop" class="px-1 basic">A-B Loop:</label>
+                        <button id="btn-abloop" class="btn btn-outline-secondary btn-sm"
+                            title="Toggle A-B Loop">A</button>
+                    </div>
+                </form>
+            </div>
+            AUDIOPLAYER_CONTAINER;
+        
+        $html .= '<hr>';
+
+        return $html;
+    }
+
+    /**
+     * Return audio MIME type based on URI file extension
+     *
+     * @return string
+     */
+    private function getAudioMimeType(): string {
+        // Get file extension
+        $file_extension = pathinfo($this->text->audio_uri, PATHINFO_EXTENSION);
+
+        // Map file extensions to audio types
+        $audio_types = array(
+            'mp3'  => 'audio/mpeg',
+            'ogg'  => 'audio/ogg',
+            'wav'  => 'audio/wav',
+            'aac'  => 'audio/aac',
+            'm4a'  => 'audio/x-m4a',
+            'webm' => 'audio/webm',
+            'flac' => 'audio/flac',
+            'opus' => 'audio/opus',
+        );
+
+        // Set the appropriate MIME type based on the file extension
+        return isset($audio_types[$file_extension]) ? $audio_types[$file_extension] : 'audio/mpeg';
+    }
 
     /**
      * Constructs HTML code to show text in reader
