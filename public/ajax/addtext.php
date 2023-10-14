@@ -61,18 +61,18 @@ try {
             }
             
             // check if required fields are set
-            if (!isset($title) || empty($title)) {
+            if (empty($title)) {
                 $errors[] = "<li>Title is a required field. Please enter one and try again.</li>";
             }
                         
-            if (!isset($text) || empty($text)) {
+            if (empty($text)) {
                 $errors[] = "<li>Text is a required field. Please enter one and try again. In case you
                 are uploading a video, enter a valid YouTube URL and fetch the correct transcript.
                 Only videos with subtitles in your target language are supported.</li>";
             }
 
             // check if audio file exists or is accessible
-            if (isset($audio_uri)) {
+            if (!empty($audio_uri)) {
                 $headers = get_headers($audio_uri);
                 if (stripos($headers[0], '200 OK') === false) {
                     $errors[] = "<li>The provided audio file cannot be accessed. Try another URL address.</li>";
