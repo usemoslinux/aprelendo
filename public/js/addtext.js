@@ -140,8 +140,21 @@ $(document).ready(function() {
                             const doc = document.implementation.createHTMLDocument(
                                 "New Document"
                             );
-                            doc.body.parentElement.innerHTML = data.file_contents;
+                            doc.body.parentElement.innerHTML = DOMPurify.sanitize(data.file_contents);
                             const article = new Readability(doc).parse();
+
+                            if (article == null) {
+                                $("#url").val(data.url);
+                                showMessage(
+                                    "It was not possible to extract the text from the URL you provided. " +
+                                    "Try doing it manually.",
+                                    "alert-danger"
+                                );
+                                // alert("It was not possible to extract the text from the URL you provided. " +
+                                    // "Try doing it manually.");
+                                return;
+                            }
+
                             $("#title").val($("<input>").html(article.title).text());
                             $("#author").val($("<input>").html(article.byline).text());
                             $("#url").val(data.url);

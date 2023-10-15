@@ -175,6 +175,12 @@ use Aprelendo\Texts;
     integrity="sha384-YqVytsOEvlLnJ+cNHmbexthfaZ482cPdQ+GQuIZngy2l0P+HIKE7wpmcUC6Ni5iw"
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"
+    integrity="sha512-H+rglffZ6f5gF7UJgvH4Naa+fGCgjrHKMgoFOGmcPTRwR6oILo5R+gtzNrpDp7iMV3udbymBVjkeZGNz1Em4rQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+</script>
+
 <script defer src="/js/addtext.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 

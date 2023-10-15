@@ -72,7 +72,12 @@ if (!$user_auth->isLoggedIn()) {
                                 <li>
                                     <a href="https://github.com/mozilla/readability" target="_blank"
                                         rel="noopener noreferrer">Readability</a>, by Mozilla (used to fetch texts from
-                                    web sources)
+                                        external web sources)
+                                </li>
+                                <li>
+                                    <a href="https://github.com/cure53/DOMPurify" target="_blank"
+                                        rel="noopener noreferrer">DOMPurify</a>, by cure53 (used for security
+                                        before fetching texts from external web sources)
                                 </li>
                                 <li>
                                     <a href="https://github.com/bazh/subtitles-parser" target="_blank"

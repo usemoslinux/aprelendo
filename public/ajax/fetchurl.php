@@ -34,8 +34,8 @@ try {
     ];
     if (!empty($_GET['url'])) {
         $url = $_GET['url'];
-        $file_contents = Curl::getUrlContents($url, $options);
         $url = Curl::getFinalUrl($url);
+        $file_contents = Curl::getUrlContents($url, $options);
         $result = $file_contents ? ['url' => $url, 'file_contents' => $file_contents] : '';
         header('Content-Type: application/json');
         echo json_encode($result);

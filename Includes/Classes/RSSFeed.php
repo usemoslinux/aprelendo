@@ -65,7 +65,7 @@ class RSSFeed
             throw new UserException('Error fetching the feed: ' . $url);
         }
 
-        $xml_feed = simplexml_load_string($feed_contents);
+        $xml_feed = simplexml_load_string($feed_contents, LIBXML_NOERROR |  LIBXML_ERR_NONE);
 
         if (!$xml_feed) {
             throw new UserException('Error parsing the feed: ' . $url);
