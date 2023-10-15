@@ -180,10 +180,14 @@ class Videos extends DBEntity
     private function fetchTranscript(string $youtube_id, array $available_subs): \SimpleXMLElement
     {
         // Fetch transcript using shell_exec
-        $command = "youtube_transcript_api $youtube_id"
+        $command = PYTHON_VENV . "/bin/python " . PYTHON_VENV . "/bin/youtube_transcript_api $youtube_id"
             . " --languages " . implode(" ", $available_subs)
             . " --format json --exclude-generated 2>&1";
         $output = shell_exec($command);
+
+        if ($output === null) {
+            throw new InternalException();
+        }
 
         $output_array = json_decode($output, true);
 
