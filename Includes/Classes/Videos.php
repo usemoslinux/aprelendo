@@ -189,9 +189,9 @@ class Videos extends DBEntity
 
         if (!$output_array) {
             throw new UserException("The video might lack subtitles or they're unavailable in the desired "
-                . "language. Auto-generated Google subtitles are of low quality and won't work. Consider trying a "
-                . "different video or using the <a href='" . $this->getFilmotUrl() . "' "
-                . "target='_blank' class='alert-link'>Filmot search engine</a>  to find manually created subtitles.");
+                . "language. Auto-generated subtitles are of low quality and, thus, are not supported. Consider "
+                . "using the <a href='" . $this->getFilmotUrl() . "' target='_blank' class='alert-link'>"
+                . "Filmot search engine</a>  to find YouTube videos with manually created subtitles.");
         }
 
         // Convert transcript to XML

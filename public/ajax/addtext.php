@@ -46,7 +46,7 @@ try {
             $title = $_POST['title'];
             $author = $_POST['author'];
             $source_uri = $_POST['url'];
-            $audio_uri = $_POST['audio-url'];
+            $audio_uri = isset($_POST['audio-url']) ? $_POST['audio-url'] : '';
             $text = $_POST['text'];
             $type = $_POST['type'];
             $level = isset($_POST['level']) ? $_POST['level'] : 2;  // default to 2 (intermediate) if not set
