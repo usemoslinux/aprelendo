@@ -1,5 +1,4 @@
 .vscode/
-.venv/
 vendor/
 config/config.php
 public/tests/
