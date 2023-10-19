@@ -31,6 +31,7 @@ use Aprelendo\SharedTexts;
 use Aprelendo\EbookFile;
 use Aprelendo\LogFileUploads;
 use Aprelendo\Gems;
+use Aprelendo\Curl;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
@@ -73,6 +74,8 @@ try {
 
             // check if audio file exists or is accessible
             if (!empty($audio_uri)) {
+                $audio_uri = Curl::getFinalUrl($audio_uri);
+
                 $headers = get_headers($audio_uri);
                 if (stripos($headers[0], '200 OK') === false) {
                     $errors[] = "<li>The provided audio file cannot be accessed. Try another URL address.</li>";

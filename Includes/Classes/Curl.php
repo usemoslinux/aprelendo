@@ -85,19 +85,25 @@ class Curl
     {
         $final_url = $url;
         $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_NOBODY, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        
-        $result = curl_exec($ch);
-        
-        if (preg_match('~Location: (.*)~i', $result, $match)) {
-            $final_url = trim($match[1]);
+    
+        while (true) {
+            curl_setopt($ch, CURLOPT_URL, $final_url);
+            curl_setopt($ch, CURLOPT_HEADER, true);
+            curl_setopt($ch, CURLOPT_NOBODY, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+            $result = curl_exec($ch);
+    
+            if (preg_match('~Location: (.*)~i', $result, $match)) {
+                $final_url = trim($match[1]);
+            } else {
+                break; // No more redirects
+            }
         }
-
+    
+        curl_close($ch);
+    
         return $final_url;
     }
 }
