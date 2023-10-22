@@ -120,6 +120,11 @@ class TextTable extends Table
     private function generateLink(array $row): string
     {
         $title = $row['title'];
+
+        if ($this->show_archived) {
+            return $title;
+        }
+
         $link_html = '';
         if (!empty($row['type'])) {
             switch ($row['type']) {
