@@ -40,7 +40,7 @@ $(document).ready(function() {
     let $dic_frame = $doc.find("#dicFrame");
     let $pagereader = $doc.find('iframe[id^="epubjs"]');
     $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
-      
+    
     loadAudio();
 
     // underline text
@@ -1148,7 +1148,7 @@ $(document).ready(function() {
         let $audio_player = $("#audioplayer");
         let audio_player_src = $("#audio-source").attr('src');
         // if audio player is found and not an ebook...
-        if ($audio_player.length > 0 && typeof audio_player_src === 'undefined' 
+        if ($audio_player.length > 0 && audio_player_src === '' 
             && !$('#readerpage > :first').is('#navigation')) {
             const txt = $("#text").text();
 
