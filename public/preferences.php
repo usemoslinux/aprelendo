@@ -171,19 +171,19 @@ $sel = ' selected ';
                             <br>
                             <div class="card">
                                 <div class="card-header">
-                                    Learning
+                                    Learning mode
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <label for="assistedlearning">Mode:</label>
+                                        <label for="assistedlearning">Assisted learning:</label>
                                         <div>
                                             <select name="assistedlearning" id="assistedlearning"
                                                 class="form-control form-select">
                                                 <option value="1" <?php echo $assisted_learning ? $sel : ''; ?>>
-                                                    Assisted
+                                                    On
                                                 </option>
                                                 <option value="0" <?php echo !$assisted_learning ? $sel : ''; ?>>
-                                                    Free
+                                                    Off
                                                 </option>
                                             </select>
                                         </div>

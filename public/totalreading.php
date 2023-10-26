@@ -172,28 +172,30 @@ if (!$user_auth->isLoggedIn()) {
                             <h4>How does Aprelendo implement total reading?</h4>
                             <div class="row">
                                 <div class="col-12 col-lg-6">
-                                    <p>Aprelendo allows reading texts in <strong>two modes</strong>: free and
-                                        assisted. <strong>Free mode</strong> lets you read texts however you
-                                        like. <strong>Assisted mode</strong>, on the other hand, leads you through
-                                        5 phases:</p>
+                                    <p>In Aprelendo, conventional text reading is just the beginning. You have the
+                                        option to delve deeper into the material through our assisted learning feature.
+                                        This unique approach encourages you to revisit the text multiple times, each
+                                        time with a specific objective, enhancing your comprehension and vocabulary
+                                        acquisition.</p>
                                     <ol>
-                                        <li><strong>Reading</strong>: try to understand what the text is about. If you
-                                            see words or phrases that you don&#39;t understand, look them up in the
-                                            built-in dictionary.</li>
-                                        <li><strong>Listening</strong>: listen to the -automagically created- audio
-                                            version of the text and pay attention to the different sounds.</li>
-                                        <li><strong>Speaking</strong>: speak on top of the recording, trying to imitate
-                                            the pronunciation of each word. You can reduce the speed of the recording
-                                            if necessary.</li>
-                                        <li><strong>Dictation</strong>: type the words you marked for learning as
-                                            they are spoken.</li>
-                                        <li><strong>Review</strong>: this is the most
+                                        <li><strong>Phase 1 - Reading</strong>: gain a grasp of the text's meaning. If
+                                            you encounter unfamiliar words or phrases, effortlessly consult our built-in
+                                            dictionary.</li>
+                                        <li><strong>Phase 2 - Listening</strong>: immerse yourself in the automatically
+                                            generated audio version of the text, paying attention to diverse sounds.
+                                        </li>
+                                        <li><strong>Phase 3 - Speaking</strong>: elevate your learning by verbally
+                                            engaging with the material. Mimic the pronunciation of each word by speaking
+                                            over the recording, adjusting the speed as needed.</li>
+                                        <li><strong>Phase 4 - Dictation</strong>: solidify your learning by typing the
+                                            marked words as they are spoken.</li>
+                                        <li><strong>Phase 5 - Review</strong>: this is the most
                                             <a href="https://en.wikipedia.org/wiki/Testing_effect" target="_blank"
                                                 rel="noopener noreferrer">critical phase</a> for long-term language
-                                            acquisition. Review all the underlined words. Make an effort to remember
-                                            their meaning and pronunciation, while also paying attention to their
-                                            spelling. Try to come up with alternative phrases in which you could use
-                                            them. The latter is essential to turn your
+                                            acquisition. Review all the underlined words. Revisit all underlined words,
+                                            actively recalling their meanings and pronunciations. Focus on spelling and
+                                            explore alternative phrases in which you could apply them. . This step is
+                                            crucial for transitioning your
                                             <a href="https://en.wiktionary.org/wiki/passive_vocabulary" target="_blank"
                                                 rel="noopener noreferrer">passive vocabulary</a> into
                                             <a href="https://en.wiktionary.org/wiki/active_vocabulary" target="_blank"
