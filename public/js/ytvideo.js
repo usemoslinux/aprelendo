@@ -18,6 +18,7 @@
  */
 
 // Youtube JS code to load iframe player (w/access to YT API)
+let video_paused;
 
 // 2. This code loads the IFrame Player API code asynchronously.
 let tag = document.createElement("script");
@@ -60,10 +61,8 @@ function onPlayerReady(event) {
 //    The function indicates that when playing a video (state=1),
 //    the player should play for six seconds and then stop.
 function onPlayerStateChange(event) {
-    let video_paused;
-    
     if (event.data === YT.PlayerState.PLAYING) {
-        let $obj = $("div.text-center", "#text-container");
+        let $obj = $("div", "#text-container");
         let video_time = 0;
         let timer;
         video_paused = false;
