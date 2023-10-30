@@ -15,14 +15,22 @@ function buildTranslationLink(translator_URI, $selword) {
     // select first part of sentence: from sentence divider (.!?) to selection
     while (!final_iteration) {
         if ($end_obj.index() === 0) {
-            sentence = $end_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim() + " ";
-            $end_obj = $end_obj.parent().prev().children().last();
-            continue;
+            // sentence = $end_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim() + " ";
+            // $end_obj = $end_obj.parent().prev().children().last();
+            // continue;
+            sentence = $end_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
+            break;
         }
+
+        if ($end_obj.filter(sentence_dividers).length > 0) {
+            break;
+        } 
 
         $start_obj = $end_obj
             .prevAll(sentence_dividers)
+            .next()
             .last();
+
         final_iteration = $start_obj.length > 0 || $end_obj.filter(sentence_dividers).length > 0;
         $start_obj = final_iteration ? $start_obj : $end_obj.siblings().addBack().first();
 
@@ -42,24 +50,31 @@ function buildTranslationLink(translator_URI, $selword) {
     $end_obj = $();
     $start_obj = $selword.next().length === 0 ? $selword : $selword.next();
     let regex = /[.。!?]/g;
+    let separator;
     let matches = sentence.match(regex);
     final_iteration = matches;
     while (!final_iteration) {
         $end_obj = $start_obj
             .nextAll(sentence_dividers)
-            .last()
+            .first()
 
         $end_obj = $end_obj.index() === $end_obj.parent().children().length ? $start_obj : $end_obj;
         final_iteration = $end_obj.length > 0 || $start_obj.filter(sentence_dividers).length > 0;
         $end_obj = final_iteration ? $end_obj : $start_obj.siblings().last();
 
-        $sentence_obj = $start_obj
+        if ($start_obj.filter(sentence_dividers).length > 0) {
+            $sentence_obj = $start_obj;
+            separator = "";
+        } else {
+            $sentence_obj = $start_obj
             .nextUntil($end_obj)
             .addBack()
             .next()
-            .addBack();
+            .addBack();    
+            separator = " ";
+        }
 
-        sentence += $sentence_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim() + " ";
+        sentence = sentence.trim() + separator + $sentence_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
 
         $start_obj = $start_obj.parent().next().children().first();
     }
