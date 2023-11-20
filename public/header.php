@@ -96,7 +96,7 @@ $today_is_reading_streak = $gems->today_is_streak;
 
                         <li id="user-dropdown" class="nav-item dropdown">
                             <a id="user-menu" href="javascript:;" class="nav-link dropdown-toggle" role="button"
-                              data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="fas fa-user-circle me-3 me-md-1"></span>
                                 <?php echo ucfirst($user->name); ?>
                                 <strong class="caret"></strong>
@@ -126,7 +126,9 @@ $today_is_reading_streak = $gems->today_is_streak;
                                 <a href="/logout.php" onclick="signOut();" class="dropdown-item">Logout</a>
                                 <script>
                                     function signOut() {
-                                        google.accounts.id.disableAutoSelect();
+                                        if (typeof google !== 'undefined') {
+                                            google.accounts.id.disableAutoSelect();
+                                        }
                                     }
                                 </script>
                             </div>
