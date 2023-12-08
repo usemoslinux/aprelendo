@@ -795,12 +795,14 @@ a[role="menuitem"] {
 .lightmode .highlighted,
 .darkmode .highlighted {
     background-color: #e8e8e8;
+    border-radius: 2px;
     color: #333;
 }
 
 .sepiamode .word:hover,
 .sepiamode .highlighted {
     background-color: rosybrown;
+    border-radius: 2px;
     color: #333;
 }
 
@@ -1459,4 +1461,10 @@ small>a:not(.btn):hover {
 
 .card-text cite {
 	font-size: small;
+}
+
+/* EBOOK */
+
+#btn-close-ebook:hover {
+	border: var(--bs-secondary) solid 1px;
 }
