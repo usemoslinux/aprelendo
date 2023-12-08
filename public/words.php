@@ -57,7 +57,7 @@ $query_str = '?s=' . $search_text . '&o=0';
                                 <input type="text" id="s" name="s" class="form-control" aria-label="Search text"
                                     placeholder="Search..." value="<?php echo $search_text ?>">
                                 <button type="submit" name="submit" aria-label="Search" class="btn btn-secondary">
-                                    <span class="fas fa-search"></span>
+                                    <span class="bi bi-search"></span>
                                 </button>
                             </div>
                             <!-- Split button -->
@@ -65,7 +65,7 @@ $query_str = '?s=' . $search_text . '&o=0';
                                 <button type="button"
                                     class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
-                                    <span class="fas fa-file-export"></span> Export
+                                    <span class="bi bi-cloud-download-fill"></span> Export
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a id="export-all" href="ajax/exportwords" class="dropdown-item">Export all</a>

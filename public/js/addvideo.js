@@ -67,7 +67,7 @@ $(document).ready(function() {
 
             $("#btn-fetch-img")
                 .removeClass()
-                .addClass("fas fa-sync fa-spin text-warning");
+                .addClass("spinner-border spinner-border-sm text-warning");
 
             $.ajax({
                 type: "POST",
@@ -112,7 +112,7 @@ $(document).ready(function() {
                 .always(function() {
                     $("#btn-fetch-img")
                         .removeClass()
-                        .addClass("fas fa-arrow-down text-warning");
+                        .addClass("bi bi-arrow-down-right-square text-warning");
                 }); // end ajax
         } else {
             showMessage(

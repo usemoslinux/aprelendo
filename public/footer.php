@@ -48,25 +48,25 @@
                     <li class="list-inline-item">
                         <a href="https://www.facebook.com/aprelendo.fb" aria-label="Aprelendo's Facebook Page"
                             target="_blank" rel="noopener noreferrer">
-                            <span class="fab fa-facebook"></span>
+                            <span class="bi bi-facebook"></span>
                         </a>
                     </li>
                     <li class="list-inline-item">
                         <a href="https://www.instagram.com/apre.lendo/" aria-label="Aprelendo's Instagram Page"
                             target="_blank" rel="noopener noreferrer">
-                            <span class="fab fa-instagram"></span>
+                            <span class="bi bi-instagram"></span>
                         </a>
                     </li>
                     <li class="list-inline-item">
                         <a href="https://twitter.com/aprelendo" aria-label="Aprelendo's Twitter Page" target="_blank"
                             rel="noopener noreferrer">
-                            <span class="fab fa-twitter"></span>
+                            <span class="bi bi-twitter"></span>
                         </a>
                     </li>
                     <li class="list-inline-item">
                         <a href="https://www.youtube.com/channel/UCc5gaiAsGU4sC09mvVjibCA"
                             aria-label="Aprelendo's YouTube channel" target="_blank" rel="noopener noreferrer">
-                            <span class="fab fa-youtube"></span>
+                            <span class="bi bi-youtube"></span>
                         </a>
                     </li>
                 </ul>

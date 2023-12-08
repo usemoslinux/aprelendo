@@ -141,11 +141,12 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Font awesome icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0"
-        crossorigin="anonymous" referrerpolicy="no-referrer">
-
+    <!-- Bootstrap icons -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.2/font/bootstrap-icons.min.css"
+        integrity="sha512-D1liES3uvDpPrgk7vXR/hR/sukGn7EtDWEyvpdLsyalQYq6v6YUsTUJmku7B4rcuQ21rf0UTksw2i/2Pdjbd3g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        
     <!-- Epub.js & jszip -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
         integrity="sha384-+mbV2IY1Zk/X1p/nWllGySJSUN8uMs+gUAN10Or95UBH0fpj6GfKgPmgC5EXieXG"
@@ -196,11 +197,11 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
     <div id="main">
         <div id="header">
             <span class="d-flex flex-row-reverse">
-                <button class="basic btn btn-link me-n2" title="Close & Save reading position" id="btn-close-ebook">
-                    <span class="fas fa-times"></span></button>
+            <button type="button" title="Close &amp; Save reading position" id="btn-close-ebook"
+                aria-label="Close" class="btn-close"></button>
                 <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
                     class="basic btn btn-sm btn-secondary me-2" title="Reader settings">
-                    <span class="fas fa-cog"></span>
+                    <span class="bi bi-gear-fill"></span>
                 </button>
 
                 <div class="loading-spinner me-2">

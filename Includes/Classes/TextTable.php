@@ -102,10 +102,10 @@ class TextTable extends Table
         $not_video_or_ebook = $row['type'] < 5 || $row['type'] > 6;
 
         if (!empty($row['audio_uri'])) {
-            $result = '<span title="Has audio (provided by user)" class="fa-solid fa-headphones"></span>';
+            $result = '<span title="Has audio (provided by user)" class="bi bi-headphones"></span>';
         } elseif ($adequate_text_length && $not_video_or_ebook) {
             $result = '<span title="Has audio (created by TTS engine - only works in assisted learning mode)" '
-                . 'class="fa-solid fa-volume-high"></span>';
+                . 'class="bi bi-volume-up-fill"></span>';
         }
         
         return $result;
@@ -194,9 +194,9 @@ class TextTable extends Table
                 . '<label class="form-check-label" for="row-' . $text_id . '"></label></div></td>';
         } else {
             $total_likes = $row['total_likes'] ?? 0;
-            $user_liked = $row['user_liked'] ? 'fas' : 'far';
+            $user_liked = $row['user_liked'] ? 'bi-heart-fill ' : 'bi-heart';
     
-            return '<tr><td class="text-center"><span title="Like"><span class="' . $user_liked . ' fa-heart" '
+            return '<tr><td class="text-center"><span title="Like"><span class="' . $user_liked . '" '
                 . 'data-idText="' . $text_id . '"></span><br><small>' . $total_likes . '</small></span></td>';
         }
     } // end generateCheckboxCell()
@@ -210,13 +210,13 @@ class TextTable extends Table
     private function generateTypeIcon(array $row): string
     {
         $type_icons = [
-            'Article' => '<span title="Article" class="far fa-newspaper"></span>',
-            'Conversation' => '<span title="Conversation" class="far fa-comments"></span>',
-            'Letter' => '<span title="Letter" class="far fa-envelope-open"></span>',
-            'Lyrics' => '<span title="Lyrics" class="fas fa-music"></span>',
-            'Video' => '<span title="Video" class="fas fa-video"></span>',
-            'Ebook' => '<span title="Ebook" class="fas fa-book"></span>',
-            'Other' => '<span title="Other" class="far fa-file-alt"></span>'
+            'Article' => '<span title="Article" class="bi bi-newspaper"></span>',
+            'Conversation' => '<span title="Conversation" class="bi bi-chat-left-dots"></span>',
+            'Letter' => '<span title="Letter" class="bi bi-envelope-open-fill"></span>',
+            'Lyrics' => '<span title="Lyrics" class="bi bi-file-earmark-music-fill"></span>',
+            'Video' => '<span title="Video" class="bi bi-file-earmark-play-fill"></span>',
+            'Ebook' => '<span title="Ebook" class="bi bi-journal-bookmark-fill"></span>',
+            'Other' => '<span title="Other" class="bi bi-file-earmark-text-fill"></span>'
         ];
 
         $keys  = array_values($type_icons);

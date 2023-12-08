@@ -77,7 +77,7 @@ try {
             if (!isset($_COOKIE['hide_welcome_msg'])) {
                 $html = <<<'HTML_MODAL'
                     <div id="alert-box" class="alert alert-success alert-dismissible fade show">
-                    <div class="alert-flag fs-5"><i class="fa-solid fa-champagne-glasses"></i>Welcome!</div>
+                    <div class="alert-flag fs-5"><i class="bi bi-emoji-laughing-fill"></i>Welcome!</div>
                     <div class="alert-msg">
                     <p>It appears this is your first time using Aprelendo. To get started, follow these simple
                     steps:</p>
@@ -116,7 +116,7 @@ try {
 
             $html .= <<<'HTML_EMPTY_LIBRARY'
                 <div id="alert-box" class="alert alert-danger">
-                <div class="alert-flag fs-5"><i class="fa-solid fa-circle-exclamation"></i>Oops!</div>
+                <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
                 <div class="alert-msg">
                 <p>Your private library is currently empty.</p>
                 <p>To start building it, use the <kbd class="bg-success">Add</kbd> button above, or take advantage of
@@ -130,7 +130,7 @@ try {
         } else {
             $html = <<<'HTML_SEARCH_RESULT'
             <div id="alert-box" class="alert alert-danger">
-            <div class="alert-flag fs-5"><i class="fa-solid fa-circle-exclamation"></i>Oops!</div>
+            <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
             <div class="alert-msg">
             <p>No texts found with that criteria.</p>
             <p>Consider refining your search using the <kbd class="bg-secondary">Filter</kbd> options on the left.</p>
@@ -155,7 +155,7 @@ try {
 } catch (\Throwable $e) {
     $html = <<<'HTML_UNEXPECTED_ERROR'
     <div id="alert-box" class="alert alert-danger">
-    <div class="alert-flag fs-5"><i class="fa-solid fa-circle-exclamation"></i>Oops!</div>
+    <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
     <div class="alert-msg">
     <p>There was an unexpected error trying to list the texts in your private library.</p>
     </div>

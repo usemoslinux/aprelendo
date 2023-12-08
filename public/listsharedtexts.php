@@ -72,7 +72,7 @@ try {
         if (!empty($_GET)) {
             $html = <<<'HTML_SEARCH_RESULT'
             <div id="alert-box" class="alert alert-danger">
-            <div class="alert-flag fs-5"><i class="fa-solid fa-circle-exclamation"></i>Oops!</div>
+            <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
             <div class="alert-msg">
             <p>No shared texts found with that criteria.</p>
             <p>Consider refining your search using the <kbd class="bg-secondary">Filter</kbd> options on the left.</p>
@@ -92,7 +92,7 @@ try {
         } else {
             $html = <<<'HTML_EMPTY_LIBRARY'
             <div id="alert-box" class="alert alert-danger">
-            <div class="alert-flag fs-5"><i class="fa-solid fa-circle-exclamation"></i>Oops!</div>
+            <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
             <div class="alert-msg">
             <p>There are still no shared texts for this language.</p><p>Be the first to add one and start earning
             precious gems!</p><p>To do so, use the <kbd class="bg-success">Add</kbd> button above, or take advantage
@@ -109,7 +109,7 @@ try {
 } catch (\Throwable $e) {
     $html = <<<'HTML_UNEXPECTED_ERROR'
     <div id="alert-box" class="alert alert-danger">
-    <div class="alert-flag fs-5"><i class="fa-solid fa-circle-exclamation"></i>Oops!</div>
+    <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
     <div class="alert-msg">
     <p>There was an unexpected error trying to list the texts in the shared texts section.</p>
     </div>

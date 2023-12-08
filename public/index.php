@@ -179,7 +179,7 @@ require_once PUBLIC_PATH . 'head.php';
             <div class="container">
                 <div class="row text-center">
                     <div class="col-lg-4 pt-5">
-                        <span class="fab fa-osi display-1 pb-3"></span>
+                        <span class="bi bi-code-slash display-1 pb-3"></span>
                         <h4>Open source</h4>
                         <p>Aprelendo is open source software, meaning you can download and fiddle
                             with its source code. This allows us to be super transparent and build
@@ -192,7 +192,7 @@ require_once PUBLIC_PATH . 'head.php';
                         </p>
                     </div>
                     <div class="col-lg-4 pt-5">
-                        <span class="fas fa-book-open display-1 pb-3"></span>
+                        <span class="bi bi-book display-1 pb-3"></span>
                         <h4>Total Reading</h4>
                         <p>Our language learning system is aimed especially (though not exclusively)
                             at users with a beginner-intermediate level upwards. Complete beginners
@@ -204,7 +204,7 @@ require_once PUBLIC_PATH . 'head.php';
                         </p>
                     </div>
                     <div class="col-lg-4 pt-5">
-                        <span class="fas fa-mobile-alt display-1 pb-3"></span>
+                        <span class="bi bi-phone display-1 pb-3"></span>
                         <h4>Use it on any device</h4>
                         <p>You can use Aprelendo on mobile and desktop devices as long as they have
                             an Internet connection. We offer addons for Firefox, Chrome and Edge to easily

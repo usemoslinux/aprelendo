@@ -130,13 +130,13 @@ $lvl_active_dropdown_class = ' class="dropdown-item fl active" ';
                                 placeholder="Search..." value="<?php echo isset($search_text) ? $search_text : '' ?>">
                             <button id="btn-search" type="submit" name="submit" class="btn btn-secondary"
                                 aria-label="Search">
-                                <span class="fas fa-search"></span>
+                                <span class="bi bi-search"></span>
                             </button>
                         </div> <!-- /btn-group -->
                         <!-- Split button -->
                         <div class="dropdown dropdown-add ms-md-2 mb-3">
                             <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
-                                <span class="fas fa-plus"></span> Add
+                                <span class="bi bi bi-plus-lg"></span> Add
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="/addtext?sh">Plain text</a>

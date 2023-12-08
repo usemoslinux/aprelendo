@@ -68,7 +68,7 @@ require_once PUBLIC_PATH . 'header.php';
                         <div class="mb-3 col-lg-6">
                             <input class="d-none" id="url" name="url" type="file" accept=".epub">
                             <button id="btn-upload-epub" type="button" class="btn btn-primary btn-upload">
-                                <span class="fas fa-upload"></span>&nbsp;Select epub file
+                                <span class="bi bi-cloud-upload-fill"></span>&nbsp;Select epub file
                             </button>
                         </div>
                         <div class="mb-3 col-lg-6">
@@ -87,7 +87,7 @@ require_once PUBLIC_PATH . 'header.php';
                             <label for="audio-uri">Audio:</label>
                             <input type="text" id="audio-uri" name="audio-uri" class="form-control" maxlength="200"
                                 placeholder="Google Drive link (optional)">
-                            <div class="form-text" id="audio-url-helptext"><i class="fa-brands fa-google-drive"></i>
+                            <div class="form-text" id="audio-url-helptext"><i class="bi bi-cloud-fill"></i>
                                 Remember to <a href="https://support.google.com/drive/answer/2494822?hl=en&co=GENIE.Platform%3DDesktop#zippy=%2Cshare-a-file-publicly" target="_blank" rel="noopener noreferrer" class="alert-link">share this file publicly</a>, allowing access to anyone with the link.
                             </div>
                         </div>

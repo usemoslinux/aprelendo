@@ -97,7 +97,7 @@ $today_is_reading_streak = $gems->today_is_streak;
                         <li id="user-dropdown" class="nav-item dropdown">
                             <a id="user-menu" href="javascript:;" class="nav-link dropdown-toggle" role="button"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="fas fa-user-circle me-3 me-md-1"></span>
+                                <span class="bi bi-person-circle me-3 me-md-1"></span>
                                 <?php echo ucfirst($user->name); ?>
                                 <strong class="caret"></strong>
                             </a>

@@ -149,7 +149,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 }
 
 #user-menu>span {
-    font-size: 32px;
+    font-size: 24px;
     vertical-align: middle;
 }
 
@@ -563,6 +563,7 @@ ol {
 
 .alert .alert-flag {
     margin: -1rem -1rem auto -1rem;
+    padding: 0.5em 0;
 }
 
 .alert-dismissible .alert-flag {
@@ -1159,12 +1160,15 @@ span.status_learned {
 
 /* SHARED TEXTS */
 
-.fas.fa-heart {
-    color: red;
+.bi-heart {
+    font-size: 1.2em;
+    vertical-align: bottom;
+    cursor: pointer;
 }
 
-.fa-heart {
-    font-size: 1.3em;
+.bi-heart-fill {
+    color: red;
+    font-size: 1.2em;
     vertical-align: bottom;
     cursor: pointer;
 }
@@ -1179,10 +1183,6 @@ span.status_learned {
 
 #yt-logo {
     color: red;
-    left: 50%;
-    top: 50%;
-    position: absolute;
-    transform: translate(-27px, -24px);
 }
 
 .video-reading-line {
@@ -1466,5 +1466,10 @@ small>a:not(.btn):hover {
 /* EBOOK */
 
 #btn-close-ebook:hover {
-	border: var(--bs-secondary) solid 1px;
+	box-shadow: 0 0 1px var(--bs-secondary);
+}
+
+#btn-close-ebook {
+	height: 25px;
+	width: 25px;
 }

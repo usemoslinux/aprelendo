@@ -63,7 +63,7 @@ try {
         $assisted_learning = $prefs->assisted_learning;
 
         $likes = new Likes($pdo, $text_id, $user->id, $user->lang_id);
-        $user_liked_class = $likes->userLiked($user->id, $text_id) ? 'fas' : 'far';
+        $user_liked_class = $likes->userLiked($user->id, $text_id) ? 'bi-heart-fill' : 'bi-heart';
         $nr_of_likes = $likes->get($text_id);
         
         $html .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
@@ -87,13 +87,13 @@ require_once PUBLIC_PATH . 'head.php';
                     <div class="sidebar-sticky-item my-4"><button type="button" data-bs-toggle="modal"
                             data-bs-target="#reader-settings-modal" class="btn btn-sm btn-secondary d-block"
                             title="Reading settings">
-                            <span class="fas fa-cog"></span>
+                            <span class="bi bi-gear-fill"></span>
                         </button>
                         
                         <?php if ($assisted_learning && !$is_long_text) : ?>
                             <button id="btn-toggle-audio-player-controls" type="button"
                                 class="btn btn-sm btn-primary d-block mt-2" title="Toggle sticky audio controls">
-                                <span class="fas fa-headphones"></span>
+                                <span class="bi bi-headphones"></span>
                             </button>
                         <?php endif ?>
                         
@@ -103,12 +103,12 @@ require_once PUBLIC_PATH . 'head.php';
                             title="<?php echo $assisted_learning && !$is_long_text
                                 ? 'Go to phase 2: Listening'
                                 : 'Save'; ?>">
-                            <span class="fas fa-chevron-circle-right"></span>
+                            <span class="bi bi-skip-end-circle-fill"></span>
                         </button>
                         <?php if ($is_shared) : ?>
                             <button type="button" title="Like" class="btn btn-sm btn-link mt-1 px-0">
                                 <span title="Like">
-                                    <span class="<?php echo $user_liked_class ?> fa-heart"
+                                    <span class="<?php echo $user_liked_class ?>"
                                         data-idText="<?php echo $text_id ?>">
                                     </span>
                                     <small class="px-1"><?php echo $nr_of_likes ?></small>

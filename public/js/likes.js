@@ -23,7 +23,7 @@ $(document).ready(function() {
      * Toggles like for text
      * Triggers when user clicks on a heart
      */
-    $("span.fa-heart").on("click", function() {
+    $("span.bi-heart, span.bi-heart-fill").on("click", function() {
         const $like_btn = $(this);
         const text_id = $like_btn.attr("data-idText");
 
@@ -44,14 +44,14 @@ $(document).ready(function() {
                 console.log("Oops! There was an unexpected error");
                 toggleLike($like_btn);
             });
-    }); // end span.fa-heart.on.click
+    }); // end span.bi-heart-fill.on.click
 
     function toggleLike($like_btn) {
-        $like_btn.toggleClass("fas far");
+        $like_btn.toggleClass("bi-heart bi-heart-fill");
         const total_likes = parseInt(
             $like_btn.siblings("small").text()
         );
-        if ($like_btn.hasClass("fas")) {
+        if ($like_btn.hasClass("bi-heart-fill")) {
             $like_btn.siblings("small").text(total_likes + 1);
         } else {
             $like_btn.siblings("small").text(total_likes - 1);

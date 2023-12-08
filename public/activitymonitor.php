@@ -84,7 +84,7 @@ $message_html .= '</span>';
                     <?php echo $msg_progress_bar; ?></div>
                 </div>
                 <?php echo $message_html; ?>
-                <a href="/stats" class="font-italic float-end"><span class="fas fa-chart-line"></span> More stats</a>
+                <a href="/stats" class="font-italic float-end"><span class="bi bi-graph-up"></span> More stats</a>
             </div>
         </div>
     </div>

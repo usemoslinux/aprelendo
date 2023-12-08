@@ -90,10 +90,10 @@ $(document).ready(function() {
 
         if ($password_input.attr('type') === 'text') {
             $password_input.attr('type', 'password')
-            $password_span.addClass('fa-eye-slash').removeClass('fa-eye')
+            $password_span.addClass('bi-eye-slash-fill').removeClass('bi-eye-fill')
         } else if ($password_input.attr('type') === 'password') {
             $password_input.attr('type', 'text')
-            $password_span.removeClass('fa-eye-slash').addClass('fa-eye')
+            $password_span.removeClass('bi-eye-slash-fill').addClass('bi-eye-fill')
         }
     }) // end .show-hide-password-btn.on.click
 })

@@ -19,29 +19,6 @@
 
 $(document).ready(function() {
     /**
-     * Shows down/right arrow when user opens/closes accordion item
-     * Triggers when user opens/closes accordion item
-     */
-    $(".btn-link").on("click", function() {
-        let $sel_card = $(".fas", this);
-
-        $sel_card
-            .toggleClass("fa-chevron-right")
-            .toggleClass("fa-chevron-down");
-
-        $(".fas", "#accordion").each(function() {
-            if (
-                $(this).hasClass("fa-chevron-down") &&
-                $(this)[0] !== $sel_card[0]
-            ) {
-                $(this)
-                    .toggleClass("fa-chevron-right")
-                    .toggleClass("fa-chevron-down");
-            }
-        });
-    }); // end .btn-link.on.click
-
-    /**
      * Edits language record
      * This is triggered when user presses the "Save" button & submits the form
      */

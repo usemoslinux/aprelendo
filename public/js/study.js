@@ -215,7 +215,7 @@ $(document).ready(function() {
     function lastCardReached() {
         if (max_cards == 0) { 
             $("#card-header").text("Sorry, no cards to practice");
-            $("#card-text").html("<div class='fas fa-exclamation-circle text-danger display-3'>"
+            $("#card-text").html("<div class='bi bi-exclamation-circle text-danger display-3'>"
                 + "</div><div class='mt-3'>It seems you don't have any cards left for learning.</div>");
             $("#card-footer").addClass("d-none");
             $("#card-loader").addClass("d-none");
@@ -235,7 +235,7 @@ $(document).ready(function() {
                     title + ": " + subtotal + " answer(s)'>" + percentage + " %</div>";
             }
 
-            $("#card-text").html("<div class='fa-solid fa-flag-checkered text-primary display-3 mt-3'></div>"
+            $("#card-text").html("<div class='bi bi-trophy text-primary display-3 mt-3'></div>"
                 + "<div class='mt-3'>You have reached the end of your study.</div>"
                 + "<div class='mt-3'>These were your results:</div>"
                 + "<div class='progress mx-auto mt-3 fw-bold' style='height: 25px;max-width: 550px'>" + progress_html + "</div>"

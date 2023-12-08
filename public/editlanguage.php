@@ -48,7 +48,7 @@ if (empty($error_msg)) {
                 </div>
                 <div class="text-end">
                     <a href="javascript:;" title="Help" data-bs-toggle="collapse" data-bs-target="#help-dictionary">Help
-                        <span class="far fa-question-circle"></span></a>
+                        <span class="bi bi-question-circle"></span></a>
                 </div>
 
                 <div id="help-dictionary" class="collapse small">

@@ -25,10 +25,10 @@
         <div class="modal-content mb-xs-3">
             <div class="modal-header p-2">
                 <button id="btnremove" type="button" data-bs-dismiss="modal" class="btn btn-danger me-3" title="Delete">
-                    <span class="fas fa-trash-alt"></span>
+                    <span class="bi bi-trash3-fill"></span>
                 </button>
                 <button id="btn-translate" type="button" class="btn btn-link p-0 me-auto" title="Open translator">
-                    <span id="gt-icon" class="fas fa-language"></span>
+                    <span id="gt-icon" class="bi bi-translate"></span>
                 </button>
                 <button id="btncancel" type="button" data-bs-dismiss="modal" class="btn btn-link">Cancel</button>
                 <button id="btnadd" type="button" class="btn btn-primary" data-bs-dismiss="modal">Add</button>

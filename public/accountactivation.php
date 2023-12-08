@@ -42,7 +42,7 @@ use Aprelendo\UserRegistrationManager;
                             $user_reg->activate($_GET['username'], $_GET['hash']);
                             echo '<div class="text-success text-center">
                                 <div class="display-1">
-                                <span class="far fa-check-circle"></span>
+                                <span class="bi bi-check-circle-fill"></span>
                                 </div>
                                 <div id="alert_msg_2">Congratulations! Your account is now active.</div>
                                 </div>
@@ -53,7 +53,7 @@ use Aprelendo\UserRegistrationManager;
                         } catch (\Exception $e) {
                             echo '<div class="text-danger text-center">
                             <div class="display-1">
-                            <span class="fas fa-times-circle"></span>
+                            <span class="bi bi-x-circle-fill"></span>
                             </div>
                             <div id="alert_msg_2">Oh no! Your account activation failed.</div>
                             </div>

@@ -50,7 +50,8 @@ require_once PUBLIC_PATH . 'header.php';
                     <!-- VIDEO CONTAINER -->
                     <div class="col-lg-6 mb-3">
                         <div id="add-video-wrapper" class="ratio ratio-16x9">
-                            <span id="yt-logo" class="fab fa-youtube fa-3x"></span>
+                            <span id="yt-logo"
+                                class="d-flex justify-content-center align-items-center bi bi-youtube fa-3x"></span>
                             <iframe id="yt-video" style="border:none;" title="YouTube video thumbnail"
                                 allow="autoplay; encrypted-media" allowfullscreen></iframe>
                         </div>
@@ -87,7 +88,7 @@ require_once PUBLIC_PATH . 'header.php';
                                             value="<?php if (!empty($_GET['url'])) { echo $_GET['url']; } ?>"
                                             required>
                                         <button id="btn-fetch" class="btn btn-secondary" type="button">
-                                            <i id="btn-fetch-img" class="fas fa-arrow-down text-warning"></i>
+                                            <i id="btn-fetch-img" class="bi bi-arrow-down-right-square text-warning"></i>
                                             Fetch</button>
                                     </div>
                                 </div>

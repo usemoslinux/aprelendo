@@ -130,7 +130,7 @@ function printTableFooter($array_table_rows)
             <div class="col-12">
                 <button class="btn btn-success float-end mb-3" type="button"
                     onclick="window.location.replace('/texts');">
-                    <span class="fas fa-chevron-circle-left"></span> Go back to
+                    <span class="bi bi-skip-start-circle-fill"></span> Go back to
                     your library</button>
             </div>
         </div>

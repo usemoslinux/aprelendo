@@ -41,7 +41,7 @@ if (!$user_auth->isLoggedIn()) {
                 <div class="col-12">
                     <h1 id="hiw" class="col-12"><u>Free</u> language learning for everyone!</h1>
                     <h4>No ads, no subscriptions &amp; open source</h4>
-                    <span class="fa-brands fa-pagelines fs-1 my-5"></span>
+                    <div class="bi bi-braces-asterisk fs-1 my-5"></div>
                 </div>
 
                 <div class="col-12">
@@ -58,14 +58,14 @@ if (!$user_auth->isLoggedIn()) {
                         <input type="hidden" name="currency_code" value="USD">
                         <button class="btn btn-warning btn-lg" name="submit"
                             title="Pay via PayPal - The safer, easier way to pay online!">
-                            Say thanks via <span class="fa-brands fa-paypal"></span> PayPal
+                            Say thanks via <span class="bi bi-paypal"></span> PayPal
                             </button>
                         <img alt="" border="0" src="https://www.paypalobjects.com/en\_US/i/scr/pixel.gif" width="1"
                         height="1">
                     </form>
                     <p>or</p>
                     <a href="https://www.patreon.com/aprelendo/" class="btn btn-danger btn-lg">become a
-                        <span class="fa-brands fa-patreon"></span> Patron</a>
+                        <span class="bi bi-cash-coin"></span> Patron</a>
                 </div>
             </div>
         </div>

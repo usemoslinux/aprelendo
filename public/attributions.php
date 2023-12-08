@@ -98,8 +98,8 @@ if (!$user_auth->isLoggedIn()) {
                             <p>Other attributions:</p>
                             <ul>
                                 <li>
-                                    <a href="http://fontawesome.io/" target="_blank" rel="noopener noreferrer">Font
-                                        Awesome</a>, by Dave Gandy
+                                    <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener noreferrer">
+                                        Bootstrap Icons</a>
                                 </li>
                                 <li>Flag icons designed by
                                     <a href="https://www.flaticon.com/authors/freepik" target="_blank"

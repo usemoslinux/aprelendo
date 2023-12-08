@@ -191,7 +191,7 @@ $sel = ' selected ';
                                     <div class="text-end">
                                         <a href="javascript:;" title="Help" data-bs-toggle="collapse"
                                             data-bs-target="#help-learning-mode">Help
-                                            <span class="far fa-question-circle"></span>
+                                            <span class="bi bi-question-circle"></span>
                                         </a>
                                     </div>
                                     <div id="help-learning-mode" class="collapse small">

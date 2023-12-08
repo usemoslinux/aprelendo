@@ -51,7 +51,7 @@ use Aprelendo\User;
 
                     <div id="alert-box" class="alert alert-info">
                         <div class="alert-flag fs-5">
-                            <i class="fa-solid fa-circle-info"></i>
+                            <i class="bi bi-info-circle-fill"></i>
                             Information
                         </div>
                         <div class="alert-msg">
@@ -72,7 +72,7 @@ use Aprelendo\User;
                                     title="Password must have at least 8 characters and contain letters, special characters and a digits"
                                     autocomplete="off" required>
                                 <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
-                                    aria-label="Show/hide password" tabindex="-1"><span class="fas fa-eye-slash"
+                                    aria-label="Show/hide password" tabindex="-1"><span class="bi bi-eye-slash-fill"
                                         aria-hidden="true"></span></button>
                             </div>
                             <small id="password-strength-text"></small>
@@ -87,7 +87,7 @@ use Aprelendo\User;
                                     autocomplete="off" required>
                                 <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                     aria-label="Show/hide password confirmation" tabindex="-1">
-                                    <span class="fas fa-eye-slash" aria-hidden="true"></span></button>
+                                    <span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>
                             </div>
                             <small id="passwords-match-text"></small>
                         </div>
@@ -104,7 +104,7 @@ use Aprelendo\User;
 
                     <div id="alert-box" class="alert alert-danger">
                         <div class="alert-flag fs-5">
-                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <i class="bi bi-exclamation-circle-fill"></i>
                             Information
                         </div>
                         <div class="alert-msg">
@@ -119,7 +119,7 @@ use Aprelendo\User;
 
                     <div id="alert-box" class="alert alert-info">
                         <div class="alert-flag fs-5">
-                            <i class="fa-solid fa-circle-info"></i>
+                            <i class="bi bi-info-circle-fill"></i>
                             Information
                         </div>
                         <div class="alert-msg">

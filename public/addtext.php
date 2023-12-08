@@ -118,7 +118,7 @@ use Aprelendo\Texts;
                                     placeholder="Source URL (optional)"
                                     value="<?php if (isset($text_url)) {echo $text_url;}?>">
                                 <button id="btn-fetch" class="btn btn-secondary" type="button">
-                                    <span id="btn-fetch-img" class="fas fa-arrow-down text-warning"></span>
+                                    <span id="btn-fetch-img" class="bi bi-arrow-down-right-square text-warning"></span>
                                     &nbsp;Fetch
                                 </button>
                             </div>

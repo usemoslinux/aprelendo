@@ -201,7 +201,7 @@ $(document).ready(function () {
                 alert(data.error_msg);
             } else {
                 let $hourglass = $sel_word.parent().next().children(":first");
-                $hourglass.removeClass().addClass("fas fa-hourglass-start status_forgotten");
+                $hourglass.removeClass().addClass("bi bi-hourglass-bottom status_forgotten");
                 $hourglass.attr("title", "Forgotten");
             }
         }).fail(function () {

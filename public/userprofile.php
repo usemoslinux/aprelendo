@@ -75,7 +75,7 @@ $password_title = 'Password must have at least 8 characters and contain letters,
                                         autocomplete="off" required>
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide current password" tabindex="-1">
-                                        <span class="fas fa-eye-slash" aria-hidden="true"></span></button>
+                                        <span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -90,7 +90,7 @@ $password_title = 'Password must have at least 8 characters and contain letters,
                                         autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide new password" tabindex="-1">
-                                        <span class="fas fa-eye-slash" aria-hidden="true"></span></button>
+                                        <span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>
                                 </div>
                                 <small id="password-strength-text"></small>
                             </div>
@@ -104,7 +104,7 @@ $password_title = 'Password must have at least 8 characters and contain letters,
                                         autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide new password confirmation" tabindex="-1">
-                                        <span class="fas fa-eye-slash" aria-hidden="true"></span></button>
+                                        <span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>
                                 </div>
                                 <small id="passwords-match-text"></small>
                             </div>
@@ -180,7 +180,7 @@ $password_title = 'Password must have at least 8 characters and contain letters,
             <div class="modal-body">
                 <div id="modal-alert-box" class="alert alert-warning">
                     <div class="alert-flag fs-5">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <i class="bi bi-exclamation-triangle-fill"></i>
                         Careful
                     </div>
                     <div class="alert-msg">

@@ -25,10 +25,10 @@ use Aprelendo\Table;
 class WordTable extends Table
 {
     private const STATUS_ICONS = [
-        'fa-hourglass-end status_learned',
-        'fa-hourglass-half status_learning',
-        'fa-hourglass-start status_new',
-        'fa-hourglass-start status_forgotten',
+        'bi-hourglass-top status_learned',
+        'bi-hourglass-split status_learning',
+        'bi-hourglass-bottom status_new',
+        'bi-hourglass-bottom status_forgotten',
     ];
 
     private const STATUS_TEXT = [
@@ -138,6 +138,6 @@ class WordTable extends Table
         $statusText = self::STATUS_TEXT[$word_status];
 
         return '<td class="col-status text-center"><span title="' . $statusText . $days_modif_str
-            . '" class="fas ' . $statusIconClass . '"></span></td>';
+            . '" class="bi ' . $statusIconClass . '"></span></td>';
     } // end generateStatusIcon()
 }

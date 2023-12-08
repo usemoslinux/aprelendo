@@ -73,7 +73,7 @@ try {
         if (!empty($_GET)) {
             $html = <<<'HTML_SEARCH_RESULT'
             <div id="alert-box" class="alert alert-danger">
-            <div class="alert-flag fs-5"><i class="fa-solid fa-circle-exclamation"></i>Oops!</div>
+            <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
             <div class="alert-msg">
             <p>No words with that search criteria were found for the active language.</p>
             <p>Please, take a moment to fine-tune your search to improve your results. Keep in mind that searches are
@@ -87,7 +87,7 @@ try {
                 .' language yet. Consider adding some as you read any text using Aprelendo.</div>';
             $html = <<<'HTML_EMPTY_LIST'
             <div id="alert-box" class="alert alert-danger">
-            <div class="alert-flag fs-5"><i class="fa-solid fa-circle-exclamation"></i>Oops!</div>
+            <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
             <div class="alert-msg">
             <p>Your word list for the currently active language is looking a bit lonely!</p>
             <p>But don't worry, it's super easy to add new words to your learning journey while you read texts using
@@ -101,7 +101,7 @@ try {
 } catch (\Throwable $e) {
     $html = <<<'HTML_UNEXPECTED_ERROR'
     <div id="alert-box" class="alert alert-danger">
-    <div class="alert-flag fs-5"><i class="fa-solid fa-circle-exclamation"></i>Oops!</div>
+    <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
     <div class="alert-msg">
     <p>There was an unexpected error trying to show your word list.</p>
     </div>
