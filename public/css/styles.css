@@ -149,7 +149,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 }
 
 #user-menu>span {
-    font-size: 24px;
+    font-size: 32px;
     vertical-align: middle;
 }
 
@@ -187,8 +187,11 @@ img#img-language-flag {
     border-radius: 98px;
     font-size: 1rem;
     text-shadow: none;
-    margin-top: 4px;
-    padding: 4px 8px;
+    padding: 0 8px;
+}
+
+#login-menu {
+    padding: 0.5rem;
 }
 
 .navbar-light .navbar-nav .nav-link:focus,
@@ -220,6 +223,7 @@ img#img-language-flag {
         height: auto;
         margin-top: inherit;
         padding: .5rem 0;
+        text-shadow: inherit;
     }
 
     #user-menu:hover,
@@ -231,10 +235,6 @@ img#img-language-flag {
 
     #learning-lang-span {
         display: inline;
-    }
-
-    #streak-days {
-        margin-top: 20px;
     }
 
     #streak-days:after {
@@ -776,7 +776,7 @@ a[role="menuitem"] {
 }
 
 .darkmode {
-    background-color: #323847;
+    background-color: #212529;
     color: #cccccc;
     -ms-user-select: none;
     -webkit-user-select: none;
@@ -1473,3 +1473,8 @@ small>a:not(.btn):hover {
 	height: 25px;
 	width: 25px;
 }
+
+body.darkmode #btn-close-ebook {
+	filter: invert(1);
+}
+

@@ -40,12 +40,12 @@ $(document).ready(function() {
     $("#btn-translate").removeClass("ps-0");
     $("#btnremove").hide();
     $("#btnadd").hide();
-    $("#btncancel").addClass("ms-auto").html("&#x2715");
+    $("#btncancel").removeClass().addClass("btn-close me-1").html('');
     $(".modal-header").addClass("p-0");
 
     // disable Yes/No buttons
     $(".btn-answer").prop('disabled', true);
-  
+
     // ajax call to get dictionary URI
     $.ajax({
         url: "/ajax/getdicuris.php",

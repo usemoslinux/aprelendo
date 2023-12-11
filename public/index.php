@@ -164,8 +164,8 @@ require_once PUBLIC_PATH . 'head.php';
                 <div class="row">
                     <div class="col-12">
                         <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/qimkPHrLkS4" allowfullscreen
-                                title="How it works video" class="video"></iframe>
+                            <iframe src="https://www.youtube-nocookie.com/embed/qimkPHrLkS4?si=pCgpoYVUwCiUlMzk"
+                                allowfullscreen title="How it works video" class="video"></iframe>
                         </div>
                     </div>
                 </div>

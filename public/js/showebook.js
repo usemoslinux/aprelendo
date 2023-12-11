@@ -264,8 +264,18 @@ $(document).ready(function() {
         if (section) {
             section.render().then(function (ebook_html) {
                 let $parsed = $('<div/>').append(ebook_html);
+                // clean html from unwanted elements and css styles
                 $parsed.find('*').removeAttr("class").removeAttr("style");
                 $parsed.find('link[rel="stylesheet"]').remove();
+                $parsed.find('div').replaceWith(function() {
+                    return $('<p/>').html($(this).html());
+                });
+                $parsed.find('br').remove();
+                $parsed.find('a').remove();
+                $parsed.find(':empty').remove();
+                $parsed.find('p').filter(function () {
+                    return $.trim($(this).text()) === '';
+                }).remove();
 
                 // underline text
                 $(".loading-spinner").fadeIn(1000);
