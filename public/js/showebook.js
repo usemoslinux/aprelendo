@@ -256,26 +256,14 @@ $(document).ready(function() {
                 $cover.src = book.cover;
             }
         }
-    }); // book.loaded.metadata
+    }); // end book.loaded.metadata
 
     function display(item) {
         let section = book.spine.get(item);
 
         if (section) {
             section.render().then(function (ebook_html) {
-                let $parsed = $('<div/>').append(ebook_html);
-                // clean html from unwanted elements and css styles
-                $parsed.find('*').removeAttr("class").removeAttr("style");
-                $parsed.find('link[rel="stylesheet"]').remove();
-                $parsed.find('div').replaceWith(function() {
-                    return $('<p/>').html($(this).html());
-                });
-                $parsed.find('br').remove();
-                $parsed.find('a').remove();
-                $parsed.find(':empty').remove();
-                $parsed.find('p').filter(function () {
-                    return $.trim($(this).text()) === '';
-                }).remove();
+                let $parsed = cleanEbookHTML(ebook_html);
 
                 // underline text
                 $(".loading-spinner").fadeIn(1000);
@@ -339,7 +327,59 @@ $(document).ready(function() {
         }
 
         return section;
-    }
+    } // end display
+
+    function cleanEbookHTML(html) {
+        let $parsed = $('<div/>').append(html);
+        
+        // Remove HTML comments
+        $parsed.contents().filter(function() {
+            return this.nodeType === 8; // Node.COMMENT_NODE
+        }).remove();
+
+        // Remove styles and classes
+        $parsed.find('*').removeAttr("class").removeAttr("style");
+        $parsed.find('link[rel="stylesheet"]').remove();
+
+        // Completely remove unwanted HTML elements
+        $parsed.find('head, meta, style, title, br').remove();
+        
+        // Convert all DIV to P
+        $parsed.find('div').replaceWith(function() {
+            return $('<p/>').html($(this).html());
+        });
+
+        // Convert all H to P
+        $parsed.find('h1, h2, h3, h4, h5, h6').replaceWith(function() {
+            let tagName = this.tagName.toLowerCase();
+            let $heading = $(this);
+            $heading.parent().after($heading);
+            return $('<p/>').html($(this).text()).addClass(tagName);
+        });
+        
+        // Extract images to parent
+        $parsed.find('img').each(function() {
+            let $img = $(this);
+            $img.parent().after($img);
+            $img.addClass('mx-auto d-block');
+            $img.wrap('<p></p>');
+        });
+
+        // Remove all HTML from elements that are not IMG or P
+        $parsed.find('*').not('img, p').each(function() {
+            let $this = $(this);
+            $this.replaceWith($(this).text());
+        });
+
+        // Trim HTML and remove empty elements
+        $parsed.html($parsed.html().trim());
+        $parsed.find(':empty').not('img').remove();
+        $parsed.find('p:not(:has(img))').filter(function () {
+            return $.trim($(this).text()) === '';
+        }).remove();
+
+        return $parsed;
+    } // end cleanEbookHTML
 
     function updateToc(current_chapter_url) {
         let $nav = document.getElementById('toc');
@@ -352,7 +392,7 @@ $(document).ready(function() {
         if ($selector !== null) {
             $selector.classList.add('fw-bold', 'text-primary');
         }
-    }
+    } // end updateToc
 
     function setTextAndAudioPos() {
         // retrieve ebook & audio last reading position
@@ -389,7 +429,8 @@ $(document).ready(function() {
                 audio.currentTime = 0;
             }
         });
-    }
+    } // end setTextAndAudioPos
+
     function saveTextAndAudioPos(text_pos, audio_pos) {
         $.ajax({
             type: "POST",
@@ -403,7 +444,7 @@ $(document).ready(function() {
         .fail(function(xhr, ajaxOptions, thrownError) {
             console.log(thrownError);
         });
-    }
+    } // end saveTextAndAudioPos
 
     $("#btn-close-ebook").on('click', function() {
         // save book position to resume reading from there later
@@ -416,5 +457,5 @@ $(document).ready(function() {
 
         // don't show confirmation dialog when closing window
         show_confirmation_dialog = false;
-    });
+    }); // end btn-close-ebook.on.click
 });
