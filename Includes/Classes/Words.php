@@ -182,8 +182,8 @@ class Words extends DBEntity
      */
     public function exists(string $word): bool
     {
-        $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `word`=?";
-        return $this->sqlCount($sql, [$word]) === 0;
+        $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
+        return $this->sqlCount($sql, [$this->user_id, $this->lang_id, $word]) > 0;
     } // end exists()
 
     /**

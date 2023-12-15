@@ -45,6 +45,21 @@ try {
         $status = $words_table->exists($word) ? 3 : 2;
 
         $words_table->add($word, $status, $is_phrase);
+    } elseif (isset($_POST['words'])) {
+        $user_id = $user->id;
+        $lang_id = $user->lang_id;
+        $words = $_POST['words'];
+        $is_phrase =  false;
+
+        $words_table = new Words($pdo, $user_id, $lang_id);
+
+        foreach ($words as $word) {
+            // if word already exists in table, status = 3 ("forgotten")
+            // otherwise, $status = 2 ("new")
+            $status = $words_table->exists($word) ? 3 : 2;
+
+            $words_table->add($word, $status, $is_phrase);
+        }
     }
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();

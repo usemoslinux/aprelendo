@@ -1478,3 +1478,19 @@ body.darkmode #btn-close-ebook {
 	filter: invert(1);
 }
 
+/* IMPORT WORDS */
+
+.words-upload-wrap {
+    border: 3px dashed #0062CC;
+    position: relative;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.words-dropping,
+.words-upload-wrap:hover {
+    background-color: #0062CC;
+    border: 3px dashed #fff;
+    color: white;
+    padding: 1rem;
+}

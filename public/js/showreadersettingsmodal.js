@@ -52,12 +52,10 @@ $(document).ready(function() {
                 'font-size' : $('#fontsize').val(),
                 'text-align' : $('#alignment').val(),
                 'line-height': $('#lineheight').val()
-             });
+            });
             
             $('#text').css('line-height', $('#lineheight').val());    
         }
-        
-        
 
         // change audioplayer class
         $doc.find("#audioplayer-container").removeClass().addClass(className);
@@ -79,6 +77,6 @@ $(document).ready(function() {
             type: "POST",
             data: $("#prefs-modal-form").serialize()
         });
-    });
+    }); // end #btn-save-reader-prefs.on.click
 
 });

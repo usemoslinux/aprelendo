@@ -112,7 +112,8 @@ try {
 }
 
 require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
+require_once PUBLIC_PATH . 'showimportwordsmodal.php'; // load import words modal window
 
 ?>
 
-<script defer src="/js/listwords.js"></script>
+<script defer src="/js/listwords.min.js"></script>
