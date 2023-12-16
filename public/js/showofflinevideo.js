@@ -86,7 +86,7 @@ $(document).ready(function () {
         } else if (e.which == 3) {
             // on right click show translation of the whole sentence
             $selword = $(this);
-            window.open(buildTranslationLink());
+            window.open(buildTranslationLink(translator_URI, $selword));
         }
     }); // end .word.on.mousedown/touchstart
 
@@ -141,7 +141,7 @@ $(document).ready(function () {
 
         if (e.type == "touchmove") {
             const cur_sel_pos_top = $(this).offset().top - $(window).scrollTop();
-            swiping = swiping ? swiping : Math.abs(start_sel_pos_top - cur_sel_pos_top) > 0;
+            swiping = swiping || Math.abs(start_sel_pos_top - cur_sel_pos_top) > 0;
 
             if (!swiping) {
                 highlighting = (end_sel_time - start_sel_time) > 1000;
@@ -269,29 +269,6 @@ $(document).ready(function () {
     }); // end #btnadd.on.click
 
     /**
-     * Builds translator link including the paragraph to translate as a parameter
-     */
-    function buildTranslationLink() {
-        let $start_obj = $selword.prevUntil(":contains('.')").last();
-        $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
-        let $end_obj = $selword
-            .prev()
-            .nextUntil(":contains('.')")
-            .last()
-            .next();
-        $end_obj =
-            $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
-        let $sentence_obj = $start_obj
-            .nextUntil($end_obj)
-            .addBack()
-            .next()
-            .addBack();
-        const sentence_obj = $sentence.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
-
-        return translator_URI.replace("%s", encodeURIComponent(sentence));
-    } // end buildTranslationLink
-
-    /**
      * Updates vh value on window resize
      * Fix for mobile devices where vh includes hidden address bar
      */
@@ -312,7 +289,7 @@ $(document).ready(function () {
         $("#dicFrame").attr('class', 'd-none');
 
         // build translate sentence url
-        translate_paragraph_link = buildTranslationLink();
+        translate_paragraph_link = buildTranslationLink(translator_URI, $selword);
 
         // show dictionary
         const selword_text = $selword.text().replace(/(\r\n|\n|\r)/gm, " ");
@@ -453,9 +430,9 @@ $(document).ready(function () {
                     // update user score (gems)
                     const review_data = {
                         words: {
-                            new: $(".reviewing.new").length,
-                            learning: $(".reviewing.learning").length,
-                            forgotten: $(".reviewing.forgotten").length
+                            new: getUniqueElements('.reviewing.new'),
+                            learning: getUniqueElements('.reviewing.learning'),
+                            forgotten: getUniqueElements('.reviewing.forgotten')
                         },
                         texts: { reviewed: 1 }
                     };

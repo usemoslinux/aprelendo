@@ -86,7 +86,7 @@ $(document).ready(function() {
                                 // changing $('#yt-video') src attribute would affect browser history, that's why
                                 // we do it this way
                             }
-                            $("#title").val(data.title);
+                            $("#title").val(toSentenceCase(data.title));
                             $("#author").val(data.author);
                             $("#url").val(url);
 

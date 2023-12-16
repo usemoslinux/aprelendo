@@ -25,10 +25,6 @@
     text-decoration: none;
 }
 
-.navlink:hover {
-    text-decoration: underline;
-}
-
 /* SIDEBAR */
 
 #opener {
@@ -57,7 +53,7 @@
 }
 
 #navigation {
-    font: 14px 'Roboto';
+    font: 14px Roboto, sans-serif;
 }
 
 #navigation.fixed {
@@ -121,7 +117,7 @@ svg {
 /* HEADER  */
 
 #header {
-    font: 14px 'Roboto';
+    font: 14px Roboto, sans-serif;
     height: 44px;
     padding: .5rem 1rem;
     position: -webkit-sticky;
@@ -207,6 +203,7 @@ svg {
     width: 20px;
     height: 20px;
     border-radius: 50%;
+    box-sizing: content-box;
     transform: translate(40px, 40px) scale(1);
     background: #e15b64;
     animation: ldio-nhngmna4s2b 1.6949152542372883s infinite cubic-bezier(0, 0.5, 0.5, 1);
@@ -256,9 +253,6 @@ svg {
     /* see note above */
 }
 
-.ldio-nhngmna4s2b div {
-    box-sizing: content-box;
-}
 
 /* OTHER */
 

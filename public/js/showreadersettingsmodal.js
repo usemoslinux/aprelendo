@@ -22,7 +22,7 @@ $(document).ready(function() {
     $('#btn-save-reader-prefs').on('click', function () {
         // apply color mode
         const className = $('#mode').val() + 'mode';
-        $doc = $(parent.document.body);
+        let $doc = $(parent.document.body);
         $doc.removeClass().addClass(className);
         
         // apply CSS changes: font-family, font-size, text-align, text-height, etc.

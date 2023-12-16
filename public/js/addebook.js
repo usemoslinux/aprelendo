@@ -50,12 +50,10 @@ $(document).ready(function() {
                 "alert-danger"
             );
             resetControls(true);
-        } else {
-            if (window.FileReader) {
-                const reader = new FileReader();
-                reader.onload = openBook;
-                reader.readAsArrayBuffer($epub_file[0].files[0]);
-            }
+        } else if (window.FileReader) {
+            const reader = new FileReader();
+            reader.onload = openBook;
+            reader.readAsArrayBuffer($epub_file[0].files[0]);
         }
     }); // end #file-upload-epub.on.change
 

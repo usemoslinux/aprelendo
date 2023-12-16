@@ -198,7 +198,7 @@ $(document).ready(function() {
 
         if (e.type == "touchmove") {
             const cur_sel_pos_top = $(this).offset().top - $(window).scrollTop();
-            swiping = swiping ? swiping : Math.abs(start_sel_pos_top - cur_sel_pos_top) > 0;
+            swiping = swiping || Math.abs(start_sel_pos_top - cur_sel_pos_top) > 0;
 
             if (!swiping) {
                 highlighting = (end_sel_time - start_sel_time) > 1000;
@@ -214,11 +214,11 @@ $(document).ready(function() {
 
             $sel_end =
                 e.type === "mouseover" ? $(this) : $(
-                          document.elementFromPoint(
-                              e.originalEvent.touches[0].clientX,
-                              e.originalEvent.touches[0].clientY
-                          )
-                      );
+                    document.elementFromPoint(
+                        e.originalEvent.touches[0].clientX,
+                        e.originalEvent.touches[0].clientY
+                    )
+                );
 
             if ($sel_end.isAfter($sel_start)) {
                 $sel_start
@@ -390,7 +390,7 @@ $(document).ready(function() {
         }
 
         getWordFrequency($selword.text(), doclang);
-        setAddDeleteButtons($selword);
+        setAddDeleteButtons();
 
         $doc.find("#loading-spinner").attr('class','lds-ellipsis m-auto');
         $dic_frame.attr('class','d-none');
@@ -808,10 +808,12 @@ $(document).ready(function() {
                 if (data.error_msg == null) {
                     // update user score (gems)
                     const review_data = {
-                        words : { new:       $(".reviewing.new").length, 
-                                  learning:  $(".reviewing.learning").length, 
-                                  forgotten: $(".reviewing.forgotten").length },
-                        texts : { reviewed:  1 }
+                        words: {
+                            new: getUniqueElements('.reviewing.new'),
+                            learning: getUniqueElements('.reviewing.learning'),
+                            forgotten: getUniqueElements('.reviewing.forgotten')
+                        },
+                        texts: { reviewed: 1 }
                     };
 
                     $.ajax({
@@ -857,18 +859,18 @@ $(document).ready(function() {
                             $("body").append(form);
                             form.submit();
                         } else {
-                            alert("Oops! There was an unexpected error.");
+                            alert("Oops! There was an unexpected error updating user score.");
                         }
                     })
                     .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                        alert("Oops! There was an unexpected error.");
+                        alert("Oops! There was an unexpected error updating user score.");
                     });
                 } else {
-                    alert("Oops! There was an unexpected error.");
+                    alert("Oops! There was an error unexpected error saving this text.");
                 }
             })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Oops! There was an unexpected error.");
+                alert("Oops! There was an error unexpected error saving this text.");
             });
     } // end #archiveTextAndSaveWords
 
@@ -1095,7 +1097,7 @@ $(document).ready(function() {
             default:
                 break;
         }
-        $(this).val($(this).val().replace(/[0-9]/gi, '')); // don't allow digits to get printed
+        $(this).val($(this).val().replace(/\d/gi, '')); // don't allow digits to get printed
 
         // if maxlength reached, switch focus to next input
         if(maxLength == $(this).val().length && !e.originalEvent.isComposing) {

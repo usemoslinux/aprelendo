@@ -122,7 +122,18 @@ $(document).ready(function() {
     $("body").on("click", "#btn-close-ebook", function () {
         // save word status before closing
         $.when(SaveWords()).then(function () {
-            window.location.replace("/texts");
+            // save book position to resume reading from there later
+            let audio = document.getElementById("audioplayer");
+            let audio_pos = audio != null ? audio.currentTime : 0;
+        
+            if (text_pos) {
+                $.when(saveTextAndAudioPos(text_pos, audio_pos)).then(function() {
+                    // don't show confirmation dialog when closing window
+                    window.parent.show_confirmation_dialog = false;
+                    
+                    window.location.replace("/texts");
+                });
+            }
         });
     }); // end #btn-close-ebook.on.click
 
@@ -133,6 +144,9 @@ $(document).ready(function() {
         // build array with underlined words
         let oldwords = [];
         let word = "";
+
+        // don't show confirmation dialog when closing window
+        window.parent.show_confirmation_dialog = false;
 
         $(document)
             .find(".learning")
@@ -145,10 +159,10 @@ $(document).ready(function() {
                 }
             });
 
-        $.ajax({
+        return $.ajax({
             type: "POST",
             url: "/ajax/archivetext.php",
-            async: false,
+            // async: false,
             data: {
                 words: oldwords
             }
@@ -158,14 +172,14 @@ $(document).ready(function() {
                     // update user score (gems)
                     const review_data = {
                         words: {
-                            new: $(".reviewing.new").length,
-                            learning: $(".reviewing.learning").length,
-                            forgotten: $(".reviewing.forgotten").length
+                            new: getUniqueElements('.reviewing.new'),
+                            learning: getUniqueElements('.reviewing.learning'),
+                            forgotten: getUniqueElements('.reviewing.forgotten')
                         },
                         texts: { reviewed: 1 }
                     };
 
-                    $.ajax({
+                    return $.ajax({
                         type: "post",
                         url: "/ajax/updateuserscore.php",
                         data: review_data
@@ -179,15 +193,12 @@ $(document).ready(function() {
                             alert("Oops! There was an unexpected error updating user score.");
                         });
                 } else {
-                    alert("Oops! There was an error unexpected error archiving text.");
+                    alert("Oops! There was an error unexpected error saving this text.");
                 }
             })
             .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("Oops! There was an error unexpected error archiving text.");
+                alert("Oops! There was an error unexpected error saving this text.");
             });
-
-        // don't show confirmation dialog when closing window
-        window.parent.show_confirmation_dialog = false;
     } // end SaveWords
 
     parent.window.addEventListener("unload", function () {
@@ -432,30 +443,18 @@ $(document).ready(function() {
     } // end setTextAndAudioPos
 
     function saveTextAndAudioPos(text_pos, audio_pos) {
-        $.ajax({
+        return $.ajax({
             type: "POST",
             url: "/ajax/ebookposition.php",
-            data: { mode: "SAVE", id: ebook_id, audio_pos: audio_pos, text_pos: text_pos },
-            dataType: "json",
+            data: { mode: "SAVE", id: ebook_id, audio_pos: audio_pos, text_pos: text_pos }
         })
         .done(function(data) {
-            console.log("success");
+            if (data.error_msg != null) {
+                alert('Oops! There was an error unexpected error saving text and audio position');
+            }
         })
         .fail(function(xhr, ajaxOptions, thrownError) {
-            console.log(thrownError);
+            alert('Oops! There was an error unexpected error saving text and audio position');
         });
     } // end saveTextAndAudioPos
-
-    $("#btn-close-ebook").on('click', function() {
-        // save book position to resume reading from there later
-        let audio = document.getElementById("audioplayer");
-        let audio_pos = audio != null ? audio.currentTime : 0;
-    
-        if (text_pos) {
-            saveTextAndAudioPos(text_pos, audio_pos);
-        }
-
-        // don't show confirmation dialog when closing window
-        show_confirmation_dialog = false;
-    }); // end btn-close-ebook.on.click
 });

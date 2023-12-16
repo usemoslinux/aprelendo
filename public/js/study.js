@@ -192,19 +192,19 @@ $(document).ready(function() {
      * Escapes regex strings
      */
     function escapeRegex(str) {
-        return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
     } // end escapeRegex()
 
     function removeUnclosedQuotes(sentence) {
         const count = (sentence.match(/"/g) || []).length;
-        
+
         if (count % 2 !== 0) {
-          if (sentence.length <= 4) return sentence;
+            if (sentence.length <= 4) return sentence;
             let firstFive = sentence.substring(0, 2).replace("\"", "");
             let lastFive = sentence.substring(sentence.length - 2).replace("\"", "");
             return firstFive + sentence.substring(2, sentence.length - 2) + lastFive;
-          }
-          
+        }
+
         return sentence;
     } // end removeUnclosedQuotes()
 
@@ -224,11 +224,11 @@ $(document).ready(function() {
             $("#card-header").text("Congratulations!");
 
             let progress_html = "";
-            for(let i = 0; i < answers.length; i++) {
-                let subtotal = answers[i][1];
+            for(const answer of answers) {
+                let subtotal = answer[1];
                 let percentage = subtotal / max_cards * 100;
-                let bg_class = answers[i][2];
-                let title = answers[i][3];
+                let bg_class = answer[2];
+                let title = answer[3];
 
                 progress_html += "<div class='progress-bar " + bg_class + "' role='progressbar' aria-valuenow='" + 
                     percentage + "' aria-valuemin='0' aria-valuemax='100' style='width: " + percentage + "%' title='" +
@@ -276,7 +276,7 @@ $(document).ready(function() {
     /**
      * Hides loader spinner when dictionary iframe finished loading
      */
-     $dic_frame.on("load", function() {
+    $dic_frame.on("load", function() {
         $("#loading-spinner").attr('class','d-none');
         $dic_frame.removeClass();
     }); // end $dic_frame.on.load()
@@ -323,14 +323,14 @@ $(document).ready(function() {
      * Opens translator in new window. 
      * Triggers when user click in translate button in modal window
      */
-     $("#btn-translate").on("click", function() {
+    $("#btn-translate").on("click", function() {
         window.open(buildTranslationLink($sel_word));
     }); // end #btn-translate.on.click()
 
     /**
      * Disables right click context menu
      */
-     $(document).on("contextmenu",function(e){
+    $(document).on("contextmenu",function(e){
         // opens dictionary translator in case user right clicked on a word/phrase
         // but only on desktop browsers
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);

@@ -43,12 +43,10 @@ $(document).ready(function() {
             .done(function(data) {
                 if (typeof data != "undefined") {
                     showMessage(data.error_msg, "alert-danger");
+                } else if (form_data.get("shared-text") == "on") {
+                    window.location.replace("/sharedtexts");
                 } else {
-                    if (form_data.get("shared-text") == "on") {
-                        window.location.replace("/sharedtexts");
-                    } else {
-                        window.location.replace("/texts");
-                    }
+                    window.location.replace("/texts");
                 }
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
@@ -112,7 +110,8 @@ $(document).ready(function() {
      */
     function validateUrl(str)
     {
-        const patt = new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
+        const patt = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/[\w .-]+)*\/?$/;
+
         return patt.test(str);
     } 
 
@@ -136,54 +135,50 @@ $(document).ready(function() {
                 .done(function(data) {
                     if (data.error_msg != null) {
                         showMessage(data.error_msg, "alert-danger");
-                    } else {
-                        if (typeof data !== "undefined" && data.length != 0) {
-                            const doc = document.implementation.createHTMLDocument(
-                                "New Document"
-                            );
-                            doc.body.parentElement.innerHTML = DOMPurify.sanitize(data.file_contents);
-                            const article = new Readability(doc).parse();
+                    } else if (typeof data !== "undefined" && data.length != 0) {
+                        const doc = document.implementation.createHTMLDocument(
+                            "New Document"
+                        );
+                        doc.body.parentElement.innerHTML = DOMPurify.sanitize(data.file_contents);
+                        const article = new Readability(doc).parse();
 
-                            if (article == null) {
-                                $("#url").val(data.url);
-                                showMessage(
-                                    "It was not possible to extract the text from the URL you provided. " +
-                                    "Try doing it manually.",
-                                    "alert-danger"
-                                );
-                                // alert("It was not possible to extract the text from the URL you provided. " +
-                                    // "Try doing it manually.");
-                                return;
-                            }
-
-                            $("#title").val($("<input>").html(article.title).text());
-                            $("#author").val($("<input>").html(article.byline).text());
+                        if (article == null) {
                             $("#url").val(data.url);
-                            let txt = "";
-                            let $tempDom = $("<output>").append(
-                                $.parseHTML(article.content)
-                            );
-                            $("p, h1, h2, h3, h4, h5, h6", $tempDom).each(
-                                function() {
-                                    txt +=
-                                        $(this)
-                                            .text()
-                                            .replace(/\s+/g, " ") + "\n\n";
-                                }
-                            );
-
-                            txt = txt.replace(/(\r\n|\n|\r)(\r\n|\n|\r)*/g, "\n\n"); // remove multiple line breaks
-                            txt = txt.replace(/\t/g, ""); // remove tabs
-                            // txt = txt.replace(/  /g, ' '); // remove multiple spaces
-
-                            $("#text").val($.trim(txt));
-                            $("#text").trigger("input");
-                        } else {
                             showMessage(
-                                "There was an unexpected error trying to fetch this text.",
+                                "It was not possible to extract the text from the URL you provided. " +
+                                "Try doing it manually.",
                                 "alert-danger"
                             );
+                            return;
                         }
+
+                        $("#title").val($("<input>").html(article.title).text());
+                        $("#author").val($("<input>").html(article.byline).text());
+                        $("#url").val(data.url);
+                        let txt = "";
+                        let $tempDom = $("<output>").append(
+                            $.parseHTML(article.content)
+                        );
+                        $("p, h1, h2, h3, h4, h5, h6", $tempDom).each(
+                            function() {
+                                txt +=
+                                    $(this)
+                                        .text()
+                                        .replace(/\s+/g, " ") + "\n\n";
+                            }
+                        );
+
+                        txt = txt.replace(/(\r\n|\n|\r)(\r\n|\n|\r)*/g, "\n\n"); // remove multiple line breaks
+                        txt = txt.replace(/\t/g, ""); // remove tabs
+                        // txt = txt.replace(/  /g, ' '); // remove multiple spaces
+
+                        $("#text").val($.trim(txt));
+                        $("#text").trigger("input");
+                    } else {
+                        showMessage(
+                            "There was an unexpected error trying to fetch this text.",
+                            "alert-danger"
+                        );
                     }
                 })
                 .fail(function(xhr, ajaxOptions, thrownError) {

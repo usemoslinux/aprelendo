@@ -154,7 +154,7 @@ $(document).ready(function () {
 
         if (e.type == "touchmove") {
             const cur_sel_pos_top = $(this).offset().top - $(window).scrollTop();
-            swiping = swiping ? swiping : Math.abs(start_sel_pos_top - cur_sel_pos_top) > 0;
+            swiping = swiping || Math.abs(start_sel_pos_top - cur_sel_pos_top) > 0;
 
             if (!swiping) {
                 highlighting = (end_sel_time - start_sel_time) > 1000;
@@ -438,9 +438,9 @@ $(document).ready(function () {
                     // update user score (gems)
                     const review_data = {
                         words: {
-                            new: $(".reviewing.new").length,
-                            learning: $(".reviewing.learning").length,
-                            forgotten: $(".reviewing.forgotten").length
+                            new: getUniqueElements('.reviewing.new'),
+                            learning: getUniqueElements('.reviewing.learning'),
+                            forgotten: getUniqueElements('.reviewing.forgotten')
                         },
                         texts: { reviewed: 1 }
                     };

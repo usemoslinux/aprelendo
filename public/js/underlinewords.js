@@ -79,12 +79,10 @@ function underlineWords(data, doclang, hide_elem) {
             } else {
                 user_phrases_learned += escapeRegExp(element.word) + '|';
             }
+        } else if (element.status > 0) {
+            user_words_learning += element.word + '|';    
         } else {
-            if (element.status > 0) {
-                user_words_learning += element.word + '|';    
-            } else {
-                user_words_learned += element.word + '|';
-            }
+            user_words_learned += element.word + '|';
         }
     });
 
@@ -108,9 +106,9 @@ function underlineWords(data, doclang, hide_elem) {
             user_phrases_learned  = user_phrases_learned.slice(0, -1); // remove trailing |
 
             if (langs_with_no_word_separator.includes(doclang)) {
-                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(" + user_phrases_learned + ")", 'iug');
+                pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(" + user_phrases_learned + ")", 'iug');
             } else {
-                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(?<![\\p{L}])(" + user_phrases_learned + ")(?![\\p{L}])", 'iug');
+                pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(?<![\\p{L}])(" + user_phrases_learned + ")(?![\\p{L}])", 'iug');
             }
 
             text = text.replace(pattern, function(match, g1) {
@@ -124,9 +122,9 @@ function underlineWords(data, doclang, hide_elem) {
             user_words_learning = user_words_learning.slice(0, -1); // remove trailing |
 
             if (langs_with_no_word_separator.includes(doclang)) {
-                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(" + user_words_learning + ")", 'iug');
+                pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(" + user_words_learning + ")", 'iug');
             } else {
-                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(?<![\\p{L}])(" + user_words_learning + ")(?![\\p{L}])", 'iug');
+                pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(?<![\\p{L}])(" + user_words_learning + ")(?![\\p{L}])", 'iug');
             }
 
             text = text.replace(pattern, function(match, g1) {
@@ -140,9 +138,9 @@ function underlineWords(data, doclang, hide_elem) {
             user_words_learned  = user_words_learned.slice(0, -1); // remove trailing |
             
             if (langs_with_no_word_separator.includes(doclang)) {
-                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(" + user_words_learned + ")", 'iug');
+                pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(" + user_words_learned + ")", 'iug');
             } else {
-                pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(?<![\\p{L}])(" + user_words_learned + ")(?![\\p{L}])", 'iug');
+                pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(?<![\\p{L}])(" + user_words_learned + ")(?![\\p{L}])", 'iug');
             }
             
             text = text.replace(pattern, function(match, g1) {
@@ -158,9 +156,9 @@ function underlineWords(data, doclang, hide_elem) {
         high_freq = data.high_freq.join('|');
         
         if (langs_with_no_word_separator.includes(doclang)) {
-            pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(" + high_freq + ")", 'iug');
+            pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(" + high_freq + ")", 'iug');
         } else {
-            pattern = new RegExp("(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(?<![\\p{L}])(" + high_freq + ")(?![\\p{L}])", 'iug');
+            pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(?<![\\p{L}])(" + high_freq + ")(?![\\p{L}])", 'iug');
         }
 
         text = text.replace(pattern, function(match, p1, offset, string) {
@@ -175,4 +173,15 @@ function underlineWords(data, doclang, hide_elem) {
 
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
+function getUniqueElements(class_name) {
+    let unique_elements = new Set();
+
+    $(class_name).each(function() {
+        let text = $(this).text().toLowerCase().trim();
+        unique_elements.add(text);
+    });
+
+    return unique_elements.size;
 }

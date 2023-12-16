@@ -41,7 +41,7 @@ $(document).ready(function() {
      * Checks password strength and changes progress bar accordingly
      */
     $('#newpassword').on('input', function() {
-        const number = /([0-9])/
+        const number = /(\d)/
         const letters = /([a-zA-Z])/
         const special_chars = /([~`!@#$%^&*()\-_+={};:[\]?./,])/
 

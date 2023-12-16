@@ -100,7 +100,7 @@ if (!$user_auth->isLoggedIn()) {
     </div>
 </div>
 
-<script defer src="/js/contact.js"></script>
+<script defer src="/js/contact.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 
 <?php require_once 'footer.php';?>

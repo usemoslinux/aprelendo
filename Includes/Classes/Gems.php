@@ -93,6 +93,8 @@ class Gems extends DBEntity
         $gems += ($events['texts']['new'] ?? 0) * 2;
         $gems += ($events['texts']['reviewed'] ?? 0) * 5;
 
+        $min_gems = $gems < 0 ? 0 : $gems;
+
         // if text was reviewed, update last_study_session & calculate days_streak
         if (isset($events['texts']['reviewed'])) {
             if (!empty($this->last_study_session) && !empty($this->days_streak)) {
@@ -120,7 +122,7 @@ class Gems extends DBEntity
                 `user_id`=?, `lang_id`=?, `gems`=`gems` + ?, `last_study_session`=?, `days_streak`=?";
 
         $this->sqlExecute($sql, [
-            $this->user_id, $this->lang_id, $gems, $this->last_study_session, $this->days_streak,
+            $this->user_id, $this->lang_id, $min_gems, $this->last_study_session, $this->days_streak,
             $this->user_id, $this->lang_id, $gems, $this->last_study_session, $this->days_streak
         ]);
 

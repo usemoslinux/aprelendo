@@ -40,7 +40,7 @@ $(document).ready(function () {
                 const ctx = document.getElementById("total-stats-canvas").getContext("2d");
 
                 //create Chart class object
-                const total_stats_chart = new Chart(ctx, {
+                new Chart(ctx, {
                     type: "bar",
                     data: {
                         labels: ['Words'],

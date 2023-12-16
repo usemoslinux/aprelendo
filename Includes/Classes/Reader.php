@@ -277,17 +277,17 @@ class Reader
                             '</video>' .
                         '</div>';
 
-        $html .= '<div class="d-flex flex-wrap">'.
+        $html .= '<div class="d-flex flex-wrap m-1 mx-xl-0">'.
                     '<button type="button" id="btn-selvideo" title="Select video (MP4/OGG/WEBM)" class="btn btn-sm
-                        btn-primary me-2 my-2"><span class="bi bi-file-earmark-play"></span></button>'.
+                        btn-primary me-2"><span class="bi bi-file-earmark-play"></span></button>'.
                     '<button type="button" id="btn-selsubs" title="Select subtitles (SRT)" class="btn btn-sm btn-primary
-                        me-2 my-2"><span class="bi bi-badge-cc-fill"></span></button>'.
+                        me-2"><span class="bi bi-badge-cc-fill"></span></button>'.
                     '<button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
-                        class="btn btn-sm btn-secondary me-2 my-2" title="Reader settings">
+                        class="btn btn-sm btn-secondary me-2" title="Reader settings">
                         <span class="bi bi-gear-fill"></span>
                     </button>' .
                     '<button type="button" id="btn-save-offline-video" title="Save the learning status of your words"
-                        class="btn btn-sm btn-success ms-auto my-2">Save</button>'.
+                        class="btn btn-sm btn-success ms-auto">Save</button>'.
                 '</div>'.
                 '<div id="text-container" class="overflow-auto mb-1"></div>';
 

@@ -231,11 +231,12 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
             </span>
         </div>
 
-        <a id="prev" href="#prev" class="navlink"></a>
+        <div class="navlink"><a id="prev" href="#prev"></a></div>
         <div id="viewer" class="py-0 px-5 scrolled"
             data-idText="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
         </div>
-        <a id="next" href="#next" class="navlink"></a>
+        <div class="navlink"><a id="next" href="#next"></a></div>
+        
 
     </div>
 

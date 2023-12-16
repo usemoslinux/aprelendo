@@ -5,7 +5,7 @@
  * @returns {string} The complete translator link
  */
 function buildTranslationLink(translator_URI, $selword) {
-    let $start_obj = $();
+    let $start_obj;
     let $end_obj = $selword;
     let $sentence_obj = $();
     let sentence = '';
@@ -47,7 +47,6 @@ function buildTranslationLink(translator_URI, $selword) {
     }
 
     // select second part of sentence: from selection to sentence divider
-    $end_obj = $();
     $start_obj = $selword.next().length === 0 ? $selword : $selword.next();
     let regex = /[.。!?]/g;
     let separator;

@@ -1,5 +1,5 @@
-var parser = (function() {
-    var pItems = {};
+let parser = (function() {
+    let pItems = {};
 
     /**
      * Converts SubRip subtitles into array of objects
@@ -15,20 +15,20 @@ var parser = (function() {
      * @return {Array}  
      */
     pItems.fromSrt = function(data, ms) {
-        var useMs = ms ? true : false;
+        let useMs = !!ms;
 
         data = data.replace(/\r/g, '');
-        var regex = /(\d+)\n(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})/g;
+        let regex = /(\d+)\n(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})/g;
         data = data.split(regex);
         data.shift();
 
-        var items = [];
-        for (var i = 0; i < data.length; i += 4) {
+        let items = [];
+        for (let i = 0; i < data.length; i += 4) {
             items.push({
                 id: data[i].trim(),
                 startTime: useMs ? timeMs(data[i + 1].trim()) : data[i + 1].trim(),
                 endTime: useMs ? timeMs(data[i + 2].trim()) : data[i + 2].trim(),
-                text: data[i + 3].trim()
+                text: data[i + 3].replace(/<[^>]*>?/gm, '').trim()
             });
         }
 
@@ -41,11 +41,11 @@ var parser = (function() {
      * @return {String}      SubRip subtitles string
      */
     pItems.toSrt = function(data) {
-        if (!data instanceof Array) return '';
-        var res = '';
+        if (!(data instanceof Array)) return '';
+        let res = '';
 
-        for (var i = 0; i < data.length; i++) {
-            var s = data[i];
+        for (const element of data) {
+            let s = element;
 
             if (!isNaN(s.startTime) && !isNaN(s.endTime)) {
                 s.startTime = msTime(parseInt(s.startTime, 10));
@@ -60,38 +60,38 @@ var parser = (function() {
         return res;
     };
 
-    var timeMs = function(val) {
-        var regex = /(\d+):(\d{2}):(\d{2}),(\d{3})/;
-        var parts = regex.exec(val);
+    let timeMs = function(val) {
+        let regex = /(\d+):(\d{2}):(\d{2}),(\d{3})/;
+        let parts = regex.exec(val);
 
         if (parts === null) {
             return 0;
         }
 
-        for (var i = 1; i < 5; i++) {
+        for (let i = 1; i < 5; i++) {
             parts[i] = parseInt(parts[i], 10);
             if (isNaN(parts[i])) parts[i] = 0;
         }
 
         // hours + minutes + seconds + ms
-        return parts[1] * 3600000 + parts[2] * 60000 + parts[3] * 1000 + parts[4];
+        return parseInt(parts[1] * 3600000 + parts[2] * 60000 + parts[3] * 1000 + parts[4]);
     };
 
-    var msTime = function(val) {
-        var measures = [ 3600000, 60000, 1000 ]; 
-        var time = [];
+    let msTime = function(val) {
+        let measures = [ 3600000, 60000, 1000 ]; 
+        let time = [];
 
-        for (var i in measures) {
-            var res = (val / measures[i] >> 0).toString();
+        for (let i in measures) {
+            let res = (val / measures[i] >> 0).toString();
             
             if (res.length < 2) res = '0' + res;
             val %= measures[i];
             time.push(res);
         }
 
-        var ms = val.toString();
+        let ms = val.toString();
         if (ms.length < 3) {
-            for (i = 0; i <= 3 - ms.length; i++) ms = '0' + ms;
+            for (let i = 0; i <= 3 - ms.length; i++) ms = '0' + ms;
         }
 
         return time.join(':') + ',' + ms;
