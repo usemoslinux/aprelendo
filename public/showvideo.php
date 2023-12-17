@@ -96,5 +96,6 @@ require_once PUBLIC_PATH . 'head.php';
         <script defer src="/js/dictionary.min.js"></script>
         <script defer src="/js/ytvideo.min.js"></script>
         <script defer src="/js/likes.min.js"></script>
+        <script defer src="/js/tooltips.min.js"></script>
     </body>
 </html>

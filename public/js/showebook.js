@@ -310,7 +310,8 @@ $(document).ready(function() {
 
                     next.textContent = nextLabel + " »";
                     next.href = nextSection.href;
-                    next.title = "Go to next chapter & update word status";
+                    next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as practiced');
+                    new bootstrap.Tooltip(next);
                 } else {
                     next.textContent = "";
                 }
@@ -327,7 +328,8 @@ $(document).ready(function() {
 
                     prev.textContent = "« " + prevLabel;
                     prev.href = prevSection.href;
-                    prev.title = "Go to previous chapter";
+                    prev.setAttribute('data-bs-title', 'Go to previous chapter');
+                    new bootstrap.Tooltip(prev);
                 } else {
                     prev.textContent = "";
                 }

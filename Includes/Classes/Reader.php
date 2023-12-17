@@ -165,7 +165,8 @@ class Reader
                             max="2" step="0.1">
                         <label id="label-abloop" class="px-1 basic">A-B Loop:</label>
                         <button id="btn-abloop" class="btn btn-outline-secondary btn-sm"
-                            title="Toggle A-B Loop">A</button>
+                            data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Toggle A-B Loop">A</button>
                     </div>
                 </form>
             </div>
@@ -217,21 +218,25 @@ class Reader
                     '<div id="main-container" style="height: 100vh; height: calc(var(--vh, 1vh) * 100);"
                         class="d-flex flex-column">';
 
-        $html .= '<div class="d-flex flex-row-reverse  my-2">
-                        <button type="button" id="btn-save-ytvideo"
-                            title="Close and save the learning status of your words" class="btn btn-sm btn-success">
+        $html .= '<div class="d-flex flex-row-reverse my-2">
+                        <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                            data-bs-title="Close and save the learning status of your words">
+                            <button type="button" id="btn-save-ytvideo" class="btn btn-sm btn-success">
                             Save</button>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
-                            class="btn btn-sm btn-secondary me-2" title="Reader settings">
-                            <span class="bi bi-gear-fill"></span>
-                        </button>
-                        <button type="button" title="Like" class="btn btn-sm btn-link me-2">
-                            <span title="Like">
-                                <span class="'
-                                    . $user_liked_class
-                                    . ' bi-heart-fill" data-idText="' . $this->text->id .'"></span>
-                                <small>' . $likes->get($this->text->id) . '</small>
-                            </span>
+                        </span>
+                        <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                        data-bs-title="Reader settings">
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
+                                class="btn btn-sm btn-secondary me-2">
+                                <span class="bi bi-gear-fill"></span>
+                            </button>
+                        </span>
+                        <button type="button" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                            data-bs-placement="bottom" data-bs-title="Like" class="btn btn-sm btn-link me-2">
+                            <span class="'
+                                . $user_liked_class
+                                . ' bi-heart-fill" data-idText="' . $this->text->id .'"></span>
+                            <small>' . $likes->get($this->text->id) . '</small>
                         </button>
                     </div>';
 
@@ -278,15 +283,23 @@ class Reader
                         '</div>';
 
         $html .= '<div class="d-flex flex-wrap m-1 mx-xl-0">'.
-                    '<button type="button" id="btn-selvideo" title="Select video (MP4/OGG/WEBM)" class="btn btn-sm
-                        btn-primary me-2"><span class="bi bi-file-earmark-play"></span></button>'.
-                    '<button type="button" id="btn-selsubs" title="Select subtitles (SRT)" class="btn btn-sm btn-primary
-                        me-2"><span class="bi bi-badge-cc-fill"></span></button>'.
-                    '<button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
-                        class="btn btn-sm btn-secondary me-2" title="Reader settings">
+                    '<button type="button" id="btn-selvideo" data-bs-toggle="tooltip"
+                        data-bs-custom-class="custom-tooltip" data-bs-title="Select video (MP4/OGG/WEBM)"
+                        data-bs-placement="bottom" class="btn btn-sm btn-primary me-2">
+                        <span class="bi bi-file-earmark-play"></span></button>'.
+                    '<button type="button" id="btn-selsubs" data-bs-toggle="tooltip"
+                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                        data-bs-title="Select subtitles (SRT)" class="btn btn-sm btn-primary me-2">
+                        <span class="bi bi-badge-cc-fill"></span></button>'.
+                    '<span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                        data-bs-placement="bottom" data-bs-title="Reader settings">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
+                            class="btn btn-sm btn-secondary me-2">
                         <span class="bi bi-gear-fill"></span>
-                    </button>' .
-                    '<button type="button" id="btn-save-offline-video" title="Save the learning status of your words"
+                    </button></span>' .
+                    '<button type="button" id="btn-save-offline-video" data-bs-toggle="tooltip"
+                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                        data-bs-title="Save the learning status of your words"
                         class="btn btn-sm btn-success ms-auto">Save</button>'.
                 '</div>'.
                 '<div id="text-container" class="overflow-auto mb-1"></div>';

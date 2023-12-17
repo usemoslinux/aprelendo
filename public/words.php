@@ -63,7 +63,7 @@ $query_str = '?s=' . $search_text . '&o=0';
                             <!-- Import words button -->
                             <div class="dropdown-add">
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#import-words-modal"
-                                    class="btn btn-primary text-nowrap ms-md-2 mb-3" title="Import words">
+                                    class="btn btn-primary text-nowrap ms-md-2 mb-3">
                                     <span class="bi bi-cloud-upload-fill"></span> Import
                                 </button>
                             </div>

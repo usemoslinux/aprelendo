@@ -25,8 +25,6 @@ require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Language;
 
-$password_title = 'Password must have at least 8 characters and contain letters, special characters and a digits';
-
 ?>
 
 <div class="container mtb d-flex flex-grow-1 flex-column">
@@ -67,11 +65,10 @@ $password_title = 'Password must have at least 8 characters and contain letters,
                             <div class="mb-3">
                                 <label for="password">Current password:</label>
                                 <small>
-                                    <em>at least 8 characters (including letters, numbers &amp; special characters)</em>
+                                    <em>at least 8 characters (including letters, digits &amp; special characters)</em>
                                 </small>
                                 <div class="input-group">
                                     <input type="password" id="password" name="password" class="form-control"
-                                        title="<?php echo $password_title; ?>"
                                         autocomplete="off" required>
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide current password" tabindex="-1">
@@ -81,12 +78,11 @@ $password_title = 'Password must have at least 8 characters and contain letters,
                             <div class="mb-3">
                                 <label for="password">New password:</label>
                                 <small>
-                                    <em>at least 8 characters (including letters, numbers &amp; special characters)</em>
+                                    <em>at least 8 characters (including letters, digits &amp; special characters)</em>
                                 </small>
                                 <div class="input-group">
                                     <input type="password" id="newpassword" name="newpassword" class="form-control"
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                        title="<?php echo $password_title; ?>"
                                         autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide new password" tabindex="-1">
@@ -100,7 +96,6 @@ $password_title = 'Password must have at least 8 characters and contain letters,
                                     <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
                                         class="form-control"
                                         pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                        title="<?php echo $password_title; ?>"
                                         autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide new password confirmation" tabindex="-1">
@@ -206,5 +201,6 @@ $password_title = 'Password must have at least 8 characters and contain letters,
 <script defer src="/js/userprofile.min.js"></script>
 <script defer src="/js/password.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
+<script defer src="/js/tooltips.min.js"></script>
 
 <?php require_once 'footer.php'; ?>

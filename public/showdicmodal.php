@@ -24,10 +24,14 @@
         <!-- Modal content-->
         <div class="modal-content mb-xs-3">
             <div class="modal-header p-2">
-                <button id="btnremove" type="button" data-bs-dismiss="modal" class="btn btn-danger me-3" title="Delete">
+                <button id="btnremove" type="button" data-bs-dismiss="modal" class="btn btn-danger me-3"
+                    data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                    data-bs-title="Delete">
                     <span class="bi bi-trash3-fill"></span>
                 </button>
-                <button id="btn-translate" type="button" class="btn btn-link p-0 me-auto" title="Open translator">
+                <button id="btn-translate" type="button" class="btn btn-link p-0 me-auto"
+                    data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                    data-bs-title="Open translator">
                     <span id="gt-icon" class="bi bi-translate"></span>
                 </button>
                 <button id="btncancel" type="button" data-bs-dismiss="modal" class="btn btn-link">Cancel</button>

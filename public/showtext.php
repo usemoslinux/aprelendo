@@ -84,15 +84,20 @@ require_once PUBLIC_PATH . 'head.php';
         <div class="row">
             <div id="sidebar" class="col-2">
                 <div class="sidebar">
-                    <div class="sidebar-sticky-item my-4"><button type="button" data-bs-toggle="modal"
-                            data-bs-target="#reader-settings-modal" class="btn btn-sm btn-secondary d-block"
-                            title="Reading settings">
-                            <span class="bi bi-gear-fill"></span>
-                        </button>
+                    <div class="sidebar-sticky-item my-4">
+                        <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                            data-bs-placement="right" data-bs-title="Reading settings">
+                            <button type="button" data-bs-toggle="modal"
+                                data-bs-target="#reader-settings-modal" class="btn btn-sm btn-secondary d-block">
+                                <span class="bi bi-gear-fill"></span>
+                            </button>
+                        </span>
                         
                         <?php if ($assisted_learning && !$is_long_text) : ?>
                             <button id="btn-toggle-audio-player-controls" type="button"
-                                class="btn btn-sm btn-primary d-block mt-2" title="Toggle sticky audio controls">
+                                class="btn btn-sm btn-primary d-block mt-2"
+                                data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                                data-bs-placement="right" data-bs-title="Toggle sticky audio controls">
                                 <span class="bi bi-headphones"></span>
                             </button>
                         <?php endif ?>
@@ -100,14 +105,16 @@ require_once PUBLIC_PATH . 'head.php';
                         <button id="<?php echo $assisted_learning && !$is_long_text
                             ? 'btn-next-phase'
                             : 'btn-save-text'; ?>" type="button" class="btn btn-sm btn-success d-block mt-2"
-                            title="<?php echo $assisted_learning && !$is_long_text
+                            data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                            data-bs-placement="right" data-bs-title="<?php echo $assisted_learning && !$is_long_text
                                 ? 'Go to phase 2: Listening'
                                 : 'Save'; ?>">
                             <span class="bi bi-skip-end-circle-fill"></span>
                         </button>
                         <?php if ($is_shared) : ?>
-                            <button type="button" title="Like" class="btn btn-sm btn-link mt-1 px-0">
-                                <span title="Like">
+                            <button type="button" class="btn btn-sm btn-link mt-1 px-0">
+                                <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                                    data-bs-placement="right" data-bs-title="Like">
                                     <span class="<?php echo $user_liked_class ?>"
                                         data-idText="<?php echo $text_id ?>">
                                     </span>
@@ -137,6 +144,7 @@ require_once PUBLIC_PATH . 'head.php';
     <script defer src="/js/underlinewords.min.js"></script>
     <script defer src="/js/showtext.min.js"></script>
     <script defer src="/js/likes.min.js"></script>
+    <script defer src="/js/tooltips.min.js"></script>
 </body>
 
 </html>

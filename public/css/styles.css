@@ -156,7 +156,6 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 img#img-language-flag {
     border: 2px solid white;
     border-radius: 50%;
-    /* box-shadow: 0 0.1rem 0.1rem 0 rgb(0 0 0 / 70%); */
 }
 
 .navbar-nav>li>.dropdown-menu {
@@ -219,7 +218,6 @@ img#img-language-flag {
     #login-menu {
         background-color: transparent;
         color: white;
-        padding-bottom: 0;
         height: auto;
         margin-top: inherit;
         padding: .5rem 0;
@@ -436,7 +434,6 @@ body.blue-gradient-wallpaper .navbar-light {
 /* FOOTER */
 
 .footer {
-    /* background-color: inherit; */
     padding-bottom: 15px;
     padding-top: 15px;
     font-size: 0.9rem;
@@ -575,7 +572,6 @@ ol {
 }
 
 .alert .alert-msg {
-    /* padding: 1rem; */
     margin: 1rem auto auto auto;
 }
 
@@ -665,7 +661,6 @@ a[role="menuitem"] {
 
 /* Loader / spinner */
 .lds-ellipsis {
-    /* display: inline-block; */
     position: relative;
     width: 80px;
     height: 80px;
@@ -759,9 +754,14 @@ a[role="menuitem"] {
     margin: 0 0 10px 0;
 }
 
-.tooltip {
-    font-size: 100%;
+.custom-tooltip {
+    --bs-tooltip-bg: var(--bs-blue);
+    --bs-tooltip-color: var(--bs-white);
 }
+
+.tooltip.show {
+    opacity: 1;
+} 
 
 .word {
     cursor: pointer;
@@ -870,7 +870,7 @@ audio {
 }
 
 .basic {
-    font: 0.85rem 'Roboto';
+    font: 0.85rem Roboto, sans-serif;
     white-space: normal;
 }
 
@@ -904,8 +904,7 @@ audio {
 }
 
 #btn-abloop {
-    font: 0.85rem 'Roboto';
-    /* padding: .0 0.5rem; */
+    font: 0.85rem Roboto, sans-serif;
     flex-basis: 30px;
     flex-shrink: 0;
 }
@@ -919,6 +918,7 @@ audio {
     -ms-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+    flex: 1;
 }
 
 #text {
@@ -1190,10 +1190,6 @@ span.status_learned {
     border-radius: 2px;
 }
 
-#text-container {
-    flex: 1;
-}
-
 /* SHOW OFFLINE VIDEO */
 
 #offline-video-container {
@@ -1296,7 +1292,6 @@ div.blurry-background {
 .or__text {
     display: inline;
     padding: 0 10px;
-    /* font-weight: 500; */
     background: #fff;
     color: #666E7E;
     text-transform: lowercase;
@@ -1470,8 +1465,8 @@ small>a:not(.btn):hover {
 }
 
 #btn-close-ebook {
-	height: 25px;
-	width: 25px;
+	height: 28px;
+	width: 28px;
 }
 
 body.darkmode #btn-close-ebook {

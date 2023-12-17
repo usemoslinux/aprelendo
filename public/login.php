@@ -66,12 +66,11 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <div class="mb-3">
                             <label for="password">Password:</label>
                             <small>
-                                <em>at least 8 characters (including letters, numbers &amp; special characters)</em>
+                                <em>at least 8 characters (including letters, digits &amp; special characters)</em>
                             </small>
                             <div class="input-group">
                                 <input type="password" id="password" name="password" class="form-control"
                                     pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
-                                    title="Password must have at least 8 characters and contain letters, special characters and a digits"
                                     autocomplete="off" required>
                                 <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                     aria-label="Show/hide password" tabindex="-1"><span class="bi bi-eye-slash-fill"

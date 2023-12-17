@@ -197,12 +197,18 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
     <div id="main">
         <div id="header">
             <span class="d-flex flex-row-reverse">
-            <button type="button" title="Close &amp; Save reading position" id="btn-close-ebook"
-                aria-label="Close" class="btn-close"></button>
-                <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
-                    class="basic btn btn-sm btn-secondary me-2" title="Reader settings">
-                    <span class="bi bi-gear-fill"></span>
+                <button id="btn-close-ebook" type="button" data-bs-toggle="tooltip"
+                    data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                    data-bs-title="Close &amp; Save reading position"
+                    aria-label="Close" class="btn-close">
                 </button>
+                <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                    data-bs-placement="bottom" data-bs-title="Reader settings">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
+                        class="btn btn-sm btn-secondary me-2">
+                        <span class="bi bi-gear-fill"></span>
+                    </button>
+                </span>
 
                 <div class="loading-spinner me-2">
                     <div class="ldio-nhngmna4s2b">
@@ -218,8 +224,8 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
 
                 <button id="opener" class="btn btn-link" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#navigation" aria-controls="navigation">
-                    <svg height="24px" id="hamburger" style="enable-background:new 0 0 32 32;" version="1.1"
-                        viewBox="0 0 32 32" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    <svg height="28px" id="hamburger" style="enable-background:new 0 0 32 32;" version="1.1"
+                        viewBox="0 0 32 32" width="28px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink">
                         <path
                             d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,
@@ -231,13 +237,17 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
             </span>
         </div>
 
-        <div class="navlink"><a id="prev" href="#prev"></a></div>
+        <div class="navlink">
+            <a id="prev" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                data-bs-placement="bottom" href="#prev"></a>
+        </div>
         <div id="viewer" class="py-0 px-5 scrolled"
             data-idText="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
         </div>
-        <div class="navlink"><a id="next" href="#next"></a></div>
-        
-
+        <div class="navlink">
+            <a id="next" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                data-bs-placement="top" href="#next"></a>
+        </div>
     </div>
 
     <?php
@@ -248,7 +258,7 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
     <script defer src="/js/underlinewords.min.js"></script>
     <script defer src="/js/showtext.min.js"></script>
     <script defer src="/js/showebook.min.js"></script>
-
+    <script defer src="/js/tooltips.min.js"></script>
 </body>
 
 </html>

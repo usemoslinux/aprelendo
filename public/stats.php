@@ -57,12 +57,12 @@ use Aprelendo\WordDailyGoal;
             <div class="row">
                 <div class="col-12 my-4">
                     <div class="row">
-                        <h4 class="text-center pt-2">Your word list</h4>
+                        <h4 id="word-list-heading" class="text-center pt-2">Your word list</h4>
                         <div class="col-lg-7 pt-4">
                             <canvas id="total-stats-canvas" style="max-height:295px"></canvas>
                         </div>
                         <div class="col-lg-5 pt-4">
-                            <table class="table text-end small">
+                            <table class="table text-end small" aria-describedby="word-list-heading">
                                 <thead>
                                     <tr class="table-secondary">
                                         <th>Status</th>
