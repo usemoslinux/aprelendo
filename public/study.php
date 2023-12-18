@@ -87,8 +87,8 @@ require_once PUBLIC_PATH . 'header.php';
                                 <button id="btn-answer-excellent" type="button" value="0"
                                     class="btn btn-lg btn-success btn-answer mb-3"
                                     data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                    data-bs-placement="bottom" data-bs-title="I thoroughly understand and can confidently
-                                    use this word.">
+                                    data-bs-placement="bottom" data-bs-title="I thoroughly understand and can
+                                    confidently use this word.">
                                     4. Excellent
                                 </button>
                             </div>

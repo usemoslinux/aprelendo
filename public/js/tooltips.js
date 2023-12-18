@@ -17,11 +17,25 @@
  * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(document).ready(function() {
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => 
-        new bootstrap.Tooltip(tooltipTriggerEl, {
-            trigger: 'hover'
-        })
-    );
+$(document).ready(function () {
+    function isMobileDevice() {
+        let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    
+        // Check for iOS and Android platforms
+        if (/android/i.test(userAgent)) {
+            return true; // Android
+        }
+    
+        return !!(/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream); // Not a mobile device
+    }
+
+    // Use Bootstrap tooltips only on desktop
+    if (!isMobileDevice()) {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => 
+            new bootstrap.Tooltip(tooltipTriggerEl, {
+                trigger: 'hover'
+            })
+        );
+    } 
 });
