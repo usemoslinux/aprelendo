@@ -310,8 +310,11 @@ $(document).ready(function() {
 
                     next.textContent = nextLabel + " »";
                     next.href = nextSection.href;
-                    next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as practiced');
-                    new bootstrap.Tooltip(next);
+                    
+                    if (!isMobileDevice) {
+                        next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as practiced');
+                        new bootstrap.Tooltip(next);
+                    }
                 } else {
                     next.textContent = "";
                 }
@@ -328,8 +331,11 @@ $(document).ready(function() {
 
                     prev.textContent = "« " + prevLabel;
                     prev.href = prevSection.href;
-                    prev.setAttribute('data-bs-title', 'Go to previous chapter');
-                    new bootstrap.Tooltip(prev);
+                    
+                    if (!isMobileDevice) {
+                        prev.setAttribute('data-bs-title', 'Go to previous chapter');
+                        new bootstrap.Tooltip(prev);
+                    }
                 } else {
                     prev.textContent = "";
                 }
@@ -360,6 +366,11 @@ $(document).ready(function() {
         // Convert all DIV to P
         $parsed.find('div').replaceWith(function() {
             return $('<p/>').html($(this).html());
+        });
+
+        // Convert all blockquotes to P with italics
+        $parsed.find('blockquote').replaceWith(function() {
+            return $('<p/>').html($(this).html()).addClass('fst-italic');
         });
 
         // Convert all H to P
