@@ -311,7 +311,7 @@ $(document).ready(function() {
                     next.textContent = nextLabel + " »";
                     next.href = nextSection.href;
                     
-                    if (!isMobileDevice) {
+                    if (!isMobileDevice()) {
                         next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as practiced');
                         new bootstrap.Tooltip(next);
                     }
@@ -332,7 +332,7 @@ $(document).ready(function() {
                     prev.textContent = "« " + prevLabel;
                     prev.href = prevSection.href;
                     
-                    if (!isMobileDevice) {
+                    if (!isMobileDevice()) {
                         prev.setAttribute('data-bs-title', 'Go to previous chapter');
                         new bootstrap.Tooltip(prev);
                     }
