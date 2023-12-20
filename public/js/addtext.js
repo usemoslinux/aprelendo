@@ -97,7 +97,7 @@ $(document).ready(function() {
         const reader = new FileReader();
         reader.onload = function(e) {
             const text = e.target.result;
-            $("#text").val($.trim(text));
+            $("#text").val(normalizeLineBreaksInText(text));
             updateCharsLeft();
         };
         reader.readAsText(file);
