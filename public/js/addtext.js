@@ -105,6 +105,42 @@ $(document).ready(function() {
     }); // end #upload-text.on.change
 
     /**
+     * Process text pasted inside textarea
+     */
+        $("#text").on("paste", function(e) {
+            e.preventDefault();
+            let pasted_text = e.originalEvent.clipboardData.getData('text');
+            $(this).val(normalizeLineBreaksInText(pasted_text));
+            updateCharsLeft();
+        });
+
+    /**
+     * 
+     * @param {string} text 
+     */
+    function normalizeLineBreaksInText(text) {
+        // 1. Make sure all paragraphs are separated by 2 \n\n
+        let normalized_text_regex = /(\r\n|\n|\r){3,}/gm;
+        text = text.replace(normalized_text_regex, '\n\n');
+        
+        // 2. Remove line breaks from sentences within paragraphs
+        
+        // Regular expression for matching various line break types
+        let line_break_regex = /(\r\n|\n|\r)/gm;
+
+        // Split paragraphs by two or more line breaks
+        let paragraphs = text.split(/(\r\n|\n|\r){2,}/gm);
+
+        // Clean empty elements from array
+        paragraphs = paragraphs.map(s => s.trim()).filter(s => s !== '');
+        
+        // Replace single line breaks within paragraphs and join paragraphs
+        return paragraphs.map(paragraph => {
+            return paragraph.replace(line_break_regex, ' ');
+        }).join('\n\n');
+    } // end normalizeLineBreaksInText
+
+    /**
      * Checks that the string parameter is a valid URL
      * @param {string} str 
      */
@@ -168,9 +204,8 @@ $(document).ready(function() {
                             }
                         );
 
-                        txt = txt.replace(/(\r\n|\n|\r)(\r\n|\n|\r)*/g, "\n\n"); // remove multiple line breaks
+                        txt = normalizeLineBreaksInText(txt);
                         txt = txt.replace(/\t/g, ""); // remove tabs
-                        // txt = txt.replace(/  /g, ' '); // remove multiple spaces
 
                         $("#text").val($.trim(txt));
                         $("#text").trigger("input");
