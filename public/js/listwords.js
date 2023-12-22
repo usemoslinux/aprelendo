@@ -86,42 +86,6 @@ $(document).ready(function () {
         }
     } // end toggleActionMenu
 
-    /**
-     * Returns current URI parameters
-     */
-    function getCurrentURIParameters() {
-        const parts = window.location.search.slice(1).split("&");
-        let result = { p: "1" };
-
-        if (parts != "") {
-            for (const part of parts) {
-                const temp = part.split("=");
-                result[decodeURIComponent(temp[0])] = decodeURIComponent(
-                    temp[1]
-                );
-            }
-        }
-
-        return result; // remove trailing '&'
-    } // end getCurrentURIParameters
-
-    /**
-     * Converts array to URI string with parameters
-     * @param {array} arr 
-     * @returns string
-     */
-    function parameterizeArray(arr) {
-        let result = '?';
-
-        for (const key in arr) {
-            if (arr[key]) {
-                result += key + '=' + encodeURIComponent(arr[key]) + '&';
-            }
-        }
-
-        return result.slice(0, -1);
-    } // end parameterizeArray
-
     $(document).on("change", ".chkbox-selrow", toggleActionMenu);
 
     /**

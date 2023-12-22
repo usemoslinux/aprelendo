@@ -141,14 +141,17 @@ $(document).ready(function() {
     } // end normalizeLineBreaksInText
 
     /**
-     * Checks that the string parameter is a valid URL
-     * @param {string} str 
+     * Checks that the URL passed as a parameter is valid
+     * @param {string} url
      */
-    function validateUrl(str)
+    function isValidUrl(url)
     {
-        const patt = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/[\w .-]+)*\/?$/;
-
-        return patt.test(str);
+        try {
+            new URL(url);
+            return true;
+        } catch (e) {
+            return false;
+        }
     } 
 
     /**
@@ -158,7 +161,7 @@ $(document).ready(function() {
     function fetch_url(url) {
         resetControls(true);
 
-        if (validateUrl(url)) {
+        if (isValidUrl(url)) {
             $("#btn-fetch-img")
                 .removeClass()
                 .addClass("spinner-border spinner-border-sm text-warning");

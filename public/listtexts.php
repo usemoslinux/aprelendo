@@ -166,5 +166,6 @@ try {
 }
 ?>
 
-<script defer src="/js/cookies.min.js"></script>
 <script defer src="/js/listtexts.min.js"></script>
+<script defer src="/js/helpers.min.js"></script>
+<script defer src="/js/cookies.min.js"></script>
