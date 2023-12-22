@@ -43,7 +43,6 @@ try {
 
         if (!empty($user->email)) {
             // user already exists
-            $user->updateGoogleId($google_id, $google_email);
             $user_auth->login($user->name, '', $google_id);
         } else {
             // new user
@@ -52,9 +51,10 @@ try {
                 'email' => $google_email,
                 'password' => $google_id
             ];
-
+            
             $user_reg = new UserRegistrationManager($user);
             $user_reg->register($user_data);
+            $user->updateGoogleId($google_id, $google_email);
             $user_auth->login($google_name, $google_id);
         }
     }

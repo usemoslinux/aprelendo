@@ -47,7 +47,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <br>
                     <div id="alert-box" class="d-none"></div>
                     <div id="g_id_onload"
-                        data-client_id="913422235077-p01j7jbo80c7vpbesb4uuvl10vemfl13.apps.googleusercontent.com"
+                        data-client_id="913422235077-082170c2l6b58ck8ie0f03rigombl2pc.apps.googleusercontent.com"
                         data-callback="googleSignIn">
                     </div>
                     <div class="g_id_signin" data-type="standard"></div>
@@ -101,7 +101,6 @@ require_once PUBLIC_PATH . 'simpleheader.php';
     </div>
 </main>
 
-<script defer src="https://cdn.jsdelivr.net/npm/jwt-decode/build/cjs/index.min.js"></script>
 <script defer src="/js/login.min.js"></script>
 <script defer src="/js/password.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
