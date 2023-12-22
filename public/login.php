@@ -101,7 +101,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
     </div>
 </main>
 
-<script defer src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jwt-decode/build/cjs/index.min.js"></script>
 <script defer src="/js/login.min.js"></script>
 <script defer src="/js/password.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>

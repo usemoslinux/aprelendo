@@ -242,7 +242,7 @@ class User extends DBEntity
      */
     public function updateGoogleId(string $google_id, string $google_email): void
     {
-        $sql = "UPDATE `users` SET `google_id`=? WHERE `email`=?";
+        $sql = "UPDATE `users` SET `google_id`=?,  WHERE `email`=?";
         $this->sqlExecute($sql, [$google_id, $google_email]);
     } // end updateGoogleId()
 
