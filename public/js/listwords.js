@@ -125,7 +125,7 @@ $(document).ready(function () {
         const url = dictionary_URI.replace("%s", encodeURI($sel_word.text()));
 
         // set up buttons
-        $("#btnadd").text("Forgot");
+        $("#btnadd").text("Forgot").removeClass('btn-primary').addClass('btn-danger');
         $("#btn-translate").hide();
         $("#btnremove").removeClass().addClass("btn btn-danger me-auto");
 

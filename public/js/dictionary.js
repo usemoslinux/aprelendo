@@ -133,10 +133,10 @@ function setAddDeleteButtons($selword) {
     if (words_in_selection == underlined_words_in_selection) {
         if ($btnremove.is(":visible") === false) {
             $btnremove.show();
-            $btnadd.text("Forgot");
+            $btnadd.text("Forgot").removeClass('btn-primary').addClass('btn-danger');
         }
     } else {
         $btnremove.hide();
-        $btnadd.text("Add");
+        $btnadd.text("Add").removeClass('btn-danger').addClass('btn-primary');
     }
 } // end setAddDeleteButtons
