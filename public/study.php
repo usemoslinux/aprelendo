@@ -106,6 +106,7 @@ require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
 ?>
 
 <script defer src="/js/study.min.js"></script>
+<script defer src="/js/dictionary.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 <script defer src="/js/tooltips.min.js"></script>
 

@@ -18,14 +18,15 @@
  */
 
 $(document).ready(function() {
-    let dictionary_URI = "";            // user dictionary URI
-    let translator_URI = "";            // user dictionary URI
-    const $dic_frame = $("#dicFrame");  // dictionary iframe inside modal window
-    let $sel_word = $();                // jQuery object used to open dictionary modal
-    let words = [];                     // array containing all words user is learning
-    let max_cards = 10;                 // maximum nr. of cards
-    let cur_word_index = 0;             // current word index
-    let cur_card_index = 0;             // current word index
+    let   dictionary_URI     = "";              // user dictionary URI
+    let   img_dictionary_URI = "";              // user image dictionary URI
+    let   translator_URI     = "";              // user translator URI
+    const $dic_frame         = $("#dicFrame");  // dictionary iframe inside modal window
+    let   $sel_word          = $();             // jQuery object used to open dictionary modal
+    let   words              = [];              // array containing all words user is learning
+    let   max_cards          = 10;              // maximum nr. of cards
+    let   cur_word_index     = 0;               // current word index
+    let   cur_card_index     = 0;               // current word index
 
     // nr. of words recalled during practice
     let answers = [
@@ -38,9 +39,9 @@ $(document).ready(function() {
     // initialize modal dictionary window buttons
     // $("#btn-translate").hide();
     $("#btn-translate").removeClass("ps-0");
-    $("#btnremove").hide();
-    $("#btnadd").hide();
-    $("#btncancel").removeClass().addClass("btn-close me-1").html('');
+    $("#btn-remove").hide();
+    $("#btn-add").hide();
+    $("#btn-cancel").removeClass().addClass("btn-close me-1").html('');
     $(".modal-header").addClass("p-0");
 
     // disable Yes/No buttons
@@ -54,6 +55,7 @@ $(document).ready(function() {
     }).done(function(data) {
         if (data.error_msg == null) {
             dictionary_URI = data.dictionary_uri;
+            img_dictionary_URI = data.img_dictionary_uri;
             translator_URI = data.translator_uri;
         }
     }); // end $.ajax 
@@ -260,7 +262,7 @@ $(document).ready(function() {
         const url = dictionary_URI.replace("%s", encodeURI($sel_word.text()));
 
         // set up buttons
-        $("#btnadd").text("Forgot").removeClass('btn-primary').addClass('btn-danger');
+        $("#btn-add").text("Forgot").removeClass('btn-primary').addClass('btn-danger');
         
         // show loading spinner
         $("#loading-spinner").attr('class','lds-ellipsis m-auto');
@@ -311,21 +313,16 @@ $(document).ready(function() {
     }); // end .btn-answer.on.click()
 
     /**
-     * Builds translator link using the word object as a parameter
-     */
-    function buildTranslationLink($word) {
-        const sentence = $word.parent("p").text().trim();
-
-        return translator_URI.replace("%s", encodeURIComponent(sentence));
-    } // end buildTranslationLink
-
-    /**
      * Opens translator in new window. 
      * Triggers when user click in translate button in modal window
      */
     $("#btn-translate").on("click", function() {
-        window.open(buildTranslationLink($sel_word));
+        window.open(buildStudyTranslationLink(translator_URI, $sel_word), '_blank', 'noopener,noreferrer');
     }); // end #btn-translate.on.click()
+
+    $("#btn-img-dic").on("click", function () {
+        window.open(buildDictionaryLink(img_dictionary_URI, $sel_word.text()), '_blank', 'noopener,noreferrer');
+    }); // end #btn-img-dic.on.click()
 
     /**
      * Disables right click context menu
@@ -336,7 +333,7 @@ $(document).ready(function() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         if (!isMobile && $(e.target).is(".word")) {
-            window.open(buildTranslationLink($(e.target)));
+            window.open(buildStudyTranslationLink(translator_URI, $(e.target)), '_blank', 'noopener,noreferrer');
         }
         return false;
      }); // end document.contextmenu

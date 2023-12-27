@@ -125,9 +125,9 @@ $(document).ready(function () {
         const url = dictionary_URI.replace("%s", encodeURI($sel_word.text()));
 
         // set up buttons
-        $("#btnadd").text("Forgot").removeClass('btn-primary').addClass('btn-danger');
+        $("#btn-add").text("Forgot").removeClass('btn-primary').addClass('btn-danger');
         $("#btn-translate").hide();
-        $("#btnremove").removeClass().addClass("btn btn-danger me-auto");
+        $("#btn-remove").removeClass().addClass("btn btn-danger me-auto");
 
         // show loading spinner
         $("#loading-spinner").attr('class', 'lds-ellipsis m-auto');
@@ -152,7 +152,7 @@ $(document).ready(function () {
      * Updates status of forgotten words
      * Triggers when user click in Forgot button in dictionary modal
      */
-    $("#btnadd").on("click", function (e) {
+    $("#btn-add").on("click", function (e) {
         // add selection to "words" table
         $.ajax({
             type: "POST",
@@ -173,14 +173,14 @@ $(document).ready(function () {
                 "Oops! There was an error updating this words' status."
             );
         });
-    }); // end #btnadd.on.click
+    }); // end #btn-add.on.click
 
     /**
      * Deletes current word
      * Triggers when user selects Delete button in dictionary modal
      * @param {event object} e
      */
-    $("#btnremove").on("click", function (e) {
+    $("#btn-remove").on("click", function (e) {
         $.ajax({
             url: "ajax/removeword.php",
             type: "POST",
@@ -198,5 +198,5 @@ $(document).ready(function () {
                     "There was an error when trying to delete the selected words. Refresh the page and try again."
                 );
             });
-    }); // end #btnremove.on.click
+    }); // end #btn-remove.on.click
 });

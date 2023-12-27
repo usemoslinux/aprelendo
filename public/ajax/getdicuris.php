@@ -29,8 +29,9 @@ try {
     $lang = new Language($pdo, $user->id);
     $lang->loadRecordById($user->lang_id);
 
-    $result['dictionary_uri'] = $lang->dictionary_uri;
-    $result['translator_uri'] = $lang->translator_uri;
+    $result['dictionary_uri']     = $lang->dictionary_uri;
+    $result['img_dictionary_uri'] = $lang->img_dictionary_uri;
+    $result['translator_uri']     = $lang->translator_uri;
 
     echo json_encode($result);
 } catch (InternalException | UserException $e) {

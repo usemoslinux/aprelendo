@@ -69,5 +69,6 @@ try {
     $user_reg = new UserRegistrationManager($user);
     $user_reg->register($user_data);
 } catch (InternalException | UserException $e) {
+    $user->delete();
     echo $e->getJsonError();
 }

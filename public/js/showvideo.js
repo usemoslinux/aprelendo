@@ -25,6 +25,7 @@ $(document).ready(function () {
     let swiping = false; // used in mobile devices to activate "word/phrase selection mode"
     let $selword = null; // jQuery object of the selected word/phrase
     let dictionary_URI = "";
+    let img_dictionary_URI = "";
     let translator_URI = "";
     let translate_paragraph_link = "";
     let resume_video = false;
@@ -46,8 +47,9 @@ $(document).ready(function () {
         dataType: "json"
     }).done(function (data) {
         if (data.error_msg == null) {
-            dictionary_URI = data.dictionary_uri;
-            translator_URI = data.translator_uri;
+            dictionary_URI     = data.dictionary_uri;
+            img_dictionary_URI = data.img_dictionary_uri
+            translator_URI     = data.translator_uri;
         }
     });
 
@@ -99,7 +101,7 @@ $(document).ready(function () {
         } else if (e.which == 3) {
             // on right click show translation of the whole sentence
             $selword = $(this);
-            window.open(buildTranslationLink(translator_URI, $selword));
+            window.open(buildVideoTranslationLink(translator_URI, $selword), '_blank', 'noopener,noreferrer');
         }
     }); // end .word.on.mousedown/touchstart
 
@@ -200,7 +202,7 @@ $(document).ready(function () {
     /**
      * Adds selected word or phrase to the database and underlines it in the text
      */
-    $("#btnadd").on("click", function () {
+    $("#btn-add").on("click", function () {
         const sel_text = $selword.text();
         const is_phrase = $selword.length > 1 ? 1 : 0;
         // add selection to "words" table
@@ -279,7 +281,7 @@ $(document).ready(function () {
                     "Oops! There was an error adding this word or phrase to the database."
                 );
             });
-    }); // end #btnadd.on.click
+    }); // end #btn-add.on.click
 
     /**
      * Updates vh value on window resize
@@ -302,17 +304,14 @@ $(document).ready(function () {
         $("#dicFrame").attr('class', 'd-none');
 
         // build translate sentence url
-        translate_paragraph_link = buildTranslationLink(translator_URI, $selword);
+        translate_paragraph_link = buildVideoTranslationLink(translator_URI, $selword);
 
         // show dictionary
-        const selword_text = $selword.text().replace(/(\r\n|\n|\r)/gm, " ");
-        const url = dictionary_URI.replace("%s", encodeURIComponent(selword_text));
-
         $(parent.document)
             .find("#dicFrame")
             .get(0)
-            .contentWindow.location.replace(url);
-        $("#btnadd").focus();
+            .contentWindow.location.replace(buildDictionaryLink(dictionary_URI, $selword.text()));
+        $("#btn-add").focus();
         // the previous line loads iframe content without adding it to browser history,
         // as this one does: $('#dicFrame').attr('src', url);
 
@@ -324,7 +323,7 @@ $(document).ready(function () {
     /**
      * Remove selected word or phrase from database
      */
-    $("#btnremove").on("click", function () {
+    $("#btn-remove").on("click", function () {
         $.ajax({
             type: "POST",
             url: "ajax/removeword.php",
@@ -403,7 +402,7 @@ $(document).ready(function () {
                     "Oops! There was an error removing the word from the database."
                 );
             });
-    }); // end #btnremove.on.click
+    }); // end #btn-remove.on.click
 
     /**
      * Finished studying this text. Archives text & saves new status of words/phrases
@@ -523,8 +522,12 @@ $(document).ready(function () {
     }); // end #dicFrame.on.load()
 
     $("#btn-translate").on("click", function () {
-        window.open(translate_paragraph_link, '_blank', 'noopener');
+        window.open(translate_paragraph_link, '_blank', 'noopener,noreferrer');
     }); // end #btn-translate.on.click()
+
+    $("#btn-img-dic").on("click", function () {
+        window.open(buildDictionaryLink(img_dictionary_URI, $selword.text()), '_blank', 'noopener,noreferrer');
+    }); // end #btn-img-dic.on.click()
 
     /**
      * Removes word highlighting when user opens dictionary for word

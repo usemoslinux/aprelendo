@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -24,23 +25,37 @@
         <!-- Modal content-->
         <div class="modal-content mb-xs-3">
             <div class="modal-header p-2">
-                <button id="btnremove" type="button" data-bs-dismiss="modal" class="btn btn-danger me-3"
+                <button id="btn-remove" type="button" data-bs-dismiss="modal" class="btn btn-danger me-3"
                     data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
                     data-bs-title="Delete">
                     <span class="bi bi-trash3-fill"></span>
                 </button>
-                <button id="btn-translate" type="button" class="btn btn-link p-0 me-auto"
-                    data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                    data-bs-title="Open translator">
-                    <span id="gt-icon" class="bi bi-translate"></span>
+                <div class="btn-group" role="group" aria-label="Additional dictionaries and translator">
+                    <button id="btn-translate" type="button" class="btn btn-lg btn-primary px-3"
+                        data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                        data-bs-title="Open translator">
+                        <span class="bi bi-translate"></span>
+                    </button>
+                    <button id="btn-img-dic" type="button" class="btn btn-primary px-3" data-bs-toggle="tooltip"
+                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                        data-bs-title="Open visual dictionary">
+                        <span class="bi bi-card-image"></span>
+                    </button>
+                </div>
+                <button id="btn-cancel" type="button" data-bs-dismiss="modal" class="btn btn-lg btn-link ms-auto">
+                    Cancel
                 </button>
-                <button id="btncancel" type="button" data-bs-dismiss="modal" class="btn btn-link">Cancel</button>
-                <button id="btnadd" type="button" class="btn btn-primary" data-bs-dismiss="modal">Add</button>
+                <button id="btn-add" type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal">
+                    Add
+                </button>
             </div>
             <span id="bdgfreqlvl" class="badge d-none"></span>
             <div class="modal-body" id="definitions">
                 <div id="loading-spinner" class="lds-ellipsis m-auto">
-                    <div></div><div></div><div></div><div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
                 <iframe id="dicFrame" title="User dictionary" style="width:100%;border:none;"></iframe>
             </div>

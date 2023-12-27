@@ -25,6 +25,7 @@ $(document).ready(function() {
     let swiping = false; // used in mobile devices to activate "word/phrase selection mode"
     let $selword = null; // jQuery object with selected word/phrase
     let dictionary_URI = "";
+    let img_dictionary_URI = "";
     let translator_URI = "";
     let translate_paragraph_link = "";
     let next_phase = 2; // next phase of the learning cycle
@@ -113,7 +114,7 @@ $(document).ready(function() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         if (!isMobile && $(e.target).is(".word")) {
-            window.open(buildTranslationLink());
+            window.open(buildTextTranslationLink(translator_URI, $selword), '_blank', 'noopener,noreferrer');
         }
         return false;
      }); // end document.contextmenu
@@ -249,46 +250,11 @@ $(document).ready(function() {
         dataType: "json"
     }).done(function(data) {
         if (data.error_msg == null) {
-            dictionary_URI = data.dictionary_uri;
-            translator_URI = data.translator_uri;
+            dictionary_URI     = data.dictionary_uri;
+            img_dictionary_URI = data.img_dictionary_uri
+            translator_URI     = data.translator_uri;
         }
     }); // end $.ajax
-
-    /**
-     * Builds translator link including the paragraph to translate as a parameter
-     */
-    function buildTranslationLink() {
-        let $start_obj = $selword.prevUntil(":contains('.'), :contains('!'), :contains('?'), :contains('\n')").last();
-        $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
-        
-        let $end_obj = $selword.prev().length == 0
-            ? $selword
-                .nextUntil(":contains('.'), :contains('。'), :contains('!'), :contains('?'), :contains('\n')")
-                .last()
-                .next()
-            : $selword
-                .prev()
-                .nextUntil(":contains('.'), :contains('。'), :contains('!'), :contains('?'), :contains('\n')")
-                .last()
-                .next();
-        $end_obj =
-            $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
-        
-        let end_obj_length = $end_obj.text().length;
-
-        let $sentence_obj = $start_obj
-            .nextUntil($end_obj)
-            .addBack()
-            .next()
-            .addBack();
-        let sentence = $sentence_obj.text().replace(/(\r\n|\n|\r)/gm, " ");
-        if (end_obj_length > 1) {
-            sentence.slice(0,-end_obj_length+1);
-        }
-        sentence.trim();
-
-        return translator_URI.replace("%s", encodeURI(sentence));
-    } // end buildTranslationLink
 
     /**
      * Disables scrolling without making text jump around
@@ -311,65 +277,6 @@ $(document).ready(function() {
     };
 
     /**
-     * Sets Add & Delete buttons depending on whether selection exists in database
-     */
-    function setAddDeleteButtons() {
-        let $btnremove = $(parent.document).find("#btnremove");
-        let $btnadd = $(parent.document).find("#btnadd");
-
-        const underlined_words_in_selection = $selword.filter(
-            ".learning, .new, .forgotten, .learned"
-        ).length;
-        const words_in_selection = $selword.filter(".word").length;
-
-        if (words_in_selection == underlined_words_in_selection) {
-            if ($btnremove.is(":visible") === false) {
-                $btnremove.show();
-                $btnadd.text("Forgot").removeClass('btn-primary').addClass('btn-danger');
-            }
-        } else {
-            $btnremove.hide();
-            $btnadd.text("Add").removeClass('btn-danger').addClass('btn-primary');
-        }
-    } // end setAddDeleteButtons
-
-    /**
-     * Shows message for high & medium frequency words in dictionary modal window
-     * @param {string} word
-     * @param {string} lg_iso
-     */
-    function getWordFrequency(word, lg_iso) {
-        let $freqlvl = $doc.find("#bdgfreqlvl");
-
-        // ajax call to get word frequency
-        $.ajax({
-            type: "GET",
-            url: "/ajax/getwordfreq.php",
-            data: { word: word, lg_iso: lg_iso }
-        }).done(function(data) {
-            if (data == 0){
-                $freqlvl.hide();
-            } else if (data < 81) {
-                $freqlvl
-                    .hide()
-                    .text("High frequency word")
-                    .removeClass()
-                    .addClass("badge text-bg-danger")
-                    .show();
-            } else if (data < 97){
-                $freqlvl
-                    .hide()
-                    .text("Medium frequency word")
-                    .removeClass()
-                    .addClass("badge text-bg-warning")
-                    .show();
-            }
-        }).fail(function() {
-            $freqlvl.hide();
-        });
-    } // end getWordFrequency
-
-    /**
      * Shows dictionary when user clicks a word
      * All words are enclosed in a.word tags
      */
@@ -388,24 +295,20 @@ $(document).ready(function() {
                 playing_audio = false;
             }
         }
-
         getWordFrequency($selword.text(), doclang);
-        setAddDeleteButtons();
+        setAddDeleteButtons($selword);
 
         $doc.find("#loading-spinner").attr('class','lds-ellipsis m-auto');
         $dic_frame.attr('class','d-none');
 
         // build translate sentence url
-        translate_paragraph_link = buildTranslationLink();
+        translate_paragraph_link = buildTextTranslationLink(translator_URI, $selword);
 
         // show dictionary
-        const search_text = $selword.text().replace(/\r?\n|\r/gm, " ");
-        const url = dictionary_URI.replace("%s", encodeURIComponent(search_text));
-
-        $dic_frame.get(0).contentWindow.location.replace(url);
-        $("#btnadd").focus();
+        $dic_frame.get(0).contentWindow.location.replace(buildDictionaryLink(dictionary_URI, $selword.text()));
         // the previous line loads iframe content without adding it to browser history,
-        // as this one does: $dic_frame.attr('src', url);
+        // as this one does: $dic_frame.attr('src', dic_url);
+        $("#btn-add").focus();
 
         $doc.find("#dic-modal").modal("show");
     } // end showModal
@@ -419,14 +322,18 @@ $(document).ready(function() {
     }); // end $dic_frame.on.load()
 
     $doc.on("click", "#btn-translate", function() {
-        window.open(translate_paragraph_link);
+        window.open(translate_paragraph_link, '_blank', 'noopener,noreferrer');
     }); // end #btn-translate.on.click()
+
+    $doc.on("click", "#btn-img-dic", function() {
+        window.open(buildDictionaryLink(img_dictionary_URI, $selword.text()), '_blank', 'noopener,noreferrer');
+    }); // end #btn-img-dic.on.click()
 
     /**
      * Adds word to user db
      * Triggered when user clicks the "Add" button in the dictionary modal window
      */
-    $doc.on("click", "#btnadd", function() {
+    $doc.on("click", "#btn-add", function() {
         const is_phrase = $selword.length > 1 ? 1: 0;
         const sel_text = $selword.text();
         const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
@@ -542,13 +449,13 @@ $(document).ready(function() {
             });
 
         $selword.removeClass("highlighted");
-    }); // end #btnadd.on.click
+    }); // end #btn-add.on.click
 
     /**
      * Removes word from db
      * Triggered when user clicks the "Delete" button in the dictionary modal window
      */
-    $doc.on("click", "#btnremove", function() {
+    $doc.on("click", "#btn-remove", function() {
         $.ajax({
             type: "POST",
             url: "/ajax/removeword.php",
@@ -628,7 +535,7 @@ $(document).ready(function() {
                     "Oops! There was an error removing the word from the database."
                 );
             });
-    }); // end #btnremove.on.click
+    }); // end #btn-remove.on.click
 
     /**
      * Executes next phase of assisted learning

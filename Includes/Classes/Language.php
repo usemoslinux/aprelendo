@@ -25,16 +25,17 @@ use Aprelendo\UserException;
 
 class Language extends DBEntity
 {
-    public int $id                  = 0;
-    public int $user_id             = 0;
-    public string $name             = '';
-    public string $dictionary_uri   = '';
-    public ?string $translator_uri  = null;
-    public ?string $rss_feed1_uri  = null;
-    public ?string $rss_feed2_uri  = null;
-    public ?string $rss_feed3_uri  = null;
-    public bool $show_freq_words    = false;
-    public int $level               = 0;
+    public int $id                      = 0;
+    public int $user_id                 = 0;
+    public string $name                 = '';
+    public string $dictionary_uri       = '';
+    public string $img_dictionary_uri   = '';
+    public string $translator_uri       = '';
+    public ?string $rss_feed1_uri       = null;
+    public ?string $rss_feed2_uri       = null;
+    public ?string $rss_feed3_uri       = null;
+    public bool $show_freq_words        = false;
+    public int $level                   = 0;
 
     private static $iso_code = [
         'ar' => 'arabic',
@@ -65,7 +66,7 @@ class Language extends DBEntity
     public function __construct(\PDO $pdo, int $user_id)
     {
         parent::__construct($pdo);
-        $this->table = 'languages';
+        $this->table   = 'languages';
         $this->user_id = $user_id;
     } // end __construct()
 
@@ -78,16 +79,17 @@ class Language extends DBEntity
     private function loadRecord(array $record): void
     {
         if ($record) {
-            $this->id               = $record['id'];
-            $this->user_id          = $record['user_id'];
-            $this->name             = $record['name'];
-            $this->dictionary_uri   = $record['dictionary_uri'];
-            $this->translator_uri   = $this->setUri($record['translator_uri']);
-            $this->rss_feed1_uri   = $this->setUri($record['rss_feed1_uri']);
-            $this->rss_feed2_uri   = $this->setUri($record['rss_feed2_uri']);
-            $this->rss_feed3_uri   = $this->setUri($record['rss_feed3_uri']);
-            $this->show_freq_words  = $record['show_freq_words'];
-            $this->level            = $record['level'];
+            $this->id                 = $record['id'];
+            $this->user_id            = $record['user_id'];
+            $this->name               = $record['name'];
+            $this->dictionary_uri     = $record['dictionary_uri'];
+            $this->img_dictionary_uri = $record['img_dictionary_uri'];
+            $this->translator_uri     = $record['translator_uri'];
+            $this->rss_feed1_uri      = $this->setUri($record['rss_feed1_uri']);
+            $this->rss_feed2_uri      = $this->setUri($record['rss_feed2_uri']);
+            $this->rss_feed3_uri      = $this->setUri($record['rss_feed3_uri']);
+            $this->show_freq_words    = $record['show_freq_words'];
+            $this->level              = $record['level'];
         }
     } // end loadRecord()
 
@@ -138,22 +140,23 @@ class Language extends DBEntity
 
         // if everything is fine, proceed editing the record
 
-        $this->dictionary_uri  = $new_record['dict-uri'];
-        $this->translator_uri  = $this->setUri($new_record['translator-uri']);
-        $this->level           = $new_record['level'];
-        $this->rss_feed1_uri  = $this->setUri($new_record['rss-feed1-uri']);
-        $this->rss_feed2_uri  = $this->setUri($new_record['rss-feed2-uri']);
-        $this->rss_feed3_uri  = $this->setUri($new_record['rss-feed3-uri']);
-        $this->show_freq_words = (bool)$new_record['show-freq-words'];
+        $this->dictionary_uri     = $new_record['dict-uri'];
+        $this->img_dictionary_uri = $new_record['img-dict-uri'];
+        $this->translator_uri     = $new_record['translator-uri'];
+        $this->level              = $new_record['level'];
+        $this->rss_feed1_uri      = $this->setUri($new_record['rss-feed1-uri']);
+        $this->rss_feed2_uri      = $this->setUri($new_record['rss-feed2-uri']);
+        $this->rss_feed3_uri      = $this->setUri($new_record['rss-feed3-uri']);
+        $this->show_freq_words    = (bool)$new_record['show-freq-words'];
 
         $sql = "UPDATE `{$this->table}`
-                SET `dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?, `rss_feed2_uri`=?,
-                    `rss_feed3_uri`=?, `show_freq_words`=?, `level`=?
+                SET `dictionary_uri`=?, `img_dictionary_uri`=?, `translator_uri`=?, `rss_feed1_uri`=?,
+                    `rss_feed2_uri`=?, `rss_feed3_uri`=?, `show_freq_words`=?, `level`=?
                 WHERE `user_id`=? AND `id`=?";
         $this->sqlExecute($sql, [
-            $this->dictionary_uri, $this->translator_uri, $this->rss_feed1_uri,
-            $this->rss_feed2_uri, $this->rss_feed3_uri, (int)$this->show_freq_words,
-            $this->level, $this->user_id, $this->id
+            $this->dictionary_uri, $this->img_dictionary_uri, $this->translator_uri, $this->rss_feed1_uri,
+            $this->rss_feed2_uri, $this->rss_feed3_uri, (int)$this->show_freq_words, $this->level,
+            $this->user_id, $this->id
         ]);
     } // end editRecord()
 
@@ -167,18 +170,20 @@ class Language extends DBEntity
     {
         // create & save default language preferences for user
         foreach (self::$iso_code as $key => $value) {
-            $translator_uri = 'https://translate.google.com/?hl='
-                . $native_lang
-                . '&sl='
+            $translator_uri     = 'https://www.bing.com/translator/?from='
                 . $key
-                . '&tl='
+                . '&to='
                 . $native_lang
-                . '&text=%s';
-            $dictionary_uri = 'https://' . $key . '.m.wiktionary.org/wiki/%s';
+                . '&text=%s'
+                . '&setLang='
+                . $native_lang;
+            $dictionary_uri     = 'https://' . $key . '.m.wiktionary.org/wiki/%s';
+            $img_dictionary_uri = 'https://www.bing.com/images/search?q=%s&setLang=' . $key;
 
-            $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`, `translator_uri`)
-                    VALUES (?, ?, ?, ?)";
-            $this->sqlExecute($sql, [$this->user_id, $key, $dictionary_uri, $translator_uri]);
+            $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`,
+                    `img_dictionary_uri`, `translator_uri`)
+                    VALUES (?, ?, ?, ?, ?)";
+            $this->sqlExecute($sql, [$this->user_id, $key, $dictionary_uri, $img_dictionary_uri, $translator_uri]);
         }
     } // end createInitialRecordsForUser()
 
