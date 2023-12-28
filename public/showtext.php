@@ -63,7 +63,7 @@ try {
         $assisted_learning = $prefs->assisted_learning;
 
         $likes = new Likes($pdo, $text_id, $user->id, $user->lang_id);
-        $user_liked_class = $likes->userLiked($user->id, $text_id) ? 'bi-heart-fill' : 'bi-heart';
+        $user_liked_class = $likes->userLiked() ? 'bi-heart-fill' : 'bi-heart';
         $nr_of_likes = $likes->get($text_id);
         
         $html .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";

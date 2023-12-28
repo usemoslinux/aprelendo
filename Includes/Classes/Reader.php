@@ -32,6 +32,7 @@ use SimpleXMLElement;
 class Reader
 {
     private $pdo;
+    private $user_id;
     private $text;
     public $is_long_text = false;
     public $prefs;
@@ -46,6 +47,7 @@ class Reader
     public function __construct(\PDO $pdo, int $user_id, int $lang_id, int $text_id = 0, bool $is_shared = false)
     {
         $this->pdo = $pdo;
+        $this->user_id = $user_id;
 
         $this->prefs = new Preferences($pdo, $user_id);
         $this->prefs->loadRecord();
@@ -211,8 +213,8 @@ class Reader
     public function showVideo(string $yt_id): string
     {
         $yt_id = $yt_id ? $yt_id : '';
-        $likes = new Likes($this->pdo, $this->text->id, $this->text->user_id, $this->text->lang_id);
-        $user_liked_class = $likes->userLiked($this->text->user_id, $this->text->id) ? 'fas' : 'far';
+        $likes = new Likes($this->pdo, $this->text->id, $this->user_id, $this->text->lang_id);
+        $user_liked_class = $likes->userLiked() ? 'bi-heart-fill' : 'bi-heart';
 
         $html = '<div class="col-lg-6 offset-lg-3">' .
                     '<div id="main-container" style="height: 100vh; height: calc(var(--vh, 1vh) * 100);"
@@ -233,9 +235,9 @@ class Reader
                         </span>
                         <button type="button" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                             data-bs-placement="bottom" data-bs-title="Like" class="btn btn-sm btn-link me-2">
-                            <span class="'
+                            <span class="bi '
                                 . $user_liked_class
-                                . ' bi-heart-fill" data-idText="' . $this->text->id .'"></span>
+                                . '" data-idText="' . $this->text->id .'"></span>
                             <small>' . $likes->get($this->text->id) . '</small>
                         </button>
                     </div>';
