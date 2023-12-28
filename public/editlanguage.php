@@ -42,7 +42,7 @@ if (empty($error_msg)) {
                         value="<?php echo htmlspecialchars($lang->dictionary_uri); ?>">
                 </div>
                 <div class="mb-3">
-                    <label for="img-dict-uri">Dictionary URI:</label>
+                    <label for="img-dict-uri">Image dictionary URI:</label>
                     <input type="url" id="img-dict-uri" name="img-dict-uri" class="form-control"
                         value="<?php echo htmlspecialchars($lang->img_dictionary_uri); ?>">
                 </div>

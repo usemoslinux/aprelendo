@@ -25,7 +25,7 @@
         <!-- Modal content-->
         <div class="modal-content mb-xs-3">
             <div class="modal-header p-2">
-                <button id="btn-remove" type="button" data-bs-dismiss="modal" class="btn btn-danger me-3"
+                <button id="btn-remove" type="button" data-bs-dismiss="modal" class="btn btn-lg btn-danger me-3"
                     data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
                     data-bs-title="Delete">
                     <span class="bi bi-trash3-fill"></span>

@@ -127,7 +127,7 @@ $(document).ready(function () {
         // set up buttons
         $("#btn-add").text("Forgot").removeClass('btn-primary').addClass('btn-danger');
         $("#btn-translate").hide();
-        $("#btn-remove").removeClass().addClass("btn btn-danger me-auto");
+        $("#btn-remove").removeClass().addClass("btn btn-lg btn-danger me-auto");
 
         // show loading spinner
         $("#loading-spinner").attr('class', 'lds-ellipsis m-auto');
