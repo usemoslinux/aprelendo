@@ -37,5 +37,5 @@ $(document).ready(function () {
                 trigger: 'hover'
             })
         );
-    } 
+    }
 });

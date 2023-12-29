@@ -178,7 +178,7 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
         <div class="offcanvas-header">
             <h1 id="title">...</h1>
             <button id="close-offcanvas" type="button"
-                class="btn-close text-reset <?php echo $class == 'darkmode' ? 'btn-close-white' : ''; ?>"
+                class="btn-close <?php echo $class == 'darkmode' ? 'btn-close-white' : ''; ?>"
                 data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -220,7 +220,8 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
                     </div>
                 </div>
 
-                <span id="book-title" class="fw-bold ms-2 me-auto my-auto"></span>
+                <span id="book-title-chapter" class="fw-bold pe-2 me-auto my-auto text-truncate"></span>
+                <span id="book-title" class="fw-bold ms-2 me-2 my-auto text-nowrap text-truncate"></span>
 
                 <button id="opener" class="btn btn-link" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#navigation" aria-controls="navigation">
@@ -257,9 +258,9 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
 
     <script defer src="/js/underlinewords.min.js"></script>
     <script defer src="/js/showtext.min.js"></script>
-    <script defer src="/js/showebook.min.js"></script>
+    <script defer src="/js/showebook.js"></script>
     <script defer src="/js/dictionary.min.js"></script>
-    <script defer src="/js/tooltips.min.js"></script>
+    <script defer src="/js/tooltips.js"></script>
 </body>
 
 </html>

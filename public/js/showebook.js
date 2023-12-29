@@ -94,6 +94,7 @@ $(document).ready(function() {
         "click",
         function (e) {
             e.preventDefault();
+            $(next).tooltip('hide');
             $.when(SaveWords()).then(function () {
                 let url = next.getAttribute("href");
                 display(url);
@@ -110,6 +111,7 @@ $(document).ready(function() {
         "click",
         function (e) {
             e.preventDefault();
+            $(prev).tooltip('hide');
             let url = prev.getAttribute("href");
             display(url);
             $("html, body").animate({
@@ -313,7 +315,9 @@ $(document).ready(function() {
                     
                     if (!isMobileDevice()) {
                         next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as practiced');
-                        new bootstrap.Tooltip(next);
+                        new bootstrap.Tooltip(next, {
+                            trigger: 'hover'
+                        })
                     }
                 } else {
                     next.textContent = "";
@@ -334,7 +338,9 @@ $(document).ready(function() {
                     
                     if (!isMobileDevice()) {
                         prev.setAttribute('data-bs-title', 'Go to previous chapter');
-                        new bootstrap.Tooltip(prev);
+                        new bootstrap.Tooltip(prev, {
+                            trigger: 'hover'
+                        })
                     }
                 } else {
                     prev.textContent = "";
@@ -408,13 +414,17 @@ $(document).ready(function() {
     function updateToc(current_chapter_url) {
         let $nav = document.getElementById('toc');
         let $selector = $nav.querySelector('.fw-bold');
+        let $title = document.getElementById('book-title-chapter');
+
         if ($selector !== null) {
             $selector.classList.remove('fw-bold', 'text-primary');
         }
 
         $selector = $nav.querySelector('a[href*="' + current_chapter_url + '"]');
+        
         if ($selector !== null) {
             $selector.classList.add('fw-bold', 'text-primary');
+            $title.textContent = ' - ' + $selector.textContent;
         }
     } // end updateToc
 

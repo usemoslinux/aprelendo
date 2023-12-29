@@ -595,6 +595,10 @@ ol {
     color: #f4f8fa;
 }
 
+.alert-dismissible .btn-close {
+    padding: 1rem;
+}
+
 /* COOKIES */
 
 #eucookielaw {
