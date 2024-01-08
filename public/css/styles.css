@@ -519,6 +519,7 @@ ol {
 .alert {
     box-shadow: 0 .10rem .10rem 0 rgba(0,0,0,.1);
     font-family: "Roboto", sans-serif;
+    font-size: 1rem;
 }
 
 .alert p:last-child {
@@ -863,12 +864,9 @@ a[role="menuitem"] {
     border-color: gray;
 }
 
-audio {
-    width: 100%;
-    min-height: 40px;
-}
-
 #audioplayer-container {
+    font-family: "Roboto",sans-serif;
+    font-size: 1rem;
     top: 0;
     z-index: 3;
 }
@@ -876,41 +874,6 @@ audio {
 .basic {
     font: 0.85rem Roboto, sans-serif;
     white-space: normal;
-}
-
-#label-speed {
-    margin-top: 4px;
-    flex-basis: 85px;
-    flex-shrink: 0;
-}
-
-#audioplayer-speedbar-container {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    align-items: stretch;
-    margin: 0;
-    padding-bottom: 5px;
-}
-
-#range-speed {
-    background-color: transparent;
-    flex-grow: 1;
-    margin-top: 3px;
-    width: 50px;
-}
-
-#label-abloop {
-    margin-top: 4px;
-    flex-basis: 80px;
-    flex-shrink: 0;
-    text-align: center;
-}
-
-#btn-abloop {
-    font: 0.85rem Roboto, sans-serif;
-    flex-basis: 30px;
-    flex-shrink: 0;
 }
 
 #alert-box-phase {
@@ -1165,14 +1128,12 @@ span.status_learned {
 /* SHARED TEXTS */
 
 .bi-heart {
-    font-size: 1.2em;
     vertical-align: bottom;
     cursor: pointer;
 }
 
 .bi-heart-fill {
     color: red;
-    font-size: 1.2em;
     vertical-align: bottom;
     cursor: pointer;
 }

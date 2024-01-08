@@ -24,6 +24,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
 use Aprelendo\Reader;
 use Aprelendo\Texts;
 use Aprelendo\TextsUtilities;
+use Aprelendo\AudioPlayerForEbooks;
 use Aprelendo\UserException;
 
 function getCSS($styles)
@@ -186,12 +187,12 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
             <h2 id="author">...</h2>
             <div id="toc"></div>
         </div>
-        <?php if(!empty($audio_uri)): ?>
-            <audio id="audioplayer" controls>
-                <source id="audioplayer" src="<?php echo $audio_uri; ?>" />
-                <p>Your browser doesn't support the audio HTML tag.</p>
-            </audio>
-        <?php endif; ?>
+        <?php
+            if (!empty($audio_uri)) {
+                $audio_player = new AudioPlayerForEbooks($audio_uri);
+                echo $audio_player->show();
+            }
+        ?>
     </div>
 
     <div id="main">
@@ -259,6 +260,7 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
     <script defer src="/js/underlinewords.min.js"></script>
     <script defer src="/js/showtext.min.js"></script>
     <script defer src="/js/showebook.min.js"></script>
+    <script defer src="/js/audioplayer.min.js"></script>
     <script defer src="/js/dictionary.min.js"></script>
     <script defer src="/js/tooltips.min.js"></script>
 </body>

@@ -30,8 +30,6 @@ $(document).ready(function() {
     let translate_paragraph_link = "";
     let next_phase = 2; // next phase of the learning cycle
     let playing_audio = false;
-    let abloop_start = 0;
-    let abloop_end = 0;
     window.parent.show_confirmation_dialog = true; // confirmation dialog that shows when closing window
     let doclang = $("html").attr("lang");
 
@@ -62,48 +60,6 @@ $(document).ready(function() {
             skipAudioPhases();
         }); // end $.ajax
     }
-
-    /**
-     * Toggles audio player
-     */
-    function toggleAudio() {
-        let $audioplayer = $("#audioplayer");
-        let playing = !$audioplayer.prop("paused");
-            if (playing) {
-                $audioplayer.trigger("pause");
-            } else {
-                $audioplayer.trigger("play");
-            }
-    } // end toggleAudio
-
-    /**
-     * AB Loop button click
-     */
-    $("body").on("click", "#btn-abloop", function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (abloop_start == 0 && abloop_end == 0) {
-            abloop_start = $("#audioplayer").prop("currentTime");
-            $(this).text("B");
-        } else if (abloop_start > 0 && abloop_end == 0) {
-            abloop_end = $("#audioplayer").prop("currentTime");
-            $(this).text("C");
-        } else {
-            abloop_start = abloop_end = 0;
-            $(this).text("A");
-        }
-    }); // end #btn-abloop.click
-
-    /**
-     * AB Loop
-     */
-    $("#audioplayer").on("timeupdate", function() {
-        if (abloop_end > 0) {
-            if($(this).prop("currentTime") >= abloop_end) {
-                $(this).prop("currentTime", abloop_start);
-            }    
-        }
-    }); // end #audioplayer.timeupdate
 
     /**
      * Disables right click context menu
@@ -435,9 +391,10 @@ $(document).ready(function() {
                     if (!audio_is_loaded) {
                         skipAudioPhases();
                     } else {
-                        $("#btn-next-phase").attr('title',
-                            'Go to phase 4: Writing (be patient, may take a while to load depending on text length)'
-                        );
+                        let elem = document.getElementById('btn-next-phase');
+                        let title = 'Go to phase 4: Writing (be patient, may take a while to load depending on text length)';
+                        setNewTooltip(elem, title);
+
                         next_phase = 4;
                     }
                 }
@@ -544,6 +501,7 @@ $(document).ready(function() {
      */
     $("body").on("click", "#btn-next-phase", function() {
         const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
+        const btn_next_phase = document.getElementById('btn-next-phase');
         let $msg_phase = $("#alert-box-phase");
 
         if (next_phase < 6 && !audio_is_loaded) {
@@ -569,11 +527,9 @@ $(document).ready(function() {
                             + 'the audio if necessary.</span>'
                     );
 
-                $(this).attr('title',
-                    'Go to phase 3: Speaking'
-                );
+                setNewTooltip(document.getElementById('btn-next-phase'), 'Go to phase 3: Speaking');
 
-                playAudioFromBeginning();
+                playAudioFromBeginning(); // from audioplayer.js
                 break;
             case 3:
                 $("html, body").animate(
@@ -584,10 +540,9 @@ $(document).ready(function() {
                 );
 
                 next_phase++;
-
-                $(this).attr('title', 
-                    'Go to phase 4: Writing (be patient, may take a while to load depending on text length)'
-                    );
+                
+                setNewTooltip(btn_next_phase, 
+                    'Go to phase 4: Writing (be patient, may take a while to load depending on text length)');
 
                 $msg_phase.html(
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
@@ -596,7 +551,7 @@ $(document).ready(function() {
                     + 'you listen to the audio. You can slow it down if necessary.</span>'
                 );
 
-                playAudioFromBeginning();
+                playAudioFromBeginning(); // from audioplayer.js
                 break;
             case 4:
                 $("html, body").animate(
@@ -607,14 +562,13 @@ $(document).ready(function() {
                 );
 
                 if ($(".learning, .new, .forgotten").length == 0) {
-                    $(this).attr('title',
-                        'Finish & Save - Skipped phase 5 (reviewing): no underlined words</span>'
-                    );
+                    setNewTooltip(btn_next_phase, 
+                        'Finish & Save - Skipped phase 5 (reviewing): no underlined words</span>');
+                    
                     next_phase = 6;
                 } else {
-                    $(this).attr('title',
-                        'Go to phase 5: Reviewing'
-                    );
+                    setNewTooltip(btn_next_phase, 'Go to phase 5: Reviewing');
+                    
                     next_phase++;
                 }
 
@@ -623,7 +577,7 @@ $(document).ready(function() {
                         '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
                         + '<h5 class="alert-heading">Assisted learning - Phase 4: Writing</h5><span class="small">'
                         + 'Fill in the blanks as you listen to the dictation. To toggle audio playback press '
-                        + '<kbd>2</kbd>. To rewind or fast-forward 1 second, use <kbd>1</kbd> and <kbd>3</kbd>. '
+                        + '<kbd>2</kbd>. To rewind or fast-forward 5 seconds, use <kbd>1</kbd> and <kbd>3</kbd>. '
                         + 'You can also click on the hint beside any misspelled word to include it in '
                         + 'your word list. We recommend you do this once the dictation is complete and you are '
                         + 'reviewing your mistakes.</span>'
@@ -641,7 +595,7 @@ $(document).ready(function() {
 
                 next_phase++;
 
-                $(this).attr('title', 'Finish & Save');
+                setNewTooltip(btn_next_phase, 'Finish & Save');
 
                 $msg_phase
                     .html(
@@ -823,19 +777,11 @@ $(document).ready(function() {
     }); // end #pbr.on.input/change
 
     /**
-     * Plays audio from beginning
-     */
-    function playAudioFromBeginning() {
-        let $audioplayer = $("#audioplayer");
-        $audioplayer.prop("currentTime", "0");
-        $audioplayer.trigger("play");
-    } // end playAudioFromBeginning
-
-    /**
      * Toggles dictation on/off
      */
     function toggleDictation() {
         const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
+
         if (audio_is_loaded) {
             let $container = $("#text").clone();
             let $elems = $container.find(".word");
@@ -844,9 +790,9 @@ $(document).ready(function() {
             if ($(".dict-answer").length == 0) {
                 // if no words are underlined don't allow phase 5 (reviewing) & jump to phase 6 (save changes)
                 if ($(".learning, .new, .forgotten").length == 0) {
-                    $("#btn-next-phase").attr('title',
-                        'Finish & Save - 5 (reviewing): no underlined words'
-                    );
+                    setNewTooltip(document.getElementById('btn-next-phase'), 
+                        'Finish & Save - 5 (reviewing): no underlined words');
+                    
                     next_phase = 6;
                 }
 
@@ -890,7 +836,7 @@ $(document).ready(function() {
     
                 // automatically play audio, from the beginning
                 $("#range-speed").trigger("change", [{cpbr:0.5}]);
-                playAudioFromBeginning();
+                playAudioFromBeginning(); // from audioplayer.js
     
                 $(":text:first").focus(); // focus first input
             } else {
@@ -993,13 +939,13 @@ $(document).ready(function() {
                 }
                 break;
             case 49: // 1
-                $("#audioplayer")[0].currentTime = curTime - 1;
+                $("#audioplayer")[0].currentTime = curTime - 5;
                 break;
             case 50: // 2
-                toggleAudio();   
+                togglePlayPause();  // found in audioplayer.js 
                 break;
             case 51: // 3
-                $("#audioplayer")[0].currentTime = curTime + 1;
+                $("#audioplayer")[0].currentTime = curTime + 5;
                 break;
             default:
                 break;
@@ -1032,18 +978,17 @@ $(document).ready(function() {
      */
     function skipAudioPhases() {
         const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
+        const btn_next_phase = document.getElementById('btn-next-phase');
 
         if (!audio_is_loaded) {
             if ($(".learning, .new, .forgotten").length == 0) {
-                $("#btn-next-phase").attr('title',
-                    'Finish & Save - Skipped some phases: no audio detected & no underlined words'
-                );
+                setNewTooltip(btn_next_phase, 
+                    'Finish & Save - Skipped some phases: no audio detected & no underlined words');
         
                 next_phase = 6;    
             } else {
-                $("#btn-next-phase").attr('title',
-                    'Go to phase 5: Reviewing - Skipped some phases: no audio detected'
-                );
+                setNewTooltip(btn_next_phase, 
+                    'Go to phase 5: Reviewing - Skipped some phases: no audio detected');
         
                 next_phase = 5;
             }    
@@ -1056,7 +1001,7 @@ $(document).ready(function() {
     function loadAudio() {
         let $audio_player = $("#audioplayer");
         let audio_player_src = $("#audio-source").attr('src');
-        // if audio player is found and not an ebook...
+        // if audio player is found, src is empty and not an ebook...
         if ($audio_player.length > 0 && audio_player_src === '' 
             && !$('#readerpage > :first').is('#navigation')) {
             const txt = $("#text").text();
@@ -1081,12 +1026,10 @@ $(document).ready(function() {
                     $("#audio-source").attr("src", e.response);
                     $audio_player[0].load();
                     $("#audioplayer-loader").addClass("d-none");
-                    $("#audioplayer").removeClass("d-none");
-                    $("#audioplayer-speedbar").removeClass("d-none");
+                    $("#audioplayer-container").removeClass("d-none");
 
-                    $("#btn-next-phase").attr('title',
-                        'Go to phase 2: Listening'
-                    );
+                    setNewTooltip(document.getElementById('btn-next-phase'), 
+                        'Go to phase 2: Listening');
 
                     next_phase = 2;
                     

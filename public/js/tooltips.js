@@ -28,6 +28,20 @@ function isMobileDevice() {
     return !!(/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream); // Not a mobile device
 }
 
+function setNewTooltip(elem, title) {
+    // hide old tooltip
+    let old_tooltip = bootstrap.Tooltip.getInstance(elem);
+    old_tooltip.hide();
+
+    // create new tooltip
+    elem.setAttribute('data-bs-title', title);
+    let tooltip = new bootstrap.Tooltip(elem, {
+        trigger: 'hover'
+    });
+    
+    return tooltip;
+}
+
 $(document).ready(function () {
     // Use Bootstrap tooltips only on desktop
     if (!isMobileDevice()) {
