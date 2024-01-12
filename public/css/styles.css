@@ -115,12 +115,12 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
 }
 
 .navbar-brand {
-    background-image: url("../img/logo_long.svg");
+    background-image: url("../img/logo_long.png");
     background-repeat: no-repeat;
     background-size: cover;
     margin-left: 15px !important;
-    width: 183px;
-    height: 47px;
+    width: 189px;
+    height: 48px;
 }
 
 .navbar-brand:focus {

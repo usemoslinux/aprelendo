@@ -142,7 +142,7 @@ if (!$user_auth->isLoggedIn()) {
                 </div>
                 <div class="col-sm-3 d-none d-sm-block">
                     <figure>
-                        <img class="img-fluid" src="img/logo.svg" alt="Aprelendo logo">
+                        <img class="img-fluid" src="img/logo.png" alt="Aprelendo logo">
                     </figure>
                 </div>
             </div>
