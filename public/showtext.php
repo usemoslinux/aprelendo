@@ -83,8 +83,8 @@ require_once PUBLIC_PATH . 'head.php';
     <div class="container-fluid">
         <div class="row">
             <div id="sidebar" class="col-2">
-                <div class="sidebar">
-                    <div class="sidebar-sticky-item my-4">
+                <div class="d-flex justify-content-center">
+                    <div class="position-fixed my-4">
                         <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                             data-bs-placement="right" data-bs-title="Reading settings">
                             <button type="button" data-bs-toggle="modal"

@@ -1,6 +1,7 @@
 const audio = document.getElementById('audioplayer');
 const audio_source = document.getElementById('audio-source');
 const playPauseButton = document.getElementById('ap-play-btn');
+const icon = document.getElementById('ap-play-btn-icon');
 const progressBar = document.getElementById('ap-progress-bar');
 const timeStamp = document.getElementById('ap-time-stamp');
 const btnAbloop = document.getElementById("ap-abloop-btn");
@@ -11,7 +12,6 @@ let abloop_end = 0;
 if (audio) {
     // Toggle Play/Pause
     function togglePlayPause() {
-        const icon = document.getElementById('ap-play-btn-icon');
 
         if (audio.paused || audio.ended) {
             icon.className = 'bi bi-pause-fill';
@@ -24,6 +24,7 @@ if (audio) {
 
     // Plays audio from beginning
     function playAudioFromBeginning() {
+        audio.pause();
         audio.currentTime = 0;
         togglePlayPause();
     }
@@ -88,10 +89,17 @@ if (audio) {
         playbackProgressUpdate();
     });
 
+    audio.addEventListener('ended', function() {
+        audio.currentTime = 0;
+        icon.className = 'bi bi-play-fill';
+    });
+
     // on audio error
     audio_source.addEventListener('error', function(e) {
-        playPauseButton.removeEventListener('click', togglePlayPause);
-        playPauseButton.classList = 'btn btn-danger';
+        if (audio_source.src !== '' && audio_source.src !== window.location.href) {
+            playPauseButton.removeEventListener('click', togglePlayPause);
+            playPauseButton.classList = 'btn btn-danger';   
+        }
     });
 }
 

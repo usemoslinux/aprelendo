@@ -733,21 +733,6 @@ a[role="menuitem"] {
 
 /* SHOW TEXT PAGE */
 
-.sidebar {
-    position: relative;
-    height: 100%;
-    left: 50%;
-    margin-left: -17px;
-    width: 35px;
-}
-
-.sidebar-sticky-item {
-    position: sticky;
-    text-align: left;
-    top: 1.5rem;
-    z-index: 3;
-}
-
 .source {
     border-bottom: 1px solid;
     font-size: 0.9em;

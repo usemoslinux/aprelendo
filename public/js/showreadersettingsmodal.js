@@ -58,7 +58,13 @@ $(document).ready(function() {
         }
 
         // change audioplayer class
-        $doc.find("#audioplayer-container").removeClass().addClass(className);
+        let $audioplayer = $doc.find("#audioplayer-container");
+        
+        if (!$audioplayer.hasClass('d-none')) {
+            $audioplayer.removeClass().addClass(className + ' py-3');
+        } else {
+            $audioplayer.removeClass().addClass(className).addClass('py-3 d-none');
+        }
 
         // change offcanvas classes
         if ($doc.find('.offcanvas').length) {
