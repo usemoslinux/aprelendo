@@ -126,7 +126,7 @@ $(document).ready(function () {
 
         // set up buttons
         $("#btn-add").text("Forgot").removeClass('btn-primary').addClass('btn-danger');
-        $("#btn-translate").hide();
+        $("#btn-more-dics").hide();
         $("#btn-remove").removeClass().addClass("btn btn-lg btn-danger me-auto");
 
         // show loading spinner

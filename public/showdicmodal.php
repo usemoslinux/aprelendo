@@ -30,7 +30,8 @@
                     data-bs-title="Delete">
                     <span class="bi bi-trash3-fill"></span>
                 </button>
-                <div class="btn-group" role="group" aria-label="Additional dictionaries and translator">
+                <div id="btn-more-dics" class="btn-group" role="group"
+                    aria-label="Additional dictionaries and translator">
                     <button id="btn-translate" type="button" class="btn btn-lg btn-primary px-3"
                         data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
                         data-bs-title="Open translator">
