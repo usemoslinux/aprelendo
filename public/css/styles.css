@@ -1051,8 +1051,8 @@ input {
     padding-left: 0;
 }
 
-.form-check-input {
-    margin-top: 0;    
+.table .form-check-input {
+    margin-top: 0;
 }
 
 /* ADD TEXT */

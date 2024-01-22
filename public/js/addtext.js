@@ -20,7 +20,7 @@
 $(document).ready(function() {
     // Check for an external api call. If detected, try to fetch text using Mozilla's readability parser
     if ($("#external_call").length) {
-        fetch_url($("#url").val());
+        fetch_text($("#url").val());
     }
 
     /**
@@ -152,13 +152,25 @@ $(document).ready(function() {
         } catch (e) {
             return false;
         }
-    } 
+    }
+    
+    function fetch_text(url) {
+        if (isWikiArticle(url)) {
+            const urlObj = new URL(url);
+            const pathname = urlObj.pathname;
+            const title = pathname.split('/').pop(); // get the last part of the path
+
+            fetch_wikipedia_article(title);
+        } else {
+            fetch_readable_text_version(url);
+        }
+    }
 
     /**
      * Fetches text from url using Mozilla's redability parser
      * This is triggered when user clicks the Fetch button or, externally, by bookmarklet/addons calls
      */
-    function fetch_url(url) {
+    function fetch_readable_text_version(url) {
         resetControls(true);
 
         if (isValidUrl(url)) {
@@ -231,14 +243,14 @@ $(document).ready(function() {
                         .addClass("bi bi-arrow-down-right-square text-warning");
                 });
         }
-    } // end fetch_url
+    } // end fetch_readable_text_version
 
     /**
      * Fetch text from URL
      * This is triggered when user clicks the Fetch button
      */
     $("#btn-fetch").on("click", function(e) {
-        fetch_url($("#url").val());
+        fetch_text($("#url").val());
     });
 
     /**
@@ -249,8 +261,8 @@ $(document).ready(function() {
         const text = $("#text").val();
         // only auto-fetch text if textarea is empty
         if (!text || /^\s*$/.test(text)) {
-            const pastedData = e.originalEvent.clipboardData.getData('text');
-            fetch_url(pastedData);    
+            const url = e.originalEvent.clipboardData.getData('text');
+            fetch_text(url);
         }
     });
 
@@ -275,5 +287,57 @@ $(document).ready(function() {
     // in that case, trigger an input event to refresh the amount of chars left
     if ($("#text").text().length > 0) {
         $("#text").trigger("input");
+    }
+
+    function isWikiArticle(textURI) {
+        const text_lang =  document.documentElement.lang;
+        const wiki_uri = 'https://' + text_lang + '.wikipedia.org/wiki/';
+        return textURI.startsWith(wiki_uri);
+    }
+
+    function fetch_wikipedia_article(title) {
+        resetControls(true);
+
+        let text_lang =  document.documentElement.lang;
+        const url = 'https://' + text_lang + '.wikipedia.org/w/api.php';
+        const params = {
+            action: 'query',
+            prop: 'extracts',
+            titles: title,
+            format: 'json',
+            explaintext: true,
+            origin: '*'  // This is for CORS
+        };
+    
+        $.ajax({
+            url: url,
+            method: 'GET',
+            data: params
+        })
+        .done(function(data) {
+            const page = data.query.pages[Object.keys(data.query.pages)[0]];
+            let modifiedpage = page.extract.replace(/(\r\n|\r|\n)+/g, "\n\n");
+            modifiedpage = removeNumbersInBrackets(modifiedpage);
+
+            const readable_title = decodeURIComponent(title.replace(/_/g, ' '));    
+
+            $("#title").val(readable_title);
+            $("#text").val(modifiedpage);
+            updateCharsLeft();
+        })
+        .fail(function(xhr, ajaxOptions, thrownError) {
+            showMessage(
+                "There was an unexpected error trying to fetch this Wikipedia article.",
+                "alert-danger"
+            );
+        });
+    }
+
+    function removeNumbersInBrackets(inputString) {
+        // This regex matches any sequence of '[', digits, and ']'
+        const regex = /\[\d+\]/g;
+        let resultString = inputString.replace(regex, '');
+        
+        return resultString;
     }
 });

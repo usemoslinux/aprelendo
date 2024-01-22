@@ -181,7 +181,7 @@ use Aprelendo\Texts;
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
 
-<script defer src="/js/addtext.js"></script>
+<script defer src="/js/addtext.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 
 

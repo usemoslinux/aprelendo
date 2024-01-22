@@ -60,7 +60,7 @@ abstract class Table
     {
         $html = '<div class="row">
             <div class="col-sm-12">
-            <table id="textstable" class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover">
             <colgroup>';
         
         foreach ($this->col_widths as $col_width) {
