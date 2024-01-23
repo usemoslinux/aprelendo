@@ -115,29 +115,19 @@ $(document).ready(function() {
         });
 
     /**
-     * 
+     * Makes sure paragraphs are divided by 2 \n and there are no single
+     * lines separated by \n that are not paragraph breaks.
      * @param {string} text 
      */
     function normalizeLineBreaksInText(text) {
-        // 1. Make sure all paragraphs are separated by 2 \n\n
-        let normalized_text_regex = /(\r\n|\n|\r){3,}/gm;
-        text = text.replace(normalized_text_regex, '\n\n');
-        
-        // 2. Remove line breaks from sentences within paragraphs
-        
-        // Regular expression for matching various line break types
-        let line_break_regex = /(\r\n|\n|\r)/gm;
+        const pattern = /\.(\r\n|\n|\r)|(\r\n|\n|\r)+/gm;
 
-        // Split paragraphs by two or more line breaks
-        let paragraphs = text.split(/(\r\n|\n|\r){2,}/gm);
+        // Replace the matched patterns accordingly
+        const normalizedText = text.replace(pattern, (match, dot) => {
+            return dot ? '.\n\n' : ' ';
+        });
 
-        // Clean empty elements from array
-        paragraphs = paragraphs.map(s => s.trim()).filter(s => s !== '');
-        
-        // Replace single line breaks within paragraphs and join paragraphs
-        return paragraphs.map(paragraph => {
-            return paragraph.replace(line_break_regex, ' ');
-        }).join('\n\n');
+        return normalizedText;
     } // end normalizeLineBreaksInText
 
     /**
