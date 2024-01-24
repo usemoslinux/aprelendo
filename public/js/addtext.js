@@ -65,6 +65,67 @@ $(document).ready(function() {
     }); // end #text.on.input
 
     /**
+     * Inserts text from file in textarea
+     * This is triggered when the user clicks the "upload" text button
+     */
+    $("#upload-text").on("change", function() {
+        const file = $(this)[0].files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            $("#text").val(text);
+            updateCharsLeft();
+        };
+        reader.readAsText(file);
+        $(this).val(""); // reset value, allows user to select same file if necessary
+    }); // end #upload-text.on.change
+
+    /**
+     * Process text pasted inside textarea
+     */
+    $("#text").on("paste", function(e) {
+        updateCharsLeft();
+    });
+
+    /**
+     * Fetch text from URL
+     * This is triggered when user clicks the Fetch button
+     */
+    $("#btn-fetch").on("click", function(e) {
+        fetch_text($("#url").val());
+    });
+
+    /**
+     * Automatically fetch text from URL
+     * This is triggered when user pastes a URL 
+     */
+    $("#url").on("paste", function(e) {
+        const text = $("#text").val();
+        // only auto-fetch text if textarea is empty
+        if (!text || /^\s*$/.test(text)) {
+            const url = e.originalEvent.clipboardData.getData('text');
+            fetch_text(url);
+        }
+    });
+
+    /**
+     * Resets control values, i.e. empty form
+     * @param {string} exceptSourceURI 
+     */
+    function resetControls(exceptSourceURI) {
+        $("#alert-box").addClass("d-none");
+        $("#type").prop("selectedIndex", 0);
+        $("#title").val("");
+        $("#author").val("");
+        $("#title").val("");
+        $("#text").val("");
+        $("#upload-text").val("");
+        if (!exceptSourceURI) {
+            $("#url").val("");
+        }
+    } // end resetControls
+
+    /**
      * Tells user how many characters are left in message box
      */
     function updateCharsLeft() {
@@ -87,48 +148,6 @@ $(document).ready(function() {
             $msg_box.text(chars_left.toLocaleString() + " left");
         }
     } // end updateCharsLeft()
-
-    /**
-     * Inserts text from file in textarea
-     * This is triggered when the user clicks the "upload" text button
-     */
-    $("#upload-text").on("change", function() {
-        const file = $(this)[0].files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const text = e.target.result;
-            $("#text").val(normalizeLineBreaksInText(text));
-            updateCharsLeft();
-        };
-        reader.readAsText(file);
-        $(this).val(""); // reset value, allows user to select same file if necessary
-    }); // end #upload-text.on.change
-
-    /**
-     * Process text pasted inside textarea
-     */
-        $("#text").on("paste", function(e) {
-            e.preventDefault();
-            let pasted_text = e.originalEvent.clipboardData.getData('text');
-            $(this).val(normalizeLineBreaksInText(pasted_text));
-            updateCharsLeft();
-        });
-
-    /**
-     * Makes sure paragraphs are divided by 2 \n and there are no single
-     * lines separated by \n that are not paragraph breaks.
-     * @param {string} text 
-     */
-    function normalizeLineBreaksInText(text) {
-        const pattern = /\.(\r\n|\n|\r)|(\r\n|\n|\r)+/gm;
-
-        // Replace the matched patterns accordingly
-        const normalizedText = text.replace(pattern, (match, dot) => {
-            return dot ? '.\n\n' : ' ';
-        });
-
-        return normalizedText;
-    } // end normalizeLineBreaksInText
 
     /**
      * Checks that the URL passed as a parameter is valid
@@ -209,11 +228,11 @@ $(document).ready(function() {
                             }
                         );
 
-                        txt = normalizeLineBreaksInText(txt);
+                        txt = separateParagraphsWithTwoLineBreaks(txt);
                         txt = txt.replace(/\t/g, ""); // remove tabs
 
                         $("#text").val($.trim(txt));
-                        $("#text").trigger("input");
+                        updateCharsLeft();
                     } else {
                         showMessage(
                             "There was an unexpected error trying to fetch this text.",
@@ -235,48 +254,10 @@ $(document).ready(function() {
         }
     } // end fetch_readable_text_version
 
-    /**
-     * Fetch text from URL
-     * This is triggered when user clicks the Fetch button
-     */
-    $("#btn-fetch").on("click", function(e) {
-        fetch_text($("#url").val());
-    });
-
-    /**
-     * Automatically fetch text from URL
-     * This is triggered when user pastes a URL 
-     */
-    $("#url").on("paste", function(e) {
-        const text = $("#text").val();
-        // only auto-fetch text if textarea is empty
-        if (!text || /^\s*$/.test(text)) {
-            const url = e.originalEvent.clipboardData.getData('text');
-            fetch_text(url);
-        }
-    });
-
-    /**
-     * Resets control values, i.e. empty form
-     * @param {string} exceptSourceURI 
-     */
-    function resetControls(exceptSourceURI) {
-        $("#alert-box").addClass("d-none");
-        $("#type").prop("selectedIndex", 0);
-        $("#title").val("");
-        $("#author").val("");
-        $("#title").val("");
-        $("#text").val("");
-        $("#upload-text").val("");
-        if (!exceptSourceURI) {
-            $("#url").val("");
-        }
-    } // end resetControls
-
     // when page loads, check if text was imported from RSS feed
-    // in that case, trigger an input event to refresh the amount of chars left
+    // in that case, refresh the amount of chars left
     if ($("#text").text().length > 0) {
-        $("#text").trigger("input");
+        updateCharsLeft();
     }
 
     function isWikiArticle(textURI) {
@@ -306,8 +287,9 @@ $(document).ready(function() {
         })
         .done(function(data) {
             const page = data.query.pages[Object.keys(data.query.pages)[0]];
-            let modifiedpage = page.extract.replace(/(\r\n|\r|\n)+/g, "\n\n");
-            modifiedpage = removeNumbersInBrackets(modifiedpage);
+            let modifiedpage = removeNumbersInBrackets(page.extract);
+            modifiedpage = addLineBreaksAfterDots(modifiedpage);
+            modifiedpage = separateParagraphsWithTwoLineBreaks(modifiedpage)
 
             const readable_title = decodeURIComponent(title.replace(/_/g, ' '));    
 
@@ -322,12 +304,32 @@ $(document).ready(function() {
             );
         });
     }
+    
+    /**
+     * Removes all numbers in brackets commonly used in Wikipedia articles to indicate references
+     * @param {string} text 
+     * @returns string
+     */
+    function removeNumbersInBrackets(text) {
+        return text.replace(/\[\d+\]/g, '');
+    }
 
-    function removeNumbersInBrackets(inputString) {
-        // This regex matches any sequence of '[', digits, and ']'
-        const regex = /\[\d+\]/g;
-        let resultString = inputString.replace(regex, '');
-        
-        return resultString;
+    /**
+     * Replace a dot followed by a word character with a dot plus two line breaks, 
+     * but only if it's not followed by another dot (common in acronyms)
+     * @param {string} text 
+     * @returns string
+     */
+    function addLineBreaksAfterDots(text) {
+        return text.replace(/\.(?=\w)(?!\w\.)/gu, '.\n\n');
+    }
+
+    /**
+     * Separates all paragraphs with two line breaks
+     * @param {string} text 
+     * @returns string
+     */
+    function separateParagraphsWithTwoLineBreaks(text) {
+        return text.replace(/(\r\n|\r|\n)+/g, "\n\n");
     }
 });
