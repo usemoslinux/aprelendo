@@ -321,7 +321,7 @@ $(document).ready(function() {
      * @returns string
      */
     function addLineBreaksAfterDots(text) {
-        return text.replace(/\.(?=\w)(?!\w\.)/gu, '.\n\n');
+        return text.replace(/\.(?=\p{L})(?!\p{L}\.)/gu, '.\n\n');
     }
 
     /**
