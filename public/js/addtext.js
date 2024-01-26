@@ -169,7 +169,7 @@ $(document).ready(function() {
             const pathname = urlObj.pathname;
             const title = pathname.split('/').pop(); // get the last part of the path
 
-            fetch_wikipedia_article(title);
+            fetch_wikipedia_article(decodeURIComponent(title));
         } else {
             fetch_readable_text_version(url);
         }
@@ -261,7 +261,7 @@ $(document).ready(function() {
     }
 
     function isWikiArticle(textURI) {
-        const text_lang =  document.documentElement.lang;
+        const text_lang = $('#text').data('text-lang');
         const wiki_uri = 'https://' + text_lang + '.wikipedia.org/wiki/';
         return textURI.startsWith(wiki_uri);
     }
@@ -269,7 +269,7 @@ $(document).ready(function() {
     function fetch_wikipedia_article(title) {
         resetControls(true);
 
-        let text_lang =  document.documentElement.lang;
+        let text_lang = $('#text').data('text-lang');
         const url = 'https://' + text_lang + '.wikipedia.org/w/api.php';
         const params = {
             action: 'query',

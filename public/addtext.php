@@ -41,6 +41,8 @@ use Aprelendo\Texts;
                 </ol>
             </nav>
             <?php
+            $text_lang = $user->lang;
+
             if (isset($_GET['id'])) {
                 // modify text
                 $text_id = $_GET['id'];
@@ -66,6 +68,7 @@ use Aprelendo\Texts;
             } elseif (isset($_GET['url'])) {
                 // external call (bookmarklet, addon)
                 $text_url = $_GET['url'];
+                $text_lang = $_GET['lang'] ?? $text_lang;
                 $text_is_shared = true;
                 $external_call = true;
             }
@@ -150,6 +153,7 @@ use Aprelendo\Texts;
                                 <span id="span-chars-left" class="text-success">10,000 chars left</span>
                             </div>
                             <textarea id="text" name="text" class="form-control" rows="16" cols="80"
+                                data-text-lang="<?php echo $text_lang; ?>"
                                 placeholder="Text goes here (required), max. length = 10,000 chars" required><?php
                                     if (isset($text_content)) {echo $text_content;}
                             ?></textarea>
