@@ -540,7 +540,7 @@ $(document).ready(function () {
     $("#btn-selvideo").on("click", function (e) {
         e.preventDefault();
         $("#video-file-input").trigger('click');
-    });
+    }); // end #btn-selvideo.on.click
 
     /**
      * After user selects video, load it
@@ -554,7 +554,7 @@ $(document).ready(function () {
                 player.src = fileURL;
             }
         }
-    });
+    }); // end #video-file-input.on.change
 
     /**
      * Open subtitle selection dialog
@@ -562,8 +562,29 @@ $(document).ready(function () {
     $("#btn-selsubs").on("click", function (e) {
         e.preventDefault();
         $("#subs-file-input").trigger('click');
-    });
+    }); // end #btn-selsubs.on.click
 
+    /**
+     * Toggle fullscreen mode
+     */
+    $("#btn-fullscreen").on("click", function(e) {
+        // Check if we're already in fullscreen
+        if (document.fullscreenElement) {
+            // Exit fullscreen
+            document.exitFullscreen().catch((err) => {
+                alert(`An error occurred while trying to exit fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            // Request fullscreen
+            let elem = document.documentElement;
+    
+            elem.requestFullscreen({ navigationUI: "show" })
+                .catch((err) => {
+                    alert(`An error occurred while trying to switch into fullscreen mode: ${err.message} (${err.name})`);
+                });
+        }
+    }); // end #btn-fullscreen.on.click
+    
     /**
      * After user selects subs, load them
      */
@@ -621,7 +642,7 @@ $(document).ready(function () {
 
             reader.readAsText(file);
         }
-    });
+    }); // end #subs-file-input.on.change
 
     /**
      * Show reading line when video's currentTime changes
@@ -647,7 +668,7 @@ $(document).ready(function () {
                 inline: 'center'
             });
         }
-    });
+    }); // end #video-stream.on.timeupdate
 
     /**
      * Shows dialog message reminding users to save changes before leaving

@@ -147,20 +147,27 @@ class Reader
                         class="d-flex flex-column">';
 
         $html .= '<div class="d-flex flex-row-reverse my-2">
-                        <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                        <button type="button" id="btn-save-ytvideo" class="btn btn-success"
+                            data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                            data-bs-placement="bottom"
                             data-bs-title="Close and save the learning status of your words">
-                            <button type="button" id="btn-save-ytvideo" class="btn btn-sm btn-success">
-                            Save</button>
-                        </span>
-                        <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                        data-bs-title="Reader settings">
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
-                                class="btn btn-sm btn-secondary me-2">
+                            Save
+                        </button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
+                            class="btn btn-secondary me-2">
+                            <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                                data-bs-placement="bottom"
+                                data-bs-title="Reader settings">
                                 <span class="bi bi-gear-fill"></span>
-                            </button>
-                        </span>
+                            </span>
+                        </button>
+                        <button type="button" id="btn-fullscreen" data-bs-toggle="tooltip"
+                            data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                            data-bs-title="Toggle fullscreen" class="btn btn-warning me-2">
+                            <span class="bi bi-arrows-fullscreen"></span>
+                        </button>
                         <button type="button" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                            data-bs-placement="bottom" data-bs-title="Like" class="btn btn-sm btn-link me-2">
+                            data-bs-placement="bottom" data-bs-title="Like" class="btn btn-link me-2">
                             <span class="bi '
                                 . $user_liked_class
                                 . '" data-idText="' . $this->text->id .'"></span>
@@ -213,22 +220,27 @@ class Reader
         $html .= '<div class="d-flex flex-wrap m-1 mx-xl-0">'.
                     '<button type="button" id="btn-selvideo" data-bs-toggle="tooltip"
                         data-bs-custom-class="custom-tooltip" data-bs-title="Select video (MP4/OGG/WEBM)"
-                        data-bs-placement="bottom" class="btn btn-sm btn-primary me-2">
+                        data-bs-placement="bottom" class="btn btn-primary me-2">
                         <span class="bi bi-file-earmark-play"></span></button>'.
                     '<button type="button" id="btn-selsubs" data-bs-toggle="tooltip"
                         data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                        data-bs-title="Select subtitles (SRT)" class="btn btn-sm btn-primary me-2">
+                        data-bs-title="Select subtitles (SRT)" class="btn btn-primary me-2">
                         <span class="bi bi-badge-cc-fill"></span></button>'.
-                    '<span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                        data-bs-placement="bottom" data-bs-title="Reader settings">
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
-                            class="btn btn-sm btn-secondary me-2">
-                        <span class="bi bi-gear-fill"></span>
-                    </button></span>' .
+                    '<button type="button" id="btn-fullscreen" data-bs-toggle="tooltip"
+                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                        data-bs-title="Toggle fullscreen" class="btn btn-warning me-2">
+                        <span class="bi bi-arrows-fullscreen"></span></button>'.
+                    '<button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
+                            class="btn btn-secondary me-2">
+                            <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                                data-bs-placement="bottom" data-bs-title="Reader settings">
+                            <span class="bi bi-gear-fill"></span>
+                        </span>
+                    </button>' .
                     '<button type="button" id="btn-save-offline-video" data-bs-toggle="tooltip"
                         data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
                         data-bs-title="Save the learning status of your words"
-                        class="btn btn-sm btn-success ms-auto">Save</button>'.
+                        class="btn btn-success ms-auto">Save</button>'.
                 '</div>'.
                 '<div id="text-container" class="overflow-auto mb-1"></div>';
 

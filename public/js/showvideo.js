@@ -551,4 +551,25 @@ $(document).ready(function () {
                 + "will be lost. Are you sure you want to exit this page?";
         }
     }); // end window.on.beforeunload
+
+    /**
+     * Toggle fullscreen mode
+     */
+    $("#btn-fullscreen").on("click", function(e) {
+        // Check if we're already in fullscreen
+        if (document.fullscreenElement) {
+            // Exit fullscreen
+            document.exitFullscreen().catch((err) => {
+                alert(`An error occurred while trying to exit fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            // Request fullscreen
+            let elem = document.documentElement;
+    
+            elem.requestFullscreen({ navigationUI: "show" })
+                .catch((err) => {
+                    alert(`An error occurred while trying to switch into fullscreen mode: ${err.message} (${err.name})`);
+                });
+        }
+    }); // end #btn-fullscreen.on.click
 });
