@@ -76,9 +76,10 @@ if (!$user_auth->isLoggedIn()) {
                             </p>
                             <p>For a step-by-step guide, we recommend you to watch the following video:</p>
                             <iframe width="560" height="315" style="max-width: 100%; text-align:center;"
-                                src="https://www.youtube.com/embed/6ShMD6uu1bk" title="YouTube video player"
+                                src="https://www.youtube-nocookie.com/embed/dZ3-Jwn41mo" title="YouTube video player"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media;
                                 gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                
                         </section>
                         <br>
                         <section>
