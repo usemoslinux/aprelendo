@@ -90,9 +90,9 @@ $(document).ready(function() {
                 start_sel_pos_top = $sel_start.offset().top - $(window).scrollTop();
             }
         } else if (e.which == 3) {
+            togglePlayPause(); // audioplayer.js
             $("#audioplayer").trigger("pause");
             $selword = $(this);
-            // opening the translator was moved to $(document).on("contextmenu") due to a bug in Windows
         }
     }); // end .word.on.mousedown/touchstart
 

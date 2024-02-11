@@ -109,10 +109,6 @@ if (!$user_auth->isLoggedIn()) {
                                     <a href="https://github.com/hermitdave/FrequencyWords" target="_blank"
                                         rel="noopener noreferrer">Hermit Dave</a>
                                 </li>
-                                <li>Logo by
-                                    <a href="https://www.flaticon.com/" target="_blank"
-                                        rel="noopener noreferrer">Flaticon</a>
-                                </li>
                                 <li>Theme based on
                                     <a href="https://blacktie.co/demo/solid/index.html" target="_blank"
                                         rel="noopener noreferrer">Solid</a>, by
