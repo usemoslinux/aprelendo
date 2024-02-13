@@ -21,11 +21,20 @@
 require_once '../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
+use Aprelendo\Dictionaries;
+
+
 if (empty($error_msg)) {
     echo '<div id="alert-box" class="d-none"></div>';
 } else {
     echo '<div id="alert-box" class="alert alert-danger">' . $error_msg .'</div>';
 }
+
+$dictionaries = new Dictionaries($pdo, $user->native_lang, $lang->name);
+$monolingual_dics = $dictionaries->getMonolingual(true);
+$bilingual_dics = $dictionaries->getBilingual(true);
+$visual_dics = $dictionaries->getVisual();
+$translators = $dictionaries->getTranslators();
 
 ?>
 
@@ -34,22 +43,76 @@ if (empty($error_msg)) {
     <input type="hidden" name="language" class="form-control" value="<?php echo $lang->name; ?>">
     <fieldset>
         <div class="card">
-            <div class="card-header">Dictionary & Translator</div>
+            <div class="card-header">Default dictionaries & Translator</div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label for="dict-uri">Dictionary URI:</label>
-                    <input type="url" id="dict-uri" name="dict-uri" class="form-control"
-                        value="<?php echo htmlspecialchars($lang->dictionary_uri); ?>">
+                    <label for="dict-uri">Default dictionary URI:</label>
+                    <div class="dict-select input-group mb-3">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-lightning-fill"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <?php
+                                $html = '';
+                                foreach ($monolingual_dics as $monolingual_dic) {
+                                    $html .= '<li><a class="dropdown-item" href="#" ';
+                                    $html .= 'value="' . $monolingual_dic['uri'] . '">';
+                                    $html .= $monolingual_dic['name'];
+                                    $html .= '</a></li>';
+                                }
+                                echo $html;
+                            ?>
+                        </ul>
+                        <input type="url" id="dict-uri" name="dict-uri" class="form-control"
+                            value="<?php echo htmlspecialchars($lang->dictionary_uri); ?>">
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <label for="img-dict-uri">Image dictionary URI:</label>
-                    <input type="url" id="img-dict-uri" name="img-dict-uri" class="form-control"
-                        value="<?php echo htmlspecialchars($lang->img_dictionary_uri); ?>">
+                    <label for="img-dict-uri">Default visual dictionary URI:</label>
+                    <div class="dict-select input-group mb-3">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-lightning-fill"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <?php
+                                $html = '';
+                                foreach ($visual_dics as $visual_dic) {
+                                    $html .= '<li><a class="dropdown-item" href="#" ';
+                                    $html .= 'value="' . $visual_dic['uri'] . '">';
+                                    $html .= $visual_dic['name'];
+                                    $html .= '</a></li>';
+                                }
+                                echo $html;
+                            ?>
+                        </ul>
+                        <input type="url" id="img-dict-uri" name="img-dict-uri" class="form-control"
+                            value="<?php echo htmlspecialchars($lang->img_dictionary_uri); ?>">
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <label for="translator-uri">Translator URI:</label>
-                    <input type="url" id="translator-uri" name="translator-uri" class="form-control"
-                        value="<?php echo htmlspecialchars($lang->translator_uri); ?>">
+                    <label for="translator-uri">Default translator URI:</label>
+                    <div class="dict-select input-group mb-3">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-lightning-fill"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <?php
+                                $html = '';
+                                foreach ($translators as $translator) {
+                                    $html .= '<li><a class="dropdown-item" href="#" ';
+                                    $html .= 'value="' . $translator['uri'] . '">';
+                                    $html .= $translator['name'];
+                                    $html .= '</a></li>';
+                                }
+                                echo $html;
+                            ?>
+                        </ul>
+                        <input type="url" id="translator-uri" name="translator-uri" class="form-control"
+                            value="<?php echo htmlspecialchars($lang->translator_uri); ?>">
+                    </div>
                 </div>
                 <div class="text-end">
                     <a href="javascript:;" title="Help" data-bs-toggle="collapse" data-bs-target="#help-dictionary">Help

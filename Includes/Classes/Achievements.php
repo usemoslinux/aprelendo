@@ -149,5 +149,5 @@ class Achievements extends DBEntity
                 ORDER BY `threshold` ASC";
 
         return $this->sqlFetchAll($sql, [$type_id, $threshold]);
-    }
-} // end checkByType()
+    } // end checkByType()
+} 

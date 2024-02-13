@@ -90,8 +90,10 @@ $(document).ready(function() {
                 start_sel_pos_top = $sel_start.offset().top - $(window).scrollTop();
             }
         } else if (e.which == 3) {
-            togglePlayPause(); // audioplayer.js
-            $("#audioplayer").trigger("pause");
+            if ($("#audioplayer").length) {
+                togglePlayPause(); // audioplayer.js
+                $("#audioplayer").trigger("pause");
+            }
             $selword = $(this);
         }
     }); // end .word.on.mousedown/touchstart

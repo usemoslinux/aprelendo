@@ -66,7 +66,7 @@ function buildVideoTranslationLink(translator_URI, $selword) {
 
         if ($end_obj.filter(sentence_dividers).length > 0) {
             break;
-        } 
+        }
 
         $start_obj = $end_obj
             .prevAll(sentence_dividers)
@@ -108,10 +108,10 @@ function buildVideoTranslationLink(translator_URI, $selword) {
             separator = "";
         } else {
             $sentence_obj = $start_obj
-            .nextUntil($end_obj)
-            .addBack()
-            .next()
-            .addBack();    
+                .nextUntil($end_obj)
+                .addBack()
+                .next()
+                .addBack();
             separator = " ";
         }
 
@@ -177,7 +177,7 @@ function setAddDeleteButtons($selword) {
  */
 function getWordFrequency(word, lg_iso) {
     let $freqlvl = $("#bdgfreqlvl") || $(parent.document).find("#bdgfreqlvl");
-    
+
     // ajax call to get word frequency
     $.ajax({
         type: "GET",

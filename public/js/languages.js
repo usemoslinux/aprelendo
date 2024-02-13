@@ -84,4 +84,13 @@ $(document).ready(function() {
             e.stopPropagation();
         }
     }); // end #savebtn.on.click
+
+    // Listen for clicks on dropdown items
+    $('.dict-select .dropdown-item').on('click', function () {
+        // Get the value attribute of the clicked item
+        let value = $(this).attr('value');
+        
+        // Find the input box within the same input-group and set its value
+        $(this).closest('.input-group').find('input[type="url"]').val(value);
+    });
 });
