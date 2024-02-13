@@ -43,7 +43,7 @@ $sel = ' selected ';
 <!-- Reader Settings Modal -->
 <div class="modal fade" id="reader-settings-modal" data-keyboard="true" tabindex="-1" role="dialog"
     aria-labelledby="reader-settings-modal-label" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="reader-settings-modal-label">Reader preferences</h5>

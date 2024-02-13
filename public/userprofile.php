@@ -165,7 +165,7 @@ use Aprelendo\Language;
 
 <!-- Modal window -->
 <aside id="delete-account-modal" class="modal fade" data-keyboard="true" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
