@@ -29,6 +29,10 @@ function isMobileDevice() {
 }
 
 function setNewTooltip(elem, title) {
+    if (isMobileDevice()) {
+        return;
+    }
+    
     // hide old tooltip
     let old_tooltip = bootstrap.Tooltip.getInstance(elem);
     old_tooltip.hide();
