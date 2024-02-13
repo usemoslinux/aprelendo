@@ -396,10 +396,10 @@ $(document).ready(function() {
         });
 
         // Remove all HTML from elements that are not IMG or P
-        $parsed.find('*').not('img, p').each(function() {
-            let $this = $(this);
-            $this.replaceWith($(this).text());
-        });
+        // $parsed.find('*').not('img, p').each(function() {
+        //     let $this = $(this);
+        //     $this.replaceWith($(this).text());
+        // });
 
         // Trim HTML and remove empty elements
         $parsed.html($parsed.html().trim());
