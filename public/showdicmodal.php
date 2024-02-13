@@ -21,7 +21,7 @@
 ?>
 
 <div id="dic-modal" class="modal fade" data-keyboard="true" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content mb-xs-3">
             <div class="modal-header p-2">
