@@ -198,7 +198,10 @@ $(document).ready(function () {
             url: "ajax/addword.php",
             data: {
                 word: sel_text.toLowerCase(),
-                is_phrase: is_phrase
+                is_phrase: is_phrase,
+                source_id: null,
+                text_is_shared: null,
+                sentence: getVideoSentence($selword)
             }
         })
             .done(function () {

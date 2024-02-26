@@ -205,13 +205,17 @@ $(document).ready(function () {
     $("#btn-add").on("click", function () {
         const sel_text = $selword.text();
         const is_phrase = $selword.length > 1 ? 1 : 0;
+
         // add selection to "words" table
         $.ajax({
             type: "POST",
             url: "ajax/addword.php",
             data: {
                 word: sel_text.toLowerCase(),
-                is_phrase: is_phrase
+                is_phrase: is_phrase,
+                source_id: $('[data-idtext]').attr('data-idtext'),
+                text_is_shared: true,
+                sentence: getVideoSentence($selword)
             }
         })
             .done(function () {

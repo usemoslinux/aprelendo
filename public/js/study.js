@@ -157,8 +157,14 @@ $(document).ready(function() {
                                     examples += "<blockquote cite='" + text.source_uri + "'>";
                                     examples += "<p>" + match + "</p>";
                                     examples += "<cite>" + (text.author == "" ? "Anonymous" : text.author);
-                                    examples += ", <a href='" + text.source_uri + "' target='_blank'>" + text.title + "</a></cite>"
-                                    examples += "</blockquote>"
+                                    if (text.source_uri == '') {
+                                        examples += text.title;
+                                    } else if (text.source_uri.endsWith(".epub")) {
+                                        examples += ", " + text.title;
+                                    } else {
+                                        examples += ", <a href='" + text.source_uri + "' target='_blank'>" + text.title + "</a>"
+                                    }
+                                    examples += "</cite></blockquote>"
                                     examples_count++;    
                                 }
                             }

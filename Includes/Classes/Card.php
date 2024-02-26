@@ -73,33 +73,46 @@ class Card extends DBEntity
      */
     public function getExampleSentencesForWord(string $word): array
     {
-        $search_sql = "'[[:<:]]" . $word . "[[:>:]]'";
-                
         $sql = "(SELECT texts.title, texts.author, texts.text, texts.source_uri
                 FROM texts
                 LEFT JOIN languages ON languages.id = texts.lang_id
-                WHERE languages.name = ? AND texts.user_id = ? AND type <> 6 AND
-                texts.text regexp $search_sql
+                WHERE languages.name = ? AND texts.user_id = ? AND texts.type <> 6 AND
+                MATCH(texts.text) AGAINST('+$word' IN BOOLEAN MODE)
                 LIMIT 3)
                 UNION
                 (SELECT archived_texts.title, archived_texts.author, archived_texts.text, archived_texts.source_uri
                 FROM archived_texts
                 LEFT JOIN languages ON languages.id = archived_texts.lang_id
-                WHERE languages.name = ? AND archived_texts.user_id = ?
-                AND type <> 6 AND archived_texts.text regexp $search_sql
+                WHERE languages.name = ? AND archived_texts.user_id = ? AND archived_texts.type <> 6 AND
+                MATCH(archived_texts.text) AGAINST('+$word' IN BOOLEAN MODE)
                 LIMIT 3)
                 UNION
                 (SELECT shared_texts.title, shared_texts.author, shared_texts.text, shared_texts.source_uri
                 FROM shared_texts
                 LEFT JOIN languages ON languages.id = shared_texts.lang_id
-                WHERE languages.name = ? AND type <> 5 AND shared_texts.text regexp $search_sql
+                WHERE languages.name = ? AND shared_texts.type <> 5 AND
+                MATCH(shared_texts.text) AGAINST('+$word' IN BOOLEAN MODE)
+                LIMIT 3)
+                UNION
+                (SELECT examples.source_title, examples.source_author, examples.sentence, examples.source_uri
+                FROM example_sentences AS examples
+                WHERE examples.lang_iso = ? AND examples.word = '$word'
                 LIMIT 3)";
 
         $result = $this->sqlFetchAll($sql, [
-            $this->lang_iso, $this->user_id, $this->lang_iso, $this->user_id, $this->lang_iso
+            $this->lang_iso, $this->user_id, $this->lang_iso, $this->user_id, $this->lang_iso, $this->lang_iso
         ]);
         
-        return $this->arrayUniqueMultidimensional($result); // avoid returning duplicate example sentences
+        // Avoid returning duplicate example sentences
+        $result = $this->arrayUniqueMultidimensional($result);
+
+        // Shuffle the array to randomize the order
+        shuffle($result);
+
+        // Limit the results to max 3 records
+        $result = array_slice($result, 0, 3);
+
+        return $result;
     } // end getExampleSentencesForWord()
 
     /**

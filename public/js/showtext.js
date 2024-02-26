@@ -295,6 +295,8 @@ $(document).ready(function() {
         const is_phrase = $selword.length > 1 ? 1: 0;
         const sel_text = $selword.text();
         const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
+        const url_params = new URLSearchParams(window.location.search);
+        const text_is_shared = url_params.get('sh');
 
         // add selection to "words" table
         $.ajax({
@@ -302,7 +304,10 @@ $(document).ready(function() {
             url: "/ajax/addword.php",
             data: {
                 word: sel_text,
-                is_phrase: is_phrase
+                is_phrase: is_phrase,
+                source_id: $('[data-idtext]').attr('data-idtext'),
+                text_is_shared: text_is_shared,
+                sentence: getTextSentence($selword)
             }
         })
             .done(function() {

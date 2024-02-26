@@ -1,12 +1,11 @@
 
 /**
- * Builds translator link including the paragraph to translate as a parameter
+ * Gets sentence where selected word is included
  * Used for texts, ebooks (not YT videos & offline videos)
- * @param {string} translator_URI - The initial translator URI 
  * @param {jQuery} $selword - The element selected by user
- * @returns {string} The complete translator link
+ * @returns {string} The complete example sentence
  */
-function buildTextTranslationLink(translator_URI, $selword) {
+function getTextSentence($selword) {
     let $start_obj = $selword.prevUntil(":contains('.'), :contains('!'), :contains('?'), :contains('\n')").last();
     $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
 
@@ -34,19 +33,30 @@ function buildTextTranslationLink(translator_URI, $selword) {
     if (end_obj_length > 1) {
         sentence.slice(0, -end_obj_length + 1);
     }
-    sentence.trim();
+    
+    return sentence.trim();
+} // end getTextSentence
+
+/**
+ * Builds translator link including the paragraph to translate as a parameter
+ * Used for texts, ebooks (not YT videos & offline videos)
+ * @param {string} translator_URI - The initial translator URI 
+ * @param {jQuery} $selword - The element selected by user
+ * @returns {string} The complete translator link
+ */
+function buildTextTranslationLink(translator_URI, $selword) {
+    let sentence = getTextSentence($selword);
 
     return translator_URI.replace("%s", encodeURI(sentence));
 } // end buildTextTranslationLink
 
 /**
- * Builds a translator link including the paragraph to translate as a parameter.
+ * Gets sentence where selected word is included
  * Used only for YT videos and offline videos
- * @param {string} translator_URI - The initial translator URI 
  * @param {jQuery} $selword - The element selected by user
  * @returns {string} The complete translator link
  */
-function buildVideoTranslationLink(translator_URI, $selword) {
+function getVideoSentence($selword) {
     let $start_obj;
     let $end_obj = $selword;
     let $sentence_obj = $();
@@ -120,7 +130,20 @@ function buildVideoTranslationLink(translator_URI, $selword) {
         $start_obj = $start_obj.parent().next().children().first();
     }
 
-    return translator_URI.replace("%s", encodeURIComponent(sentence.trim()));
+    return sentence.trim();
+} // end getVideoSentence
+
+/**
+ * Builds a translator link including the paragraph to translate as a parameter.
+ * Used only for YT videos and offline videos
+ * @param {string} translator_URI - The initial translator URI 
+ * @param {jQuery} $selword - The element selected by user
+ * @returns {string} The complete translator link
+ */
+function buildVideoTranslationLink(translator_URI, $selword) {
+    let sentence = getVideoSentence($selword);
+
+    return translator_URI.replace("%s", encodeURIComponent(sentence));
 } // end buildVideoTranslationLink
 
 /**

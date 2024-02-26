@@ -171,20 +171,19 @@ class Texts extends DBEntity
     /**
     * Deletes texts in database using ids as a parameter to select them
     *
-    * @param string $ids JSON that identifies the texts to be deleted
+    * @param array $text_ids
     * @return void
     */
-    public function delete(string $ids): void
+    public function delete(array $text_ids): void
     {
-        $ids_array = json_decode($ids);
-        $id_params = str_repeat("?,", count($ids_array)-1) . "?";
+        $id_params = str_repeat("?,", count($text_ids)-1) . "?";
     
         $sql =  "SELECT `source_uri` FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $uris = $this->sqlFetchAll($sql, $ids_array);
+        $uris = $this->sqlFetchAll($sql, $text_ids);
         
         // delete entries from db
         $sql =  "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $this->sqlExecute($sql, $ids_array);
+        $this->sqlExecute($sql, $text_ids);
 
         // delete audio (mp3, oggs) & source files (epubs, etc.)
         $pop_sources = new PopularSources($this->pdo);
@@ -205,19 +204,18 @@ class Texts extends DBEntity
     /**
     * Archives texts in database using ids as a parameter to select them
     *
-    * @param string $ids JSON that identifies the texts to be archived
+    * @param array $text_ids
     * @return void
     */
-    public function archive(string $ids): void
+    public function archive(array $text_ids): void
     {
-        $ids_array = json_decode($ids);
-        $id_params = str_repeat("?,", count($ids_array)-1) . "?";
+        $id_params = str_repeat("?,", count($text_ids)-1) . "?";
     
         $sql =  "INSERT INTO `archived_texts` SELECT * FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $this->sqlExecute($sql, $ids_array);
-        
+        $this->sqlExecute($sql, $text_ids);
+
         $sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $this->sqlExecute($sql, $ids_array);
+        $this->sqlExecute($sql, $text_ids);
     } // end archive()
 
     /**

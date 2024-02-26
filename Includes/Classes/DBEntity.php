@@ -44,7 +44,7 @@ abstract class DBEntity
      * @param array $values value parameters passed to PDO
      * @return void
      */
-    protected function sqlExecute(string $sql, array $values): void
+    protected function sqlExecute(string $sql, array $values = []): void
     {
         try {
             $stmt = $this->pdo->prepare($sql);
@@ -63,7 +63,7 @@ abstract class DBEntity
      * @param array $values value parameters passed to PDO
      * @return array
      */
-    protected function sqlFetch(string $sql, array $values): array
+    protected function sqlFetch(string $sql, array $values = []): array
     {
         try {
             $stmt = $this->pdo->prepare($sql);
@@ -89,7 +89,7 @@ abstract class DBEntity
      * @param array $values value parameters passed to PDO
      * @return array
      */
-    protected function sqlFetchAll(string $sql, array $values): array
+    protected function sqlFetchAll(string $sql, array $values = []): array
     {
         try {
             $stmt = $this->pdo->prepare($sql);
@@ -114,7 +114,7 @@ abstract class DBEntity
      * @param array $where list of columns and values to include in where clause
      * @return int
      */
-    protected function sqlCount(string $sql, array $values): int
+    protected function sqlCount(string $sql, array $values = []): int
     {
         try {
             $stmt = $this->pdo->prepare($sql);

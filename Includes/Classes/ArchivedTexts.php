@@ -38,18 +38,17 @@ class ArchivedTexts extends Texts
     /**
      * Unarchives text by using their $ids
      *
-     * @param string $ids JSON with text ids to unarchive
+     * @param array $text_ids
      * @return void
      */
-    public function unarchive(string $ids): void
+    public function unarchive(array $text_ids): void
     {
-        $ids_array = json_decode($ids);
-        $id_params = str_repeat("?,", count($ids_array)-1) . "?";
+        $id_params = str_repeat("?,", count($text_ids)-1) . "?";
 
         $sql = "INSERT INTO `texts` SELECT * FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $this->sqlExecute($sql, $ids_array);
+        $this->sqlExecute($sql, $text_ids);
 
         $sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $this->sqlExecute($sql, $ids_array);
+        $this->sqlExecute($sql, $text_ids);
     }
 } // end unarchive()

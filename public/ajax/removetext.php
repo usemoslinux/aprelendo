@@ -33,7 +33,7 @@ use Aprelendo\UserException;
 
 try {
     if (isset($_POST['textIDs']) && isset($_POST['is_archived'])) {
-        $text_ids = $_POST['textIDs'];
+        $text_ids = json_decode($_POST['textIDs']);
         $is_archived = $_POST['is_archived'];
         $user_id = $user->id;
         $lang_id = $user->lang_id;
