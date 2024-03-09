@@ -194,7 +194,11 @@ $(document).ready(function() {
             })
                 .done(function(data) {
                     if (data.error_msg != null) {
-                        showMessage(data.error_msg, "alert-danger");
+                        showMessage(
+                            "It was not possible to extract the text from the URL you provided. " +
+                            "Try doing it manually.",
+                            "alert-danger"
+                        );
                     } else if (typeof data !== "undefined" && data.length != 0) {
                         const doc = document.implementation.createHTMLDocument(
                             "New Document"
