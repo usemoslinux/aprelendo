@@ -37,11 +37,12 @@ $(document).ready(function() {
             .done(function(data) {
                 if (data.error_msg == null) {
                     showMessage(
-                        "An email has been sent to your account with the activation link. Redirecting to login page...",
+                        "We've sent you an email with the activation link. It might take a few minutes "
+                        + "to arrive in your inbox, so please be patient. If you don't see it there, "
+                        + "be sure to check your spam or junk folder, as sometimes it can end up there. Once you "
+                        + "receive it, click on the link provided to activate your account.",
                         "alert-success"
                     );
-                    
-                    setTimeout(() => { window.location.replace("/login"); }, 4000);
                 } else {
                     showMessage(data.error_msg, "alert-danger");
                 }

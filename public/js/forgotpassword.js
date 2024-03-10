@@ -39,10 +39,10 @@ $(document).ready(function() {
             .done(function(data) {
                 if (data.error_msg == null) {
                     showMessage(
-                        "We've just sent an email to the address you provided. It might take a few minutes for the "
-                        + "email to arrive in your inbox, so please be patient. If you don't see it in your inbox, "
-                        + "be sure to check your spam or junk folder, as sometimes emails can end up there. Once you "
-                        + "receive the email, click on the link provided to create your new password.",
+                        "We've sent you an email to the address you provided. It might take a few minutes "
+                        + "to arrive in your inbox, so please be patient. If you don't see it there, "
+                        + "be sure to check your spam or junk folder, as sometimes it can end up there. Once you "
+                        + "receive it, click on the link provided to create your new password.",
                         "alert-success"
                     );
                 } else {
