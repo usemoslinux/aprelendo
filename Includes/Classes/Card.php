@@ -77,30 +77,33 @@ class Card extends DBEntity
                 FROM texts
                 LEFT JOIN languages ON languages.id = texts.lang_id
                 WHERE languages.name = ? AND texts.user_id = ? AND texts.type <> 6 AND
-                MATCH(texts.text) AGAINST('+$word' IN BOOLEAN MODE)
+                MATCH(texts.text) AGAINST(? IN BOOLEAN MODE)
                 LIMIT 3)
                 UNION
                 (SELECT archived_texts.title, archived_texts.author, archived_texts.text, archived_texts.source_uri
                 FROM archived_texts
                 LEFT JOIN languages ON languages.id = archived_texts.lang_id
                 WHERE languages.name = ? AND archived_texts.user_id = ? AND archived_texts.type <> 6 AND
-                MATCH(archived_texts.text) AGAINST('+$word' IN BOOLEAN MODE)
+                MATCH(archived_texts.text) AGAINST(? IN BOOLEAN MODE)
                 LIMIT 3)
                 UNION
                 (SELECT shared_texts.title, shared_texts.author, shared_texts.text, shared_texts.source_uri
                 FROM shared_texts
                 LEFT JOIN languages ON languages.id = shared_texts.lang_id
                 WHERE languages.name = ? AND shared_texts.type <> 5 AND
-                MATCH(shared_texts.text) AGAINST('+$word' IN BOOLEAN MODE)
+                MATCH(shared_texts.text) AGAINST(? IN BOOLEAN MODE)
                 LIMIT 3)
                 UNION
                 (SELECT examples.source_title, examples.source_author, examples.sentence, examples.source_uri
                 FROM example_sentences AS examples
-                WHERE examples.lang_iso = ? AND examples.word = '$word'
+                WHERE examples.lang_iso = ? AND examples.word = ?
                 LIMIT 3)";
 
         $result = $this->sqlFetchAll($sql, [
-            $this->lang_iso, $this->user_id, $this->lang_iso, $this->user_id, $this->lang_iso, $this->lang_iso
+            $this->lang_iso, $this->user_id, $word,
+            $this->lang_iso, $this->user_id, $word,
+            $this->lang_iso, $word,
+            $this->lang_iso, $word
         ]);
         
         // Avoid returning duplicate example sentences
