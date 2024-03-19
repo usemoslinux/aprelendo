@@ -108,11 +108,14 @@ $(document).ready(function() {
             dataType: "json"
             })
             .done(function(data) {
-                let examples = "";
-                let examples_count = 0;
+                let examples_array = [];
+                let examples_html = '';
                 const lang_iso = $("#card").data("lang");
+
                 let sentence_regex = new RegExp(
-                    '([^\\n.?!]|[\\d][.][\\d]|[A-Z][.](?:[A-Z][.])+)*(?<![\\p{L}])' + word + '(?![\\p{L}])([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!]',
+                    '([^\\n.?!]|[\\d][.][\\d]|[A-Z][.](?:[A-Z][.])+)*(?<![\\p{L}])' 
+                    + word 
+                    + '(?![\\p{L}])([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!]',
                     'gmiu'
                 );
 
@@ -124,9 +127,6 @@ $(document).ready(function() {
                         'gmiu'
                     );    
                 } 
-
-                const word_regex = new RegExp('(?<![\\p{L}|\\d])' + word + '(?![\\p{L}|\\d])', 'gmiu');
-                const spaces_symbols_regex = new RegExp('^[\\s\\d]+|[\\s\\d]+$' , 'g');
                 
                 data.forEach(text => {                   
                     // extract example sentences from text
@@ -137,47 +137,31 @@ $(document).ready(function() {
                             sentence_regex.lastIndex++;
                         }
                         
-                        if (examples_count < 3) {
+                        if (examples_array.length < 3) {
                             // create html for each example sentence, max 3 examples
                             let match = m[0];
-                            // first, remove leading/trailing spaces and leading symbols/numbers from sentences
-                            match = match.replace(spaces_symbols_regex, '');
-                            // remove unclosed quotes
-                            match = removeUnclosedQuotes(match);
+
                             // check that match is not the only word in current example sentence
                             if (match !== word) {
-                                // make the word user is studying clickable
-                                match = match.replace(word_regex, function(match, g1) {
-                                    return g1 === undefined
-                                        ? match
-                                        : "<a class='word fw-bold'>" + match.replace(/\s\s+/g, ' ') + "</a>";
-                                });
                                 // make sure example sentence is unique, then add to the list
-                                if (examples.search(escapeRegex(match)) == -1) {
-                                    examples += "<blockquote cite='" + text.source_uri + "'>";
-                                    examples += "<p>" + match + "</p>";
-                                    examples += "<cite>" + (text.author == "" ? "Anonymous" : text.author);
-                                    if (text.source_uri == '') {
-                                        examples += text.title;
-                                    } else if (text.source_uri.endsWith(".epub")) {
-                                        examples += ", " + text.title;
-                                    } else {
-                                        examples += ", <a href='" + text.source_uri + "' target='_blank'>" + text.title + "</a>"
-                                    }
-                                    examples += "</cite></blockquote>"
-                                    examples_count++;    
-                                }
+                                text.text = doubleQuotesNotClosed(match) ? text.text : match;
+                                examples_array = forceUnique(examples_array, text);
                             }
                         }
                     }
                 });
 
                 // if example sentence is empty, go to next card
-                if (examples == "") {
+                if (examples_array.length === 0) {
                     $("#card-header").html("Skipped. No examples found.");
                     cur_word_index++;
                     getExampleSentencesforCard(words[cur_word_index]);
                     return;
+                } else {
+                    examples_array = shuffleExamples(examples_array);
+                    examples_array.forEach(example => {
+                        examples_html += buildExampleHTML(example, word);
+                    });
                 }
 
                 // show card
@@ -185,7 +169,7 @@ $(document).ready(function() {
                 $("#card-loader").addClass('d-none');
                 $("#card-counter").text((cur_card_index+1) + "/" + max_cards);
                 $("#card-header").html(word);
-                $("#card-text").append(examples);
+                $("#card-text").append(examples_html);
                 $(".btn-answer").prop('disabled', false);
                 cur_word_index++;
                 cur_card_index++;
@@ -197,24 +181,105 @@ $(document).ready(function() {
     } // end getExampleSentencesforCard()
 
     /**
-     * Escapes regex strings
+     * 
+     * @param {array} example_list Array including example objects
+     * @param {object} new_example Example object
+     * @returns array
      */
-    function escapeRegex(str) {
-        return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
-    } // end escapeRegex()
-
-    function removeUnclosedQuotes(sentence) {
-        const count = (sentence.match(/"/g) || []).length;
-
-        if (count % 2 !== 0) {
-            if (sentence.length <= 4) return sentence;
-            let firstFive = sentence.substring(0, 2).replace("\"", "");
-            let lastFive = sentence.substring(sentence.length - 2).replace("\"", "");
-            return firstFive + sentence.substring(2, sentence.length - 2) + lastFive;
+    function forceUnique(example_list, new_example) {
+        if (example_list.length === 0) {
+            example_list.push(new_example);
+            return example_list;
         }
+    
+        for (let i = 0; i < example_list.length; i++) {
+            const existing_example = example_list[i];
+            if (new_example.text.includes(existing_example.text)) {
+                example_list[i] = new_example;
+                return example_list;
+            } else if (existing_example.text.includes(new_example.text)) {
+                return example_list; // no need to proceed, as a similar example already exists
+            }
+        }
+    
+        example_list.push(new_example);
+        return example_list;
+    }
 
-        return sentence;
-    } // end removeUnclosedQuotes()
+    /**
+     * Builds the example sentence HTML, including formatting and its source information
+     * @param {object} text Text object that includes the following properties: author, title, text & source_uri
+     * @param {string} word Word being studied
+     * @returns string
+     */
+    function buildExampleHTML(text, word) {
+        const word_regex = new RegExp('(?<![\\p{L}|\\d])' + word + '(?![\\p{L}|\\d])', 'gmiu');
+        let example_html = '';
+        let example_text_html = '';
+        let result = [];
+
+        // make the word user is studying clickable
+        example_text_html = text.text.replace(word_regex, function(match, g1) {
+            return g1 === undefined
+                ? match
+                : "<a class='word fw-bold'>" + match.replace(/\s\s+/g, ' ') + "</a>";
+        });
+
+        example_html = "<blockquote cite='" + text.source_uri + "'>";
+        example_html += "<p>" + example_text_html + "</p>";
+        example_html += "<cite>" + (text.author == "" ? "Anonymous" : text.author);
+        if (text.source_uri == '' || text.source_uri.endsWith(".epub")) {
+            example_html += ", " + text.title;
+        } else {
+            example_html += ", <a href='" + text.source_uri + "' target='_blank'>" + text.title + "</a>"
+        }
+        example_html += "</cite></blockquote>"
+
+        result.push(example_html)
+        return result;
+    }
+
+    /**
+     * Using the traditional sentence delimiters (.?!) does not work if they are used inside quotes, 
+     * like in this example: '"This is not the way!", he screamed'. If the word being studied is before '!'
+     * you would get '"This is not the way!'; and if it's after, '", he screamed.'. Either way, it's incomplete
+     * and we get only one (or an uneven nr. of) quote symbol(s). 
+     * This function is used to detect these cases, discard them and use the whole paragraph (which contains the
+     * example sentece), returned by getcards.php.
+     * @param {string} text Example sentence extracted from example paragraph returned by getcards.php
+     * @returns boolean
+     */
+    function doubleQuotesNotClosed(text) {
+        // Count the number of double quotes
+        const doubleQuotesCount = (text.match(/"/g) || []).length;
+
+        // Count the number of opening and closing curly double quotes
+        const openingCurlyQuotesCount = (text.match(/“/g) || []).length;
+        const closingCurlyQuotesCount = (text.match(/”/g) || []).length;
+
+        // If nr. of double quotes is uneven or opening and closing curly quotes don't match, return true
+        return (doubleQuotesCount % 2 !== 0 || openingCurlyQuotesCount !== closingCurlyQuotesCount);
+    }
+
+    /**
+     * 
+     * @param {array} examples array
+     * @returns array
+     */
+    function shuffleExamples(examples) {
+        let current_index = examples.length, random_index;
+
+        // While there remain elements to shuffle
+        while (current_index > 0) {
+            // Pick a remaining element
+            random_index = Math.floor(Math.random() * current_index);
+            current_index--;
+            
+            // And swap it with the current element
+            [examples[current_index], examples[random_index]] = [examples[random_index], examples[current_index]];
+        }
+        return examples;
+    }
 
     /**
      * Checks if there are any cards in deck or if end of practice was reached

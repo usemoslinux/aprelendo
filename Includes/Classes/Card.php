@@ -73,6 +73,43 @@ class Card extends DBEntity
      */
     public function getExampleSentencesForWord(string $word): array
     {
+        $texts = $this->getTextsWithWord($word);
+        $result = [];
+
+        foreach ($texts as $text) {
+            $re = '/^.*?\b(' . $word . ')\b.*$/miu';
+
+            preg_match_all($re, $text['text'], $matches, PREG_SET_ORDER, 0);
+
+            foreach ($matches as $match) {
+                $match_to_add['title'] = $text['title'];
+                $match_to_add['author'] = $text['author'];
+                $match_to_add['text'] = $match[0];
+                $match_to_add['source_uri'] = $text['source_uri'];
+                $result[] = $match_to_add;
+            }
+        }
+        
+        // Avoid returning duplicate example sentences
+        // $result = $this->arrayUniqueMultidimensional($result);
+
+        // Shuffle the array to randomize the order
+        // shuffle($result);
+
+        // Limit the results to max 3 records
+        // $result = array_slice($result, 0, 3);
+
+        return $result;
+    } // end getExampleSentencesForWord()
+
+    /**
+     * Returns a list of texts that include a specific word/phrase
+     *
+     * @param string $word
+     * @return array
+     */
+    private function getTextsWithWord(string $word): array
+    {
         $sql = "(SELECT texts.title, texts.author, texts.text, texts.source_uri
                 FROM texts
                 LEFT JOIN languages ON languages.id = texts.lang_id
@@ -99,24 +136,13 @@ class Card extends DBEntity
                 WHERE examples.lang_iso = ? AND examples.word = ?
                 LIMIT 3)";
 
-        $result = $this->sqlFetchAll($sql, [
+        return $this->sqlFetchAll($sql, [
             $this->lang_iso, $this->user_id, $word,
             $this->lang_iso, $this->user_id, $word,
             $this->lang_iso, $word,
             $this->lang_iso, $word
         ]);
-        
-        // Avoid returning duplicate example sentences
-        $result = $this->arrayUniqueMultidimensional($result);
-
-        // Shuffle the array to randomize the order
-        shuffle($result);
-
-        // Limit the results to max 3 records
-        $result = array_slice($result, 0, 3);
-
-        return $result;
-    } // end getExampleSentencesForWord()
+    }
 
     /**
      * Loops multi-dimensional array and filters unique entries only
