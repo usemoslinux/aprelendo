@@ -90,15 +90,6 @@ class Card extends DBEntity
             }
         }
         
-        // Avoid returning duplicate example sentences
-        // $result = $this->arrayUniqueMultidimensional($result);
-
-        // Shuffle the array to randomize the order
-        // shuffle($result);
-
-        // Limit the results to max 3 records
-        // $result = array_slice($result, 0, 3);
-
         return $result;
     } // end getExampleSentencesForWord()
 
@@ -142,18 +133,5 @@ class Card extends DBEntity
             $this->lang_iso, $word,
             $this->lang_iso, $word
         ]);
-    }
-
-    /**
-     * Loops multi-dimensional array and filters unique entries only
-     *
-     * @param array $input
-     * @return array
-     */
-    private function arrayUniqueMultidimensional(array $input): array
-    {
-        $serialized = array_map('serialize', $input);
-        $unique = array_unique($serialized);
-        return array_intersect_key($input, $unique);
     }
 }
