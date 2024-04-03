@@ -175,13 +175,13 @@ use Aprelendo\Texts;
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/readability/0.4.4/Readability.min.js"
-    integrity="sha384-YqVytsOEvlLnJ+cNHmbexthfaZ482cPdQ+GQuIZngy2l0P+HIKE7wpmcUC6Ni5iw"
+<script src="https://cdnjs.cloudflare.com/ajax/libs/readability/0.5.0/Readability.min.js"
+    integrity="sha512-XZ0uNdz5h40R7SJavnsSp/TnGvu6WY+U8Q75gZx6orlKCIzutPOd4g+m/zcq7HA1XL8bAQtYLs1zhoCDb4L9sA=="
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"
-    integrity="sha512-H+rglffZ6f5gF7UJgvH4Naa+fGCgjrHKMgoFOGmcPTRwR6oILo5R+gtzNrpDp7iMV3udbymBVjkeZGNz1Em4rQ=="
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.11/purify.min.js"
+    integrity="sha512-ce0fmuEgWrpnIXWKQrSgJ5FsBsr/hnOsxdWvk5lu1GThckasLwc+TAFERLNIwWnWqBoWV4GPDJiz2PSPntinVA=="
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
 
