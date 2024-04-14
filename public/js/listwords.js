@@ -25,6 +25,17 @@ $(document).ready(function () {
     $("#search").focus();
     $("input:checkbox").prop("checked", false);
 
+    $('form').submit(function(e) {
+        e.preventDefault();
+
+        const params = {    s: $("#s").val(),                       // search text
+                            o: $('.o.active').data('value') || 0    // order
+                        };
+
+        const uri_str = parameterizeArray(params);
+        window.location.replace("words" + uri_str);
+    });
+
     // ajax call to get dictionary URI
     $.ajax({
         url: "/ajax/getdicuris.php",
@@ -103,17 +114,15 @@ $(document).ready(function () {
     /**
      * Selects sorting
      */
-    $("#dropdown-menu-sort").on("click", function (e) {
-        const params = {
-            s: $("#s").val(),
-            o: $("#o").val()
-        };
+    $("#dropdown-menu-sort .o").on("click", function (e) {
+        const filename = getCurrentFileName();
+        const params = {    s: $("#s").val(),   // search text
+                            o: $(this).data('value') || 0    // order
+                        };
 
         const uri_str = parameterizeArray(params);
-
-        window.location.replace("/words" + uri_str);
-    }); // end #dropdown-menu-sort.on.click
-
+        window.location.replace(filename + uri_str);
+    }); // end #dropdown-menu-sort .o.on.click
 
     /**
      * Open dictionary modal

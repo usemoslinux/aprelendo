@@ -120,8 +120,8 @@ abstract class Table
 
         $sort_index = 0;
         foreach ($this->sort_menu as $menu_id => $menu_text) {
-            $is_active = $sort_by == $sort_index ? ' class="dropdown-item active" ' : 'class="dropdown-item"';
-            $html .= "<a id='$menu_id' onclick=\"$('#o').val($sort_index);\" $is_active>$menu_text</a>";
+            $is_active = $sort_by == $sort_index ? ' class="dropdown-item o active" ' : 'class="dropdown-item o"';
+            $html .= "<a id='$menu_id' data-value='$sort_index' $is_active>$menu_text</a>";
             $sort_index++;
         }
 

@@ -130,9 +130,20 @@ class WordTable extends Table
     {
         $word_status = $row['status'];
         $diff_today_modif = $row['diff_today_modif'];
-        $days_modif_str = $diff_today_modif !== null
-            ? ' - modified ' . $diff_today_modif . ' days ago'
-            : ' - never modified';
+        
+        switch ($diff_today_modif) {
+            case null:
+                $days_modif_str = ' - never modified';
+                break;
+            case 0:
+                $days_modif_str = ' - modified today';
+                break;
+            case 1:
+                $days_modif_str = ' - modified yesterday';
+                break;
+            default:
+                $days_modif_str = ' - modified ' . $diff_today_modif . ' days ago';
+        }
 
         $statusIconClass = self::STATUS_ICONS[$word_status];
         $statusText = self::STATUS_TEXT[$word_status];

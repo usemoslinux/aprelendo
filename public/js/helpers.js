@@ -54,6 +54,10 @@ function getCurrentURIParameters() {
  * @returns string
  */
 function parameterizeArray(arr) {
+    if (Object.keys(arr).length === 0) {
+        return '';
+    }
+    
     const params = new URLSearchParams();
 
     for (const [key, value] of Object.entries(arr)) {
@@ -62,7 +66,7 @@ function parameterizeArray(arr) {
         }
     }
 
-    return '?' + params.toString();
+    return params.toString() ? '?' + params.toString() : '';
 } // end parameterizeArray
 
 

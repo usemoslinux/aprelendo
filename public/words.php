@@ -53,7 +53,6 @@ $query_str = '?s=' . $search_text . '&o=0';
                     <div class="col-sm-12">
                         <form class="form-flex-row" method="get">
                             <div class="input-group mb-3">
-                                <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
                                 <input type="text" id="s" name="s" class="form-control" aria-label="Search text"
                                     placeholder="Search..." value="<?php echo $search_text ?>">
                                 <button type="submit" name="submit" aria-label="Search" class="btn btn-secondary">

@@ -25,6 +25,12 @@ $(document).ready(function() {
         $('#modal-achievements').modal('show');
     }
 
+    $('form').submit(function(e) {
+        e.preventDefault();
+
+        reloadPage();
+    });
+
     /**
      * Deletes selected texts from the database
      * Trigger: when user selects "Delete" in the action menu
@@ -38,7 +44,6 @@ $(document).ready(function() {
 
             const uri_params = getCurrentURIParameters();
             const is_archived = uri_params.sa == "1";
-            const cur_page = uri_params.p ? uri_params.p : "1";
 
             /**
              * Deletes selected texts from the database (based on their ID).
@@ -54,17 +59,7 @@ $(document).ready(function() {
                 }
             })
                 .done(function() {
-                    const params = {  p: cur_page,
-                                    ft: $("#ft").val(), // filter type
-                                    fl: $("#fl").val(), // filter level
-                                    s: $("#s").val(),   // search text
-                                    sa: $("#sa").val(), // is shared
-                                    o: $("#o").val()    // order
-                                };
-
-                    const uri_str = parameterizeArray(params);
-
-                    window.location.replace("/texts" + uri_str);
+                    reloadPage();
                 })
                 .fail(function() {
                     alert(
@@ -85,9 +80,6 @@ $(document).ready(function() {
             ids.push($(this).attr("data-idText"));
         });
 
-        const uri_params = getCurrentURIParameters();
-        const cur_page = uri_params.p ? uri_params.p : "1";
-
         /**
          * Moves selected texts from the "texts" table to the "archived_texts" table in the database (archive);
          * or, vice-versa, moves texts from the "archived_texts" table to the "texts" table (unarchive)
@@ -104,17 +96,7 @@ $(document).ready(function() {
             }
         })
             .done(function() {
-                const params = {    p: cur_page,
-                                    ft: $("#ft").val(), // filter type
-                                    fl: $("#fl").val(), // filter level
-                                    s: $("#s").val(),   // search text
-                                    sa: $("#sa").val(), // is shared
-                                    o: $("#o").val()    // order
-                                };
-
-                const uri_str = parameterizeArray(params);
-
-                window.location.replace("/texts" + uri_str);
+                reloadPage();
             })
             .fail(function() {
                 alert(
@@ -122,6 +104,27 @@ $(document).ready(function() {
                 );
             }); // end ajax
     }); // end mArchive.on.click
+
+    /**
+     * Reloads current page passing the correct URI parameters
+     */
+    function reloadPage() {
+        const filename = getCurrentFileName();
+        const uri_params = getCurrentURIParameters();
+        const cur_page_nr = uri_params.p ? uri_params.p : "1";
+
+        const params = {    
+            p: cur_page_nr,
+            ft: $('.ft.active').data('value') || 0, // filter type
+            fl: $('.fl.active').data('value') || 0, // filter level
+            s: $("#s").val(),   // search text
+            sa: $('.sa').hasClass('active') ? '1' : '0', // is shared
+            o: $('.o.active').data('value') || 0    // order
+        };
+
+        const uri_str = parameterizeArray(params);
+        window.location.replace(filename + uri_str);
+    }
 
     /**
      * Enables/Disables action menu based on the number of selected elements.
@@ -176,13 +179,13 @@ $(document).ready(function() {
     /**
      * Selects sorting
      */
-    $("#dropdown-menu-sort").on("click", function(e) {
+    $("#dropdown-menu-sort .o").on("click", function(e) {
         const filename = getCurrentFileName();
-        const params = {    ft: $("#ft").val(), // filter type
-                            fl: $("#fl").val(), // filter level
+        const params = {    ft: $('.ft.active').data('value') || 0, // filter type
+                            fl: $('.fl.active').data('value') || 0, // filter level
                             s: $("#s").val(),   // search text
-                            sa: $("#sa").val(), // is shared
-                            o: $("#o").val()    // order
+                            sa: $('.sa').hasClass('active') ? '1' : '0', // is shared
+                            o: $(this).data('value') || 0    // order
                         };
 
         const uri_str = parameterizeArray(params);

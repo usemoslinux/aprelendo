@@ -79,68 +79,62 @@ $lvl_active_dropdown_class = ' class="dropdown-item fl active" ';
                 <div class="row flex">
                     <div class="col-sm-12">
                         <form class="form-flex-row" method="get">
-                            <input id="ft" name="ft" value="<?php echo $filter_type; ?>" type="hidden">
-                            <input id="fl" name="fl" value="<?php echo $filter_level; ?>" type="hidden">
-                            <input id="sa" name="sa" value="<?php echo $show_archived ? '1' : '0'; ?>" type="hidden">
-                            <input id="o" name="o" value="<?php echo $sort_by; ?>" type="hidden">
                             <div id="search-wrapper-div" class="input-group mb-3">
                                 <button type="button" id="btn-filter" class="btn btn-secondary dropdown-toggle"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter
                                     <span class="caret"></span>
                                 </button>
-                                <div class="dropdown-menu">
+                                <div id="filter-dropdown" class="dropdown-menu">
                                     <h6 class="dropdown-header">Type</h6>
-                                    <a onclick="$('#ft').val(0);" <?php echo $filter_type==0 ?
+                                    <a data-value="0" <?php echo $filter_type==0 ?
                                         $type_active_dropdown_class : $type_dropdown_class ; ?>>
                                         All
                                     </a>
-                                    <a onclick="$('#ft').val(1);" <?php echo $filter_type==1 ?
+                                    <a data-value="1" <?php echo $filter_type==1 ?
                                         $type_active_dropdown_class : $type_dropdown_class ; ?>>
                                         Articles
                                     </a>
-                                    <a onclick="$('#ft').val(2);" <?php echo $filter_type==2 ?
+                                    <a data-value="2" <?php echo $filter_type==2 ?
                                         $type_active_dropdown_class : $type_dropdown_class ; ?>>
                                         Conversations
                                     </a>
-                                    <a onclick="$('#ft').val(3);" <?php echo $filter_type==3 ?
+                                    <a data-value="3" <?php echo $filter_type==3 ?
                                         $type_active_dropdown_class : $type_dropdown_class ; ?>>
                                         Letters
                                     </a>
-                                    <a onclick="$('#ft').val(4);" <?php echo $filter_type==4 ?
+                                    <a data-value="4" <?php echo $filter_type==4 ?
                                         $type_active_dropdown_class : $type_dropdown_class ; ?>>
                                         Lyrics
                                     </a>
-                                    <a onclick="$('#ft').val(6);" <?php echo $filter_type==6 ?
+                                    <a data-value="6" <?php echo $filter_type==6 ?
                                         $type_active_dropdown_class : $type_dropdown_class ; ?>>
                                         Ebooks
                                     </a>
-                                    <a onclick="$('#ft').val(7);" <?php echo $filter_type==7 ?
+                                    <a data-value="7" <?php echo $filter_type==7 ?
                                         $type_active_dropdown_class : $type_dropdown_class ; ?>>
                                         Others
                                     </a>
                                     <div role="separator" class="dropdown-divider"></div>
                                     <a id="show_archived"
-                                        onclick="var show_archived = $('#sa');
-                                        show_archived.val(1 - show_archived.val());"
                                         <?php echo $show_archived ? 'class="dropdown-item sa active"' :
                                         'class="dropdown-item sa"' ; ?>>
                                         Archived
                                     </a>
                                     <div role="separator" class="dropdown-divider"></div>
                                     <h6 class="dropdown-header">Level</h6>
-                                    <a onclick="$('#fl').val(0);" <?php echo $filter_level==0 ?
+                                    <a data-value="0" <?php echo $filter_level==0 ?
                                         $lvl_active_dropdown_class : $lvl_dropdown_class ; ?>>
                                         All
                                     </a>
-                                    <a onclick="$('#fl').val(1);" <?php echo $filter_level==1 ?
+                                    <a data-value="1" <?php echo $filter_level==1 ?
                                         $lvl_active_dropdown_class : $lvl_dropdown_class ; ?>>
                                         Beginner
                                     </a>
-                                    <a onclick="$('#fl').val(2);" <?php echo $filter_level==2 ?
+                                    <a data-value="2" <?php echo $filter_level==2 ?
                                         $lvl_active_dropdown_class : $lvl_dropdown_class ; ?>>
                                         Intermediate
                                     </a>
-                                    <a onclick="$('#fl').val(3);" <?php echo $filter_level==3 ?
+                                    <a data-value="3" <?php echo $filter_level==3 ?
                                         $lvl_active_dropdown_class : $lvl_dropdown_class ; ?>>
                                         Advanced
                                     </a>
