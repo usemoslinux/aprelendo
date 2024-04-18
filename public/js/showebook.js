@@ -307,7 +307,7 @@ $(document).ready(function() {
                     if (nextNav) {
                         nextLabel = nextNav.label;
                     } else {
-                        nextLabel = "next";
+                        nextLabel = "Next chapter";
                     }
 
                     next.textContent = nextLabel + " »";
@@ -330,7 +330,7 @@ $(document).ready(function() {
                     if (prevNav) {
                         prevLabel = prevNav.label;
                     } else {
-                        prevLabel = "previous";
+                        prevLabel = "Previous chapter";
                     }
 
                     prev.textContent = "« " + prevLabel;
@@ -402,7 +402,8 @@ $(document).ready(function() {
         // });
 
         // Trim HTML and remove empty elements
-        $parsed.html($parsed.html().trim());
+        let cleanedHtml = $parsed.html().trim().replace(/[\r\n]+/g, ' ');
+        $parsed.html(cleanedHtml);
         $parsed.find(':empty').not('img').remove();
         $parsed.find('p:not(:has(img))').filter(function () {
             return $.trim($(this).text()) === '';

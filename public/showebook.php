@@ -238,17 +238,16 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
                 </button>
             </span>
         </div>
-
         <div class="navlink">
             <a id="prev" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                data-bs-placement="bottom" href="#prev"></a>
+                data-bs-placement="bottom" href="#prev">« Previous chapter</a>
         </div>
         <div id="viewer" class="py-0 px-5 scrolled"
             data-idText="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
         </div>
         <div class="navlink">
             <a id="next" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                data-bs-placement="top" href="#next"></a>
+                data-bs-placement="top" href="#next">Next chapter »</a>
         </div>
     </div>
 
