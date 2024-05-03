@@ -392,9 +392,11 @@ $(document).ready(function() {
             // go to next card
             cur_card_index++;
             
-            if (cur_card_index < max_cards) {
-                getExampleSentencesforCard(words[cur_card_index][0]);
+            if (lastCardReached()) {
+                return;
             }
+            
+            getExampleSentencesforCard(words[cur_card_index][0]);
         })
         .fail(function(xhr, ajaxOptions, thrownError) {
             showMessage("There was an unexpected error updating this word's status", "alert-danger");
