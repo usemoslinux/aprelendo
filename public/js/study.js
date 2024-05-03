@@ -102,6 +102,10 @@ $(document).ready(function() {
         if (lastCardReached()) {
             return;
         }
+
+        console.log('words: ' + words);
+        console.log('word: ' + word);
+        console.log('cur_card_index: ' + cur_card_index);        
         
         // empty card and show spinner
         $("#card-loader").removeClass('d-none');
@@ -167,7 +171,6 @@ $(document).ready(function() {
                         return;
                     }
                     getExampleSentencesforCard(words[cur_card_index][0]);
-                    return;
                 } else {
                     examples_array = shuffleExamples(examples_array);
                     examples_array.forEach(example => {
@@ -302,7 +305,7 @@ $(document).ready(function() {
             $("#card-footer").addClass("d-none");
             $("#card-loader").addClass("d-none");
             return true;
-        } else if (cur_card_index > max_cards-1) {
+        } else if (cur_card_index >= max_cards) {
             $("#card-header").text("Congratulations!");
 
             let progress_html = "";
@@ -388,7 +391,10 @@ $(document).ready(function() {
         .done(function(data) {
             // go to next card
             cur_card_index++;
-            getExampleSentencesforCard(words[cur_card_index][0]);
+            
+            if (cur_card_index < max_cards) {
+                getExampleSentencesforCard(words[cur_card_index][0]);
+            }
         })
         .fail(function(xhr, ajaxOptions, thrownError) {
             showMessage("There was an unexpected error updating this word's status", "alert-danger");
