@@ -25,8 +25,7 @@ $(document).ready(function() {
     let   $sel_word          = $();             // jQuery object used to open dictionary modal
     let   words              = [];              // array containing all words user is learning
     let   max_cards          = 10;              // maximum nr. of cards
-    let   cur_word_index     = 0;               // current word index
-    let   cur_card_index     = 0;               // current word index
+    let   cur_card_index     = 0;               // current card/word index
 
     // nr. of words recalled during practice
     let answers = [
@@ -34,6 +33,7 @@ $(document).ready(function() {
         ["1", 0, "bg-info", "Partial"],
         ["2", 0, "bg-warning", "Fuzzy"],
         ["3", 0, "bg-danger", "No recall"],
+        ["4", 0, "text-warning bg-dark", "No example sentence found!"],
     ];
 
     // initialize modal dictionary window buttons
@@ -69,16 +69,23 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "ajax/getcards.php",
+            data: { limit : max_cards },
             dataType: "json"
             })
             .done(function(data) {
+                if (data.error_msg) {
+                    showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning "
+                    + "in this language.", "alert-danger");
+                    return;
+                }
+
                 words = data.map(function(value,index) { 
-                    return value.word.replace(/\r?\n|\r/g, " "); 
+                    return [value.word.replace(/\r?\n|\r/g, " ")]; 
                 });
                 max_cards = words.length > max_cards ? max_cards : words.length;
 
                 $("#card-counter").text("1" + "/" + max_cards);
-                getExampleSentencesforCard(words[0]);
+                getExampleSentencesforCard(words[0][0]);
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
                 showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning "
@@ -154,8 +161,12 @@ $(document).ready(function() {
                 // if example sentence is empty, go to next card
                 if (examples_array.length === 0) {
                     $("#card-header").html("Skipped. No examples found.");
-                    cur_word_index++;
-                    getExampleSentencesforCard(words[cur_word_index]);
+                    words[cur_card_index][1] = 4;
+                    cur_card_index++;
+                    if (lastCardReached()) {
+                        return;
+                    }
+                    getExampleSentencesforCard(words[cur_card_index][0]);
                     return;
                 } else {
                     examples_array = shuffleExamples(examples_array);
@@ -171,8 +182,6 @@ $(document).ready(function() {
                 $("#card-header").html(word);
                 $("#card-text").append(examples_html);
                 $(".btn-answer").prop('disabled', false);
-                cur_word_index++;
-                cur_card_index++;
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
                 showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.", 
@@ -312,6 +321,7 @@ $(document).ready(function() {
                 + "<div class='mt-3'>You have reached the end of your study.</div>"
                 + "<div class='mt-3'>These were your results:</div>"
                 + "<div class='progress mx-auto mt-3 fw-bold' style='height: 25px;max-width: 550px'>" + progress_html + "</div>"
+                + buildResultsTable()
                 + "<div class='small mt-4'>If you want to continue, you can "
                 + "refresh this page (F5).<br>However, we strongly recommend that you keep your study sessions short "
                 + "and take rest intervals.</div>");
@@ -363,6 +373,7 @@ $(document).ready(function() {
         const answer = $(this).attr("value");
 
         answers[answer][1] = answers[answer][1] + 1;
+        words[cur_card_index][1] = answer;
 
         // disable Yes/No buttons
         $(".btn-answer").prop('disabled', true);
@@ -376,12 +387,38 @@ $(document).ready(function() {
         })
         .done(function(data) {
             // go to next card
-            getExampleSentencesforCard(words[cur_word_index]);
+            cur_card_index++;
+            getExampleSentencesforCard(words[cur_card_index][0]);
         })
         .fail(function(xhr, ajaxOptions, thrownError) {
             showMessage("There was an unexpected error updating this word's status", "alert-danger");
         });
     }); // end .btn-answer.on.click()
+
+    function buildResultsTable() {
+        const table_header = 
+        `<table class="table text-end small mx-auto mt-3" aria-describedby="" style="max-width: 550px">
+        <thead>
+            <tr class="table-secondary">
+                <th>Word</th>
+                <th>Recall level</th>
+            </tr>
+        </thead>
+        <tbody>`;
+
+        let table_rows = '';
+
+        const table_footer = '</tbody></table>';
+
+        words.forEach(word => {
+            table_rows += '<tr>'
+                + '<td><strong class="word-description ' +  answers[word[1]][2] + '">' + word[0] + '</td>'
+                + '<td>' + answers[word[1]][3] + '</strong></td>'
+                + '</tr>';
+        });
+
+        return table_header + table_rows + table_footer;
+    }
 
     /**
      * Opens translator in new window. 

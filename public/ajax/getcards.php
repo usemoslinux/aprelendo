@@ -33,7 +33,8 @@ try {
     $card = new Card($pdo, $user_id, $lang_id);
 
     if (!isset($_POST['word']) || empty($_POST['word'])) {
-        $result = $card->getWordsUserIsLearning();
+        $limit = $_POST['limit'];
+        $result = $card->getWordsUserIsLearning((int)$limit);
     } else {
         $result = $card->getExampleSentencesForWord($_POST['word']);
     }
