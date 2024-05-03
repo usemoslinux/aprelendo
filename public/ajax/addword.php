@@ -42,11 +42,6 @@ try {
         $word = $_POST['word'];
         $is_phrase =  (!empty($_POST['is_phrase'])) ? $_POST['is_phrase'] : false;
 
-        
-        $source_id = $_POST['source_id'];
-        $source_table = $_POST['text_is_shared'] ? 'shared_texts' : 'texts';
-        $sentence = $_POST['sentence'];
-
         // 1. Add word to table
         $words_table = new Words($pdo, $user_id, $lang_id);
 
@@ -56,15 +51,22 @@ try {
         $words_table->add($word, $status, $is_phrase);
 
         // 2. If new word, save example sentence
-        $new_sentence_record = [
-            'source_id' => $source_id,
-            'source_table' => $source_table,
-            'word' => $word,
-            'sentence' => $sentence
-        ];
 
-        $example_sentence = new ExampleSentences($pdo, $user_id);
-        $example_sentence->addRecord($new_sentence_record);
+        if (isset($_POST['source_id'])) {
+            $source_id = $_POST['source_id'];
+            $source_table = $_POST['text_is_shared'] ? 'shared_texts' : 'texts';
+            $sentence = $_POST['sentence'];
+
+            $new_sentence_record = [
+                'source_id' => $source_id,
+                'source_table' => $source_table,
+                'word' => $word,
+                'sentence' => $sentence
+            ];
+
+            $example_sentence = new ExampleSentences($pdo, $user_id);
+            $example_sentence->addRecord($new_sentence_record);
+        }
     } elseif (isset($_POST['words'])) {
         // $_POST['words'] would be used for ONLY importing many words
         // using the "import words" button
