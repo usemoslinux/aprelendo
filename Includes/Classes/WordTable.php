@@ -72,7 +72,7 @@ class WordTable extends Table
         }
 
         return $html;
-    }
+    } // end printContent()
 
     /**
      * Generates the HTML for a single table row
@@ -132,14 +132,14 @@ class WordTable extends Table
         $diff_today_modif = $row['diff_today_modif'];
         
         switch ($diff_today_modif) {
-            case null:
-                $days_modif_str = ' - never modified';
-                break;
             case 0:
                 $days_modif_str = ' - modified today';
                 break;
             case 1:
                 $days_modif_str = ' - modified yesterday';
+                break;
+            case null:
+                $days_modif_str = ' - never modified';
                 break;
             default:
                 $days_modif_str = ' - modified ' . $diff_today_modif . ' days ago';
