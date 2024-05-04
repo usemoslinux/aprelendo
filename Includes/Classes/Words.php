@@ -23,6 +23,7 @@ namespace Aprelendo;
 
 use Aprelendo\DBEntity;
 use Aprelendo\SearchWordsParameters;
+use Aprelendo\Language;
 use Aprelendo\UserException;
 
 class Words extends DBEntity
@@ -161,12 +162,27 @@ class Words extends DBEntity
     {
         $sort_sql = $search_params->buildSortSQL();
         $search_text = '%' . $search_params->search_text . '%';
+        
+        $lang = new Language($this->pdo, $this->user_id);
+        $lang->loadRecordById($this->lang_id);
+        $lang_iso = $lang->name;
+        $freq_table = 'frequency_list_' . $lang_iso;
 
-        $sql = "SELECT `id`, `word`, `status`,
-                DATEDIFF(CURRENT_DATE(), `date_modified`) AS `diff_today_modif`,
-                DATEDIFF(`date_modified`, `date_created`) AS `frequency`
-                FROM `{$this->table}`
-                WHERE `user_id`=? AND `lang_id`=? AND word LIKE ?
+        $sql = "SELECT w.`id`, w.`word`, w.`status`,
+                    DATEDIFF(CURRENT_DATE(), w.`date_modified`) AS `diff_today_modif`,
+                    DATEDIFF(`date_modified`, w.`date_created`) AS `frequency`,
+                    CASE
+                        WHEN f.`frequency_index` < 81 THEN 'high'
+                        WHEN f.`frequency_index` < 97 THEN 'medium'
+                        ELSE ''
+                    END AS `freq_level`
+                FROM `{$this->table}` w
+                LEFT JOIN
+                    `$freq_table` f ON w.`word` = f.`word`
+                WHERE
+                    w.`user_id` = ?
+                    AND w.`lang_id` = ?
+                    AND w.`word` LIKE ?
                 ORDER BY $sort_sql LIMIT {$search_params->offset}, {$search_params->limit}";
 
         return $this->sqlFetchAll($sql, [

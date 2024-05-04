@@ -37,7 +37,7 @@ abstract class WordsUtilities
      */
     public static function exportToCSV(array $words): void
     {
-        $headers = ['Words', 'Status'];
+        $headers = ['Words', 'Status', 'Freq_Level'];
 
         $fp = fopen('php://output', 'w');
 
@@ -49,7 +49,7 @@ abstract class WordsUtilities
             fputcsv($fp, $headers);
 
             foreach ($words as $word) {
-                fputcsv($fp, [$word['word'], $word['status']]);
+                fputcsv($fp, [$word['word'], $word['status'], $word['freq_level']]);
             }
 
             fclose($fp);

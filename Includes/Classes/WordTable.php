@@ -72,7 +72,7 @@ class WordTable extends Table
         }
 
         return $html;
-    } // end printContent()
+    }
 
     /**
      * Generates the HTML for a single table row
@@ -117,8 +117,21 @@ class WordTable extends Table
     private function generateLink(array $row): string
     {
         $word = $row['word'];
-        return "<td class='col-title'><a class='word word-list'>$word</a></td>";
+        $freq_badge = $this->generateFrequencyBadge($row['freq_level']);
+        return "<td class='col-title'><a class='word word-list'>$word</a> $freq_badge</td>";
     } // end generateLink()
+
+    private function generateFrequencyBadge(string $frequency): string
+    {
+        switch ($frequency) {
+            case 'high':
+                return '<span class="badge rounded-pill bg-danger" title="High frequency">high</span>';
+            case 'medium':
+                return '<span class="badge rounded-pill bg-warning text-dark" title="Medium frequency">medium</span>';
+            default:
+                return '';
+        }
+    }
 
     /**
      * Generates the status icon HTML for a row
@@ -132,14 +145,14 @@ class WordTable extends Table
         $diff_today_modif = $row['diff_today_modif'];
         
         switch ($diff_today_modif) {
+            case null:
+                $days_modif_str = ' - never modified';
+                break;
             case 0:
                 $days_modif_str = ' - modified today';
                 break;
             case 1:
                 $days_modif_str = ' - modified yesterday';
-                break;
-            case null:
-                $days_modif_str = ' - never modified';
                 break;
             default:
                 $days_modif_str = ' - modified ' . $diff_today_modif . ' days ago';
