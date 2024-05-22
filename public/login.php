@@ -70,7 +70,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             </small>
                             <div class="input-group">
                                 <input type="password" id="password" name="password" class="form-control"
-                                    pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
+                                    pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&amp;*()\-_+={};:\[\]\?\.\/,]).{8,}"
                                     autocomplete="off" required>
                                 <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                     aria-label="Show/hide password" tabindex="-1"><span class="bi bi-eye-slash-fill"

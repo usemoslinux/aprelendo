@@ -82,7 +82,7 @@ use Aprelendo\Language;
                                 </small>
                                 <div class="input-group">
                                     <input type="password" id="newpassword" name="newpassword" class="form-control"
-                                        pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
+                                        pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&amp;*()\-_+={};:\[\]\?\.\/,]).{8,}"
                                         autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide new password" tabindex="-1">
@@ -95,7 +95,7 @@ use Aprelendo\Language;
                                 <div class="input-group">
                                     <input type="password" id="newpassword-confirmation" name="newpassword-confirmation"
                                         class="form-control"
-                                        pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}"
+                                        pattern="(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&amp;*()\-_+={};:\[\]\?\.\/,]).{8,}"
                                         autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide new password confirmation" tabindex="-1">
