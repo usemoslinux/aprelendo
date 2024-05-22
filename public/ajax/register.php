@@ -44,7 +44,7 @@ try {
     }
 
     // check password is valid
-    $regex = '/(?=.*[0-9a-zA-Z])(?=.*[~`!@#$%^&*()\-_+={};:\[\]\?\.\/,]).{8,}/';
+    $regex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/';
     if (!preg_match($regex, $_POST['newpassword'])) {
         throw new UserException("Password must have at least 8 characters and contain letters, special characters"
             . " and digits. Please try again.");
