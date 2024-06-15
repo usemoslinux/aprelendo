@@ -4,7 +4,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Aprelendo\\":"Includes/Classes/"
+            "Aprelendo\\":"src/Includes/Classes/"
         }
     }
 }

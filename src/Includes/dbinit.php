@@ -21,11 +21,8 @@
 
 // perform all database initialization here, in a single file
 
-defined('APP_ROOT')     ? null : define('APP_ROOT', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
-defined('PUBLIC_PATH')  ? null : define('PUBLIC_PATH', APP_ROOT . 'public' . DIRECTORY_SEPARATOR);
-
-require_once dirname(__DIR__) . '/config/config.php';
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(dirname(__FILE__)) . '/config/config.php';
+require_once dirname(APP_ROOT) . '/vendor/autoload.php';
 
 use Aprelendo\Connect;
 

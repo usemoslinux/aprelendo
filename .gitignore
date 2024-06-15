@@ -1,7 +1,7 @@
 .vscode/
 vendor/
-config/config.php
-public/tests/
+src/config/config.php
+src/public/tests/
 uploads/
 todo.md
 .rsyncignore

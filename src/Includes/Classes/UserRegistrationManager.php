@@ -118,7 +118,7 @@ class UserRegistrationManager extends DBEntity
             $subject = 'Aprelendo - Account activation';
             
             // get template
-            $message = file_get_contents(APP_ROOT . 'templates/welcome.html');
+            $message = file_get_contents(TEMPLATES_PATH . 'welcome.html');
             
             // edit template
             $message = str_replace('{{action_url}}', $reset_link, $message);

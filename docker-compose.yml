@@ -1,0 +1,40 @@
+version: '3'
+services:
+  nginx:
+    container_name: aprelendo_nginx
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/aprelendo.conf:/etc/nginx/conf.d/aprelendo.conf
+      - ./aprelendo:/var/www/aprelendo
+  php:
+    container_name: aprelendo_php
+    build:
+      context: .
+      dockerfile: php/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./aprelendo:/var/www/aprelendo
+      - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./php/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+  mysql:
+    image: mariadb:latest
+    container_name: aprelendo_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root_password'
+      MYSQL_USER: 'aprelendo_user'
+      MYSQL_PASSWORD: 'aprelendo_user_password'
+      MYSQL_DATABASE: 'aprelendo'
+    volumes:
+      - mysqldata:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+volumes:
+  mysqldata: {}

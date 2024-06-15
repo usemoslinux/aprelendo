@@ -39,8 +39,8 @@ class File
     public function __construct(string $file_name = '')
     {
         $this->name = $file_name;
-        $this->folder = APP_ROOT . 'uploads' . DIRECTORY_SEPARATOR;
-        $this->path = realpath(APP_ROOT . 'uploads' . DIRECTORY_SEPARATOR . $file_name);
+        $this->folder = UPLOADS_PATH;
+        $this->path = realpath(UPLOADS_PATH . $file_name);
         $this->extension = empty($file_name) ? 0 : pathinfo($file_name, PATHINFO_EXTENSION);
         $this->size = empty($file_name) ? 0 : filesize($this->path);
     } // end __construct()
