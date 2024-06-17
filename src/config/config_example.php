@@ -32,8 +32,8 @@ defined('TEMPLATES_PATH')
 defined('DB_DRIVER')              ? null : define('DB_DRIVER', 'mysql');
 defined('DB_HOST')                ? null : define('DB_HOST', 'mysql');
 defined('DB_NAME')                ? null : define('DB_NAME', 'aprelendo');
-defined('DB_USER')                ? null : define('DB_USER', 'username'); // << update this
-defined('DB_PASSWORD')            ? null : define('DB_PASSWORD', 'password'); // << update this
+defined('DB_USER')                ? null : define('DB_USER', 'aprelendo_user'); // << update this
+defined('DB_PASSWORD')            ? null : define('DB_PASSWORD', 'aprelendo_user_password'); // << update this
 defined('DB_CHARSET')             ? null : define('DB_CHARSET', 'utf8mb4');
 
 // YouTube API key used to retrieve YouTube videos
