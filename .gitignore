@@ -2,7 +2,7 @@
 vendor/
 src/config/config.php
 src/public/tests/
-uploads/
+uploads/*
 todo.md
 .rsyncignore
 **/*.log

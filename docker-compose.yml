@@ -18,7 +18,6 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - .:/var/www/aprelendo
       - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./docker/php/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
@@ -26,9 +25,9 @@ services:
     image: mariadb:latest
     container_name: aprelendo_db
     environment:
-      MYSQL_ROOT_PASSWORD: 'root_password'
-      MYSQL_USER: 'aprelendo_user'
-      MYSQL_PASSWORD: 'aprelendo_user_password'
+      MYSQL_ROOT_PASSWORD: 'D3G56s63GXTrgnXg'
+      MYSQL_USER: 'earendil'
+      MYSQL_PASSWORD: '9ZRfpQqAvjV22C55'
       MYSQL_DATABASE: 'aprelendo'
     volumes:
       - mysqldata:/var/lib/mysql
@@ -43,7 +42,7 @@ services:
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
-      MYSQL_ROOT_PASSWORD: 'root_password'
+      MYSQL_ROOT_PASSWORD: 'D3G56s63GXTrgnXg'
       UPLOAD_LIMIT: 64M
     ports:
       - 8081:80
