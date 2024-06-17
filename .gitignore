@@ -3,7 +3,6 @@ vendor/
 src/config/config.php
 src/public/tests/
 uploads/*
-!uploads/.gitkeep
 todo.md
 .rsyncignore
 **/*.log
