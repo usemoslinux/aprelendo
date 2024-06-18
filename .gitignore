@@ -1,9 +1,0 @@
-.vscode/
-vendor/
-src/config/config.php
-src/public/tests/
-uploads/*
-todo.md
-.rsyncignore
-**/*.log
-docker-compose.yml
