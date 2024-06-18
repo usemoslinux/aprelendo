@@ -51,18 +51,11 @@ if (!$user_auth->isLoggedIn()) {
                     <br>
                     <h6>If you enjoy using Aprelendo, please consider supporting me by donating and becoming
                         a Patron!</h6>
-                    <form id="paypal-form" class="mt-5" action="https://www.paypal.com/cgi-bin/webscr" method="post"
-                        target="_top">
-                        <input type="hidden" name="cmd" value="_s-xclick">
-                        <input type="hidden" name="hosted_button_id" value="6MJ8GBHPRXAC4">
-                        <input type="hidden" name="currency_code" value="USD">
-                        <button class="btn btn-warning btn-lg" name="submit"
-                            title="Pay via PayPal - The safer, easier way to pay online!">
-                            Say thanks via <span class="bi bi-paypal"></span> PayPal
-                            </button>
-                        <img alt="" border="0" src="https://www.paypalobjects.com/en\_US/i/scr/pixel.gif" width="1"
-                        height="1">
-                    </form>
+                    <br>
+                    <a href="https://www.paypal.com/ncp/payment/GJCS2645TD9GN" class="btn btn-warning btn-lg"
+                        title="Pay via PayPal - The safer, easier way to pay online!">
+                        Say thanks via <span class="bi bi-paypal"></span> PayPal
+                    </a>
                     <p>or</p>
                     <a href="https://www.patreon.com/aprelendo/" class="btn btn-danger btn-lg">become a
                         <span class="bi bi-cash-coin"></span> Patron</a>
