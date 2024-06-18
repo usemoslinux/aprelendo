@@ -77,6 +77,7 @@ git clone https://github.com/usemoslinux/aprelendo.git
 
 ```bash
 cp aprelendo/src/config/config-example.php aprelendo/src/config/config.php
+```
 
 4. In ``aprelendo/src/config/config.php`` and ``aprelendo/docker-compose.yml``:
 
