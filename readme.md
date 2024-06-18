@@ -68,7 +68,7 @@ By using Aprelendo, you will practice the four dimensions of your target languag
 
 Follow the appropriate installation instructions described [here](https://docs.docker.com/engine/install/).
 
-2. Github pull
+2. Github clone
 
 ```bash
 git clone https://github.com/usemoslinux/aprelendo.git
