@@ -6,3 +6,4 @@ uploads/*
 todo.md
 .rsyncignore
 **/*.log
+docker-compose.yml

@@ -18,6 +18,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
+      - .:/var/www/aprelendo
       - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./docker/php/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
