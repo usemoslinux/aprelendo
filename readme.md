@@ -73,23 +73,36 @@ Follow the appropriate installation instructions described [here](https://docs.d
 ```bash
 git clone https://github.com/usemoslinux/aprelendo.git
 ```
-3. Create new config file:
+3. Create and modify config file
+
+Copy config template and create new config file:
 
 ```bash
-cp aprelendo/src/config/config-example.php aprelendo/src/config/config.php
+cd aprelendo
+cp src/config/config-example.php src/config/config.php
 ```
 
-4. In ``aprelendo/src/config/config.php`` and ``aprelendo/docker-compose.yml``:
+In ``aprelendo/src/config/config.php``: 
 
-- Change ``MYSQL_ROOT_PASSWORD``, ``MYSQL_USER`` and ``MYSQL_PASSWORD``.
-
-5. In ``aprelendo/src/config/config.php``:
+- Change ``MYSQL_USER`` and ``MYSQL_PASSWORD``.
 
 - Change API credentials (YouTube, Google Drive, etc.)
 
 - Change email credentials (used to send email to new users, retrieve forgotten passwords, etc.).
 
-6. In ``aprelendo`` root directory, run:
+4. Create and modify docker YAML file
+
+```bash
+mv docker-compose.yml.example docker-compose.yml
+```
+
+In ``docker-compose.yml``: 
+
+- Change ``MYSQL_ROOT_PASSWORD``, ``MYSQL_USER`` and ``MYSQL_PASSWORD``.
+
+5. Build and run container
+
+In ``aprelendo`` root directory, run:
 
 ```bash
 docker compose up -d

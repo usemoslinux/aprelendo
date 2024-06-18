@@ -1,0 +1,51 @@
+services:
+  nginx:
+    container_name: aprelendo_nginx
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./docker/nginx/aprelendo.conf:/etc/nginx/conf.d/aprelendo.conf
+      - .:/var/www/aprelendo
+  php:
+    container_name: aprelendo_php
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      #- .:/var/www/aprelendo ## only use this if on development env
+      - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./docker/php/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+  mysql:
+    image: mariadb:latest
+    container_name: aprelendo_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root_password' ## change as necessary
+      MYSQL_USER: 'aprelendo_user' ## change and keep the same as in src/config/config.php
+      MYSQL_PASSWORD: 'aprelendo_user_password' ## change and keep the same as in src/config/config.php
+      MYSQL_DATABASE: 'aprelendo'
+    volumes:
+      - mysqldata:/var/lib/mysql
+    ports:
+      - 3306:3306
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: 'root_password' ## change as necessary
+      UPLOAD_LIMIT: 64M
+    ports:
+      - 8081:80
+volumes:
+  mysqldata: {}
