@@ -62,23 +62,37 @@ Phase 5: Review - This is the most important step in long-term language acquisit
 
 By using Aprelendo, you will practice the four dimensions of your target language in a systematic and integrated way. Say goodbye to traditional, dull language learning methods and hello to a fun and engaging experience with Aprelendo!
 
-## Prerequisites
-
-  * Nginx/Apache
-  * PHP
-  * MySQL
-  * Ajax
-  * HTML/CSS
-
 ## Installation
 
-1. Install and configure an Apache/Nginx server with MySQL support
+1. Install docker
 
-2. Install and configure MySQL
+Follow the appropriate installation instructions described [here](https://docs.docker.com/engine/install/).
 
-3. Import the file config/aprelendo-template.sql to MySQL and change the database name to "aprelendo"
+2. Github pull
 
-4. Copy the contents of this git to your website's root folder
+```bash
+git clone https://github.com/usemoslinux/aprelendo.git
+```
+3. Create new config file:
+
+```bash
+cp aprelendo/src/config/config-example.php aprelendo/src/config/config.php
+
+4. In ``aprelendo/src/config/config.php`` and ``aprelendo/docker-compose.yml``:
+
+- Change ``MYSQL_ROOT_PASSWORD``, ``MYSQL_USER`` and ``MYSQL_PASSWORD``.
+
+5. In ``aprelendo/src/config/config.php``:
+
+- Change API credentials (YouTube, Google Drive, etc.)
+
+- Change email credentials (used to send email to new users, retrieve forgotten passwords, etc.).
+
+6. In ``aprelendo`` root directory, run:
+
+```bash
+docker compose up -d
+```
 
 ## Contributing
 
@@ -92,7 +106,7 @@ Do you find the app useful and want to contribute to make it even better? Here a
 
 When I started programming this app I decided that it should be completely free and open-source. This also means that there will be no income for me from ads or paid features. So if you enjoy the app and want to support my work you can do so:
 
-* [Paypal](https://www.paypal.com/donate?token=659GrnnHXSNidaX842M3Te*RJKxw7DNCPqoaZQ9A1XS8eHD1dmawxax_3rptVSJ4cwtJ366g4YwtmpWBP)
+* [Paypal](https://www.paypal.com/ncp/payment/GJCS2645TD9GN)
 * [Patreon](https://www.patreon.com/aprelendo/)
 
 You can also join our [Matrix Space](https://matrix.to/#/#aprelendo:matrix.org) to get in touch with me.
