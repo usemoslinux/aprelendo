@@ -79,6 +79,11 @@ $(document).ready(function() {
                     return;
                 }
 
+                if (data.length == 0) {
+                    showNoMoreCardsMsg();
+                    return true;
+                }
+
                 words = data.map(function(value,index) { 
                     return [value.word.replace(/\r?\n|\r/g, " ")]; 
                 });
@@ -299,11 +304,7 @@ $(document).ready(function() {
      */
     function lastCardReached() {
         if (max_cards == 0) { 
-            $("#card-header").text("Sorry, no cards to practice");
-            $("#card-text").html("<div class='bi bi-exclamation-circle text-danger display-3'>"
-                + "</div><div class='mt-3'>It seems you don't have any cards left for learning.</div>");
-            $("#card-footer").addClass("d-none");
-            $("#card-loader").addClass("d-none");
+            showNoMoreCardsMsg();
             return true;
         } else if (cur_card_index >= max_cards) {
             $("#card-header").text("Congratulations!");
@@ -335,6 +336,14 @@ $(document).ready(function() {
 
         return false;
     } // end lastCardReached()
+
+    function showNoMoreCardsMsg() {
+        $("#card-header").text("Sorry, no cards to practice");
+        $("#card-text").html("<div class='bi bi-exclamation-circle text-danger display-3'>"
+            + "</div><div class='mt-3'>It seems you don't have any cards left for learning.</div>");
+        $("#card-footer").addClass("d-none");
+        $("#card-loader").addClass("d-none");
+    }
 
     /**
      * Open dictionary modal
