@@ -920,20 +920,20 @@ input {
 
 #dic-modal .modal-dialog {
     color: black;
-    display: flex;
-    flex: 1;
     font-family: "Roboto", sans-serif;
     height: calc(100% - 1rem);
     margin: .5rem auto;
-    max-width: 750px;
+    max-width: 768px;
     width: calc(100% - 1rem);
     z-index: 4;
 }
 
-#dic-modal .modal-content {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
+@media (max-width: 767px) {
+    #dic-modal .modal-dialog {
+        height: 100%;
+        width: 100%;
+        margin:0;
+    }
 }
 
 #dic-modal .modal-header {
