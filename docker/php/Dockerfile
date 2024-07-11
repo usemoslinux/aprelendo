@@ -30,14 +30,11 @@ WORKDIR /var/www/aprelendo/
 # Copy the composer.json and composer.lock files to the working directory
 COPY composer.json composer.lock /var/www/aprelendo/
 
-# Ensure correct permissions
-RUN chown -R www-data:www-data /var/www/aprelendo/
-
 # Install the PHP dependencies
 RUN composer install --no-scripts --no-autoloader
 
 # Copy the rest of the application code
-COPY . /var/www/aprelendo/
+COPY --chown=www-data:www-data . /var/www/aprelendo/
 
 # Ensure correct permissions again after copy
 RUN chown -R www-data:www-data /var/www/aprelendo/
