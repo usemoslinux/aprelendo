@@ -20,7 +20,7 @@
  */
 ?>
 
-<div id="dic-modal" class="modal modal-fullscreen fade" data-keyboard="true" role="dialog" tabindex="-1">
+<div id="dic-modal" class="modal modal-fullscreen fade" data-keyboard="true" tabindex="-1">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content mb-xs-3">
@@ -30,8 +30,7 @@
                     data-bs-title="Delete">
                     <span class="bi bi-trash3-fill"></span>
                 </button>
-                <div id="btn-more-dics" class="btn-group" role="group"
-                    aria-label="Additional dictionaries and translator">
+                <fieldset id="btn-more-dics" class="btn-group" aria-label="Additional dictionaries and translator">
                     <button id="btn-translate" type="button" class="btn btn-lg btn-primary px-3"
                         data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
                         data-bs-title="Open translator">
@@ -42,7 +41,7 @@
                         data-bs-title="Open visual dictionary">
                         <span class="bi bi-card-image"></span>
                     </button>
-                </div>
+                </fieldset>
                 <button id="btn-cancel" type="button" data-bs-dismiss="modal" class="btn btn-lg btn-link ms-auto">
                     Cancel
                 </button>
