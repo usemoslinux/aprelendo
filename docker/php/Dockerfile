@@ -1,14 +1,13 @@
 FROM php:fpm-alpine
 
-RUN apk add --no-cache autoconf gcc g++ linux-headers make python3 py3-pip && \
-    apk add python3-dev
+RUN apk add --no-cache autoconf gcc g++ linux-headers make python3 py3-pip python3-dev shadow
 
 # Set working directory
 WORKDIR /opt/venv
 
 # Create and activate virtual environment
 ENV VIRT_ENV=/opt/venv
-RUN python3 -m venv $VIRT_ENV
+RUN python3 -m venv "$VIRT_ENV"
 ENV PATH="$VIRT_ENV/bin:$PATH"
 
 # Upgrade pip and setuptools within the virtual environment
@@ -32,6 +31,10 @@ COPY composer.json composer.lock /var/www/aprelendo/
 
 # Install the PHP dependencies
 RUN composer install --no-scripts --no-autoloader
+
+# Make sure www-data group and user have ID 33, same as in Ubuntu.
+RUN groupmod -g 33 www-data && \
+    usermod -u 33 -g 33 www-data
 
 # Copy the rest of the application code
 COPY --chown=www-data:www-data . /var/www/aprelendo/
