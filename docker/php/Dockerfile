@@ -16,6 +16,9 @@ RUN source bin/activate && pip install --upgrade pip setuptools && deactivate
 # Install youtube_transcript_api within the virtual environment
 RUN source bin/activate && pip install youtube_transcript_api && deactivate
 
+# Install gTTS within the virtual environment
+RUN source bin/activate && pip install gtts && deactivate
+
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql
 RUN pecl install xdebug && docker-php-ext-enable xdebug
