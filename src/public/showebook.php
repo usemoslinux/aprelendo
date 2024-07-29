@@ -227,7 +227,7 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
                 <button id="opener" class="btn btn-link" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#navigation" aria-controls="navigation">
                     <svg height="28px" id="hamburger" style="enable-background:new 0 0 32 32;" version="1.1"
-                        viewBox="0 0 32 32" width="28px" xml:space="preserve" xmlns="https://www.w3.org/2000/svg"
+                        viewBox="0 0 32 32" width="28px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="https://www.w3.org/1999/xlink">
                         <path
                             d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,
