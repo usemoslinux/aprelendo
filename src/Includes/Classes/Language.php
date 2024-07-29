@@ -205,42 +205,6 @@ class Language extends DBEntity
         }
     } // end createInitialRecordsForUser()
 
-    public function createAdditionalRecordsForUser(string $native_lang): void
-    {
-        // $result = '';
-        // create & save default language preferences for user
-        foreach (self::$iso_code as $key => $value) {
-            // 'NB' (Norwegian Bokmål) is more specific than 'NO' (general Norwegian).
-            // Bing and MS Translator use 'NB', while Wikipedia redirects 'NB' to 'NO'.
-            $uri_key = $key == 'no' ? 'nb' : $key;
-
-            $translator_uri     = 'https://www.bing.com/translator/?from='
-                . $uri_key
-                . '&to='
-                . $native_lang
-                . '&text=%s'
-                . '&setLang='
-                . $native_lang;
-            $dictionary_uri     = 'https://' . $uri_key . '.m.wiktionary.org/wiki/%s';
-            $img_dictionary_uri = 'https://www.bing.com/images/search?q=%s&setLang=' . $uri_key;
-
-            // Check if the record already exists
-            $check_sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `user_id` = ? AND `name` = ?";
-            $record_exists = $this->sqlCount($check_sql, [$this->user_id, $key]);
-
-            if (!$record_exists) {
-                // $result .= "<br>Native Lang: " . $native_lang . "<br>" . "Lang: " . $key . "<br>" . "Dic URI: " . $dictionary_uri . "<br>" .
-                // "Img Dic URI: " . $img_dictionary_uri . "<br>" . "Translator URI: " . $translator_uri . "<hr>";
-                $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`,
-                    `img_dictionary_uri`, `translator_uri`)
-                    VALUES (?, ?, ?, ?, ?)";
-                $this->sqlExecute($sql, [$this->user_id, $key, $dictionary_uri, $img_dictionary_uri, $translator_uri]);
-            }
-            
-        }
-        // return $result;
-    } // end createInitialRecordsForUser()
-
     /**
      * Converts 639-1 iso codes to full language names (ie. 'en' => 'English')
      *
