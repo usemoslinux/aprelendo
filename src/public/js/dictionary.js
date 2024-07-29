@@ -92,7 +92,7 @@ function getVideoSentence($selword) {
             .next()
             .addBack();
 
-        sentence = $sentence_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim() + " " + sentence;
+        sentence = $sentence_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim() + "\n" + sentence;
 
         $end_obj = $end_obj.parent().prev().children().last();
         final_iteration = final_iteration || $end_obj.length === 0;
@@ -122,12 +122,13 @@ function getVideoSentence($selword) {
                 .addBack()
                 .next()
                 .addBack();
-            separator = " ";
+            separator = "\n";
         }
 
         sentence = sentence.trim() + separator + $sentence_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
 
         $start_obj = $start_obj.parent().next().children().first();
+        final_iteration = final_iteration || $start_obj.length === 0;
     }
 
     return sentence.trim();

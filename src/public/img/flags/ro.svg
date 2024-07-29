@@ -5,7 +5,7 @@
    viewBox="0 0 512 512"
    version="1.1"
    id="svg3"
-   sodipodi:docname="nl.svg"
+   sodipodi:docname="ro.svg"
    inkscape:version="1.3.2 (091e20ef0f, 2023-11-25)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -44,16 +44,16 @@
      mask="url(#a)"
      id="g3">
     <path
-       fill="#eee"
-       d="m0 167 253.8-19.3L512 167v178l-254.9 32.3L0 345z"
+       fill="#ffda44"
+       d="M167 0h178l25.9 252.3L345 512H167l-29.8-253.4z"
        id="path1" />
     <path
-       fill="#a2001d"
-       d="M0 0h512v167H0z"
+       fill="#0052b4"
+       d="M0 0h167v512H0z"
        id="path2" />
     <path
-       fill="#0052b4"
-       d="M0 345h512v167H0z"
+       fill="#d80027"
+       d="M345 0h167v512H345z"
        id="path3" />
   </g>
 </svg>

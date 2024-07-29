@@ -307,6 +307,37 @@ body.blue-gradient-wallpaper .navbar-light {
     background: transparent;
 }
 
+.cursive-titles h1, .cursive-titles h2, .cursive-titles h3,
+.cursive-titles h4, .cursive-titles h5, .cursive-titles h6 {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.full-vh {
+    min-height: 100vh;
+}
+
+#main-features .card:hover {
+    background-color: #eee;
+}
+
+#languages-card.faded-background {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-shadow: none;
+}
+
+#languages-card .flag-icon {
+    width: 24px;
+    height: 24px;
+}
+
+#languages-card .language-pill {
+    display: inline-flex;
+    align-items: center;
+}
+
 .dropdown-menu {
     background: white;
 }
@@ -1182,15 +1213,12 @@ div.blurry-background {
     text-align: center;
     text-shadow: 1px 1px #333;
     color: white;
+    min-height: 100vh;
 }
 
 .blurry-background a:hover,
 .blurry-background a:focus {
     color: inherit;
-}
-
-.blurry-background h1 {
-    margin: 3rem auto;
 }
 
 .blurry-background .dropdown-item {
@@ -1221,6 +1249,7 @@ div.blurry-background {
 
 #learning-flag {
     width: 64px;
+    height: 64px;
 }
 
 /* LOGIN */

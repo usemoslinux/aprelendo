@@ -99,7 +99,7 @@ try {
             of our <a href="/extensions" target="_blank" rel="noopener noreferrer" class="alert-link">extensions</a>,
             which allow you to easily add texts as you browse the Web. When adding text, make sure the
             "share with the community" option is selected. Learn how to do this by watching this
-            <a href="https://www.youtube.com/watch?v=qimkPHrLkS4" target="_blank" rel="noopener noreferrer"
+            <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I" target="_blank" rel="noopener noreferrer"
             class="alert-link">explanatory video</a>.</p>
             </div>
             </div>

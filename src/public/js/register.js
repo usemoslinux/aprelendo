@@ -60,42 +60,73 @@ $(document).ready(function() {
      */
     $("#learning-lang").on("change", function() {
         const lang_array = [
-                            "Arabic",
-                            "Chinese",
-                            "Dutch",
-                            "English",
-                            "French",
-                            "German",
-                            "Greek",
-                            "Hebrew",
-                            "Hindi",
-                            "Italian",
-                            "Japanese",
-                            "Korean",
-                            "Portuguese",
-                            "Russian",              
-                            "Spanish"
-                        ];
-        const iso_array = ["ar", "zh", "nl", "en", "fr", "de", "el", "he", "hi", "it", "ja", "ko", "pt", "ru", "es"];
-
+            "Arabic",
+            "Bulgarian",
+            "Catalan",
+            "Chinese",
+            "Croatian",
+            "Czech",
+            "Danish",
+            "Dutch",
+            "English",
+            "French",
+            "German",
+            "Greek",
+            "Hebrew",
+            "Hindi",
+            "Hungarian",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Norwegian",
+            "Polish",
+            "Portuguese",
+            "Romanian",
+            "Russian",
+            "Slovak",
+            "Slovenian",
+            "Spanish",
+            "Swedish",
+            "Turkish",
+            "Vietnamese"
+        ];
+        const iso_array = [ 
+            "ar", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "fr", "de", "el", "he", "hi", "hu", "it", "ja",
+            "ko", "no", "pl", "pt", "ro", "ru", "sk", "sl", "es", "sv", "tr", "vi"
+        ];
+        
         const welcome_array = [
-                                "أهلا بك!",
-                                "欢迎！",
-                                "Welkom!",
-                                "Welcome!",
-                                "Bienvenue!",
-                                "Willkommen!",
-                                "Καλως ΗΡΘΑΤΕ!",
-                                "ברוך הבא!",
-                                "स्वागत हे!",
-                                "Benvenuto!",
-                                "ようこそ！",
-                                "어서 오십시오!",
-                                "Bemvindo!",
-                                "Добро пожаловать!",                    
-                                "¡Bienvenido!"
-                            ];
-
+            "أهلا بك!",         // Arabic
+            "Добре дошли!",   // Bulgarian
+            "Benvingut!",     // Catalan
+            "欢迎！",          // Chinese
+            "Dobrodošli!",    // Croatian
+            "Vítejte!",       // Czech
+            "Velkommen!",     // Danish
+            "Welkom!",        // Dutch
+            "Welcome!",       // English
+            "Bienvenue!",     // French
+            "Willkommen!",    // German
+            "Καλώς ήρθατε!",  // Greek
+            "ברוך הבא!",         // Hebrew
+            "स्वागत है!",         // Hindi
+            "Üdvözöljük!",    // Hungarian
+            "Benvenuto!",     // Italian
+            "ようこそ！",      // Japanese
+            "환영합니다!",       // Korean
+            "Velkommen!",     // Norwegian
+            "Witaj!",         // Polish
+            "Bem-vindo!",     // Portuguese
+            "Bun venit!",     // Romanian
+            "Добро пожаловать!", // Russian
+            "Vitajte!",       // Slovak
+            "Dobrodošli!",    // Slovenian
+            "¡Bienvenido!",   // Spanish
+            "Välkommen!",     // Swedish
+            "Hoş geldiniz!",  // Turkish
+            "Chào mừng!"      // Vietnamese
+        ];
+        
         const sel_index = $(this).prop("selectedIndex");
         const img_uri = "img/flags/" + iso_array[sel_index] + ".svg";
 

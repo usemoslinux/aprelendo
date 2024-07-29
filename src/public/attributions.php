@@ -102,8 +102,8 @@ if (!$user_auth->isLoggedIn()) {
                                         Bootstrap Icons</a>
                                 </li>
                                 <li>Flag icons designed by
-                                    <a href="https://www.flaticon.com/authors/freepik" target="_blank"
-                                        rel="noopener noreferrer">Freepik</a>
+                                    <a href="https://github.com/HatScripts/circle-flags" target="_blank"
+                                        rel="noopener noreferrer">HatScripts</a>
                                 </li>
                                 <li>Frequency lists by
                                     <a href="https://github.com/hermitdave/FrequencyWords" target="_blank"

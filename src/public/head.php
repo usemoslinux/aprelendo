@@ -54,6 +54,7 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
     <meta name="keywords" content="language, learning, language learning, flashcards, total reading,
     reading, ebooks, books, videos">
     <meta name="author" content="Aprelendo">
+    <meta name="robots" content="index, follow">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicons/favicon-32x32.png">
@@ -75,6 +76,7 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     
     <!-- Custom styles for this template -->
     <link href="/css/styles.min.css" rel="stylesheet">

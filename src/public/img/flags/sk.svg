@@ -4,17 +4,17 @@
    height="512"
    viewBox="0 0 512 512"
    version="1.1"
-   id="svg3"
-   sodipodi:docname="nl.svg"
+   id="svg7"
+   sodipodi:docname="sk.svg"
    inkscape:version="1.3.2 (091e20ef0f, 2023-11-25)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs3" />
+     id="defs7" />
   <sodipodi:namedview
-     id="namedview3"
+     id="namedview7"
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
@@ -30,7 +30,7 @@
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg3" />
+     inkscape:current-layer="svg7" />
   <mask
      id="a">
     <circle
@@ -42,18 +42,34 @@
   </mask>
   <g
      mask="url(#a)"
-     id="g3">
-    <path
-       fill="#eee"
-       d="m0 167 253.8-19.3L512 167v178l-254.9 32.3L0 345z"
-       id="path1" />
-    <path
-       fill="#a2001d"
-       d="M0 0h512v167H0z"
-       id="path2" />
+     id="g7">
     <path
        fill="#0052b4"
-       d="M0 345h512v167H0z"
+       d="m0 160 256-32 256 32v192l-256 32L0 352z"
+       id="path1" />
+    <path
+       fill="#eee"
+       d="M0 0h512v160H0z"
+       id="path2" />
+    <path
+       fill="#d80027"
+       d="M0 352h512v160H0z"
        id="path3" />
+    <path
+       fill="#eee"
+       d="M64 63v217c0 104 144 137 144 137s144-33 144-137V63z"
+       id="path4" />
+    <path
+       fill="#d80027"
+       d="M96 95v185a83 78 0 0 0 9 34h206a83 77 0 0 0 9-34V95z"
+       id="path5" />
+    <path
+       fill="#eee"
+       d="M288 224h-64v-32h32v-32h-32v-32h-32v32h-32v32h32v32h-64v32h64v32h32v-32h64z"
+       id="path6" />
+    <path
+       fill="#0052b4"
+       d="M152 359a247 231 0 0 0 56 24c12-3 34-11 56-24a123 115 0 0 0 47-45 60 56 0 0 0-34-10l-14 2a60 56 0 0 0-110 0 60 56 0 0 0-14-2c-12 0-24 4-34 10a123 115 0 0 0 47 45z"
+       id="path7" />
   </g>
 </svg>

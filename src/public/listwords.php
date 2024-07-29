@@ -91,7 +91,7 @@ try {
             <div class="alert-msg">
             <p>Your word list for the currently active language is looking a bit lonely!</p>
             <p>But don't worry, it's super easy to add new words to your learning journey while you read texts using
-            Aprelendo. Just check out this <a href="https://www.youtube.com/watch?v=qimkPHrLkS4" target="_blank"
+            Aprelendo. Just check out this <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I" target="_blank"
             rel="noopener noreferrer" class="alert-link">helpful video</a> for a quick guide!</p>
             </div>
             </div>

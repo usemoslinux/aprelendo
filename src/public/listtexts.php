@@ -104,7 +104,7 @@ try {
                     instructions for each learning phase.
                     </li>
                     </ol>
-                    <p>For more info, check our video on <a href="https://www.youtube.com/watch?v=qimkPHrLkS4"
+                    <p>For more info, check our video on <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I"
                     target="_blank" rel="noopener noreferrer" class="alert-link">how to get started</a>.</p>
                     </div>
                     <button id="welcome-close" type="button" class="btn-close" data-bs-dismiss="alert"
@@ -122,7 +122,7 @@ try {
                 <p>To start building it, use the <kbd class="bg-success">Add</kbd> button above, or take advantage of
                 our <a href="/extensions" target="_blank" rel="noopener noreferrer" class="alert-link">extensions</a>,
                 which allow you to easily add texts as you browse the Web. Learn how to do this by watching
-                this <a href="https://www.youtube.com/watch?v=qimkPHrLkS4" target="_blank"
+                this <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I" target="_blank"
                 rel="noopener noreferrer" class="alert-link">explanatory video</a>.</p>
                 </div>
                 </div>
