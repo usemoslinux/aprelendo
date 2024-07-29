@@ -94,7 +94,7 @@ if (!$user_auth->isLoggedIn()) {
                         <p>Evidence shows that <strong>the best way to learn a language is through immersion</strong>.
                             That's how we all learned to speak our native language. Also, people who become really
                             fluent in a second language often use it at home in some way or another and have the help of
-                            a "caring and interested tutor" (either their parents or better half).</p>
+                            an "attentive and interested tutor" (either their parents or significant other).</p>
 
                         <p><strong>Yet, immersion can be quite difficult to achieve when studying a second
                                 language</strong>, as only a few have a "caring language tutor" at home, and it is even
@@ -115,7 +115,7 @@ if (!$user_auth->isLoggedIn()) {
                         <p>Aprelendo, on the other hand, is based on the idea that <strong>learning a new language by
                                 reading texts you like is easier, more engaging and more effective than reviewing
                                 flashcards</strong>, as most language learning services seem to do these days. Instead,
-                            <strong>we developed a method called <a href="/totalreading">total reading</a></strong>,
+                            <strong>I developed a method called <a href="/totalreading">total reading</a></strong>,
                             which enables students to develop not only their reading comprehension -as the name
                             implies-, but all their comprehension (reading & listening) and communication (writing &
                             speaking) skills in a second language.</p>
@@ -128,16 +128,16 @@ if (!$user_auth->isLoggedIn()) {
                             the intricacies of your target language. Apart from that, while <a
                                 href="/totalreading">total reading</a> can be beneficial to all, it yields better
                             results for those who already have an initial knowledge of the language and want to improve
-                            or break out of the "learning plateau" that often afflicts intermediate or advanced
+                            or break out of the "learning plateau" that often afflicts intermediate and advanced
                             students.</p>
 
                         <p>In sum, <strong>Aprelendo has been designed so that you can learn new languages from the
                                 comfort of your own home and adapting to your schedule and interests</strong> with the
                             added benefit of improving all your levels of comprehension and communication in each
-                            session. As long as you can read at least 1 article a day using Aprelendo, we are confident
+                            session. As long as you can read at least 1 article a day using Aprelendo, I am confident
                             that you will see results in just a few weeks. Give it a try and <a
                                 href="https://www.facebook.com/aprelendo" target="_blank" rel="noopener noreferrer">let
-                                us know</a> what you think.</p>
+                                me know</a> what you think.</p>
                     </section>
                 </div>
                 <div class="col-sm-3 d-none d-sm-block">

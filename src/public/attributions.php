@@ -54,12 +54,12 @@ if (!$user_auth->isLoggedIn()) {
                             <p>Aprelendo was built using the following free and open source tools:</p>
                             <ul>
                                 <li>
-                                    <a href="http://php.net/" target="_blank" rel="noopener noreferrer">PHP</a>, by The
+                                    <a href="https://php.net/" target="_blank" rel="noopener noreferrer">PHP</a>, by The
                                     PHP Group
                                 </li>
                                 <li>
-                                    <a href="https://jquery.com/" target="_blank" rel="noopener noreferrer">JQuery</a>,
-                                    by the JQuery Foundation
+                                    <a href="https://jquery.com/" target="_blank" rel="noopener noreferrer">jQuery</a>,
+                                    by the jQuery Foundation
                                 </li>
                                 <li>
                                     <a href="https://www.apache.org/" target="_blank"

@@ -29,7 +29,10 @@
                         <a href="aboutus">About us</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="/privacy">Privacy</a>
+                        <a href="/termsofservice">Terms of service</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="/privacy">Privacy policy</a>
                     </li>
                     <li class="list-inline-item">
                         <a href="attributions">Attributions</a>
