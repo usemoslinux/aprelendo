@@ -6,7 +6,7 @@ I created this tool with a single goal in mind: to make language learning a more
 
 ## Why are flashcards bad for language learning?
 
-Programs like [Learning with Texts (LWT)](http://lwt.sourceforge.net/) and [Readlang](https://readlang.com/) are similar to Aprelendo, but they end up distorting the reading process by converting it into a purely extractive routine in which people focus too much on creating flashcards. Thus, reading becomes an instrument in this boring and tedious scheme.
+Programs like [Learning with Texts (LWT)](https://lwt.sourceforge.net/) and [Readlang](https://readlang.com/) are similar to Aprelendo, but they end up distorting the reading process by converting it into a purely extractive routine in which people focus too much on creating flashcards. Thus, reading becomes an instrument in this boring and tedious scheme.
 
 If you ever used [Anki](https://apps.ankiweb.net/) and other [spaced repetition software](https://en.wikipedia.org/wiki/Spaced_repetition) you probably know that creating new flashcards can become a very tiresome and time consuming task and, after a while, reviewing them also becomes dull and monotonous. 
 

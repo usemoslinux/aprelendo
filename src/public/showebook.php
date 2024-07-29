@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 require_once '../Includes/dbinit.php'; // connect to database
@@ -227,8 +227,8 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
                 <button id="opener" class="btn btn-link" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#navigation" aria-controls="navigation">
                     <svg height="28px" id="hamburger" style="enable-background:new 0 0 32 32;" version="1.1"
-                        viewBox="0 0 32 32" width="28px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        viewBox="0 0 32 32" width="28px" xml:space="preserve" xmlns="https://www.w3.org/2000/svg"
+                        xmlns:xlink="https://www.w3.org/1999/xlink">
                         <path
                             d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,
                             10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,

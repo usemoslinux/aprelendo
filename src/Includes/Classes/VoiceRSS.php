@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2019 VoiceRSS (http://www.voicerss.org/sdk)
+ * Copyright (C) 2019 VoiceRSS (https://www.voicerss.org/sdk)
  *
  * This file is part of aprelendo.
  *
@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 namespace Aprelendo;

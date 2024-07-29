@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 require_once '../Includes/dbinit.php'; // connect to database
@@ -969,7 +969,7 @@ if (!$user_auth->isLoggedIn()) {
                             </ul>
                             The following have been reported to work only as external dictionaries:
                             <ul>
-                                <li><a href="http://www.treccani.it/vocabolario/" target="_blank"
+                                <li><a href="https://www.treccani.it/vocabolario/" target="_blank"
                                         rel="noopener noreferrer">Trecanni</a> (no modal support)</li>
                             </ul>
                             <strong>Bilingual dictionaries (*)</strong>
