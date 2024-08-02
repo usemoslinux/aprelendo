@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 ?>
 
@@ -29,7 +29,10 @@
                         <a href="aboutus">About us</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="/privacy">Privacy</a>
+                        <a href="/termsofservice">Terms of service</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="/privacy">Privacy policy</a>
                     </li>
                     <li class="list-inline-item">
                         <a href="attributions">Attributions</a>

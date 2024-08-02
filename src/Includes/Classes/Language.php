@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 namespace Aprelendo;
@@ -39,20 +39,34 @@ class Language extends DBEntity
 
     private static $iso_code = [
         'ar' => 'arabic',
-        'zh' => 'chinese',
-        'nl' => 'dutch',
-        'en' => 'english',
-        'fr' => 'french',
+        'bg' => 'bulgarian',
+        'ca' => 'catalan',
+        'cs' => 'czech',
+        'da' => 'danish',
         'de' => 'german',
         'el' => 'greek',
+        'en' => 'english',
+        'es' => 'spanish',
+        'fr' => 'french',
         'he' => 'hebrew',
         'hi' => 'hindi',
+        'hr' => 'croatian',
+        'hu' => 'hungarian',
         'it' => 'italian',
         'ja' => 'japanese',
         'ko' => 'korean',
+        'nl' => 'dutch',
+        'no' => 'norwegian',
+        'pl' => 'polish',
         'pt' => 'portuguese',
+        'ro' => 'romanian',
         'ru' => 'russian',
-        'es' => 'spanish'
+        'sk' => 'slovak',
+        'sl' => 'slovenian',
+        'sv' => 'swedish',
+        'tr' => 'turkish',
+        'vi' => 'vietnamese',
+        'zh' => 'chinese'
     ];
 
     /**
@@ -170,15 +184,19 @@ class Language extends DBEntity
     {
         // create & save default language preferences for user
         foreach (self::$iso_code as $key => $value) {
+            // 'NB' (Norwegian Bokmål) is more specific than 'NO' (general Norwegian).
+            // Bing and MS Translator use 'NB', while Wikipedia redirects 'NB' to 'NO'.
+            $uri_key = $key == 'no' ? 'nb' : $key;
+
             $translator_uri     = 'https://www.bing.com/translator/?from='
-                . $key
+                . $uri_key
                 . '&to='
                 . $native_lang
                 . '&text=%s'
                 . '&setLang='
                 . $native_lang;
-            $dictionary_uri     = 'https://' . $key . '.m.wiktionary.org/wiki/%s';
-            $img_dictionary_uri = 'https://www.bing.com/images/search?q=%s&setLang=' . $key;
+            $dictionary_uri     = 'https://' . $uri_key . '.m.wiktionary.org/wiki/%s';
+            $img_dictionary_uri = 'https://www.bing.com/images/search?q=%s&setLang=' . $uri_key;
 
             $sql = "INSERT INTO `{$this->table}` (`user_id`, `name`, `dictionary_uri`,
                     `img_dictionary_uri`, `translator_uri`)

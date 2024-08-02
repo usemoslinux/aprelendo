@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 require_once '../Includes/dbinit.php'; // connect to database
@@ -208,7 +208,7 @@ if (!$user_auth->isLoggedIn()) {
                                 </div>
                                 <div class="col-12 col-lg-6 mt-lg-3">
                                     <div class="ratio ratio-16x9">
-                                        <iframe src="https://www.youtube.com/embed/qimkPHrLkS4"
+                                        <iframe src="https://www.youtube.com/embed/AmRq3tNFu9I"
                                             title="YouTube video player"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media;gyroscope; picture-in-picture"
                                             allowfullscreen></iframe>

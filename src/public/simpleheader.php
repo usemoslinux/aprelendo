@@ -15,10 +15,10 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 ?>
-<div class="d-flex h-100 flex-column">
+<div class="d-flex flex-column full-vh">
     <header>
         <nav class="navbar navbar-expand-md navbar-light">
             <div class="container mtb">

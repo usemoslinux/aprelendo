@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with aprelendo.  If not, see <http://www.gnu.org/licenses/>.
+ * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 require_once '../Includes/dbinit.php'; // connect to database
@@ -54,16 +54,16 @@ if (!$user_auth->isLoggedIn()) {
                             <p>Aprelendo was built using the following free and open source tools:</p>
                             <ul>
                                 <li>
-                                    <a href="http://php.net/" target="_blank" rel="noopener noreferrer">PHP</a>, by The
+                                    <a href="https://php.net/" target="_blank" rel="noopener noreferrer">PHP</a>, by The
                                     PHP Group
                                 </li>
                                 <li>
-                                    <a href="https://jquery.com/" target="_blank" rel="noopener noreferrer">JQuery</a>,
-                                    by the JQuery Foundation
+                                    <a href="https://jquery.com/" target="_blank" rel="noopener noreferrer">jQuery</a>,
+                                    by the jQuery Foundation
                                 </li>
                                 <li>
-                                    <a href="https://www.apache.org/" target="_blank"
-                                        rel="noopener noreferrer">Apache</a>, by the Apache Software Foundation
+                                    <a href="https://nginx.org/" target="_blank"
+                                        rel="noopener noreferrer">Nginx</a>, by Igor Sysoev
                                 </li>
                                 <li>
                                     <a href="https://getbootstrap.com/" target="_blank"
@@ -83,7 +83,7 @@ if (!$user_auth->isLoggedIn()) {
                                     <a href="https://github.com/bazh/subtitles-parser" target="_blank"
                                         rel="noopener noreferrer">Subtitles parser</a>, by <a
                                         href="https://github.com/bazh" target="_blank" rel="noopener noreferrer">Anton
-                                        Bazhenov</a>.
+                                        Bazhenov</a> (used to parse offline video subtitles).
                                 </li>
                                 <li>
                                     <a href="https://github.com/futurepress/epub.js/">EpubJS</a>, by Futurepress (used
@@ -102,8 +102,8 @@ if (!$user_auth->isLoggedIn()) {
                                         Bootstrap Icons</a>
                                 </li>
                                 <li>Flag icons designed by
-                                    <a href="https://www.flaticon.com/authors/freepik" target="_blank"
-                                        rel="noopener noreferrer">Freepik</a>
+                                    <a href="https://github.com/HatScripts/circle-flags" target="_blank"
+                                        rel="noopener noreferrer">HatScripts</a>
                                 </li>
                                 <li>Frequency lists by
                                     <a href="https://github.com/hermitdave/FrequencyWords" target="_blank"
