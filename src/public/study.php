@@ -46,19 +46,37 @@ require_once PUBLIC_PATH . 'header.php';
                         <div id="alert-box" class="d-none"></div>
                     </div>
                     <div class="col-sm-12">
-                        <div id="card" class="card text-center" style="min-width: 100%;"
-                            data-lang="<?php echo $user->lang;?>">
-                            <div id="card-header" class="card-header fw-bold">...</div>
-                            <div class="card-body">
-                                <div id="card-loader" class="lds-ellipsis m-auto">
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                </div>
-                                <p id="card-text" class="card-text"></p>
+                        <div id="study-card" class="card text-center" data-lang="<?php echo $user->lang;?>">
+                            <div id="study-card-header" class="study-card-header py-3 placeholder-glow">
+                                <h4 id="study-card-word-title" class="my-0 fw-bold placeholder">&nbsp;</h4>
                             </div>
-                            <div id="card-footer" class="card-footer">
+                            <div id="study-card-body" class="card-body">
+                                <div id="examples-placeholder" class="card-examples placeholder-glow">
+                                    <p>
+                                        <span class="placeholder col-7"></span>
+                                        <span class="placeholder col-4"></span>
+                                        <span class="placeholder col-4"></span>
+                                        <span class="placeholder col-6"></span>
+                                        <span class="placeholder col-8"></span>
+                                    </p>
+                                    <p>
+                                        <span class="placeholder col-8"></span>
+                                        <span class="placeholder col-4"></span>
+                                        <span class="placeholder col-7"></span>
+                                        <span class="placeholder col-6"></span>
+                                        <span class="placeholder col-4"></span>
+                                    </p>
+                                    <p>
+                                        <span class="placeholder col-7"></span>
+                                        <span class="placeholder col-4"></span>
+                                        <span class="placeholder col-4"></span>
+                                        <span class="placeholder col-6"></span>
+                                        <span class="placeholder col-8"></span>
+                                    </p>
+                                </div>
+                                <p id="study-card-examples" class="card-examples"></p>
+                            </div>
+                            <div id="study-card-footer" class="card-footer">
                                 <p id="card-counter"></p>
                                 <p class="fw-bold">How well did you remember the meaning of this word?</p>
                                 <button id="btn-answer-no-recall" type="button" value="3"
@@ -66,30 +84,33 @@ require_once PUBLIC_PATH . 'header.php';
                                     data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                                     data-bs-placement="bottom" data-bs-title="I am unsure about the meaning of this
                                     word, or I might be confusing it with another, even after reviewing example uses.">
-                                    1. No recall
+                                    <span class="fw-bold">1. No recall</span>
+                                    <br><span class="small">Forgotten</span>
                                 </button>
                                 <button id="btn-answer-fuzzy" type="button" value="2"
-                                    class="btn btn-lg btn-warning btn-answer mb-3"
+                                    class="btn btn-lg btn-primary btn-answer mb-3"
                                     data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                                     data-bs-placement="bottom" data-bs-title="I have a general idea of what this
                                     word means, but my understanding is hazy and uncertain, even after reviewing
                                     example uses.">
-                                    2. Fuzzy
+                                    <span class="fw-bold">2. Fuzzy</span>
+                                    <br><span class="small">New</span>
                                 </button>
                                 <button id="btn-answer-partial" type="button" value="1"
-                                    class="btn btn-lg btn-info btn-answer mb-3"
+                                    class="btn btn-lg btn-warning btn-answer mb-3"
                                     data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                    data-bs-placement="bottom" data-bs-title="I have a good overall understanding of the
-                                    meaning of this word, but I am unable to recall all the details or provide a
-                                    complete and accurate definition, even after reviewing example uses.">
-                                    3. Partial
+                                    data-bs-placement="bottom" data-bs-title="I was only able to fully understand the
+                                    meaning of this word after reviewing example uses.">
+                                    <span class="fw-bold">3. Partial</span>
+                                    <br><span class="small">Learning</span>
                                 </button>
                                 <button id="btn-answer-excellent" type="button" value="0"
                                     class="btn btn-lg btn-success btn-answer mb-3"
                                     data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                                     data-bs-placement="bottom" data-bs-title="I thoroughly understand and can
                                     confidently use this word.">
-                                    4. Excellent
+                                    <span class="fw-bold">4. Excellent</span>
+                                    <br><span class="small">Learned</span>
                                 </button>
                             </div>
                         </div>

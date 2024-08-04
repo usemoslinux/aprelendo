@@ -51,16 +51,6 @@ body {
     margin: 0;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-}
-
 p {
     font-weight: 400;
     margin-bottom: 12px;
@@ -1432,13 +1422,39 @@ small>a:not(.btn):hover {
 
 /* STUDY */
 
-.card-text blockquote:not(:last-child) {
+.card-examples blockquote:not(:last-child) {
     border-bottom: solid 1px lightgrey;
     padding-bottom: .5rem;
 }
 
-.card-text cite {
+.card-examples cite {
 	font-size: small;
+}
+
+.card-high-freq {
+    animation: glow-high-freq 1s infinite alternate;
+}
+
+.card-medium-freq {
+    animation: glow-medium-freq 1s infinite alternate;
+}
+
+@keyframes glow-high-freq {
+    from {
+        box-shadow: 0 0 0px rgba(220, 53, 69, 0.7);
+    }
+    to {
+        box-shadow: 0 0 10px rgba(220, 53, 69, 1);
+    }
+}
+
+@keyframes glow-medium-freq {
+    from {
+        box-shadow: 0 0 0px rgba(255, 193, 7, 0.7);
+    }
+    to {
+        box-shadow: 0 0 10px rgba(255, 193, 7, 1);
+    }
 }
 
 /* EBOOK */

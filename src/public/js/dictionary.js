@@ -67,9 +67,6 @@ function getVideoSentence($selword) {
     // select first part of sentence: from sentence divider (.!?) to selection
     while (!final_iteration) {
         if ($end_obj.index() === 0) {
-            // sentence = $end_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim() + " ";
-            // $end_obj = $end_obj.parent().prev().children().last();
-            // continue;
             sentence = $end_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
             break;
         }
@@ -202,30 +199,31 @@ function setAddDeleteButtons($selword) {
 function getWordFrequency(word, lg_iso) {
     let $freqlvl = $("#bdgfreqlvl") || $(parent.document).find("#bdgfreqlvl");
 
-    // ajax call to get word frequency
-    $.ajax({
-        type: "GET",
-        url: "/ajax/getwordfreq.php",
-        data: { word: word, lg_iso: lg_iso }
-    }).done(function (data) {
-        if (data == 0) {
-            $freqlvl.hide();
-        } else if (data < 81) {
-            $freqlvl
-                .hide()
-                .text("High frequency word")
-                .removeClass()
-                .addClass("badge text-bg-danger")
-                .show();
-        } else if (data < 97) {
-            $freqlvl
-                .hide()
-                .text("Medium frequency word")
-                .removeClass()
-                .addClass("badge text-bg-warning")
-                .show();
-        }
-    }).fail(function () {
-        $freqlvl.hide();
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "GET",
+            url: "/ajax/getwordfreq.php",
+            data: { word: word, lg_iso: lg_iso }
+        }).done(function (data) {
+            if (data == 0) {
+                $freqlvl.removeClass().hide();
+            } else if (data < 81) {
+                $freqlvl
+                    .removeClass()
+                    .addClass("badge text-bg-danger")
+                    .text("High frequency word")
+                    .show();
+            } else if (data < 97) {
+                $freqlvl
+                    .removeClass()
+                    .addClass("badge text-bg-warning")
+                    .text("Medium frequency word")
+                    .show();
+            }
+            resolve(data);
+        }).fail(function () {
+            $freqlvl.removeClass().hide();
+            reject(new Error("AJAX request failed"));
+        });
     });
 } // end getWordFrequency
