@@ -98,9 +98,7 @@ $(document).ready(function() {
             $.when(SaveWords()).then(function () {
                 let url = next.getAttribute("href");
                 display(url);
-                $("html, body").animate({
-                    scrollTop: 0
-                }, "fast");
+                scrollToPageTop();
             });
         },
         false
@@ -114,9 +112,7 @@ $(document).ready(function() {
             $(prev).tooltip('hide');
             let url = prev.getAttribute("href");
             display(url);
-            $("html, body").animate({
-                scrollTop: 0
-            }, "fast");
+            scrollToPageTop();
         },
         false
     );
@@ -231,9 +227,8 @@ $(document).ready(function() {
                     document.getElementById("opener").click();
 
                     display(url);
-                    $("html, body").animate({
-                        scrollTop: 0
-                    }, "fast");
+                    scrollToPageTop();
+                    
                     return false;
                 };
 

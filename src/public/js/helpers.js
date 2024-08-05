@@ -35,7 +35,20 @@ function showMessage(html, type) {
 } // end showMessage
 
 /**
- * Returns current URI parameters
+ * Smoothly scrolls the webpage to the top.
+ * @returns {void}
+ */
+function scrollToPageTop() {
+    $("html, body").animate({
+        scrollTop: 0
+    }, "fast");
+} // end scrollToPageTop()
+
+/**
+ * Retrieves the current URI parameters from the URL.
+ * Parses the query string of the current page's URL and returns an object
+ * containing key-value pairs of the parameters.
+ * @returns {Object} An object with the current URI parameters as key-value pairs.
  */
 function getCurrentURIParameters() {
     const params = new URLSearchParams(window.location.search);
@@ -49,29 +62,34 @@ function getCurrentURIParameters() {
 } // end getCurrentURIParameters
 
 /**
- * Converts array to URI string with parameters
- * @param {array} arr 
- * @returns string
+ * Converts an object of key-value pairs into a URI query string.
+ * Takes an object and converts it into a URL-encoded query string format,
+ * ensuring only parameters with values are included.
+ * If the object is empty, it returns an empty string.
+ * @param {Object} paramsObject - An object containing key-value pairs to be parameterized.
+ * @returns {string} A URI query string with parameters.
  */
-function parameterizeArray(arr) {
-    if (Object.keys(arr).length === 0) {
+function buildQueryString(paramsObject) {
+    if (Object.keys(paramsObject).length === 0) {
         return '';
     }
     
     const params = new URLSearchParams();
 
-    for (const [key, value] of Object.entries(arr)) {
+    for (const [key, value] of Object.entries(paramsObject)) {
         if (value) {
             params.append(key, value);
         }
     }
 
     return params.toString() ? '?' + params.toString() : '';
-} // end parameterizeArray
-
+} // end buildQueryString()
 
 /**
- * Gets current page file name
+ * Retrieves the file name of the current page.
+ * Extracts the file name from the current page's URL, ignoring the path.
+ * Returns only the file name, without any directories or parameters.
+ * @returns {string} The file name of the current page.
  */
 function getCurrentFileName() {
     const pathname = new URL(window.location.href).pathname;

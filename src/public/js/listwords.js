@@ -32,7 +32,7 @@ $(document).ready(function () {
                             o: $('.o.active').data('value') || 0    // order
                         };
 
-        const uri_str = parameterizeArray(params);
+        const uri_str = buildQueryString(params);
         window.location.replace("words" + uri_str);
     });
 
@@ -74,7 +74,7 @@ $(document).ready(function () {
             })
                 .done(function () {
                     window.location.replace(
-                        "words" + parameterizeArray(getCurrentURIParameters())
+                        "words" + buildQueryString(getCurrentURIParameters())
                     );
                 })
                 .fail(function (request, status, error) {
@@ -120,7 +120,7 @@ $(document).ready(function () {
                             o: $(this).data('value') || 0    // order
                         };
 
-        const uri_str = parameterizeArray(params);
+        const uri_str = buildQueryString(params);
         window.location.replace(filename + uri_str);
     }); // end #dropdown-menu-sort .o.on.click
 
@@ -199,7 +199,7 @@ $(document).ready(function () {
         })
             .done(function () {
                 window.location.replace(
-                    "words" + parameterizeArray(getCurrentURIParameters())
+                    "words" + buildQueryString(getCurrentURIParameters())
                 );
             })
             .fail(function (request, status, error) {

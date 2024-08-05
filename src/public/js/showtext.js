@@ -517,12 +517,7 @@ $(document).ready(function() {
 
         switch (next_phase) {
             case 2:
-                $("html, body").animate(
-                    {
-                        scrollTop: 0
-                    },
-                    "fast"
-                );
+                scrollToPageTop();
 
                 next_phase++;
 
@@ -539,12 +534,7 @@ $(document).ready(function() {
                 playAudioFromBeginning(); // from audioplayer.js
                 break;
             case 3:
-                $("html, body").animate(
-                    {
-                        scrollTop: 0
-                    },
-                    "fast"
-                );
+                scrollToPageTop();
 
                 next_phase++;
                 
@@ -561,12 +551,7 @@ $(document).ready(function() {
                 playAudioFromBeginning(); // from audioplayer.js
                 break;
             case 4:
-                $("html, body").animate(
-                    {
-                        scrollTop: 0
-                    },
-                    "fast"
-                );
+                scrollToPageTop();
 
                 if ($(".learning, .new, .forgotten").length == 0) {
                     setNewTooltip(btn_next_phase, 
@@ -593,12 +578,7 @@ $(document).ready(function() {
                 toggleDictation();
                 break;
             case 5:
-                $("html, body").animate(
-                    {
-                        scrollTop: 0
-                    },
-                    "fast"
-                );
+                scrollToPageTop();
 
                 next_phase++;
 
@@ -834,12 +814,7 @@ $(document).ready(function() {
 
                 $("#text").replaceWith($container);
 
-                $("html, body").animate(
-                    {
-                        scrollTop: 0
-                    },
-                    "fast"
-                ); // go back to the top of the page
+                scrollToPageTop();
     
                 // automatically play audio, from the beginning
                 $("#range-speed").trigger("change", [{cpbr:0.5}]);
@@ -858,12 +833,8 @@ $(document).ready(function() {
 
                 $("#text").replaceWith($container);
                 
-                $("html, body").animate(
-                    {
-                        scrollTop: 0
-                    },
-                    "fast"
-                );
+                scrollToPageTop();
+                
                 $("#audioplayer").trigger("pause");
             }
         }

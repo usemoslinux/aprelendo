@@ -122,7 +122,7 @@ $(document).ready(function() {
             o: $('.o.active').data('value') || 0    // order
         };
 
-        const uri_str = parameterizeArray(params);
+        const uri_str = buildQueryString(params);
         window.location.replace(filename + uri_str);
     }
 
@@ -188,7 +188,7 @@ $(document).ready(function() {
                             o: $(this).data('value') || 0    // order
                         };
 
-        const uri_str = parameterizeArray(params);
+        const uri_str = buildQueryString(params);
         window.location.replace(filename + uri_str);
     }); // end #dropdown-menu-sort.on.click
 
