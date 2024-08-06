@@ -312,7 +312,9 @@ $(document).ready(function() {
         })
             .done(function() {
                 const no_prev_underlined_words = $(".learning, .new, .forgotten").length == 0;
-                const hide_elem_if_dictation_is_on = next_phase == 5 ? "style='display: none;'" : "";
+                const hide_elem_if_dictation_is_on = $("#audioplayer")[0].readyState > 0 && next_phase == 5
+                    ? "style='display: none;'"
+                    : "";
 
                 // if successful, underline word or phrase
                 if (is_phrase) {
@@ -451,7 +453,7 @@ $(document).ready(function() {
                     // also, the case of the word/phrase in the text has to be respected
                     // for phrases, we need to make sure that new underlining is added for each word
 
-                    const hide_elem =  next_phase == 5;
+                    const hide_elem = $("#audioplayer")[0].readyState > 0 && next_phase == 5;
                     let $result = $(underlineWords(data, doclang, hide_elem));
                     let $cur_filter = {};
                     let cur_word = /""/;
