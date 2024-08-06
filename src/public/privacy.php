@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -43,7 +44,7 @@ if (!$user_auth->isLoggedIn()) {
                         <a href="/index">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <span class="active">Privacy policy</span>
+                        <span class="active">Privacy Policy</span>
                     </li>
                 </ol>
             </nav>
@@ -51,52 +52,102 @@ if (!$user_auth->isLoggedIn()) {
                 <div class="row flex simple-text">
                     <div class="col-sm-12">
                         <section>
-                            <h4>Our privacy policy</h4>
-                            <em>Last updated: December 2020</em>
-                            <p>Protecting the privacy of Aprelendo website users is important to us.</p>
-                            <p>Our Privacy Policy is designed to inform you about the personal information we collect on
-                                this website. From time to time, we may make changes to this Privacy Policy, so we
-                                encourage you to check back and review it regularly to ensure you are aware of current
-                                practices.</p>
-                            <p>If you have additional questions or require more information about our Privacy Policy, do
-                                not hesitate to <a href="/contact">contact us</a>.</p>
-                            <br>
-                            <h6>Personal information</h6>
-                            <p>We collect some minimal information about you on this website. This information includes
-                                your user name and email address, which you provide when you register to our service.
-                                Additionally, we may log the IP address and web browser details of the computer or
-                                device you use. In case you use your Google account to log in to Aprelendo we will get
-                                your basic profile information (full name, e-mail address and profile image).</p>
-                            <br>
-                            <h6>Cookies</h6>
-                            <p>When you use and access Aprelendo we place a minimal number of cookies on your web
-                                browser.</p>
-                            <p>Unlike most websites, we won't use them to provide analytics, store your preferences or
-                                deliver personalized ads.</p>
+                            <h4>Our Privacy Policy</h4>
+                            <em>Last updated: July 2024</em>
+                            <p>Protecting the privacy of our users is important to us.</p>
+                            <p> This Privacy Policy explains how we collect, use, and protect your personal
+                                information when you visit our website.</p>
+                        </section>
+                        <br>
+                        <section>
+                            <h6>1. What Information We Collect</h6>
+                            <p>We collect the following types of information:</p>
+                            <ul>
+                                <li><strong>Personal information:</strong> this includes your username and email address
+                                    when you register. If you log in with Google, we collect your basic profile
+                                    information (full name, email address, and profile image).</li>
+                                <li><strong>Technical information:</strong> this includes your IP address, browser type,
+                                    and other technical details about the device you use.</li>
+                            </ul>
+                        </section>
+                        <br>
+                        <section>
+                            <h6>2. How We Use Your Information</h6>
+                            <p>The information we collect is used to:</p>
+                            <ul>
+                                <li>Provide and improve our services.</li>
+                                <li>Communicate with you about your account or any issues you encounter.</li>
+                                <li>Analyze how our website is used to enhance your experience.</li>
+                            </ul>
+                        </section>
+                        <br>
+                        <section>
+                            <h6>3. Cookies and Tracking Technologies</h6>
+                            <p>Cookies are small text files stored on your device to help us improve your experience on
+                                our website. We use minimal cookies, primarily to support essential site functions such
+                                as auto-login and managing your preferences.</p>
+                            <p>Unlike most websites, <strong>we do not use cookies for analytics or delivering
+                                personalized ads</strong>.</p>
                             <p>Here is a detailed description of the cookies we store on your computer:</p>
                             <ul>
-                                <li>user_token: user token to enable auto-login</li>
-                                <li>accept_cookies: tells us you have accepted to use cookies</li>
-                                <li>hide_welcome_msg: hides welcome message, which introduces Aprelendo to new users
-                                </li>
+                                <li><strong>user_token:</strong> a token to enable auto-login.</li>
+                                <li><strong>accept_cookies:</strong> indicates that you have accepted the use of
+                                    cookies.</li>
+                                <li><strong>hide_welcome_msg:</strong> hides the welcome message that introduces
+                                    Aprelendo to new users.</li>
                             </ul>
                             <br>
-                            <strong>Third-party cookies</strong>
-                            <p>The following is a list of third party services we use that may store cookies on your
-                                computer:</p>
+                            <strong>Third-party Cookies</strong>
+                            <p>We use third-party services that may store cookies on your computer. These include:</p>
                             <ul>
-                                <li>Google sign-in</li>
-                                <li>YouTube</li>
-                                <li>External dictionaries</li>
+                                <li><strong>Google Sign-In:</strong> stores cookies to manage your login session
+                                    securely.</li>
+                                <li><strong>YouTube:</strong> may place cookies when you watch embedded videos on our
+                                    site.</li>
+                                <li><strong>External Dictionaries:</strong> certain features may use cookies to enhance
+                                    your experience when using external resources.</li>
                             </ul>
                             <br>
                             <strong>Deleting/blocking cookies</strong>
-                            <p>Please note that if you delete cookies or refuse to accept them, you might not be able to
-                                use all of the features we offer and some of our pages might not display properly.</p>
-                            <br>
-                            <h6>Consent</h6>
-                            <p>By using our website, you hereby consent to our Privacy Policy and agree to its Terms and
-                                Conditions.</p>
+                            <p>You can manage your cookie preferences through your browser settings. Please note that
+                                blocking cookies may affect the functionality of our site and limit your ability to use
+                                certain features.</p>
+                        </section>
+                        <br>
+                        <section>
+                            <h6>4. Sharing Your Information</h6>
+                            <p>We do not share your personal information with third parties.</p>
+                            <p>In cases where we work with third-party services, we ensure they adhere to strict privacy
+                                standards.</p>
+                        </section>
+                        <br>
+                        <section>
+                            <h6>5. Your Rights</h6>
+                            <p>You have the right to access, update, or delete your personal information at any time.
+                                You can do this by visiting your account settings or contacting us directly.</p>
+                            <p>If you have any concerns about how your data is handled, please contact us, and we will
+                                address them promptly.</p>
+                        </section>
+                        <br>
+                        <section>
+                            <h6>6. Changes to This Privacy Policy</h6>
+                            <p>We may update our Privacy Policy from time to time to reflect changes in our practices or
+                                for other operational, legal, or regulatory reasons.</p>
+                            <p>We will notify you of any significant changes by posting the new policy on this page. We
+                                encourage you to review this Privacy Policy periodically for any updates.</p>
+                        </section>
+                        <br>
+                        <section>
+                            <h6>7. Contact Us</h6>
+                            <p>If you have any questions or concerns about this Privacy Policy, please do not hesitate
+                                to contact us through our <a href="/contact">contact page</a>.</p>
+                        </section>
+                        <br>
+                        <section>
+                            <h6>8. Consent</h6>
+                            <p>By using our website, you consent to the collection and use of your information as
+                                described in this Privacy Policy. If you do not agree with this policy, please do not
+                                use our services.</p>
                         </section>
                     </div>
                 </div>
@@ -105,4 +156,4 @@ if (!$user_auth->isLoggedIn()) {
     </div>
 </div>
 
-<?php require_once 'footer.php';?>
+<?php require_once 'footer.php'; ?>

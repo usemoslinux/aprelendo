@@ -638,13 +638,13 @@ ol {
     width: 100%;
 }
 
-#more-privacy-policy {
-    color: #4b8ee7;
+#eucookielaw a {
+    color: #ffd700;
     text-decoration: none;
     cursor: pointer;
 }
 
-#more-privacy-policy:hover {
+#eucookielaw a:hover {
     text-decoration: underline;
 }
 

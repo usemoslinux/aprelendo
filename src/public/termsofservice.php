@@ -43,7 +43,7 @@ if (!$user_auth->isLoggedIn()) {
                         <a href="/index">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <span class="active">Terms of service</span>
+                        <span class="active">Terms of Service</span>
                     </li>
                 </ol>
             </nav>
