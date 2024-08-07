@@ -182,7 +182,10 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             <div class="d-grid gap-2">
                                 <button type="submit" id="btn_register" class="btn btn-success">Sign up</button>
                             </div>
-                            <small>By registering, you declare to have read and accepted our <a href="/termsofservice" target="_blank" rel="noopener noreferrer">terms of service</a>.</small>
+                            <small class="text-center">By registering, you declare to have read and accepted our
+                                <a href="/termsofservice" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+                                and our <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
+                            </small>
                         </div>
                     </form>
 

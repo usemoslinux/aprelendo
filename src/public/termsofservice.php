@@ -51,7 +51,7 @@ if (!$user_auth->isLoggedIn()) {
                 <div class="row flex simple-text">
                     <div class="col-sm-12">
                         <section>
-                            <h4>Terms of service</h4>
+                            <h4>Terms of Service</h4>
                             <em>Last updated: July 2024</em>
                             <p>By using our service, you agree to these terms. Please read them carefully.</p>
                             <br>
