@@ -24,10 +24,6 @@
     <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
 
     <link rel="stylesheet" type="text/css" href="/css/500.min.css">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>

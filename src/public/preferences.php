@@ -65,6 +65,10 @@ $sel = ' selected ';
                                         <div>
                                             <select name="fontfamily" id="fontfamily" class="form-control form-select"
                                                 autocomplete="off">
+                                                <option value="inherit" <?php echo $font_family=="inherit"
+                                                    ? $sel                                     : ''; ?>>
+                                                    System default
+                                                </option>
                                                 <option value="Arial, sans-serif"
                                                     <?php echo $font_family=='Arial, sans-serif' ? $sel : ''; ?>>
                                                     Arial

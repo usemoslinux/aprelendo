@@ -45,7 +45,6 @@ html {
 body {
     background: white;
     color: #384452;
-    font-family: "Roboto", sans-serif;
     font-weight: 400;
     height: 100%;
     margin: 0;
@@ -342,7 +341,6 @@ body.blue-gradient-wallpaper .navbar-light {
 .btn-group,
 .form-control {
     box-shadow: 0 .10rem .10rem 0 rgba(0, 0, 0, 0.1);
-    font-family: "Roboto", sans-serif;
     font-size: 1rem;
 }
 
@@ -539,7 +537,6 @@ ol {
 
 .alert {
     box-shadow: 0 .10rem .10rem 0 rgba(0,0,0,.1);
-    font-family: "Roboto", sans-serif;
     font-size: 1rem;
 }
 
@@ -871,14 +868,13 @@ a[role="menuitem"] {
 }
 
 #audioplayer-container {
-    font-family: "Roboto",sans-serif;
     font-size: 1rem;
     top: 0;
     z-index: 3;
 }
 
 .basic {
-    font: 0.85rem Roboto, sans-serif;
+    font-size: 0.85rem;
     white-space: normal;
 }
 
@@ -941,7 +937,6 @@ input {
 
 #dic-modal .modal-dialog {
     color: black;
-    font-family: "Roboto", sans-serif;
     height: calc(100% - 1rem);
     margin: .5rem auto;
     max-width: 768px;
@@ -968,7 +963,6 @@ input {
 }
 
 .modal {
-    font-family: "Roboto", sans-serif;
     font-size: 1rem;
     color: #384452;
     text-align: left;

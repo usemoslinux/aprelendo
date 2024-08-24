@@ -9,7 +9,7 @@ Blue Grey
 
 body {
     background: linear-gradient(to right, #0062E6, #33AEFF);
-    font-family: 'Roboto', serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     color: #fff;
     margin: 0;
     padding: 0;

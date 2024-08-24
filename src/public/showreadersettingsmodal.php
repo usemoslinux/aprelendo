@@ -56,6 +56,10 @@ $sel = ' selected ';
                         <div>
                             <select name="fontfamily" id="fontfamily" class="form-control form-select"
                                 autocomplete="off">
+                                <option value="inherit" <?php echo $font_family=="inherit"
+                                    ? $sel                                     : ''; ?>>
+                                    System default
+                                </option>
                                 <option value="Arial, sans-serif" <?php echo $font_family=='Arial, sans-serif'
                                     ? $sel                                     : ''; ?>>
                                     Arial
@@ -111,8 +115,7 @@ $sel = ' selected ';
                     <div class="mb-3 <?php echo $is_video_page ? 'd-none' : ''; ?> ">
                         <label for="alignment">Text alignment:</label>
                         <div>
-                            <select name="alignment" id="alignment" class="form-control form-select"
-                                autocomplete="off">
+                            <select name="alignment" id="alignment" class="form-control form-select" autocomplete="off">
                                 <option value="left" <?php echo $text_align == 'left' ? $sel : ''; ?>>Left
                                 </option>
                                 <option value="center" <?php echo $text_align == 'center' ? $sel : ''; ?>>Center
