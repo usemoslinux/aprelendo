@@ -496,6 +496,9 @@ if (!$user_auth->isLoggedIn()) {
                             <ul>
                                 <li>Wiktionary: <a href="https://en.m.wiktionary.org/wiki/%s" target="_blank"
                                         rel="noopener noreferrer">https://en.m.wiktionary.org/wiki/%s</a></li>
+                                <li>Britannica Dictionary: <a href="https://www.britannica.com/dictionary/%s" target="_blank"
+                                        rel="noopener noreferrer">https://www.britannica.com/dictionary/%s</a></li>
+                                </li>
                                 <li>Word Reference: <a href="https://www.wordreference.com/definition/%s"
                                         target="_blank"
                                         rel="noopener noreferrer">https://www.wordreference.com/definition/%s</a></li>
@@ -520,9 +523,14 @@ if (!$user_auth->isLoggedIn()) {
                                 <li>Urban Dictionary: <a href="https://www.urbandictionary.com/define.php?term=%s"
                                         target="_blank"
                                         rel="noopener noreferrer">https://www.urbandictionary.com/define.php?term=%s</a>
+                                <li>Thesaurus.com: <a href="https://www.thesaurus.com/browse/%s" target="_blank"
+                                        rel="noopener noreferrer">https://www.thesaurus.com/browse/%s</a></li>
                                 </li>
                                 <li>Visuwords: <a href="https://visuwords.com/%s" target="_blank"
                                         rel="noopener noreferrer">https://visuwords.com/%s</a></li>
+                                <li>YourDictionary: <a href="https://www.yourdictionary.com/%s" target="_blank"
+                                        rel="noopener noreferrer">https://www.yourdictionary.com/%s</a></li>
+                                </li>
                                 <li>Google: <a href="https://www.google.com/search?q=define:%s" target="_blank"
                                         rel="noopener noreferrer">https://www.google.com/search?q=define:%s</a></li>
                             </ul>
