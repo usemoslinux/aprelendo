@@ -65,7 +65,7 @@ $sel = ' selected ';
                                         <div>
                                             <select name="fontfamily" id="fontfamily" class="form-control form-select"
                                                 autocomplete="off">
-                                                <option value="inherit" <?php echo $font_family=="inherit"
+                                                <option value="var(--bs-body-font-family)" <?php echo $font_family=="var(--bs-body-font-family)"
                                                     ? $sel                                     : ''; ?>>
                                                     System default
                                                 </option>
