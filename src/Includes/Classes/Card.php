@@ -20,8 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\Language;
-
 class Card extends DBEntity
 {
     protected $user_id = 0;

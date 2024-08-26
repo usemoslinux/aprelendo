@@ -20,8 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\UserException;
-
 require_once dirname(__DIR__) . '../../config/config.php';
 
 class Curl

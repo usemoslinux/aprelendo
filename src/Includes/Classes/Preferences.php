@@ -20,9 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\DBEntity;
-use Aprelendo\UserException;
-
 class Preferences extends DBEntity
 {
     public int    $user_id            = 0;

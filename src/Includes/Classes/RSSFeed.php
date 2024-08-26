@@ -21,9 +21,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\Curl;
-use Aprelendo\UserException;
-
 class RSSFeed
 {
     public $title    = '';

@@ -20,8 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\UserException;
-
 class UserPassword
 {
     /**

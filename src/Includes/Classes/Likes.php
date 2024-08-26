@@ -20,8 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\DBEntity;
-
 class Likes extends DBEntity
 {
     private int $user_id = 0;

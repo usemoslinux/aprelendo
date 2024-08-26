@@ -21,8 +21,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\UserException;
-
 class AudioPlayerForEbooks extends AudioPlayer
 {
     /**

@@ -21,8 +21,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\TextTable;
-
 class SharedTextTable extends TextTable
 {
     /**

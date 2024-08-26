@@ -20,8 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\UserException;
-
 abstract class Log extends DBEntity
 {
     private int $user_id = 0;

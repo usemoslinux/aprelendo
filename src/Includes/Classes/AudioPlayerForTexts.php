@@ -20,8 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\UserException;
-
 class AudioPlayerForTexts extends AudioPlayer
 {
     /**

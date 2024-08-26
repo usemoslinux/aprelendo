@@ -20,9 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\InternalException;
-use Aprelendo\UserException;
-
 class Token extends DBEntity
 {
     public int $id      = 0;

@@ -20,10 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\RSSFeed;
-use Aprelendo\Language;
-use Aprelendo\UserException;
-
 class RSSFeeds
 {
     private $feed1;

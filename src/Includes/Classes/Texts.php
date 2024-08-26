@@ -20,13 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\File;
-use Aprelendo\PopularSources;
-use Aprelendo\Url;
-use Aprelendo\Language;
-use Aprelendo\SearchTextsParameters;
-use Aprelendo\TextsUtilities;
-
 class Texts extends DBEntity
 {
     public $id            = 0;

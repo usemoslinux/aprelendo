@@ -20,8 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\Table;
-
 class WordTable extends Table
 {
     private const STATUS_ICONS = [

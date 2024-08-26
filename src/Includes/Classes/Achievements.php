@@ -20,10 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\DBEntity;
-use Aprelendo\Gems;
-use Aprelendo\Words;
-
 class Achievements extends DBEntity
 {
     private int $user_id = 0;
@@ -150,4 +146,4 @@ class Achievements extends DBEntity
 
         return $this->sqlFetchAll($sql, [$type_id, $threshold]);
     } // end checkByType()
-} 
+}

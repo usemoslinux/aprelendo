@@ -20,11 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\User;
-use Aprelendo\Token;
-use Aprelendo\InternalException;
-use Aprelendo\UserException;
-
 class UserAuth extends DBEntity
 {
     private User $user;

@@ -20,8 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\InternalException;
-
 class UserException extends InternalException {
     public function getJsonError(): string {
         return $this->encodeJsonError($this->getMessage());

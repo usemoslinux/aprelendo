@@ -20,9 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\Curl;
-use Aprelendo\UserException;
-
 class VoiceRSS
 {
     /**

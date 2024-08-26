@@ -21,8 +21,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\Url;
-
 class Pagination
 {
     private $adjacents    = 0; // adjacent page numbers

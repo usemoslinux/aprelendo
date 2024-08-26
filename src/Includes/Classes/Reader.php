@@ -20,14 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\Texts;
-use Aprelendo\SharedTexts;
-use Aprelendo\Url;
-use Aprelendo\Language;
-use Aprelendo\Preferences;
-use Aprelendo\Likes;
-use Aprelendo\AudioPlayerForTexts;
-use Aprelendo\UserException;
 use SimpleXMLElement;
 
 class Reader

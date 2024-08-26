@@ -21,11 +21,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\DBEntity;
-use Aprelendo\Curl;
-use Aprelendo\Conversion;
-use Aprelendo\UserException;
-
 class Videos extends DBEntity
 {
     public $id                = '';

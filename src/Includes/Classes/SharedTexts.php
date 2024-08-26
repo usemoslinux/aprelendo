@@ -20,11 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\Texts;
-use Aprelendo\Language;
-use Aprelendo\SearchTextParameters;
-use Aprelendo\UserException;
-
 class SharedTexts extends Texts
 {
     /**

@@ -20,8 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\File;
-
 class EbookFile extends File
 {
     /**

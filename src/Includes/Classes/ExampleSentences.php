@@ -20,12 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\DBEntity;
-use Aprelendo\User;
-use Aprelendo\Texts;
-use Aprelendo\Language;
-use Aprelendo\UserException;
-
 class ExampleSentences extends DBEntity
 {
     public int $id                      = 0;

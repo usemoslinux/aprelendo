@@ -21,8 +21,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\UserException;
-
 abstract class WordsUtilities
 {
     /**

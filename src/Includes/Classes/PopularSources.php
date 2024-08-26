@@ -20,9 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\DBEntity;
-use Aprelendo\UserException;
-
 class PopularSources extends DBEntity
 {
     /**

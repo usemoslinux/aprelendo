@@ -20,8 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\InternalException;
-
 abstract class DBEntity
 {
     protected $pdo;

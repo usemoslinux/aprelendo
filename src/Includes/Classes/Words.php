@@ -21,11 +21,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\DBEntity;
-use Aprelendo\SearchWordsParameters;
-use Aprelendo\Language;
-use Aprelendo\UserException;
-
 class Words extends DBEntity
 {
     public $id            = 0;

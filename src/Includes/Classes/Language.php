@@ -20,9 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\DBEntity;
-use Aprelendo\UserException;
-
 class Language extends DBEntity
 {
     public int $id                      = 0;

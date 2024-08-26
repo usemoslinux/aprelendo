@@ -20,8 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\UserException;
-
 class Gems extends DBEntity
 {
     public int $id                 = 0;

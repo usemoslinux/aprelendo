@@ -20,9 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\DBEntity;
-use Aprelendo\Language;
-
 class Dictionaries extends DBEntity
 {
     private $monolingual = [];

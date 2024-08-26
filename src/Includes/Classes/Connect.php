@@ -21,7 +21,6 @@
 namespace Aprelendo;
 
 use PDO;
-use Aprelendo\InternalException;
 
 class Connect
 {

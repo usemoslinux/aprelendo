@@ -20,12 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\File;
-use Aprelendo\Language;
-use Aprelendo\UserAuth;
-use Aprelendo\UserPassword;
-use Aprelendo\UserException;
-
 class User extends DBEntity
 {
     public int    $id;

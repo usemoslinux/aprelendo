@@ -20,12 +20,6 @@
 
 namespace Aprelendo;
 
-use Aprelendo\Language;
-use Aprelendo\UserPassword;
-use Aprelendo\EmailSender;
-use Aprelendo\UserException;
-use Aprelendo\InternalException;
-
 class UserRegistrationManager extends DBEntity
 {
     private User $user;
