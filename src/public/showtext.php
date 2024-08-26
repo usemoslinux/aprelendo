@@ -112,13 +112,20 @@ require_once PUBLIC_PATH . 'head.php';
                             <span class="bi bi-skip-end-circle-fill"></span>
                         </button>
                         <?php if ($is_shared) : ?>
-                            <button type="button" class="btn btn-link mt-1" data-bs-toggle="tooltip"
+                            <button type="button" class="btn btn-link d-block mt-2" data-bs-toggle="tooltip"
                                 data-bs-custom-class="custom-tooltip" data-bs-placement="right" data-bs-title="Like">
                                 <span class="<?php echo $user_liked_class ?>"
                                     data-idText="<?php echo $text_id ?>">
                                 </span>
                                 <small class="px-1"><?php echo $nr_of_likes ?></small>
                             </button>
+                            <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                                data-bs-placement="right" data-bs-title="Report">
+                                <button type="button" class="btn btn-link d-block mt-2" data-bs-toggle="modal"
+                                    data-bs-target="#report-text-modal">
+                                    <span id="report-flag" class="bi bi-flag"></span>
+                                </button>
+                            </span>
                         <?php endif ?>
                     </div>
                 </div>
@@ -137,6 +144,9 @@ require_once PUBLIC_PATH . 'head.php';
     <?php
         require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
         require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
+        if ($is_shared) {
+            require_once PUBLIC_PATH . 'showreporttextmodal.php'; // load report text modal window
+        }
     ?>
 
     <script defer src="/js/underlinewords.min.js"></script>

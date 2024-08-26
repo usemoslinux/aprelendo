@@ -173,6 +173,13 @@ class Reader
                                 . '" data-idText="' . $this->text->id .'"></span>
                             <small>' . $likes->get($this->text->id) . '</small>
                         </button>
+                        <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                                data-bs-placement="bottom" data-bs-title="Report">
+                            <button type="button" class="btn btn-link me-2" data-bs-toggle="modal"
+                                data-bs-target="#report-text-modal">
+                                <span id="report-flag" class="bi bi-flag"></span>
+                            </button>
+                        </span>
                     </div>';
 
         $html .= '<div class="ratio ratio-16x9" style="max-height: 60%;">' .

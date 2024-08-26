@@ -52,7 +52,7 @@ if (!$user_auth->isLoggedIn()) {
                     <div class="col-sm-12">
                         <section>
                             <h4>Terms of Service</h4>
-                            <em>Last updated: July 2024</em>
+                            <em>Last updated: August 2024</em>
                             <p>By using our service, you agree to these terms. Please read them carefully.</p>
                             <br>
                             <h6>1. Accounts</h6>
@@ -61,12 +61,25 @@ if (!$user_auth->isLoggedIn()) {
                                 information could lead to the termination of your account.</p>
                             <br>
                             <h6>2. Content</h6>
-                            <p>You can upload, share, and manage your texts, ebooks, videos or other material
-                                ("Content") on our service. You are responsible for ensuring that your Content does
-                                not violate any laws or rights of others, including copyright, privacy rights,
-                                publicity rights, contract rights or any other rights of any person or entity. We
-                                reserve to remove content involved in the infringement of any of the
-                                aforementioned rights.</p>
+                            <p>You can upload, share, and manage your texts, ebooks, videos, or other material
+                                ("Content") on our service. You are responsible for ensuring that your Content does not
+                                violate any laws or rights of others, including copyright, privacy rights, publicity
+                                rights, contract rights, or any other rights of any person or entity.</p>
+                            <p>Content that is considered inappropriate or unacceptable includes, but is not limited to:
+                            </p>
+                            <ol>
+                                <li>Sexual or inappropriate content;</li>
+                                <li>Violent, abusive, or hateful content;</li>
+                                <li>Misleading, spam, or useless content;</li>
+                                <li>Content that raises legal issues, such as copyright violations;</li>
+                                <li>Content that is in a language other than the one for which it was uploaded.</li>
+                            </ol>
+                            <p>Users are allowed to report any of the above for texts and videos included in the
+                                "<a href="/sharedtexts">Shared texts</a>" section. Any other content under
+                                "<a href="/texts">My texts</a>" will remain private and will not be subject to these
+                                reports.</p>
+                            <p>We reserve, however, the right to remove any content that violates these directives or
+                                any other terms outlined in this agreement.</p>
                             <br>
                             <h6>3. Privacy</h6>
                             <p>Our <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
@@ -76,7 +89,8 @@ if (!$user_auth->isLoggedIn()) {
                             <h6>4. Donations</h6>
                             <p>Aprelendo is supported by donations. If you value our service, consider
                                 <a href="/donate" target="_blank" rel="noopener noreferrer">donating</a> to help us
-                                    keep it running.</p>
+                                keep it running.
+                            </p>
                             <br>
                             <h6>5. Communication</h6>
                             <p>We will not send you marketing emails. You will only receive emails necessary for
@@ -94,7 +108,8 @@ if (!$user_auth->isLoggedIn()) {
                             <br>
                             <h6>8. Contact Us</h6>
                             <p>If you have questions or concerns about these terms, please
-                                <a href="/contact" target="_blank" rel="noopener noreferrer">contact us</a>.</p>
+                                <a href="/contact" target="_blank" rel="noopener noreferrer">contact us</a>.
+                            </p>
                         </section>
                     </div>
                 </div>

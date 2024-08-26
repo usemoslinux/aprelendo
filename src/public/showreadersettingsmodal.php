@@ -155,8 +155,7 @@ $sel = ' selected ';
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-link" data-bs-dismiss="modal">Cancel</button>
-                <button id="btn-save-reader-prefs" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save
-                    changes</button>
+                <button id="btn-save-reader-prefs" type="button" class="btn btn-primary" data-bs-dismiss="modal">Apply changes</button>
             </div>
         </div>
     </div>

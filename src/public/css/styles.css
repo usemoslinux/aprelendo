@@ -1061,11 +1061,6 @@ input {
     width: 100%;
 }
 
-.form-group,
-.form-check {
-    padding-left: 0;
-}
-
 .table .form-check-input {
     margin-top: 0;
 }

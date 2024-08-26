@@ -89,6 +89,7 @@ require_once PUBLIC_PATH . 'head.php';
         <?php
             require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
             require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
+            require_once PUBLIC_PATH . 'showreporttextmodal.php'; // load report text modal window
         ?>
 
         <script defer src="/js/underlinewords.min.js"></script>
@@ -96,6 +97,7 @@ require_once PUBLIC_PATH . 'head.php';
         <script defer src="/js/dictionary.min.js"></script>
         <script defer src="/js/ytvideo.min.js"></script>
         <script defer src="/js/likes.min.js"></script>
+        <script defer src="/js/helpers.min.js"></script>s
         <script defer src="/js/tooltips.min.js"></script>
     </body>
 </html>

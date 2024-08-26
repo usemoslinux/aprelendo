@@ -28,11 +28,16 @@ function showMessage(html, type) {
 
     $("#alert-box")
         .empty()
+        .removeAttr('style')
         .removeClass()
         .addClass("alert " + type)
         .append($div_flag, $div_msg);
     $(window).scrollTop(0);
 } // end showMessage
+
+function hideMessage(timeout) {
+    $("#alert-box").hide(timeout);
+}
 
 /**
  * Smoothly scrolls the webpage to the top.
