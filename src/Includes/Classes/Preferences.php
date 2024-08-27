@@ -23,7 +23,7 @@ namespace Aprelendo;
 class Preferences extends DBEntity
 {
     public int    $user_id            = 0;
-    public string $font_family        = 'Arial';
+    public string $font_family        = 'var(--bs-body-font-family)';
     public string $font_size          = '12pt';
     public string $line_height        = '1.5';
     public string $text_alignment     = 'left';
