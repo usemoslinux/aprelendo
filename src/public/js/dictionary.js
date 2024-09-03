@@ -168,12 +168,12 @@ function buildDictionaryLink(dictionary_URI, sel_word) {
 } // end buildDictionaryLink
 
 /**
- * Sets Add & Delete buttons depending on whether selection exists in database
+ * Sets Add, Forgot & Remove buttons depending on whether selection already is underlined or not
  * @param {jQuery} $selword 
  */
-function setAddDeleteButtons($selword) {
-    let $btn_remove = $("#btn-remove") || $(parent.document).find("#btn-remove");
-    let $btn_add = $("#btn-add") || $(parent.document).find("#btn-add");
+function setWordActionButtons($selword) {
+    let $word_action_group_1 = $("#word-actions-g1") || $(parent.document).find("#word-actions-g1");
+    let $word_action_group_2 = $("#word-actions-g2") || $(parent.document).find("#word-actions-g2");
 
     const underlined_words_in_selection = $selword.filter(
         ".learning, .new, .forgotten, .learned"
@@ -181,15 +181,13 @@ function setAddDeleteButtons($selword) {
     const words_in_selection = $selword.filter(".word").length;
 
     if (words_in_selection == underlined_words_in_selection) {
-        if ($btn_remove.is(":visible") === false) {
-            $btn_remove.show();
-            $btn_add.text("Forgot").removeClass('btn-primary').addClass('btn-danger');
-        }
+        $word_action_group_1.hide();
+        $word_action_group_2.show();
     } else {
-        $btn_remove.hide();
-        $btn_add.text("Add").removeClass('btn-danger').addClass('btn-primary');
+        $word_action_group_1.show();
+        $word_action_group_2.hide();
     }
-} // end setAddDeleteButtons
+} // end setWordActionButtons
 
 /**
  * Shows message for high & medium frequency words in dictionary modal window
@@ -227,3 +225,78 @@ function getWordFrequency(word, lg_iso) {
         });
     });
 } // end getWordFrequency
+
+/**
+ * Displays action buttons next to the selected word element on the screen.
+ * It determines the appropriate position for the action buttons
+ * based on the available space on the screen. If there is not enough space 
+ * to the right of the selected word, the buttons are positioned to the left.
+ *
+ * @param {jQuery} $selword - The jQuery object representing the selected word element.
+ */
+function showActionButtons($selword) {
+    const $actions = $('#action-buttons');
+    const actions_width = $actions.outerWidth();
+    const screen_width = $(window).width();
+    const offset = $selword.offset();
+    const word_width = $selword.outerWidth();
+    
+    // Check if there is enough space on the right
+    if (offset.left + actions_width > screen_width) {
+        // If not enough space, align to the right
+        $actions.css({
+            top: offset.top - $actions.outerHeight() - 2,
+            left: offset.left - actions_width + word_width
+        });
+    } else {
+        // Default positioning to the left of the word
+        $actions.css({
+            top: offset.top - $actions.outerHeight() - 2,
+            left: offset.left
+        });
+    }
+
+    $actions.show();
+}
+
+/**
+ * Hides the action buttons element from the screen.
+ * It is typically called when the user clicks outside the action buttons
+ * or when the user interaction with the word element is complete.
+ *
+ * @param {Event} e - The event object (optional), used to capture event data if needed.
+ */
+function hideActionButtons(e) {
+    $('#action-buttons').hide();
+}
+
+/**
+ * Sets up click event listeners on dictionary and translator action buttons.
+ * When an action button is clicked, it opens a new browser window or tab
+ * with the appropriate link (dictionary, image dictionary, or translator) 
+ * based on the selected word's text.
+ *
+ * @param {jQuery} $selword - The jQuery object representing the selected word element.
+ * @param {Object} base_uris - An object containing base URIs for dictionary, image dictionary, and translator services.
+ *                             The object should have the following structure:
+ *                             {
+ *                               dictionary: 'base URI for the dictionary service',
+ *                               img_dictionary: 'base URI for the image dictionary service',
+ *                               translator: 'base URI for the translator service'
+ *                             }
+ */
+function setDicActionButtonsClick($selword, base_uris) {
+    const dic_link = buildDictionaryLink(base_uris.dictionary, $selword.text())
+    const img_dic_link = buildDictionaryLink(base_uris.img_dictionary, $selword.text());
+    const translator_link = buildTextTranslationLink(base_uris.translator, $selword);
+    
+    $('#btn-open-dict').off('click').on('click', function() {
+        window.open(dic_link, '_blank', 'noopener,noreferrer');
+    });
+    $('#btn-open-img-dict').off('click').on('click', function() {
+        window.open(img_dic_link, '_blank', 'noopener,noreferrer');
+    });
+    $('#btn-open-translator').off('click').on('click', function() {
+        window.open(translator_link, '_blank', 'noopener,noreferrer');
+    });
+}

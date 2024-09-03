@@ -44,7 +44,7 @@ function addLinks(text, doclang, hide_elem) {
     result = text.replace(pattern, function (match, g1) {
         return g1 === undefined
             ? match
-            : '<a class="word" data-toggle="modal" data-bs-target="#dic-modal" ' + hide_elem_str + ">" + g1 + '</a>';
+            : '<a class="word" ' + hide_elem_str + ">" + g1 + '</a>';
     });
 
     // add a to whitespaces
@@ -132,8 +132,7 @@ function underlineUserWords(text, doclang, hide_elem, user_words, user_words_str
             const user_word_match = user_words.find(element => element.word.toLowerCase() === match.toLowerCase());
             const word_status = vocab_status[user_word_match.status];
 
-            return "<a class='word reviewing " + word_status + "' data-toggle='modal' data-bs-target='#dic-modal'"
-                + hide_elem_str + ">" + g1 + "</a>";
+            return "<a class='word reviewing " + word_status + "' " + hide_elem_str + ">" + g1 + "</a>";
         });
     }
 
@@ -171,8 +170,7 @@ function underlineUserPhrases(text, doclang, hide_elem, user_phrases, user_phras
             const user_phrase_match = user_phrases.find(element => element.word.toLowerCase() === match.toLowerCase());
             const phrase_status = vocab_status[user_phrase_match.status];
 
-            return "<a class='word reviewing " + phrase_status + "' data-toggle='modal' data-bs-target='#dic-modal'"
-                + hide_elem_str + ">" + g1 + "</a>";
+            return "<a class='word reviewing " + phrase_status + "' " + hide_elem_str + ">" + g1 + "</a>";
         });
     }
 
@@ -205,7 +203,7 @@ function underlineFrequentWords(text, doclang, hide_elem, high_freq) {
     text = text.replace(pattern, function (match, p1, offset, string) {
         return p1 === undefined
             ? match
-            : "<a class='word frequency-list' data-toggle='modal' data-bs-target='#dic-modal' " + hide_elem_str + ">" + p1 + "</a>";
+            : "<a class='word frequency-list' " + hide_elem_str + ">" + p1 + "</a>";
     });
 
     return text;

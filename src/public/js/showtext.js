@@ -27,7 +27,6 @@ $(document).ready(function() {
     let dictionary_URI = "";
     let img_dictionary_URI = "";
     let translator_URI = "";
-    let translate_paragraph_link = "";
     let next_phase = 2; // next phase of the learning cycle
     let playing_audio = false;
     window.parent.show_confirmation_dialog = true; // confirmation dialog that shows when closing window
@@ -36,7 +35,6 @@ $(document).ready(function() {
     // $doc & $pagereader are used to make this JS code work when showing simple texts &
     // ebooks (which are displayed inside an iframe)
     let $doc = $(parent.document);
-    let $dic_frame = $doc.find("#dicFrame");
     let $pagereader = $doc.find('iframe[id^="epubjs"]');
     $pagereader = $pagereader.length > 0 ? $pagereader : $("html");
     
@@ -65,13 +63,7 @@ $(document).ready(function() {
      * Disables right click context menu
      */
     $(document).on("contextmenu",function(e){
-        // opens dictionary translator in case user right clicked on a word/phrase
-        // but only on desktop browsers
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-        if (!isMobile && $(e.target).is(".word")) {
-            window.open(buildTextTranslationLink(translator_URI, $selword), '_blank', 'noopener,noreferrer');
-        }
+        e.preventDefault();
         return false;
      }); // end document.contextmenu
 
@@ -81,6 +73,9 @@ $(document).ready(function() {
      */
     $(document).on("mousedown touchstart", ".word", function(e) {
         e.stopPropagation();
+
+        hideActionButtonsPopUpToolbar(false);
+
         if (e.which < 2) {
             // if left mouse button (e.which = 1) / touch (e.which = 0)...
             highlighting = true;
@@ -91,10 +86,11 @@ $(document).ready(function() {
             }
         } else if (e.which == 3) {
             if ($("#audioplayer").length) {
-                togglePlayPause(); // audioplayer.js
-                $("#audioplayer").trigger("pause");
+                pauseAudio();
+                playing_audio = false;
             }
             $selword = $(this);
+            window.open(buildTextTranslationLink(translator_URI, $selword), '_blank', 'noopener,noreferrer');
         }
     }); // end .word.on.mousedown/touchstart
 
@@ -127,21 +123,15 @@ $(document).ready(function() {
                     } else {
                         $selword = $(this);
                     }
+                    $(".highlighted").removeClass("highlighted"); // remove previous highlighting
+                    $selword.addClass("highlighted");
                 }
-                showModal();
+                showActionButtonsPopUpToolbar();
             }
         }
         
         start_sel_time = end_sel_time = new Date();
     }); // end .word.mouseup/touchend
-
-    /**
-     * Determines if an element is after another one
-     * @param {Jquery object} sel
-     */
-    $.fn.isAfter = function(sel) {
-        return this.prevUntil(sel).length !== this.prevAll().length;
-    }; // end $.fn.isAfter
 
     /**
      * Word/Phrase selection
@@ -169,7 +159,7 @@ $(document).ready(function() {
                 $("html").disableScroll();
             }
             
-            $(".word").removeClass("highlighted");
+            $(".highlighted").removeClass("highlighted"); // remove previous highlighting
 
             $sel_end =
                 e.type === "mouseover" ? $(this) : $(
@@ -195,12 +185,6 @@ $(document).ready(function() {
         }
     }); // end .word.on.mouseover/touchmove
 
-    $(document).on("click", ".dict-answer", function(e) {
-        e.stopPropagation();
-        $selword = $(this).parent().prev();
-        showModal();
-    });
-
     // ajax call to get dictionary & translator URIs
     $.ajax({
         url: "/ajax/getdicuris.php",
@@ -215,83 +199,10 @@ $(document).ready(function() {
     }); // end $.ajax
 
     /**
-     * Disables scrolling without making text jump around
-     */
-    $.fn.disableScroll = function() {
-        window.oldScrollPos = $(window).scrollTop();
-
-        $(window).on('scroll.scrolldisabler',function ( event ) {
-            $(window).scrollTop( window.oldScrollPos );
-            event.preventDefault();
-        });
-    };
-
-    /**
-     * Renables scrolling without making text jump around
-     */
-
-    $.fn.enableScroll = function() {
-        $(window).off('scroll.scrolldisabler');
-    };
-
-    /**
-     * Shows dictionary when user clicks a word
-     * All words are enclosed in a.word tags
-     */
-    function showModal() {
-        let $audioplayer = $("#audioplayer");
-
-        if ($audioplayer.length) {
-            // if there is audio playing
-            if (
-                !$audioplayer.prop("paused") &&
-                $audioplayer.prop("currentTime")
-            ) {
-                $audioplayer.trigger("pause"); // pause audio
-                playing_audio = true;
-            } else {
-                playing_audio = false;
-            }
-        }
-        getWordFrequency($selword.text(), doclang);
-        setAddDeleteButtons($selword);
-
-        $doc.find("#loading-spinner").attr('class','lds-ellipsis m-auto');
-        $dic_frame.attr('class','d-none');
-
-        // build translate sentence url
-        translate_paragraph_link = buildTextTranslationLink(translator_URI, $selword);
-
-        // show dictionary
-        $dic_frame.get(0).contentWindow.location.replace(buildDictionaryLink(dictionary_URI, $selword.text()));
-        // the previous line loads iframe content without adding it to browser history,
-        // as this one does: $dic_frame.attr('src', dic_url);
-        $("#btn-add").focus();
-
-        $doc.find("#dic-modal").modal("show");
-    } // end showModal
-
-    /**
-     * Hides loader spinner when dictionary iframe finished loading
-     */
-    $dic_frame.on("load", function() {
-        $doc.find("#loading-spinner").attr('class','d-none');
-        $dic_frame.removeClass();
-    }); // end $dic_frame.on.load()
-
-    $doc.on("click", "#btn-translate", function() {
-        window.open(translate_paragraph_link, '_blank', 'noopener,noreferrer');
-    }); // end #btn-translate.on.click()
-
-    $doc.on("click", "#btn-img-dic", function() {
-        window.open(buildDictionaryLink(img_dictionary_URI, $selword.text()), '_blank', 'noopener,noreferrer');
-    }); // end #btn-img-dic.on.click()
-
-    /**
      * Adds word to user db
-     * Triggered when user clicks the "Add" button in the dictionary modal window
+     * Triggered when user clicks the "Add" button in the action popup
      */
-    $doc.on("click", "#btn-add", function() {
+    $doc.on("click", "#btn-add, #btn-forgot", function() {
         const is_phrase = $selword.length > 1 ? 1: 0;
         const sel_text = $selword.text();
         const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
@@ -355,7 +266,7 @@ $(document).ready(function() {
                             sel_text.toLowerCase()
                         ) {
                             $phrase.wrapAll(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#dic-modal' " +
+                                "<a class='word reviewing new' " +
                                 hide_elem_if_dictation_is_on + "></a>"
                             );
 
@@ -381,12 +292,12 @@ $(document).ready(function() {
                         let $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
-                                "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#dic-modal' " +
+                                "<a class='word reviewing forgotten' " +
                                 hide_elem_if_dictation_is_on + "></a>"
                             );
                         } else {
                             $word.wrap(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#dic-modal' " +
+                                "<a class='word reviewing new' " +
                                 hide_elem_if_dictation_is_on + "></a>"
                             );
                         }
@@ -415,12 +326,13 @@ $(document).ready(function() {
                 );
             });
 
-        $selword.removeClass("highlighted");
+        hideActionButtonsPopUpToolbar(true);
+        resumeAudio();
     }); // end #btn-add.on.click
 
     /**
      * Removes word from db
-     * Triggered when user clicks the "Delete" button in the dictionary modal window
+     * Triggered when user clicks the "Remove" button in the action popup
      */
     $doc.on("click", "#btn-remove", function() {
         $.ajax({
@@ -502,6 +414,9 @@ $(document).ready(function() {
                     "Oops! There was an error removing the word from the database."
                 );
             });
+        
+        hideActionButtonsPopUpToolbar(true);
+        resumeAudio();
     }); // end #btn-remove.on.click
 
     /**
@@ -534,7 +449,7 @@ $(document).ready(function() {
 
                 setNewTooltip(document.getElementById('btn-next-phase'), 'Go to phase 3: Speaking');
 
-                playAudioFromBeginning(); // from audioplayer.js
+                playAudioFromBeginning();
                 break;
             case 3:
                 scrollToPageTop();
@@ -551,20 +466,19 @@ $(document).ready(function() {
                     + 'you listen to the audio. You can slow it down if necessary.</span>'
                 );
 
-                playAudioFromBeginning(); // from audioplayer.js
+                playAudioFromBeginning();
                 break;
             case 4:
                 scrollToPageTop();
 
                 if ($(".learning, .new, .forgotten").length == 0) {
                     setNewTooltip(btn_next_phase, 
-                        'Finish & Save - Skipped phase 5 (reviewing): no underlined words</span>');
+                        'Finish & Save - Will skip phase 5 (reviewing): no underlined words');
                     
                     next_phase = 6;
                 } else {
-                    setNewTooltip(btn_next_phase, 'Go to phase 5: Reviewing');
-                    
                     next_phase++;
+                    setNewTooltip(btn_next_phase, 'Go to phase 5: Reviewing');
                 }
 
                 $msg_phase
@@ -742,19 +656,16 @@ $(document).ready(function() {
     }); // end #btn-toggle-audio-player-controls
 
     /**
-     * Triggered when modal dictionary window is closed
+     * Triggered when the action popup is closed
      */
-    $doc.on("hidden.bs.modal", "#dic-modal", function() {
+    function resumeAudio() {
         let $audioplayer = $("#audioplayer");
 
         // Resumes playing if audio was paused when clicking on a word
         if (playing_audio && $audioplayer.length) {
-            $audioplayer.trigger("play");
+            playAudio();
         }
-
-        // removes word selection
-        $selword.removeClass("highlighted");
-    }); // end #dic-modal.on.hidden.bs.modal
+    } // end resumeAudio()
 
     /**
      * Changes playback speed when user moves slider
@@ -765,182 +676,6 @@ $(document).ready(function() {
         $("#currentpbr").text(cpbr);    
         $("#audioplayer").prop("playbackRate", cpbr);
     }); // end #pbr.on.input/change
-
-    /**
-     * Toggles dictation on/off
-     */
-    function toggleDictation() {
-        const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
-
-        if (audio_is_loaded) {
-            let $container = $("#text").clone();
-            let $elems = $container.find(".word");
-            let $original_elems = $(".word");
-
-            if ($(".dict-answer").length == 0) {
-                // if no words are underlined don't allow phase 5 (reviewing) & jump to phase 6 (save changes)
-                if ($(".learning, .new, .forgotten").length == 0) {
-                    setNewTooltip(document.getElementById('btn-next-phase'), 
-                        'Finish & Save - 5 (reviewing): no underlined words');
-                    
-                    next_phase = 6;
-                }
-
-                // toggle dictation on
-                // replace all underlined words/phrases with input boxes
-                $elems.each(function(index, value) {
-                    let $elem = $(this);
-                    const length = $elem.text().length;
-                    const width = $original_elems.eq(index).width();
-                    const line_height = $original_elems.eq(index).css("font-size");
-                    let border_color = '';
-                    
-                    if ($elem.hasClass('learned')) {
-                        border_color = 'green'
-                    } else if ($elem.hasClass('learning')) {
-                        border_color = 'orange'
-                    } else if ($elem.hasClass('new')) {
-                        border_color = 'DodgerBlue'
-                    } else if ($elem.hasClass('forgotten')) {
-                        border_color = 'crimson'
-                    }
-
-                    $elem
-                        .hide()
-                        .after(
-                            '<div class="input-group dict-input-group"><input type="text" class="dict" ' +
-                            'style="width:' + width + "px; line-height:" + line_height + "; border-color:" + 
-                            border_color + ';" ' + 'maxlength="' + length + '" data-text="' + $elem.text() + '">' +
-                            '<span data-toggle="modal" data-bs-target="#dic-modal" class="dict-answer d-none"></span></div>'
-                        );
-                });
-
-                $("#text").replaceWith($container);
-
-                scrollToPageTop();
-    
-                // automatically play audio, from the beginning
-                $("#range-speed").trigger("change", [{cpbr:0.5}]);
-                playAudioFromBeginning(); // from audioplayer.js
-    
-                $(":text:first").focus(); // focus first input
-            } else {
-                // toggle dictation off
-                $elems.each(function(index, value) {
-                    let $elem = $(this);
-                    $elem
-                        .show()
-                        .nextAll(":lt(1)")
-                        .remove();
-                });
-
-                $("#text").replaceWith($container);
-                
-                scrollToPageTop();
-                
-                $("#audioplayer").trigger("pause");
-            }
-        }
-    } // end toggleDictation
-
-    /**
-     * Checks if answer is correct and shows a cue to indicate status when user moves
-     * focus out of an input box.
-     */
-    $("body").on("blur", ".dict", function() {
-        let $curinput = $(this);
-        if (
-            $curinput.val().toLowerCase() ==
-            $curinput.attr("data-text").toLowerCase()
-        ) {
-            $curinput.css("border-color", "green");
-            $curinput
-                .next("span")
-                .not(".d-none")
-                .addClass("d-none");
-        } else if ($.trim($curinput.val()) != "") {
-            $curinput.css("border-color", "crimson");
-            $curinput
-                .next("span")
-                .removeClass("d-none")
-                .addClass("dict-wronganswer")
-                .text("[ " + $curinput.attr("data-text") + " ]");
-        }
-    }); // end .dict.on.blur
-
-    /**
-     * Implements shortcuts for dictation
-     */
-    $("body").on("keydown", ".dict", function(e) {
-        const keyCode = e.keyCode || e.which;
-        
-        // IME on mobile devices may not return correct keyCode
-        if (e.isComposing || keyCode == 0 || keyCode == 229) { 
-            return;
-        }
-
-        // if input is empty...
-        if (!$(this).val()) {
-            if (keyCode == 8) {
-                // if backspace is pressed, move focus to previous input
-                const index = $(".dict").index(this) - 1;
-                e.preventDefault();
-                $(".dict")
-                    .eq(index)
-                    .focus();    
-            } else if (keyCode == 32) {
-                // if space key is pressed, prevent default behavior
-                e.preventDefault();
-            }    
-        }
-        
-    }); // end .dict.on.keydown
-
-    /**
-     * Implements shortcuts for dictation
-     */
-    $("body").on("input", ".dict", function(e) {
-        let keyCode = e.keyCode || e.which;
-        const maxLength = $(this).attr("maxlength");
-        const curTime = $("#audioplayer")[0].currentTime;
-
-        // make sure keycode is correct (fix for IME on mobile devices)
-        if (keyCode == 0 || keyCode == 229) { 
-            keyCode = e.target.value.charAt(e.target.selectionStart - 1).charCodeAt();             
-        }
-
-        // if "1", rewind 1 sec; if "2", toggle audio; if "3" fast-forward 1 sec
-        switch (keyCode) {
-            case 8: // backspace
-                if (!$(this).val()) {
-                    const index = $(".dict").index(this) - 1;
-                    $(".dict")
-                        .eq(index)
-                        .focus();    
-                }
-                break;
-            case 49: // 1
-                $("#audioplayer")[0].currentTime = curTime - 5;
-                break;
-            case 50: // 2
-                togglePlayPause();  // found in audioplayer.js 
-                break;
-            case 51: // 3
-                $("#audioplayer")[0].currentTime = curTime + 5;
-                break;
-            default:
-                break;
-        }
-        $(this).val($(this).val().replace(/\d/gi, '')); // don't allow digits to get printed
-
-        // if maxlength reached, switch focus to next input
-        if(maxLength == $(this).val().length && !e.originalEvent.isComposing) {
-            const index = $(".dict").index(this) + 1;
-            $(".dict")
-                .eq(index)
-                .focus();
-        }
-    }); // end .dict.on.input
 
     /**
      * Tries to reload audio
@@ -964,12 +699,12 @@ $(document).ready(function() {
         if (!audio_is_loaded) {
             if ($(".learning, .new, .forgotten").length == 0) {
                 setNewTooltip(btn_next_phase, 
-                    'Finish & Save - Skipped some phases: no audio detected & no underlined words');
+                    'Finish & Save - Will skip some phases: no audio detected & no underlined words');
         
                 next_phase = 6;    
             } else {
                 setNewTooltip(btn_next_phase, 
-                    'Go to phase 5: Reviewing - Skipped some phases: no audio detected');
+                    'Go to phase 5: Reviewing - Will skip some phases: no audio detected');
         
                 next_phase = 5;
             }    
@@ -1043,26 +778,60 @@ $(document).ready(function() {
     /**
      * Removes selection when user clicks in white-space
      */
-    $(document).on("click", $pagereader, function(e) {
-        if ($(e.target).is(".word") === false) {
+    $(document).on("mouseup touchend", "#text-container", function(e) {
+        if ($(e.target).is(".word") === false &&
+            !$(e.target).closest('#action-buttons').length &&
+            !$(e.target).closest('#ap-play-btn').length) {
             e.stopPropagation();
 
             let $text_container = $("#text-container").length ? $("#text-container") : $pagereader.contents();
 
             highlighting = false;
-            $("html").enableScroll();
             $text_container.find(".highlighted").removeClass("highlighted");
+            hideActionButtonsPopUpToolbar(true);
+            resumeAudio();
         }
-    }); // end $pagereader.on.click
+    }); // end $pagereader.on.mouseup
 
     /**
-     * Shows confirmation message before closing/unloading tab/window
+     * Shows pop up toolbar when user clicks a word
      */
-    $(window.parent).on("beforeunload", function(e) {
+    function showActionButtonsPopUpToolbar() {
+        let $audioplayer = $("#audioplayer");
 
-        if (window.parent.show_confirmation_dialog) {
-            e.preventDefault(); // To show a dialog we need this preventDefault()
-            return "To save your progress, please click the Save button before you go.";
+        if ($audioplayer.length) {
+            // if there is audio playing
+            if (
+                !$audioplayer.prop("paused") &&
+                $audioplayer.prop("currentTime")
+            ) {
+                pauseAudio();
+                playing_audio = true;
+            } else {
+                playing_audio = false;
+            }
         }
-    }); // end window.parent.on.beforeunload
+        // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
+        getWordFrequency($selword.text(), doclang);
+        setWordActionButtons($selword);
+
+        const base_uris = {
+            dictionary: dictionary_URI,
+            img_dictionary: img_dictionary_URI,
+            translator: translator_URI
+        };
+
+        setDicActionButtonsClick($selword, base_uris);
+        showActionButtons($selword);
+    } // end showActionButtonsPopUpToolbar
+
+    /**
+     * Hides actions pop up toolbar
+     */
+    function hideActionButtonsPopUpToolbar(renable_scroll) {
+        if (renable_scroll) {
+            $("#text-container").enableScroll();
+        }
+        hideActionButtons();
+    } // end hideActionButtonsPopUpToolbar
 });

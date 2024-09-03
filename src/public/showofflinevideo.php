@@ -69,7 +69,7 @@ require_once PUBLIC_PATH . 'head.php';
         </div>
 
         <?php
-            require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
+            require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
             require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
         ?>
 
@@ -77,6 +77,7 @@ require_once PUBLIC_PATH . 'head.php';
         <script defer src="/js/showofflinevideo.min.js"></script>
         <script defer src="/js/dictionary.min.js"></script>
         <script defer src="/js/subtitles-parser/subtitles.parser.min.js"></script>
+        <script defer src="/js/helpers.min.js"></script>
         <script defer src="/js/tooltips.min.js"></script>
     </body>
 </html>

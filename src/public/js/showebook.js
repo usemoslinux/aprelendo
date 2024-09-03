@@ -309,7 +309,7 @@ $(document).ready(function() {
                     next.href = nextSection.href;
                     
                     if (!isMobileDevice()) {
-                        next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as practiced');
+                        next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as reviewed');
                         new bootstrap.Tooltip(next, {
                             trigger: 'hover'
                         })

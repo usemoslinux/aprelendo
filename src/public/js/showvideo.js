@@ -27,7 +27,6 @@ $(document).ready(function () {
     let dictionary_URI = "";
     let img_dictionary_URI = "";
     let translator_URI = "";
-    let translate_paragraph_link = "";
     let resume_video = false;
     let video_paused = false;
     let show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
@@ -60,17 +59,17 @@ $(document).ready(function () {
         data: { txt: $('#text-container').html() },
         dataType: "json"
     })
-        .done(function (data) {
-            $('#text-container').html(underlineWords(data, doclang, false));
-        })
-        .fail(function (xhr, ajaxOptions, thrownError) {
-            console.log("There was an unexpected error trying to underline words in this text")
-        }); // end $.ajax    
+    .done(function (data) {
+        $('#text-container').html(underlineWords(data, doclang, false));
+    })
+    .fail(function (xhr, ajaxOptions, thrownError) {
+        console.log("There was an unexpected error trying to underline words in this text")
+    }); // end $.ajax    
 
     /**
      * Disable right click context menu 
      */
-    $(document).on("contextmenu", ".word", function (e) {
+    $(document).on("contextmenu", function (e) {
         e.preventDefault();
         return false;
     }); // end .word.on.contextmenu
@@ -81,6 +80,8 @@ $(document).ready(function () {
      */
     $(document).on("mousedown touchstart", ".word", function (e) {
         e.stopPropagation();
+
+        hideActionButtonsPopUpToolbar(false);
 
         video_paused = player.getPlayerState() != 1;
 
@@ -126,21 +127,18 @@ $(document).ready(function () {
             if (e.which < 2) {
                 // if left mouse button / touch...
                 highlighting = false;
+
                 if ($sel_start === $sel_end) {
                     $selword = $(this);
                 }
-                showModal();
+
+                $(".highlighted").removeClass("highlighted"); // remove previous highlighting
+                $selword.addClass("highlighted");
+
+                showActionButtonsPopUpToolbar();
             }
         }
     }); // end .word.on.mouseup/touchend
-
-    /**
-     * Determines if an element is after another one
-     * @param {Jquery object} sel
-     */
-    $.fn.isAfter = function (sel) {
-        return this.prevUntil(sel).length !== this.prevAll().length;
-    }; // end $.fn.isAfter
 
     /**
      * Word/Phrase selection
@@ -168,7 +166,7 @@ $(document).ready(function () {
                 $('html').css({ 'overflow': 'hidden' });
             }
 
-            $(".word").removeClass("highlighted");
+            $(".highlighted").removeClass("highlighted"); // remove previous highlighting
 
             $sel_end =
                 e.type === "mouseover" ? $(this) : $(
@@ -202,7 +200,7 @@ $(document).ready(function () {
     /**
      * Adds selected word or phrase to the database and underlines it in the text
      */
-    $("#btn-add").on("click", function () {
+    $("#btn-add, #btn-forgot").on("click", function () {
         const sel_text = $selword.text();
         const is_phrase = $selword.length > 1 ? 1 : 0;
 
@@ -218,73 +216,76 @@ $(document).ready(function () {
                 sentence: getVideoSentence($selword)
             }
         })
-            .done(function () {
-                // if successful, underline word or phrase
-                if (is_phrase) {
-                    // if it's a phrase
-                    const firstword = $selword.eq(0).text();
-                    const phraseext = $selword.filter(".word").length;
-                    let $filterphrase = $("a.word").filter(function () {
-                        return (
-                            $(this)
-                                .text()
-                                .toLowerCase() === firstword.toLowerCase()
+        .done(function () {
+            // if successful, underline word or phrase
+            if (is_phrase) {
+                // if it's a phrase
+                const firstword = $selword.eq(0).text();
+                const phraseext = $selword.filter(".word").length;
+                let $filterphrase = $("a.word").filter(function () {
+                    return (
+                        $(this)
+                            .text()
+                            .toLowerCase() === firstword.toLowerCase()
+                    );
+                });
+
+                $filterphrase.each(function () {
+                    let lastword = $(this)
+                        .nextAll("a.word")
+                        .slice(0, phraseext - 1)
+                        .last();
+                    let phrase = $(this)
+                        .nextUntil(lastword)
+                        .addBack()
+                        .next("a.word")
+                        .addBack();
+
+                    if (
+                        phrase.text().toLowerCase() ===
+                        sel_text.toLowerCase()
+                    ) {
+                        phrase.wrapAll(
+                            "<a class='word reviewing new'></a>"
                         );
-                    });
 
-                    $filterphrase.each(function () {
-                        let lastword = $(this)
-                            .nextAll("a.word")
-                            .slice(0, phraseext - 1)
-                            .last();
-                        let phrase = $(this)
-                            .nextUntil(lastword)
-                            .addBack()
-                            .next("a.word")
-                            .addBack();
+                        phrase.contents().unwrap();
+                    }
+                });
+            } else {
+                // if it's a word
+                let $filterword = $("a.word").filter(function () {
+                    return (
+                        $(this)
+                            .text()
+                            .toLowerCase() === sel_text.toLowerCase()
+                    );
+                });
 
-                        if (
-                            phrase.text().toLowerCase() ===
-                            sel_text.toLowerCase()
-                        ) {
-                            phrase.wrapAll(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#dic-modal'></a>"
-                            );
-
-                            phrase.contents().unwrap();
-                        }
-                    });
-                } else {
-                    // if it's a word
-                    let $filterword = $("a.word").filter(function () {
-                        return (
-                            $(this)
-                                .text()
-                                .toLowerCase() === sel_text.toLowerCase()
+                $filterword.each(function () {
+                    let $word = $(this);
+                    if ($word.is(".new, .learning, .learned, .forgotten")) {
+                        $word.wrap(
+                            "<a class='word reviewing forgotten'></a>"
                         );
-                    });
+                    } else {
+                        $word.wrap(
+                            "<a class='word reviewing new'></a>"
+                        );
+                    }
+                });
 
-                    $filterword.each(function () {
-                        let $word = $(this);
-                        if ($word.is(".new, .learning, .learned, .forgotten")) {
-                            $word.wrap(
-                                "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#dic-modal'></a>"
-                            );
-                        } else {
-                            $word.wrap(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#dic-modal'></a>"
-                            );
-                        }
-                    });
+                $filterword.contents().unwrap();
+            }
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(
+                "Oops! There was an error adding this word or phrase to the database."
+            );
+        });
 
-                    $filterword.contents().unwrap();
-                }
-            })
-            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(
-                    "Oops! There was an error adding this word or phrase to the database."
-                );
-            });
+        hideActionButtonsPopUpToolbar(true);
+        resumeVideo();
     }); // end #btn-add.on.click
 
     /**
@@ -297,34 +298,6 @@ $(document).ready(function () {
     });
 
     /**
-     * Shows dictionary when user clicks a word
-     * All words are enclosed in a.word tags
-     */
-    function showModal() {
-        getWordFrequency($selword.text(), doclang);
-        setAddDeleteButtons($selword);
-
-        $("#loading-spinner").attr('class', 'lds-ellipsis m-auto');
-        $("#dicFrame").attr('class', 'd-none');
-
-        // build translate sentence url
-        translate_paragraph_link = buildVideoTranslationLink(translator_URI, $selword);
-
-        // show dictionary
-        $(parent.document)
-            .find("#dicFrame")
-            .get(0)
-            .contentWindow.location.replace(buildDictionaryLink(dictionary_URI, $selword.text()));
-        $("#btn-add").focus();
-        // the previous line loads iframe content without adding it to browser history,
-        // as this one does: $('#dicFrame').attr('src', url);
-
-        $(parent.document)
-            .find("#dic-modal")
-            .modal("show");
-    } // end showModal
-
-    /**
      * Remove selected word or phrase from database
      */
     $("#btn-remove").on("click", function () {
@@ -335,77 +308,80 @@ $(document).ready(function () {
                 word: $selword.text().toLowerCase()
             }
         })
-            .done(function () {
-                let $filter = $("a.word").filter(function () {
-                    return (
-                        $(this)
-                            .text()
-                            .toLowerCase() === $selword.text().toLowerCase()
-                    );
-                });
-
-                // ajax call to underline text
-                $.ajax({
-                    type: "POST",
-                    url: "/ajax/getuserwords.php",
-                    data: { txt: $selword.text() },
-                    dataType: "json"
-                })
-                    .done(function (data) {
-                        // if everything went fine, remove the underlining and underline once again the whole selection
-                        // also, the case of the word/phrase in the text has to be respected
-                        // for phrases, we need to make sure that new underlining is added for each word
-
-                        let $result = $(underlineWords(data, doclang, false));
-                        let $cur_filter = {};
-                        let cur_word = /""/;
-
-                        $filter.each(function () {
-                            $cur_filter = $(this);
-
-                            $result.filter(".word").each(function (key) {
-                                if (langs_with_no_word_separator.includes(doclang)) {
-                                    cur_word = new RegExp(
-                                        "(?<![^])" + $(this).text() + "(?![$])",
-                                        "iug"
-                                    ).exec($cur_filter.text());
-                                }
-                                else {
-                                    cur_word = new RegExp(
-                                        "(?<![\\p{L}|^])" + $(this).text() + "(?![\\p{L}|$])",
-                                        "iug"
-                                    ).exec($cur_filter.text());
-                                }
-
-                                $(this).text(cur_word);
-
-                                // check if any word marked by PHP as .learning should be marked as .new instead
-                                const word = $(this).text().toLowerCase();
-                                const user_word = data.user_words.find(function (element) {
-                                    return element.word == word;
-                                });
-
-                                if (user_word !== undefined) {
-                                    if (user_word.status == 2) {
-                                        $(this).removeClass("learning").addClass("new");
-                                    } else if (user_word.status == 3) {
-                                        $(this).removeClass("learning").addClass("forgotten");
-                                    }
-                                }
-                            });
-
-                            $cur_filter.replaceWith($result.clone());
-                        });
-                    })
-                    .fail(function (xhr, ajaxOptions, thrownError) {
-                        console.log("There was an unexpected error trying to underline words in this text")
-                    }); // end $.ajax    
-            })
-            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(
-                    "Oops! There was an error removing the word from the database."
+        .done(function () {
+            let $filter = $("a.word").filter(function () {
+                return (
+                    $(this)
+                        .text()
+                        .toLowerCase() === $selword.text().toLowerCase()
                 );
             });
+
+            // ajax call to underline text
+            $.ajax({
+                type: "POST",
+                url: "/ajax/getuserwords.php",
+                data: { txt: $selword.text() },
+                dataType: "json"
+            })
+                .done(function (data) {
+                    // if everything went fine, remove the underlining and underline once again the whole selection
+                    // also, the case of the word/phrase in the text has to be respected
+                    // for phrases, we need to make sure that new underlining is added for each word
+
+                    let $result = $(underlineWords(data, doclang, false));
+                    let $cur_filter = {};
+                    let cur_word = /""/;
+
+                    $filter.each(function () {
+                        $cur_filter = $(this);
+
+                        $result.filter(".word").each(function (key) {
+                            if (langs_with_no_word_separator.includes(doclang)) {
+                                cur_word = new RegExp(
+                                    "(?<![^])" + $(this).text() + "(?![$])",
+                                    "iug"
+                                ).exec($cur_filter.text());
+                            }
+                            else {
+                                cur_word = new RegExp(
+                                    "(?<![\\p{L}|^])" + $(this).text() + "(?![\\p{L}|$])",
+                                    "iug"
+                                ).exec($cur_filter.text());
+                            }
+
+                            $(this).text(cur_word);
+
+                            // check if any word marked by PHP as .learning should be marked as .new instead
+                            const word = $(this).text().toLowerCase();
+                            const user_word = data.user_words.find(function (element) {
+                                return element.word == word;
+                            });
+
+                            if (user_word !== undefined) {
+                                if (user_word.status == 2) {
+                                    $(this).removeClass("learning").addClass("new");
+                                } else if (user_word.status == 3) {
+                                    $(this).removeClass("learning").addClass("forgotten");
+                                }
+                            }
+                        });
+
+                        $cur_filter.replaceWith($result.clone());
+                    });
+                })
+                .fail(function (xhr, ajaxOptions, thrownError) {
+                    console.log("There was an unexpected error trying to underline words in this text")
+                }); // end $.ajax    
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(
+                "Oops! There was an error removing the word from the database."
+            );
+        });
+
+        hideActionButtonsPopUpToolbar(true);
+        resumeVideo();
     }); // end #btn-remove.on.click
 
     /**
@@ -505,56 +481,21 @@ $(document).ready(function () {
     }); // end #btn-save-ytvideo.on.click
 
     /**
-     * Resumes video when modal window is closed
+     * Removes selection when user clicks in white-space
      */
-    $("#dic-modal").on("hidden.bs.modal", function () {
-        if (resume_video) {
-            player.playVideo();
-            resume_video = false;
+    $(document).on("mouseup touchend", "#text-container", function(e) {
+        if ($(e.target).is(".word") === false && !$(e.target).closest('#action-buttons').length > 0) {
+            e.stopPropagation();
+
+            let $text_container = $("#text-container");
+
+            highlighting = false;
+            
+            $text_container.find(".highlighted").removeClass("highlighted");
+            hideActionButtonsPopUpToolbar(true);
+            resumeVideo();
         }
-
-        // removes word selection
-        $selword.removeClass("highlighted");
-    }); // end #dic-modal.on.hidden.bs.modal
-
-    /**
-     * Hides loader spinner when dictionary iframe finished loading
-     */
-    $("#dicFrame").on("load", function () {
-        $("#loading-spinner").attr('class', 'd-none');
-        $(this).removeClass();
-    }); // end #dicFrame.on.load()
-
-    $("#btn-translate").on("click", function () {
-        window.open(translate_paragraph_link, '_blank', 'noopener,noreferrer');
-    }); // end #btn-translate.on.click()
-
-    $("#btn-img-dic").on("click", function () {
-        window.open(buildDictionaryLink(img_dictionary_URI, $selword.text()), '_blank', 'noopener,noreferrer');
-    }); // end #btn-img-dic.on.click()
-
-    /**
-     * Removes word highlighting when user opens dictionary for word
-     */
-    $("#text-container").on("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        highlighting = false;
-        $("#text-container")
-            .find(".highlighted")
-            .removeClass("highlighted");
-    }); // end #text-container.on.click
-
-    /**
-     * Shows dialog message reminding users to save changes before leaving
-     */
-    $(window).on("beforeunload", function () {
-        if (show_confirmation_dialog) {
-            return "To save your progress, please click the Save button before you go. Otherwise, your changes "
-                + "will be lost. Are you sure you want to exit this page?";
-        }
-    }); // end window.on.beforeunload
+    }); // end $pagereader.on.mouseup
 
     /**
      * Toggle fullscreen mode
@@ -576,4 +517,55 @@ $(document).ready(function () {
                 });
         }
     }); // end #btn-fullscreen.on.click
+
+    /**
+     * Shows dialog message reminding users to save changes before leaving
+     */
+    $(window).on("beforeunload", function () {
+        if (show_confirmation_dialog) {
+            return "To save your progress, please click the Save button before you go. Otherwise, your changes "
+                + "will be lost. Are you sure you want to exit this page?";
+        }
+    }); // end window.on.beforeunload
+
+    /**
+     * Resumes video when action buttons popup is closed
+     */
+    function resumeVideo() {
+        if (resume_video) {
+            player.playVideo();
+            resume_video = false;
+        }
+    } // end resumeVideo()
+
+    /**
+     * Shows pop up toolbar when user clicks a word
+     */
+    function showActionButtonsPopUpToolbar() {
+        // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
+        getWordFrequency($selword.text(), doclang);
+        $("#text-container").disableScroll();
+        setWordActionButtons($selword);
+
+        const base_uris = {
+            dictionary: dictionary_URI,
+            img_dictionary: img_dictionary_URI,
+            translator: translator_URI
+        };
+
+        setDicActionButtonsClick($selword, base_uris);
+        showActionButtons($selword);
+    } // end showActionButtonsPopUpToolbar
+
+    /**
+     * Hides actions pop up toolbar
+     */
+    function hideActionButtonsPopUpToolbar(renable_scroll) {
+        if (renable_scroll) {
+            $("#text-container").enableScroll();
+        }
+        hideActionButtons();
+    } // end hideActionButtonsPopUpToolbar
+
+    
 });

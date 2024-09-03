@@ -238,7 +238,7 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
                 </button>
             </span>
         </div>
-        <div id="viewer-container" class="py-0 px-5">
+        <div id="text-container" class="py-0 px-5">
             <div class="navlink">
                 <a id="prev" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                     data-bs-placement="bottom" href="#prev"></a>
@@ -254,7 +254,7 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
     </div>
 
     <?php
-        require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
+        require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
         require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
     ?>
 

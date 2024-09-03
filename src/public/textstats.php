@@ -192,7 +192,7 @@ function printTableFooter($array_table_rows)
             </div>
             <div class="col-12">
                 <p><strong class="word reviewing new">New</strong>: words you've just added to your learning list.</p>
-                <p><strong class="word reviewing learning">Reviewed</strong>: words that you already reviewed at
+                <p><strong class="word reviewing learning">Learning</strong>: words that you already reviewed at
                     least once, but still need to review more times.</p>
                 <p><strong class="word learned">Learned</strong>: words that the system thinks you have already reviewed
                     enough times.</p>

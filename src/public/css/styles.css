@@ -834,7 +834,8 @@ a[role="menuitem"] {
     border-color: orange;
 }
 
-.word.learning:hover .word.learning:active {
+.word.learning:hover
+.word.learning:active {
     background-color: orange;
     color: ghostwhite;
 }
@@ -914,12 +915,6 @@ a[role="menuitem"] {
     width: initial;
 }
 
-.dict-answer:hover,
-.dict-answer:active {
-    color: #0a58ca;
-    cursor: pointer;
-}
-
 .dict-wronganswer {
     background-color: inherit;
     border: 0;
@@ -933,34 +928,7 @@ input {
     background-color: inherit;
 }
 
-/* MODAL DIALOG (TO ADD NEW WORDS) */
-
-#dic-modal .modal-dialog {
-    color: black;
-    height: calc(100% - 1rem);
-    margin: .5rem auto;
-    max-width: 768px;
-    width: calc(100% - 1rem);
-    z-index: 4;
-}
-
-@media (max-width: 767px) {
-    #dic-modal .modal-dialog {
-        height: 100%;
-        width: 100%;
-        margin:0;
-    }
-}
-
-#dic-modal .modal-header {
-    padding-bottom: 2px;
-}
-
-#dic-modal .modal-body {
-    display: flex;
-    flex: 1;
-    padding: 0;
-}
+/* MODAL DIALOGS */
 
 .modal {
     font-size: 1rem;
@@ -969,34 +937,11 @@ input {
     line-height: 1.5;
 }
 
-#bdgfreqlvl {
-    border-radius: 0;
-}
+/* ACTION POPUP MENU */
 
-.forget {
-    margin-right: 10px;
-    margin-top: 2px;
-}
-
-#gt-icon {
-    font-size: 34px;
-}
-
-@media screen and (min-width: 768px) {
-    .flex {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .flex>.col-lg-3 {
-        flex: 1;
-        max-width: 247px;
-    }
-
-    .flex>.col-lg-9 {
-        flex: 1;
-        width: auto;
-    }
+#action-buttons {
+    z-index: 1000;
+    position: absolute;
 }
 
 /* TABLE ADJUSTMENTS (USED TO LIST TEXTS/WORDS) */

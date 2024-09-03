@@ -100,3 +100,37 @@ function getCurrentFileName() {
     const pathname = new URL(window.location.href).pathname;
     return pathname.substring(pathname.lastIndexOf('/') + 1);
 } // end getCurrentFileName
+
+/**
+ * Renables scrolling without making text jump around
+ */
+$.fn.enableScroll = function() {
+    // Remove the scroll event handler for the specific element
+    this.off('scroll.scrolldisabler');
+    return this; // Enable chainability
+};
+
+/**
+ * Disables scrolling without making text jump around
+ */
+$.fn.disableScroll = function() {
+    // Store the current scroll position of the element
+    this.data('oldScrollPos', this.scrollTop());
+
+    // Attach a scroll event handler to the element
+    this.on('scroll.scrolldisabler', (event) => {
+        // Reset the scroll position to the stored value
+        this.scrollTop(this.data('oldScrollPos'));
+        event.preventDefault();
+    });
+
+    return this; // Enable chainability
+};
+
+/**
+ * Determines if an element is after another one
+ * @param {Jquery object} sel
+ */
+$.fn.isAfter = function(sel) {
+    return this.prevUntil(sel).length !== this.prevAll().length;
+}; // end $.fn.isAfter

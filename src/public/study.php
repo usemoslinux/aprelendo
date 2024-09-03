@@ -123,7 +123,7 @@ require_once PUBLIC_PATH . 'header.php';
 </div>
 
 <?php
-require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
+require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
 ?>
 
 <script defer src="/js/study.min.js"></script>

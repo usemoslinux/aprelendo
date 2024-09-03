@@ -111,7 +111,7 @@ try {
     echo $html;
 }
 
-require_once PUBLIC_PATH . 'showdicmodal.php'; // load dictionary modal window
+require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
 require_once PUBLIC_PATH . 'showimportwordsmodal.php'; // load import words modal window
 
 ?>

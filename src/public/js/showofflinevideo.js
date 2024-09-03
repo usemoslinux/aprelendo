@@ -28,7 +28,6 @@ $(document).ready(function () {
     let dictionary_URI = "";
     let img_dictionary_URI = "";
     let translator_URI = "";
-    let translate_paragraph_link = "";
     let resume_video = false;
     let video_paused = false;
     let show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
@@ -57,7 +56,7 @@ $(document).ready(function () {
     /**
      * Disable right click context menu 
      */
-    $(document).on("contextmenu", ".word", function (e) {
+    $(document).on("contextmenu", function (e) {
         e.preventDefault();
         return false;
     }); // end .word.on.contextmenu
@@ -68,6 +67,8 @@ $(document).ready(function () {
      */
     $(document).on("mousedown touchstart", ".word", function (e) {
         e.stopPropagation();
+
+        hideActionButtonsPopUpToolbar(false);
 
         video_paused = player.paused;
 
@@ -116,18 +117,14 @@ $(document).ready(function () {
                 if ($sel_start === $sel_end) {
                     $selword = $(this);
                 }
-                showModal();
+
+                $(".highlighted").removeClass("highlighted"); // remove previous highlighting
+                $selword.addClass("highlighted");
+
+                showActionButtonsPopUpToolbar();
             }
         }
     }); // end .word.on.mouseup/touchend
-
-    /**
-     * Determines if an element is after another one
-     * @param {Jquery object} sel
-     */
-    $.fn.isAfter = function (sel) {
-        return this.prevUntil(sel).length !== this.prevAll().length;
-    }; // end $.fn.isAfter
 
     /**
      * Word/Phrase selection
@@ -155,7 +152,7 @@ $(document).ready(function () {
                 $('html').css({ 'overflow': 'hidden' });
             }
 
-            $(".word").removeClass("highlighted");
+            $(".highlighted").removeClass("highlighted"); // remove previous highlighting
 
             $sel_end =
                 e.type === "mouseover" ? $(this) : $(
@@ -189,7 +186,7 @@ $(document).ready(function () {
     /**
      * Adds selected word or phrase to the database and underlines it in the text
      */
-    $("#btn-add").on("click", function () {
+    $("#btn-add, #btn-forgot").on("click", function () {
         const sel_text = $selword.text();
         const is_phrase = $selword.length > 1 ? 1 : 0;
         // add selection to "words" table
@@ -234,7 +231,7 @@ $(document).ready(function () {
                             sel_text.toLowerCase()
                         ) {
                             phrase.wrapAll(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#dic-modal'></a>"
+                                "<a class='word reviewing new'></a>"
                             );
 
                             phrase.contents().unwrap();
@@ -254,11 +251,11 @@ $(document).ready(function () {
                         let $word = $(this);
                         if ($word.is(".new, .learning, .learned, .forgotten")) {
                             $word.wrap(
-                                "<a class='word reviewing forgotten' data-toggle='modal' data-bs-target='#dic-modal'></a>"
+                                "<a class='word reviewing forgotten'></a>"
                             );
                         } else {
                             $word.wrap(
-                                "<a class='word reviewing new' data-toggle='modal' data-bs-target='#dic-modal'></a>"
+                                "<a class='word reviewing new'></a>"
                             );
                         }
                     });
@@ -271,6 +268,9 @@ $(document).ready(function () {
                     "Oops! There was an error adding this word or phrase to the database."
                 );
             });
+
+            hideActionButtonsPopUpToolbar(true);
+            resumeVideo();
     }); // end #btn-add.on.click
 
     /**
@@ -281,34 +281,6 @@ $(document).ready(function () {
         vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
     });
-
-    /**
-     * Shows dictionary when user clicks a word
-     * All words are enclosed in a.word tags
-     */
-    function showModal() {
-        getWordFrequency($selword.text(), doclang);
-        setAddDeleteButtons($selword);
-
-        $("#loading-spinner").attr('class', 'lds-ellipsis m-auto');
-        $("#dicFrame").attr('class', 'd-none');
-
-        // build translate sentence url
-        translate_paragraph_link = buildVideoTranslationLink(translator_URI, $selword);
-
-        // show dictionary
-        $(parent.document)
-            .find("#dicFrame")
-            .get(0)
-            .contentWindow.location.replace(buildDictionaryLink(dictionary_URI, $selword.text()));
-        $("#btn-add").focus();
-        // the previous line loads iframe content without adding it to browser history,
-        // as this one does: $('#dicFrame').attr('src', url);
-
-        $(parent.document)
-            .find("#dic-modal")
-            .modal("show");
-    } // end showModal
 
     /**
      * Remove selected word or phrase from database
@@ -392,6 +364,9 @@ $(document).ready(function () {
                     "Oops! There was an error removing the word from the database."
                 );
             });
+
+            hideActionButtonsPopUpToolbar(true);
+            resumeVideo();
     }); // end #btn-remove.on.click
 
     /**
@@ -496,46 +471,20 @@ $(document).ready(function () {
     } // end #btn-save-offline-video.on.click
 
     /**
-     * Resumes video when modal window is closed
+     * Removes selection when user clicks in white-space
      */
-    $("#dic-modal").on("hidden.bs.modal", function () {
-        if (resume_video) {
-            player.play();
-            resume_video = false;
+    $(document).on("mouseup touchend", "#text-container", function(e) {
+        if ($(e.target).is(".word") === false && !$(e.target).closest('#action-buttons').length > 0) {
+            e.stopPropagation();
+
+            let $text_container = $("#text-container");
+
+            highlighting = false;
+            $text_container.find(".highlighted").removeClass("highlighted");
+            hideActionButtonsPopUpToolbar(true);
+            resumeVideo();
         }
-
-        // removes word selection
-        $selword.removeClass("highlighted");
-    }); // end #dic-modal.on.hidden.bs.modal
-
-    /**
-     * Hides loader spinner when dictionary iframe finished loading
-     */
-    $("#dicFrame").on("load", function () {
-        $("#loading-spinner").attr('class', 'd-none');
-        $(this).removeClass();
-    }); // end #dicFrame.on.load()
-
-    $("#btn-translate").on("click", function () {
-        window.open(translate_paragraph_link, '_blank', 'noopener,noreferrer');
-    }); // end #btn-translate.on.click()
-
-    $("#btn-img-dic").on("click", function () {
-        window.open(buildDictionaryLink(img_dictionary_URI, $selword.text()), '_blank', 'noopener,noreferrer');
-    }); // end #btn-img-dic.on.click()
-
-    /**
-     * Removes word highlighting when user opens dictionary for word
-     */
-    $("#text-container").on("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        highlighting = false;
-        $("#text-container")
-            .find(".highlighted")
-            .removeClass("highlighted");
-    }); // end #text-container.on.click
+    }); // end $pagereader.on.mouseup
 
     /**
      * Open video selection dialog
@@ -566,30 +515,9 @@ $(document).ready(function () {
         e.preventDefault();
         $("#subs-file-input").trigger('click');
     }); // end #btn-selsubs.on.click
-
-    /**
-     * Toggle fullscreen mode
-     */
-    $("#btn-fullscreen").on("click", function(e) {
-        // Check if we're already in fullscreen
-        if (document.fullscreenElement) {
-            // Exit fullscreen
-            document.exitFullscreen().catch((err) => {
-                alert(`An error occurred while trying to exit fullscreen mode: ${err.message} (${err.name})`);
-            });
-        } else {
-            // Request fullscreen
-            let elem = document.documentElement;
-    
-            elem.requestFullscreen({ navigationUI: "show" })
-                .catch((err) => {
-                    alert(`An error occurred while trying to switch into fullscreen mode: ${err.message} (${err.name})`);
-                });
-        }
-    }); // end #btn-fullscreen.on.click
     
     /**
-     * After user selects subs, load them
+     * Load subtitles selected by user
      */
     $("#subs-file-input").on("change", function () {
         if (this.files[0]) {
@@ -648,6 +576,27 @@ $(document).ready(function () {
     }); // end #subs-file-input.on.change
 
     /**
+     * Toggle fullscreen mode
+     */
+    $("#btn-fullscreen").on("click", function(e) {
+        // Check if we're already in fullscreen
+        if (document.fullscreenElement) {
+            // Exit fullscreen
+            document.exitFullscreen().catch((err) => {
+                alert(`An error occurred while trying to exit fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            // Request fullscreen
+            let elem = document.documentElement;
+    
+            elem.requestFullscreen({ navigationUI: "show" })
+                .catch((err) => {
+                    alert(`An error occurred while trying to switch into fullscreen mode: ${err.message} (${err.name})`);
+                });
+        }
+    }); // end #btn-fullscreen.on.click
+
+    /**
      * Show reading line when video's currentTime changes
      */
     $("#video-stream").on("timeupdate", function (e) {
@@ -682,4 +631,44 @@ $(document).ready(function () {
                 + "be lost. Are you sure you want to exit this page?";
         }
     }); // end window.on.beforeunload
+
+    /**
+     * Resumes video when action buttons popup is closed
+     */
+    function resumeVideo() {
+        if (resume_video) {
+            player.play();
+            resume_video = false;
+        }
+    } // end resumeVideo()
+    
+    /**
+     * Shows dictionary when user clicks a word
+     * All words are enclosed in a.word tags
+     */
+    function showActionButtonsPopUpToolbar() {
+        // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
+        getWordFrequency($selword.text(), doclang);
+        $("#text-container").disableScroll();
+        setWordActionButtons($selword);
+
+        const base_uris = {
+            dictionary: dictionary_URI,
+            img_dictionary: img_dictionary_URI,
+            translator: translator_URI
+        };
+
+        setDicActionButtonsClick($selword, base_uris);
+        showActionButtons($selword);
+    } // end showActionButtonsPopUpToolbar
+
+    /**
+     * Hides actions pop up toolbar
+     */
+    function hideActionButtonsPopUpToolbar(renable_scroll) {
+        if (renable_scroll) {
+            $("#text-container").enableScroll();
+        }
+        hideActionButtons();
+    } // end hideActionButtonsPopUpToolbar
 });

@@ -10,19 +10,30 @@ let abloop_start = 0;
 let abloop_end = 0;
 
 if (audio) {
-    // Toggle Play/Pause
-    function togglePlayPause() {
+    function playAudio() {
+        icon.className = 'bi bi-pause-fill';
+        audio.play();
+    }
 
+    function stopAudio() {
+        icon.className = 'bi bi-play-fill';
+        audio.pause();
+        audio.currentTime = 0;
+    }
+    
+    function pauseAudio() {
+        icon.className = 'bi bi-play-fill';
+        audio.pause();
+    }
+
+    function togglePlayPause() {
         if (audio.paused || audio.ended) {
-            icon.className = 'bi bi-pause-fill';
-            audio.play();
+            playAudio();
         } else {
-            icon.className = 'bi bi-play-fill';
-            audio.pause();
+            pauseAudio();
         }
     }
 
-    // Plays audio from beginning
     function playAudioFromBeginning() {
         audio.pause();
         audio.currentTime = 0;
@@ -92,6 +103,7 @@ if (audio) {
     audio.addEventListener('ended', function() {
         audio.currentTime = 0;
         icon.className = 'bi bi-play-fill';
+        playing_audio = false;
     });
 
     // on audio error
