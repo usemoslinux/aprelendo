@@ -90,7 +90,7 @@ $(document).ready(function() {
                 playing_audio = false;
             }
             $selword = $(this);
-            window.open(buildTextTranslationLink(translator_URI, $selword), '_blank', 'noopener,noreferrer');
+            openInNewTab(buildTextTranslationLink(translator_URI, $selword));
         }
     }); // end .word.on.mousedown/touchstart
 
@@ -812,7 +812,7 @@ $(document).ready(function() {
             }
         }
         // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
-        getWordFrequency($selword.text(), doclang);
+        // getWordFrequency($selword.text(), doclang);
         setWordActionButtons($selword);
 
         const base_uris = {
@@ -821,7 +821,7 @@ $(document).ready(function() {
             translator: translator_URI
         };
 
-        setDicActionButtonsClick($selword, base_uris);
+        setDicActionButtonsClick($selword, base_uris, 'text');
         showActionButtons($selword);
     } // end showActionButtonsPopUpToolbar
 

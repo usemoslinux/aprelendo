@@ -102,7 +102,7 @@ $(document).ready(function () {
         } else if (e.which == 3) {
             // on right click show translation of the whole sentence
             $selword = $(this);
-            window.open(buildVideoTranslationLink(translator_URI, $selword), '_blank', 'noopener,noreferrer');
+            openInNewTab(buildVideoTranslationLink(translator_URI, $selword));
         }
     }); // end .word.on.mousedown/touchstart
 
@@ -495,7 +495,7 @@ $(document).ready(function () {
             hideActionButtonsPopUpToolbar(true);
             resumeVideo();
         }
-    }); // end $pagereader.on.mouseup
+    }); // end $document.on.mouseup
 
     /**
      * Toggle fullscreen mode
@@ -543,7 +543,7 @@ $(document).ready(function () {
      */
     function showActionButtonsPopUpToolbar() {
         // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
-        getWordFrequency($selword.text(), doclang);
+        // getWordFrequency($selword.text(), doclang);
         $("#text-container").disableScroll();
         setWordActionButtons($selword);
 
@@ -553,7 +553,7 @@ $(document).ready(function () {
             translator: translator_URI
         };
 
-        setDicActionButtonsClick($selword, base_uris);
+        setDicActionButtonsClick($selword, base_uris, 'video');
         showActionButtons($selword);
     } // end showActionButtonsPopUpToolbar
 
@@ -566,6 +566,4 @@ $(document).ready(function () {
         }
         hideActionButtons();
     } // end hideActionButtonsPopUpToolbar
-
-    
 });

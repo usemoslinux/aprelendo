@@ -152,7 +152,7 @@ function buildVideoTranslationLink(translator_URI, $selword) {
  * @returns string
  */
 function buildStudyTranslationLink(translator_URI, $selword) {
-    const sentence = $selword.parent("p").text().trim();
+    const sentence = $selword.parent("p").text().trim() || $selword.text();
     return translator_URI.replace("%s", encodeURIComponent(sentence));
 } // end buildStudyTranslationLink
 
@@ -284,19 +284,34 @@ function hideActionButtons(e) {
  *                               img_dictionary: 'base URI for the image dictionary service',
  *                               translator: 'base URI for the translator service'
  *                             }
+ * @param {string} source - Page where dictionary pop-up will be shown. Different translation links are build based
  */
-function setDicActionButtonsClick($selword, base_uris) {
-    const dic_link = buildDictionaryLink(base_uris.dictionary, $selword.text())
+function setDicActionButtonsClick($selword, base_uris, source) {
+    const dic_link = buildDictionaryLink(base_uris.dictionary, $selword.text());
     const img_dic_link = buildDictionaryLink(base_uris.img_dictionary, $selword.text());
-    const translator_link = buildTextTranslationLink(base_uris.translator, $selword);
+    
+    let translator_link = '';
+    switch (source) {
+        case 'text':
+            translator_link = buildTextTranslationLink(base_uris.translator, $selword);
+            break;
+        case 'video':
+            translator_link = buildVideoTranslationLink(base_uris.translator, $selword);
+            break;
+        case 'study':
+            translator_link = buildStudyTranslationLink(base_uris.translator, $selword);
+            break;
+        default:
+            break;
+    }
     
     $('#btn-open-dict').off('click').on('click', function() {
-        window.open(dic_link, '_blank', 'noopener,noreferrer');
+        openInNewTab(dic_link);
     });
     $('#btn-open-img-dict').off('click').on('click', function() {
-        window.open(img_dic_link, '_blank', 'noopener,noreferrer');
+        openInNewTab(img_dic_link);
     });
     $('#btn-open-translator').off('click').on('click', function() {
-        window.open(translator_link, '_blank', 'noopener,noreferrer');
+        openInNewTab(translator_link);
     });
 }

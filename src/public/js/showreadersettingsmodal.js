@@ -23,6 +23,7 @@ $(document).ready(function() {
         // apply color mode
         const className = $('#mode').val() + 'mode';
         let $doc = $(parent.document.body);
+        let $text_container = $("#text-container");
         $doc.removeClass().addClass(className);
         
         // apply CSS changes: font-family, font-size, text-align, text-height, etc.
@@ -47,14 +48,12 @@ $(document).ready(function() {
 
             $userstyles.html(p_styles + h_styles);
         } else {
-            $doc.css({
+            $text_container.css({
                 'font-family' : $('#fontfamily').val(),
                 'font-size' : $('#fontsize').val(),
                 'text-align' : $('#alignment').val(),
                 'line-height': $('#lineheight').val()
             });
-            
-            $('#text').css('line-height', $('#lineheight').val());    
         }
 
         // change audioplayer class
@@ -84,5 +83,4 @@ $(document).ready(function() {
             data: $("#prefs-modal-form").serialize()
         });
     }); // end #btn-save-reader-prefs.on.click
-
 });

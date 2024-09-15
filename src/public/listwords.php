@@ -117,6 +117,7 @@ require_once PUBLIC_PATH . 'showimportwordsmodal.php'; // load import words moda
 ?>
 
 <script defer src="/js/listwords.min.js"></script>
+<script defer src="/js/dictionary.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 <script defer src="/js/tooltips.min.js"></script>
 

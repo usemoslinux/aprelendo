@@ -39,7 +39,6 @@ class Dictionaries extends DBEntity
         parent::__construct($pdo);
         $this->table = 'dictionaries';
         $dictionaries = $this->load($learning_lang_iso);
-        
 
         foreach ($dictionaries as $dictionary) {
             switch ($dictionary['type']) {
@@ -66,7 +65,7 @@ class Dictionaries extends DBEntity
 
     private function load(string $learning_lang_iso)
     {
-        $sql = "SELECT * FROM `{$this->table}` WHERE `lang_iso` = ? OR `lang_iso` = 'all' ORDER BY `name`";
+        $sql = "SELECT * FROM `{$this->table}` WHERE FIND_IN_SET(?, `lang_iso`) > 0 OR `lang_iso` = 'all' ORDER BY `name`";
 
         return $this->sqlFetchAll($sql, [
             $learning_lang_iso

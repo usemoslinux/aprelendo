@@ -134,3 +134,11 @@ $.fn.disableScroll = function() {
 $.fn.isAfter = function(sel) {
     return this.prevUntil(sel).length !== this.prevAll().length;
 }; // end $.fn.isAfter
+
+/**
+ * Opens link in new tab
+ * @param {string} $url 
+ */
+function openInNewTab($url) {
+    window.open($url, '_blank', 'noopener,noreferrer');
+}

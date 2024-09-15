@@ -31,8 +31,8 @@ if (empty($error_msg)) {
 }
 
 $dictionaries = new Dictionaries($pdo, $user->native_lang, $lang->name);
-$monolingual_dics = $dictionaries->getMonolingual(true);
-$bilingual_dics = $dictionaries->getBilingual(true);
+$monolingual_dics = $dictionaries->getMonolingual(false);
+$bilingual_dics = $dictionaries->getBilingual(false);
 $visual_dics = $dictionaries->getVisual();
 $translators = $dictionaries->getTranslators();
 
@@ -53,12 +53,24 @@ $translators = $dictionaries->getTranslators();
                             <i class="bi bi-lightning-fill"></i>
                         </button>
                         <ul class="dropdown-menu">
+                            <li><h6 class="dropdown-header">Monolingual</h6></li>
                             <?php
                                 $html = '';
                                 foreach ($monolingual_dics as $monolingual_dic) {
                                     $html .= '<li><a class="dropdown-item" href="#" ';
                                     $html .= 'value="' . $monolingual_dic['uri'] . '">';
                                     $html .= $monolingual_dic['name'];
+                                    $html .= '</a></li>';
+                                }
+                                echo $html;
+                            ?>
+                            <li><h6 class="dropdown-header">Bilingual</h6></li>
+                            <?php
+                                $html = '';
+                                foreach ($bilingual_dics as $bilingual_dic) {
+                                    $html .= '<li><a class="dropdown-item" href="#" ';
+                                    $html .= 'value="' . $bilingual_dic['uri'] . '">';
+                                    $html .= $bilingual_dic['name'];
                                     $html .= '</a></li>';
                                 }
                                 echo $html;

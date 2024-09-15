@@ -21,8 +21,7 @@ $(document).ready(function () {
     let dictionary_URI = "";              // user dictionary URI
     let img_dictionary_URI = "";              // user image dictionary URI
     let translator_URI = "";              // user translator URI
-    const $dic_frame = $("#dicFrame");  // dictionary iframe inside modal window
-    let $sel_word = $();             // jQuery object used to open dictionary modal
+    let $selword = $();             // jQuery object used to open dictionary modal
     let words = [];              // array containing all words user is learning
     let max_cards = 10;              // maximum nr. of cards
     let cur_card_index = 0;               // current card/word index
@@ -411,30 +410,9 @@ $(document).ready(function () {
      * @param {event object} e
      */
     $("body").on("click", ".word", function (e) {
-        $sel_word = $(this);
-        const url = dictionary_URI.replace("%s", encodeURI($sel_word.text()));
-
-        // set up buttons
-        $("#btn-add").text("Forgot").removeClass('btn-primary').addClass('btn-danger');
-
-        // show loading spinner
-        $("#loading-spinner").attr('class', 'lds-ellipsis m-auto');
-        $dic_frame.attr('class', 'd-none');
-
-        $dic_frame.get(0).contentWindow.location.replace(url);
-        // the previous line loads iframe content without adding it to browser history,
-        // as this one does: $dic_frame.attr('src', url);
-
-        $("#dic-modal").modal("show");
+        $selword = $(this);
+        showActionButtonsPopUpToolbar();
     }); // end #.word.on.click
-
-    /**
-     * Hides loader spinner when dictionary iframe finished loading
-     */
-    $dic_frame.on("load", function () {
-        $("#loading-spinner").attr('class', 'd-none');
-        $dic_frame.removeClass();
-    }); // end $dic_frame.on.load()
 
     /**
      * Triggers when user clicks on answer buttons
@@ -537,11 +515,11 @@ $(document).ready(function () {
      * Triggers when user click in translate button in modal window
      */
     $("#btn-translate").on("click", function () {
-        window.open(buildStudyTranslationLink(translator_URI, $sel_word), '_blank', 'noopener,noreferrer');
+        openInNewTab(buildStudyTranslationLink(translator_URI, $selword));
     }); // end #btn-translate.on.click()
 
     $("#btn-img-dic").on("click", function () {
-        window.open(buildDictionaryLink(img_dictionary_URI, $sel_word.text()), '_blank', 'noopener,noreferrer');
+        openInNewTab(buildDictionaryLink(img_dictionary_URI, $selword.text()));
     }); // end #btn-img-dic.on.click()
 
     /**
@@ -553,7 +531,7 @@ $(document).ready(function () {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         if (!isMobile && $(e.target).is(".word")) {
-            window.open(buildStudyTranslationLink(translator_URI, $(e.target)), '_blank', 'noopener,noreferrer');
+            openInNewTab(buildStudyTranslationLink(translator_URI, $(e.target)));
         }
         return false;
     }); // end document.contextmenu
@@ -583,4 +561,30 @@ $(document).ready(function () {
             }
         }
     }); // end document.keypress()
+
+    /**
+     * Removes selection when user clicks in white-space
+     */
+    $(document).on("mouseup touchend", function (e) {
+        if ($(e.target).is(".word") === false && !$(e.target).closest('#action-buttons').length > 0) {
+            e.stopPropagation();
+            hideActionButtons();
+        }
+    }); // end $document.on.mouseup
+
+    /**
+     * Shows pop up toolbar when user clicks a word
+     */
+    function showActionButtonsPopUpToolbar() {
+        setWordActionButtons($selword);
+
+        const base_uris = {
+            dictionary: dictionary_URI,
+            img_dictionary: img_dictionary_URI,
+            translator: translator_URI
+        };
+
+        setDicActionButtonsClick($selword, base_uris, 'study');
+        showActionButtons($selword);
+    } // end showActionButtonsPopUpToolbar
 });

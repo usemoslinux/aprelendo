@@ -126,60 +126,19 @@ class Reader
      * Constructs HTML code to show text in reader
      *
      * @param string $yt_id YouTube Id
+     * @param string $reader_css CSS style to include in reader HTML
      * @return string
      */
-    public function showVideo(string $yt_id): string
+    public function showVideo(string $yt_id, string $reader_css): string
     {
         $yt_id = $yt_id ? $yt_id : '';
-        $likes = new Likes($this->pdo, $this->text->id, $this->user_id, $this->text->lang_id);
-        $user_liked_class = $likes->userLiked() ? 'bi-heart-fill' : 'bi-heart';
 
-        $html = '<div class="col-lg-6 offset-lg-3">' .
-                    '<div id="main-container" style="height: 100vh; height: calc(var(--vh, 1vh) * 100);"
-                        class="d-flex flex-column">';
-
-        $html .= '<div class="d-flex flex-row-reverse my-2">
-                        <button type="button" id="btn-save-ytvideo" class="btn btn-success"
-                            data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                            data-bs-placement="bottom"
-                            data-bs-title="Close and save the learning status of your words">
-                            Save
-                        </button>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
-                            class="btn btn-secondary me-2">
-                            <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                data-bs-placement="bottom"
-                                data-bs-title="Reader settings">
-                                <span class="bi bi-gear-fill"></span>
-                            </span>
-                        </button>
-                        <button type="button" id="btn-fullscreen" data-bs-toggle="tooltip"
-                            data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                            data-bs-title="Toggle fullscreen" class="btn btn-warning me-2">
-                            <span class="bi bi-arrows-fullscreen"></span>
-                        </button>
-                        <button type="button" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                            data-bs-placement="bottom" data-bs-title="Like" class="btn btn-link me-2">
-                            <span class="bi '
-                                . $user_liked_class
-                                . '" data-idText="' . $this->text->id .'"></span>
-                            <small>' . $likes->get($this->text->id) . '</small>
-                        </button>
-                        <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                data-bs-placement="bottom" data-bs-title="Report">
-                            <button type="button" class="btn btn-link me-2" data-bs-toggle="modal"
-                                data-bs-target="#report-text-modal">
-                                <span id="report-flag" class="bi bi-flag"></span>
-                            </button>
-                        </span>
-                    </div>';
-
-        $html .= '<div class="ratio ratio-16x9" style="max-height: 60%;">' .
+        $html = '<div class="ratio ratio-16x9" style="max-height: calc(100vh - 8rem);">' .
                     '<div data-ytid="' . $yt_id . '" id="player"></div>' .
                 '</div>';
 
-        $html .= "<div id='text-container' class='overflow-auto text-center mb-1' data-type='video' data-IdText='"
-            . $this->text->id . "'>";
+        $html .= "<div id='text-container' class='overflow-auto text-center my-1' data-type='video' data-IdText='"
+            . $this->text->id . "' style='" . $reader_css . "'>";
         $xml = new SimpleXMLElement($this->text->text);
 
         for ($i=0; $i < sizeof($xml); $i++) {
@@ -189,7 +148,7 @@ class Reader
             $html .= "<div data-start='$start' data-dur='$dur' >". $text .'</div>';
         }
         
-        $html .= '</div></div></div>';
+        $html .= '</div>';
 
         return $html;
     } // end showVideo()
@@ -197,54 +156,24 @@ class Reader
     /**
      * Constructs HTML code to show an offline video
      *
-     * @param string $file file path
+     * @param string $reader_css CSS style to include in reader HTML
      * @return string html
      */
-    public function showOfflineVideo(string $file): string
+    public function showOfflineVideo(string $reader_css): string
     {
-        $html = '<div class="col-xl-8 offset-xl-2">' .
-                    '<div style="height: 100vh; height: calc(var(--vh, 1vh) * 100);" class="d-flex flex-column">' .
-                        '<div id="offline-video-container" class="ratio ratio-16x9 bg-dark mt-1">' .
-                        '<input id="video-file-input" type="file" name="video-file-input"
-                            accept="video/mp4,video/ogg,video/webm" style="display: none;">' .
-                        '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt"
-                            style="display: none;">' .
-                            '<video id="video-stream" controls controlsList="nofullscreen nodownload noremoteplayback"
-                                playsinline disablePictureInPicture>' .
-                                '<source src="' . $file . '"/>'.
-                                'Your browser does not support HTML5 video.' .
-                            '</video>' .
-                        '</div>';
+        $html = '<div id="offline-video-container" style="max-height: calc(100vh - 8rem);" class="ratio ratio-16x9 bg-dark">' .
+                    '<input id="video-file-input" type="file" name="video-file-input"
+                        accept="video/mp4,video/ogg,video/webm" style="display: none;">' .
+                    '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt"
+                        style="display: none;">' .
+                        '<video id="video-stream" controls controlsList="nofullscreen nodownload noremoteplayback"
+                            playsinline disablePictureInPicture>' .
+                            '<source src=""/>'.
+                            'Your browser does not support HTML5 video.' .
+                        '</video>' .
+                '</div>';
 
-        $html .= '<div class="d-flex flex-wrap m-1 mx-xl-0">'.
-                    '<button type="button" id="btn-selvideo" data-bs-toggle="tooltip"
-                        data-bs-custom-class="custom-tooltip" data-bs-title="Select video (MP4/OGG/WEBM)"
-                        data-bs-placement="bottom" class="btn btn-primary me-2">
-                        <span class="bi bi-file-earmark-play"></span></button>'.
-                    '<button type="button" id="btn-selsubs" data-bs-toggle="tooltip"
-                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                        data-bs-title="Select subtitles (SRT)" class="btn btn-primary me-2">
-                        <span class="bi bi-badge-cc-fill"></span></button>'.
-                    '<button type="button" id="btn-fullscreen" data-bs-toggle="tooltip"
-                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                        data-bs-title="Toggle fullscreen" class="btn btn-warning me-2">
-                        <span class="bi bi-arrows-fullscreen"></span></button>'.
-                    '<button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
-                            class="btn btn-secondary me-2">
-                            <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                data-bs-placement="bottom" data-bs-title="Reader settings">
-                            <span class="bi bi-gear-fill"></span>
-                        </span>
-                    </button>' .
-                    '<button type="button" id="btn-save-offline-video" data-bs-toggle="tooltip"
-                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                        data-bs-title="Save the learning status of your words"
-                        class="btn btn-success ms-auto">Save</button>'.
-                '</div>'.
-                '<div id="text-container" class="overflow-auto mb-1"></div>';
-
-        $html .= '</div></div>';
-
+        $html .= '<div id="text-container" class="overflow-auto my-1" style="' . $reader_css . '"></div>';
         return $html;
     } // end showOfflineVideo()
 }
