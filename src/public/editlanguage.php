@@ -133,20 +133,17 @@ $translators = $dictionaries->getTranslators();
 
                 <div id="help-dictionary" class="collapse small">
                     <hr>
-                    <p>
-                        URLs should meet the following requirements to work properly:
-                    </p>
                     <ul>
-                        <li>Some websites ensure that their content is not embedded into other sites. Therefore, some
-                            dictionaries may not work with Aprelendo. For further help, check the list of <a
-                                href="/compatibledics">compatible dictionaries</a>.</li>
-                        <li>For security reasons, only HTTPS websites are supported. Make sure you use URL addresses
-                            that start with HTTPS, not HTTP.</li>
-                        <li>As the dictionary is going to be shown inside a modal window, it is highly recommended to
-                            use websites that support smaller screens. In case that support is not automatic, look for
-                            the mobile version of that website (if there is one) and use that one instead.</li>
-                        <li>Don't forget to indicate the position of the lookup phrase by using "%s" (without quotation
-                            marks).</li>
+                        <li>The dictionaries and translators that can be loaded with the
+                            <kbd><i class="bi bi-lightning-fill"></i></kbd> button are merely indicative.
+                            You can load any other dictionary you want. To do so, perform a search in your favorite
+                            dictionary. Then copy and paste the URL here replacing the search term with "%s"
+                            (without quotation marks).
+                        </li>
+                        <li>For further assistance, we've compiled a list of
+                            <a href="/exampledics" target="_blank" rel="noopener noreferrer">popular dictinaries</a>
+                            you can use and how to load them here.
+                        </li>
                     </ul>
                 </div>
             </div>
