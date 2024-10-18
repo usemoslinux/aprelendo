@@ -23,14 +23,17 @@ namespace Aprelendo;
 
 class Words extends DBEntity
 {
-    public $id            = 0;
-    public $user_id       = 0;
-    public $lang_id       = 0;
-    public $word          = '';
-    public $status        = 0;
-    public $is_phrase     = false;
-    public $date_created  = '';
-    public $date_modified = '';
+    public $id              = 0;
+    public $user_id         = 0;
+    public $lang_id         = 0;
+    public $word            = '';
+    public $status          = 0;
+    public $is_phrase       = false;
+    public $date_created    = '';
+    public $date_modified   = '';
+    public $review_interval = 1;
+    public $easiness        = 2.5;
+    public $repetitions     = 0;
 
     /**
      * Constructor
