@@ -259,7 +259,7 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
     ?>
 
     <script defer src="/js/underlinewords.min.js"></script>
-    <script defer src="/js/showtext.min.js"></script>
+    <script defer src="/js/showtext.js"></script>
     <script defer src="/js/showebook.min.js"></script>
     <script defer src="/js/audioplayer.min.js"></script>
     <script defer src="/js/dictionary.min.js"></script>

@@ -74,7 +74,7 @@ $(document).ready(function() {
     $(document).on("mousedown touchstart", ".word", function(e) {
         e.stopPropagation();
 
-        hideActionButtonsPopUpToolbar(false);
+        hideActionButtonsPopUpToolbar();
 
         if (e.which < 2) {
             // if left mouse button (e.which = 1) / touch (e.which = 0)...
@@ -107,7 +107,7 @@ $(document).ready(function() {
             if (!swiping) {
                 highlighting = (end_sel_time - start_sel_time) > 1000;
             }
-            $("html").enableScroll(); 
+            $("body").enableScroll(); 
             swiping = false;
         }
 
@@ -156,7 +156,7 @@ $(document).ready(function() {
 
         if (highlighting) {
             if (e.type == "touchmove") {
-                $("html").disableScroll();
+                $("body").disableScroll();
             }
             
             $(".highlighted").removeClass("highlighted"); // remove previous highlighting
@@ -326,7 +326,7 @@ $(document).ready(function() {
                 );
             });
 
-        hideActionButtonsPopUpToolbar(true);
+        hideActionButtonsPopUpToolbar();
         resumeAudio();
     }); // end #btn-add.on.click
 
@@ -415,7 +415,7 @@ $(document).ready(function() {
                 );
             });
         
-        hideActionButtonsPopUpToolbar(true);
+        hideActionButtonsPopUpToolbar();
         resumeAudio();
     }); // end #btn-remove.on.click
 
@@ -778,20 +778,30 @@ $(document).ready(function() {
     /**
      * Removes selection when user clicks in white-space
      */
-    $(document).on("mouseup touchend", "#text-container", function(e) {
-        if ($(e.target).is(".word") === false &&
-            !$(e.target).closest('#action-buttons').length &&
-            !$(e.target).closest('#ap-play-btn').length) {
-            e.stopPropagation();
-
-            let $text_container = $("#text-container").length ? $("#text-container") : $pagereader.contents();
-
-            highlighting = false;
-            $text_container.find(".highlighted").removeClass("highlighted");
-            hideActionButtonsPopUpToolbar(true);
-            resumeAudio();
+    $(document).on("mouseup touchend", function(e) {
+        let $action_btns = $("#action-buttons");
+        let $text_container = $("#text-container").length ? $("#text-container") : $pagereader.contents();
+        
+        // Only proceed if action buttons are hidden
+        if ($action_btns.is(':visible')) {
+            let is_word_clicked = $(e.target).is(".word");
+            let is_btn_clicked = $(e.target).closest('.btn').length > 0;
+            let is_navigation = $(e.target).closest('.offcanvas').length > 0;
+            let is_modal = $(e.target).closest('.modal').length > 0;
+            
+            // Check if click is not on a word and outside action buttons
+            if (!is_word_clicked && !is_btn_clicked && !is_navigation && !is_modal) {
+                e.stopPropagation();
+                // Remove highlight
+                highlighting = false;
+                $text_container.find(".highlighted").removeClass("highlighted");
+    
+                // Hide toolbar and resume audio
+                hideActionButtonsPopUpToolbar();
+                resumeAudio();
+            }
         }
-    }); // end $pagereader.on.mouseup
+    }); // end $document.on.mouseup
 
     /**
      * Shows pop up toolbar when user clicks a word
@@ -821,6 +831,7 @@ $(document).ready(function() {
             translator: translator_URI
         };
 
+        $("body").disableScroll();
         setDicActionButtonsClick($selword, base_uris, 'text');
         showActionButtons($selword);
     } // end showActionButtonsPopUpToolbar
@@ -828,10 +839,8 @@ $(document).ready(function() {
     /**
      * Hides actions pop up toolbar
      */
-    function hideActionButtonsPopUpToolbar(renable_scroll) {
-        if (renable_scroll) {
-            $("#text-container").enableScroll();
-        }
+    function hideActionButtonsPopUpToolbar() {
+        $("body").enableScroll();
         hideActionButtons();
     } // end hideActionButtonsPopUpToolbar
 });

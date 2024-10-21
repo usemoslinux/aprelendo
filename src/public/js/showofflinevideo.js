@@ -68,7 +68,7 @@ $(document).ready(function () {
     $(document).on("mousedown touchstart", ".word", function (e) {
         e.stopPropagation();
 
-        hideActionButtonsPopUpToolbar(false);
+        hideActionButtonsPopUpToolbar();
 
         video_paused = player.paused;
 
@@ -269,7 +269,7 @@ $(document).ready(function () {
                 );
             });
 
-            hideActionButtonsPopUpToolbar(true);
+            hideActionButtonsPopUpToolbar();
             resumeVideo();
     }); // end #btn-add.on.click
 
@@ -365,7 +365,7 @@ $(document).ready(function () {
                 );
             });
 
-            hideActionButtonsPopUpToolbar(true);
+            hideActionButtonsPopUpToolbar();
             resumeVideo();
     }); // end #btn-remove.on.click
 
@@ -481,7 +481,7 @@ $(document).ready(function () {
 
             highlighting = false;
             $text_container.find(".highlighted").removeClass("highlighted");
-            hideActionButtonsPopUpToolbar(true);
+            hideActionButtonsPopUpToolbar();
             resumeVideo();
         }
     }); // end $pagereader.on.mouseup
@@ -665,10 +665,8 @@ $(document).ready(function () {
     /**
      * Hides actions pop up toolbar
      */
-    function hideActionButtonsPopUpToolbar(renable_scroll) {
-        if (renable_scroll) {
-            $("#text-container").enableScroll();
-        }
+    function hideActionButtonsPopUpToolbar() {
+        $("#text-container").enableScroll();
         hideActionButtons();
     } // end hideActionButtonsPopUpToolbar
 });
