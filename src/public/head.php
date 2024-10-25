@@ -102,8 +102,10 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
     <?php if($curpage=='login' || $use_google_login): ?>
     <!-- Google API -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    
     <?php endif; ?>
+
+    <!-- Matomo Analytics -->
+    <script src="/js/matomo.min.js" async defer></script>
 </head>
 
 <?php
