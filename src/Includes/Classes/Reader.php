@@ -65,13 +65,14 @@ class Reader
     /**
      * Constructs HTML code to show text in reader
      *
+     * @param string $reader_css CSS style to include in reader HTML
      * @return string
      */
-    public function showText(): string
+    public function showText(string $reader_css): string
     {
-        $html = '<div id="text-container" class="my-3" data-type="text" data-IdText="' . $this->text->id
-            . '" data-assisted-learning="' . (int)$this->prefs->assisted_learning . '" data-is-long-text="'
-            . (int)$this->is_long_text . '">';
+        $html = '<div id="text-container" style="' . $reader_css . '" class="my-3" data-type="text" data-IdText="'
+            . $this->text->id . '" data-assisted-learning="' . (int)$this->prefs->assisted_learning
+            . '" data-is-long-text="' . (int)$this->is_long_text . '">';
         
         // display source, if available
         if (!empty($this->text->source_uri)) {

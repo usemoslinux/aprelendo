@@ -60,13 +60,13 @@ try {
         $font_family = $prefs->font_family;
         $font_size = $prefs->font_size;
         $text_align = $prefs->text_alignment;
+        $reader_css = "font-family:$font_family;font-size:$font_size;text-align:$text_align;";
+
         $assisted_learning = $prefs->assisted_learning;
 
         $likes = new Likes($pdo, $text_id, $user->id, $user->lang_id);
         $user_liked_class = $likes->userLiked() ? 'bi-heart-fill' : 'bi-heart';
         $nr_of_likes = $likes->get($text_id);
-        
-        $html .= " style='font-family:$font_family;font-size:$font_size;text-align:$text_align;'";
     } else {
         throw new UserException('Error fetching this text.');
     }
@@ -132,7 +132,7 @@ require_once PUBLIC_PATH . 'head.php';
             </div>
             <div class="col-10 col-sm-8 ps-0 pe-4 pe-sm-0">
                 <?php
-                    echo $reader->showText();
+                    echo $reader->showText($reader_css);
                     if ($is_shared) {
                         echo '<input type="hidden" id="is_shared">';
                     }
