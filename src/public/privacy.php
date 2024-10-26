@@ -68,7 +68,16 @@ if (!$user_auth->isLoggedIn()) {
                                     information (full name, email address, and profile image).</li>
                                 <li><strong>Technical information:</strong> this includes your IP address, browser type,
                                     and other technical details about the device you use.</li>
+
                             </ul>
+                            <p>In addition to the above, we use <a href="https://matomo.org/" target="_blank"
+                                    rel="noopener noreferrer">Matomo</a>, an open-source analytics platform, to gather
+                                anonymized usage data for improving user experience and understanding how our platform
+                                is used. Matomo respects your privacy by anonymizing your IP address and not tracking
+                                you across websites. You can opt out of Matomo tracking by adjusting your browser
+                                settings or by using the <a href="https://allaboutdnt.com/" target="_blank">Do Not
+                                    Track</a> (DNT) feature.
+                            </p>
                         </section>
                         <br>
                         <section>
@@ -87,7 +96,7 @@ if (!$user_auth->isLoggedIn()) {
                                 our website. We use minimal cookies, primarily to support essential site functions such
                                 as auto-login and managing your preferences.</p>
                             <p>Unlike most websites, <strong>we do not use cookies for analytics or delivering
-                                personalized ads</strong>.</p>
+                                    personalized ads</strong>.</p>
                             <p>Here is a detailed description of the cookies we store on your computer:</p>
                             <ul>
                                 <li><strong>user_token:</strong> a token to enable auto-login.</li>

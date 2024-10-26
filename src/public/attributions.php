@@ -54,16 +54,16 @@ if (!$user_auth->isLoggedIn()) {
                             <p>Aprelendo was built using the following free and open source tools:</p>
                             <ul>
                                 <li>
+                                    <a href="https://nginx.org/" target="_blank"
+                                        rel="noopener noreferrer">Nginx</a>, by Igor Sysoev
+                                </li>
+                                <li>
                                     <a href="https://php.net/" target="_blank" rel="noopener noreferrer">PHP</a>, by The
                                     PHP Group
                                 </li>
                                 <li>
                                     <a href="https://jquery.com/" target="_blank" rel="noopener noreferrer">jQuery</a>,
                                     by the jQuery Foundation
-                                </li>
-                                <li>
-                                    <a href="https://nginx.org/" target="_blank"
-                                        rel="noopener noreferrer">Nginx</a>, by Igor Sysoev
                                 </li>
                                 <li>
                                     <a href="https://getbootstrap.com/" target="_blank"
@@ -97,6 +97,9 @@ if (!$user_auth->isLoggedIn()) {
                             </ul>
                             <p>Other attributions:</p>
                             <ul>
+                                <li>
+                                    <a href="https://matomo.org/" target="_blank" rel="noopener noreferrer">Matomo</a>
+                                </li>
                                 <li>
                                     <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener noreferrer">
                                         Bootstrap Icons</a>
