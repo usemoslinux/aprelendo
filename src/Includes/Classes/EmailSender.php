@@ -33,7 +33,7 @@ class EmailSender
     public function __construct()
     {
         $this->mail = new PHPMailer(true); // passing true enables exceptions
-
+        $this->mail->CharSet = 'UTF-8';
         $this->mail->SMTPDebug = SMTP::DEBUG_OFF;
         $this->mail->isSMTP();
         $this->mail->Host       = EMAIL_HOST;

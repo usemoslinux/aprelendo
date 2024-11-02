@@ -28,12 +28,13 @@ $(document).ready(function() {
         const text_id = $("#text-container").attr("data-idtext");
         const reason = $('input[name="report-reason"]:checked').val();
 
-        hideMessage();
-
         if (!reason) {
             showMessage("Please select a reason for reporting.", "alert-danger");
             throw new Error("User forgot to complete reason for reporting");
         }
+
+        showMessage("Sending... please wait.", "alert-info");
+        $btn_report.prop("disabled", true); // disable report button
 
         $.ajax({
             type: "POST",
@@ -47,11 +48,10 @@ $(document).ready(function() {
                 }
 
                 showMessage("Thank you! Your report has been submitted. Together, we're making our community safer and more enjoyable for everyone.", "alert-success");
-                $btn_report.prop("disabled",true); // disable report button
 
                 setTimeout(function() {
                     $('#report-text-modal').modal('hide');
-                    $btn_report.prop("disabled",false); // re-enable report button
+                    $btn_report.prop("disabled", false); // re-enable report button
                 }, 3000);
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
