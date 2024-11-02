@@ -168,7 +168,7 @@ $(document).ready(function () {
 
                 // if example sentence is empty, go to next card
                 if (examples_array.length === 0) {
-                    $("#study-card-header").html("Skipped. No examples found.");
+                    $("#study-card-word-title").text("Skipped. No examples found.");
                     words[cur_card_index].status = 4;
                     cur_card_index++;
                     if (lastCardReached()) {
@@ -185,7 +185,7 @@ $(document).ready(function () {
                 // show card
                 $("#study-card").data('word', word);
                 $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
-                $("#study-card-word-title").addClass('word').removeClass('placeholder').text(word);
+                $("#study-card-word-title").removeClass('placeholder').text(word);
                 $("#examples-placeholder").addClass('d-none');
                 $("#study-card-examples").append(examples_html);
                 $(".btn-answer").prop('disabled', false);
@@ -312,7 +312,7 @@ $(document).ready(function () {
             showNoMoreCardsMsg();
             return true;
         } else if (cur_card_index >= max_cards) {
-            $("#study-card-word-title").removeClass('word').text("Congratulations!");
+            $("#study-card-word-title").text("Congratulations!");
             adaptCardStyleToWordStatus();
 
             glowIfHighOrMedFreq();

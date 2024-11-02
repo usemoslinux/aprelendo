@@ -29,7 +29,6 @@ if (!isset($_POST) || empty($_POST)) {
 use Aprelendo\Texts;
 use Aprelendo\ArchivedTexts;
 use Aprelendo\Language;
-use Aprelendo\ExampleSentences;
 use Aprelendo\Words;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
