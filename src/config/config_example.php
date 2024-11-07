@@ -55,3 +55,5 @@ defined('FICTIONAL_USER_AGENT')   ? null : define('FICTIONAL_USER_AGENT', 'Mozil
 defined('PYTHON_VENV')            ? null : define('PYTHON_VENV', '/opt/venv');
 
 defined('PROXY')                  ? null : define('PROXY', '');
+
+define('ENCRYPTION_KEY', 'Replace this with a nice encryption key');
