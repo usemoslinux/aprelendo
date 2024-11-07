@@ -24,6 +24,7 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Language;
+use Aprelendo\SecureEncryption;
 
 ?>
 
@@ -145,6 +146,20 @@ use Aprelendo\Language;
                                         echo $html;
                                     ?>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card">
+                        <div class="card-header">Artificial Intelligence (AI)</div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="hf_api_key">Hugging Face API key:</label>
+                                <input type="text" id="hf_api_key" name="hf_api_key" class="form-control"
+                                    value="<?php
+                                        $crypto = new SecureEncryption(ENCRYPTION_KEY);
+                                        echo $crypto->decrypt($user->hf_api_key);
+                                        ?>" maxlength="40">
                             </div>
                         </div>
                     </div>

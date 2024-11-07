@@ -27,6 +27,7 @@ if (!isset($_POST) || empty($_POST)) {
     exit;
 }
 
+use Aprelendo\SecureEncryption;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
@@ -41,6 +42,10 @@ try {
     $new_password2 = isset($_POST['newpassword-confirmation']) ? $_POST['newpassword-confirmation'] : '';
     $src_lang = isset($_POST['src_lang']) ? $_POST['src_lang'] : '';
     $to_lang = isset($_POST['to_lang']) ? $_POST['to_lang'] : '';
+    $hf_api_key = isset($_POST['hf_api_key']) ? $_POST['hf_api_key'] : '';
+
+    $crypto = new SecureEncryption(ENCRYPTION_KEY);
+    $hf_api_key = $crypto->encrypt($_POST['hf_api_key']);
 
     $user_data = [
         'new_username' => $username,
@@ -48,7 +53,8 @@ try {
         'password' => $password,
         'new_password' => $new_password1,
         'new_native_lang' => $src_lang,
-        'new_lang' => $to_lang
+        'new_lang' => $to_lang,
+        'hf_api_key' => $hf_api_key
     ];
 
     if (empty($new_password1) && empty($new_password2)) {

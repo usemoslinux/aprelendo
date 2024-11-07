@@ -33,6 +33,7 @@ class User extends DBEntity
     public string $activation_hash;
     public bool   $is_active;
     public string $google_id;
+    public string $hf_api_key;
 
     public string $error_msg;
     
@@ -57,6 +58,7 @@ class User extends DBEntity
         $this->activation_hash = '';
         $this->is_active       = false;
         $this->google_id       = '';
+        $this->hf_api_key      = '';
     
         $this->error_msg       = '';
     } // end __construct()
@@ -81,6 +83,7 @@ class User extends DBEntity
             $this->activation_hash = $record['activation_hash'];
             $this->is_active       = $record['is_active'];
             $this->google_id       = $record['google_id'];
+            $this->hf_api_key      = $record['hf_api_key'];
 
             // get active language id (lang_id)
             $lang = new Language($this->pdo, $this->id);
@@ -158,60 +161,49 @@ class User extends DBEntity
      */
     public function updateProfile(array $user_data): void
     {
+        // Extract variables from user data
         $new_username = $user_data['new_username'];
         $new_email = $user_data['new_email'];
         $password = $user_data['password'];
-        $new_password = $user_data['new_password'];
+        $new_password = $user_data['new_password'] ?? null; // Default to null if not set
         $new_native_lang = $user_data['new_native_lang'];
         $new_lang = $user_data['new_lang'];
+        $hf_api_key = $user_data['hf_api_key'];
 
-        // check if $password is correct, without it user would not have the right priviliges to update his profile
-        $hashed_password = $this->password_hash;
-        $authorized = UserPassword::verify($password, $hashed_password);
-
-        if ($authorized) {
-            $user_id = $this->id;
-            
-            // check if user already exists
-            if ($this->name != $new_username && $this->existsByName($new_username)) {
-                throw new UserException('Username already exists. Please try again.');
-            }
-            
-            // check if email already exists
-            if ($this->email != $new_email && $this->existsByEmail($new_email)) {
-                throw new UserException('Email already exists. Please try using another one.');
-            }
-            
-            // was a new password given? In that case, save new password and replace the old one
-            if (empty($new_password)) {
-                $sql = "UPDATE `{$this->table}`
-                        SET `name`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?
-                        WHERE `id`=?";
-                $this->sqlExecute($sql, [$new_username, $new_email, $new_native_lang, $new_lang, $user_id]);
-            } else {
-                $new_password_hash = UserPassword::createHash($new_password);
-
-                $sql = "UPDATE `{$this->table}`
-                        SET `name`=?, `password_hash`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?
-                        WHERE `id`=?";
-                $this->sqlExecute($sql, [
-                    $new_username, $new_password_hash, $new_email, $new_native_lang,
-                    $new_lang, $user_id
-                ]);
-            }
-            
-            // TODO: remove this lines?
-            $this->name = $new_username;
-            $this->email = $new_email;
-            $this->native_lang = $new_native_lang;
-            $this->lang = $new_lang;
-            
-            // if new password was set, then create new rememberme cookie
-            if (!empty($new_password)) {
-                $user_auth = new UserAuth($this);
-                $user_auth->login($new_username, $new_password);
-            }
+        // Verify the user's password
+        if (!UserPassword::verify($password, $this->password_hash)) {
+            throw new UserException('Invalid password. Please try again.');
         }
+
+        $user_id = $this->id;
+
+        // Check for duplicate username
+        if ($this->name !== $new_username && $this->existsByName($new_username)) {
+            throw new UserException('Username already exists. Please try again.');
+        }
+
+        // Check for duplicate email
+        if ($this->email !== $new_email && $this->existsByEmail($new_email)) {
+            throw new UserException('Email already exists. Please try using another one.');
+        }
+
+        // Prepare the parameters and SQL statement
+        $params = [$new_username, $new_email, $new_native_lang, $new_lang, $hf_api_key];
+        $sql = "UPDATE `{$this->table}` SET `name`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?, `hf_api_key`=?";
+
+        // Add password hash if a new password is provided
+        if (!empty($new_password)) {
+            $new_password_hash = UserPassword::createHash($new_password);
+            $sql .= ", `password_hash`=?";
+            $params[] = $new_password_hash;
+        }
+
+        $sql .= " WHERE `id`=?";
+        $params[] = $user_id;
+        $this->sqlExecute($sql, $params);
+
+        // Update remember-me cookie
+        (new UserAuth($this))->login($new_username, $new_password ?: $password);
     } // updateProfile()
 
     /**
