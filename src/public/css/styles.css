@@ -1102,7 +1102,7 @@ span.status_learned {
     border: 1px solid black;
 }
 
-#video-stream {
+#videoplayer {
     object-fit: fill;
 }
 

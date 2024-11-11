@@ -167,9 +167,9 @@ class Reader
                         accept="video/mp4,video/ogg,video/webm" style="display: none;">' .
                     '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt"
                         style="display: none;">' .
-                        '<video id="video-stream" controls controlsList="nofullscreen nodownload noremoteplayback"
+                        '<video id="videoplayer" controls controlsList="nofullscreen nodownload noremoteplayback"
                             playsinline disablePictureInPicture>' .
-                            '<source src=""/>'.
+                            '<source id="video-source" src=""/>'.
                             'Your browser does not support HTML5 video.' .
                         '</video>' .
                 '</div>';
