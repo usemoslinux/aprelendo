@@ -28,7 +28,7 @@ $(document).ready(function() {
     let img_dictionary_URI = "";
     let translator_URI = "";
     let next_phase = 2; // next phase of the learning cycle
-    let playing_audio = false;
+    // let playing_audio = false;
     window.parent.show_confirmation_dialog = true; // confirmation dialog that shows when closing window
     let doclang = $("html").attr("lang");
 
@@ -86,8 +86,7 @@ $(document).ready(function() {
             }
         } else if (e.which == 3) {
             if ($("#audioplayer").length) {
-                pauseAudio();
-                playing_audio = false;
+                audioController.pause(false);
             }
             $selword = $(this);
             openInNewTab(buildTextTranslationLink(translator_URI, $selword));
@@ -327,7 +326,7 @@ $(document).ready(function() {
             });
 
         hideActionButtonsPopUpToolbar();
-        resumeAudio();
+        audioController.resume();
     }); // end #btn-add.on.click
 
     /**
@@ -416,7 +415,7 @@ $(document).ready(function() {
             });
         
         hideActionButtonsPopUpToolbar();
-        resumeAudio();
+        audioController.resume();
     }); // end #btn-remove.on.click
 
     /**
@@ -449,7 +448,7 @@ $(document).ready(function() {
 
                 setNewTooltip(document.getElementById('btn-next-phase'), 'Go to phase 3: Speaking');
 
-                playAudioFromBeginning();
+                audioController.playFromBeginning();
                 break;
             case 3:
                 scrollToPageTop();
@@ -466,7 +465,7 @@ $(document).ready(function() {
                     + 'you listen to the audio. You can slow it down if necessary.</span>'
                 );
 
-                playAudioFromBeginning();
+                audioController.playFromBeginning();
                 break;
             case 4:
                 scrollToPageTop();
@@ -656,28 +655,6 @@ $(document).ready(function() {
     }); // end #btn-toggle-audio-player-controls
 
     /**
-     * Triggered when the action popup is closed
-     */
-    function resumeAudio() {
-        let $audioplayer = $("#audioplayer");
-
-        // Resumes playing if audio was paused when clicking on a word
-        if (playing_audio && $audioplayer.length) {
-            playAudio();
-        }
-    } // end resumeAudio()
-
-    /**
-     * Changes playback speed when user moves slider
-     */
-    $("body").on("input change", "#range-speed", function(e, data) {
-        const cpbr = data !== undefined ? data.cpbr : parseFloat($(this).val()).toFixed(1);
-        $(this).val(cpbr);
-        $("#currentpbr").text(cpbr);    
-        $("#audioplayer").prop("playbackRate", cpbr);
-    }); // end #pbr.on.input/change
-
-    /**
      * Tries to reload audio
      * When audio fails to load, an error message is shown with a link to reload audio
      * This event is triggered when the user clicks this link
@@ -798,7 +775,7 @@ $(document).ready(function() {
     
                 // Hide toolbar and resume audio
                 hideActionButtonsPopUpToolbar();
-                resumeAudio();
+                audioController.resume();
             }
         }
     }); // end $document.on.mouseup
@@ -810,17 +787,9 @@ $(document).ready(function() {
         let $audioplayer = $("#audioplayer");
 
         if ($audioplayer.length) {
-            // if there is audio playing
-            if (
-                !$audioplayer.prop("paused") &&
-                $audioplayer.prop("currentTime")
-            ) {
-                pauseAudio();
-                playing_audio = true;
-            } else {
-                playing_audio = false;
-            }
+            audioController.pause(true);
         }
+
         // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
         // getWordFrequency($selword.text(), doclang);
         setWordActionButtons($selword);

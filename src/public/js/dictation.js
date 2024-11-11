@@ -44,7 +44,7 @@ $(document).ready(function () {
     }); // end .dict.on.blur
 
     /**
-     * Implements shortcuts for dictation
+     * Modify backspace and space normal behavior in dictation mode
      */
     $("body").on("keydown", ".dict", function (e) {
         const keyCode = e.keyCode || e.which;
@@ -97,7 +97,7 @@ $(document).ready(function () {
                 $("#audioplayer")[0].currentTime = curTime - 5;
                 break;
             case 50: // 2
-                togglePlayPause();
+                audioController.togglePlayPause();
                 break;
             case 51: // 3
                 $("#audioplayer")[0].currentTime = curTime + 5;
@@ -132,14 +132,6 @@ function toggleDictation() {
         let $original_elems = $(".word");
 
         if ($(".dict-answer").length == 0) {
-            // if no words are underlined don't allow phase 5 (reviewing) & jump to phase 6 (save changes)
-            // if ($(".learning, .new, .forgotten").length == 0) {
-            //     setNewTooltip(document.getElementById('btn-next-phase'),
-            //         'Finish & Save - 5 (reviewing): no underlined words');
-
-            //     next_phase = 6;
-            // }
-
             // toggle dictation on
             // replace all underlined words/phrases with input boxes
             $elems.each(function (index, value) {
@@ -172,10 +164,7 @@ function toggleDictation() {
             $("#text").replaceWith($container);
 
             scrollToPageTop();
-
-            // automatically play audio, from the beginning
-            $("#range-speed").trigger("change", [{ cpbr: 0.5 }]);
-            playAudioFromBeginning();
+            audioController.playFromBeginning();
 
             $(":text:first").focus(); // focus first input
         } else {
@@ -191,7 +180,7 @@ function toggleDictation() {
             $("#text").replaceWith($container);
 
             scrollToPageTop();
-            stopAudio();
+            audioController.stop();
         }
     }
 } // end toggleDictation
