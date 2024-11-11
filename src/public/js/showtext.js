@@ -28,7 +28,6 @@ $(document).ready(function() {
     let img_dictionary_URI = "";
     let translator_URI = "";
     let next_phase = 2; // next phase of the learning cycle
-    // let playing_audio = false;
     window.parent.show_confirmation_dialog = true; // confirmation dialog that shows when closing window
     let doclang = $("html").attr("lang");
 
@@ -78,6 +77,7 @@ $(document).ready(function() {
 
         if (e.which < 2) {
             // if left mouse button (e.which = 1) / touch (e.which = 0)...
+            audio_controller.pause(true);
             highlighting = true;
             $sel_start = $sel_end = $(this);
             if (e.type == "touchstart") {
@@ -85,9 +85,7 @@ $(document).ready(function() {
                 start_sel_pos_top = $sel_start.offset().top - $(window).scrollTop();
             }
         } else if (e.which == 3) {
-            if ($("#audioplayer").length) {
-                audio_controller.pause(false);
-            }
+            audio_controller.pause(false);
             $selword = $(this);
             openInNewTab(buildTextTranslationLink(translator_URI, $selword));
         }
@@ -784,12 +782,6 @@ $(document).ready(function() {
      * Shows pop up toolbar when user clicks a word
      */
     function showActionButtonsPopUpToolbar() {
-        let $audioplayer = $("#audioplayer");
-
-        if ($audioplayer.length) {
-            audio_controller.pause(true);
-        }
-
         // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
         // getWordFrequency($selword.text(), doclang);
         setWordActionButtons($selword);

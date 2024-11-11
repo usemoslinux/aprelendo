@@ -27,7 +27,7 @@ const audio_controller = (() => {
     const speed_menu_items = document.querySelectorAll('#ap-speed-menu .dropdown-item');
     const ab_loop_btn = document.getElementById("ap-abloop-btn");
 
-    let playing_audio = false;
+    let resume_audio = false;
     let ab_loop_start = 0;
     let ab_loop_end = 0;
 
@@ -46,33 +46,25 @@ const audio_controller = (() => {
         stop = () => {
             audio.pause();
             audio.currentTime = 0;
-            playing_audio = false;
         };
 
         pause = (resume) => {
-            if (!audio.paused) {
-                audio.pause();
-                if (resume) {
-                    setTimeout(() => {
-                        playing_audio = true;
-                    }, 50);
-                }
-            }
+            resume_audio = audio.paused && !resume_audio ? false : resume;
+            audio.pause();
         };
 
         togglePlayPause = () => {
             if (audio.paused || audio.ended) {
-                audio.play();
-                playing_audio = true;
+                play();
             } else {
                 audio.pause();
-                playing_audio = false;
             }
         };
 
         resume = () => {
-            if (playing_audio) {
+            if (resume_audio) {
                 play();
+                resume_audio = false;
             }
         };
 
@@ -146,18 +138,15 @@ const audio_controller = (() => {
 
         audio.addEventListener('play', () => {
             play_pause_btn_icon.className = 'bi bi-pause-fill';
-            playing_audio = true;
         });
 
         audio.addEventListener('pause', () => {
             play_pause_btn_icon.className = 'bi bi-play-fill';
-            playing_audio = false;
         });
 
         audio.addEventListener('ended', () => {
             audio.currentTime = 0;
             play_pause_btn_icon.className = 'bi bi-play-fill';
-            playing_audio = false;
         });
 
         audio_source.addEventListener('error', () => {

@@ -38,13 +38,14 @@ const video_controller = (() => {
         };
 
         pause = (resume) => {
-            resume_video = video.paused ? false : resume;
+            resume_video = video.paused  && !resume_video ? false : resume;
             video.pause();
         };
 
         resume = () => {
             if (resume_video) {
                 play();
+                resume_video = false;
             }
         };
 
