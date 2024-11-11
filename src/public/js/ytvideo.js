@@ -1,89 +1,78 @@
-/**
- * Copyright (C) 2019 Pablo Castagnino
- *
- * This file is part of aprelendo.
- *
- * aprelendo is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * aprelendo is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
- */
+// Video paused flag, specific to player instance
+let resume_video = false;
 
-// Youtube JS code to load iframe player (w/access to YT API)
-let video_paused;
-
-// 2. This code loads the IFrame Player API code asynchronously.
-let tag = document.createElement("script");
-const yt_id = document.getElementById("player").dataset.ytid;
+// Load the IFrame Player API code asynchronously
+const tag = document.createElement("script");
+const video_element = document.getElementById("player");
+const ytId = video_element.dataset.ytid;
 
 tag.src = "https://www.youtube.com/iframe_api";
-let firstScriptTag = document.getElementsByTagName("script")[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+const first_script_tag = document.getElementsByTagName("script")[0];
+first_script_tag.parentNode.insertBefore(tag, first_script_tag);
 
-// 3. This function creates an <iframe> (and YouTube player)
-//    after the API code downloads.
-let player;
+let video_controller = {}; // Define the custom player object
 
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player("player", {
+// Function called when the YouTube API is ready
+window.onYouTubeIframeAPIReady = function () {
+    video_controller.instance = new YT.Player("player", {
         height: "390",
         width: "640",
         playerVars: {
-            // autoplay: 1,
             loop: 0,
             controls: 1,
             fs: 0,
             showinfo: 0,
             autohide: 1,
-            modestbranding: 1},
-        videoId: yt_id,
+            modestbranding: 1
+        },
+        videoId: ytId,
         events: {
-            onReady: onPlayerReady,
             onStateChange: onPlayerStateChange
         }
     });
-} // end onYouTubeIframeAPIReady
+    
+    // Add custom methods to the video_controller object
+    video_controller.play = function() {
+        video_controller.instance.playVideo();
+        resume_video = false;
+    };
+    
+    video_controller.pause = function(resume) {
+        let ispaused =  video_controller.isPaused();
+        resume_video = ispaused ? false : resume;
+        video_controller.instance.pauseVideo();
+    };
 
-// 4. The API will call this function when the video player is ready.
-function onPlayerReady(event) {
-    event.target.playVideo();
-} // end onPlayerReady
+    video_controller.isPaused = function() {
+        return video_controller.instance.getPlayerState() === YT.PlayerState.PAUSED;
+    };
 
-// 5. The API calls this function when the player's state changes.
-//    The function indicates that when playing a video (state=1),
-//    the player should play for six seconds and then stop.
+    video_controller.resume = function() {
+        if (resume_video) {
+            video_controller.play();
+        }
+    };
+};
+
 function onPlayerStateChange(event) {
     if (event.data === YT.PlayerState.PLAYING) {
-        let $obj = $("div", "#text-container");
-        let video_time = 0;
-        let timer;
+        const text_container = document.getElementById("text-container");
+        const text_divs = Array.from(text_container.getElementsByTagName("div"));
+        let current_video_time = 0;
         video_paused = false;
 
-        function updateTime(time_interval) {
-            timer = setInterval(function() {
+        const updateTime = (interval) => {
+            const timer = setInterval(() => {
                 if (!video_paused) {
-                    video_time = player.getCurrentTime();
-                    let $next_obj = $obj
-                        .filter(function() {
-                            return $(this).attr("data-start") < video_time;
-                        })
-                        .last();
-                    if (
-                        $next_obj.length > 0 &&
-                        !$next_obj.hasClass("video-reading-line")
-                    ) {
-                        $obj.removeClass("video-reading-line");
-                        $next_obj.addClass("video-reading-line");
-                        
-                        $next_obj[0].scrollIntoView({
+                    current_video_time = video_controller.instance.getCurrentTime();
+                    const next_obj = text_divs
+                        .filter(div => parseFloat(div.dataset.start) < current_video_time)
+                        .slice(-1)[0];
+
+                    if (next_obj && !next_obj.classList.contains("video-reading-line")) {
+                        text_divs.forEach(div => div.classList.remove("video-reading-line"));
+                        next_obj.classList.add("video-reading-line");
+                        next_obj.scrollIntoView({
                             behavior: 'auto',
                             block: 'center',
                             inline: 'center'
@@ -92,11 +81,11 @@ function onPlayerStateChange(event) {
                 } else {
                     clearInterval(timer);
                 }
-            }, time_interval);
-        }
+            }, interval);
+        };
 
         updateTime(500);
     } else {
         video_paused = true;
     }
-} // end onPlayerStateChange
+}

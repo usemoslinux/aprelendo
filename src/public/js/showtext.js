@@ -86,7 +86,7 @@ $(document).ready(function() {
             }
         } else if (e.which == 3) {
             if ($("#audioplayer").length) {
-                audioController.pause(false);
+                audio_controller.pause(false);
             }
             $selword = $(this);
             openInNewTab(buildTextTranslationLink(translator_URI, $selword));
@@ -326,7 +326,7 @@ $(document).ready(function() {
             });
 
         hideActionButtonsPopUpToolbar();
-        audioController.resume();
+        audio_controller.resume();
     }); // end #btn-add.on.click
 
     /**
@@ -415,7 +415,7 @@ $(document).ready(function() {
             });
         
         hideActionButtonsPopUpToolbar();
-        audioController.resume();
+        audio_controller.resume();
     }); // end #btn-remove.on.click
 
     /**
@@ -448,7 +448,7 @@ $(document).ready(function() {
 
                 setNewTooltip(document.getElementById('btn-next-phase'), 'Go to phase 3: Speaking');
 
-                audioController.playFromBeginning();
+                audio_controller.playFromBeginning();
                 break;
             case 3:
                 scrollToPageTop();
@@ -465,7 +465,7 @@ $(document).ready(function() {
                     + 'you listen to the audio. You can slow it down if necessary.</span>'
                 );
 
-                audioController.playFromBeginning();
+                audio_controller.playFromBeginning();
                 break;
             case 4:
                 scrollToPageTop();
@@ -775,7 +775,7 @@ $(document).ready(function() {
     
                 // Hide toolbar and resume audio
                 hideActionButtonsPopUpToolbar();
-                audioController.resume();
+                audio_controller.resume();
             }
         }
     }); // end $document.on.mouseup
@@ -787,7 +787,7 @@ $(document).ready(function() {
         let $audioplayer = $("#audioplayer");
 
         if ($audioplayer.length) {
-            audioController.pause(true);
+            audio_controller.pause(true);
         }
 
         // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
