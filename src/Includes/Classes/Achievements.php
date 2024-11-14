@@ -83,6 +83,7 @@ class Achievements extends DBEntity
 
         if (count($all_achievements) > count($db_achievements)) {
             foreach ($all_achievements as $all_achievement) {
+                $found_in_array = false;
                 foreach ($db_achievements as $db_achievement) {
                     $found_in_array = ($all_achievement['id'] == $db_achievement['achievement_id']);
                     if ($found_in_array) {
