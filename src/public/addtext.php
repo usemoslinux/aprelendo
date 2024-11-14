@@ -133,6 +133,9 @@ use Aprelendo\Texts;
                             <input type="text" id="audio-url" name="audio-url" class="form-control"
                                 placeholder="Audio URL (optional)"
                                 value="<?php if (isset($text_audio_url)) {echo $text_audio_url;}?>">
+                            <div class="form-text" id="audio-url-helptext">
+                                Accepts URLs from Google Drive or any standard audio source.
+                            </div>
                         </div>
                     </div>
                     <div class="row mb-2">

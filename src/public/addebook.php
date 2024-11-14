@@ -87,8 +87,8 @@ require_once PUBLIC_PATH . 'header.php';
                             <label for="audio-uri">Audio:</label>
                             <input type="text" id="audio-uri" name="audio-uri" class="form-control" maxlength="200"
                                 placeholder="Google Drive link (optional)">
-                            <div class="form-text" id="audio-url-helptext"><i class="bi bi-cloud-fill"></i>
-                                Remember to <a href="https://support.google.com/drive/answer/2494822?hl=en&co=GENIE.Platform%3DDesktop#zippy=%2Cshare-a-file-publicly" target="_blank" rel="noopener noreferrer" class="alert-link">share this file publicly</a>, allowing access to anyone with the link.
+                            <div class="form-text" id="audio-url-helptext">
+                                Accepts URLs from Google Drive or any standard audio source.
                             </div>
                         </div>
                     </div>
