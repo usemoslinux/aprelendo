@@ -45,21 +45,35 @@ try {
     }
 
     $audiolang = [
-        'ar' => 'ar-sa',
-        'zh' => 'zh-cn',
-        'nl' => 'nl-nl',
-        'en' => 'en-us',
-        'fr' => 'fr-fr',
-        'de' => 'de-de',
-        'el' => 'el-gr',
-        'he' => 'he-il',
-        'hi' => 'hi-in',
-        'it' => 'it-it',
-        'ja' => 'ja-jp',
-        'ko' => 'ko-kr',
-        'pt' => 'pt-br',
-        'ru' => 'ru-ru',
-        'es' => 'es-es'
+        'ar' => 'ar-sa', // Arabic
+        'bg' => 'bg-bg', // Bulgarian
+        'ca' => 'ca-es', // Catalan
+        'zh' => 'zh-cn', // Chinese
+        'hr' => 'hr-hr', // Croatian
+        'cs' => 'cs-cz', // Czech
+        'da' => 'da-dk', // Danish
+        'nl' => 'nl-nl', // Dutch
+        'en' => 'en-us', // English
+        'fr' => 'fr-fr', // French
+        'de' => 'de-de', // German
+        'el' => 'el-gr', // Greek
+        'he' => 'he-il', // Hebrew
+        'hi' => 'hi-in', // Hindi
+        'hu' => 'hu-hu', // Hungarian
+        'it' => 'it-it', // Italian
+        'ja' => 'ja-jp', // Japanese
+        'ko' => 'ko-kr', // Korean
+        'no' => 'nb-no', // Norwegian
+        'pl' => 'pl-pl', // Polish
+        'pt' => 'pt-br', // Portuguese
+        'ro' => 'ro-ro', // Romanian
+        'ru' => 'ru-ru', // Russian
+        'sk' => 'sk-sk', // Slovak
+        'sl' => 'sl-si', // Slovenian
+        'es' => 'es-es', // Spanish
+        'sv' => 'sv-se', // Swedish
+        'tr' => 'tr-tr', // Turkish
+        'vi' => 'vi-vn'  // Vietnamese
     ];
 
     $tts = new VoiceRSS;

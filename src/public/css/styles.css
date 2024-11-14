@@ -537,7 +537,8 @@ ol {
 
 .alert {
     box-shadow: 0 .10rem .10rem 0 rgba(0,0,0,.1);
-    font-size: 1rem;
+    font-family: var(--bs-body-font-family);
+    font-size: var(--bs-body-font-size);
 }
 
 .alert p:last-child {
@@ -869,9 +870,14 @@ a[role="menuitem"] {
 }
 
 #audioplayer-container {
-    font-size: 1rem;
+    font-family: var(--bs-body-font-family);
+    font-size: var(--bs-body-font-size);
     top: 0;
     z-index: 3;
+}
+
+#audioplayer-container ul li {
+    font-size: 12px;
 }
 
 .basic {
@@ -1102,7 +1108,7 @@ span.status_learned {
     border: 1px solid black;
 }
 
-#video-stream {
+#videoplayer {
     object-fit: fill;
 }
 

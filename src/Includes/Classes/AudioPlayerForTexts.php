@@ -75,14 +75,14 @@ class AudioPlayerForTexts extends AudioPlayer
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-speedometer"></i>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="ap-speed-menu" style="">
-                        <li><a class="dropdown-item" href="#" onclick="changeSpeed(event, 0.5)">0.5x</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="changeSpeed(event, 0.75)">0.75x</a></li>
-                        <li><a class="dropdown-item active" href="#" onclick="changeSpeed(event, 1)">1x</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="changeSpeed(event, 1.25)">1.25x</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="changeSpeed(event, 1.5)">1.5x</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="changeSpeed(event, 1.75)">1.75x</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="changeSpeed(event, 2)">2x</a></li>
+                    <ul class="dropdown-menu" id="ap-speed-menu" aria-labelledby="ap-speed-menu">
+                        <li><a class="dropdown-item" href="#" data-speed="0.5">0.5x</a></li>
+                        <li><a class="dropdown-item" href="#" data-speed="0.75">0.75x</a></li>
+                        <li><a class="dropdown-item active" href="#" data-speed="1">1x</a></li>
+                        <li><a class="dropdown-item" href="#" data-speed="1.25">1.25x</a></li>
+                        <li><a class="dropdown-item" href="#" data-speed="1.5">1.5x</a></li>
+                        <li><a class="dropdown-item" href="#" data-speed="1.75">1.75x</a></li>
+                        <li><a class="dropdown-item" href="#" data-speed="2">2x</a></li>
                     </ul>
                     </div>
                 <button data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-title="Toggle A-B Loop"

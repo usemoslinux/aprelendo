@@ -27,8 +27,6 @@ $(document).ready(function () {
     let dictionary_URI = "";
     let img_dictionary_URI = "";
     let translator_URI = "";
-    let resume_video = false;
-    let video_paused = false;
     let show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
     let gems_earned = 0;
     let doclang = $("html").attr("lang");
@@ -83,16 +81,9 @@ $(document).ready(function () {
 
         hideActionButtonsPopUpToolbar();
 
-        video_paused = player.getPlayerState() != 1;
-
-        // if there is video playing
-        if (!video_paused) {
-            player.pauseVideo();
-            resume_video = true;
-        }
-
         if (e.which < 2) {
             // if left mouse button / touch...
+            video_controller.pause(true);
             highlighting = true;
             $sel_start = $sel_end = $(this);
             if (e.type == "touchstart") {
@@ -101,6 +92,7 @@ $(document).ready(function () {
             }
         } else if (e.which == 3) {
             // on right click show translation of the whole sentence
+            video_controller.pause(false);
             $selword = $(this);
             openInNewTab(buildVideoTranslationLink(translator_URI, $selword));
         }
@@ -285,7 +277,7 @@ $(document).ready(function () {
         });
 
         hideActionButtonsPopUpToolbar();
-        resumeVideo();
+        video_controller.resume();
     }); // end #btn-add.on.click
 
     /**
@@ -381,7 +373,7 @@ $(document).ready(function () {
         });
 
         hideActionButtonsPopUpToolbar();
-        resumeVideo();
+        video_controller.resume();
     }); // end #btn-remove.on.click
 
     /**
@@ -493,7 +485,7 @@ $(document).ready(function () {
             
             $text_container.find(".highlighted").removeClass("highlighted");
             hideActionButtonsPopUpToolbar();
-            resumeVideo();
+            video_controller.resume();
         }
     }); // end $document.on.mouseup
 
@@ -527,16 +519,6 @@ $(document).ready(function () {
                 + "will be lost. Are you sure you want to exit this page?";
         }
     }); // end window.on.beforeunload
-
-    /**
-     * Resumes video when action buttons popup is closed
-     */
-    function resumeVideo() {
-        if (resume_video) {
-            player.playVideo();
-            resume_video = false;
-        }
-    } // end resumeVideo()
 
     /**
      * Shows pop up toolbar when user clicks a word

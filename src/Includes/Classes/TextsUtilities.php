@@ -44,7 +44,7 @@ class TextsUtilities
      * @param string $audio_uri
      * @return string
      */
-    public static function getAudioUriForEmbbeding(string $audio_uri): string
+    public static function getGoogleDriveAudioUri(string $audio_uri): string
     {
         $url = '';
 
@@ -61,7 +61,19 @@ class TextsUtilities
         }
         
         return $url;
-    } // end getAudioUriForEmbbeding()
+    } // end getGoogleDriveAudioUri()
+
+    /**
+     * Checks if the provided URL is a Google Drive link with the specific format
+     * expected for file URLs (i.e., "https://drive.google.com/file/d")
+     *
+     * @param string $audio_uri The URL to be checked.
+     * @return bool True if the URL is a Google Drive file link, false otherwise.
+     */
+    public static function isGoogleDriveLink(string $audio_uri): bool
+    {
+        return strpos($audio_uri, 'https://drive.google.com/file/d') === 0;
+    }
 
     /**
      * Convert author case to Title Case, except for acronyms in author names

@@ -104,6 +104,7 @@ require_once PUBLIC_PATH . 'head.php';
     <script defer src="/js/underlinewords.min.js"></script>
     <script defer src="/js/showofflinevideo.min.js"></script>
     <script defer src="/js/dictionary.min.js"></script>
+    <script defer src="/js/videoplayer.min.js"></script>
     <script defer src="/js/subtitles-parser/subtitles.parser.min.js"></script>
     <script defer src="/js/helpers.min.js"></script>
     <script defer src="/js/tooltips.min.js"></script>

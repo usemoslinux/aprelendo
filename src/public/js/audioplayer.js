@@ -1,135 +1,186 @@
-const audio = document.getElementById('audioplayer');
-const audio_source = document.getElementById('audio-source');
-const playPauseButton = document.getElementById('ap-play-btn');
-const icon = document.getElementById('ap-play-btn-icon');
-const progressBar = document.getElementById('ap-progress-bar');
-const timeStamp = document.getElementById('ap-time-stamp');
-const btnAbloop = document.getElementById("ap-abloop-btn");
+/**
+ * Copyright (C) 2019 Pablo Castagnino
+ *
+ * This file is part of aprelendo.
+ *
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
-let abloop_start = 0;
-let abloop_end = 0;
+const audio_controller = (() => {
+    const audio = document.getElementById('audioplayer');
+    const audio_source = document.getElementById('audio-source');
+    const play_pause_btn = document.getElementById('ap-play-btn');
+    const play_pause_btn_icon = document.getElementById('ap-play-btn-icon');
+    const progress_bar = document.getElementById('ap-progress-bar');
+    const time_stamp = document.getElementById('ap-time-stamp');
+    const speed_menu_items = document.querySelectorAll('#ap-speed-menu .dropdown-item');
+    const ab_loop_btn = document.getElementById("ap-abloop-btn");
 
-if (audio) {
-    function playAudio() {
-        icon.className = 'bi bi-pause-fill';
-        audio.play();
-    }
+    let resume_audio = false;
+    let ab_loop_start = 0;
+    let ab_loop_end = 0;
 
-    function stopAudio() {
-        icon.className = 'bi bi-play-fill';
-        audio.pause();
-        audio.currentTime = 0;
-    }
+    // Default functions (do nothing if audio is not defined)
+    let play = () => {};
+    let stop = () => {};
+    let pause = () => {};
+    let resume = () => {};
+    let togglePlayPause = () => {};
+    let playFromBeginning = () => {};
     
-    function pauseAudio() {
-        icon.className = 'bi bi-play-fill';
-        audio.pause();
-    }
+    // If the audio element exists, redefine the functions
+    if (audio) {
+        play = () => audio.play();
 
-    function togglePlayPause() {
-        if (audio.paused || audio.ended) {
-            playAudio();
-        } else {
-            pauseAudio();
-        }
-    }
+        stop = () => {
+            audio.pause();
+            audio.currentTime = 0;
+        };
 
-    function playAudioFromBeginning() {
-        audio.pause();
-        audio.currentTime = 0;
-        togglePlayPause();
-    }
+        pause = (resume) => {
+            resume_audio = audio.paused && !resume_audio ? false : resume;
+            audio.pause();
+        };
 
-    // Set progress bar and time labels to reflect playback progress
-    function playbackProgressUpdate() {
-        // set progress bar and time labels
-        let progress = (audio.currentTime / audio.duration) * 100;
-        progressBar.style.width = `${progress}%`;
-
-        // Calculate hours, minutes, and seconds
-        let currentHours = Math.floor(audio.currentTime / 3600);
-        let currentMinutes = Math.floor((audio.currentTime % 3600) / 60);
-        let currentSeconds = Math.floor(audio.currentTime % 60);
-
-        let durationHours = Math.floor(audio.duration / 3600);
-        let durationMinutes = Math.floor((audio.duration % 3600) / 60);
-        let durationSeconds = Math.floor(audio.duration % 60);
-
-        // Format time for display
-        let currentTimeDisplay = currentHours > 0 ? `${currentHours}:` : '';
-        currentTimeDisplay += `${currentMinutes < 10 ? '0' : ''}${currentMinutes}:${currentSeconds < 10 ? '0' : ''}${currentSeconds}`;
-
-        let durationTimeDisplay = durationHours > 0 ? `${durationHours}:` : '';
-        durationTimeDisplay += `${durationMinutes < 10 ? '0' : ''}${durationMinutes}:${durationSeconds < 10 ? '0' : ''}${durationSeconds}`;
-
-        timeStamp.textContent = `${currentTimeDisplay} / ${durationTimeDisplay}`;
-    }
-
-    // Change Playback Speed
-    function changeSpeed(event, speed) {
-        event.preventDefault(); // Prevent the default anchor action
-
-        audio.playbackRate = speed;
-
-        // Get all speed options
-        let speedOptions = document.querySelectorAll('#ap-speed-menu + .dropdown-menu .dropdown-item');
-
-        // Remove 'active' class from all options and add to the selected one
-        speedOptions.forEach(option => {
-            if (parseFloat(option.textContent) === speed) {
-                option.classList.add('active');
+        togglePlayPause = () => {
+            if (audio.paused || audio.ended) {
+                play();
             } else {
-                option.classList.remove('active');
+                audio.pause();
+            }
+        };
+
+        resume = () => {
+            if (resume_audio) {
+                play();
+                resume_audio = false;
+            }
+        };
+
+        playFromBeginning = () => {
+            audio.pause();
+            audio.currentTime = 0;
+            play();
+        };
+
+        const playbackProgressUpdate = () => {
+            let progress = (audio.currentTime / audio.duration) * 100;
+            progress_bar.style.width = `${progress}%`;
+
+            let currentHours = Math.floor(audio.currentTime / 3600);
+            let currentMinutes = Math.floor((audio.currentTime % 3600) / 60);
+            let currentSeconds = Math.floor(audio.currentTime % 60);
+
+            let durationHours = Math.floor(audio.duration / 3600);
+            let durationMinutes = Math.floor((audio.duration % 3600) / 60);
+            let durationSeconds = Math.floor(audio.duration % 60);
+
+            let currentTimeDisplay = currentHours > 0 ? `${currentHours}:` : '';
+            currentTimeDisplay += `${currentMinutes < 10 ? '0' : ''}${currentMinutes}:${currentSeconds < 10 ? '0' : ''}${currentSeconds}`;
+
+            let durationTimeDisplay = durationHours > 0 ? `${durationHours}:` : '';
+            durationTimeDisplay += `${durationMinutes < 10 ? '0' : ''}${durationMinutes}:${durationSeconds < 10 ? '0' : ''}${durationSeconds}`;
+
+            time_stamp.textContent = `${currentTimeDisplay} / ${durationTimeDisplay}`;
+        };
+
+        // Change Playback Speed
+        const changeSpeed = (speed) => {
+            audio.playbackRate = speed;
+
+            // Update active class
+            document.querySelectorAll('#ap-speed-menu .dropdown-item').forEach(option => {
+                if (parseFloat(option.getAttribute('data-speed')) === speed) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+        }
+
+        // event listeners
+        
+        play_pause_btn.addEventListener('click', togglePlayPause);
+        audio.addEventListener('loadedmetadata', playbackProgressUpdate);
+
+        audio.addEventListener('timeupdate', () => {
+            if (ab_loop_end > 0) {
+                if(audio.currentTime >= ab_loop_end) {
+                    audio.currentTime = ab_loop_start;
+                }
+            }
+            playbackProgressUpdate();
+        });
+
+        speed_menu_items.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const target = e.target;
+        
+                if (target.hasAttribute('data-speed')) {
+                    const speed = parseFloat(target.getAttribute('data-speed'));
+                    changeSpeed(speed);
+                }
+            });
+        });
+
+        audio.addEventListener('play', () => {
+            play_pause_btn_icon.className = 'bi bi-pause-fill';
+        });
+
+        audio.addEventListener('pause', () => {
+            play_pause_btn_icon.className = 'bi bi-play-fill';
+        });
+
+        audio.addEventListener('ended', () => {
+            audio.currentTime = 0;
+            play_pause_btn_icon.className = 'bi bi-play-fill';
+        });
+
+        audio_source.addEventListener('error', () => {
+            if (audio_source.src !== '' && audio_source.src !== window.location.href) {
+                play_pause_btn.removeEventListener('click', togglePlayPause);
+                play_pause_btn.classList = 'btn btn-danger';
             }
         });
+
+        // Add AB loop button functionality if the button exists
+        if (ab_loop_btn) {
+            ab_loop_btn.addEventListener("click", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (ab_loop_start === 0 && ab_loop_end === 0) {
+                    ab_loop_start = audio.currentTime;
+                    ab_loop_btn.textContent = "B";
+                } else if (ab_loop_start > 0 && ab_loop_end === 0) {
+                    ab_loop_end = audio.currentTime;
+                    ab_loop_btn.textContent = "C";
+                } else {
+                    ab_loop_start = ab_loop_end = 0;
+                    ab_loop_btn.textContent = "A";
+                }
+            });
+        }
     }
 
-    playPauseButton.addEventListener('click', togglePlayPause);
-
-    audio.addEventListener('loadedmetadata', playbackProgressUpdate);
-
-    // Update Progress Bar and Time Stamp
-    audio.addEventListener('timeupdate', function() {
-        // set abloop
-        if (abloop_end > 0) {
-            if(audio.currentTime >= abloop_end) {
-                audio.currentTime = abloop_start;
-            }    
-        }
-
-        playbackProgressUpdate();
-    });
-
-    audio.addEventListener('ended', function() {
-        audio.currentTime = 0;
-        icon.className = 'bi bi-play-fill';
-        playing_audio = false;
-    });
-
-    // on audio error
-    audio_source.addEventListener('error', function(e) {
-        if (audio_source.src !== '' && audio_source.src !== window.location.href) {
-            playPauseButton.removeEventListener('click', togglePlayPause);
-            playPauseButton.classList = 'btn btn-danger';   
-        }
-    });
-}
-
-if (btnAbloop) {
-    // Add click event listener to the AB loop button
-    btnAbloop.addEventListener("click", function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (abloop_start === 0 && abloop_end === 0) {
-            abloop_start = audio.currentTime;
-            this.textContent = "B";
-        } else if (abloop_start > 0 && abloop_end === 0) {
-            abloop_end = audio.currentTime;
-            this.textContent = "C";
-        } else {
-            abloop_start = abloop_end = 0;
-            this.textContent = "A";
-        }
-    });
-}
+    return {
+        play,
+        stop,
+        pause,
+        resume,
+        togglePlayPause,
+        playFromBeginning
+    };
+})();

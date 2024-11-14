@@ -28,8 +28,6 @@ $(document).ready(function () {
     let dictionary_URI = "";
     let img_dictionary_URI = "";
     let translator_URI = "";
-    let resume_video = false;
-    let video_paused = false;
     let show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
     let gems_earned = 0;
     let doclang = $("html").attr("lang");
@@ -70,16 +68,9 @@ $(document).ready(function () {
 
         hideActionButtonsPopUpToolbar();
 
-        video_paused = player.paused;
-
-        // if there is video playing
-        if (!video_paused) {
-            player.pause();
-            resume_video = true;
-        }
-
         if (e.which < 2) {
             // if left mouse button / touch...
+            video_controller.pause(true);
             highlighting = true;
             $sel_start = $sel_end = $(this);
             if (e.type == "touchstart") {
@@ -88,6 +79,7 @@ $(document).ready(function () {
             }
         } else if (e.which == 3) {
             // on right click show translation of the whole sentence
+            video_controller.pause(false);
             $selword = $(this);
             openInNewTab(buildVideoTranslationLink(translator_URI, $selword));
         }
@@ -270,7 +262,7 @@ $(document).ready(function () {
             });
 
             hideActionButtonsPopUpToolbar();
-            resumeVideo();
+            video_controller.resume();
     }); // end #btn-add.on.click
 
     /**
@@ -366,7 +358,7 @@ $(document).ready(function () {
             });
 
             hideActionButtonsPopUpToolbar();
-            resumeVideo();
+            video_controller.resume();
     }); // end #btn-remove.on.click
 
     /**
@@ -482,7 +474,7 @@ $(document).ready(function () {
             highlighting = false;
             $text_container.find(".highlighted").removeClass("highlighted");
             hideActionButtonsPopUpToolbar();
-            resumeVideo();
+            video_controller.resume();
         }
     }); // end $pagereader.on.mouseup
 
@@ -597,32 +589,6 @@ $(document).ready(function () {
     }); // end #btn-fullscreen.on.click
 
     /**
-     * Show reading line when video's currentTime changes
-     */
-    $("#video-stream").on("timeupdate", function (e) {
-        const video_time = document.getElementById('video-stream').currentTime * 1000;
-        let $obj = $("div.text-center", "#text-container");
-        let $next_obj = $obj
-            .filter(function () {
-                return $(this).attr("data-start") < video_time;
-            })
-            .last();
-        if (
-            $next_obj.length > 0 &&
-            !$next_obj.hasClass("video-reading-line")
-        ) {
-            $obj.removeClass("video-reading-line");
-            $next_obj.addClass("video-reading-line");
-
-            $next_obj[0].scrollIntoView({
-                behavior: 'auto',
-                block: 'center',
-                inline: 'center'
-            });
-        }
-    }); // end #video-stream.on.timeupdate
-
-    /**
      * Shows dialog message reminding users to save changes before leaving
      */
     $(window).on("beforeunload", function () {
@@ -631,16 +597,6 @@ $(document).ready(function () {
                 + "be lost. Are you sure you want to exit this page?";
         }
     }); // end window.on.beforeunload
-
-    /**
-     * Resumes video when action buttons popup is closed
-     */
-    function resumeVideo() {
-        if (resume_video) {
-            player.play();
-            resume_video = false;
-        }
-    } // end resumeVideo()
     
     /**
      * Shows dictionary when user clicks a word

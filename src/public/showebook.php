@@ -100,7 +100,9 @@ try {
 // get audio uri, if any
 $text = new Texts($pdo, $user->id, $user->lang_id);
 $text->loadRecord($_GET['id']);
-$audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
+$audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
+            ? TextsUtilities::getGoogleDriveAudioUri($text->audio_uri)
+            : $text->audio_uri;
 
 ?>
 
@@ -259,7 +261,7 @@ $audio_uri = TextsUtilities::getAudioUriForEmbbeding($text->audio_uri);
     ?>
 
     <script defer src="/js/underlinewords.min.js"></script>
-    <script defer src="/js/showtext.js"></script>
+    <script defer src="/js/showtext.min.js"></script>
     <script defer src="/js/showebook.min.js"></script>
     <script defer src="/js/audioplayer.min.js"></script>
     <script defer src="/js/dictionary.min.js"></script>

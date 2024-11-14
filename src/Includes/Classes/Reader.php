@@ -70,6 +70,10 @@ class Reader
      */
     public function showText(string $reader_css): string
     {
+        $audio_uri = TextsUtilities::isGoogleDriveLink($this->text->audio_uri)
+            ? TextsUtilities::getGoogleDriveAudioUri($this->text->audio_uri)
+            : $this->text->audio_uri;
+        
         $html = '<div id="text-container" style="' . $reader_css . '" class="my-3" data-type="text" data-IdText="'
             . $this->text->id . '" data-assisted-learning="' . (int)$this->prefs->assisted_learning
             . '" data-is-long-text="' . (int)$this->is_long_text . '">';
@@ -89,14 +93,14 @@ class Reader
         }
         
         // display audio player, if necessary
-        if (!empty($this->text->audio_uri)) {
-            $audio_player = new AudioPlayerForTexts($this->text->audio_uri);
+        if (!empty($audio_uri)) {
+            $audio_player = new AudioPlayerForTexts($audio_uri);
             $html .= $audio_player->show($this->prefs->display_mode, false);
         }
 
         if ($this->prefs->assisted_learning) {
-            if (!$this->is_long_text && empty($this->text->audio_uri)) {
-                $audio_player = new AudioPlayerForTexts($this->text->audio_uri);
+            if (!$this->is_long_text && empty($audio_uri)) {
+                $audio_player = new AudioPlayerForTexts($audio_uri);
                 $html .= $audio_player->show($this->prefs->display_mode, true);
             }
 
@@ -167,9 +171,9 @@ class Reader
                         accept="video/mp4,video/ogg,video/webm" style="display: none;">' .
                     '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt"
                         style="display: none;">' .
-                        '<video id="video-stream" controls controlsList="nofullscreen nodownload noremoteplayback"
+                        '<video id="videoplayer" controls controlsList="nofullscreen nodownload noremoteplayback"
                             playsinline disablePictureInPicture>' .
-                            '<source src=""/>'.
+                            '<source id="video-source" src=""/>'.
                             'Your browser does not support HTML5 video.' .
                         '</video>' .
                 '</div>';
