@@ -54,8 +54,8 @@ if (!$user_auth->isLoggedIn()) {
                             <p>Aprelendo was built using the following free and open source tools:</p>
                             <ul>
                                 <li>
-                                    <a href="https://nginx.org/" target="_blank"
-                                        rel="noopener noreferrer">Nginx</a>, by Igor Sysoev
+                                    <a href="https://nginx.org/" target="_blank" rel="noopener noreferrer">Nginx</a>, by
+                                    Igor Sysoev
                                 </li>
                                 <li>
                                     <a href="https://php.net/" target="_blank" rel="noopener noreferrer">PHP</a>, by The
@@ -70,14 +70,21 @@ if (!$user_auth->isLoggedIn()) {
                                         rel="noopener noreferrer">Bootstrap</a>, by Bootstrap Core Team
                                 </li>
                                 <li>
+                                    <a href="https://huggingface.co/" target="_blank" rel="noopener noreferrer">Hugging
+                                        Face</a>, for providing access to machine learning models used to power Aprelendo's
+                                    AI capabilities. The <a href="https://huggingface.co/microsoft/Phi-3.5-mini-instruct"
+                                        target="_blank" rel="noopener noreferrer">Phi 3.5 mini instruct model</a> by
+                                    Microsoft is used to power Lingobot.
+                                </li>
+                                <li>
                                     <a href="https://github.com/mozilla/readability" target="_blank"
                                         rel="noopener noreferrer">Readability</a>, by Mozilla (used to fetch texts from
-                                        external web sources)
+                                    external web sources)
                                 </li>
                                 <li>
                                     <a href="https://github.com/cure53/DOMPurify" target="_blank"
                                         rel="noopener noreferrer">DOMPurify</a>, by cure53 (used for security
-                                        before fetching texts from external web sources)
+                                    before fetching texts from external web sources)
                                 </li>
                                 <li>
                                     <a href="https://github.com/bazh/subtitles-parser" target="_blank"

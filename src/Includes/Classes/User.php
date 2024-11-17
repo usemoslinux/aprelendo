@@ -33,7 +33,7 @@ class User extends DBEntity
     public string $activation_hash;
     public bool   $is_active;
     public string $google_id;
-    public string $hf_api_key;
+    public string $hf_token;
 
     public string $error_msg;
     
@@ -58,7 +58,7 @@ class User extends DBEntity
         $this->activation_hash = '';
         $this->is_active       = false;
         $this->google_id       = '';
-        $this->hf_api_key      = '';
+        $this->hf_token      = '';
     
         $this->error_msg       = '';
     } // end __construct()
@@ -83,7 +83,7 @@ class User extends DBEntity
             $this->activation_hash = $record['activation_hash'];
             $this->is_active       = $record['is_active'];
             $this->google_id       = $record['google_id'];
-            $this->hf_api_key      = $record['hf_api_key'];
+            $this->hf_token      = $record['hf_token'];
 
             // get active language id (lang_id)
             $lang = new Language($this->pdo, $this->id);
@@ -168,10 +168,10 @@ class User extends DBEntity
         $new_password = $user_data['new_password'] ?? null; // Default to null if not set
         $new_native_lang = $user_data['new_native_lang'];
         $new_lang = $user_data['new_lang'];
-        $hf_api_key = $user_data['hf_api_key'];
+        $hf_token = $user_data['hf_token'];
 
         // Verify the user's password
-        if (!UserPassword::verify($password, $this->password_hash)) {
+        if (!empty($this->password_hash) && !UserPassword::verify($password, $this->password_hash)) {
             throw new UserException('Invalid password. Please try again.');
         }
 
@@ -188,8 +188,8 @@ class User extends DBEntity
         }
 
         // Prepare the parameters and SQL statement
-        $params = [$new_username, $new_email, $new_native_lang, $new_lang, $hf_api_key];
-        $sql = "UPDATE `{$this->table}` SET `name`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?, `hf_api_key`=?";
+        $params = [$new_username, $new_email, $new_native_lang, $new_lang, $hf_token];
+        $sql = "UPDATE `{$this->table}` SET `name`=?, `email`=?, `native_lang_iso`=?, `learning_lang_iso`=?, `hf_token`=?";
 
         // Add password hash if a new password is provided
         if (!empty($new_password)) {

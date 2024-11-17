@@ -314,4 +314,9 @@ function setDicActionButtonsClick($selword, base_uris, source) {
     $('#btn-open-translator').off('click').on('click', function() {
         openInNewTab(translator_link);
     });
+    $('#btn-open-ai-bot-modal').off('click').on('click', function() {
+        const $ai_bot_modal = $('#ask-ai-bot-modal');
+        $ai_bot_modal.attr('data-word', $selword.text());
+        $ai_bot_modal.modal('show');
+    });
 }

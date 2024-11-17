@@ -48,10 +48,16 @@
         data-bs-custom-class="custom-tooltip" data-bs-placement="top" data-bs-title="Visual Dictionary">
             <span class="bi bi-card-image"></span>
         </button>
-        <button type="button" class="btn btn-info" id="btn-open-translator" data-bs-toggle="tooltip"
+        <button type="button" class="btn btn-secondary" id="btn-open-translator" data-bs-toggle="tooltip"
             data-bs-custom-class="custom-tooltip" data-bs-placement="top" data-bs-title="Translate">
             <span class="bi bi-translate"></span>
         </button>
+        <?php if (!empty($user->hf_token)) : ?>
+        <button type="button" class="btn btn-info" id="btn-open-ai-bot-modal" data-bs-toggle="tooltip"
+            data-bs-custom-class="custom-tooltip" data-bs-placement="top" data-bs-title="Lingobot">
+                    <span class="bi bi-robot"></span>
+        </button>
+        <?php endif; ?>
     </div>
 </div>
 

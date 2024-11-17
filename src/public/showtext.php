@@ -147,6 +147,9 @@ require_once PUBLIC_PATH . 'head.php';
         if ($is_shared) {
             require_once PUBLIC_PATH . 'showreporttextmodal.php'; // load report text modal window
         }
+        if (!empty($user->hf_token)) {
+            require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
+        }
     ?>
 
     <script defer src="/js/underlinewords.min.js"></script>
