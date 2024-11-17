@@ -67,7 +67,7 @@ if (!$user_auth->isLoggedIn()) {
                                 </li>
                                 <li>
                                     <a href="https://getbootstrap.com/" target="_blank"
-                                        rel="noopener noreferrer">Bootstrap</a>, by Bootstrap Core Team
+                                        rel="noopener noreferrer">Bootstrap</a>, by Bootstrap Team
                                 </li>
                                 <li>
                                     <a href="https://huggingface.co/" target="_blank" rel="noopener noreferrer">Hugging
@@ -105,11 +105,12 @@ if (!$user_auth->isLoggedIn()) {
                             <p>Other attributions:</p>
                             <ul>
                                 <li>
-                                    <a href="https://matomo.org/" target="_blank" rel="noopener noreferrer">Matomo</a>
+                                    <a href="https://matomo.org/" target="_blank" rel="noopener noreferrer">Matomo</a>,
+                                    by Matomo (web analytics platform that provides privacy-focused tracking)
                                 </li>
                                 <li>
                                     <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener noreferrer">
-                                        Bootstrap Icons</a>
+                                        Bootstrap Icons</a>, by Bootstrap Team
                                 </li>
                                 <li>Flag icons designed by
                                     <a href="https://github.com/HatScripts/circle-flags" target="_blank"
