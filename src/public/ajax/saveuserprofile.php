@@ -42,10 +42,10 @@ try {
     $new_password2 = isset($_POST['newpassword-confirmation']) ? $_POST['newpassword-confirmation'] : '';
     $src_lang = isset($_POST['src_lang']) ? $_POST['src_lang'] : '';
     $to_lang = isset($_POST['to_lang']) ? $_POST['to_lang'] : '';
-    $hf_token = isset($_POST['hf_token']) ? $_POST['hf_token'] : '';
+    $hf_token = isset($_POST['hf-token']) ? $_POST['hf-token'] : '';
 
     $crypto = new SecureEncryption(ENCRYPTION_KEY);
-    $hf_token = $_POST['hf_token'] === '' ? '' : $crypto->encrypt($_POST['hf_token']);
+    $hf_token = $_POST['hf-token'] === '' ? '' : $crypto->encrypt($_POST['hf-token']);
 
     $user_data = [
         'new_username' => $username,

@@ -153,13 +153,13 @@ use Aprelendo\SecureEncryption;
                         <div class="card-header">Lingobot</div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="hf_token">Hugging Face API key:</label>
+                                <label for="hf-token">Hugging Face API key:</label>
                                 <div class="input-group">
-                                    <input type="password" id="hf_token" name="hf_token" class="form-control"
+                                    <input type="password" id="hf-token" name="hf-token" class="form-control"
                                         value="<?php
-                                                                                                                            $crypto = new SecureEncryption(ENCRYPTION_KEY);
-                                                                                                                            echo $crypto->decrypt($user->hf_token);
-                                                                                                                            ?>" maxlength="40" autocomplete="off">
+                                            $crypto = new SecureEncryption(ENCRYPTION_KEY);
+                                            echo $crypto->decrypt($user->hf_token);
+                                            ?>" maxlength="40" autoco" maxlength="40" autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide Hugging Face API key" tabindex="-1">
                                         <span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>
