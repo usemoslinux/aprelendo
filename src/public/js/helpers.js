@@ -132,6 +132,12 @@ $.fn.disableScroll = function() {
     });
 };
 
+/**
+ * Gets the width of the scrollbar for either the document body or a specific element
+ * Uses a cached value for document body scrollbar to avoid repeated DOM operations
+ * @param {HTMLElement} [element=document.body] - The element to measure scrollbar width for
+ * @returns {number} The width of the scrollbar in pixels
+ */
 function getScrollbarWidth(element) {
     if (element === document.body) {
         return window.innerWidth - document.documentElement.clientWidth;

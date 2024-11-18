@@ -142,7 +142,7 @@ class Reader
                     '<div data-ytid="' . $yt_id . '" id="player"></div>' .
                 '</div>';
 
-        $html .= "<div id='text-container' class='overflow-auto text-center my-1' data-type='video' data-IdText='"
+        $html .= "<div id='text-container' class='overflow-auto text-center my-1 z-1' data-type='video' data-IdText='"
             . $this->text->id . "' style='" . $reader_css . "'>";
         $xml = new SimpleXMLElement($this->text->text);
 
@@ -178,7 +178,7 @@ class Reader
                         '</video>' .
                 '</div>';
 
-        $html .= '<div id="text-container" class="overflow-auto my-1" style="' . $reader_css . '"></div>';
+        $html .= '<div id="text-container" class="overflow-auto my-1 z-1" style="' . $reader_css . '"></div>';
         return $html;
     } // end showOfflineVideo()
 }
