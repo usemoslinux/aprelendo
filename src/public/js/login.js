@@ -60,7 +60,8 @@ function googleSignIn(googleUser) {
         data: {
             "id": profile.sub,
             "name": profile.name,
-            "email": profile.email
+            "email": profile.email,
+            "time-zone": Intl.DateTimeFormat().resolvedOptions().timeZone
         },
         url: "ajax/google_oauth.php"
     })

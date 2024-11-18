@@ -58,7 +58,7 @@ try {
     ];
 
     if (empty($new_password1) && empty($new_password2)) {
-        if (empty($password)) {
+        if (empty($password) && empty($user->google_id)) {
             throw new UserException('Please enter your current password and try again.');
         } else {
             $user->updateProfile($user_data);

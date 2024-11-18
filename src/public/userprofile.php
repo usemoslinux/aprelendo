@@ -27,6 +27,8 @@ require_once PUBLIC_PATH . 'header.php';
 use Aprelendo\Language;
 use Aprelendo\SecureEncryption;
 
+$google_login = !empty($user->google_id);
+
 ?>
 
 <div class="container mtb d-flex flex-grow-1 flex-column">
@@ -53,7 +55,7 @@ use Aprelendo\SecureEncryption;
                                 <input type="text" id="username" name="username" class="form-control"
                                     value="<?php echo $user->name; ?>" maxlength="20" required>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3 <?php echo $google_login ? 'disabled-card' : '' ?>">
                                 <label for="email">E-mail address:</label>
                                 <input type="email" id="email" name="email" class="form-control"
                                     value="<?php echo $user->email; ?>" maxlength="50" required>
@@ -61,7 +63,7 @@ use Aprelendo\SecureEncryption;
                         </div>
                     </div>
                     <br>
-                    <div class="card">
+                    <div class="card <?php echo $google_login ? 'disabled-card' : '' ?>">
                         <div class="card-header">Password</div>
                         <div class="card-body">
                             <div class="mb-3">
@@ -71,7 +73,7 @@ use Aprelendo\SecureEncryption;
                                 </small>
                                 <div class="input-group">
                                     <input type="password" id="password" name="password" class="form-control"
-                                        autocomplete="off" required>
+                                        autocomplete="off" <?php echo $google_login ? '' : 'required' ?> >
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide current password" tabindex="-1">
                                         <span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>

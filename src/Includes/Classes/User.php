@@ -171,7 +171,7 @@ class User extends DBEntity
         $hf_token = $user_data['hf_token'];
 
         // Verify the user's password
-        if (!empty($this->password_hash) && !UserPassword::verify($password, $this->password_hash)) {
+        if (empty($this->google_id) && !UserPassword::verify($password, $this->password_hash)) {
             throw new UserException('Invalid password. Please try again.');
         }
 
@@ -202,8 +202,11 @@ class User extends DBEntity
         $params[] = $user_id;
         $this->sqlExecute($sql, $params);
 
-        // Update remember-me cookie
-        (new UserAuth($this))->login($new_username, $new_password ?: $password);
+        // if new password was set, then update remember-me cookie
+        if (!empty($new_password)) {
+            $user_auth = new UserAuth($this);
+            $user_auth->login($new_username, $new_password);
+        }
     } // updateProfile()
 
     /**

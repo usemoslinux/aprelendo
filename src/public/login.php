@@ -101,7 +101,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
     </div>
 </main>
 
-<script defer src="/js/login.min.js"></script>
+<script src="/js/login.min.js"></script> <!-- Don't user "defer" for this one, otherwise google login won't work -->
 <script defer src="/js/password.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 

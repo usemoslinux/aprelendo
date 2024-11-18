@@ -112,8 +112,7 @@ class Token extends DBEntity
      */
     public function add(int $user_id): void
     {
-        $domain = parse_url($_SERVER['HTTP_HOST'], PHP_URL_HOST);
-        $domain = $domain ?? "";
+        $domain = $_SERVER['HTTP_HOST'];
 
         // first, remove old tokens from auth_tokens table
         $this->deleteOld();

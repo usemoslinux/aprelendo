@@ -1428,3 +1428,10 @@ body.darkmode #btn-close-ebook {
     color: white;
     padding: 1rem;
 }
+
+/* USER PROFILE */
+
+.disabled-card {
+    pointer-events: none; /* Prevents interaction */
+    opacity: 0.5; /* Makes it look visually disabled */
+}

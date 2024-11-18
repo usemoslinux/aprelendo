@@ -104,13 +104,10 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <?php endif; ?>
 
-    <?php
-    if ($_SERVER['HTTP_HOST'] === 'www.aprelendo.com') {
-        // Only output the Matomo Analytics script in deployment
-        echo '<!-- Matomo Analytics -->';
-        echo '<script src="/js/matomo.min.js" async defer></script>';
-    }
-    ?>
+    <?php if ($_SERVER['HTTP_HOST'] === 'www.aprelendo.com'): ?>
+        <!-- Matomo Analytics -->
+        <script src="/js/matomo.min.js" async defer></script>
+    <?php endif; ?>
 </head>
 
 <?php

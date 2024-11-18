@@ -33,7 +33,7 @@ class UserPassword
     {
         try {
             if (!password_verify($password, $hashed_password)) {
-                throw new UserException('Username and password combination are incorrect. Please try again.');
+                throw new UserException('Username and password combination is incorrect. Please try again.');
             }
 
             return true;

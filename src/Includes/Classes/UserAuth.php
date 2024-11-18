@@ -49,16 +49,18 @@ class UserAuth extends DBEntity
             throw new UserException('Username and password combination is incorrect. Please try again.');
         }
 
+        
         $user_id = $row['id'];
         $hashedPassword = $row['password_hash'];
-
+        
         // check if user account is active
         if (!$row['is_active']) {
             throw new UserException('You need to activate your account first. Check your email for the '
-                . 'activation link.');
+            . 'activation link.');
         }
         
-        if (password_verify($password, $hashedPassword) || $google_id !== "") { // login successful, remember me
+        if (!empty($google_id) || password_verify($password, $hashedPassword)) { // login successful, remember me
+            // throw new UserException('u:' . $username . ', p: ' . $password . ', gi: ' . $google_id . ', r: ' . json_encode($row));
             $token = new Token($this->pdo);
             $token->add($user_id);
         } else { // wrong password
@@ -74,8 +76,7 @@ class UserAuth extends DBEntity
      */
     public function logout(bool $deleted_account): void
     {
-        $domain = parse_url($_SERVER['HTTP_HOST'], PHP_URL_HOST);
-        $domain = $domain ?? "";
+        $domain = $_SERVER['HTTP_HOST'];
 
         if ($deleted_account || $this->isLoggedIn()) {
             setcookie('user_token', '', time() - 3600, "/", $domain, true); // delete user_token cookie

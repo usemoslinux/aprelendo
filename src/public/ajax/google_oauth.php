@@ -33,7 +33,7 @@ try {
         $google_email = $_POST['email']; //Email ID
         $google_name = $_POST['name']; //Name
         // $google_profile_pic = $_POST['pic']; //Profile Pic URL
-        $time_zone = $_POST['time_zone']; // browser time zone
+        $time_zone = $_POST['time-zone']; // browser time zone
 
         $user = new User($pdo);
 
@@ -55,7 +55,7 @@ try {
             $user_reg = new UserRegistrationManager($user);
             $user_reg->register($user_data);
             $user->updateGoogleId($google_id, $google_email);
-            $user_auth->login($google_name, $google_id);
+            $user_auth->login($google_name, '', $google_id);
         }
     }
 } catch (InternalException | UserException $e) {
