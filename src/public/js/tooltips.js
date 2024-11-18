@@ -17,17 +17,6 @@
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-function isMobileDevice() {
-    let userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-    // Check for iOS and Android platforms
-    if (/android/i.test(userAgent)) {
-        return true; // Android
-    }
-
-    return !!(/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream); // Not a mobile device
-}
-
 function setNewTooltip(elem, title) {
     if (isMobileDevice()) {
         return;

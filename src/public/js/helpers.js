@@ -106,7 +106,10 @@ function getCurrentFileName() {
  */
 $.fn.enableScroll = function() {
     return this.each(function() {
-        $(this).removeClass('overflow-hidden').addClass('overflow-auto');
+        this.style.overflow = ''; // Restore scrolling
+        this.style.paddingRight = ''; // Reset padding
+        this.classList.remove('overflow-hidden');
+        this.classList.add('overflow-auto');
     });
 };
 
@@ -115,9 +118,43 @@ $.fn.enableScroll = function() {
  */
 $.fn.disableScroll = function() {
     return this.each(function() {
-        $(this).removeClass('overflow-auto').addClass('overflow-hidden');
+        let scrollbarWidth;
+        if (this === document.body) {
+            scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        } else {
+            scrollbarWidth = this.offsetWidth - this.clientWidth
+        }
+        
+        this.style.overflow = 'hidden'; // Disable scrolling
+        this.style.paddingRight = `${scrollbarWidth}px`; // Compensate for scrollbar
+        this.classList.remove('overflow-auto');
+        this.classList.add('overflow-hidden');
     });
 };
+
+function getScrollbarWidth(element) {
+    if (element === document.body) {
+        return window.innerWidth - document.documentElement.clientWidth;
+    } else {
+        // Create a temporary element to measure the scrollbar
+        const temp = document.createElement('div');
+        temp.style.visibility = 'hidden';
+        temp.style.overflow = 'scroll'; // Force a scrollbar
+        temp.style.width = '100px'; // Arbitrary width
+        temp.style.height = '100px'; // Arbitrary height
+        document.body.appendChild(temp);
+
+        // Create a child inside the temp element to measure
+        const inner = document.createElement('div');
+        inner.style.width = '100%';
+        temp.appendChild(inner);
+
+        // Clean up the temporary elements
+        temp.parentNode.removeChild(temp);
+        
+        return temp.offsetWidth - inner.offsetWidth;
+    }
+}
 
 /**
  * Determines if an element is after another one
@@ -133,4 +170,19 @@ $.fn.isAfter = function(sel) {
  */
 function openInNewTab($url) {
     window.open($url, '_blank', 'noopener,noreferrer');
+}
+
+/**
+ * Determines if the user is on a mobile device.
+ * This function combines user agent string detection, screen width, and touch capability checks
+ * for a robust and accurate mobile device detection.
+ *
+ * @returns {boolean} - True if the user is on a mobile device, false otherwise.
+ */
+function isMobileDevice() {
+    const userAgentCheck = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+    const screenWidthCheck = window.innerWidth <= 768;
+    const touchDeviceCheck = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+
+    return userAgentCheck || screenWidthCheck || touchDeviceCheck;
 }
