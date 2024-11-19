@@ -138,8 +138,8 @@ class Reader
     {
         $yt_id = $yt_id ? $yt_id : '';
 
-        $html = '<div class="ratio ratio-16x9" style="max-height: calc(100vh - 8rem);">' .
-                    '<div data-ytid="' . $yt_id . '" id="player"></div>' .
+        $html = '<div class="video-player">' .
+                    '<div data-ytid="' . $yt_id . '" id="videoplayer"></div>' .
                 '</div>';
 
         $html .= "<div id='text-container' class='overflow-auto text-center my-1 z-1' data-type='video' data-IdText='"
@@ -166,7 +166,7 @@ class Reader
      */
     public function showOfflineVideo(string $reader_css): string
     {
-        $html = '<div id="offline-video-container" style="max-height: calc(100vh - 8rem);" class="ratio ratio-16x9 bg-dark">' .
+        $html = '<div id="offline-video-container" class="video-player bg-dark">' .
                     '<input id="video-file-input" type="file" name="video-file-input"
                         accept="video/mp4,video/ogg,video/webm" style="display: none;">' .
                     '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt"

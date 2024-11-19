@@ -1,6 +1,6 @@
 // Load the IFrame Player API code asynchronously
 const tag = document.createElement("script");
-const video_element = document.getElementById("player");
+const video_element = document.getElementById("videoplayer");
 const ytId = video_element.dataset.ytid;
 
 tag.src = "https://www.youtube.com/iframe_api";
@@ -11,16 +11,16 @@ let video_controller = {}; // Define the custom player object
 
 // Function called when the YouTube API is ready
 window.onYouTubeIframeAPIReady = function () {
-    video_controller.instance = new YT.Player("player", {
-        height: "390",
-        width: "640",
+    video_controller.instance = new YT.Player("videoplayer", {
+
         playerVars: {
-            loop: 0,
-            controls: 1,
-            fs: 0,
-            showinfo: 0,
-            autohide: 1,
-            modestbranding: 1
+            loop: 0, // don't play video in a loop
+            controls: 2, // minimum controls
+            fs: 0, // disable fullscreen
+            showinfo: 0, // don't show uploader info (deprecated?)
+            autohide: 1, // controls will auto-hide after user inactivity
+            modestbranding: 1, // restricts the YouTube logo display
+            playsinline: 1, // play inline, not fullscreen on mobile
         },
         videoId: ytId,
         events: {

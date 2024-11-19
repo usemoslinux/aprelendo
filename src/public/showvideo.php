@@ -83,7 +83,7 @@ require_once PUBLIC_PATH . 'head.php';
 <body id="readerpage" <?php echo $body_css; ?>>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-6 offset-lg-3">
+            <div class="col">
                 <div id="main-container" class="d-flex flex-column vh-100">
                     <div class="d-flex flex-row-reverse my-1">
                         <button type="button" id="btn-save-ytvideo" class="btn btn-success"
