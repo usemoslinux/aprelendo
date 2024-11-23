@@ -872,6 +872,7 @@ a[role="menuitem"] {
 #audioplayer-container {
     font-family: var(--bs-body-font-family);
     font-size: var(--bs-body-font-size);
+    position: sticky;
     top: 0;
     z-index: 3;
 }

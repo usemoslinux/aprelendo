@@ -97,7 +97,7 @@ require_once PUBLIC_PATH . 'head.php';
                             <button id="btn-toggle-audio-player-controls" type="button"
                                 class="btn btn-primary d-block mt-2"
                                 data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                data-bs-placement="right" data-bs-title="Toggle sticky audio controls">
+                                data-bs-placement="right" data-bs-title="Hide audio controls while scrolling">
                                 <span class="bi bi-headphones"></span>
                             </button>
                         <?php endif ?>

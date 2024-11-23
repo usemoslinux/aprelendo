@@ -85,7 +85,7 @@ class AudioPlayerForTexts extends AudioPlayer
                         <li><a class="dropdown-item" href="#" data-speed="2">2x</a></li>
                     </ul>
                     </div>
-                <button data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-title="Toggle A-B Loop"
+                <button data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-title="Loop audio from point A to point B"
                     id="ap-abloop-btn" class="btn btn-outline-secondary">
                     A
                 </button>
