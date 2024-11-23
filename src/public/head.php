@@ -56,14 +56,12 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
     <meta name="author" content="Aprelendo">
     <meta name="robots" content="index, follow">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicons/favicon-16x16.png">
-    <link rel="manifest" href="/img/favicons/site.webmanifest">
-    <link rel="shortcut icon" href="/img/favicons/favicon.ico">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-config" content="/img/favicons/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
+    <link rel="icon" type="image/png" href="/img/favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/img/favicons/favicon.svg" />
+    <link rel="shortcut icon" href="/img/favicons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Aprelendo" />
+    <link rel="manifest" href="/img/favicons/site.webmanifest" />
 
     <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
 
