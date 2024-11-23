@@ -647,13 +647,12 @@ $(document).ready(function() {
         
         if (audio_player_container.style.position === 'static') {
             audio_player_container.style.position = 'sticky';
-            toggle_sticky_btn.classList.remove('btn-outline-primary');
-            toggle_sticky_btn.classList.add('btn-primary');
+            toggle_sticky_btn.style.backgroundColor = 'var(--bs-btn-bg)';
             setNewTooltip(toggle_sticky_btn, sticky_on_title);
         } else {
             audio_player_container.style.position = 'static';
-            toggle_sticky_btn.classList.remove('btn-primary');
-            toggle_sticky_btn.classList.add('btn-outline-primary');
+            toggle_sticky_btn.style.backgroundColor = 'transparent';
+            toggle_sticky_btn.style.borderColor = 'var(--bs-btn-border-color)';
             setNewTooltip(toggle_sticky_btn, sticky_off_title);
         }        
     }); // end #btn-toggle-audio-player-controls

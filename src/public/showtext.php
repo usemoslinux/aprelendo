@@ -84,7 +84,7 @@ require_once PUBLIC_PATH . 'head.php';
         <div class="row">
             <div id="sidebar" class="col-2">
                 <div class="d-flex justify-content-center">
-                    <div class="position-fixed my-4">
+                    <div class="position-fixed my-3">
                         <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                             data-bs-placement="right" data-bs-title="Reading settings">
                             <button type="button" data-bs-toggle="modal"
@@ -130,7 +130,7 @@ require_once PUBLIC_PATH . 'head.php';
                     </div>
                 </div>
             </div>
-            <div class="col-10 col-sm-8 ps-0 pe-4 pe-sm-0">
+            <div class="col-10 col-sm-8 ps-0 pe-3 pe-sm-0">
                 <?php
                     echo $reader->showText($reader_css);
                     if ($is_shared) {
@@ -155,7 +155,7 @@ require_once PUBLIC_PATH . 'head.php';
     <script defer src="/js/underlinewords.min.js"></script>
     <script defer src="/js/showtext.min.js"></script>
     <script defer src="/js/dictation.min.js"></script>
-    <script defer src="/js/audioplayer.min.js"></script>
+    <script defer src="/js/audioplayer.js"></script>
     <script defer src="/js/likes.min.js"></script>
     <script defer src="/js/dictionary.min.js"></script>
     <script defer src="/js/helpers.min.js"></script>

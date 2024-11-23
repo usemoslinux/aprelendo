@@ -23,13 +23,14 @@ const audio_controller = (() => {
     const play_pause_btn = document.getElementById('ap-play-btn');
     const play_pause_btn_icon = document.getElementById('ap-play-btn-icon');
     const progress_bar = document.getElementById('ap-progress-bar');
+    const progress_bar_container = document.getElementById('ap-progress-bar-container');
     const time_stamp = document.getElementById('ap-time-stamp');
     const speed_menu_items = document.querySelectorAll('#ap-speed-menu .dropdown-item');
     const ab_loop_btn = document.getElementById("ap-abloop-btn");
 
     let resume_audio = false;
-    let ab_loop_start = 0;
-    let ab_loop_end = 0;
+    let ab_loop_start = -1;
+    let ab_loop_end = -1;
 
     // Default functions (do nothing if audio is not defined)
     let play = () => {};
@@ -115,12 +116,30 @@ const audio_controller = (() => {
         audio.addEventListener('loadedmetadata', playbackProgressUpdate);
 
         audio.addEventListener('timeupdate', () => {
-            if (ab_loop_end > 0) {
+            if (ab_loop_end > -1) {
                 if(audio.currentTime >= ab_loop_end) {
                     audio.currentTime = ab_loop_start;
                 }
             }
             playbackProgressUpdate();
+        });
+
+        progress_bar_container.addEventListener('click', (e) => {
+            const rect = progress_bar_container.getBoundingClientRect();
+            const clickPosition = e.clientX - rect.left;
+            const clickPercentage = clickPosition / rect.width;
+            audio.currentTime = clickPercentage * audio.duration;
+        });
+
+        progress_bar_container.addEventListener('mousemove', (e) => {
+            const rect = progress_bar_container.getBoundingClientRect();
+            const hoverPosition = e.clientX - rect.left;
+            const hoverPercentage = hoverPosition / rect.width;
+            const hoverTime = Math.floor(hoverPercentage * audio.duration);
+            const minutes = Math.floor(hoverTime / 60);
+            const seconds = hoverTime % 60;
+
+            progress_bar_container.title = `${minutes}:${seconds.toString().padStart(2, '0')}`;
         });
 
         speed_menu_items.forEach(item => {
@@ -161,15 +180,24 @@ const audio_controller = (() => {
             ab_loop_btn.addEventListener("click", function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if (ab_loop_start === 0 && ab_loop_end === 0) {
+                if (ab_loop_start === -1) {
                     ab_loop_start = audio.currentTime;
                     ab_loop_btn.textContent = "B";
-                } else if (ab_loop_start > 0 && ab_loop_end === 0) {
+                    setNewTooltip(ab_loop_btn, 'Loop audio from point A to point B, click to set point B');
+                } else if (ab_loop_start > -1 && ab_loop_end === -1) {
                     ab_loop_end = audio.currentTime;
-                    ab_loop_btn.textContent = "C";
+                    ab_loop_btn.style.backgroundColor = 'var(--bs-btn-color)';
+                    ab_loop_btn.style.color = 'black';
+                    ab_loop_btn.textContent = "A-B";
+                    setNewTooltip(ab_loop_btn, 'Stop the A-B loop');
+                    ab_loop_btn.blur();
                 } else {
-                    ab_loop_start = ab_loop_end = 0;
+                    ab_loop_start = ab_loop_end = -1;
                     ab_loop_btn.textContent = "A";
+                    ab_loop_btn.style.backgroundColor = 'var(--bs-btn-bg)';
+                    ab_loop_btn.style.color = 'var(--bs-btn-color)';
+                    setNewTooltip(ab_loop_btn, 'Loop audio from point A to point B, click to set point A');
+                    ab_loop_btn.blur();
                 }
             });
         }

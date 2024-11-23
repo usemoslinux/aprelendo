@@ -881,6 +881,11 @@ a[role="menuitem"] {
     font-size: 12px;
 }
 
+#ap-abloop-btn {
+    background-color: var(--bs-btn-bg);
+    color: var(--bs-btn-color);
+}
+
 .basic {
     font-size: 0.85rem;
     white-space: normal;

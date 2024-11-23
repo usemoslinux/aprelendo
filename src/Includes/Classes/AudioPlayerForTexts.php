@@ -65,7 +65,8 @@ class AudioPlayerForTexts extends AudioPlayer
                     00:00 / 00:00
                     </div>
 
-                    <div class="progress flex-grow-1 mx-3 border border-secondary">
+                    <div id="ap-progress-bar-container" class="progress flex-grow-1 mx-3 border border-secondary"
+                        data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip">
                         <div id="ap-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"
                             role="progressbar" style="width: 0%"></div>
                     </div>
@@ -85,8 +86,8 @@ class AudioPlayerForTexts extends AudioPlayer
                         <li><a class="dropdown-item" href="#" data-speed="2">2x</a></li>
                     </ul>
                     </div>
-                <button data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-title="Loop audio from point A to point B"
-                    id="ap-abloop-btn" class="btn btn-outline-secondary">
+                <button data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-title="Loop audio from point A to point B, click to set point A"
+                    id="ap-abloop-btn" class="btn btn-outline-warning">
                     A
                 </button>
                 </div>
