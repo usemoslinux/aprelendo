@@ -50,7 +50,7 @@ class AudioPlayerForEbooks extends AudioPlayer
                     00:00 / 00:00
                     </div>
 
-                    <div class="progress flex-grow-1 me-3 border border-secondary">
+                    <div id="ap-progress-bar-container" class="progress flex-grow-1 me-3 border border-secondary">
                         <div id="ap-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"
                             role="progressbar" style="width: 0%"></div>
                     </div>
