@@ -78,17 +78,20 @@ $(document).ready(function () {
      */
     $(document).on("mousedown touchstart", ".word", function (e) {
         e.stopPropagation();
+        console.log('mousedown touchstart: ' + e.type);
 
         hideActionButtonsPopUpToolbar();
 
         if (e.which < 2) {
             // if left mouse button / touch...
-            video_controller.pause(true);
+            
             highlighting = true;
             $sel_start = $sel_end = $(this);
             if (e.type == "touchstart") {
                 start_sel_time = new Date();
                 start_sel_pos_top = $sel_start.offset().top - $(window).scrollTop();
+            } else {
+                video_controller.pause(true);
             }
         } else if (e.which == 3) {
             // on right click show translation of the whole sentence
@@ -104,6 +107,7 @@ $(document).ready(function () {
      */
     $(document).on("mouseup touchend", ".word", function (e) {
         e.stopPropagation();
+        console.log('mouseup touchend: ' + e.type);
 
         end_sel_time = new Date();
 

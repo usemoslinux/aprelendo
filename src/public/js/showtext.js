@@ -72,6 +72,7 @@ $(document).ready(function() {
      */
     $(document).on("mousedown touchstart", ".word", function(e) {
         e.stopPropagation();
+        console.log('mousedown touchstart: ' + e.type);
 
         hideActionButtonsPopUpToolbar();
 
@@ -97,6 +98,7 @@ $(document).ready(function() {
      */
     $(document).on("mouseup touchend", ".word", function(e) {
         e.stopPropagation();
+        console.log('mouseup touchend: ' + e.type);
 
         end_sel_time = new Date();
         
