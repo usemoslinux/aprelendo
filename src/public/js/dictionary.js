@@ -34,7 +34,7 @@ function getTextSentence($selword) {
         sentence.slice(0, -end_obj_length + 1);
     }
     
-    return sentence.trim();
+    return sentence.replace(/\r?\n|\r/g, " ").trim();
 } // end getTextSentence
 
 /**
@@ -128,7 +128,7 @@ function getVideoSentence($selword) {
         final_iteration = final_iteration || $start_obj.length === 0;
     }
 
-    return sentence.trim();
+    return sentence.replace(/\r?\n|\r/g, " ").trim();
 } // end getVideoSentence
 
 /**
