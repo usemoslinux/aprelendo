@@ -136,11 +136,16 @@ const audio_controller = (() => {
             const hoverPosition = e.clientX - rect.left;
             const hoverPercentage = hoverPosition / rect.width;
             const hoverTime = Math.floor(hoverPercentage * audio.duration);
-            const minutes = Math.floor(hoverTime / 60);
+        
+            const hours = Math.floor(hoverTime / 3600);
+            const minutes = Math.floor((hoverTime % 3600) / 60);
             const seconds = hoverTime % 60;
-
-            progress_bar_container.title = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        });
+        
+            progress_bar_container.title = 
+                hours > 0 
+                    ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}` 
+                    : `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        });        
 
         speed_menu_items.forEach(item => {
             item.addEventListener('click', (e) => {

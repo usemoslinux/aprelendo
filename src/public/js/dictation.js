@@ -99,7 +99,7 @@ $(document).ready(function () {
             case 50: // 2
                 audio_controller.togglePlayPause();
                 break;
-            case 51: // 3
+            case 51: // 3       
                 $("#audioplayer")[0].currentTime = curTime + 5;
                 break;
             default:
@@ -115,8 +115,6 @@ $(document).ready(function () {
                 .focus();
         }
     }); // end .dict.on.input
-
-
 });
 
 /**
