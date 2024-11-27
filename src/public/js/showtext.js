@@ -120,8 +120,6 @@ $(document).ready(function() {
                     } else {
                         $selword = $(this);
                     }
-                    $(".highlighted").removeClass("highlighted"); // remove previous highlighting
-                    $selword.addClass("highlighted");
                 }
                 showActionButtonsPopUpToolbar();
             }

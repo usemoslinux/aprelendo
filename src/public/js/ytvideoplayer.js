@@ -38,8 +38,11 @@ window.onYouTubeIframeAPIReady = function () {
     };
     
     video_controller.pause = function(resume) {
-        video_controller.resume_video = video_controller.isPaused() ? false : resume;
-        video_controller.instance.pauseVideo();
+        if (!video_controller.isPaused()) {
+            video_controller.instance.pauseVideo();
+            video_controller.resume_video = resume;
+        }
+        console.log('pause');
     };
 
     video_controller.isPaused = function() {
@@ -49,6 +52,7 @@ window.onYouTubeIframeAPIReady = function () {
     video_controller.resume = function() {
         if (video_controller.resume_video) {
             video_controller.play();
+            video_controller.resume_video = false;
         }
     };
 };

@@ -98,7 +98,6 @@ $(document).ready(function () {
             if (!swiping) {
                 highlighting = (end_sel_time - start_sel_time) > 1000;
             }
-            $('html').css({ 'overflow': 'visible' });
             swiping = false;
         }
 
@@ -109,9 +108,6 @@ $(document).ready(function () {
                 if ($sel_start === $sel_end) {
                     $selword = $(this);
                 }
-
-                $(".highlighted").removeClass("highlighted"); // remove previous highlighting
-                $selword.addClass("highlighted");
 
                 showActionButtonsPopUpToolbar();
             }
@@ -140,10 +136,6 @@ $(document).ready(function () {
         }
 
         if (highlighting) {
-            if (e.type == "touchmove") {
-                $('html').css({ 'overflow': 'hidden' });
-            }
-
             $(".highlighted").removeClass("highlighted"); // remove previous highlighting
 
             $sel_end =
