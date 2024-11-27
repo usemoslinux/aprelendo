@@ -35,15 +35,7 @@ $(document).ready(function () {
         ["4", 0, "text-warning bg-dark", "No example sentence found!"],
     ];
 
-    // initialize modal dictionary window buttons
-    // $("#btn-translate").hide();
-    $("#btn-translate").removeClass("ps-0");
-    $("#btn-remove").hide();
-    $("#btn-add").hide();
-    $("#btn-cancel").removeClass().addClass("btn-close me-1").html('');
-    $(".modal-header").addClass("p-0");
-
-    // disable Yes/No buttons
+    // // disable Yes/No buttons
     $(".btn-answer").prop('disabled', true);
 
     // ajax call to get dictionary URI

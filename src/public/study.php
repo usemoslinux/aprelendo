@@ -123,7 +123,10 @@ require_once PUBLIC_PATH . 'header.php';
 </div>
 
 <?php
-require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
+    require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
+    if (!empty($user->hf_token)) {
+        require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
+    }
 ?>
 
 <script defer src="/js/study.min.js"></script>
