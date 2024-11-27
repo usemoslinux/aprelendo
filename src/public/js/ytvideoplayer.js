@@ -35,16 +35,14 @@ window.onYouTubeIframeAPIReady = function () {
     video_controller.play = function() {
         video_controller.instance.playVideo();
         video_controller.resume_video = false;
-        console.log('play, resume_video: ' + video_controller.resume_video);
     };
     
     video_controller.pause = function(resume) {
-        video_controller.resume_video = resume;
         if (!video_controller.isPaused()) {
             video_controller.instance.pauseVideo();
+            video_controller.resume_video = resume;
         }
-        
-        console.log('pause, resume_video: ' + video_controller.resume_video);
+        console.log('pause');
     };
 
     video_controller.isPaused = function() {
@@ -54,7 +52,7 @@ window.onYouTubeIframeAPIReady = function () {
     video_controller.resume = function() {
         if (video_controller.resume_video) {
             video_controller.play();
-            console.log('resume, resume_video: ' + video_controller.resume_video);
+            video_controller.resume_video = false;
         }
     };
 };

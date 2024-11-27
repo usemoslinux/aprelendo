@@ -78,13 +78,10 @@ $(document).ready(function () {
      */
     $(document).on("mousedown touchstart", ".word", function (e) {
         e.stopPropagation();
-        console.log('mousedown touchstart: ' + e.type);
-
         hideActionButtonsPopUpToolbar();
 
         if (e.which < 2) {
             // if left mouse button / touch...
-            
             highlighting = true;
             $sel_start = $sel_end = $(this);
             if (e.type == "touchstart") {
@@ -107,7 +104,6 @@ $(document).ready(function () {
      */
     $(document).on("mouseup touchend", ".word", function (e) {
         e.stopPropagation();
-        console.log('mouseup touchend: ' + e.type);
 
         end_sel_time = new Date();
 
@@ -115,7 +111,6 @@ $(document).ready(function () {
             if (!swiping) {
                 highlighting = (end_sel_time - start_sel_time) > 1000;
             }
-            $('html').css({ 'overflow': 'visible' });
             swiping = false;
         }
 
@@ -127,9 +122,6 @@ $(document).ready(function () {
                 if ($sel_start === $sel_end) {
                     $selword = $(this);
                 }
-
-                $(".highlighted").removeClass("highlighted"); // remove previous highlighting
-                $selword.addClass("highlighted");
 
                 showActionButtonsPopUpToolbar();
             }
@@ -145,7 +137,6 @@ $(document).ready(function () {
      */
     $(document).on("mouseover touchmove", ".word", function (e) {
         e.stopPropagation();
-
         end_sel_time = new Date();
 
         if (e.type == "touchmove") {
@@ -158,9 +149,7 @@ $(document).ready(function () {
         }
 
         if (highlighting) {
-            if (e.type == "touchmove") {
-                $('html').css({ 'overflow': 'hidden' });
-            }
+            video_controller.pause(true);
 
             $(".highlighted").removeClass("highlighted"); // remove previous highlighting
 
