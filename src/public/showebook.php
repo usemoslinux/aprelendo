@@ -193,7 +193,7 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
         ?>
     </div>
 
-    <div id="main">
+    <div id="main" class="offset-lg-2 col-lg-8">
         <div id="header">
             <span class="d-flex flex-row-reverse">
                 <button id="btn-close-ebook" type="button" data-bs-toggle="tooltip"
