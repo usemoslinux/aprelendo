@@ -171,9 +171,15 @@ function buildDictionaryLink(dictionary_URI, sel_word) {
  * Sets Add, Forgot & Remove buttons depending on whether selection already is underlined or not
  * @param {jQuery} $selword 
  */
-function setWordActionButtons($selword) {
+function setWordActionButtons($selword, is_study) {
     let $word_action_group_1 = $("#word-actions-g1") || $(parent.document).find("#word-actions-g1");
     let $word_action_group_2 = $("#word-actions-g2") || $(parent.document).find("#word-actions-g2");
+
+    if (is_study) {
+        $word_action_group_1.hide();
+        $word_action_group_2.hide();
+        return;
+    }
 
     const underlined_words_in_selection = $selword.filter(
         ".learning, .new, .forgotten, .learned"

@@ -568,7 +568,7 @@ $(document).ready(function () {
      * Shows pop up toolbar when user clicks a word
      */
     function showActionButtonsPopUpToolbar() {
-        setWordActionButtons($selword);
+        setWordActionButtons($selword, true);
 
         const base_uris = {
             dictionary: dictionary_URI,

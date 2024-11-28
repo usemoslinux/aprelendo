@@ -787,7 +787,7 @@ $(document).ready(function() {
     function showActionButtonsPopUpToolbar() {
         // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
         // getWordFrequency($selword.text(), doclang);
-        setWordActionButtons($selword);
+        setWordActionButtons($selword, false);
 
         const base_uris = {
             dictionary: dictionary_URI,

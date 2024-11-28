@@ -598,7 +598,7 @@ $(document).ready(function () {
         // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
         // getWordFrequency($selword.text(), doclang);
         $("#text-container").disableScroll();
-        setWordActionButtons($selword);
+        setWordActionButtons($selword, false);
 
         const base_uris = {
             dictionary: dictionary_URI,
