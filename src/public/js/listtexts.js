@@ -117,7 +117,7 @@ $(document).ready(function() {
             p: cur_page_nr,
             ft: $('.ft.active').data('value') || 0, // filter type
             fl: $('.fl.active').data('value') || 0, // filter level
-            s: $("#s").val(),   // search text
+            s: $("#s").val().trim(),                // search text
             sa: $('.sa').hasClass('active') ? '1' : '0', // is shared
             o: $('.o.active').data('value') || 0    // order
         };
@@ -183,7 +183,7 @@ $(document).ready(function() {
         const filename = getCurrentFileName();
         const params = {    ft: $('.ft.active').data('value') || 0, // filter type
                             fl: $('.fl.active').data('value') || 0, // filter level
-                            s: $("#s").val(),   // search text
+                            s: $("#s").val().trim(),                // search text
                             sa: $('.sa').hasClass('active') ? '1' : '0', // is shared
                             o: $(this).data('value') || 0    // order
                         };

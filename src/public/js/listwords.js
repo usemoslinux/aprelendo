@@ -26,7 +26,7 @@ $(document).ready(function () {
     $('form').submit(function(e) {
         e.preventDefault();
 
-        const params = {    s: $("#s").val(),                       // search text
+        const params = {    s: $("#s").val().trim(),                // search text
                             o: $('.o.active').data('value') || 0    // order
                         };
 
@@ -114,7 +114,7 @@ $(document).ready(function () {
      */
     $("#dropdown-menu-sort .o").on("click", function (e) {
         const filename = getCurrentFileName();
-        const params = {    s: $("#s").val(),   // search text
+        const params = {    s: $("#s").val().trim(),   // search text
                             o: $(this).data('value') || 0    // order
                         };
 
