@@ -133,13 +133,13 @@ const audio_controller = (() => {
 
         progress_bar_container.addEventListener('mousemove', (e) => {
             const rect = progress_bar_container.getBoundingClientRect();
-            const hoverPosition = e.clientX - rect.left;
-            const hoverPercentage = hoverPosition / rect.width;
-            const hoverTime = Math.floor(hoverPercentage * audio.duration);
+            const hover_position = e.clientX - rect.left;
+            const hover_percentage = hover_position / rect.width;
+            const hover_time = Math.floor(hover_percentage * audio.duration);
         
-            const hours = Math.floor(hoverTime / 3600);
-            const minutes = Math.floor((hoverTime % 3600) / 60);
-            const seconds = hoverTime % 60;
+            const hours = Math.floor(hover_time / 3600);
+            const minutes = Math.floor((hover_time % 3600) / 60);
+            const seconds = hover_time % 60;
         
             progress_bar_container.title = 
                 hours > 0 
