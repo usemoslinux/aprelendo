@@ -33,8 +33,8 @@ use Aprelendo\UserException;
 try {
     $user_id = $user->id;
 
-    $word_freq = new WordFrequency($pdo);
-    echo $word_freq->get($_GET['word'], $user->lang);
+    $word_freq = new WordFrequency($pdo, $user->lang);
+    echo $word_freq->get($_GET['word']);
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
 }

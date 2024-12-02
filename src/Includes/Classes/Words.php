@@ -167,8 +167,8 @@ class Words extends DBEntity
                     DATEDIFF(CURRENT_DATE(), w.`date_modified`) AS `diff_today_modif`,
                     DATEDIFF(`date_modified`, w.`date_created`) AS `frequency`,
                     CASE
-                        WHEN f.`frequency_index` < 81 THEN 'high'
-                        WHEN f.`frequency_index` < 97 THEN 'medium'
+                        WHEN f.`frequency_index` < 81 THEN 'very high'
+                        WHEN f.`frequency_index` < 97 THEN 'high'
                         ELSE ''
                     END AS `freq_level`
                 FROM `{$this->table}` w

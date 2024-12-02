@@ -54,9 +54,13 @@ class Card extends DBEntity
      */
     public function getWordsUserIsLearning(int $limit): array
     {
-        $sql = "SELECT `word`, `status` FROM `{$this->table}`
-                WHERE `user_id`=? AND `lang_id`=? AND `status`>0
-                ORDER BY `status` DESC, `date_created` DESC
+        $sql = "SELECT w.word, w.status, fl.frequency_index
+                FROM {$this->table} AS w
+                JOIN frequency_list_$this->lang_iso AS fl ON w.word = fl.word
+                WHERE w.user_id = ?
+                AND w.lang_id = ?
+                AND w.status > 0
+                ORDER BY w.status DESC, w.date_created DESC
                 LIMIT $limit";
         
         return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);

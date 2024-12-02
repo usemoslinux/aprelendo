@@ -122,10 +122,10 @@ class WordTable extends Table
     private function generateFrequencyBadge(string $frequency): string
     {
         switch ($frequency) {
+            case 'very high':
+                return '<span class="badge rounded-pill bg-danger" title="Very high frequency">Very high</span>';
             case 'high':
-                return '<span class="badge rounded-pill bg-danger" title="High frequency">high</span>';
-            case 'medium':
-                return '<span class="badge rounded-pill bg-warning text-dark" title="Medium frequency">medium</span>';
+                return '<span class="badge rounded-pill bg-warning text-dark" title="High frequency">High</span>';
             default:
                 return '';
         }

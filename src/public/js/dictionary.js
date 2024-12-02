@@ -197,39 +197,18 @@ function setWordActionButtons($selword, is_study) {
 
 /**
  * Shows message for high & medium frequency words in dictionary modal window
- * @param {string} word
- * @param {string} lg_iso
+ * @param {int} frequency_index
  */
-function getWordFrequency(word, lg_iso) {
-    let $freqlvl = $("#bdgfreqlvl") || $(parent.document).find("#bdgfreqlvl");
-
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            type: "GET",
-            url: "/ajax/getwordfreq.php",
-            data: { word: word, lg_iso: lg_iso }
-        }).done(function (data) {
-            if (data == 0) {
-                $freqlvl.removeClass().hide();
-            } else if (data < 81) {
-                $freqlvl
-                    .removeClass()
-                    .addClass("badge text-bg-danger")
-                    .text("High frequency word")
-                    .show();
-            } else if (data < 97) {
-                $freqlvl
-                    .removeClass()
-                    .addClass("badge text-bg-warning")
-                    .text("Medium frequency word")
-                    .show();
-            }
-            resolve(data);
-        }).fail(function () {
-            $freqlvl.removeClass().hide();
-            reject(new Error("AJAX request failed"));
-        });
-    });
+function getWordFrequency(frequency_index) {
+    if (frequency_index == 0) {
+        return 'low'
+    } else if (frequency_index < 81) {
+        return 'very high';
+    } else if (frequency_index < 97) {
+        return 'high';
+    } else {
+        return 'medium';
+    }
 } // end getWordFrequency
 
 /**

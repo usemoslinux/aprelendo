@@ -1383,32 +1383,6 @@ small>a:not(.btn):hover {
 	font-size: small;
 }
 
-.card-high-freq {
-    animation: glow-high-freq 1s infinite alternate;
-}
-
-.card-medium-freq {
-    animation: glow-medium-freq 1s infinite alternate;
-}
-
-@keyframes glow-high-freq {
-    from {
-        box-shadow: 0 0 0px rgba(220, 53, 69, 0.7);
-    }
-    to {
-        box-shadow: 0 0 10px rgba(220, 53, 69, 1);
-    }
-}
-
-@keyframes glow-medium-freq {
-    from {
-        box-shadow: 0 0 0px rgba(255, 193, 7, 0.7);
-    }
-    to {
-        box-shadow: 0 0 10px rgba(255, 193, 7, 1);
-    }
-}
-
 /* EBOOK */
 
 #btn-close-ebook:hover {

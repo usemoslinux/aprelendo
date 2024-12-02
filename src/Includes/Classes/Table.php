@@ -30,14 +30,6 @@ abstract class Table
     protected bool $has_chkbox    = false;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        // empty
-    } // end __construct()
-
-    /**
      * Prints table
      *
      * @param int $sort_by

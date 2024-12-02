@@ -49,6 +49,7 @@ require_once PUBLIC_PATH . 'header.php';
                         <div id="study-card" class="card text-center" data-lang="<?php echo $user->lang;?>">
                             <div id="study-card-header" class="study-card-header py-3 placeholder-glow">
                                 <h4 id="study-card-word-title" class="my-0 fw-bold placeholder">&nbsp;</h4>
+                                <span id="study-card-freq-badge" class="badge">&nbsp;</span>
                             </div>
                             <div id="study-card-body" class="card-body">
                                 <div id="examples-placeholder" class="card-examples placeholder-glow">
@@ -130,7 +131,7 @@ require_once PUBLIC_PATH . 'header.php';
 ?>
 
 <script defer src="/js/study.min.js"></script>
-<script defer src="/js/dictionary.js"></script>
+<script defer src="/js/dictionary.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 <script defer src="/js/tooltips.min.js"></script>
 

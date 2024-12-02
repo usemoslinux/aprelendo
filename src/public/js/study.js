@@ -158,9 +158,14 @@ $(document).ready(function () {
                     }
                 });
 
-                // if example sentence is empty, go to next card
+                // update card
+                $("#study-card").data('word', word);
+                $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
+                $("#study-card-word-title").removeClass('placeholder').text(word);
+                
+                
+                // if example sentence is empty, go to next card, else update example sentences
                 if (examples_array.length === 0) {
-                    $("#study-card-word-title").text("Skipped. No examples found.");
                     words[cur_card_index].status = 4;
                     cur_card_index++;
                     if (lastCardReached()) {
@@ -172,18 +177,16 @@ $(document).ready(function () {
                     examples_array.forEach(example => {
                         examples_html += buildExampleHTML(example, word);
                     });
+
+                    // only look for word frequency if word has example sentences
+                    const doclang = $("#study-card").data("lang");
+                    showWordFrequency(word, doclang);
+
+                    $("#examples-placeholder").addClass('d-none');
+                    $("#study-card-examples").append(examples_html);
                 }
-
-                // show card
-                $("#study-card").data('word', word);
-                $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
-                $("#study-card-word-title").removeClass('placeholder').text(word);
-                $("#examples-placeholder").addClass('d-none');
-                $("#study-card-examples").append(examples_html);
+                
                 $(".btn-answer").prop('disabled', false);
-
-                const doclang = $("#study-card").data("lang");
-                glowIfHighOrMedFreq(word, doclang);
             })
             .fail(function (xhr, ajaxOptions, thrownError) {
                 showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.",
@@ -305,9 +308,8 @@ $(document).ready(function () {
             return true;
         } else if (cur_card_index >= max_cards) {
             $("#study-card-word-title").text("Congratulations!");
+            $("#study-card-freq-badge").hide();
             adaptCardStyleToWordStatus();
-
-            glowIfHighOrMedFreq();
 
             let progress_html = "";
             for (const answer of answers) {
@@ -476,31 +478,27 @@ $(document).ready(function () {
     } // end buildResultsTable()
 
     /**
-     * Updates the styling of a study card based on the frequency level of a word.
-     * The function first waits for an asynchronous call to retrieve the word's frequency.
-     * Depending on the frequency level, the function modifies the card's appearance to reflect
-     * whether the word is high, medium, or low frequency.
-     * @param {string} word - The word whose frequency level is being checked.
-     * @param {string} doclang - ISO code for the language of the document in which the word appears.
-     * @returns {void}
+     * Updates the frequency badge on the study card to display the frequency level of the current word.
+     * @param {number} frequency_index - Index indicating the frequency of the word.
      */
-    async function glowIfHighOrMedFreq(word, doclang) {
-        // Wait until ajax call finishes
-        await getWordFrequency(word, doclang);
+    function showWordFrequency(frequency_index) {
+        const $freq_badge = $("#study-card-freq-badge");
+        const freq_level = getWordFrequency(words[cur_card_index].frequency_index);
 
-        // Glow card if neccesary
-        if ($("#bdgfreqlvl").hasClass("text-bg-danger")) {
-            $("#study-card")
-                .removeClass("card-medium-freq")
-                .addClass("card-high-freq");
-        } else if ($("#bdgfreqlvl").hasClass("text-bg-warning")) {
-            $("#study-card")
-                .removeClass("card-high-freq")
-                .addClass("card-medium-freq");
-        } else {
-            $("#study-card").removeClass("card-medium-freq card-high-freq");
-        }
-    } // end glowIfHighOrMedFreq()
+        const freq_text = {
+            'very high': 'Very high frequency',
+            'high': 'High frequency',
+            'medium': 'Medium frequency',
+            'low': 'Low frequency',
+        };
+
+        // Update the badge with the corresponding frequency text and styling
+        const badge_text = freq_text[freq_level] || 'Low frequency';
+        $freq_badge
+            .removeClass('placeholder')
+            .addClass('border border-light')
+            .text(badge_text);
+    } // end showWordFrequency()
 
     /**
      * Opens translator in new window. 

@@ -22,7 +22,19 @@ namespace Aprelendo;
 
 class WordFrequency extends DBEntity
 {
-    
+    private string $lg_iso;
+
+    /**
+     * Constructor
+     *
+     * @param string $lg_iso
+     */
+    public function __construct(\PDO $pdo, string $lg_iso) {
+        parent::__construct($pdo);
+        $this->lg_iso = $lg_iso;
+        $this->table = 'frequency_list_' . $this->lg_iso;
+    }
+
     /**
      * Gets word frequency
      * The number stored in frequency_index column is the result of processing all the subtitles available in
@@ -34,15 +46,13 @@ class WordFrequency extends DBEntity
      * that if a person knows that word and the previous ones, he or she will understand 80% of the text.
      *
      * @param string $word
-     * @param string $lg_iso
      * @return int
      */
-    public function get(string $word, string $lg_iso): int
+    public function get(string $word): int
     {
-        $table = 'frequency_list_' . $lg_iso;
         $word = mb_strtolower($word);
 
-        $sql = "SELECT * FROM {$table} WHERE word=?";
+        $sql = "SELECT * FROM {$this->table} WHERE word=?";
 
         $row = self::sqlFetch($sql, [$word]);
 
@@ -56,14 +66,12 @@ class WordFrequency extends DBEntity
     /**
      * Gets High Frequency List for language
      *
-     * @param string $lg_iso
      * @return array
      */
-    public function getHighFrequencyList(string $lg_iso): array
+    public function getHighFrequencyList(): array
     {
-        $table = 'frequency_list_' . $lg_iso;
         $sql = "SELECT `word`, `frequency_index`
-                FROM `$table`
+                FROM `{$this->table}`
                 WHERE `frequency_index` < 81";
         return self::sqlFetchAll($sql, []);
     } // end getHighFrequencyList()

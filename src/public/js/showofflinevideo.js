@@ -595,8 +595,6 @@ $(document).ready(function () {
      * All words are enclosed in a.word tags
      */
     function showActionButtonsPopUpToolbar() {
-        // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
-        // getWordFrequency($selword.text(), doclang);
         $("#text-container").disableScroll();
         setWordActionButtons($selword, false);
 

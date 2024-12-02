@@ -44,8 +44,8 @@ try {
         $lang->loadRecordById($user->lang_id);
 
         if ($lang->show_freq_words) {
-            $word_freq = new WordFrequency($pdo);
-            $freq_words = $word_freq->getHighFrequencyList($lang->name);
+            $word_freq = new WordFrequency($pdo, $lang->name);
+            $freq_words = $word_freq->getHighFrequencyList();
             $result['high_freq'] = \array_column($freq_words, 'word');
         }
 

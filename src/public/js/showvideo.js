@@ -517,8 +517,6 @@ $(document).ready(function () {
      * Shows pop up toolbar when user clicks a word
      */
     function showActionButtonsPopUpToolbar() {
-        // TODO: IS WORD FREQUENCY STILL NECESSARY? HOW CAN I REINVENT THIS?
-        // getWordFrequency($selword.text(), doclang);
         $("#text-container").disableScroll();
         setWordActionButtons($selword, false);
 
