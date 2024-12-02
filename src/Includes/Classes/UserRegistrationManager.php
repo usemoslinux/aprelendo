@@ -45,10 +45,7 @@ class UserRegistrationManager extends DBEntity
         $this->user->native_lang = isset($user_data['native_lang']) ? $user_data['native_lang'] : 'en';
         $this->user->lang = isset($user_data['lang']) ? $user_data['lang'] : 'en';
         $this->user->time_zone = isset($user_data['time_zone']) ? $user_data['time_zone'] : 'UTC';
-
-        $today = new \DateTime("now", new \DateTimeZone($this->user->time_zone));  // current date/time
-        $this->user->date_created = $today->format('Y-m-d H:i:s');
-
+        
         $send_email = isset($user_data['send_email']) ? $user_data['send_email'] : false;
         $this->user->is_active = false;
 
@@ -72,12 +69,12 @@ class UserRegistrationManager extends DBEntity
         // save user data in db
         $user_active = !$send_email;
         $sql = "INSERT INTO `{$this->table}` (`name`, `password_hash`, `email`, `native_lang_iso`,
-            `learning_lang_iso`, `time_zone`, `activation_hash`, `is_active`, `date_created`)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            `learning_lang_iso`, `time_zone`, `activation_hash`, `is_active`)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         $this->sqlExecute($sql, [
             $this->user->name, $password_hash, $this->user->email, $this->user->native_lang,
-            $this->user->lang, $this->user->time_zone, $activation_hash, (int)$user_active, $this->user->date_created
+            $this->user->lang, $this->user->time_zone, $activation_hash, (int)$user_active
         ]);
 
         $user_id = $this->user->id = $this->pdo->lastInsertId();
