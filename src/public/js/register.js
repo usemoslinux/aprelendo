@@ -27,7 +27,11 @@ $(document).ready(function() {
         const form_data = $("#form-register").serializeArray();
         form_data.push({ name: "time-zone", value: Intl.DateTimeFormat().resolvedOptions().timeZone });
 
-        showMessage("Processing...", "alert-info");
+        showMessage(
+            "We are processing your registration. Please wait a moment while we securely handle your information. "
+            + "This should only take a few seconds.",
+            "alert-info"
+        );
 
         $.ajax({
             type: "POST",
@@ -37,10 +41,12 @@ $(document).ready(function() {
             .done(function(data) {
                 if (data.error_msg == null) {
                     showMessage(
-                        "We've sent you an email with the activation link. It might take a few minutes "
-                        + "to arrive in your inbox, so please be patient. If you don't see it there, "
-                        + "be sure to check your spam or junk folder, as sometimes it can end up there. Once you "
-                        + "receive it, click on the link provided to activate your account.",
+                        "Registration successful! We've sent an activation email to the address you provided. "
+                        + "Please check your inbox to complete the registration process. "
+                        + "The email might take a few minutes to arrive. If you don't find it in your inbox, check "
+                        + "your spam or junk folder as it might have been filtered there. "
+                        + "Once you locate the email, click on the activation link to activate your account and "
+                        + "start using our platform.",
                         "alert-success"
                     );
                 } else {

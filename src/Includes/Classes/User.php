@@ -22,20 +22,20 @@ namespace Aprelendo;
 
 class User extends DBEntity
 {
-    public int    $id;
-    public string $name;
-    public string $password_hash;
-    public string $email;
-    public string $lang;
-    public int    $lang_id;
-    public string $native_lang;
-    public string $time_zone;
-    public string $activation_hash;
-    public bool   $is_active;
-    public string $google_id;
-    public string $hf_token;
-
-    public string $error_msg;
+    public int    $id = 0;
+    public string $name = '';
+    public string $password_hash = '';
+    public string $email = '';
+    public string $lang = '';
+    public int    $lang_id = 0;
+    public string $native_lang = '';
+    public string $time_zone = 'UTC';
+    public string $activation_hash = '';
+    public bool   $is_active = false;
+    public string $google_id = '';
+    public string $hf_token = '';
+    public string $date_created = '';
+    public string $error_msg = '';
     
     /**
      * Constructor
@@ -46,21 +46,6 @@ class User extends DBEntity
     {
         parent::__construct($pdo);
         $this->table = 'users';
-
-        $this->id              = 0;
-        $this->name            = '';
-        $this->password_hash   = '';
-        $this->email           = '';
-        $this->lang            = '';
-        $this->lang_id         = 0;
-        $this->native_lang     = '';
-        $this->time_zone       = 'UTC';
-        $this->activation_hash = '';
-        $this->is_active       = false;
-        $this->google_id       = '';
-        $this->hf_token      = '';
-    
-        $this->error_msg       = '';
     } // end __construct()
 
     /**
@@ -83,7 +68,8 @@ class User extends DBEntity
             $this->activation_hash = $record['activation_hash'];
             $this->is_active       = $record['is_active'];
             $this->google_id       = $record['google_id'];
-            $this->hf_token      = $record['hf_token'];
+            $this->hf_token        = $record['hf_token'];
+            $this->date_created    = $record['date_created'];
 
             // get active language id (lang_id)
             $lang = new Language($this->pdo, $this->id);

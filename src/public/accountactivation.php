@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -32,41 +33,84 @@ use Aprelendo\UserRegistrationManager;
         <div class="row">
             <div class="col-sm-0 col-sm-1 col-lg-3"></div>
             <div class="col-sm-12 col-sm-10 col-lg-6">
-                <main>
-                    <?php
-                    if (!empty($_GET['username']) && !empty($_GET['hash'])) {
-                        // check if username & hash values passed by the reset link are set
-                        try {
-                            $user = new User($pdo);
-                            $user_reg = new UserRegistrationManager($user);
-                            $user_reg->activate($_GET['username'], $_GET['hash']);
-                            echo '<div class="text-success text-center">
-                                <div class="display-1">
-                                <span class="bi bi-check-circle-fill"></span>
+                <main class="my-5">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <?php
+                            if (!empty($_GET['username']) && !empty($_GET['hash'])) {
+                                // check if username & hash values passed by the reset link are set
+                                try {
+                                    $user = new User($pdo);
+                                    $user_reg = new UserRegistrationManager($user);
+                                    $user_reg->activate($_GET['username'], $_GET['hash']);
+                                    echo <<<'HTML_REGISTRATION_SUCCESS'
+                                        <div class="display-1 text-success">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                        </div>
+
+                                        <h1 class="text-success my-3">Welcome to Aprelendo!</h1>
+                                        <p class="lead text-muted">
+                                            Your account has been activated.
+                                        </p>
+
+                                        <p class="mt-4">
+                                            Sign in now to start learning new words
+                                            and expanding your vocabulary in fun and engaging ways!
+                                        </p>
+
+                                        <a href="/login" class="btn btn-success btn-lg mt-3 px-5">
+                                            <i class="bi bi-box-arrow-in-right"></i> Sign in
+                                        </a>
+                                    HTML_REGISTRATION_SUCCESS;
+                                } catch (\Exception $e) {
+                                    echo <<<'HTML_REGISTRATION_FAILED'
+                                    <div class="display-1 text-danger">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </div>
+
+                                    <h1 class="text-danger my-3">Registration Failed</h1>
+                                    <p class="lead text-muted">
+                                        Something went wrong, and we couldn't activate your account.
+                                        This might be due to a technical issue or incomplete information.
+                                    </p>
+
+                                    <p class="mt-4">
+                                        Please try again later. If the issue persists,
+                                        <a href="https://www.aprelendo.com/contact">contact</a> our support team
+                                        for assistance.
+                                    </p>
+
+                                    <a href="/" class="btn btn-danger btn-lg mt-3 px-5">
+                                        <i class="bi bi-arrow-left"></i> Back to Home
+                                    </a>
+                                    HTML_REGISTRATION_FAILED;
+                                }
+                            } else { // $_GET parameters not set or empty
+                                echo <<<'HTML_MALFORMED_URL'
+                                <div class="display-1 text-warning">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
                                 </div>
-                                <div id="alert_msg_2">Congratulations! Your account is now active.</div>
-                                </div>
-                                <div class="text-center">You can now login with the username and password you
-                                provided when you signed up.</div>
-                                <br><div class="text-center"><a href="/login" class="btn btn-lg btn-success">
-                                Login now</a></div><br>';
-                        } catch (\Exception $e) {
-                            echo '<div class="text-danger text-center">
-                            <div class="display-1">
-                            <span class="bi bi-x-circle-fill"></span>
-                            </div>
-                            <div id="alert_msg_2">Oh no! Your account activation failed.</div>
-                            </div>
-                            <br>
-                            <div class="text-center">Try again later or <a
-                            href="https://www.aprelendo.com/contact">contact support</a> for help.</div><br>';
-                        }
-                    } else { // $_GET parameters not set or empty
-                        echo "<div id='alert_msg_2' class='alert alert-danger'>The activation link seems to be
-                        malformed. Please try again using the one provided in the email we've sent you.</div>";
-                    }
-                    ?>
-                    <br>
+
+                                <h1 class="text-warning my-3">Invalid Activation Link</h1>
+                                <p class="lead text-muted">
+                                    The activation link seems to be malformed or incomplete. Please try again using
+                                    the correct link provided in the email we sent you.
+                                </p>
+
+                                <p class="mt-4">
+                                    If you believe this is an error or the issue persists, feel free to
+                                    <a href="https://www.aprelendo.com/contact">contact</a> our support team for
+                                    assistance.
+                                </p>
+
+                                <a href="/" class="btn btn-warning btn-lg mt-3 px-5">
+                                    <i class="bi bi-arrow-left"></i> Back to Home
+                                </a>
+                                HTML_MALFORMED_URL;
+                            }
+                            ?>
+                        </div>
+                    </div>
                 </main>
             </div>
             <div class="col-sm-0 col-sm-1 col-lg-3"></div>
@@ -74,4 +118,4 @@ use Aprelendo\UserRegistrationManager;
     </div>
 </div>
 
-<?php require_once 'footer.php'?>
+<?php require_once 'footer.php' ?>
