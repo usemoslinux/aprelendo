@@ -179,8 +179,7 @@ $(document).ready(function () {
                     });
 
                     // only look for word frequency if word has example sentences
-                    const doclang = $("#study-card").data("lang");
-                    showWordFrequency(word, doclang);
+                    showWordFrequency();
 
                     $("#examples-placeholder").addClass('d-none');
                     $("#study-card-examples").append(examples_html);
@@ -479,25 +478,16 @@ $(document).ready(function () {
 
     /**
      * Updates the frequency badge on the study card to display the frequency level of the current word.
-     * @param {number} frequency_index - Index indicating the frequency of the word.
      */
-    function showWordFrequency(frequency_index) {
+    function showWordFrequency() {
         const $freq_badge = $("#study-card-freq-badge");
-        const freq_level = getWordFrequency(words[cur_card_index].frequency_index);
-
-        const freq_text = {
-            'very high': 'Very high frequency',
-            'high': 'High frequency',
-            'medium': 'Medium frequency',
-            'low': 'Low frequency',
-        };
+        const freq_level = getWordFrequency(words[cur_card_index].frequency_index) + ' frequency';
 
         // Update the badge with the corresponding frequency text and styling
-        const badge_text = freq_text[freq_level] || 'Low frequency';
         $freq_badge
             .removeClass('placeholder')
             .addClass('border border-light')
-            .text(badge_text);
+            .text(freq_level);
     } // end showWordFrequency()
 
     /**

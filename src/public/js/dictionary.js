@@ -200,15 +200,13 @@ function setWordActionButtons($selword, is_study) {
  * @param {int} frequency_index
  */
 function getWordFrequency(frequency_index) {
-    if (frequency_index == 0) {
-        return 'low'
+    if (frequency_index == 100) {
+        return 'Medium/low'
     } else if (frequency_index < 81) {
-        return 'very high';
+        return 'Very high';
     } else if (frequency_index < 97) {
-        return 'high';
-    } else {
-        return 'medium';
-    }
+        return 'High';
+    } 
 } // end getWordFrequency
 
 /**
