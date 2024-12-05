@@ -103,7 +103,7 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
     <?php endif; ?>
 
     <?php if ($_SERVER['HTTP_HOST'] === 'www.aprelendo.com'): ?>
-        <!-- Matomo Analytics -->
+    <!-- Matomo Analytics -->
         <script src="/js/matomo.min.js" async defer></script>
     <?php endif; ?>
 </head>
