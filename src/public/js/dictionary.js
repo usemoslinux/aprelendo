@@ -34,7 +34,7 @@ function getTextSentence($selword) {
         sentence.slice(0, -end_obj_length + 1);
     }
     
-    return sentence.replace(/\r?\n|\r/g, " ").trim();
+    return sentence.replace(/\s+/g, " ").trim();   
 } // end getTextSentence
 
 /**
