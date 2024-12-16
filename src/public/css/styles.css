@@ -682,71 +682,24 @@ a[role="menuitem"] {
     padding: 15px;
 }
 
-/* Loader / spinner */
-.lds-ellipsis {
-    position: relative;
-    width: 80px;
-    height: 80px;
+/* RSS loading placeholder */
+.rss-placeholder-glow {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
 }
 
-.lds-ellipsis div {
-    position: absolute;
-    top: 33px;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: #0275d8;
-    animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-
-.lds-ellipsis div:nth-child(1) {
-    left: 8px;
-    animation: lds-ellipsis1 0.6s infinite;
-}
-
-.lds-ellipsis div:nth-child(2) {
-    left: 8px;
-    animation: lds-ellipsis2 0.6s infinite;
-}
-
-.lds-ellipsis div:nth-child(3) {
-    left: 32px;
-    animation: lds-ellipsis2 0.6s infinite;
-}
-
-.lds-ellipsis div:nth-child(4) {
-    left: 56px;
-    animation: lds-ellipsis3 0.6s infinite;
-}
-
-@keyframes lds-ellipsis1 {
+@keyframes shimmer {
     0% {
-        transform: scale(0);
+        background-position: 200% 0;
     }
-
     100% {
-        transform: scale(1);
+        background-position: -200% 0;
     }
 }
 
-@keyframes lds-ellipsis3 {
-    0% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(0);
-    }
-}
-
-@keyframes lds-ellipsis2 {
-    0% {
-        transform: translate(0, 0);
-    }
-
-    100% {
-        transform: translate(24px, 0);
-    }
+.rss-placeholder-text {
+    user-select: none;
 }
 
 /* SHOW TEXT PAGE */

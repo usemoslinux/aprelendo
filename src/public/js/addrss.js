@@ -19,25 +19,52 @@
 
 $(document).ready(function () {
     // load rss feeds
-    $.ajax({
-        type: "GET",
-        url: "ajax/fetchrssfeeds.php"
-    })
-        .done(function (data) {
-            $(".lds-ellipsis").fadeOut(function () {
-                if (data.error_msg != null) {
-                    showMessage(data.error_msg, 'alert-danger');
-                } else {
-                    $(this).after(data);
-                }
-            });
+    const $accordion_items = $(".accordion").find(".accordion-item");
+    const feed_count = $accordion_items.length;
+
+    if (feed_count == 0) {
+        $("#accordion").html(function () {
+            return showMessage('<p>No RSS feeds found.</p><p>To '
+                + 'get started, head over to the <a class="alert-link" href="/languages.php">languages</a> section '
+                + ' and add up to 3 feeds per language to start enjoying curated <a href="https://en.wikipedia.org/wiki/RSS"'
+                + 'target="_blank" rel="noopener noreferrer" class="alert-link">RSS content</a>.</p>',
+            'alert-danger');
+        });
+        return;
+    }
+
+    for (let i = 0; i < feed_count; i++) {
+        const $feed = $accordion_items.eq(i);
+        const feed_full_id = '#' + $feed.attr('id');
+        const feed_index = $feed.data('feed-index');
+
+        $.ajax({
+            type: "GET",
+            data: { feed_index: feed_index },
+            url: "ajax/fetchrssfeeds.php"
+        })
+        .done(function (data) {            
+            if (data.error_msg != null) {
+                let $acordion_item = $(feed_full_id);
+                let item_index = feed_index+1;
+
+                $acordion_item.find('.rss-placeholder-text').text("Error!");
+                $acordion_item.find('.accordion-button').removeClass('rss-placeholder-glow').addClass('text-bg-danger');
+                $acordion_item.find('h2').after('<div id="item-' + item_index 
+                    + '" class="collapse" data-bs-parent="#accordion"><div class="accordion-body"><div>'
+                    + data.error_msg + '</div></div></div>');
+            }
+            else {
+                $(feed_full_id).html(data);
+            }
         })
         .fail(function (xhr, ajaxOptions, thrownError) {
-            $(".lds-ellipsis").fadeOut(function () {
+            $("#accordion").fadeOut(function () {
                 showMessage('There was an error trying to retrieve your RSS feeds. Please try again later.',
                 'alert-danger');
             });
         }); // end $.ajax
+    }
 
     /**
      * Escapes string

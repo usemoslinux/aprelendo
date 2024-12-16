@@ -21,7 +21,8 @@
 require_once '../../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
-use Aprelendo\RSSFeeds;
+use Aprelendo\RSSFeed;
+use Aprelendo\Language;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
@@ -29,25 +30,18 @@ $user_id = $user->id; // get current user's ID
 $lang_id = $user->lang_id; // get current language's ID
 
 try {
-    $rssfeeds = new RSSFeeds($pdo, $user_id, $lang_id);
-    $feeds = $rssfeeds->get();
+    $feed_index = $_GET['feed_index'];
 
-    $html = '<div id="accordion" class="accordion">';
+    $lang = new Language($pdo, $user_id);
+    $lang->loadRecordById($lang_id);
 
-    if ($feeds) {
-        $html = '<div id="accordion" class="accordion">';
+    $feed_uris = [ $lang->rss_feed1_uri,
+                   $lang->rss_feed2_uri,
+                   $lang->rss_feed3_uri ] ;
 
-        for ($i=0; $i < count($feeds); $i++) {
-            $html .= printRSSFeed($feeds[$i], $i+1);
-        }
-
-        echo $html . '</div>';
-    } else {
-        // If all feeds are empty, throw exception with message
-        throw new UserException('<p>There are no RSS feeds available for display in this section.</p><p>To '
-            . 'get started, head over to the <a class="alert-link" href="/languages.php">languages</a> section and add '
-            . 'up to 3 feeds per language to start enjoying <a href="https://en.wikipedia.org/wiki/RSS"'
-            . 'target="_blank" rel="noopener noreferrer" class="alert-link">RSS content</a>.</p>');
+    if ($feed_uris) {
+        $feed = new RSSFeed($feed_uris[$feed_index]);
+        echo printRSSFeed($feed, $feed_index+1);
     }
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
@@ -74,8 +68,7 @@ function printRSSFeed($feed, $groupindex): string
         $label_id = 'btn-' . $groupindex;
 
         // Initialize HTML string for accordion group
-        $html = "<div class='accordion-item'>"
-            . "<h2 class='accordion-header' id='$heading_id'>"
+        $html = "<h2 class='accordion-header' id='$heading_id'>"
             . "<button id='$label_id' class='accordion-button collapsed' data-bs-toggle='collapse' "
             . "data-bs-target='#$item_id' aria-expanded='false' aria-controls='$item_id'>"
             . "$feed_title</a>"
@@ -130,11 +123,9 @@ function printRSSFeed($feed, $groupindex): string
                 $itemindex++;
             }
         }
-        $html .= '</div></div></div></div>';
+        $html .= '</div></div></div>';
     } else {
-        throw new UserException("Oops! There was an error trying to fetch this feed:"
-            . $feed->url
-            . "\nIt is probably due to a malformed RSS feed.");
+        throw new UserException("Malformed RSS feed");
     }
     return $html;
 }
