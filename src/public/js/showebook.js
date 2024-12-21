@@ -24,7 +24,7 @@ $(document).ready(function() {
 
     window.parent.show_confirmation_dialog = true; // show confirmation dialog on close
 
-    let $viewer = document.getElementById("viewer");
+    let viewer = document.getElementById("viewer");
 
     let formData = new FormData();
     formData.append("id", ebook_id);
@@ -98,7 +98,6 @@ $(document).ready(function() {
             $.when(SaveWords()).then(function () {
                 let url = next.getAttribute("href");
                 display(url);
-                scrollToPageTop();
             });
         },
         false
@@ -112,7 +111,6 @@ $(document).ready(function() {
             $(prev).tooltip('hide');
             let url = prev.getAttribute("href");
             display(url);
-            scrollToPageTop();
         },
         false
     );
@@ -227,7 +225,7 @@ $(document).ready(function() {
                     document.getElementById("opener").click();
 
                     display(url);
-                    scrollToPageTop();
+                    
                     
                     return false;
                 };
@@ -268,13 +266,15 @@ $(document).ready(function() {
 
     function display(item) {
         let section = book.spine.get(item);
+        let text_html = '';
 
         if (section) {
             section.render().then(function (ebook_html) {
                 let $parsed = cleanEbookHTML(ebook_html);
 
                 // underline text
-                $(".loading-spinner-container").fadeIn(1000);
+                $(".loading-spinner-container").fadeIn(300);
+                $("#text-container").hide();
                 $.ajax({
                     type: "POST",
                     url: "/ajax/getuserwords.php",
@@ -282,8 +282,11 @@ $(document).ready(function() {
                     dataType: "json"
                 })
                     .done(function (data) {
-                        $viewer.innerHTML = underlineWords(data, doclang, false);
-                        $(".loading-spinner-container").fadeOut(1000);
+                        text_html = underlineWords(data, doclang, false);
+                        viewer.innerHTML = text_html;
+                        $("#text-container").fadeIn(300);
+                        $(".loading-spinner-container").fadeOut(300);
+                        scrollToPageTop();
                     })
                     .fail(function (xhr, ajaxOptions, thrownError) {
                         alert(
