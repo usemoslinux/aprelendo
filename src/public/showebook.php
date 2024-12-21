@@ -214,8 +214,8 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
                     </button>
                 </span>
 
-                <div class="loading-spinner me-2">
-                    <div class="ldio-nhngmna4s2b">
+                <div class="loading-spinner-container me-2">
+                    <div class="spinner-wrapper">
                         <div></div>
                         <div></div>
                         <div></div>

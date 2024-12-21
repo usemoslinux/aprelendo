@@ -274,7 +274,7 @@ $(document).ready(function() {
                 let $parsed = cleanEbookHTML(ebook_html);
 
                 // underline text
-                $(".loading-spinner").fadeIn(1000);
+                $(".loading-spinner-container").fadeIn(1000);
                 $.ajax({
                     type: "POST",
                     url: "/ajax/getuserwords.php",
@@ -283,7 +283,7 @@ $(document).ready(function() {
                 })
                     .done(function (data) {
                         $viewer.innerHTML = underlineWords(data, doclang, false);
-                        $(".loading-spinner").fadeOut(1000);
+                        $(".loading-spinner-container").fadeOut(1000);
                     })
                     .fail(function (xhr, ajaxOptions, thrownError) {
                         alert(

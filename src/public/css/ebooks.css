@@ -144,7 +144,9 @@ svg {
 
 /* UNDERLINE WORDS SPINNER */
 
-@keyframes ldio-nhngmna4s2b {
+/* UNDERLINE WORDS SPINNER */
+
+@keyframes spinner-circle-grow {
     0% {
         transform: translate(6px, 40px) scale(0);
     }
@@ -166,7 +168,7 @@ svg {
     }
 }
 
-@keyframes ldio-nhngmna4s2b-r {
+@keyframes spinner-circle-shrink {
     0% {
         transform: translate(74px, 40px) scale(1);
     }
@@ -176,29 +178,29 @@ svg {
     }
 }
 
-@keyframes ldio-nhngmna4s2b-c {
+@keyframes spinner-color-change {
     0% {
-        background: #e15b64
+        background: #e15b64;
     }
 
     25% {
-        background: #abbd81
+        background: #abbd81;
     }
 
     50% {
-        background: #f8b26a
+        background: #f8b26a;
     }
 
     75% {
-        background: #f47e60
+        background: #f47e60;
     }
 
     100% {
-        background: #e15b64
+        background: #e15b64;
     }
 }
 
-.ldio-nhngmna4s2b div {
+.spinner-wrapper div {
     position: absolute;
     width: 20px;
     height: 20px;
@@ -206,36 +208,36 @@ svg {
     box-sizing: content-box;
     transform: translate(40px, 40px) scale(1);
     background: #e15b64;
-    animation: ldio-nhngmna4s2b 1.6949152542372883s infinite cubic-bezier(0, 0.5, 0.5, 1);
+    animation: spinner-circle-grow 1.6949152542372883s infinite cubic-bezier(0, 0.5, 0.5, 1);
 }
 
-.ldio-nhngmna4s2b div:nth-child(1) {
+.spinner-wrapper div:nth-child(1) {
     background: #f47e60;
     transform: translate(74px, 40px) scale(1);
-    animation: ldio-nhngmna4s2b-r 0.42372881355932207s infinite cubic-bezier(0, 0.5, 0.5, 1), ldio-nhngmna4s2b-c 1.6949152542372883s infinite step-start;
+    animation: spinner-circle-shrink 0.42372881355932207s infinite cubic-bezier(0, 0.5, 0.5, 1), spinner-color-change 1.6949152542372883s infinite step-start;
 }
 
-.ldio-nhngmna4s2b div:nth-child(2) {
+.spinner-wrapper div:nth-child(2) {
     animation-delay: -0.42372881355932207s;
     background: #e15b64;
 }
 
-.ldio-nhngmna4s2b div:nth-child(3) {
+.spinner-wrapper div:nth-child(3) {
     animation-delay: -0.8474576271186441s;
     background: #f47e60;
 }
 
-.ldio-nhngmna4s2b div:nth-child(4) {
+.spinner-wrapper div:nth-child(4) {
     animation-delay: -1.2711864406779663s;
     background: #f8b26a;
 }
 
-.ldio-nhngmna4s2b div:nth-child(5) {
+.spinner-wrapper div:nth-child(5) {
     animation-delay: -1.6949152542372883s;
     background: #abbd81;
 }
 
-.loading-spinner {
+.loading-spinner-container {
     width: 30px;
     height: 30px;
     display: inline-block;
@@ -243,16 +245,14 @@ svg {
     background: none;
 }
 
-.ldio-nhngmna4s2b {
+.spinner-wrapper {
     width: 100%;
     height: 100%;
     position: relative;
     transform: translateZ(0) scale(0.3);
     backface-visibility: hidden;
     transform-origin: 0 0;
-    /* see note above */
 }
-
 
 /* OTHER */
 

@@ -39,7 +39,7 @@ class AudioPlayerForTexts extends AudioPlayer
         $html .= '<div id="alert-box-audio" class="alert alert-danger d-none"></div>';
 
         if ($show_loading) {
-            $html .= '<div id="audioplayer-loader" class="lds-facebook mx-auto" title="Loading audio...">
+            $html .= '<div id="audioplayer-loader" class="audio-loading mx-auto" title="Loading audio...">
                         <div></div>
                         <div></div>
                         <div></div>
