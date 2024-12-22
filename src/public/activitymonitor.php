@@ -76,15 +76,58 @@ $message_html .= '</span>';
 <div id="activity-monitor" class="row flex">
     <div class="col-sm-12">
         <div class="card mb-3">
+            <div class="card-header">
+                <div class="">Daily Goal: Recall 10 words</div>
+            </div>
             <div class="card-body">
-                <h6 class="card-title">Today's goal: Practice 10 words</h6>
-                <div class="progress my-2" style="height: 10px;">
+                <div class="progress mb-2" style="height: 13px;">
                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                    style="min-width: 34px; width: <?php echo strval($per_of_words_learned_today) . '%'; ?>">
-                    <?php echo $msg_progress_bar; ?></div>
+                        style="width: <?php echo strval($per_of_words_learned_today) . '%'; ?>">
+                        <?php echo $msg_progress_bar; ?></div>
                 </div>
-                <?php echo $message_html; ?>
-                <a href="/stats" class="font-italic float-end"><span class="bi bi-graph-up"></span> More stats</a>
+                <div class="d-flex d-inline-block">
+                    <?php echo $message_html; ?>
+                    <div class="mx-2 ms-auto">
+                        <a href="/stats" title="My statistics" class="d-flex font-italic">
+                            <span class="bi bi-graph-up"></span><span class="d-none ms-1 d-md-block"> More stats</span>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="javascript:;" title="Help" data-bs-toggle="collapse"
+                            data-bs-target="#help-word-recall-streak" class="d-flex collapsed" aria-expanded="false">
+                            <span class="bi bi-question-circle"></span><span class="d-none ms-1 d-md-block"> Help</span>
+                        </a>
+                    </div>
+                </div>
+                <div id="help-word-recall-streak" class="small collapse">
+                    <hr>
+                    <p>
+                        At Aprelendo we measure two types of streaks: recall and reading streaks.
+                    </p>
+                    <p>
+                        A <u>recall streak</u> tracks how many consecutive days you've successfully marked the target
+                        number of words as recalled during your daily practice. Recalled words include all those in your
+                        vocabulary list that you reviewed, excluding those marked as 'forgotten'.
+                    </p>
+                    <p>
+                        The recall goal, shown in this card, indicates how many words you recalled today and helps you
+                        track your daily progress to keep the streak growing.
+                    </p>
+                    <p>
+                        The streak resets if you miss a day of practice, regardless of how many words you recalled on
+                        the previous day.
+                    </p>
+                    <p>
+                        A <u>reading streak</u>, on the other hand, measures how many consecutive days you've read
+                        through your chosen texts at least once. This helps track your overall engagement with learning
+                        materials.
+                    </p>
+                    <p>
+                        The reading streak is only affected by your reading activity, not by your recall sessions.
+                        Progress is shown in the blue header on the upper part of every page, which gives a broader
+                        overview of your language learning activity.
+                    </p>
+                </div>
             </div>
         </div>
     </div>

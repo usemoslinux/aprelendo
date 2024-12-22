@@ -30,70 +30,110 @@ $(document).ready(function () {
             dataType: "json"
         })
             .done(function (data) {
-                const nr_learned   = parseInt(data[0]["count"]);
-                const nr_learning  = parseInt(data[1]["count"]);
-                const nr_new       = parseInt(data[2]["count"]);
-                const nr_forgotten = parseInt(data[3]["count"]);
-                const nr_total     = nr_learned + nr_learning + nr_new + nr_forgotten;
+                const count_learned   = parseInt(data[0]);
+                const count_learning  = parseInt(data[1]);
+                const count_new       = parseInt(data[2]);
+                const count_forgotten = parseInt(data[3]);
+                const count_total     = parseInt(data[4]);
 
                 // build chart
                 const ctx = document.getElementById("total-stats-canvas").getContext("2d");
 
+                const chart_data = {
+                    labels: ['Words'],
+                    datasets: [
+                        {
+                            label: 'Learned',
+                            data: [count_learned],
+                            backgroundColor: '#3cb371'
+                        }, {
+                            label: 'Learning',
+                            data: [count_learning],
+                            backgroundColor: '#ffa500'
+                        }, {
+                            label: 'New',
+                            data: [count_new],
+                            backgroundColor: '#1e90ff'
+                        }, {
+                            label: 'Forgotten',
+                            data: [count_forgotten],
+                            backgroundColor: '#ff6347'
+                        }
+                    ]
+                };
+
+                const noDataPlugin = {
+                    id: 'noDataPlugin',
+                    afterDraw: (chart) => {
+                        // If no data, show message
+                        if (count_total === 0) {
+                            const ctx = chart.ctx;
+                            const { width, height } = chart;
+                            ctx.save();
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.font = '16px Arial';
+                            ctx.fillStyle = 'gray';
+                            ctx.fillText('No Data Available', width / 2, height / 2);
+                            ctx.restore();
+                        }
+                    }
+                };
+
                 //create Chart class object
-                new Chart(ctx, {
+                const total_stats_chart = new Chart(ctx, {
                     type: "bar",
-                    data: {
-                        labels: ['Words'],
-                        datasets: [
-                            {
-                                label: 'Learned',
-                                data: [nr_learned],
-                                backgroundColor: '#3cb371'
-                            }, {
-                                label: 'Learning',
-                                data: [nr_learning],
-                                backgroundColor: '#ffa500'
-                            }, {
-                                label: 'New',
-                                data: [nr_new],
-                                backgroundColor: '#1e90ff'
-                            }, {
-                                label: 'Forgotten',
-                                data: [nr_forgotten],
-                                backgroundColor: '#ff6347'
-                            }
-                        ]
-                    },
+                    data: chart_data,
                     options: {
                         indexAxis: 'y',
                         responsive: true,
                         scales: {
                             x: {
-                                stacked: true
+                                stacked: true,
+                                max: count_total || 10
                             },
                             y: {
                                 stacked: true,
                                 display: false
                             }
+                        },
+                        plugins: {
+                            legend: { display: true },
                         }
-                    }                
+                    },
+                    plugins: [noDataPlugin] // Add the plugin here              
                 });
 
-                // show legend in table
-                $("#learned-count").text(nr_learned);
-                $("#learned-percentage").text((nr_learned / nr_total * 100).toFixed(2).toLocaleString('en-US'));
+                if (count_total === 0) {
+                    $("#learned-count").text("0");
+                    $("#learned-percentage").text("0");
+                
+                    $("#learning-count").text("0");
+                    $("#learning-percentage").text("0");
+                
+                    $("#new-count").text("0");
+                    $("#new-percentage").text("0");
+                
+                    $("#forgotten-count").text("0");
+                    $("#forgotten-percentage").text("0");
+                
+                    $("#total-count").text("0");
+                } else {
+                    // show legend in table
+                    $("#learned-count").text(count_learned);
+                    $("#learned-percentage").text((count_learned / count_total * 100).toFixed(2).toLocaleString('en-US'));
 
-                $("#learning-count").text(nr_learning);
-                $("#learning-percentage").text((nr_learning / nr_total * 100).toFixed(2).toLocaleString('en-US'));
+                    $("#learning-count").text(count_learning);
+                    $("#learning-percentage").text((count_learning / count_total * 100).toFixed(2).toLocaleString('en-US'));
 
-                $("#new-count").text(nr_new);
-                $("#new-percentage").text((nr_new / nr_total * 100).toFixed(2).toLocaleString('en-US'));
+                    $("#new-count").text(count_new);
+                    $("#new-percentage").text((count_new / count_total * 100).toFixed(2).toLocaleString('en-US'));
 
-                $("#forgotten-count").text(nr_forgotten);
-                $("#forgotten-percentage").text((nr_forgotten / nr_total * 100).toFixed(2).toLocaleString('en-US'));
+                    $("#forgotten-count").text(count_forgotten);
+                    $("#forgotten-percentage").text((count_forgotten / count_total * 100).toFixed(2).toLocaleString('en-US'));
 
-                $("#total-count").text(nr_learned + nr_learning + nr_new + nr_forgotten);
-
+                    $("#total-count").text(count_learned + count_learning + count_new + count_forgotten);
+                }
             })
             .fail(function () {
                 let error_div = "<div class='d-flex align-items-center justify-content-center' " +

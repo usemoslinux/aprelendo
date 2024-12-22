@@ -63,11 +63,27 @@ class WordStats extends DBEntity
      */
     public function getTotals(): array
     {
-        $sql = "SELECT COUNT(*) as count
+        $temp = [];
+        $result = [0 => 0,  // learned
+                   1 => 0,  // learning
+                   2 => 0,  // new
+                   3 => 0,  // forgotten
+                   4 => 0]; // total
+
+        $sql = "SELECT `status`, COUNT(*) as count
             FROM `{$this->table}`
             WHERE `user_id`=? AND `lang_id`=?
             GROUP BY `status`";
 
-        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
+        $temp = $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
+
+        foreach ($temp as $value) {
+            $result[$value['status']] = $value['count'];
+        }
+
+        $result[4] = $result[0] + $result[1] + $result[2] + $result[3];
+
+        return $result;
+        
     } // end getTotals()
 }

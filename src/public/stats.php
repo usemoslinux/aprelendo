@@ -173,7 +173,7 @@ use Aprelendo\WordDailyGoal;
         <section>
             <dl class="row">
                 <dt class="col-12">
-                    <h4 class="text-center py-4">Gems & study streak</h4>
+                    <h4 class="text-center py-4">Gems & reading streak</h4>
                 </dt>
                 <dt class="col-md-2">
                     <figure class="px-5 px-sm-0 mt-2">
@@ -186,7 +186,7 @@ use Aprelendo\WordDailyGoal;
                     </figure>
                 </dt>
                 <dd class="col-md-10">
-                    <p>This is the number of consecutive days you studied a text, video or ebook in the currently
+                    <p>This is the number of consecutive days you reviewed a text, video or ebook in the currently
                         selected language.</p>
                     <p>Streaks are a robust repetition tool. They reward you each time you complete an action,
                         meaning you’re more likely to keep doing it. After a while, this new routine will become
