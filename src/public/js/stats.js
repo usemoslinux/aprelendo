@@ -40,27 +40,23 @@ $(document).ready(function () {
                 const ctx = document.getElementById("total-stats-canvas").getContext("2d");
 
                 const chart_data = {
-                    labels: ['Words'],
-                    datasets: [
-                        {
-                            label: 'Learned',
-                            data: [count_learned],
-                            backgroundColor: '#3cb371'
-                        }, {
-                            label: 'Learning',
-                            data: [count_learning],
-                            backgroundColor: '#ffa500'
-                        }, {
-                            label: 'New',
-                            data: [count_new],
-                            backgroundColor: '#1e90ff'
-                        }, {
-                            label: 'Forgotten',
-                            data: [count_forgotten],
-                            backgroundColor: '#ff6347'
-                        }
-                    ]
-                };
+                    labels: [
+                      'Learned',
+                      'Learning',
+                      'New',
+                      'Forgotten'
+                    ],
+                    datasets: [{
+                      data: [count_learned, count_learning, count_new, count_forgotten],
+                      backgroundColor: [
+                        '#3cb371',
+                        '#ffa500',
+                        '#1e90ff',
+                        '#E0115F'
+                      ],
+                      hoverOffset: 4
+                    }]
+                  };
 
                 const noDataPlugin = {
                     id: 'noDataPlugin',
@@ -82,43 +78,29 @@ $(document).ready(function () {
 
                 //create Chart class object
                 const total_stats_chart = new Chart(ctx, {
-                    type: "bar",
+                    type: "doughnut",
                     data: chart_data,
+                    
                     options: {
-                        indexAxis: 'y',
                         responsive: true,
-                        scales: {
-                            x: {
-                                stacked: true,
-                                max: count_total || 10
-                            },
-                            y: {
-                                stacked: true,
-                                display: false
-                            }
-                        },
                         plugins: {
-                            legend: { display: true },
+                            legend: { display: count_total, position: 'right' },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        const value = context.raw; // Raw value of the slice
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0); // Sum of all values
+                                        const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage
+                                        return `${context.label}: ${value} (${percentage}%)`;
+                                    }
+                                }
+                            }
                         }
                     },
                     plugins: [noDataPlugin] // Add the plugin here              
                 });
 
-                if (count_total === 0) {
-                    $("#learned-count").text("0");
-                    $("#learned-percentage").text("0");
-                
-                    $("#learning-count").text("0");
-                    $("#learning-percentage").text("0");
-                
-                    $("#new-count").text("0");
-                    $("#new-percentage").text("0");
-                
-                    $("#forgotten-count").text("0");
-                    $("#forgotten-percentage").text("0");
-                
-                    $("#total-count").text("0");
-                } else {
+                if (count_total) {
                     // show legend in table
                     $("#learned-count").text(count_learned);
                     $("#learned-percentage").text((count_learned / count_total * 100).toFixed(2).toLocaleString('en-US'));

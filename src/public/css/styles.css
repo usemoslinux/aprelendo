@@ -32,6 +32,20 @@ URL: https://alvarez.is
 1. GENERAL STRUCTURES
 ################################################################# */
 
+:root {
+    --w-learned: #3cb371;
+    --w-learning: #ffa500;
+    --w-new: #1e90ff;
+    --w-forgotten: #E0115F;
+}
+
+/* :root {
+    --w-learned: 'green';
+    --w-learning: 'orange';
+    --w-new: 'dodgerblue';
+    --w-forgotten: 'crimson';
+} */
+                        
 * {
     margin: 0;
     padding: 0;
@@ -774,44 +788,44 @@ a[role="menuitem"] {
 }
 
 .new {
-    border-color: DodgerBlue;
+    border-color: var(--w-new);
 }
 
 .word.new:hover,
 .word.new:active {
-    background-color: DodgerBlue;
+    background-color: var(--w-new);
     color: ghostwhite;
 }
 
 .learning {
-    border-color: orange;
+    border-color: var(--w-learning);
 }
 
 .word.learning:hover
 .word.learning:active {
-    background-color: orange;
+    background-color: var(--w-learning);
     color: ghostwhite;
 }
 
 .learned {
     border-bottom-width: 2px;
     border-bottom-style: solid;
-    border-color: green;
+    border-color: var(--w-learned);
 }
 
 .word.learned:hover,
 .word.learned:active {
-    background-color: green;
+    background-color: var(--w-learned);
     color: ghostwhite;
 }
 
 .forgotten {
-    border-color: crimson;
+    border-color: var(--w-forgotten);
 }
 
 .word.forgotten:hover,
 .word.forgotten:active {
-    background-color: crimson;
+    background-color: var(--w-forgotten);
     color: ghostwhite;
 }
 
@@ -882,7 +896,7 @@ a[role="menuitem"] {
 .dict-wronganswer {
     background-color: inherit;
     border: 0;
-    color: crimson;
+    color: var(--w-forgotten);
     display: inherit;
     font-size: inherit;
     padding: 0 4px 0 10px;
@@ -1014,11 +1028,11 @@ input {
 /* WORDS */
 
 span.status_forgotten {
-    color: Crimson;
+    color: var(--w-forgotten);
 }
 
 span.status_new {
-    color: DodgerBlue;
+    color: var(--w-new);
 }
 
 span.status_learning {
@@ -1026,7 +1040,7 @@ span.status_learning {
 }
 
 span.status_learned {
-    color: MediumSeaGreen;
+    color: var(--w-learned);
 }
 
 /* SHARED TEXTS */
@@ -1181,19 +1195,19 @@ div.blurry-background {
 }
 
 .word-description.new {
-    background-color: DodgerBlue;
+    background-color: var(--w-new);
 }
 
 .word-description.reviewed {
-    background-color: Orange;
+    background-color: var(--w-learning);
 }
 
 .word-description.learned {
-    background-color: Green;
+    background-color: var(--w-learned);
 }
 
 .word-description.forgotten {
-    background-color: Crimson;
+    background-color: var(--w-forgotten);
 }
 
 .gamification-img {
@@ -1202,11 +1216,16 @@ div.blurry-background {
 }
 
 .gamification-badge {
-    background: rgba(0, 0, 0, .075);
+    background: rgba(255,255,255,.75);
     border-radius: 50%;
+    border: 1px solid goldenrod;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 0 15px rgba(255, 223, 186, 0.4);
     padding: 20px;
-    box-shadow: 0 0.1rem 0.1rem 0 rgb(0 0 0 / 10%);
-    border: 1px solid burlywood;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.achievements-card {
+    background: linear-gradient(45deg, #F9E79F, #F5CBA7, #D7BDE2);
 }
 
 /* POPULAR SOURCES */

@@ -28,13 +28,13 @@ $(document).ready(function () {
             $curinput.val().toLowerCase() ==
             $curinput.attr("data-text").toLowerCase()
         ) {
-            $curinput.css("border-color", "green");
+            $curinput.css("border-color", "var(--w-learned)");
             $curinput
                 .next("span")
                 .not(".d-none")
                 .addClass("d-none");
         } else if ($.trim($curinput.val()) != "") {
-            $curinput.css("border-color", "crimson");
+            $curinput.css("border-color", "var(--w-forgotten)");
             $curinput
                 .next("span")
                 .removeClass("d-none")
@@ -140,13 +140,13 @@ function toggleDictation() {
                 let border_color = '';
 
                 if ($elem.hasClass('learned')) {
-                    border_color = 'green'
+                    border_color = 'var(--w-learned)'
                 } else if ($elem.hasClass('learning')) {
-                    border_color = 'orange'
+                    border_color = 'var(--w-learning)'
                 } else if ($elem.hasClass('new')) {
-                    border_color = 'DodgerBlue'
+                    border_color = 'var(--w-new)'
                 } else if ($elem.hasClass('forgotten')) {
-                    border_color = 'crimson'
+                    border_color = 'var(--w-forgotten)'
                 }
 
                 $elem

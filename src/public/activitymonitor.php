@@ -102,30 +102,23 @@ $message_html .= '</span>';
                 <div id="help-word-recall-streak" class="small collapse">
                     <hr>
                     <p>
-                        At Aprelendo we measure two types of streaks: recall and reading streaks.
+                        The metric shown in this card indicates how many words you've recalled today and helps you
+                        track your daily progress to keep the "recall streak" growing.
                     </p>
                     <p>
                         A <u>recall streak</u> tracks how many consecutive days you've successfully marked the target
                         number of words as recalled during your daily practice. Recalled words include all those in your
-                        vocabulary list that you reviewed, excluding those marked as 'forgotten'.
+                        vocabulary list that you reviewed, excluding those marked as "forgotten".
                     </p>
                     <p>
-                        The recall goal, shown in this card, indicates how many words you recalled today and helps you
-                        track your daily progress to keep the streak growing.
-                    </p>
-                    <p>
-                        The streak resets if you miss a day of practice, regardless of how many words you recalled on
+                        This streak resets if you miss a day of practice, regardless of how many words you recalled on
                         the previous day.
                     </p>
                     <p>
-                        A <u>reading streak</u>, on the other hand, measures how many consecutive days you've read
-                        through your chosen texts at least once. This helps track your overall engagement with learning
-                        materials.
-                    </p>
-                    <p>
-                        The reading streak is only affected by your reading activity, not by your recall sessions.
-                        Progress is shown in the blue header on the upper part of every page, which gives a broader
-                        overview of your language learning activity.
+                        Please note the difference between the recall streak and the <u>reading streak</u>, which
+                        measures how many consecutive days you've read through your chosen texts at least once.
+                        This other metric helps track your overall engagement with learning materials and is shown
+                        in the blue header, next to the flame icon, on the header of every page.
                     </p>
                 </div>
             </div>
