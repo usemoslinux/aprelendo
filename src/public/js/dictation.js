@@ -121,7 +121,6 @@ $(document).ready(function () {
   * Toggles dictation on/off
   */
 function toggleDictation() {
-    let next_phase = 5;
     const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
 
     if (audio_is_loaded) {

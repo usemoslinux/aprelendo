@@ -38,14 +38,7 @@ URL: https://alvarez.is
     --w-new: #1e90ff;
     --w-forgotten: #E0115F;
 }
-
-/* :root {
-    --w-learned: 'green';
-    --w-learning: 'orange';
-    --w-new: 'dodgerblue';
-    --w-forgotten: 'crimson';
-} */
-                        
+                     
 * {
     margin: 0;
     padding: 0;
