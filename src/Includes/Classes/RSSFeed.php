@@ -52,7 +52,7 @@ class RSSFeed
     {
         $options = [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_USERAGENT => FICTIONAL_USER_AGENT,
+            CURLOPT_USERAGENT => MOCK_USER_AGENT,
             CURLOPT_FOLLOWLOCATION => true,
         ];
 

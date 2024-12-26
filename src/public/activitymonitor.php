@@ -27,10 +27,10 @@ use Aprelendo\WordDailyGoal;
 $stats = new WordStats($pdo, $user->id, $user->lang_id);
 
 // get today's statistics
-$nr_of_words_reviewed_today = $stats->getReviewedToday();
-$per_of_words_learned_today = round($nr_of_words_reviewed_today * 100 / 10);
-$today_is_streak = ($nr_of_words_reviewed_today >= 10);
-$msg_progress_bar = "$nr_of_words_reviewed_today / 10";
+$words_recalled_today = $stats->getRecalledToday();
+$percentage_words_recalled_today = round($words_recalled_today * 100 / 10);
+$today_is_streak = ($words_recalled_today >= 10);
+$msg_progress_bar = "$words_recalled_today / 10";
 
 // get streak days
 $daily_goal = new WordDailyGoal($pdo, $user->id, $user->lang_id, $user->time_zone, $today_is_streak);
@@ -60,12 +60,14 @@ $motivational_msg_ongoing_streak = ["You've taken a new step towards mastering a
                                      "Keep going, and soon you'll be able to speak with confidence."
                                 ];
 
-$message_html = '<span class="font-italic text-muted">';
+$message_html = '<span class="text-muted">';
 
 if ($daily_goal_streak_days > 0) {
-    $message_html .= $daily_goal_streak_days . ' day streak. ' . $motivational_msg_ongoing_streak[rand(0, 9)];
+    $message_html .= '<span class="badge text-bg-warning me-1 bg-opacity-50"><i class="bi bi-fire text-danger me-1">'
+        . '</i><strong>' . $daily_goal_streak_days . ' day streak!</strong></span>'
+        . '<em>' . $motivational_msg_ongoing_streak[rand(0, 9)] . '</em>';
 } else {
-    $message_html .= $motivational_msg_no_streak[rand(0, 9)];
+    $message_html .= '<em>' . $motivational_msg_no_streak[rand(0, 9)] . '</em>';
 }
 
 $message_html .= '</span>';
@@ -82,13 +84,13 @@ $message_html .= '</span>';
             <div class="card-body">
                 <div class="progress mb-2" style="height: 13px;">
                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                        style="width: <?php echo strval($per_of_words_learned_today) . '%'; ?>">
+                        style="width: <?php echo strval($percentage_words_recalled_today) . '%'; ?>">
                         <?php echo $msg_progress_bar; ?></div>
                 </div>
-                <div class="d-flex d-inline-block">
+                <div class="d-flex d-inline-block small">
                     <?php echo $message_html; ?>
                     <div class="mx-2 ms-auto">
-                        <a href="/stats" title="My statistics" class="d-flex font-italic">
+                        <a href="/stats" title="My statistics" class="d-flex">
                             <span class="bi bi-graph-up"></span><span class="d-none ms-1 d-md-block"> More stats</span>
                         </a>
                     </div>
@@ -102,23 +104,23 @@ $message_html .= '</span>';
                 <div id="help-word-recall-streak" class="small collapse">
                     <hr>
                     <p>
-                        The metric shown in this card indicates how many words you've recalled today and helps you
-                        track your daily progress to keep the "recall streak" growing.
+                        The metric displayed on this card shows the number of words you've successfully recalled today,
+                        helping you monitor your daily progress and maintain your "recall streak".
                     </p>
                     <p>
-                        A <u>recall streak</u> tracks how many consecutive days you've successfully marked the target
-                        number of words as recalled during your daily practice. Recalled words include all those in your
-                        vocabulary list that you reviewed, excluding those marked as "forgotten".
+                        A <u>recall streak</u> tracks the number of consecutive days you've met your target for recalled
+                        words during daily practice. It includes all words from your vocabulary list that you've
+                        reviewed, but excludes any marked as "forgotten."
                     </p>
                     <p>
                         This streak resets if you miss a day of practice, regardless of how many words you recalled on
                         the previous day.
                     </p>
                     <p>
-                        Please note the difference between the recall streak and the <u>reading streak</u>, which
-                        measures how many consecutive days you've read through your chosen texts at least once.
-                        This other metric helps track your overall engagement with learning materials and is shown
-                        in the blue header, next to the flame icon, on the header of every page.
+                        Additionally, it's important to differentiate between the recall streak and the <u>reading
+                        streak</u>, which measures how many consecutive days you've engaged with your chosen texts
+                        at least once. This metric reflects your overall engagement with learning materials and is
+                        displayed in the blue header next to the flame icon.
                     </p>
                 </div>
             </div>

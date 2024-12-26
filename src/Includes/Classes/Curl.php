@@ -81,27 +81,69 @@ class Curl
      */
     public static function getFinalUrl(string $url): string
     {
-        $final_url = $url;
         $ch = curl_init();
     
-        while (true) {
-            curl_setopt($ch, CURLOPT_URL, $final_url);
-            curl_setopt($ch, CURLOPT_HEADER, true);
-            curl_setopt($ch, CURLOPT_NOBODY, true);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // Basic cURL options
+        curl_setopt_array($ch, [
+            CURLOPT_URL => $url,
+            CURLOPT_HEADER => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_USERAGENT => MOCK_USER_AGENT,
+            CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,  // Only allow HTTP and HTTPS protocols
+        ]);
     
-            $result = curl_exec($ch);
+        $final_url = $url;
+        $redirect_count = 0;
+        $max_redirects = 10;
     
-            if (preg_match('~Location: (.*)~i', $result, $match)) {
-                $final_url = trim($match[1]);
+        while ($redirect_count < $max_redirects) {
+            $response = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+            // Check for cURL errors
+            if ($response === false) {
+                throw new UserException('The URL ' . $url  . ' returned the following error: ' . curl_error($ch));
+            }
+    
+            // Only follow 301, 302, 303, 307, and 308 redirects
+            if (!in_array($http_code, [301, 302, 303, 307, 308])) {
+                break;
+            }
+    
+            // Extract Location header
+            if (preg_match('/^Location:\s*(.+)$/mi', $response, $matches)) {
+                $next_url = trim($matches[1]);
+                
+                // Handle relative URLs
+                if (parse_url($next_url, PHP_URL_SCHEME) === null) {
+                    $parsed_url = parse_url($final_url);
+                    if (strpos($next_url, '/') === 0) {
+                        $next_url = $parsed_url['scheme'] . '://' . $parsed_url['host'] . $next_url;
+                    } else {
+                        $base_url = dirname($final_url);
+                        $next_url = $base_url . '/' . $next_url;
+                    }
+                }
+    
+                // Validate protocol
+                $scheme = parse_url($next_url, PHP_URL_SCHEME);
+                if (!in_array($scheme, ['http', 'https'])) {
+                    break;
+                }
+    
+                $final_url = $next_url;
+                curl_setopt($ch, CURLOPT_URL, $final_url);
+                $redirect_count++;
             } else {
-                break; // No more redirects
+                break;
             }
         }
     
         curl_close($ch);
-    
         return $final_url;
     }
 }

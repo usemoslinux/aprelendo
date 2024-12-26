@@ -49,9 +49,9 @@ defined('EMAIL_SENDER_USERNAME')  ? null : define('EMAIL_SENDER_USERNAME', 'USER
 defined('EMAIL_SENDER_PASSWORD')  ? null : define('EMAIL_SENDER_PASSWORD', 'PASSWORD'); // << update this
 defined('SUPPORT_EMAIL')          ? null : define('SUPPORT_EMAIL', 'example@mail.com'); // << update this
 
-defined('FICTIONAL_USER_AGENT')   ? null : define('FICTIONAL_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-    . 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3');
-
+defined('MOCK_USER_AGENT')        ? null : define('MOCK_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+    .'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+    
 defined('PYTHON_VENV')            ? null : define('PYTHON_VENV', '/opt/venv');
 
 defined('PROXY')                  ? null : define('PROXY', '');

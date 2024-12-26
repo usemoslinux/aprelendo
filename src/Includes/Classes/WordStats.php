@@ -46,15 +46,15 @@ class WordStats extends DBEntity
      *
      * @return int
      */
-    public function getReviewedToday(): int
+    public function getRecalledToday(): int
     {
-        $sql = "SELECT COUNT(word) AS `reviewed_today`
+        $sql = "SELECT COUNT(word) AS `recalled_today`
                 FROM `{$this->table}`
                 WHERE `user_id`=? AND `lang_id`=? AND `status` < 3
                 AND `date_modified` > CURRENT_DATE()";
 
         return $this->sqlCount($sql, [$this->user_id, $this->lang_id]);
-    } // end get()
+    } // end getRecalledToday()
 
     /**
      * Gets total stats for user words in a specific language, grouped by status

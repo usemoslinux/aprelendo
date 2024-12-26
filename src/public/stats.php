@@ -30,8 +30,8 @@ use Aprelendo\WordDailyGoal;
 
 // Get daily recall streak statistics
 $stats = new WordStats($pdo, $user->id, $user->lang_id);
-$nr_of_words_reviewed_today = $stats->getReviewedToday();
-$today_is_streak = ($nr_of_words_reviewed_today >= 10);
+$words_recalled_today = $stats->getRecalledToday();
+$today_is_streak = ($words_recalled_today >= 10);
 
 // get streak days
 $daily_goal = new WordDailyGoal(
@@ -217,7 +217,7 @@ if ($total_nr_of_badges > 0) {
                         <img src="/img/gamification/words_today.png" class="mx-auto d-block m-2"
                             alt="Words practiced today" title="Words practiced today">
                         <figcaption class="w-100 text-center fw-bold">
-                            <span style="font-size:2rem"><?php echo $nr_of_words_reviewed_today; ?></span>
+                            <span style="font-size:2rem"><?php echo $words_recalled_today; ?></span>
                         </figcaption>
                     </figure>
                     <p>This is the total number of words in your learning list that you recalled today.</p>
