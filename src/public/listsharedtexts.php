@@ -97,7 +97,7 @@ try {
             <p>There are still no shared texts for this language.</p><p>Be the first to add one and start earning
             precious gems!</p><p>To do so, use the <kbd class="bg-success">Add</kbd> button above, or take advantage
             of our <a href="/extensions" target="_blank" rel="noopener noreferrer" class="alert-link">extensions</a>,
-            which allow you to easily add texts as you browse the Web. When adding text, make sure the
+            which allow you to easily add texts as you browse the Web. When adding texts, make sure the
             "share with the community" option is selected. Learn how to do this by watching this
             <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I" target="_blank" rel="noopener noreferrer"
             class="alert-link">explanatory video</a>.</p>

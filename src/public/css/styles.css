@@ -456,6 +456,11 @@ body.blue-gradient-wallpaper .navbar-light {
     color: #0275d8;
 }
 
+kbd {
+    box-shadow: .02rem .02rem .05rem 0 rgba(0,0,0,.4);
+    vertical-align: middle;
+}
+
 /* FOOTER */
 
 .footer {

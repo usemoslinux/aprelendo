@@ -110,7 +110,7 @@ $message_html .= '</span>';
                     <p>
                         A <u>recall streak</u> tracks the number of consecutive days you've met your target for recalled
                         words during daily practice. It includes all words from your vocabulary list that you've
-                        reviewed, but excludes any marked as "forgotten."
+                        reviewed, but excludes any marked as "forgotten".
                     </p>
                     <p>
                         This streak resets if you miss a day of practice, regardless of how many words you recalled on
@@ -118,9 +118,8 @@ $message_html .= '</span>';
                     </p>
                     <p>
                         Additionally, it's important to differentiate between the recall streak and the <u>reading
-                        streak</u>, which measures how many consecutive days you've engaged with your chosen texts
-                        at least once. This metric reflects your overall engagement with learning materials and is
-                        displayed in the blue header next to the flame icon.
+                        streak</u>. This other metric reflects your overall engagement with learning materials and is
+                        displayed next to the flame icon in the blue header.
                     </p>
                 </div>
             </div>
