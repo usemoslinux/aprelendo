@@ -1222,8 +1222,20 @@ div.blurry-background {
     transition: box-shadow 0.3s ease-in-out;
 }
 
+/* ACHIEVEMENTS */
+
 .achievements-card {
     background: linear-gradient(45deg, #F9E79F, #F5CBA7, #D7BDE2);
+}
+
+#modal-achievements .modal-header,
+#modal-achievements .modal-footer {
+	border: none;
+}
+
+.achievement-icon {
+    -webkit-filter: drop-shadow(8px 8px 7px rgba(0,0,0,0.5));
+    filter: drop-shadow(8px 8px 7px rgba(0,0,0,0.5));
 }
 
 /* POPULAR SOURCES */

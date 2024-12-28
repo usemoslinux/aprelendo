@@ -24,7 +24,6 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
 use Aprelendo\Achievements;
 
 $achievements = new Achievements($pdo, $user->id, $user->lang_id, $user->time_zone);
-
 $unnanounced_achievements = $achievements->checkUnannounced();
 $achievements->saveUnannounced($unnanounced_achievements);
 
@@ -32,20 +31,22 @@ if (!empty($unnanounced_achievements)):
 ?>
 
 <!-- ACHIEVEMENTS MODAL WINDOW -->
-<div id="modal-achievements" class="modal fade" data-keyboard="true" role="dialog" tabindex="-1">
+<div id="modal-achievements" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <!-- Modal content-->
-        <div class="modal-content mb-xs-3">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title mx-auto">Achievement unlocked</h5>
+        <div class="modal-content mb-xs-3 achievements-card">
+            <div class="modal-header">
+                <h4 class="modal-title fw-bold mx-auto">Achievement Unlocked</h4>
             </div>
             <div class="modal-body">
                 <?php foreach($unnanounced_achievements as $achievement): ?>
                 <div class="modal-split">
                     <figure class="w-75 mx-auto my-0">
-                        <img src="<?php echo $achievement['img_uri'];?>" class="mx-auto d-block"
+                        <img src="<?php echo $achievement['img_uri'];?>" class="achievement-icon mx-auto d-block"
                             alt="<?php echo $achievement['description'];?>">
-                        <figcaption class="text-center fw-bold"><?php echo $achievement['description'];?></figcaption>
+                        <figcaption class="text-center mt-3 fs-4 fw-bold">
+                            <?php echo $achievement['description'];?>
+                        </figcaption>
                     </figure>
                 </div>
                 <?php endforeach; ?>

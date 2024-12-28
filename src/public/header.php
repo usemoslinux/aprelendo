@@ -70,11 +70,11 @@ $today_is_reading_streak = $gems->today_is_streak;
                             <img src="/img/gamification/streak.png"
                             style="<?php echo $today_is_reading_streak ? '' : 'filter: grayscale(1);'; ?>"
                             class="me-3 me-md-1" alt="Streak"
-                            title="Reading streak days"> <?php echo $streak_days; ?>
+                            title="Reading streak days"> <?php echo number_format($streak_days); ?>
                         </li>
                         <li id="gems" class="nav-item gamification mb-1 mb-md-0 py-2 pe-md-2">
                             <img src="/img/gamification/gems.png" class="me-3 me-md-1 ms-md-2" alt="Gems"
-                            title="Gems earned"> <?php echo $nr_of_gems; ?>
+                            title="Gems earned"> <?php echo number_format($nr_of_gems); ?>
                         </li>
                         <li id="language-dropdown" class="nav-item dropdown">
                             <a href="javascript:;" id="language-menu" class="nav-link dropdown-toggle" role="button"

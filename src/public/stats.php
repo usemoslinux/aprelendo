@@ -190,7 +190,7 @@ if ($total_nr_of_badges > 0) {
                         <img src="/img/gamification/daily_goal_streak.png" class="mx-auto d-block m-2"
                             alt="Daily goal streak" title="Daily goal streak days">
                         <figcaption class="w-100 text-center fw-bold">
-                            <span style="font-size:2rem"><?php echo $daily_goal_streak_days; ?></span>
+                            <span style="font-size:2rem"><?php echo number_format($daily_goal_streak_days); ?></span>
                         </figcaption>
                     </figure>
                     <p>Behold the count of successive days you conquered the challenge of
@@ -217,7 +217,7 @@ if ($total_nr_of_badges > 0) {
                         <img src="/img/gamification/words_today.png" class="mx-auto d-block m-2"
                             alt="Words practiced today" title="Words practiced today">
                         <figcaption class="w-100 text-center fw-bold">
-                            <span style="font-size:2rem"><?php echo $words_recalled_today; ?></span>
+                            <span style="font-size:2rem"><?php echo number_format($words_recalled_today); ?></span>
                         </figcaption>
                     </figure>
                     <p>This is the total number of words in your learning list that you recalled today.</p>
@@ -251,7 +251,7 @@ if ($total_nr_of_badges > 0) {
                             style="<?php echo $today_is_reading_streak ? '' : 'filter: grayscale(1);'; ?>"
                             class="mx-auto d-block m-2" alt="Streak" title="Reading streak days">
                         <figcaption class="w-100 text-center fw-bold">
-                            <span style="font-size:2rem"><?php echo $streak_days; ?></span>
+                            <span style="font-size:2rem"><?php echo number_format($streak_days); ?></span>
                         </figcaption>
                     </figure>
                     <p>
@@ -278,7 +278,7 @@ if ($total_nr_of_badges > 0) {
                         <img src="/img/gamification/gems.png" class="mx-auto d-block m-2" alt="Gems"
                             title="Gems earned">
                         <figcaption class="w-100 text-center fw-bold">
-                            <span style="font-size:2rem"><?php echo $nr_of_gems; ?></span>
+                            <span style="font-size:2rem"><?php echo number_format($nr_of_gems); ?></span>
                         </figcaption>
                     </figure>
                     <p>The total gems you've accumulated are a reflection of your commitment to learning and your
