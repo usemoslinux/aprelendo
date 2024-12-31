@@ -50,17 +50,20 @@ try {
 
     $yt_id = $video->youtube_id;
 
+    $body_class = "class='position-fixed w-100 h-100 overflow-hidden ";
+    
     switch ($prefs->display_mode) {
         case 'light':
-            $body_css = "class='lightmode'";
+            $body_css = $body_class . "lightmode'";
             break;
         case 'sepia':
-            $body_css = "class='sepiamode'";
+            $body_css = $body_class . "sepiamode'";
             break;
         case 'dark':
-            $body_css = "class='darkmode'";
+            $body_css = $body_class . "darkmode'";
             break;
         default:
+            $body_class = $body_class . "'";
             break;
     }
     $font_family = $prefs->font_family;

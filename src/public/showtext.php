@@ -83,7 +83,7 @@ require_once PUBLIC_PATH . 'head.php';
     <div class="container-fluid">
         <div class="row">
             <div id="sidebar" class="col-2">
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-end me-sm-3">
                     <div class="position-fixed my-3">
                         <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                             data-bs-placement="right" data-bs-title="Reading settings">
@@ -112,20 +112,22 @@ require_once PUBLIC_PATH . 'head.php';
                             <span class="bi bi-skip-end-circle-fill"></span>
                         </button>
                         <?php if ($is_shared) : ?>
-                            <button type="button" class="btn btn-link d-block mt-2" data-bs-toggle="tooltip"
-                                data-bs-custom-class="custom-tooltip" data-bs-placement="right" data-bs-title="Like">
-                                <span class="<?php echo $user_liked_class ?>"
-                                    data-idText="<?php echo $text_id ?>">
-                                </span>
-                                <small class="px-1"><?php echo $nr_of_likes ?></small>
-                            </button>
-                            <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                            <div data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                                data-bs-placement="right" data-bs-title="Like">
+                                <div class="d-block text-center mt-2">
+                                    <span class="<?php echo $user_liked_class ?>"
+                                        data-idText="<?php echo $text_id ?>">
+                                    </span>
+                                    <small class="d-block px-1"><?php echo number_format($nr_of_likes) ?></small>
+                                </div>
+                            </div>
+                            <div data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                                 data-bs-placement="right" data-bs-title="Report">
                                 <button type="button" class="btn btn-link d-block mt-2" data-bs-toggle="modal"
                                     data-bs-target="#report-text-modal">
                                     <span id="report-flag" class="bi bi-flag"></span>
                                 </button>
-                            </span>
+                            </div>
                         <?php endif ?>
                     </div>
                 </div>
