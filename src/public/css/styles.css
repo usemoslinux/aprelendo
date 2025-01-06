@@ -769,14 +769,12 @@ a[role="menuitem"] {
 .lightmode .highlighted,
 .darkmode .highlighted {
     background-color: #e8e8e8;
-    border-radius: 2px;
     color: #333;
 }
 
 .sepiamode .word:hover,
 .sepiamode .highlighted {
     background-color: rosybrown;
-    border-radius: 2px;
     color: #333;
 }
 

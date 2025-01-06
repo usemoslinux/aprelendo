@@ -50,6 +50,23 @@ function scrollToPageTop() {
 } // end scrollToPageTop()
 
 /**
+ * Calculates the number of unique elements of a specific class in the document, providing a count of unique occurrences.
+ *
+ * @param {string} class_name - The class name to target within the document.
+ * @returns {number} The count of unique textual elements of the specified class.
+ */
+function getUniqueElements(class_name) {
+    let unique_elements = new Set();
+
+    $(class_name).each(function () {
+        let text = $(this).text().toLowerCase().trim();
+        unique_elements.add(text);
+    });
+
+    return unique_elements.size;
+} // end getUniqueElements()
+
+/**
  * Retrieves the current URI parameters from the URL.
  * Parses the query string of the current page's URL and returns an object
  * containing key-value pairs of the parameters.

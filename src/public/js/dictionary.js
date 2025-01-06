@@ -128,7 +128,7 @@ function getVideoSentence($selword) {
         final_iteration = final_iteration || $start_obj.length === 0;
     }
 
-    return sentence.replace(/\r?\n|\r/g, " ").trim();
+    return sentence.replace(/\s+/g, " ").trim();
 } // end getVideoSentence
 
 /**
@@ -163,7 +163,7 @@ function buildStudyTranslationLink(translator_URI, $selword) {
  * @returns string
  */
 function buildDictionaryLink(dictionary_URI, sel_word) {
-    const word = sel_word.trim().replace(/\r?\n|\r/gm, " ");
+    const word = sel_word.replace(/\s+/g, " ").trim();
     return dictionary_URI.replace("%s", encodeURIComponent(word));
 } // end buildDictionaryLink
 

@@ -26,9 +26,9 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
 ?>
 
 <!-- Import words Modal -->
-<div class="modal fade" id="import-words-modal" data-keyboard="true" tabindex="-1" role="dialog"
+<div class="modal fade" id="import-words-modal" data-keyboard="true" tabindex="-1"
     aria-labelledby="import-words-modal-label" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="import-words-modal-label">Import words</h5>

@@ -18,13 +18,13 @@
  */
 $(document).ready(function() {
     const doclang = $("html").attr("lang");
-    const ebook_id = $("#viewer").attr("data-idText");
+    const ebook_id = $("#text").attr("data-idText");
     const book = ePub();
     let text_pos = "";
 
     window.parent.show_confirmation_dialog = true; // show confirmation dialog on close
 
-    let viewer = document.getElementById("viewer");
+    let text = document.getElementById("text");
 
     let formData = new FormData();
     formData.append("id", ebook_id);
@@ -56,7 +56,7 @@ $(document).ready(function() {
             window.location.replace("/texts");
         });
 
-    let rendition = book.renderTo("viewer", {
+    let rendition = book.renderTo("text", {
         flow: "scrolled-doc"
     });
 
@@ -282,8 +282,9 @@ $(document).ready(function() {
                     dataType: "json"
                 })
                     .done(function (data) {
-                        text_html = underlineWords(data, doclang, false);
-                        viewer.innerHTML = text_html;
+                        text_html = TextProcessor.underlineWords(data, doclang, false);
+                        text.innerHTML = text_html;
+                        TextProcessor.updateAnchorsList();
                         $("#text-container").fadeIn(300);
                         $(".loading-spinner-container").fadeOut(300);
                         scrollToPageTop();

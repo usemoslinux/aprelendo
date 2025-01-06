@@ -27,31 +27,6 @@ use Aprelendo\TextsUtilities;
 use Aprelendo\AudioPlayerForEbooks;
 use Aprelendo\UserException;
 
-function getCSS($styles)
-{
-    // styles for P
-    $style_str = "#viewer p {";
-    foreach ($styles as $style => $value) {
-        $style_str .= "$style: $value !important; ";
-    }
-    $style_str .= "margin: 0 0 1em 0 !important; padding: 0 !important; text-indent:1.5em !important;} ";
-    
-    // styles for headers
-    $style_str .= "#viewer h1, #viewer h2, #viewer h3, #viewer h4, #viewer h5, #viewer h6 {";
-
-    foreach ($styles as $style => $value) {
-        if ($style !== "text-align") {
-            $style_str .= "$style: $value !important; ";
-        }
-    }
-    $style_str .= "text-align:center !important;
-        margin: 0 0 1em 0 !important;
-        padding: 2.5em 0 !important;
-        text-indent:0 !important;}";
-    
-    return $style_str;
-}
-
 $class = '';
 $styles = [];
 $doclang = $user->lang;
@@ -169,10 +144,6 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
     <!-- Matomo Analytics -->
         <script src="/js/matomo.min.js" async defer></script>
     <?php endif; ?>
-
-    <style id="userstyles">
-        <?php echo getCSS($styles); ?>
-    </style>
 </head>
 
 <body id="readerpage" <?php echo ' class="'. $class . '"' ?>>
@@ -246,7 +217,7 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
                 <a id="prev" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                     data-bs-placement="bottom" href="#prev"></a>
             </div>
-            <div id="viewer" class="scrolled"
+            <div id="text" class="scrolled"
                 data-idText="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
             </div>
             <div class="navlink">
@@ -264,8 +235,8 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
         }
     ?>
 
-    <script defer src="/js/underlinewords.min.js"></script>
-    <script defer src="/js/showtext.min.js"></script>
+    <script defer src="/js/underlinewords.js"></script>
+    <script defer src="/js/showtext.js"></script>
     <script defer src="/js/showebook.min.js"></script>
     <script defer src="/js/audioplayer.min.js"></script>
     <script defer src="/js/dictionary.min.js"></script>

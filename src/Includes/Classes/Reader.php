@@ -118,12 +118,8 @@ class Reader
         }
         
         // display text
-        $html .= '<div id="text" style="line-height:' . $this->prefs->line_height . ';">';
-        
-        $html .= $this->text->text . '</div>';
-        $html .= '<p></p>';
-        
-        $html .= '<p></p></div>';
+        $html .= '<div id="text">' . $this->text->text . '</div>';
+        $html .= '</div>';
         return $html;
     } // end showText()
 
@@ -143,7 +139,7 @@ class Reader
                 '</div>';
 
         $html .= "<div id='text-container' class='overflow-auto text-center my-1 z-1' data-type='video' data-IdText='"
-            . $this->text->id . "' style='" . $reader_css . "'>";
+            . $this->text->id . "' style='" . $reader_css . "'><div id='text'>";
         $xml = new SimpleXMLElement($this->text->text);
 
         for ($i=0; $i < sizeof($xml); $i++) {
@@ -153,7 +149,7 @@ class Reader
             $html .= "<div data-start='$start' data-dur='$dur' >". $text .'</div>';
         }
         
-        $html .= '</div>';
+        $html .= '</div></div>';
 
         return $html;
     } // end showVideo()
@@ -178,7 +174,9 @@ class Reader
                         '</video>' .
                 '</div>';
 
-        $html .= '<div id="text-container" class="overflow-auto my-1 z-1" style="' . $reader_css . '"></div>';
+        $html .= '<div id="text-container" class="overflow-auto my-1 z-1" style="'
+            . $reader_css
+            . '"><div id="text"></div></div>';
         return $html;
     } // end showOfflineVideo()
 }

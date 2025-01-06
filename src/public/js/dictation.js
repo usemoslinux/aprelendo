@@ -97,7 +97,7 @@ $(document).ready(function () {
                 $("#audioplayer")[0].currentTime = curTime - 5;
                 break;
             case 50: // 2
-                audio_controller.togglePlayPause();
+                AudioController.togglePlayPause();
                 break;
             case 51: // 3       
                 $("#audioplayer")[0].currentTime = curTime + 5;
@@ -161,7 +161,7 @@ function toggleDictation() {
             $("#text").replaceWith($container);
 
             scrollToPageTop();
-            audio_controller.playFromBeginning();
+            AudioController.playFromBeginning();
 
             $(":text:first").focus(); // focus first input
         } else {
@@ -177,7 +177,7 @@ function toggleDictation() {
             $("#text").replaceWith($container);
 
             scrollToPageTop();
-            audio_controller.stop();
+            AudioController.stop();
         }
     }
 } // end toggleDictation

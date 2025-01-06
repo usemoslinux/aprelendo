@@ -70,7 +70,7 @@ $(document).ready(function () {
 
         if (e.which < 2) {
             // if left mouse button / touch...
-            video_controller.pause(true);
+            VideoController.pause(true);
             highlighting = true;
             $sel_start = $sel_end = $(this);
             if (e.type == "touchstart") {
@@ -79,7 +79,7 @@ $(document).ready(function () {
             }
         } else if (e.which == 3) {
             // on right click show translation of the whole sentence
-            video_controller.pause(false);
+            VideoController.pause(false);
             $selword = $(this);
             openInNewTab(buildVideoTranslationLink(translator_URI, $selword));
         }
@@ -254,7 +254,7 @@ $(document).ready(function () {
             });
 
             hideActionButtonsPopUpToolbar();
-            video_controller.resume();
+            VideoController.resume();
     }); // end #btn-add.on.click
 
     /**
@@ -298,7 +298,7 @@ $(document).ready(function () {
                         // also, the case of the word/phrase in the text has to be respected
                         // for phrases, we need to make sure that new underlining is added for each word
 
-                        let $result = $(underlineWords(data, doclang, false));
+                        let $result = $(TextProcessor.underlineWords(data, doclang, false));
                         let $cur_filter = {};
                         let cur_word = /""/;
 
@@ -306,7 +306,7 @@ $(document).ready(function () {
                             $cur_filter = $(this);
 
                             $result.filter(".word").each(function (key) {
-                                if (langs_with_no_word_separator.includes(doclang)) {
+                                if (TextProcessor.langHasNoWordSeparators(doclang)) {
                                     cur_word = new RegExp(
                                         "(?<![^])" + $(this).text() + "(?![$])",
                                         "iug"
@@ -350,7 +350,7 @@ $(document).ready(function () {
             });
 
             hideActionButtonsPopUpToolbar();
-            video_controller.resume();
+            VideoController.resume();
     }); // end #btn-remove.on.click
 
     /**
@@ -466,9 +466,9 @@ $(document).ready(function () {
             highlighting = false;
             $text_container.find(".highlighted").removeClass("highlighted");
             hideActionButtonsPopUpToolbar();
-            video_controller.resume();
+            VideoController.resume();
         }
-    }); // end $pagereader.on.mouseup
+    }); // end $document.on.mouseup
 
     /**
      * Open video selection dialog
@@ -547,7 +547,7 @@ $(document).ready(function () {
                     dataType: "json"
                 })
                     .done(function (data) {
-                        $('#text-container').html(underlineWords(data, doclang, false));
+                        $('#text-container').html(TextProcessor.underlineWords(data, doclang, false));
                     })
                     .fail(function (xhr, ajaxOptions, thrownError) {
                         console.log("There was an unexpected error trying to underline words in this text")

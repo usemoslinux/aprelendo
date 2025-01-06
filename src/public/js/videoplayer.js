@@ -17,7 +17,7 @@
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const video_controller = (() => {
+const VideoController = (() => {
     const video = document.getElementById('videoplayer');
     let resume_video = false;
 

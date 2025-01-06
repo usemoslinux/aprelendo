@@ -17,7 +17,7 @@
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const audio_controller = (() => {
+const AudioController = (() => {
     const audio = document.getElementById('audioplayer');
     const audio_source = document.getElementById('audio-source');
     const play_pause_btn = document.getElementById('ap-play-btn');

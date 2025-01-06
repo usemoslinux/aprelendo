@@ -144,9 +144,9 @@ require_once PUBLIC_PATH . 'head.php';
     }
     ?>
 
-    <script defer src="/js/underlinewords.min.js"></script>
-    <script defer src="/js/showvideo.min.js"></script>
-    <script defer src="/js/dictionary.min.js"></script>
+    <script defer src="/js/underlinewords.js"></script>
+    <script defer src="/js/showvideo.js"></script>
+    <script defer src="/js/dictionary.js"></script>
     <script defer src="/js/ytvideoplayer.min.js"></script>
     <script defer src="/js/likes.min.js"></script>
     <script defer src="/js/helpers.min.js"></script>
