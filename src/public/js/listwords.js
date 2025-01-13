@@ -129,7 +129,7 @@ $(document).ready(function () {
      */
     $(".word").on("click", function (e) {
         const $selword = $(this);
-        const dic_link = buildDictionaryLink(dictionary_URI, $selword.text());
+        const dic_link = LinkBuilder.forWordInDictionary(dictionary_URI, $selword.text());
         openInNewTab(dic_link);
     }); // end #.word.on.click
 });

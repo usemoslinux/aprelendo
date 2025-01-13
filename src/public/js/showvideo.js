@@ -26,11 +26,6 @@ $(document).ready(function () {
     let current_index = -1;
     let $selword = null; // jQuery object with selected word/phrase
 
-    // dictionary/translator variables
-    let dictionary_URI = "";
-    let img_dictionary_URI = "";
-    let translator_URI = "";
-
     let gems_earned = 0;
     
     // HTML selectors
@@ -48,7 +43,7 @@ $(document).ready(function () {
 
     // initial AJAX calls
     underlineText(); // underline text with user words/phrases
-    fetchDictionaryURIs(); // get dictionary & translator URIs
+    Dictionaries.fetchURIs(); // get dictionary & translator URIs
 
     /**
      * Fetches user words/phrases from the server and underlines them in the text, but only if this
@@ -58,11 +53,11 @@ $(document).ready(function () {
         $.ajax({
             type: "POST",
             url: "/ajax/getuserwords.php",
-            data: { txt: $('#text-container').html() },
+            data: { txt: $('#text').html() },
             dataType: "json"
         })
         .done(function (data) {
-            $('#text-container').html(TextProcessor.underlineWords(data, doclang, false));
+            $('#text').html(TextProcessor.underlineWords(data, doclang, false));
             TextProcessor.updateAnchorsList();
         })
         .fail(function (xhr, ajaxOptions, thrownError) {
@@ -91,9 +86,9 @@ $(document).ready(function () {
             $selword = $(this);
             TextProcessor.removeAllHighlighted();
             $selword.addClass('highlighted');
-            hideActionButtonsPopUpToolbar();
+            VideoActionBtns.hide();
             VideoController.pause(true);
-            showActionButtonsPopUpToolbar();
+            VideoActionBtns.show($selword);
         }
     });
 
@@ -113,7 +108,8 @@ $(document).ready(function () {
         } else if (e.originalEvent.which == 3) { // right click, open translator
             VideoController.pause(false);
             $selword = $(e.target);
-            openInNewTab(buildVideoTranslationLink(translator_URI, $selword));
+            const base_uris = Dictionaries.getURIs();
+            openInNewTab(LinkBuilder.forTranslationInVideo(base_uris.translator, $selword));
         }
     });
     $doc.on('mousemove', '#text', function (e) {
@@ -204,7 +200,7 @@ $(document).ready(function () {
     function onPointerUp() {
         if (has_long_pressed && start_index >= 0 && current_index >= 0) {
             $selword = TextProcessor.getHighlightedTextObj(start_index, current_index);
-            showActionButtonsPopUpToolbar();
+            VideoActionBtns.show($selword);
         }
 
         // Clear state
@@ -248,7 +244,7 @@ $(document).ready(function () {
                 TextProcessor.removeAllHighlighted(); // Remove highlight
 
                 // Hide toolbar and resume audio
-                hideActionButtonsPopUpToolbar();
+                VideoActionBtns.hide();
                 VideoController.resume();
             }
         }
@@ -257,50 +253,6 @@ $(document).ready(function () {
     // *************************************************************
     // **** ACTION BUTTONS (ADD, DELETE, FORGOT & DICTIONARIES) **** 
     // *************************************************************
-
-    /**
-     * Fetches dictionary and translator URIs from the server via an AJAX GET request.
-     * @returns {jqXHR} A jQuery promise object that resolves with the JSON response or rejects with error information.
-     */
-    function fetchDictionaryURIs() {
-        
-        $.ajax({
-            url: "/ajax/getdicuris.php",
-            type: "GET",
-            dataType: "json"
-        }).done(function(data) {
-            if (data.error_msg == null) {
-                dictionary_URI     = data.dictionary_uri;
-                img_dictionary_URI = data.img_dictionary_uri
-                translator_URI     = data.translator_uri;
-            }
-        }); // end $.ajax
-    }
-
-    /**
-     * Shows pop up toolbar when user clicks a word
-     */
-    function showActionButtonsPopUpToolbar() {
-        $("#text-container").disableScroll();
-        setWordActionButtons($selword, false);
-
-        const base_uris = {
-            dictionary: dictionary_URI,
-            img_dictionary: img_dictionary_URI,
-            translator: translator_URI
-        };
-
-        setDicActionButtonsClick($selword, base_uris, 'video');
-        showActionButtons($selword);
-    } // end showActionButtonsPopUpToolbar
-
-    /**
-     * Hides actions pop up toolbar
-     */
-    function hideActionButtonsPopUpToolbar() {
-        $("#text-container").enableScroll();
-        hideActionButtons();
-    } // end hideActionButtonsPopUpToolbar
 
     /**
      * Adds selected word or phrase to the database and underlines it in the text
@@ -318,7 +270,7 @@ $(document).ready(function () {
                 is_phrase: is_phrase,
                 source_id: $('[data-idtext]').attr('data-idtext'),
                 text_is_shared: true,
-                sentence: getVideoSentence($selword)
+                sentence: SentenceExtractor.fromVideo($selword)
             }
         })
         .done(function () {
@@ -357,9 +309,6 @@ $(document).ready(function () {
                         phrase.contents().unwrap();
                     }
                 });
-                if ($(e.target).is("#btn-add")) {
-                    TextProcessor.updateAnchorsList();
-                }
             } else {
                 // if it's a word
                 let $filterword = $("a.word").filter(function () {
@@ -385,6 +334,8 @@ $(document).ready(function () {
 
                 $filterword.contents().unwrap();
             }
+
+            TextProcessor.updateAnchorsList();
         })
         .fail(function (XMLHttpRequest, textStatus, errorThrown) {
             alert(
@@ -392,7 +343,7 @@ $(document).ready(function () {
             );
         });
 
-        hideActionButtonsPopUpToolbar();
+        VideoActionBtns.hide();
         VideoController.resume();
     }); // end #btn-add.on.click
 
@@ -480,7 +431,7 @@ $(document).ready(function () {
             );
         });
 
-        hideActionButtonsPopUpToolbar();
+        VideoActionBtns.hide();
         VideoController.resume();
     }); // end #btn-remove.on.click
 
@@ -606,6 +557,15 @@ $(document).ready(function () {
     }); // end #btn-fullscreen.on.click
 
     /**
+     * Updates vh value on window resize
+     * Fix for mobile devices where vh includes hidden address bar
+     */
+    $(window).on('resize', function () {
+        vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
+    
+    /**
      * Shows dialog message reminding users to save changes before leaving
      */
     $(window).on("beforeunload", function () {
@@ -614,13 +574,4 @@ $(document).ready(function () {
                 + "will be lost. Are you sure you want to exit this page?";
         }
     }); // end window.on.beforeunload
-
-    /**
-     * Updates vh value on window resize
-     * Fix for mobile devices where vh includes hidden address bar
-     */
-    $(window).on('resize', function () {
-        vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-    });
 });

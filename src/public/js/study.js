@@ -18,13 +18,11 @@
  */
 
 $(document).ready(function () {
-    let dictionary_URI = "";              // user dictionary URI
-    let img_dictionary_URI = "";              // user image dictionary URI
-    let translator_URI = "";              // user translator URI
+
     let $selword = $();             // jQuery object used to open dictionary modal
-    let words = [];              // array containing all words user is learning
-    let max_cards = 10;              // maximum nr. of cards
-    let cur_card_index = 0;               // current card/word index
+    let words = [];                 // array containing all words user is learning
+    let max_cards = 10;             // maximum nr. of cards
+    let cur_card_index = 0;         // current card/word index
 
     // nr. of words recalled during practice
     let answers = [
@@ -35,22 +33,8 @@ $(document).ready(function () {
         ["4", 0, "text-warning bg-dark", "No example sentence found!"],
     ];
 
-    // // disable Yes/No buttons
-    $(".btn-answer").prop('disabled', true);
-
-    // ajax call to get dictionary URI
-    $.ajax({
-        url: "/ajax/getdicuris.php",
-        type: "GET",
-        dataType: "json"
-    }).done(function (data) {
-        if (data.error_msg == null) {
-            dictionary_URI = data.dictionary_uri;
-            img_dictionary_URI = data.img_dictionary_uri;
-            translator_URI = data.translator_uri;
-        }
-    }); // end $.ajax 
-
+    $(".btn-answer").prop('disabled', true); // disable Yes/No buttons
+    Dictionaries.fetchURIs(); // get dictionary & translator URIs
     getListofCards();
 
     /**
@@ -404,7 +388,7 @@ $(document).ready(function () {
      */
     $("body").on("click", ".word", function (e) {
         $selword = $(this);
-        showActionButtonsPopUpToolbar();
+        StudyActionBtns.show($selword);
     }); // end #.word.on.click
 
     /**
@@ -481,7 +465,7 @@ $(document).ready(function () {
      */
     function showWordFrequency() {
         const $freq_badge = $("#study-card-freq-badge");
-        const freq_level = getWordFrequency(words[cur_card_index].frequency_index) + ' frequency';
+        const freq_level = Dictionaries.getWordFrequency(words[cur_card_index].frequency_index) + ' frequency';
 
         // Update the badge with the corresponding frequency text and styling
         $freq_badge
@@ -495,11 +479,13 @@ $(document).ready(function () {
      * Triggers when user click in translate button in modal window
      */
     $("#btn-translate").on("click", function () {
-        openInNewTab(buildStudyTranslationLink(translator_URI, $selword));
+        const base_uris = Dictionaries.getURIs();
+        openInNewTab(LinkBuilder.forTranslationInStudy(base_uris.translator, $selword));
     }); // end #btn-translate.on.click()
 
     $("#btn-img-dic").on("click", function () {
-        openInNewTab(buildDictionaryLink(img_dictionary_URI, $selword.text()));
+        const base_uris = Dictionaries.getURIs();
+        openInNewTab(LinkBuilder.forWordInDictionary(base_uris.img_dictionary, $selword.text()));
     }); // end #btn-img-dic.on.click()
 
     /**
@@ -511,7 +497,8 @@ $(document).ready(function () {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         if (!isMobile && $(e.target).is(".word")) {
-            openInNewTab(buildStudyTranslationLink(translator_URI, $(e.target)));
+            const base_uris = Dictionaries.getURIs();
+            openInNewTab(LinkBuilder.forTranslationInStudy(base_uris.translator, $(e.target)));
         }
         return false;
     }); // end document.contextmenu
@@ -548,23 +535,7 @@ $(document).ready(function () {
     $(document).on("mouseup touchend", function (e) {
         if ($(e.target).is(".word") === false && !$(e.target).closest('#action-buttons').length > 0) {
             e.stopPropagation();
-            hideActionButtons();
+            ActionBtns.hide();
         }
     }); // end $document.on.mouseup
-
-    /**
-     * Shows pop up toolbar when user clicks a word
-     */
-    function showActionButtonsPopUpToolbar() {
-        setWordActionButtons($selword, true);
-
-        const base_uris = {
-            dictionary: dictionary_URI,
-            img_dictionary: img_dictionary_URI,
-            translator: translator_URI
-        };
-
-        setDicActionButtonsClick($selword, base_uris, 'study');
-        showActionButtons($selword);
-    } // end showActionButtonsPopUpToolbar
 });

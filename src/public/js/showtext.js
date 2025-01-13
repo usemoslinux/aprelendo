@@ -26,11 +26,6 @@ $(document).ready(function() {
     let current_index = -1;
     let $selword = null; // jQuery object with selected word/phrase
 
-    // dictionary/translator variables
-    let dictionary_URI = "";
-    let img_dictionary_URI = "";
-    let translator_URI = "";
-
     // assisted learning
     let next_phase = 2; // next phase of the learning cycle
 
@@ -45,7 +40,7 @@ $(document).ready(function() {
     // initial AJAX calls
     // loadAudio();
     underlineText(); // underline text with user words/phrases
-    fetchDictionaryURIs(); // get dictionary & translator URIs
+    Dictionaries.fetchURIs(); // get dictionary & translator URIs
 
     /**
      * Fetches user words/phrases from the server and underlines them in the text, but only if this
@@ -92,9 +87,9 @@ $(document).ready(function() {
             $selword = $(this);
             TextProcessor.removeAllHighlighted();
             $selword.addClass('highlighted');
-            hideActionButtonsPopUpToolbar();
+            TextActionBtns.hide();
             AudioController.pause(true);
-            showActionButtonsPopUpToolbar();
+            TextActionBtns.show($selword);
         }
     });
 
@@ -114,7 +109,8 @@ $(document).ready(function() {
         } else if (e.originalEvent.which == 3) { // right click, open translator
             AudioController.pause(false);
             $selword = $(e.target);
-            openInNewTab(buildTextTranslationLink(translator_URI, $selword));
+            const base_uris = Dictionaries.getURIs();
+            openInNewTab(LinkBuilder.forTranslationInText(base_uris.translator, $selword));
         }
     });
     $doc.on('mousemove', '#text', function (e) {
@@ -205,7 +201,7 @@ $(document).ready(function() {
     function onPointerUp() {
         if (has_long_pressed && start_index >= 0 && current_index >= 0) {
             $selword = TextProcessor.getHighlightedTextObj(start_index, current_index);
-            showActionButtonsPopUpToolbar();
+            TextActionBtns.show($selword);
         }
 
         // Clear state
@@ -249,7 +245,7 @@ $(document).ready(function() {
                 TextProcessor.removeAllHighlighted(); // Remove highlight
 
                 // Hide toolbar and resume audio
-                hideActionButtonsPopUpToolbar();
+                TextActionBtns.hide();
                 AudioController.resume();
             }
         }
@@ -258,50 +254,6 @@ $(document).ready(function() {
     // *************************************************************
     // **** ACTION BUTTONS (ADD, DELETE, FORGOT & DICTIONARIES) **** 
     // *************************************************************
-
-    /**
-     * Fetches dictionary and translator URIs from the server via an AJAX GET request.
-     * @returns {jqXHR} A jQuery promise object that resolves with the JSON response or rejects with error information.
-     */
-    function fetchDictionaryURIs() {
-        
-        $.ajax({
-            url: "/ajax/getdicuris.php",
-            type: "GET",
-            dataType: "json"
-        }).done(function(data) {
-            if (data.error_msg == null) {
-                dictionary_URI     = data.dictionary_uri;
-                img_dictionary_URI = data.img_dictionary_uri;
-                translator_URI     = data.translator_uri;
-            }
-        }); // end $.ajax
-    }
-    
-    /**
-     * Shows pop up toolbar when user clicks a word
-     */
-    function showActionButtonsPopUpToolbar() {
-        setWordActionButtons($selword, false);
-
-        const base_uris = {
-            dictionary: dictionary_URI,
-            img_dictionary: img_dictionary_URI,
-            translator: translator_URI
-        };
-
-        $("body").disableScroll();
-        setDicActionButtonsClick($selword, base_uris, 'text');
-        showActionButtons($selword);
-    } // end showActionButtonsPopUpToolbar()
-
-    /**
-     * Hides actions pop up toolbar
-     */
-    function hideActionButtonsPopUpToolbar() {
-        $("body").enableScroll();
-        hideActionButtons();
-    } // end hideActionButtonsPopUpToolbar()
 
     /**
      * Adds word to user db
@@ -323,7 +275,7 @@ $(document).ready(function() {
                 is_phrase: is_phrase,
                 source_id: $('[data-idtext]').attr('data-idtext'),
                 text_is_shared: text_is_shared,
-                sentence: getTextSentence($selword)
+                sentence: SentenceExtractor.fromText($selword)
             }
         })
             .done(function() {
@@ -376,10 +328,6 @@ $(document).ready(function() {
 
                             $phrase.contents().unwrap();
                         }
-
-                        if ($(e.target).is("#btn-add")) {
-                            TextProcessor.updateAnchorsList();
-                        }
                     });
                 } else {
                     // if it's a word
@@ -426,6 +374,8 @@ $(document).ready(function() {
                         next_phase = 4;
                     }
                 }
+
+                TextProcessor.updateAnchorsList();
             })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
                 alert(
@@ -433,7 +383,7 @@ $(document).ready(function() {
                 );
             });
 
-        hideActionButtonsPopUpToolbar();
+        TextActionBtns.hide();
         AudioController.resume();
     }); // end #btn-add.on.click
 
@@ -522,7 +472,7 @@ $(document).ready(function() {
                 );
             });
         
-        hideActionButtonsPopUpToolbar();
+        TextActionBtns.hide();
         AudioController.resume();
     }); // end #btn-remove.on.click
 

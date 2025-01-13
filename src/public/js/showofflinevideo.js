@@ -18,19 +18,23 @@
  */
 
 $(document).ready(function () {
-    let player = document.querySelector('video');
-    let highlighting = false;
-    let $sel_start, $sel_end;
-    let start_sel_time, end_sel_time;
-    let start_sel_pos_top; // used in mobile devices to activate "word/phrase selection mode"
-    let swiping = false; // used in mobile devices to activate "word/phrase selection mode"
-    let $selword = null; // jQuery object of the selected word/phrase
-    let dictionary_URI = "";
-    let img_dictionary_URI = "";
-    let translator_URI = "";
-    let show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
+    // word selection variables
+    let long_press_timer;
+    let has_long_pressed = false;
+    let start_x, start_y;
+    let start_index = -1;
+    let current_index = -1;
+    let $selword = null; // jQuery object with selected word/phrase
+
     let gems_earned = 0;
-    let doclang = $("html").attr("lang");
+    
+    // HTML selectors
+    const doclang = $("html").attr("lang");
+    const $doc = $(parent.document);
+    const player = document.querySelector('video');
+    
+    // configuration to show confirmation dialog on close
+    let show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
 
     // Fix for mobile devices where vh includes hidden address bar
     // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
@@ -38,141 +42,203 @@ $(document).ready(function () {
     // Then we set the value in the --vh custom property to the root of the document
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 
-    // ajax call to get dictionary & translator URIs
-    $.ajax({
-        url: "ajax/getdicuris.php",
-        type: "GET",
-        dataType: "json"
-    }).done(function (data) {
-        if (data.error_msg == null) {
-            dictionary_URI     = data.dictionary_uri;
-            img_dictionary_URI = data.img_dictionary_uri;
-            translator_URI     = data.translator_uri;
+    Dictionaries.fetchURIs(); // get dictionary & translator URIs
+
+    // *************************************************************
+    // ******************* WORD/PHRASE SELECTION ******************* 
+    // *************************************************************
+
+    /**
+     * Disables right click context menu
+     */
+    $doc.on("contextmenu",function(e){
+        e.preventDefault();
+        return false;
+     }); // end document.contextmenu
+
+    /**
+     * On word click, assume single word selection
+     */
+    $doc.on('click', '#text .word', function (e) {
+        if (!has_long_pressed) {
+            $selword = $(this);
+            TextProcessor.removeAllHighlighted();
+            $selword.addClass('highlighted');
+            VideoActionBtns.hide();
+            VideoController.pause(true);
+            VideoActionBtns.show($selword);
         }
     });
 
     /**
-     * Disable right click context menu 
+     * On word mouse/touch down, potential start of selection
      */
-    $(document).on("contextmenu", function (e) {
-        e.preventDefault();
-        return false;
-    }); // end .word.on.contextmenu
+    $doc.on('mousedown touchstart', '#text .word', function (e) {
+        start_index = TextProcessor.getAnchorIndex($(this));
+    });
 
-    /**
-     * Word/Phrase selection start
-     * @param {event object} e
-     */
-    $(document).on("mousedown touchstart", ".word", function (e) {
-        e.stopPropagation();
+    // Bind container mouse word selection events
 
-        hideActionButtonsPopUpToolbar();
-
-        if (e.which < 2) {
-            // if left mouse button / touch...
-            VideoController.pause(true);
-            highlighting = true;
-            $sel_start = $sel_end = $(this);
-            if (e.type == "touchstart") {
-                start_sel_time = new Date();
-                start_sel_pos_top = $sel_start.offset().top - $(window).scrollTop();
-            }
-        } else if (e.which == 3) {
-            // on right click show translation of the whole sentence
+    $doc.on('mousedown', '#text', function (e) {
+        // only if selection starts with left mouse button
+        if (e.originalEvent.which < 2) {
+            startLongPress(e);
+        } else if (e.originalEvent.which == 3) { // right click, open translator
             VideoController.pause(false);
-            $selword = $(this);
-            openInNewTab(buildVideoTranslationLink(translator_URI, $selword));
+            $selword = $(e.target);
+            const base_uris = Dictionaries.getURIs();
+            openInNewTab(LinkBuilder.forTranslationInVideo(base_uris.translator, $selword));
         }
-    }); // end .word.on.mousedown/touchstart
+    });
+    $doc.on('mousemove', '#text', function (e) {
+        onPointerMove(e);
+    });
+    $doc.on('mouseup', '#text', function (e) {
+        onPointerUp();
+    });
+
+    // Bind container touch word selection events
+
+    $doc.on('touchstart', '#text', function (e) {
+        const touch = e.originalEvent.touches[0];
+        startLongPress(touch);
+    });
+    $doc.on('touchmove', '#text', function (e) {
+        const touch = e.originalEvent.touches[0];
+        onPointerMove(touch);
+    });
+    $doc.on('touchend', '#text', function (e) {
+        onPointerUp();
+    });
 
     /**
-     * Word/Phrase selection end
-     * @param {event object} e
+     * Starts the long-press timer. If the timer completes without interruption, the multi-selection mode is activated.
+     * @param {Event} e - The pointer event that triggered the long-press action.
      */
-    $(document).on("mouseup touchend", ".word", function (e) {
-        e.stopPropagation();
+    function startLongPress(e) {
+        has_long_pressed = false;
+        start_x = e.pageX;
+        start_y = e.pageY;
 
-        end_sel_time = new Date();
-
-        if (e.type == "touchend") {
-            if (!swiping) {
-                highlighting = (end_sel_time - start_sel_time) > 1000;
-            }
-            swiping = false;
-        }
-
-        if (highlighting) {
-            if (e.which < 2) {
-                // if left mouse button / touch...
-                highlighting = false;
-                if ($sel_start === $sel_end) {
-                    $selword = $(this);
-                }
-
-                showActionButtonsPopUpToolbar();
-            }
-        }
-    }); // end .word.on.mouseup/touchend
+        long_press_timer = setTimeout(function () {
+            has_long_pressed = true;
+            VideoController.pause(true);
+        }, 500);
+    } // end startLongPress()
 
     /**
-     * Word/Phrase selection
-     * While user drags the mouse without releasing the mouse button
-     * or while touches an elements an moves the pointer without releasing
-     * Here we build the selected phrase & change its background color to gray
-     * @param {event object} e
+     * Cancels the long-press timer and resets relevant state variables.
      */
-    $(document).on("mouseover touchmove", ".word", function (e) {
-        e.stopPropagation();
+    function cancelLongPress() {
+        clearTimeout(long_press_timer);
+        start_x = null;
+        start_y = null;
+    } // end cancelLongPress()
 
-        end_sel_time = new Date();
+    /**
+     * Checks whether the pointer has moved significantly enough to be considered scrolling rather than pressing.
+     * @param {Event} e - The pointer event to evaluate.
+     * @returns {boolean} - True if the pointer has moved beyond a predefined threshold, false otherwise.
+     */
+    function pointerMovedEnough(e) {
+        if (start_x == null || start_y == null) return false;
+        const threshold = 10;
+        const dx = e.pageX - start_x;
+        const dy = e.pageY - start_y;
+        return (Math.abs(dx) > threshold || Math.abs(dy) > threshold);
+    } // end pointerMovedEnough()
 
-        if (e.type == "touchmove") {
-            const cur_sel_pos_top = $(this).offset().top - $(window).scrollTop();
-            swiping = swiping || Math.abs(start_sel_pos_top - cur_sel_pos_top) > 0;
+    /**
+     * Continuously called during pointer movement. If multi-selection mode is active, highlights text from 
+     * the starting index to the anchor element currently under the pointer.
+     * @param {Event} e - The pointer event containing movement details.
+     */
+    function highlightCurrent(e) {
+        if (!has_long_pressed || start_index < 0) return;
 
-            if (!swiping) {
-                highlighting = (end_sel_time - start_sel_time) > 1000;
-            }
+        // Determine which anchor we are over
+        const el = document.elementFromPoint(e.clientX, e.clientY);
+        // If the element is text node or something else, climb up to 'a'
+        const $target_anchor = $(el).closest('a');
+        if ($target_anchor.length) {
+            current_index = TextProcessor.getAnchorIndex($target_anchor);
+
+            // First clear existing highlights
+            TextProcessor.removeAllHighlighted();
+
+            // Then highlight from start_index to current_index
+            TextProcessor.addHighlightToSelection(start_index, current_index);
+        }
+    } // end highlightCurrent()
+
+    /**
+     * Finalizes the selection when the pointer is released, if multi-selection mode is active.
+     * Also resets relevant state variables.
+     */
+    function onPointerUp() {
+        if (has_long_pressed && start_index >= 0 && current_index >= 0) {
+            $selword = TextProcessor.getHighlightedTextObj(start_index, current_index);
+            VideoActionBtns.show($selword);
         }
 
-        if (highlighting) {
-            $(".highlighted").removeClass("highlighted"); // remove previous highlighting
+        // Clear state
+        cancelLongPress();
+        has_long_pressed = false;
+        start_index = -1;
+        current_index = -1;
+    } // end onPointerUp()
 
-            $sel_end =
-                e.type === "mouseover" ? $(this) : $(
-                    document.elementFromPoint(
-                        e.originalEvent.touches[0].clientX,
-                        e.originalEvent.touches[0].clientY
-                    )
-                );
+    /**
+     * Handles pointer movement within the container. Cancels the long-press timer if scrolling is detected.
+     * If multi-selection mode is active, updates the highlighted text selection.
+     * @param {Event} e - The pointer event to process.
+     */
+    function onPointerMove(e) {
+        if (pointerMovedEnough(e)) {
+            cancelLongPress();
+        }
+        if (has_long_pressed) {
+            highlightCurrent(e);
+        }
+    } // end onPointerMove()
 
-            // if $sel_start & $sel_end are on the same line, then...
-            if ($sel_start.parent().get(0) === $sel_end.parent().get(0)) {
-                if ($sel_end.isAfter($sel_start)) {
-                    $sel_start
-                        .nextUntil($sel_end.next(), ".word")
-                        .addBack()
-                        .addClass("highlighted");
-                    $selword = $sel_start.nextUntil($sel_end.next()).addBack();
-                } else {
-                    $sel_start
-                        .prevUntil($sel_end.prev(), ".word")
-                        .addBack()
-                        .addClass("highlighted");
-                    $selword = $sel_end.nextUntil($sel_start.next()).addBack();
-                }
-            } else {
-                $sel_end = $selword = $sel_start;
+    /**
+     * Removes selection when user clicks in white-space
+     * @param {Event} e - The pointer event to process.
+     */
+    $doc.on("mouseup touchend", function (e) {
+        let $action_btns = $("#action-buttons");
+
+        // Only proceed if action buttons are visible
+        if ($action_btns.is(':visible')) {
+            let is_word_clicked = $(e.target).is(".word");
+            let is_btn_clicked = $(e.target).closest('.btn').length > 0;
+            let is_navigation = $(e.target).closest('.offcanvas').length > 0;
+            let is_modal = $(e.target).closest('.modal').length > 0;
+
+            // Check if click is not on a word and outside action buttons
+            if (!is_word_clicked && !is_btn_clicked && !is_navigation && !is_modal) {
+                e.stopPropagation();
+                TextProcessor.removeAllHighlighted(); // Remove highlight
+
+                // Hide toolbar and resume audio
+                VideoActionBtns.hide();
+                VideoController.resume();
             }
         }
-    }); // end .word.on.mouseover/touchmove
+    }); // end $document.on.mouseup
+
+    // *************************************************************
+    // **** ACTION BUTTONS (ADD, DELETE, FORGOT & DICTIONARIES) **** 
+    // *************************************************************
 
     /**
      * Adds selected word or phrase to the database and underlines it in the text
      */
-    $("#btn-add, #btn-forgot").on("click", function () {
+    $("#btn-add, #btn-forgot").on("click", function (e) {
         const sel_text = $selword.text();
         const is_phrase = $selword.length > 1 ? 1 : 0;
+
         // add selection to "words" table
         $.ajax({
             type: "POST",
@@ -180,91 +246,84 @@ $(document).ready(function () {
             data: {
                 word: sel_text.toLowerCase(),
                 is_phrase: is_phrase,
-                source_id: null,
-                text_is_shared: null,
-                sentence: getVideoSentence($selword)
+                source_id: $('[data-idtext]').attr('data-idtext'),
+                text_is_shared: true,
+                sentence: SentenceExtractor.fromVideo($selword)
             }
         })
-            .done(function () {
-                // if successful, underline word or phrase
-                if (is_phrase) {
-                    // if it's a phrase
-                    const firstword = $selword.eq(0).text();
-                    const phraseext = $selword.filter(".word").length;
-                    let $filterphrase = $("a.word").filter(function () {
-                        return (
-                            $(this)
-                                .text()
-                                .toLowerCase() === firstword.toLowerCase()
+        .done(function () {
+            // if successful, underline word or phrase
+            if (is_phrase) {
+                // if it's a phrase
+                const firstword = $selword.eq(0).text();
+                const phraseext = $selword.filter(".word").length;
+                let $filterphrase = $("a.word").filter(function () {
+                    return (
+                        $(this)
+                            .text()
+                            .toLowerCase() === firstword.toLowerCase()
+                    );
+                });
+
+                $filterphrase.each(function () {
+                    let lastword = $(this)
+                        .nextAll("a.word")
+                        .slice(0, phraseext - 1)
+                        .last();
+                    let phrase = $(this)
+                        .nextUntil(lastword)
+                        .addBack()
+                        .next("a.word")
+                        .addBack();
+
+                    if (
+                        phrase.text().toLowerCase() ===
+                        sel_text.toLowerCase()
+                    ) {
+                        phrase.wrapAll(
+                            "<a class='word reviewing new'></a>"
                         );
-                    });
 
-                    $filterphrase.each(function () {
-                        let lastword = $(this)
-                            .nextAll("a.word")
-                            .slice(0, phraseext - 1)
-                            .last();
-                        let phrase = $(this)
-                            .nextUntil(lastword)
-                            .addBack()
-                            .next("a.word")
-                            .addBack();
+                        phrase.contents().unwrap();
+                    }
+                });
+            } else {
+                // if it's a word
+                let $filterword = $("a.word").filter(function () {
+                    return (
+                        $(this)
+                            .text()
+                            .toLowerCase() === sel_text.toLowerCase()
+                    );
+                });
 
-                        if (
-                            phrase.text().toLowerCase() ===
-                            sel_text.toLowerCase()
-                        ) {
-                            phrase.wrapAll(
-                                "<a class='word reviewing new'></a>"
-                            );
-
-                            phrase.contents().unwrap();
-                        }
-                    });
-                } else {
-                    // if it's a word
-                    let $filterword = $("a.word").filter(function () {
-                        return (
-                            $(this)
-                                .text()
-                                .toLowerCase() === sel_text.toLowerCase()
+                $filterword.each(function () {
+                    let $word = $(this);
+                    if ($word.is(".new, .learning, .learned, .forgotten")) {
+                        $word.wrap(
+                            "<a class='word reviewing forgotten'></a>"
                         );
-                    });
+                    } else {
+                        $word.wrap(
+                            "<a class='word reviewing new'></a>"
+                        );
+                    }
+                });
 
-                    $filterword.each(function () {
-                        let $word = $(this);
-                        if ($word.is(".new, .learning, .learned, .forgotten")) {
-                            $word.wrap(
-                                "<a class='word reviewing forgotten'></a>"
-                            );
-                        } else {
-                            $word.wrap(
-                                "<a class='word reviewing new'></a>"
-                            );
-                        }
-                    });
+                $filterword.contents().unwrap();
+            }
 
-                    $filterword.contents().unwrap();
-                }
-            })
-            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(
-                    "Oops! There was an error adding this word or phrase to the database."
-                );
-            });
+            TextProcessor.updateAnchorsList();
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(
+                "Oops! There was an error adding this word or phrase to the database."
+            );
+        });
 
-            hideActionButtonsPopUpToolbar();
-            VideoController.resume();
+        VideoActionBtns.hide();
+        VideoController.resume();
     }); // end #btn-add.on.click
-
-    /**
-     * Updates vh value on window resize
-     * Fix for mobile devices where vh includes hidden address bar
-     */
-    $(window).on('resize', function () {
-        vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-    });
 
     /**
      * Remove selected word or phrase from database
@@ -338,6 +397,8 @@ $(document).ready(function () {
 
                             $cur_filter.replaceWith($result.clone());
                         });
+
+                        TextProcessor.updateAnchorsList();
                     })
                     .fail(function (xhr, ajaxOptions, thrownError) {
                         console.log("There was an unexpected error trying to underline words in this text")
@@ -349,9 +410,13 @@ $(document).ready(function () {
                 );
             });
 
-            hideActionButtonsPopUpToolbar();
+            VideoActionBtns.hide();
             VideoController.resume();
     }); // end #btn-remove.on.click
+
+    // *************************************************************
+    // ******************* MAIN MENU BUTTONS ***********************
+    // *************************************************************
 
     /**
      * Finished studying this text. Archives text & saves new status of words/phrases
@@ -455,22 +520,6 @@ $(document).ready(function () {
     } // end #btn-save-offline-video.on.click
 
     /**
-     * Removes selection when user clicks in white-space
-     */
-    $(document).on("mouseup touchend", "#text-container", function(e) {
-        if ($(e.target).is(".word") === false && !$(e.target).closest('#action-buttons').length > 0) {
-            e.stopPropagation();
-
-            let $text_container = $("#text-container");
-
-            highlighting = false;
-            $text_container.find(".highlighted").removeClass("highlighted");
-            hideActionButtonsPopUpToolbar();
-            VideoController.resume();
-        }
-    }); // end $document.on.mouseup
-
-    /**
      * Open video selection dialog
      */
     $("#btn-selvideo").on("click", function (e) {
@@ -537,22 +586,22 @@ $(document).ready(function () {
                     text += line;
                 }
 
-                document.getElementById('text-container').innerHTML = text;
+                document.getElementById('text').innerHTML = text;
 
                 // ajax call to underline text
                 $.ajax({
                     type: "POST",
                     url: "/ajax/getuserwords.php",
-                    data: { txt: $('#text-container').html() },
+                    data: { txt: $('#text').html() },
                     dataType: "json"
                 })
                     .done(function (data) {
-                        $('#text-container').html(TextProcessor.underlineWords(data, doclang, false));
+                        $('#text').html(TextProcessor.underlineWords(data, doclang, false));
+                        TextProcessor.updateAnchorsList();
                     })
                     .fail(function (xhr, ajaxOptions, thrownError) {
                         console.log("There was an unexpected error trying to underline words in this text")
                     }); // end $.ajax    
-                // document.getElementById('text-container').innerText = JSON.stringify(data);
             });
 
             reader.readAsText(file);
@@ -581,6 +630,15 @@ $(document).ready(function () {
     }); // end #btn-fullscreen.on.click
 
     /**
+     * Updates vh value on window resize
+     * Fix for mobile devices where vh includes hidden address bar
+     */
+    $(window).on('resize', function () {
+        vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
+
+    /**
      * Shows dialog message reminding users to save changes before leaving
      */
     $(window).on("beforeunload", function () {
@@ -589,30 +647,5 @@ $(document).ready(function () {
                 + "be lost. Are you sure you want to exit this page?";
         }
     }); // end window.on.beforeunload
-    
-    /**
-     * Shows dictionary when user clicks a word
-     * All words are enclosed in a.word tags
-     */
-    function showActionButtonsPopUpToolbar() {
-        $("#text-container").disableScroll();
-        setWordActionButtons($selword, false);
 
-        const base_uris = {
-            dictionary: dictionary_URI,
-            img_dictionary: img_dictionary_URI,
-            translator: translator_URI
-        };
-
-        setDicActionButtonsClick($selword, base_uris, 'video');
-        showActionButtons($selword);
-    } // end showActionButtonsPopUpToolbar
-
-    /**
-     * Hides actions pop up toolbar
-     */
-    function hideActionButtonsPopUpToolbar() {
-        $("#text-container").enableScroll();
-        hideActionButtons();
-    } // end hideActionButtonsPopUpToolbar
 });
