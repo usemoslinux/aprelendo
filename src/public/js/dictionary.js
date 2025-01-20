@@ -67,127 +67,58 @@ const Dictionaries = (() => {
 
 const SentenceExtractor = (() => {
     /**
-     * Gets sentence where selected word is included
-     * Used for texts, ebooks (not YT videos & offline videos)
-     * @param {jQuery} $selword - The element selected by user
-     * @returns {string} The complete example sentence
-     */
-    const fromText = ($selword) => {
-        let $start_obj = $selword.prevUntil(":contains('.'), :contains('!'), :contains('?'), :contains('\n')").last();
-        $start_obj = $start_obj.length > 0 ? $start_obj : $selword;
+   * Extracts the sentence to which a specific <a> element belongs.
+   * @param {Jquery Object} $selword - The index of the <a> element.
+   * @returns {string} - The full sentence containing the selected <a> element.
+   */
+    function extractSentence($selword) {
+        // Define sentence delimiters for Western and Eastern languages
+        // Western sentence delimiters include . (period), ! (exclamation mark), and ? (question mark).
+        // Eastern sentence delimiters include 。 (Chinese/Japanese period), ！ (Chinese/Japanese exclamation mark), 
+        // and ？ (Chinese/Japanese question mark).
+        const sentence_delimeters = /[.!?\u3002\uFF01\uFF1F]/;
 
-        let $end_obj = $selword.prev().length == 0
-            ? $selword
-                .nextUntil(":contains('.'), :contains('。'), :contains('!'), :contains('?'), :contains('\n')")
-                .last()
-                .next()
-            : $selword
-                .prev()
-                .nextUntil(":contains('.'), :contains('。'), :contains('!'), :contains('?'), :contains('\n')")
-                .last()
-                .next();
-        $end_obj =
-            $end_obj.length > 0 ? $end_obj : $selword.nextAll().last().next();
+        const $all_anchors = TextProcessor.getAnchorsList();
+        const sel_index = TextProcessor.getAnchorIndex($selword);
 
-        let end_obj_length = $end_obj.text().length;
-
-        let $sentence_obj = $start_obj
-            .nextUntil($end_obj)
-            .addBack()
-            .next()
-            .addBack();
-        let sentence = $sentence_obj.text().replace(/(\r\n|\n|\r)/gm, " ");
-        if (end_obj_length > 1) {
-            sentence.slice(0, -end_obj_length + 1);
+        // Ensure the index is within bounds
+        if (sel_index < 0 || sel_index >= $all_anchors.length) {
+            console.error("Index out of range");
+            return "";
         }
 
-        return sentence.replace(/\s+/g, " ").trim();
-    } // end fromText
-
-    /**
-     * Gets sentence where selected word is included
-     * Used only for YT videos and offline videos
-     * @param {jQuery} $selword - The element selected by user
-     * @returns {string} The complete translator link
-     */
-    const fromVideo = ($selword) => {
-        let $start_obj;
-        let $end_obj = $selword;
-        let $sentence_obj = $();
-        let sentence = '';
-        let final_iteration = false;
-        const sentence_dividers = ":contains('.'), :contains('。'), :contains('!'), :contains('?')";
-
-        // select first part of sentence: from sentence divider (.!?) to selection
-        while (!final_iteration) {
-            if ($end_obj.index() === 0) {
-                sentence = $end_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
+        // Crawl backward to find the start of the sentence
+        let start_index = sel_index;
+        while (start_index > 0) {
+            const prev_element_text = $($all_anchors[start_index - 1]).text();
+            if (sentence_delimeters.test(prev_element_text)) {
                 break;
             }
+            start_index--;
+        }
 
-            if ($end_obj.filter(sentence_dividers).length > 0) {
+        // Crawl forward to find the end of the sentence
+        let end_index = sel_index;
+        while (end_index < $all_anchors.length - 1) {
+            const next_element_text = $($all_anchors[end_index + 1]).text();
+            if (sentence_delimeters.test(next_element_text)) {
+                end_index++; // Include the delimiter in the result
                 break;
             }
-
-            $start_obj = $end_obj
-                .prevAll(sentence_dividers)
-                .next()
-                .last();
-
-            final_iteration = $start_obj.length > 0 || $end_obj.filter(sentence_dividers).length > 0;
-            $start_obj = final_iteration ? $start_obj : $end_obj.siblings().addBack().first();
-
-            $sentence_obj = $start_obj
-                .nextUntil($end_obj)
-                .addBack()
-                .next()
-                .addBack();
-
-            sentence = $sentence_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim() + "\n" + sentence;
-
-            $end_obj = $end_obj.parent().prev().children().last();
-            final_iteration = final_iteration || $end_obj.length === 0;
+            end_index++;
         }
 
-        // select second part of sentence: from selection to sentence divider
-        $start_obj = $selword.next().length === 0 ? $selword : $selword.next();
-        let regex = /[.。!?]/g;
-        let separator;
-        let matches = sentence.match(regex);
-        final_iteration = matches;
-        while (!final_iteration) {
-            $end_obj = $start_obj
-                .nextAll(sentence_dividers)
-                .first()
-
-            $end_obj = $end_obj.index() === $end_obj.parent().children().length ? $start_obj : $end_obj;
-            final_iteration = $end_obj.length > 0 || $start_obj.filter(sentence_dividers).length > 0;
-            $end_obj = final_iteration ? $end_obj : $start_obj.siblings().last();
-
-            if ($start_obj.filter(sentence_dividers).length > 0) {
-                $sentence_obj = $start_obj;
-                separator = "";
-            } else {
-                $sentence_obj = $start_obj
-                    .nextUntil($end_obj)
-                    .addBack()
-                    .next()
-                    .addBack();
-                separator = "\n";
-            }
-
-            sentence = sentence.trim() + separator + $sentence_obj.text().replace(/(\r\n|\n|\r)/gm, " ").trim();
-
-            $start_obj = $start_obj.parent().next().children().first();
-            final_iteration = final_iteration || $start_obj.length === 0;
+        // Combine the sentence elements
+        let sentence = "";
+        for (let i = start_index; i <= end_index; i++) {
+            sentence += $($all_anchors[i]).text();
         }
 
-        return sentence.replace(/\s+/g, " ").trim();
-    } // end getVideoSentence
+        return sentence.replace(/(\r\n|\n|\r)/g, " ").trim();
+    }
 
     return {
-        fromText,
-        fromVideo
+        extractSentence
     };
 })();
 
@@ -199,7 +130,6 @@ const LinkBuilder = (() => {
      * @returns string
      */
     const forWordInDictionary = (dictionary_URI, sel_word) => {
-        
         const word = sel_word.replace(/\s+/g, " ").trim();
         return dictionary_URI.replace("%s", encodeURIComponent(word));
     } // end LinkBuilder.forWordInDictionary
@@ -212,7 +142,7 @@ const LinkBuilder = (() => {
      * @returns {string} The complete translator link
      */
     const forTranslationInText = (translator_URI, $selword) => {
-        let sentence = SentenceExtractor.fromText($selword);
+        let sentence = SentenceExtractor.extractSentence($selword);
 
         return translator_URI.replace("%s", encodeURI(sentence));
     } // end forTranslationInText
@@ -225,7 +155,7 @@ const LinkBuilder = (() => {
      * @returns {string} The complete translator link
      */
     const forTranslationInVideo = (translator_URI, $selword) => {
-        let sentence = SentenceExtractor.fromVideo($selword);
+        let sentence = SentenceExtractor.extractSentence($selword);
 
         return translator_URI.replace("%s", encodeURIComponent(sentence));
     } // end forTranslationInVideo

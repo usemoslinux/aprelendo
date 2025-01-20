@@ -113,6 +113,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     background-image: url("../img/logo_long.png");
     background-repeat: no-repeat;
     background-size: cover;
+    filter: drop-shadow(0 2px 2px rgb(0, 0, 0));
     margin-left: 15px !important;
     width: 189px;
     height: 48px;

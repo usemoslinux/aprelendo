@@ -175,6 +175,7 @@ function toggleDictation() {
             });
 
             $("#text").replaceWith($container);
+            TextProcessor.updateAnchorsList();
 
             scrollToPageTop();
             AudioController.stop();

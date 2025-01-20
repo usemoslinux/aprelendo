@@ -146,7 +146,7 @@ class Reader
             $start = (string)$xml->e[$i]->start;
             $dur = (string)$xml->e[$i]->duration;
             $text = html_entity_decode((string)$xml->e[$i]->text, ENT_QUOTES | ENT_XML1, 'UTF-8');
-            $html .= "<div data-start='$start' data-dur='$dur' >". $text .'</div>';
+            $html .= "<span data-start='$start' data-dur='$dur' >". $text .'</span>' . PHP_EOL;
         }
         
         $html .= '</div></div>';
@@ -174,7 +174,7 @@ class Reader
                         '</video>' .
                 '</div>';
 
-        $html .= '<div id="text-container" class="overflow-auto my-1 z-1" style="'
+        $html .= '<div id="text-container" class="overflow-auto text-center my-1 z-1" style="'
             . $reader_css
             . '"><div id="text"></div></div>';
         return $html;

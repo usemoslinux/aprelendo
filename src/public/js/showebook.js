@@ -282,7 +282,7 @@ $(document).ready(function() {
                     dataType: "json"
                 })
                     .done(function (data) {
-                        text_html = TextProcessor.underlineWords(data, doclang, false);
+                        text_html = TextUnderliner.apply(data, doclang, false);
                         text.innerHTML = text_html;
                         TextProcessor.updateAnchorsList();
                         $("#text-container").fadeIn(300);

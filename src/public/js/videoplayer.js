@@ -57,7 +57,7 @@ const VideoController = (() => {
 
         const playbackProgressUpdate = () => {
             const video_time = document.getElementById('videoplayer').currentTime * 1000;
-            const objs = document.querySelectorAll("#text-container .text-center");
+            const objs = document.querySelectorAll("#text span");
             let next_obj = null;
 
             // Loop through elements to find the last one that meets the condition

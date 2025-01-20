@@ -57,7 +57,7 @@ $(document).ready(function () {
             dataType: "json"
         })
         .done(function (data) {
-            $('#text').html(TextProcessor.underlineWords(data, doclang, false));
+            $('#text').html(TextUnderliner.apply(data, doclang, false));
             TextProcessor.updateAnchorsList();
         })
         .fail(function (xhr, ajaxOptions, thrownError) {
@@ -84,7 +84,7 @@ $(document).ready(function () {
     $doc.on('click', '#text .word', function (e) {
         if (!has_long_pressed) {
             $selword = $(this);
-            TextProcessor.removeAllHighlighted();
+            TextHighlighter.removeAll();
             $selword.addClass('highlighted');
             VideoActionBtns.hide();
             VideoController.pause(true);
@@ -186,10 +186,10 @@ $(document).ready(function () {
             current_index = TextProcessor.getAnchorIndex($target_anchor);
 
             // First clear existing highlights
-            TextProcessor.removeAllHighlighted();
+            TextHighlighter.removeAll();
 
             // Then highlight from start_index to current_index
-            TextProcessor.addHighlightToSelection(start_index, current_index);
+            TextHighlighter.addSelection(start_index, current_index);
         }
     } // end highlightCurrent()
 
@@ -199,8 +199,13 @@ $(document).ready(function () {
      */
     function onPointerUp() {
         if (has_long_pressed && start_index >= 0 && current_index >= 0) {
-            $selword = TextProcessor.getHighlightedTextObj(start_index, current_index);
-            VideoActionBtns.show($selword);
+            const start_obj_parent = TextProcessor.getAnchorsList().eq(start_index).parent()[0];
+            const current_obj_parent = TextProcessor.getAnchorsList().eq(current_index).parent()[0];
+
+            if (start_obj_parent === current_obj_parent) {
+                $selword = TextHighlighter.getSelection(start_index, current_index);
+                VideoActionBtns.show($selword);
+            }
         }
 
         // Clear state
@@ -241,7 +246,7 @@ $(document).ready(function () {
             // Check if click is not on a word and outside action buttons
             if (!is_word_clicked && !is_btn_clicked && !is_navigation && !is_modal) {
                 e.stopPropagation();
-                TextProcessor.removeAllHighlighted(); // Remove highlight
+                TextHighlighter.removeAll(); // Remove highlight
 
                 // Hide toolbar and resume audio
                 VideoActionBtns.hide();
@@ -270,7 +275,7 @@ $(document).ready(function () {
                 is_phrase: is_phrase,
                 source_id: $('[data-idtext]').attr('data-idtext'),
                 text_is_shared: true,
-                sentence: SentenceExtractor.fromVideo($selword)
+                sentence: SentenceExtractor.extractSentence($selword)
             }
         })
         .done(function () {
@@ -379,7 +384,7 @@ $(document).ready(function () {
                     // also, the case of the word/phrase in the text has to be respected
                     // for phrases, we need to make sure that new underlining is added for each word
 
-                    let $result = $(TextProcessor.underlineWords(data, doclang, false));
+                    let $result = $(TextUnderliner.apply(data, doclang, false));
                     let $cur_filter = {};
                     let cur_word = /""/;
 

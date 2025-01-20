@@ -58,19 +58,18 @@ window.onYouTubeIframeAPIReady = function () {
 };
 
 function onPlayerStateChange(event) {
-    const text_container = document.getElementById("text-container");
-    const text_divs = Array.from(text_container.getElementsByTagName("div"));
+    const objs = Array.from(document.querySelectorAll("#text span"));
     let current_video_time = 0;
 
     const updateTime = (interval) => {
         return setInterval(() => {
             current_video_time = VideoController.instance.getCurrentTime();
-            const next_obj = text_divs
+            const next_obj = objs
                 .filter(div => parseFloat(div.dataset.start) < current_video_time)
                 .slice(-1)[0];
 
             if (next_obj && !next_obj.classList.contains("video-reading-line")) {
-                text_divs.forEach(div => div.classList.remove("video-reading-line"));
+                objs.forEach(div => div.classList.remove("video-reading-line"));
                 next_obj.classList.add("video-reading-line");
                 next_obj.scrollIntoView({
                     behavior: 'auto',

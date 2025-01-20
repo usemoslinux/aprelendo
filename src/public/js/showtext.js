@@ -32,13 +32,12 @@ $(document).ready(function() {
     // HTML selectors
     const doclang = $("html").attr("lang");
     const $doc = $(parent.document);
-    const $text_container = $doc.find('#text');
     
     // configuration to show confirmation dialog on close
     window.parent.show_confirmation_dialog = true;
 
     // initial AJAX calls
-    // loadAudio();
+    loadAudio();
     underlineText(); // underline text with user words/phrases
     Dictionaries.fetchURIs(); // get dictionary & translator URIs
 
@@ -55,7 +54,7 @@ $(document).ready(function() {
                 dataType: "json"
             })
             .done(function(data) {
-                $('#text').html(TextProcessor.underlineWords(data, doclang, false));
+                $('#text').html(TextUnderliner.apply(data, doclang, false));
                 TextProcessor.updateAnchorsList();
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
@@ -85,7 +84,7 @@ $(document).ready(function() {
     $doc.on('click', '#text .word', function (e) {
         if (!has_long_pressed) {
             $selword = $(this);
-            TextProcessor.removeAllHighlighted();
+            TextHighlighter.removeAll();
             $selword.addClass('highlighted');
             TextActionBtns.hide();
             AudioController.pause(true);
@@ -187,10 +186,10 @@ $(document).ready(function() {
             current_index = TextProcessor.getAnchorIndex($target_anchor);
 
             // First clear existing highlights
-            TextProcessor.removeAllHighlighted();
+            TextHighlighter.removeAll();
 
             // Then highlight from start_index to current_index
-            TextProcessor.addHighlightToSelection(start_index, current_index);
+            TextHighlighter.addSelection(start_index, current_index);
         }
     } // end highlightCurrent()
 
@@ -200,8 +199,13 @@ $(document).ready(function() {
      */
     function onPointerUp() {
         if (has_long_pressed && start_index >= 0 && current_index >= 0) {
-            $selword = TextProcessor.getHighlightedTextObj(start_index, current_index);
-            TextActionBtns.show($selword);
+            const start_obj_parent = TextProcessor.getAnchorsList().eq(start_index).parent()[0];
+            const current_obj_parent = TextProcessor.getAnchorsList().eq(current_index).parent()[0];
+
+            if (start_obj_parent === current_obj_parent) {
+                $selword = TextHighlighter.getSelection(start_index, current_index);
+                TextActionBtns.show($selword);
+            }
         }
 
         // Clear state
@@ -242,7 +246,7 @@ $(document).ready(function() {
             // Check if click is not on a word and outside action buttons
             if (!is_word_clicked && !is_btn_clicked && !is_navigation && !is_modal) {
                 e.stopPropagation();
-                TextProcessor.removeAllHighlighted(); // Remove highlight
+                TextHighlighter.removeAll(); // Remove highlight
 
                 // Hide toolbar and resume audio
                 TextActionBtns.hide();
@@ -275,7 +279,7 @@ $(document).ready(function() {
                 is_phrase: is_phrase,
                 source_id: $('[data-idtext]').attr('data-idtext'),
                 text_is_shared: text_is_shared,
-                sentence: SentenceExtractor.fromText($selword)
+                sentence: SentenceExtractor.extractSentence($selword)
             }
         })
             .done(function() {
@@ -291,7 +295,7 @@ $(document).ready(function() {
                     const word_count = $selword.filter(".word").length;
 
                     // build filter based on first word of the phrase
-                    let $filterphrase = $text_container
+                    let $filterphrase = TextProcessor.getTextContainer()
                         .find("a.word")
                         .filter(function() {
                             return (
@@ -332,7 +336,7 @@ $(document).ready(function() {
                 } else {
                     // if it's a word
                     // build filter with all the instances of the word in the text
-                    let $filterword = $text_container
+                    let $filterword = TextProcessor.getTextContainer()
                         .find("a.word")
                         .filter(function() {
                             return (
@@ -400,7 +404,7 @@ $(document).ready(function() {
             }
         })
             .done(function() {
-                let $filter = $text_container
+                let $filter = TextProcessor.getTextContainer()
                     .find("a.word")
                     .filter(function() {
                         return (
@@ -423,7 +427,7 @@ $(document).ready(function() {
                     // for phrases, we need to make sure that new underlining is added for each word
                     const there_is_audio = $("#audioplayer")[0]?.readyState > 0;
                     const hide_elem = there_is_audio > 0 && next_phase == 5;
-                    let $result = $(TextProcessor.underlineWords(data, doclang, hide_elem));                    
+                    let $result = $(TextUnderliner.apply(data, doclang, hide_elem));                    
                     let $cur_filter = {};
                     let cur_word = /""/;
 
