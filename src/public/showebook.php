@@ -28,7 +28,6 @@ use Aprelendo\AudioPlayerForEbooks;
 use Aprelendo\UserException;
 
 $class = '';
-$styles = [];
 $doclang = $user->lang;
 
 try {
@@ -60,10 +59,10 @@ try {
                 break;
         }
 
-        $styles['font-family'] = $prefs->font_family;
-        $styles['font-size'] = $prefs->font_size;
-        $styles['text-align'] = $prefs->text_alignment;
-        $styles['line-height'] = $prefs->line_height;
+        $font_family = $prefs->font_family;
+        $font_size = $prefs->font_size;
+        $text_align = $prefs->text_alignment;
+        $reader_css = "font-family:$font_family;font-size:$font_size;text-align:$text_align;";
     } else {
         throw new UserException('Oops! There was an unexpected error trying to fetch that ebook.');
     }
@@ -212,7 +211,7 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
                 </button>
             </span>
         </div>
-        <div id="text-container" class="py-0 px-5">
+        <div id="text-container" class="py-0 px-5" style="<? echo $reader_css; ?>">
             <div class="navlink">
                 <a id="prev" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                     data-bs-placement="bottom" href="#prev"></a>
@@ -235,11 +234,13 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
         }
     ?>
 
-    <script defer src="/js/underlinewords.js"></script>
-    <script defer src="/js/showtext.js"></script>
+    <script defer src="/js/showtext.min.js"></script>
+    <script defer src="/js/underlinewords.min.js"></script>
+    <script defer src="/js/wordselection.min.js"></script>
+    <script defer src="/js/actionbtns.min.js"></script>
     <script defer src="/js/showebook.min.js"></script>
     <script defer src="/js/audioplayer.min.js"></script>
-    <script defer src="/js/dictionary.min.js"></script>
+    <script defer src="/js/dictionaries.min.js"></script>
     <script defer src="/js/helpers.min.js"></script>
     <script defer src="/js/tooltips.min.js"></script>
 </body>

@@ -131,7 +131,10 @@ require_once PUBLIC_PATH . 'header.php';
 ?>
 
 <script defer src="/js/study.min.js"></script>
-<script defer src="/js/dictionary.js"></script>
+<script defer src="/js/underlinewords.min.js"></script>
+<script defer src="/js/wordselection.min.js"></script>
+<script defer src="/js/actionbtns.min.js"></script>
+<script defer src="/js/dictionaries.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 <script defer src="/js/tooltips.min.js"></script>
 

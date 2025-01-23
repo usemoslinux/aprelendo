@@ -413,16 +413,24 @@ $(document).ready(function() {
 
     function updateToc(current_chapter_url) {
         let $nav = document.getElementById('toc');
-        let $selector = $nav.querySelector('.fw-bold');
+        let $bold_elements_in_nav = $nav.querySelector('.fw-bold');;
         let $title = document.getElementById('book-title-chapter');
 
-        if ($selector !== null) {
-            $selector.classList.remove('fw-bold', 'text-primary');
+        // Remove existing bold/text-primary classes if present
+        if ($bold_elements_in_nav) {
+            $bold_elements_in_nav.classList.remove('fw-bold', 'text-primary');
         }
 
-        $selector = $nav.querySelector('a[href*="' + current_chapter_url + '"]');
-        
-        if ($selector !== null) {
+        // Determine the proper link selector
+        // If it's the first chapter, grab the first link; otherwise, do an exact match
+        if (current_chapter_url === 1) {
+            $selector = $nav.querySelector('a');
+        } else {
+            $selector = $nav.querySelector(`a[href="${current_chapter_url}"]`);
+        }
+
+        // Apply classes and update the title if the link was found
+        if ($selector) {
             $selector.classList.add('fw-bold', 'text-primary');
             $title.textContent = ' - ' + $selector.textContent;
         }

@@ -18,14 +18,6 @@
  */
 
 $(document).ready(function () {
-    // word selection variables
-    let long_press_timer;
-    let has_long_pressed = false;
-    let start_x, start_y;
-    let start_index = -1;
-    let current_index = -1;
-    let $selword = null; // jQuery object with selected word/phrase
-
     let gems_earned = 0;
     
     // HTML selectors
@@ -48,190 +40,11 @@ $(document).ready(function () {
     // ******************* WORD/PHRASE SELECTION ******************* 
     // *************************************************************
 
-    /**
-     * Disables right click context menu
-     */
-    $doc.on("contextmenu",function(e){
-        e.preventDefault();
-        return false;
-     }); // end document.contextmenu
-
-    /**
-     * On word click, assume single word selection
-     */
-    $doc.on('click', '#text .word', function (e) {
-        if (!has_long_pressed) {
-            $selword = $(this);
-            TextHighlighter.removeAll();
-            $selword.addClass('highlighted');
-            VideoActionBtns.hide();
-            VideoController.pause(true);
-            VideoActionBtns.show($selword);
-        }
+    WordSelection.setupEvents({
+        actionBtns: VideoActionBtns,
+        controller: VideoController,
+        linkBuilder: LinkBuilder.forTranslationInVideo
     });
-
-    /**
-     * On word mouse/touch down, potential start of selection
-     */
-    $doc.on('mousedown touchstart', '#text .word', function (e) {
-        start_index = TextProcessor.getAnchorIndex($(this));
-    });
-
-    // Bind container mouse word selection events
-
-    $doc.on('mousedown', '#text', function (e) {
-        // only if selection starts with left mouse button
-        if (e.originalEvent.which < 2) {
-            startLongPress(e);
-        } else if (e.originalEvent.which == 3) { // right click, open translator
-            VideoController.pause(false);
-            $selword = $(e.target);
-            const base_uris = Dictionaries.getURIs();
-            openInNewTab(LinkBuilder.forTranslationInVideo(base_uris.translator, $selword));
-        }
-    });
-    $doc.on('mousemove', '#text', function (e) {
-        onPointerMove(e);
-    });
-    $doc.on('mouseup', '#text', function (e) {
-        onPointerUp();
-    });
-
-    // Bind container touch word selection events
-
-    $doc.on('touchstart', '#text', function (e) {
-        const touch = e.originalEvent.touches[0];
-        startLongPress(touch);
-    });
-    $doc.on('touchmove', '#text', function (e) {
-        const touch = e.originalEvent.touches[0];
-        onPointerMove(touch);
-    });
-    $doc.on('touchend', '#text', function (e) {
-        onPointerUp();
-    });
-
-    /**
-     * Starts the long-press timer. If the timer completes without interruption, the multi-selection mode is activated.
-     * @param {Event} e - The pointer event that triggered the long-press action.
-     */
-    function startLongPress(e) {
-        has_long_pressed = false;
-        start_x = e.pageX;
-        start_y = e.pageY;
-
-        long_press_timer = setTimeout(function () {
-            has_long_pressed = true;
-            VideoController.pause(true);
-        }, 500);
-    } // end startLongPress()
-
-    /**
-     * Cancels the long-press timer and resets relevant state variables.
-     */
-    function cancelLongPress() {
-        clearTimeout(long_press_timer);
-        start_x = null;
-        start_y = null;
-    } // end cancelLongPress()
-
-    /**
-     * Checks whether the pointer has moved significantly enough to be considered scrolling rather than pressing.
-     * @param {Event} e - The pointer event to evaluate.
-     * @returns {boolean} - True if the pointer has moved beyond a predefined threshold, false otherwise.
-     */
-    function pointerMovedEnough(e) {
-        if (start_x == null || start_y == null) return false;
-        const threshold = 10;
-        const dx = e.pageX - start_x;
-        const dy = e.pageY - start_y;
-        return (Math.abs(dx) > threshold || Math.abs(dy) > threshold);
-    } // end pointerMovedEnough()
-
-    /**
-     * Continuously called during pointer movement. If multi-selection mode is active, highlights text from 
-     * the starting index to the anchor element currently under the pointer.
-     * @param {Event} e - The pointer event containing movement details.
-     */
-    function highlightCurrent(e) {
-        if (!has_long_pressed || start_index < 0) return;
-
-        // Determine which anchor we are over
-        const el = document.elementFromPoint(e.clientX, e.clientY);
-        // If the element is text node or something else, climb up to 'a'
-        const $target_anchor = $(el).closest('a');
-        if ($target_anchor.length) {
-            current_index = TextProcessor.getAnchorIndex($target_anchor);
-
-            // First clear existing highlights
-            TextHighlighter.removeAll();
-
-            // Then highlight from start_index to current_index
-            TextHighlighter.addSelection(start_index, current_index);
-        }
-    } // end highlightCurrent()
-
-    /**
-     * Finalizes the selection when the pointer is released, if multi-selection mode is active.
-     * Also resets relevant state variables.
-     */
-    function onPointerUp() {
-        if (has_long_pressed && start_index >= 0 && current_index >= 0) {
-            const start_obj_parent = TextProcessor.getAnchorsList().eq(start_index).parent()[0];
-            const current_obj_parent = TextProcessor.getAnchorsList().eq(current_index).parent()[0];
-
-            if (start_obj_parent === current_obj_parent) {
-                $selword = TextHighlighter.getSelection(start_index, current_index);
-                VideoActionBtns.show($selword);
-            }
-        }
-
-        // Clear state
-        cancelLongPress();
-        has_long_pressed = false;
-        start_index = -1;
-        current_index = -1;
-    } // end onPointerUp()
-
-    /**
-     * Handles pointer movement within the container. Cancels the long-press timer if scrolling is detected.
-     * If multi-selection mode is active, updates the highlighted text selection.
-     * @param {Event} e - The pointer event to process.
-     */
-    function onPointerMove(e) {
-        if (pointerMovedEnough(e)) {
-            cancelLongPress();
-        }
-        if (has_long_pressed) {
-            highlightCurrent(e);
-        }
-    } // end onPointerMove()
-
-    /**
-     * Removes selection when user clicks in white-space
-     * @param {Event} e - The pointer event to process.
-     */
-    $doc.on("mouseup touchend", function (e) {
-        let $action_btns = $("#action-buttons");
-
-        // Only proceed if action buttons are visible
-        if ($action_btns.is(':visible')) {
-            let is_word_clicked = $(e.target).is(".word");
-            let is_btn_clicked = $(e.target).closest('.btn').length > 0;
-            let is_navigation = $(e.target).closest('.offcanvas').length > 0;
-            let is_modal = $(e.target).closest('.modal').length > 0;
-
-            // Check if click is not on a word and outside action buttons
-            if (!is_word_clicked && !is_btn_clicked && !is_navigation && !is_modal) {
-                e.stopPropagation();
-                TextHighlighter.removeAll(); // Remove highlight
-
-                // Hide toolbar and resume audio
-                VideoActionBtns.hide();
-                VideoController.resume();
-            }
-        }
-    }); // end $document.on.mouseup
 
     // *************************************************************
     // **** ACTION BUTTONS (ADD, DELETE, FORGOT & DICTIONARIES) **** 
@@ -241,6 +54,7 @@ $(document).ready(function () {
      * Adds selected word or phrase to the database and underlines it in the text
      */
     $("#btn-add, #btn-forgot").on("click", function (e) {
+        const $selword = WordSelection.get();
         const sel_text = $selword.text();
         const is_phrase = $selword.length > 1 ? 1 : 0;
 
@@ -334,6 +148,8 @@ $(document).ready(function () {
      * Remove selected word or phrase from database
      */
     $("#btn-remove").on("click", function () {
+        const $selword = WordSelection.get();
+        
         $.ajax({
             type: "POST",
             url: "ajax/removeword.php",
@@ -652,5 +468,4 @@ $(document).ready(function () {
                 + "be lost. Are you sure you want to exit this page?";
         }
     }); // end window.on.beforeunload
-
 });

@@ -154,12 +154,14 @@ require_once PUBLIC_PATH . 'head.php';
         }
     ?>
 
-    <script defer src="/js/underlinewords.js"></script>
-    <script defer src="/js/showtext.js"></script>
-    <script defer src="/js/dictation.js"></script>
+    <script defer src="/js/showtext.min.js"></script>
+    <script defer src="/js/underlinewords.min.js"></script>
+    <script defer src="/js/wordselection.min.js"></script>
+    <script defer src="/js/actionbtns.min.js"></script>
+    <script defer src="/js/dictation.min.js"></script>
     <script defer src="/js/audioplayer.min.js"></script>
     <script defer src="/js/likes.min.js"></script>
-    <script defer src="/js/dictionary.js"></script>
+    <script defer src="/js/dictionaries.min.js"></script>
     <script defer src="/js/helpers.min.js"></script>
     <script defer src="/js/tooltips.min.js"></script>
 </body>
