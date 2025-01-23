@@ -22,7 +22,6 @@ $(document).ready(function () {
     
     // HTML selectors
     const doclang = $("html").attr("lang");
-    const $doc = $(parent.document);
 
     // configuration to show confirmation dialog on close
     let show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data

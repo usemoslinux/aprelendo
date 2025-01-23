@@ -22,7 +22,6 @@ $(document).ready(function () {
     
     // HTML selectors
     const doclang = $("html").attr("lang");
-    const $doc = $(parent.document);
     const player = document.querySelector('video');
     
     // configuration to show confirmation dialog on close

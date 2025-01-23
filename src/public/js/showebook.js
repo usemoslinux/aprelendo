@@ -415,6 +415,7 @@ $(document).ready(function() {
         let $nav = document.getElementById('toc');
         let $bold_elements_in_nav = $nav.querySelector('.fw-bold');;
         let $title = document.getElementById('book-title-chapter');
+        let $selector;
 
         // Remove existing bold/text-primary classes if present
         if ($bold_elements_in_nav) {

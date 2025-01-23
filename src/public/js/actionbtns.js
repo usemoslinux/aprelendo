@@ -224,9 +224,3 @@ const StudyActionBtns = (() => {
         hide
     };
 })();
-
-// TODO completar esto. Se usaria en wordlist y tal vez en algun lugar mas. Al finalizar el study?
-const OtherActionBtns = (() => {
-    return {
-    };
-})();
