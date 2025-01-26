@@ -61,17 +61,22 @@ class AudioPlayerForTexts extends AudioPlayer
                         <i id="ap-play-btn-icon" class="bi bi-play-fill"></i>
                     </button>
 
-                    <div id="ap-time-stamp" class="d-none d-sm-block ms-3">
-                    00:00 / 00:00
+                    <div class="flex-grow-1 px-1">
+                        <div id="ap-progress-bar-container" class="progress flex-grow-1 border border-secondary">
+                            <div id="ap-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"
+                                role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between small">
+                            <div id="ap-elapsedtime-stamp" class="small">
+                            00:00
+                            </div>
+                            <div id="ap-totaltime-stamp" class="small">
+                            00:00
+                            </div>
+                        </div>
                     </div>
 
-                    <div id="ap-progress-bar-container" class="progress flex-grow-1 mx-3 border border-secondary"
-                        data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip">
-                        <div id="ap-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"
-                            role="progressbar" style="width: 0%"></div>
-                    </div>
-
-                    <div class="dropdown me-3">
+                    <div class="dropdown me-1">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="ap-speed-menu"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-speedometer"></i>

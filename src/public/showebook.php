@@ -210,7 +210,7 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
                 </button>
             </span>
         </div>
-        <div id="text-container" class="py-0 px-5" style="<? echo $reader_css; ?>">
+        <div id="text-container" class="py-0 px-5" style="<?php echo $reader_css; ?>">
             <div class="navlink">
                 <a id="prev" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                     data-bs-placement="bottom" href="#prev"></a>
