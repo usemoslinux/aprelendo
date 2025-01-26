@@ -146,7 +146,6 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
 </head>
 
 <body id="readerpage" <?php echo ' class="'. $class . '"' ?>>
-
     <div class="offcanvas offcanvas-start <?php echo $class == 'darkmode' ? 'text-bg-dark' : ''; ?>"
         data-bs-scroll="true" tabindex="-1" id="navigation" aria-labelledby="navigation-title">
         <div class="offcanvas-header">

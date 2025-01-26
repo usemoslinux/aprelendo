@@ -46,13 +46,20 @@ class AudioPlayerForEbooks extends AudioPlayer
                         <i id="ap-play-btn-icon" class="bi bi-play-fill"></i>
                     </button>
 
-                    <div id="ap-time-stamp" class="mx-3">
-                    00:00 / 00:00
-                    </div>
+                    <div class="flex-grow-1 px-1">
+                        <div id="ap-progress-bar-container" class="progress flex-grow-1 border border-secondary">
+                            <div id="ap-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"
+                                role="progressbar" style="width: 0%"></div>
+                        </div>
 
-                    <div id="ap-progress-bar-container" class="progress flex-grow-1 me-3 border border-secondary">
-                        <div id="ap-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"
-                            role="progressbar" style="width: 0%"></div>
+                        <div class="d-flex justify-content-between">
+                            <div id="ap-elapsedtime-stamp" class="small">
+                            00:00
+                            </div>
+                            <div id="ap-totaltime-stamp" class="small">
+                            00:00
+                            </div>
+                        </div>
                     </div>
 
                     <div class="dropdown">

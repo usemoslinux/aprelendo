@@ -24,7 +24,8 @@ const AudioController = (() => {
     const play_pause_btn_icon = document.getElementById('ap-play-btn-icon');
     const progress_bar = document.getElementById('ap-progress-bar');
     const progress_bar_container = document.getElementById('ap-progress-bar-container');
-    const time_stamp = document.getElementById('ap-time-stamp');
+    const elapsed_time_stamp = document.getElementById('ap-elapsedtime-stamp');
+    const total_time_stamp = document.getElementById('ap-totaltime-stamp');
     const speed_menu_items = document.querySelectorAll('#ap-speed-menu .dropdown-item');
     const ab_loop_btn = document.getElementById("ap-abloop-btn");
 
@@ -93,7 +94,8 @@ const AudioController = (() => {
             let durationTimeDisplay = durationHours > 0 ? `${durationHours}:` : '';
             durationTimeDisplay += `${durationMinutes < 10 ? '0' : ''}${durationMinutes}:${durationSeconds < 10 ? '0' : ''}${durationSeconds}`;
 
-            time_stamp.textContent = `${currentTimeDisplay} / ${durationTimeDisplay}`;
+            elapsed_time_stamp.textContent = currentTimeDisplay;
+            total_time_stamp.textContent = durationTimeDisplay;
         };
 
         // Change Playback Speed
