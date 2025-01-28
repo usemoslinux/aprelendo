@@ -280,8 +280,10 @@ $(document).ready(function() {
 
     function isWikiArticle(textURI) {
         const text_lang = $('#text').data('text-lang');
-        const wiki_uri = 'https://' + text_lang + '.wikipedia.org/wiki/';
-        return textURI.startsWith(wiki_uri);
+        const standard_uri = `https://${text_lang}.wikipedia.org/wiki/`;
+        const mobile_uri   = `https://${text_lang}.m.wikipedia.org/wiki/`;
+      
+        return textURI.startsWith(standard_uri) || textURI.startsWith(mobile_uri);
     }
 
     function fetch_wikipedia_article(title) {
