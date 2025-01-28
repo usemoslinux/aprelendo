@@ -17,6 +17,8 @@
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+
+
 const Dictionaries = (() => {
     // dictionary/translator variables
     let URIs = {
@@ -65,7 +67,25 @@ const Dictionaries = (() => {
     };
 })();
 
+// TODO: this is failing when using abbreviations that don't end sentences (dot followed by space): "U.S. relations"
+// "e.g.", "i.e.", "etc.", "Mr.", "Mrs.", "Dr.", "vs.", "U.S.", "U.K.", "No."
+// It is also failing when a decimal number starts a sentence: "2.8 % of the population" or three consecutive dots
+// are used instead of ellipsis character.
 const SentenceExtractor = (() => {
+    /**
+    * Checks if the given text contains any known abbreviation or ellipsis
+    * (universal or language-specific), or any uppercase abbreviation with dots
+    * (e.g., "U.S.", "U.K.").
+    * @param {string} text - The text to examine.
+    * @param {string} isoCode - Two-letter ISO code (e.g. 'en', 'es').
+    * @returns {boolean} true if at least one matching abbreviation or uppercase-dotted
+    *                   word is found; false otherwise.
+    */
+   function isAbbreviation($all_anchors, sel_index, direction) {
+        const next_element_text = $($all_anchors[sel_index + direction]).text(); 
+        const check_pattern = /^[\p{P}\p{Z}]$/u;
+        return check_pattern.test(next_element_text);
+   }
     /**
    * Extracts the sentence to which a specific <a> element belongs.
    * @param {Jquery Object} $selword - The index of the <a> element.
@@ -76,8 +96,8 @@ const SentenceExtractor = (() => {
         // Western sentence delimiters include . (period), ! (exclamation mark), and ? (question mark).
         // Eastern sentence delimiters include 。 (Chinese/Japanese period), ！ (Chinese/Japanese exclamation mark), 
         // and ？ (Chinese/Japanese question mark).
-        const sentence_delimeters = /[.!?\u3002\uFF01\uFF1F]/;
-
+        // Match only if followed by a space or end of text
+        const sentence_delimiters = /[.!?\u3002\uFF01\uFF1F](?=\s|$)/;
         const $all_anchors = TextProcessor.getAnchorsList();
         const sel_index = TextProcessor.getAnchorIndex($selword);
 
@@ -91,7 +111,7 @@ const SentenceExtractor = (() => {
         let start_index = sel_index;
         while (start_index > 0) {
             const prev_element_text = $($all_anchors[start_index - 1]).text();
-            if (sentence_delimeters.test(prev_element_text)) {
+            if (sentence_delimiters.test(prev_element_text) && !isAbbreviation($all_anchors, start_index, -1)) {
                 break;
             }
             start_index--;
@@ -101,7 +121,7 @@ const SentenceExtractor = (() => {
         let end_index = sel_index;
         while (end_index < $all_anchors.length - 1) {
             const next_element_text = $($all_anchors[end_index + 1]).text();
-            if (sentence_delimeters.test(next_element_text)) {
+            if (sentence_delimiters.test(next_element_text) && !isAbbreviation($all_anchors, end_index, 1)) {
                 end_index++; // Include the delimiter in the result
                 break;
             }
