@@ -67,6 +67,7 @@ const WordSelection = (() => {
                 $selword = $(e.target);
                 const base_uris = Dictionaries.getURIs();
                 openInNewTab(linkBuilder(base_uris.translator, $selword));
+                // console.log(SentenceExtractor.extractSentence($selword));
             }
         });
     
