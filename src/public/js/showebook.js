@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
-$(document).ready(function() {
+$(document).ready(function () {
     const doclang = $("html").attr("lang");
     const ebook_id = $("#text").attr("data-idText");
     const book = ePub();
@@ -121,12 +121,12 @@ $(document).ready(function() {
             // save book position to resume reading from there later
             let audio = document.getElementById("audioplayer");
             let audio_pos = audio != null ? audio.currentTime : 0;
-        
+
             if (text_pos) {
-                $.when(saveTextAndAudioPos(text_pos, audio_pos)).then(function() {
+                $.when(saveTextAndAudioPos(text_pos, audio_pos)).then(function () {
                     // don't show confirmation dialog when closing window
                     window.parent.show_confirmation_dialog = false;
-                    
+
                     window.location.replace("/texts");
                 });
             }
@@ -225,8 +225,8 @@ $(document).ready(function() {
                     document.getElementById("opener").click();
 
                     display(url);
-                    
-                    
+
+
                     return false;
                 };
 
@@ -311,7 +311,7 @@ $(document).ready(function() {
 
                     next.textContent = nextLabel + " »";
                     next.href = nextSection.href;
-                    
+
                     if (!isMobileDevice()) {
                         next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as reviewed');
                         new bootstrap.Tooltip(next, {
@@ -334,7 +334,7 @@ $(document).ready(function() {
 
                     prev.textContent = "« " + prevLabel;
                     prev.href = prevSection.href;
-                    
+
                     if (!isMobileDevice()) {
                         prev.setAttribute('data-bs-title', 'Go to previous chapter');
                         new bootstrap.Tooltip(prev, {
@@ -354,62 +354,77 @@ $(document).ready(function() {
     } // end display
 
     function cleanEbookHTML(html) {
+        // Wrap the provided HTML into a container.
         let $parsed = $('<div/>').append(html);
-        
-        // Remove HTML comments
-        $parsed.contents().filter(function() {
+
+        // Remove HTML comments.
+        $parsed.contents().filter(function () {
             return this.nodeType === 8; // Node.COMMENT_NODE
         }).remove();
 
-        // Remove styles and classes
-        $parsed.find('*').removeAttr("class").removeAttr("style");
+        // Remove linked stylesheets.
         $parsed.find('link[rel="stylesheet"]').remove();
 
-        // Completely remove unwanted HTML elements
+        // Remove unwanted elements.
         $parsed.find('head, meta, style, title, br').remove();
-        
-        // Convert all DIV to P
-        $parsed.find('div').replaceWith(function() {
-            return $('<p/>').html($(this).html());
+
+        // Remove formatting from all elements.
+        // For non-image elements, remove class, style, and id.
+        // For images, remove any attribute except 'src' and 'alt'.
+        $parsed.find('*').each(function () {
+            let tag = this.tagName.toLowerCase();
+            if (tag !== 'img') {
+                $(this).removeAttr('class').removeAttr('style').removeAttr('id');
+            } else {
+                // For each image, iterate over its attributes in reverse order.
+                for (let i = this.attributes.length - 1; i >= 0; i--) {
+                    let attr_name = this.attributes[i].name;
+                    if (attr_name !== 'src' && attr_name !== 'alt') {
+                        $(this).removeAttr(attr_name);
+                    }
+                }
+            }
         });
 
-        // Convert all blockquotes to P with italics
-        $parsed.find('blockquote').replaceWith(function() {
-            return $('<p/>').html($(this).html()).addClass('fst-italic');
-        });
+        // Define the set of block-level elements that should have newline separation.
+        const block_elements = ['div', 'blockquote', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 
-        // Convert all H to P
-        $parsed.find('h1, h2, h3, h4, h5, h6').replaceWith(function() {
-            let tagName = this.tagName.toLowerCase();
-            let $heading = $(this);
-            $heading.parent().after($heading);
-            return $('<p/>').html($(this).text()).addClass(tagName);
-        });
-        
-        // Extract images to parent
-        $parsed.find('img').each(function() {
-            let $img = $(this);
-            $img.parent().after($img);
-            $img.addClass('mx-auto d-block');
-            $img.wrap('<p></p>');
-        });
+        // Recursively process nodes to build a plain string.
+        // For text nodes, return their content.
+        // For images, return the cleaned outerHTML.
+        // For block-level elements, insert newlines before and after their content.
+        function processNode(node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                return node.nodeValue;
+            }
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                let tag = node.tagName.toLowerCase();
+                if (tag === 'img') {
+                    // Return the image element as minimal HTML.
+                    return node.outerHTML;
+                } else {
+                    let content = '';
+                    $(node).contents().each(function () {
+                        content += processNode(this);
+                    });
+                    if (block_elements.indexOf(tag) !== -1) {
+                        return "\n" + content + "\n";
+                    } else {
+                        return content;
+                    }
+                }
+            }
+            return '';
+        }
 
-        // Remove all HTML from elements that are not IMG or P
-        // $parsed.find('*').not('img, p').each(function() {
-        //     let $this = $(this);
-        //     $this.replaceWith($(this).text());
-        // });
+        // Process the entire container.
+        let result = processNode($parsed[0]);
 
-        // Trim HTML and remove empty elements
-        let cleanedHtml = $parsed.html().trim().replace(/[\r\n]+/g, ' ');
-        $parsed.html(cleanedHtml);
-        $parsed.find(':empty').not('img').remove();
-        $parsed.find('p:not(:has(img))').filter(function () {
-            return $.trim($(this).text()) === '';
-        }).remove();
+        // Normalize newlines by replacing multiple consecutive newlines with a single newline and trimming.
+        result = result.replace(/\n\s*\n/g, "\n\n").trim();
 
-        return $parsed;
-    } // end cleanEbookHTML
+        return $('<div/>').append(result);
+    }
 
     function updateToc(current_chapter_url) {
         let $nav = document.getElementById('toc');
@@ -442,36 +457,36 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "/ajax/ebookposition.php",
-            data: { mode: "GET", id: ebook_id},
+            data: { mode: "GET", id: ebook_id },
             dataType: "json"
         })
-        .done(function(data) {
-            const text_pos = data.text_pos;
-            const audio_pos = parseFloat(data.audio_pos);
-            const audio = document.getElementById("audioplayer");
+            .done(function (data) {
+                const text_pos = data.text_pos;
+                const audio_pos = parseFloat(data.audio_pos);
+                const audio = document.getElementById("audioplayer");
 
-            // load text position, if available
-            if (text_pos) {
-                display(text_pos);
-            } else {
-                display(1);
-            }
-
-            // load audio position, if available
-            if (audio != null) {
-                if (!isNaN(audio_pos)) {
-                    audio.currentTime = audio_pos;
+                // load text position, if available
+                if (text_pos) {
+                    display(text_pos);
                 } else {
+                    display(1);
+                }
+
+                // load audio position, if available
+                if (audio != null) {
+                    if (!isNaN(audio_pos)) {
+                        audio.currentTime = audio_pos;
+                    } else {
+                        audio.currentTime = 0;
+                    }
+                }
+            })
+            .fail(function (xhr, ajaxOptions, thrownError) {
+                display(1);
+                if (audio != null) {
                     audio.currentTime = 0;
                 }
-            }
-        })
-        .fail(function(xhr, ajaxOptions, thrownError) {
-            display(1);
-            if (audio != null) {
-                audio.currentTime = 0;
-            }
-        });
+            });
     } // end setTextAndAudioPos
 
     function saveTextAndAudioPos(text_pos, audio_pos) {
@@ -480,13 +495,13 @@ $(document).ready(function() {
             url: "/ajax/ebookposition.php",
             data: { mode: "SAVE", id: ebook_id, audio_pos: audio_pos, text_pos: text_pos }
         })
-        .done(function(data) {
-            if (data.error_msg != null) {
+            .done(function (data) {
+                if (data.error_msg != null) {
+                    alert('Oops! There was an error unexpected error saving text and audio position');
+                }
+            })
+            .fail(function (xhr, ajaxOptions, thrownError) {
                 alert('Oops! There was an error unexpected error saving text and audio position');
-            }
-        })
-        .fail(function(xhr, ajaxOptions, thrownError) {
-            alert('Oops! There was an error unexpected error saving text and audio position');
-        });
+            });
     } // end saveTextAndAudioPos
 });
