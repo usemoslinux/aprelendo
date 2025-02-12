@@ -232,21 +232,19 @@ $(document).ready(function() {
 
                         $("#title").val($("<input>").html(article.title).text());
                         $("#author").val($("<input>").html(article.byline).text());
-                        $("#url").val(data.url);
+                        $("#url").val(decodeURIComponent(data.url));
                         let txt = "";
-                        let $tempDom = $("<output>").append(
-                            $.parseHTML(article.content)
-                        );
-                        $("p, h1, h2, h3, h4, h5, h6", $tempDom).each(
-                            function() {
-                                txt +=
-                                    $(this)
-                                        .text()
-                                        .replace(/\s+/g, " ") + "\n\n";
-                            }
-                        );
 
-                        txt = separateParagraphsWithTwoLineBreaks(txt);
+                        const safeContent = DOMPurify.sanitize(article.content, {
+                            FORBID_TAGS: ['figure', 'figcaption', 'img', 'picture', 'video']
+                        });
+                        let $tempDom = $("<output>").append($.parseHTML(safeContent, document, false));
+
+                        txt = $("p, h1, h2, h3, h4, h5, h6", $tempDom).map(function() {
+                            return $(this).text().replace(/\s+/g, " ").trim();
+                        }).get().join("\n\n");
+
+                        txt = normalizeParagraphBreaks(txt);
                         txt = txt.replace(/\t/g, ""); // remove tabs
 
                         $("#text").val($.trim(txt));
@@ -309,7 +307,7 @@ $(document).ready(function() {
             const page = data.query.pages[Object.keys(data.query.pages)[0]];
             let modifiedpage = removeNumbersInBrackets(page.extract);
             modifiedpage = addLineBreaksAfterDots(modifiedpage);
-            modifiedpage = separateParagraphsWithTwoLineBreaks(modifiedpage)
+            modifiedpage = normalizeParagraphBreaks(modifiedpage)
 
             const readable_title = decodeURIComponent(title.replace(/_/g, ' '));    
 
@@ -349,7 +347,7 @@ $(document).ready(function() {
      * @param {string} text 
      * @returns string
      */
-    function separateParagraphsWithTwoLineBreaks(text) {
+    function normalizeParagraphBreaks(text) {
         return text.replace(/(\r\n|\r|\n)+/g, "\n\n");
     }
 });

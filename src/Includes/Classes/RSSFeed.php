@@ -50,13 +50,7 @@ class RSSFeed
      */
     public function fetchXMLFeed(string $url): void
     {
-        $options = [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_USERAGENT => MOCK_USER_AGENT,
-            CURLOPT_FOLLOWLOCATION => true,
-        ];
-
-        $feed_contents = Curl::getUrlContents($url, $options);
+        $feed_contents = Curl::getUrlContents($url);
 
         if (!$feed_contents) {
             throw new UserException('Error fetching the feed: ' . $url);

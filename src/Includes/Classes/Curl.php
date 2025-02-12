@@ -36,9 +36,11 @@ class Curl
         if (!isset($options) || empty($options)) {
             $referer = 'https://www.aprelendo.com';
             $options = [
-                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_CONNECTTIMEOUT => 5,
                 CURLOPT_REFERER => $referer,
+                CURLOPT_USERAGENT => MOCK_USER_AGENT,
+                CURLOPT_ENCODING => "", // Enable automatic decompression
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_SSL_VERIFYHOST => false,
                 CURLOPT_FOLLOWLOCATION => true
@@ -64,13 +66,13 @@ class Curl
 
         curl_close($ch);
 
-        $charset = preg_match('/(?<=\bcharset=)[A-Za-z]*-[a-zA-Z0-9]*/', $info['content_type'], $match)
-            ? $match[0]
-            : 'utf-8';
-        
-        // if HTML doc get character encoding
-
-        return (strtolower($charset) == 'utf-8') ? $result : iconv($charset, 'utf-8', $result);
+        // convert to utf-8 if necessary
+        $charset = 'utf-8';
+        if (isset($info['content_type']) && preg_match('/charset=([^;]+)/i', $info['content_type'], $match)) {
+            $charset = trim($match[1]);
+        }
+    
+        return (strtolower($charset) === 'utf-8') ? $result : iconv($charset, 'utf-8', $result);
     } // end getUrlContents()
 
     /**

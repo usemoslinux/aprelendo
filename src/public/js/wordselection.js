@@ -38,6 +38,15 @@ const WordSelection = (() => {
         // Disables right-click context menu
         $doc.on("contextmenu", function (e) {
             e.preventDefault();
+            e.stopPropagation();
+
+            // Only process right-clicks on words inside #text
+            if ($(e.target).is("#text .word")) {
+                controller.pause(false);
+                $selword = $(e.target);
+                const base_uris = Dictionaries.getURIs();
+                openInNewTab(linkBuilder(base_uris.translator, $selword));
+            }
             return false;
         });
     
@@ -60,15 +69,7 @@ const WordSelection = (() => {
     
         // Bind container mouse word selection events
         $doc.on('mousedown', '#text', function (e) {
-            if (e.originalEvent.which < 2) {
-                startLongPress(e);
-            } else if (e.originalEvent.which === 3) {
-                controller.pause(false);
-                $selword = $(e.target);
-                const base_uris = Dictionaries.getURIs();
-                openInNewTab(linkBuilder(base_uris.translator, $selword));
-                // console.log(SentenceExtractor.extractSentence($selword));
-            }
+            startLongPress(e);
         });
     
         $doc.on('mousemove', '#text', function (e) {

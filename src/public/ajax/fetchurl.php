@@ -27,15 +27,10 @@ use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
 try {
-    $options = [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_USERAGENT => MOCK_USER_AGENT,
-        CURLOPT_FOLLOWLOCATION => true
-    ];
     if (!empty($_GET['url'])) {
         $url = $_GET['url'];
         $url = Curl::getFinalUrl($url);
-        $file_contents = Curl::getUrlContents($url, $options);
+        $file_contents = Curl::getUrlContents($url);
         $result = $file_contents ? ['url' => $url, 'file_contents' => $file_contents] : '';
         header('Content-Type: application/json');
         echo json_encode($result);
