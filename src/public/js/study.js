@@ -103,12 +103,10 @@ $(document).ready(function () {
                 let examples_html = '';
                 const lang_iso = $("#card").data("lang");
 
-                let sentence_regex = new RegExp(
-                    '([^\\n.?!]|[\\d][.][\\d]|[A-Z][.](?:[A-Z][.])+)*(?<![\\p{L}])'
-                    + word
-                    + '(?![\\p{L}])([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!]',
-                    'gmiu'
-                );
+                const word_boundary = '(?<![\\p{L}])' + word + '(?![\\p{L}])';
+                const sentence_start = '([^\\n.?!]|[\\d][.][\\d]|[A-Z][.](?:[A-Z][.])+)*';
+                const sentence_end = '([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!]';
+                let sentence_regex = new RegExp(sentence_start + word_boundary + sentence_end, 'gmiu');
 
                 // different sentence separator for Japanese and Chinese, as
                 // they don't separate words and finish sentences with 。
@@ -163,7 +161,7 @@ $(document).ready(function () {
                     });
 
                     // only look for word frequency if word has example sentences
-                    showWordFrequency();
+                    showWordFrequency(words[cur_card_index].is_phrase);
 
                     $("#examples-placeholder").addClass('d-none');
                     $("#study-card-examples").append(examples_html);
@@ -463,15 +461,21 @@ $(document).ready(function () {
     /**
      * Updates the frequency badge on the study card to display the frequency level of the current word.
      */
-    function showWordFrequency() {
+    function showWordFrequency(is_phrase) {
         const $freq_badge = $("#study-card-freq-badge");
-        const freq_level = Dictionaries.getWordFrequency(words[cur_card_index].frequency_index) + ' frequency';
 
-        // Update the badge with the corresponding frequency text and styling
-        $freq_badge
-            .removeClass('placeholder')
-            .addClass('border border-light')
-            .text(freq_level);
+        if (is_phrase) {
+            $freq_badge
+                .removeClass('placeholder')
+                .addClass('border border-light')
+                .text('Phrase/Expression');
+        } else {
+            const freq_level = Dictionaries.getWordFrequency(words[cur_card_index].frequency_index) + ' frequency';
+            $freq_badge
+                .removeClass('placeholder')
+                .addClass('border border-light')
+                .text(freq_level);
+        }
     } // end showWordFrequency()
 
     /**

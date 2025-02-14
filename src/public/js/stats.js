@@ -29,16 +29,19 @@ $(document).ready(function () {
             data: { type: "words" },
             dataType: "json"
         })
-            .done(function (data) {
+                    .done(handleData)
+                    .fail(handleError);
+        
+            function handleData(data) {
                 const count_learned   = parseInt(data[0]);
                 const count_learning  = parseInt(data[1]);
                 const count_new       = parseInt(data[2]);
                 const count_forgotten = parseInt(data[3]);
                 const count_total     = parseInt(data[4]);
-
+        
                 // build chart
                 const ctx = document.getElementById("total-stats-canvas").getContext("2d");
-
+        
                 const chart_data = {
                     labels: [
                       'Learned',
@@ -57,7 +60,7 @@ $(document).ready(function () {
                       hoverOffset: 4
                     }]
                   };
-
+        
                 const noDataPlugin = {
                     id: 'noDataPlugin',
                     afterDraw: (chart) => {
@@ -75,9 +78,9 @@ $(document).ready(function () {
                         }
                     }
                 };
-
+        
                 //create Chart class object
-                const total_stats_chart = new Chart(ctx, {
+                const chart = new Chart(ctx, {
                     type: "doughnut",
                     data: chart_data,
                     
@@ -87,42 +90,43 @@ $(document).ready(function () {
                             legend: { display: count_total, position: 'right' },
                             tooltip: {
                                 callbacks: {
-                                    label: function (context) {
-                                        const value = context.raw; // Raw value of the slice
-                                        const total = context.dataset.data.reduce((a, b) => a + b, 0); // Sum of all values
-                                        const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage
-                                        return `${context.label}: ${value} (${percentage}%)`;
-                                    }
+                                    label: tooltipLabelCallback
                                 }
                             }
                         }
                     },
                     plugins: [noDataPlugin] // Add the plugin here              
                 });
-
+        
                 if (count_total) {
                     // show legend in table
                     $("#learned-count").text(count_learned);
                     $("#learned-percentage").text((count_learned / count_total * 100).toFixed(2).toLocaleString('en-US'));
-
+        
                     $("#learning-count").text(count_learning);
                     $("#learning-percentage").text((count_learning / count_total * 100).toFixed(2).toLocaleString('en-US'));
-
+        
                     $("#new-count").text(count_new);
                     $("#new-percentage").text((count_new / count_total * 100).toFixed(2).toLocaleString('en-US'));
-
+        
                     $("#forgotten-count").text(count_forgotten);
                     $("#forgotten-percentage").text((count_forgotten / count_total * 100).toFixed(2).toLocaleString('en-US'));
-
+        
                     $("#total-count").text(count_learned + count_learning + count_new + count_forgotten);
                 }
-            })
-            .fail(function () {
+            }
+        
+            function handleError() {
                 let error_div = "<div class='d-flex align-items-center justify-content-center' " +
                     "style='min-height:400px;'><p class='text-danger'>Error: no data to display</p></div>";
                 $("#total-stats-canvas").replaceWith(error_div);
-            });
-
+            }
+        
+            function tooltipLabelCallback(context) {
+                const value = context.raw; // Raw value of the slice
+                const total = context.dataset.data.reduce((a, b) => a + b, 0); // Sum of all values
+                const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage
+                return `${context.label}: ${value} (${percentage}%)`;
+            }
     } // end drawTotalStats
-
 });

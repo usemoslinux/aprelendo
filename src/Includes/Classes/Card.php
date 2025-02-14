@@ -54,7 +54,7 @@ class Card extends DBEntity
      */
     public function getWordsUserIsLearning(int $limit): array
     {
-        $sql = "SELECT w.word, w.status, COALESCE(fl.frequency_index, 100) AS 'frequency_index'
+        $sql = "SELECT w.word, w.status, w.is_phrase, COALESCE(fl.frequency_index, 100) AS 'frequency_index'
                 FROM {$this->table} AS w
                 LEFT JOIN frequency_list_$this->lang_iso AS fl ON w.word = fl.word
                 WHERE w.user_id = ?
