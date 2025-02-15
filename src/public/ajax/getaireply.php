@@ -22,20 +22,22 @@ require_once '../../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\AIBot;
-use Aprelendo\Language;
-use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
+header('Content-Type: text/plain');
+header('Cache-Control: no-cache');
+header('X-Accel-Buffering: no'); // Disable buffering in Nginx
+header('Connection: keep-alive');
+
 try {
-    if (!$_POST['prompt']) {
-        throw new UserException('Error fetching AI reply. Prompt might be empty or malformed.');
+    if (!isset($_POST['prompt']) || empty($_POST['prompt'])) {
+        throw new UserException('Error: Empty or malformed prompt.');
     }
 
     $ai_bot = new AIBot($user->hf_token, $user->lang);
-    $result = $ai_bot->fetchReply($_POST['prompt']);
 
-    // echo json_encode($result);
-    echo $result;
-} catch (InternalException | UserException $e) {
-    echo $e->getJsonError();
+    // Stream the AI response
+    $ai_bot->streamReply($_POST['prompt']);
+} catch (UserException $e) {
+    echo "Error: " . $e->getMessage();
 }

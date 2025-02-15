@@ -40,13 +40,12 @@ class AIBot
     } // end __construct()
 
     /**
-     * Get AI reply from Hugging Face
+     * Stream a reply from the AI model based on the given prompt.
      *
-     * @param string $question Question to pose to the AI LLM
-     * @throws UserException If there's a problem fetching or parsing the request
-     * @return string AI reply
+     * @param string $prompt The user's input prompt.
+     * @return void
      */
-    public function fetchReply(string $prompt): string
+    public function streamReply(string $prompt): void
     {
         $data = [
             "model" => "microsoft/Phi-3.5-mini-instruct",
@@ -54,15 +53,15 @@ class AIBot
                 [
                     "role" => "system",
                     "content" => "You are a helpful language tutor for the {$this->lang} language. "
-                        . "Your answers should be concise, simple and straightforward."
+                        . "Your answers should be concise, simple, and straightforward."
                 ],
                 [
                     "role" => "user",
-                    "content" => "$prompt"
+                    "content" => $prompt
                 ]
             ],
             "max_tokens" => 600,
-            "stream" => false
+            "stream" => true
         ];
 
         $options = [
@@ -73,14 +72,33 @@ class AIBot
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => json_encode($data),
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_WRITEFUNCTION => function ($ch, $chunk) {
+                $lines = explode("\n", $chunk);
+                foreach ($lines as $line) {
+                    if (strpos($line, 'data: ') === 0) {
+                        $json = substr($line, 6);
+                        $decoded = json_decode($json, true);
+
+                        if (isset($decoded['choices'][0]['delta']['content'])) {
+                            echo $decoded['choices'][0]['delta']['content']; // Send only the content
+                            if (ob_get_level() > 0) {
+                                ob_flush();
+                            }
+                            flush();
+                        }
+                    }
+                }
+                return strlen($chunk);
+            }
         ];
 
-        $ai_reply = Curl::getUrlContents($this::BASE_URL, $options);
+        ob_start();
 
-        if (!$ai_reply) {
-            throw new UserException('Error fetching AI reply.');
-        }
+        $ch = curl_init(self::BASE_URL);
+        curl_setopt_array($ch, $options);
+        curl_exec($ch);
+        curl_close($ch);
 
-        return $ai_reply;
-    } // end fetchReply()
+        ob_end_flush();
+    }
 }

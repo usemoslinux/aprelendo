@@ -111,44 +111,47 @@ $(document).ready(function () {
         }
     });
 
-    // Handle Ask AI button click
     $('#btn-ask-ai-bot').click(async function () {
         const custom_prompt = $('#custom-prompt').val();
         if (custom_prompt) {
-            // Replace [word] with the quoted word from the modal's data attribute
             const currentWord = $('#ask-ai-bot-modal').attr('data-word');
             const prompt = replaceWordWithQuotes(custom_prompt, currentWord);
-
-            // Hide the form and show the AI answer div
+    
             $('#prompt-form').hide();
             $('#ai-answer').show();
-            
-            // Change footer
             $('#normal-footer').hide();
             $('#back-footer').show();
-
-            $('#text-ai-answer').val('Please wait while the AI is generating a response...');
-
-            $.ajax({
-                type: "POST",
-                url: "/ajax/getaireply.php",
-                data: { prompt : prompt },
-                dataType: "json"
-            })
-            .done(function(data) {
-                let ai_answer = 'No response from the AI.';
-
-                if (data && data.choices.length > 0 && data.choices[0].message.content) {
-                    ai_answer = data.choices[0].message.content;
+            $('#text-ai-answer').val(''); // Clear previous response
+    
+            try {
+                const response = await fetch('/ajax/getaireply.php', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `prompt=${encodeURIComponent(prompt)}`
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Failed to get AI response');
                 }
-
-                // Display the AI's answer
-                $('#text-ai-answer').val(ai_answer);
-            })
-            .fail(function(xhr, ajaxOptions, thrownError) {
+    
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+    
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value, { stream: true });
+    
+                    // Append the received content
+                    $('#text-ai-answer').val($('#text-ai-answer').val() + chunk);
+                }
+            } catch (error) {
                 console.error('Error:', error);
                 $('#text-ai-answer').val('Failed to get response from AI. Please try again.');
-            });
+            }
         }
     });
 
