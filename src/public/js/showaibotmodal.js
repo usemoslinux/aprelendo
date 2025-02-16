@@ -110,7 +110,7 @@ $(document).ready(function () {
             $('#custom-prompt').val('');
         }
     });
-
+    
     $('#btn-ask-ai-bot').click(async function () {
         const custom_prompt = $('#custom-prompt').val();
         if (custom_prompt) {
@@ -122,6 +122,8 @@ $(document).ready(function () {
             $('#normal-footer').hide();
             $('#back-footer').show();
             $('#text-ai-answer').val(''); // Clear previous response
+    
+            let isFirstChunk = true; // Track the first chunk
     
             try {
                 const response = await fetch('/ajax/getaireply.php', {
@@ -143,7 +145,13 @@ $(document).ready(function () {
                     const { value, done } = await reader.read();
                     if (done) break;
                     
-                    const chunk = decoder.decode(value, { stream: true });
+                    let chunk = decoder.decode(value, { stream: true });
+    
+                    // Trim leading space only for the first chunk
+                    if (isFirstChunk) {
+                        chunk = chunk.trimStart();
+                        isFirstChunk = false;
+                    }
     
                     // Append the received content
                     $('#text-ai-answer').val($('#text-ai-answer').val() + chunk);
@@ -153,7 +161,7 @@ $(document).ready(function () {
                 $('#text-ai-answer').val('Failed to get response from AI. Please try again.');
             }
         }
-    });
+    });    
 
     // Handle Back button click
     $(document).on('click', '#back-to-form', function () {
