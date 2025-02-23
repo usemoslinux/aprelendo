@@ -41,11 +41,12 @@ const WordSelection = (() => {
             e.stopPropagation();
 
             // Only process right-clicks on words inside #text
-            if ($(e.target).is("#text .word")) {
+            if ($(e.target).is("#text .word") && e.pointerType === 'mouse') {
                 controller.pause(false);
                 $selword = $(e.target);
                 const base_uris = Dictionaries.getURIs();
                 openInNewTab(linkBuilder(base_uris.translator, $selword));
+                cancelLongPress();
             }
             return false;
         });
@@ -68,30 +69,30 @@ const WordSelection = (() => {
         });
     
         // Bind container mouse word selection events
-        $doc.on('mousedown', '#text', function (e) {
+        $doc.on('mousedown', '#text .word', function (e) {
             startLongPress(e);
         });
     
-        $doc.on('mousemove', '#text', function (e) {
+        $doc.on('mousemove', '#text .word', function (e) {
             onPointerMove(e);
         });
     
-        $doc.on('mouseup', '#text', function (e) {
+        $doc.on('mouseup', '#text .word', function (e) {
             onPointerUp();
         });
     
         // Bind container touch word selection events
-        $doc.on('touchstart', '#text', function (e) {
+        $doc.on('touchstart', '#text .word', function (e) {
             const touch = e.originalEvent.touches[0];
             startLongPress(touch);
         });
     
-        $doc.on('touchmove', '#text', function (e) {
+        $doc.on('touchmove', '#text .word', function (e) {
             const touch = e.originalEvent.touches[0];
             onPointerMove(touch);
         });
     
-        $doc.on('touchend', '#text', function (e) {
+        $doc.on('touchend', '#text .word', function (e) {
             onPointerUp();
         });
     
