@@ -43,7 +43,7 @@ class AudioPlayerForEbooks extends AudioPlayer
 
                 <div class="d-flex align-items-center">
                     <button id="ap-play-btn" class="btn btn-primary">
-                        <i id="ap-play-btn-icon" class="bi bi-play-fill"></i>
+                        <i id="ap-play-btn-icon" class="spinner-border spinner-border-sm"></i>
                     </button>
 
                     <div class="flex-grow-1 px-1">

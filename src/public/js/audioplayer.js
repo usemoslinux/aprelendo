@@ -177,9 +177,16 @@ const AudioController = (() => {
 
         audio_source.addEventListener('error', () => {
             if (audio_source.src !== '' && audio_source.src !== window.location.href) {
-                play_pause_btn.removeEventListener('click', togglePlayPause);
-                play_pause_btn.classList = 'btn btn-danger';
+                play_pause_btn.classList = 'btn btn-danger disabled';
+                play_pause_btn_icon.className = 'bi bi-play-fill';
+                elapsed_time_stamp.textContent = 'Error loading audio!';
+                total_time_stamp.textContent = '';
             }
+        });
+
+        // When metadata is loaded, replace spinner with play icon
+        audio.addEventListener('loadedmetadata', () => {
+            play_pause_btn_icon.className = 'bi bi-play-fill';
         });
 
         // Add AB loop button functionality if the button exists
