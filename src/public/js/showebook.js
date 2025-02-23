@@ -144,8 +144,8 @@ $(document).ready(function () {
         // don't show confirmation dialog when closing window
         window.parent.show_confirmation_dialog = false;
 
-        $(document)
-            .find(".learning")
+        $("#text")
+            .find(".reviewing")
             .each(function () {
                 word = $(this)
                     .text()

@@ -431,7 +431,7 @@ $(document).ready(function() {
         const is_shared = $("#is_shared").length > 0;
         let gems_earned = 0;
 
-        $(".learned, .learning").each(function() {
+        $("#text").find(".reviewing").each(function() {
             word = $(this)
                 .text()
                 .toLowerCase();

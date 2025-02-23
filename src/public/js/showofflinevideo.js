@@ -252,7 +252,7 @@ $(document).ready(function () {
         let oldwords = [];
         let ids = [];
         let word = "";
-        $(".learning").each(function () {
+        $("#text").find(".reviewing").each(function () {
             word = $(this)
                 .text()
                 .toLowerCase();
