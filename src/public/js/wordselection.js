@@ -142,11 +142,11 @@ const WordSelection = (() => {
                 cancelLongPress();
             }
             if (has_long_pressed) {
-                highlightCurrent(e);
+                highlightCurrent();
             }
         }
     
-        function highlightCurrent(e) {
+        function highlightCurrent() {
             if (!has_long_pressed || start_index < 0) return;
             const el = document.elementFromPoint(e.clientX, e.clientY);
             const $target_anchor = $(el).closest('a');

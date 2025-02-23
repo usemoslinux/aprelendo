@@ -354,6 +354,9 @@ $(document).ready(function () {
     } // end display
 
     function cleanEbookHTML(html) {
+        // Replace line breaks (\n or \r) with spaces.
+        html = html.replace(/[\r\n]+/g, ' ');
+        
         // Wrap the provided HTML into a container.
         let $parsed = $('<div/>').append(html);
 
@@ -419,7 +422,7 @@ $(document).ready(function () {
 
         // Process the entire container.
         let result = processNode($parsed[0]);
-
+        
         // Normalize newlines by replacing multiple consecutive newlines with a single newline and trimming.
         result = result.replace(/\n\s*\n/g, "\n\n").trim();
 
