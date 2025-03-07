@@ -28,15 +28,17 @@ class AIBot
     private const BASE_URL = 'https://api-inference.huggingface.co/models/microsoft/Phi-3.5-mini-instruct/v1/chat/completions';
     private $api_key = '';
     private $lang = '';
+    private $native_lang = '';
 
     /**
      * Constructor
      */
-    public function __construct(string $api_key, string $learning_lang_iso)
+    public function __construct(string $api_key, string $learning_lang_iso, string $native_lang_iso)
     {
         $crypto = new SecureEncryption(ENCRYPTION_KEY);
         $this->api_key = $crypto->decrypt($api_key);
         $this->lang = Language::getNameFromIso($learning_lang_iso);
+        $this->native_lang = Language::getNameFromIso($native_lang_iso);
     } // end __construct()
 
     /**
@@ -53,7 +55,8 @@ class AIBot
                 [
                     "role" => "system",
                     "content" => "You are a helpful language tutor for the {$this->lang} language. "
-                        . "Your answers should be concise, simple, and straightforward."
+                        . "Your answers should be concise, simple, and straightforward. Always answer "
+                        . "in English, but bear in mind that the user is a {$this->native_lang} native speaker."
                 ],
                 [
                     "role" => "user",

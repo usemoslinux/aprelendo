@@ -19,47 +19,54 @@
 
 $(document).ready(function () {
     const prompts = {
-        practical: [
-            "What are some common collocations with [word]?",
-            "Does [word] have any idiomatic uses or expressions?",
-            "Can you provide some example sentences showing [word] in context?",
-            "Are there any common mistakes people make when using [word]?"
-        ],
-
         formality: [
-            "Is [word] formal or informal?",
-            "What are some more formal alternatives to [word]?",
-            "What are some more informal alternatives to [word]?",
-            "Are there situations where [word] is inappropriate or too formal/informal?",
-            "How does the formality of [word] change in different contexts?"
+            "Is [word] considered formal, neutral, or informal? In which settings should it be used?",
+            "What are some alternatives to [word] that would sound more formal?",
+            "What are some more casual or slang alternatives to [word]?",
+            "Are there situations where using [word] might be inappropriate due to formality or tone?",
+            "Does the level of formality of [word] change depending on the region, dialect, or culture?"
         ],
 
         synonyms: [
-            "In a nutshell, what is the difference between [word] and ...?",
+            "What are the subtle differences between [word] and its closest synonyms?",
+            "In a nutshell, what is the difference between [word] and ... ",
             "What are some synonyms of [word]?",
-            "What are some antonyms of [word]?"
+            "What are some antonyms of [word]?",
+            "Are there words that are often confused with [word] but actually mean something different?"
         ],
 
         context: [
-            "Is the term [word] used more in written or spoken language?",
-            "In what professions or fields is [word] most commonly used?",
-            "How does the use of [word] vary by region or country?",
-            "Does the term [word] have different nuances depending on the cultural context?",
+            "Is [word] more commonly found in spoken or written language? Can you give examples?",
+            "In what professional fields or industries is [word] frequently used?",
+            "How does the use of [word] differ across countries or dialects? Are there any regional variations?",
+            "Does [word] carry cultural connotations that may not translate directly into other languages?",
             "How is [word] commonly pronounced in different regions or accents?",
-            "Are there any social situations where the use of the term [word] should be avoided?"
+            "Are there contexts where using [word] could be considered rude or inappropriate?",
+            "Are there double meanings or slang uses of [word] in different cultures that learners should be aware of?"
+        ],
+
+        practical: [
+            "What are some common collocations with [word]?",
+            "Does [word] have any idiomatic uses or expressions?",
+            "Can you provide several example sentences that illustrate different meanings or nuances of [word]?"
         ],
 
         pop: [
-            "How has the meaning of [word] evolved in recent years?",
-            "Has [word] gained or lost popularity over time?",
-            "What current cultural references prominently feature [word]?",
+            "Has the meaning of [word] changed or evolved over time? If so, how?",
+            "Is [word] currently trending or used in pop culture, social media, or memes?",
+            "What are some well-known books, movies, or songs that feature [word]?",
             "How do different generations use [word] differently?"
+        ],
+
+        personalized: [
+            "What are the most common mistakes learners from my native language make when using [word]?",
+            "Is [word] a 'false friend' with a similar-looking word in my native language?",
+            "What are the most common translations to my native language of [word]?",
+            "For beginners, what's the easiest way to remember and use [word] correctly?",
+            "For advanced learners, what are some nuanced uses of [word] that natives commonly use?",
+            "What memory tricks or mnemonics can help learners remember [word]?"
         ]
     };
-    // Replace with your Hugging Face API Key
-    const API_KEY = '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';
-    const MODEL = 'microsoft/Phi-3.5-mini-instruct'; // Replace with the model you want
-    const language = 'English'; // Replace with the actual language variable
 
     // Function to replace [word] with quoted word
     function replaceWordWithQuotes(text, word) {
@@ -83,13 +90,13 @@ $(document).ready(function () {
     $('#prompt-category').change(function () {
         const category = $(this).val();
         const prompt_select = $('#prompt-select');
-        const currentWord = $('#ask-ai-bot-modal').attr('data-word');
+        const current_word = $('#ask-ai-bot-modal').attr('data-word');
 
         if (category) {
             prompt_select.removeAttr('disabled').empty().append('<option value="">Choose a prompt...</option>');
             prompts[category].forEach((prompt, index) => {
-                const formattedPrompt = replaceWordWithQuotes(prompt, currentWord);
-                prompt_select.append(`<option value="${index}">${formattedPrompt}</option>`);
+                const formatted_prompt = replaceWordWithQuotes(prompt, current_word);
+                prompt_select.append(`<option value="${index}">${formatted_prompt}</option>`);
             });
         } else {
             prompt_select.attr('disabled', true).empty().append('<option value="">First select a category...</option>');
@@ -100,11 +107,11 @@ $(document).ready(function () {
     // Handle prompt selection
     $('#prompt-select').change(function () {
         const category = $('#prompt-category').val();
-        const promptIndex = $(this).val();
-        const currentWord = $('#ask-ai-bot-modal').attr('data-word');
+        const prompt_index = $(this).val();
+        const current_word = $('#ask-ai-bot-modal').attr('data-word');
 
-        if (promptIndex !== '') {
-            const selected_prompt = replaceWordWithQuotes(prompts[category][promptIndex], currentWord);
+        if (prompt_index !== '') {
+            const selected_prompt = replaceWordWithQuotes(prompts[category][prompt_index], current_word);
             $('#custom-prompt').val(selected_prompt);
         } else {
             $('#custom-prompt').val('');
@@ -114,8 +121,8 @@ $(document).ready(function () {
     $('#btn-ask-ai-bot').click(async function () {
         const custom_prompt = $('#custom-prompt').val();
         if (custom_prompt) {
-            const currentWord = $('#ask-ai-bot-modal').attr('data-word');
-            const prompt = replaceWordWithQuotes(custom_prompt, currentWord);
+            const current_word = $('#ask-ai-bot-modal').attr('data-word');
+            const prompt = replaceWordWithQuotes(custom_prompt, current_word);
     
             $('#prompt-form').hide();
             $('#ai-answer').show();

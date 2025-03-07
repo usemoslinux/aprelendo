@@ -34,7 +34,7 @@ try {
         throw new UserException('Error: Empty or malformed prompt.');
     }
 
-    $ai_bot = new AIBot($user->hf_token, $user->lang);
+    $ai_bot = new AIBot($user->hf_token, $user->lang, $user->native_lang);
 
     // Stream the AI response
     $ai_bot->streamReply($_POST['prompt']);

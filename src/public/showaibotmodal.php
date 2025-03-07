@@ -44,11 +44,12 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
                             <label for="prompt-category" class="form-label">Select a Category</label>
                             <select class="form-select" id="prompt-category">
                                 <option value="">Choose a category...</option>
-                                <option value="practical">Collocations, Idioms & Common Mistakes</option>
                                 <option value="synonyms">Synonyms, Antonyms & Nuances</option>
                                 <option value="formality">Formal & Informal</option>
                                 <option value="context">Context & Regional Usage</option>
+                                <option value="practical">Collocations & Idioms</option>
                                 <option value="pop">Popular Culture</option>
+                                <option value="personalized">Personalized Learning</option>
                             </select>
                         </div>
 
