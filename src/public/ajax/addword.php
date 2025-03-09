@@ -38,6 +38,17 @@ try {
     if (isset($_POST['word'])) {
         $user_id = $user->id;
         $lang_id = $user->lang_id;
+        $text_is_shared = $_POST['text_is_shared'] === 'true';
+
+        // Make sure to use text->lang_id and not user->lang_id
+        // because the text could be in a different language
+        // avoid check if source_id is not set (e.g. offline videos)
+        if (isset($_POST['source_id']) && is_numeric($_POST['source_id'])) {
+            $text_class_name = $text_is_shared ? 'Aprelendo\SharedTexts' : 'Aprelendo\Texts';
+            $text = new $text_class_name($pdo, $user_id, $lang_id);
+            $text->loadRecord($_POST['source_id']);
+            $lang_id = $text->lang_id;
+        }
 
         $word = $_POST['word'];
         $is_phrase =  (!empty($_POST['is_phrase'])) ? $_POST['is_phrase'] : false;
@@ -54,7 +65,7 @@ try {
 
         if (isset($_POST['source_id'])) {
             $source_id = $_POST['source_id'];
-            $source_table = $_POST['text_is_shared'] ? 'shared_texts' : 'texts';
+            $source_table = $text_is_shared ? 'shared_texts' : 'texts';
             $sentence = $_POST['sentence'];
 
             $new_sentence_record = [

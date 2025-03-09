@@ -65,7 +65,7 @@ $(document).ready(function () {
                 word: sel_text.toLowerCase(),
                 is_phrase: is_phrase,
                 source_id: $('[data-idtext]').attr('data-idtext'),
-                text_is_shared: true,
+                text_is_shared: false,
                 sentence: SentenceExtractor.extractSentence($selword)
             }
         })

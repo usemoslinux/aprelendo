@@ -290,4 +290,9 @@ class Texts extends DBEntity
             $this->user_id, $this->lang_id, $search_params->filter_level, $search_params->filter_type, $search_text
         ]);
     } // end search()
+
+    // public function checkLanguageId(int $text_id): int {
+    //     $sql = "SELECT `lang_id` FROM `{$this->table}` WHERE `id` = ?";
+
+    // }
 }

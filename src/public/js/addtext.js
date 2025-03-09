@@ -214,6 +214,14 @@ $(document).ready(function() {
                             "alert-danger"
                         );
                     } else if (typeof data !== "undefined" && data.length != 0) {
+                        const text_lang = $('#text').data('text-lang');
+                        if (data.lang !== '' && data.lang !== text_lang) {
+                            showMessage("It looks like you might be adding a text in a different language " +
+                                "than the one currently active in Aprelendo. Please double-check to ensure it " +
+                                "matches your selected language before proceeding. This helps keep your learning " +
+                                "experience focused and organized!", "alert-warning");
+                        }
+                        
                         const doc = document.implementation.createHTMLDocument(
                             "New Document"
                         );

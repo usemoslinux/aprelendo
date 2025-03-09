@@ -31,7 +31,8 @@ try {
         $url = $_GET['url'];
         $url = Curl::getFinalUrl($url);
         $file_contents = Curl::getUrlContents($url);
-        $result = $file_contents ? ['url' => $url, 'file_contents' => $file_contents] : '';
+        $file_lang = extractLang($file_contents);
+        $result = $file_contents ? ['url' => $url, 'lang' => $file_lang, 'file_contents' => $file_contents] : '';
         header('Content-Type: application/json');
         echo json_encode($result);
     } else {
@@ -39,4 +40,20 @@ try {
     }
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+}
+
+function extractLang($html) {
+    $doc = new DOMDocument();
+    @$doc->loadHTML($html); // Suppress warnings for malformed HTML
+
+    $html_tag = $doc->getElementsByTagName('html')->item(0);
+    
+    if ($html_tag && $html_tag->hasAttribute('lang')) {
+        $lang = $html_tag->getAttribute('lang');
+        
+        // Normalize to two-letter code
+        return strtolower(substr($lang, 0, 2));
+    }
+
+    return ''; // Return empty if no lang attribute is found
 }
