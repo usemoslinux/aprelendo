@@ -27,7 +27,7 @@ $lang = new Language($pdo, $user->id);
 $available_langs = $lang->getAvailableLangs();
         
 if ($available_langs) {
-    $html = '<div id="accordion" class="accordion">';
+    $html = '<div class="list-group">';
 
     // add long language name to $available_langs array
     $available_langs = array_map(function ($record) {
@@ -44,31 +44,19 @@ if ($available_langs) {
         $lg_id = $lang_record['id'];
         $lg_iso_code = $lang_record['name'];
 
-        $item_id = 'item-' . $lg_iso_code;
-        $heading_id = 'heading-' . $lg_iso_code;
         $lgname = $lang_record['long_name'];
         
         $is_active = $lg_id == $user->lang_id;
-        $html .= "<div class='accordion-item'>"
-            . "<div class='accordion-header' id='$heading_id'>"
-            . "<button class='accordion-button "
-            . ($is_active ? '' : 'collapsed')
-            . "' type='button' data-bs-toggle='collapse' data-bs-target='#$item_id'"
-            . "aria-expanded='false' aria-controls='$item_id'>$lgname"
-            ."</button>"
-            ."</div>";
+        $btn_disabled = $is_active ? 'disabled' : '';
+        $active_border = $is_active ? 'border border-warning' : '';
+        
+        $html .= "<div class='list-group-item d-flex justify-content-between align-items-center $active_border'>"
+            . "<div class='align-middle'><img class='language-flag me-1' src='/img/flags/$lg_iso_code.svg' "
+            . "alt='$lgname flag'><span class='align-middle'>$lgname</span></div><div>"
+            . "<button type='button' onclick='location.href=\"languages?act=$lg_id\"' class='btn btn-primary btn-sm $btn_disabled'>Activate</button>"
+            . "<button type='button' onclick='location.href=\"languages?chg=$lg_id\"' class='btn btn-secondary btn-sm ms-2'>Edit</button>"
+            . "</div></div>";
     
-        $html .= "<div id='$item_id' class='accordion-collapse collapse "
-            . ($is_active ? 'show' : '')
-            . "' aria-labelledby='$lgname' data-bs-parent='#accordion'>"
-            . "<div class='accordion-body'>";
-
-        $btn_disabled = $lg_id == $user->lang_id ? 'disabled' : '';
-        $html .= "<button type='button' onclick='location.href=\"languages?act=$lg_id\"'"
-                . "class='btn btn-primary $btn_disabled'>Set as active</button>"
-                . "<button type='button' onclick='location.href=\"languages?chg=$lg_id\"'"
-                . " class='btn btn-secondary ms-1'>Edit</button>"
-                . "</div></div></div>";
     }
     $html .= '</div>';
 

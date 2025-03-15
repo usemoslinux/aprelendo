@@ -137,8 +137,8 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     border: none;
 }
 
-.dropdown-toggle>img,
-.gamification img {
+img.language-flag,
+img.header-gamification-icon {
     width: 32px;
     height: 32px;
     vertical-align: middle;
@@ -149,7 +149,7 @@ BOOTSTRAP MODIFICATIONS & TWEAKS
     vertical-align: middle;
 }
 
-img#img-language-flag {
+img.language-flag {
     border: 2px solid white;
     border-radius: 50%;
 }
