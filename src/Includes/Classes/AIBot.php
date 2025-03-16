@@ -50,13 +50,17 @@ class AIBot
     public function streamReply(string $prompt): void
     {
         $data = [
-            "model" => "microsoft/Phi-3.5-mini-instruct",
+            "model" => "microsoft/Phi-4-mini-instruct",
             "messages" => [
                 [
                     "role" => "system",
-                    "content" => "You are a helpful language tutor for the {$this->lang} language. "
-                        . "Your answers should be concise, simple, and straightforward. Always answer "
-                        . "in English, but bear in mind that the user is a {$this->native_lang} native speaker."
+                    "content" => "You are a {$this->lang} language tutor providing explanations and guidance in "
+                        . "English. The user is a native {$this->native_lang} speaker, so any references to their "
+                        . "native language (e.g., false friends, common mistakes, linguistic comparisons) should be in "
+                        . "relation to {$this->native_lang}. Your responses should be clear, concise, and structured "
+                        . "to help a {$this->native_lang} speaker understand {$this->lang} effectively. When "
+                        . "explaining concepts, consider similarities and differences between {$this->native_lang} "
+                        . "and {$this->lang} to highlight potential challenges and facilitate learning."
                 ],
                 [
                     "role" => "user",

@@ -37,7 +37,7 @@ function showMessage(html, type) {
 
 function hideMessage(timeout) {
     $("#alert-box").hide(timeout);
-}
+} // end hideMessage
 
 /**
  * Smoothly scrolls the webpage to the top.
@@ -128,7 +128,7 @@ $.fn.enableScroll = function() {
         this.classList.remove('overflow-hidden');
         this.classList.add('overflow-auto');
     });
-};
+}; // end $.fn.enableScroll
 
 /**
  * Disables scrolling without making text jump around
@@ -147,7 +147,7 @@ $.fn.disableScroll = function() {
         this.classList.remove('overflow-auto');
         this.classList.add('overflow-hidden');
     });
-};
+}; // end $.fn.disableScroll
 
 /**
  * Gets the width of the scrollbar for either the document body or a specific element
@@ -177,7 +177,7 @@ function getScrollbarWidth(element) {
         
         return temp.offsetWidth - inner.offsetWidth;
     }
-}
+} // end getScrollbarWidth
 
 /**
  * Determines if an element is after another one
@@ -193,7 +193,7 @@ $.fn.isAfter = function(sel) {
  */
 function openInNewTab($url) {
     window.open($url, '_blank', 'noopener,noreferrer');
-}
+} // end openInNewTab
 
 /**
  * Determines if the user is on a mobile device.
@@ -208,4 +208,4 @@ function isMobileDevice() {
     const touchDeviceCheck = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 
     return userAgentCheck || screenWidthCheck || touchDeviceCheck;
-}
+} // end isMobileDevice
