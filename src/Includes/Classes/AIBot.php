@@ -50,24 +50,25 @@ class AIBot
     public function streamReply(string $prompt): void
     {
         $data = [
-            "model" => "microsoft/Phi-4-mini-instruct",
+            "model" => "google/madlad400-8b-lm",
             "messages" => [
                 [
                     "role" => "system",
                     "content" => "You are a {$this->lang} language tutor providing explanations and guidance in "
                         . "English. The user is a native {$this->native_lang} speaker, so any references to their "
                         . "native language (e.g., false friends, common mistakes, linguistic comparisons) should be in "
-                        . "relation to {$this->native_lang}. Your responses should be clear, concise, and structured "
+                        . "relation to {$this->native_lang}. Your responses should be clear, short and structured "
                         . "to help a {$this->native_lang} speaker understand {$this->lang} effectively. When "
                         . "explaining concepts, consider similarities and differences between {$this->native_lang} "
-                        . "and {$this->lang} to highlight potential challenges and facilitate learning."
+                        . "and {$this->lang} to highlight potential challenges and facilitate learning. "
+                        . "Respond in plain text only, without Markdown formatting."
                 ],
                 [
                     "role" => "user",
                     "content" => $prompt
                 ]
             ],
-            "max_tokens" => 600,
+            "max_new_tokens" => 600,
             "stream" => true
         ];
 

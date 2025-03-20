@@ -73,7 +73,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
                 <!-- AI Answer Section -->
                 <div id="ai-answer" style="display: none;">
                     <!-- AI's response will be displayed here -->
-                    <textarea id="text-ai-answer" class="form-control" id="custom-prompt" rows="15" disabled readonly></textarea>
+                    <textarea id="text-ai-answer" class="form-control" rows="15" disabled readonly></textarea>
                     <small>Lingobot can make mistakes. Check important info.</small>
                 </div>
             </div>
