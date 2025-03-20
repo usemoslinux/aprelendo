@@ -38,7 +38,7 @@ try {
     if (isset($_POST['word'])) {
         $user_id = $user->id;
         $lang_id = $user->lang_id;
-        $text_is_shared = $_POST['text_is_shared'] === 'true';
+        $text_is_shared = isset($_POST['text_is_shared']) ? $_POST['text_is_shared'] === '1' : false;
 
         // Make sure to use text->lang_id and not user->lang_id
         // because the text could be in a different language
