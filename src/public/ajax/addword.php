@@ -27,74 +27,83 @@ if (!isset($_POST) || empty($_POST)) {
 }
 
 use Aprelendo\Words;
-use Aprelendo\Language;
 use Aprelendo\ExampleSentences;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
-try {
-    // $_POST['word'] is set when user is adding or modifying one word
-    // this is the reason why addwords.php would be usually called
-    if (isset($_POST['word'])) {
-        $user_id = $user->id;
-        $lang_id = $user->lang_id;
-        $text_is_shared = isset($_POST['text_is_shared']) ? $_POST['text_is_shared'] === '1' : false;
+/**
+ * Processes a single word addition.
+ *
+ * @param \PDO $pdo The PDO instance for database connection.
+ * @param object $user The user object containing user details.
+ * @param array $post The POST data containing word details.
+ * @return void
+ */
+function processSingleWord(\PDO $pdo, $user, array $post): void {
+    $user_id = $user->id;
+    $lang_id = $user->lang_id;
+    $text_is_shared = isset($post['text_is_shared']) ? $post['text_is_shared'] === '1' : false;
 
-        // Make sure to use text->lang_id and not user->lang_id
-        // because the text could be in a different language
-        // avoid check if source_id is not set (e.g. offline videos)
-        if (isset($_POST['source_id']) && is_numeric($_POST['source_id'])) {
-            $text_class_name = $text_is_shared ? 'Aprelendo\SharedTexts' : 'Aprelendo\Texts';
-            $text = new $text_class_name($pdo, $user_id, $lang_id);
-            $text->loadRecord($_POST['source_id']);
-            $lang_id = $text->lang_id;
-        }
+    // If a source_id is provided, load the text record and update the language id accordingly.
+    if (isset($post['source_id']) && is_numeric($post['source_id'])) {
+        $text_class_name = $text_is_shared ? 'Aprelendo\SharedTexts' : 'Aprelendo\Texts';
+        $text = new $text_class_name($pdo, $user_id, $lang_id);
+        $text->loadRecord($post['source_id']);
+        $lang_id = $text->lang_id;
+    }
 
-        $word = $_POST['word'];
-        $is_phrase =  (!empty($_POST['is_phrase'])) ? $_POST['is_phrase'] : false;
+    $word = $post['word'];
+    $is_phrase = !empty($post['is_phrase']) ? (bool) $post['is_phrase'] : false;
 
-        // 1. Add word to table
-        $words_table = new Words($pdo, $user_id, $lang_id);
+    // 1. Add word to table
+    $words_table = new Words($pdo, $user_id, $lang_id);
+    $status = $words_table->exists($word) ? 3 : 2;
+    $words_table->add($word, $status, $is_phrase);
 
-        // if word already exists in table, status = 3 ("forgotten")
-        // otherwise, $status = 2 ("new")
+    // 2. If a source_id is provided, save the example sentence
+    if (isset($post['source_id'])) {
+        $source_id = $post['source_id'];
+        $source_table = $text_is_shared ? 'shared_texts' : 'texts';
+        $sentence = isset($post['sentence']) ? $post['sentence'] : '';
+
+        $new_sentence_record = [
+            'source_id' => $source_id,
+            'source_table' => $source_table,
+            'word' => $word,
+            'sentence' => $sentence
+        ];
+
+        $example_sentence = new ExampleSentences($pdo, $user_id);
+        $example_sentence->addRecord($new_sentence_record);
+    }
+}
+
+/**
+ * Processes the import of multiple words.
+ *
+ * @param \PDO $pdo The PDO instance for database connection.
+ * @param object $user The user object containing user details.
+ * @param array $post The POST data containing words details.
+ * @return void
+ */
+function processWordsImport(\PDO $pdo, $user, array $post): void {
+    $user_id = $user->id;
+    $lang_id = $user->lang_id;
+    $words = $post['words'];
+    $is_phrase = false;
+
+    $words_table = new Words($pdo, $user_id, $lang_id);
+    foreach ($words as $word) {
         $status = $words_table->exists($word) ? 3 : 2;
         $words_table->add($word, $status, $is_phrase);
+    }
+}
 
-        // 2. If new word, save example sentence
-
-        if (isset($_POST['source_id'])) {
-            $source_id = $_POST['source_id'];
-            $source_table = $text_is_shared ? 'shared_texts' : 'texts';
-            $sentence = $_POST['sentence'];
-
-            $new_sentence_record = [
-                'source_id' => $source_id,
-                'source_table' => $source_table,
-                'word' => $word,
-                'sentence' => $sentence
-            ];
-
-            $example_sentence = new ExampleSentences($pdo, $user_id);
-            $example_sentence->addRecord($new_sentence_record);
-        }
+try {
+    if (isset($_POST['word'])) {
+        processSingleWord($pdo, $user, $_POST);
     } elseif (isset($_POST['words'])) {
-        // $_POST['words'] would be used for ONLY importing many words
-        // using the "import words" button
-        $user_id = $user->id;
-        $lang_id = $user->lang_id;
-        $words = $_POST['words'];
-        $is_phrase =  false;
-
-        $words_table = new Words($pdo, $user_id, $lang_id);
-
-        foreach ($words as $word) {
-            // if word already exists in table, status = 3 ("forgotten")
-            // otherwise, $status = 2 ("new")
-            $status = $words_table->exists($word) ? 3 : 2;
-
-            $words_table->add($word, $status, $is_phrase);
-        }
+        processWordsImport($pdo, $user, $_POST);
     }
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
