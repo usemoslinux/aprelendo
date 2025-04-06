@@ -27,6 +27,7 @@ if (!isset($_POST) || empty($_POST)) {
 }
 
 use Aprelendo\Words;
+use Aprelendo\SM2;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
@@ -35,8 +36,22 @@ try {
     $lang_id = $user->lang_id;
 
     if (!empty($_POST['word']) && isset($_POST['answer'])) {
+        $answer = (int)$_POST['answer'];
+        $word = $_POST['word'];
+
         $words_table = new Words($pdo, $user_id, $lang_id);
-        $words_table->updateStatus($_POST['word'], (int)$_POST['answer']);
+        $words_table->loadRecordByWord($word);
+        $sm2 = new SM2($words_table->easiness, $words_table->repetitions, $words_table->review_interval);
+        $sm2->processReview($answer);
+
+        $words_table->updateSM2(
+            $word,
+            $sm2->getInterval(),
+            $sm2->getEasiness(),
+            $sm2->getRepetitions()
+        );
+
+        $words_table->updateStatus($word, $answer);
     }
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();

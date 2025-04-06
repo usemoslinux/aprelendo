@@ -23,17 +23,18 @@ namespace Aprelendo;
 
 class Words extends DBEntity
 {
-    public $id              = 0;
-    public $user_id         = 0;
-    public $lang_id         = 0;
-    public $word            = '';
-    public $status          = 0;
-    public $is_phrase       = false;
-    public $date_created    = '';
-    public $date_modified   = '';
-    public $review_interval = 1;
-    public $easiness        = 2.5;
-    public $repetitions     = 0;
+    public $id               = 0;
+    public $user_id          = 0;
+    public $lang_id          = 0;
+    public $word             = '';
+    public $status           = 0;
+    public $is_phrase        = false;
+    public $date_created     = '';
+    public $date_modified    = '';
+    public $review_interval  = 1;
+    public $easiness         = 2.5;
+    public $repetitions      = 0;
+    public $date_next_review = '';
 
     /**
      * Constructor
@@ -53,7 +54,32 @@ class Words extends DBEntity
     } // end __construct()
 
     /**
-     * Adds a new wod to the database
+     * Loads word record from database
+     *
+     * @param string $word
+     * @return void
+     */
+    public function loadRecordbyWord(string $word): void
+    {
+        $sql = "SELECT * FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
+        $row = $this->sqlFetch($sql, [$this->user_id, $this->lang_id, $word]);
+        
+        if ($row) {
+            $this->id               = $row['id'];
+            $this->word             = $row['word'];
+            $this->status           = $row['status'];
+            $this->is_phrase        = $row['is_phrase'];
+            $this->date_created     = $row['date_created'];
+            $this->date_modified    = $row['date_modified'];
+            $this->review_interval  = $row['review_interval'];
+            $this->easiness         = $row['easiness'];
+            $this->repetitions      = $row['repetitions'];
+            $this->date_next_review = $row['date_next_review'];
+        }
+    } // end loadRecord()
+
+    /**
+     * Adds a new word to the database
      *
      * @param string $word
      * @param int $status
@@ -92,9 +118,14 @@ class Words extends DBEntity
     } // end updateByName()
 
     /**
-     * Updates status of existing words in database
+     * Updates the status of an existing word in the database.
      *
-     * @param array $words array containing all the words to update
+     * This method updates the `status` and `date_modified` fields for a specific word
+     * in the database table associated with the current user and language.
+     *
+     * @param string $word   The word to update.
+     * @param int    $status The new status value to set for the word.
+     *
      * @return void
      */
     public function updateStatus(string $word, int $status): void
@@ -103,7 +134,29 @@ class Words extends DBEntity
                 WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
 
         $this->sqlExecute($sql, [$this->user_id, $this->lang_id, $word]);
-    } // end updateByName()
+    } // end updateStatus()
+
+    /**
+     * Updates the SM2 algorithm parameters for a specific word in the database.
+     *
+     * This method updates the review interval, easiness factor, and repetition count
+     * for a given word associated with the current user and language.
+     *
+     * @param string $word        The word to update in the database.
+     * @param int    $interval    The new review interval for the word.
+     * @param float  $easiness    The updated easiness factor for the word.
+     * @param int    $repetitions The updated number of repetitions for the word.
+     *
+     * @return void
+     */
+    public function updateSM2(string $word, int $interval, float $easiness, int $repetitions): void
+    {
+        $sql = "UPDATE `{$this->table}` SET `review_interval`=?, `easiness`=?, `repetitions`=?,
+                `date_next_review`=DATE_ADD(NOW(), INTERVAL ? DAY)
+                WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
+
+        $this->sqlExecute($sql, [$interval, $easiness, $repetitions, $interval, $this->user_id, $this->lang_id, $word]);
+    } // end updateSM2()
 
     /**
      * Deletes 1 word in database using word (not the id, the actual word) as a parameter to select it

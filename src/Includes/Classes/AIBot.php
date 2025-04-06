@@ -54,21 +54,17 @@ class AIBot
             "messages" => [
                 [
                     "role" => "system",
-                    "content" => "You are a {$this->lang} language tutor providing explanations and guidance in "
-                        . "English. The user is a native {$this->native_lang} speaker, so any references to their "
-                        . "native language (e.g., false friends, common mistakes, linguistic comparisons) should be in "
-                        . "relation to {$this->native_lang}. Your responses should be clear, short and structured "
-                        . "to help a {$this->native_lang} speaker understand {$this->lang} effectively. When "
-                        . "explaining concepts, consider similarities and differences between {$this->native_lang} "
-                        . "and {$this->lang} to highlight potential challenges and facilitate learning. "
-                        . "Respond in plain text only, without Markdown formatting."
+                    "content" => "You are a {$this->lang} language tutor. Provide clear, concise explanations and "
+                        . "guidance in English. The user is a native {$this->native_lang} speaker, so include relevant "
+                        . "comparisons to {$this->native_lang} when helpful. Focus on practical examples and avoid "
+                        . "unnecessary complexity. Respond in plain text only."
                 ],
                 [
                     "role" => "user",
                     "content" => $prompt
                 ]
             ],
-            "max_new_tokens" => 600,
+            "max_tokens" => 500,
             "stream" => true
         ];
 
@@ -80,24 +76,7 @@ class AIBot
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => json_encode($data),
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_WRITEFUNCTION => function ($ch, $chunk) {
-                $lines = explode("\n", $chunk);
-                foreach ($lines as $line) {
-                    if (strpos($line, 'data: ') === 0) {
-                        $json = substr($line, 6);
-                        $decoded = json_decode($json, true);
-
-                        if (isset($decoded['choices'][0]['delta']['content'])) {
-                            echo $decoded['choices'][0]['delta']['content']; // Send only the content
-                            if (ob_get_level() > 0) {
-                                ob_flush();
-                            }
-                            flush();
-                        }
-                    }
-                }
-                return strlen($chunk);
-            }
+            CURLOPT_WRITEFUNCTION => $this->createWriteFunction()
         ];
 
         ob_start();
@@ -108,5 +87,93 @@ class AIBot
         curl_close($ch);
 
         ob_end_flush();
+    }
+
+    /**
+     * Create a reusable write function for handling API responses.
+     *
+     * @return callable
+     */
+    private function createWriteFunction(): callable
+    {
+        return function ($ch, $chunk) {
+            $lines = explode("\n", $chunk);
+            foreach ($lines as $line) {
+                if ($this->isDataLine($line)) {
+                    $this->processDataLine($line);
+                } elseif ($this->isErrorLine($line)) {
+                    $this->processErrorLine($line);
+                    return strlen($chunk); // Stop further processing
+                }
+            }
+            return strlen($chunk);
+        };
+    }
+
+    /**
+     * Check if a line contains data.
+     *
+     * @param string $line
+     * @return bool
+     */
+    private function isDataLine(string $line): bool
+    {
+        return strpos($line, 'data: ') === 0;
+    }
+
+    /**
+     * Check if a line contains an error.
+     *
+     * @param string $line
+     * @return bool
+     */
+    private function isErrorLine(string $line): bool
+    {
+        return strpos($line, '{"error":') === 0;
+    }
+
+    /**
+     * Process a data line and flush the content.
+     *
+     * @param string $line
+     * @return void
+     */
+    private function processDataLine(string $line): void
+    {
+        $json = substr($line, 6);
+        $decoded = json_decode($json, true);
+
+        if (isset($decoded['choices'][0]['delta']['content'])) {
+            echo $decoded['choices'][0]['delta']['content']; // Send only the content
+            $this->flushOutput();
+        }
+    }
+
+    /**
+     * Process an error line and flush the error message.
+     *
+     * @param string $line
+     * @return void
+     */
+    private function processErrorLine(string $line): void
+    {
+        $decoded = json_decode($line, true);
+        if (isset($decoded['error'])) {
+            echo "Hugging Face Error: " . $decoded['error']; // Send the error message
+            $this->flushOutput();
+        }
+    }
+
+    /**
+     * Flush the output buffer.
+     *
+     * @return void
+     */
+    private function flushOutput(): void
+    {
+        if (ob_get_level() > 0) {
+            ob_flush();
+        }
+        flush();
     }
 }
