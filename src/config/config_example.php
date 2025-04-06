@@ -40,9 +40,10 @@ defined('DB_CHARSET')             ? null : define('DB_CHARSET', 'utf8mb4');
 defined('YOUTUBE_API_KEY')        ? null : define('YOUTUBE_API_KEY', 'your_youtube_api_key'); // << update this
 // Google Drive API key used to support audio for ebooks
 defined('GOOGLE_DRIVE_API_KEY')   ? null : define('GOOGLE_DRIVE_API_KEY', 'your_google_api_key'); // << update this
-// VoiceRSS API key to provide TTS support in assisted learning mode
+// VoiceRSS API key to provide TTS support in assisted learning mode (voicerss.org)
 defined('VOICERSS_API_KEY')       ? null : define('VOICERSS_API_KEY', 'your_voicerss_api_key'); // << update this
 
+// Email
 defined('EMAIL_HOST')             ? null : define('EMAIL_HOST', 'EMAIL_HOST'); // << update this
 defined('EMAIL_SENDER')           ? null : define('EMAIL_SENDER', 'Sender <example@mail.com>'); // << update this
 defined('EMAIL_SENDER_USERNAME')  ? null : define('EMAIL_SENDER_USERNAME', 'USER'); // << update this
@@ -56,4 +57,4 @@ defined('PYTHON_VENV')            ? null : define('PYTHON_VENV', '/opt/venv');
 
 defined('PROXY')                  ? null : define('PROXY', '');
 
-define('ENCRYPTION_KEY', 'Replace this with a nice encryption key');
+define('ENCRYPTION_KEY', 'Replace this with a nice encryption key'); // << update this
