@@ -80,7 +80,7 @@ if (!$user_auth->isLoggedIn()) {
                 </div>
                 <div class="col-sm-3 d-none d-sm-block">
                     <figure>
-                        <img class="rounded-circle" src="img/avatar-pablo.jpg" alt="Pablo Castagnino - Photo">
+                        <img class="rounded-circle" src="img/avatar-pablo.jpg" alt="Pablo Castagnino">
                     </figure>
                 </div>
             </div>
