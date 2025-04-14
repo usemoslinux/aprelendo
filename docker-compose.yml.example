@@ -21,7 +21,7 @@ services:
       #- .:/var/www/aprelendo ## only use this if on development env
       - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
-      - ./docker/php/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+      - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
   mysql:
     image: mariadb:latest
     container_name: aprelendo_db

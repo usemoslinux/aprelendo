@@ -187,7 +187,7 @@ if ($total_nr_of_badges > 0) {
                 </div>
                 <div class="card-body small">
                     <figure class="px-5 px-sm-0 mt-2">
-                        <img src="/img/gamification/daily_goal_streak.png" class="mx-auto d-block m-2"
+                        <img src="/img/gamification/daily-goal-streak.png" class="mx-auto d-block m-2"
                             alt="Daily goal streak" title="Daily goal streak days">
                         <figcaption class="w-100 text-center fw-bold">
                             <span style="font-size:2rem"><?php echo number_format($daily_goal_streak_days); ?></span>
@@ -214,7 +214,7 @@ if ($total_nr_of_badges > 0) {
                 </div>
                 <div class="card-body small">
                     <figure class="px-5 px-sm-0 mt-2">
-                        <img src="/img/gamification/words_today.png" class="mx-auto d-block m-2"
+                        <img src="/img/gamification/words-today.png" class="mx-auto d-block m-2"
                             alt="Words practiced today" title="Words practiced today">
                         <figcaption class="w-100 text-center fw-bold">
                             <span style="font-size:2rem"><?php echo number_format($words_recalled_today); ?></span>
