@@ -73,7 +73,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
                 <!-- AI Answer Section -->
                 <div id="ai-answer" style="display: none;">
                     <!-- AI's response will be displayed here -->
-                    <textarea id="text-ai-answer" class="form-control" rows="15" disabled readonly></textarea>
+                    <div id="text-ai-answer" class="form-control overflow-auto" style="height: calc(1.2em * 15);"></div>
                     <small>Lingobot can make mistakes. Check important info.</small>
                 </div>
             </div>
@@ -93,3 +93,4 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
 </div>
 
 <script defer src="/js/showaibotmodal.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>

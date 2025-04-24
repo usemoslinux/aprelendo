@@ -50,14 +50,20 @@ class AIBot
     public function streamReply(string $prompt): void
     {
         $data = [
-            "model" => "google/madlad400-8b-lm",
+            // "model" => "bigscience/bloomz-7b1",
+            "model" => "Qwen/Qwen2.5-7B-Instruct",
             "messages" => [
                 [
                     "role" => "system",
-                    "content" => "You are a {$this->lang} language tutor. Provide clear, concise explanations and "
-                        . "guidance in English. The user is a native {$this->native_lang} speaker, so include relevant "
-                        . "comparisons to {$this->native_lang} when helpful. Focus on practical examples and avoid "
-                        . "unnecessary complexity. Respond in plain text only."
+                    "content" =>
+                        "You are a language tutor. Your role is to help the user understand vocabulary, "
+                        . "usage, and subtle distinctions between words in {$this->lang}, not in English. Always "
+                        . "assume the user's questions refer to words in {$this->lang}, even if the question is "
+                        . "written in English. Explanations should be written in English, but the vocabulary being "
+                        . "analyzed or compared must always be in {$this->lang}, unless the user explicitly states "
+                        . "otherwise. The user is a native {$this->native_lang} speaker, so include helpful "
+                        . "translations to {$this->native_lang} when relevant. Use practical examples, avoid unnecessary "
+                        . "complexity, and always keep your answers under 1200 characters."
                 ],
                 [
                     "role" => "user",

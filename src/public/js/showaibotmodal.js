@@ -60,7 +60,8 @@ $(document).ready(function () {
 
         personalized: [
             "What are the most common mistakes learners from my native language make when using [word]?",
-            "Is [word] a 'false friend' with a similar-looking word in my native language?",
+            // "Does [word] exist in my native language but mean something different?",
+            // "Is [word] a 'false friend' with a similar-looking word in my native language?",
             "What are the most common translations to my native language of [word]?",
             "For beginners, what's the easiest way to remember and use [word] correctly?",
             "For advanced learners, what are some nuanced uses of [word] that natives commonly use?",
@@ -128,9 +129,10 @@ $(document).ready(function () {
             $('#ai-answer').show();
             $('#normal-footer').hide();
             $('#back-footer').show();
-            $('#text-ai-answer').val(''); // Clear previous response
+            $('#text-ai-answer').html(''); // Clear previous response
     
-            let isFirstChunk = true; // Track the first chunk
+            let isFirstChunk = true;
+            let markdownResponse = '';
     
             try {
                 const response = await fetch('/ajax/getaireply.php', {
@@ -147,25 +149,28 @@ $(document).ready(function () {
     
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
-    
+                const converter = new showdown.Converter();
+                
                 while (true) {
                     const { value, done } = await reader.read();
                     if (done) break;
                     
                     let chunk = decoder.decode(value, { stream: true });
-    
-                    // Trim leading space only for the first chunk
+                    
                     if (isFirstChunk) {
                         chunk = chunk.trimStart();
                         isFirstChunk = false;
                     }
-    
-                    // Append the received content
-                    $('#text-ai-answer').val($('#text-ai-answer').val() + chunk);
+                    
+                    markdownResponse += chunk;
+                    
+                    // Render progressively
+                    const html = converter.makeHtml(markdownResponse);
+                    $('#text-ai-answer').html(html);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                $('#text-ai-answer').val('Failed to get response from AI. Please try again.');
+                $('#text-ai-answer').html('<p>Failed to get response from AI. Please try again.</p>');
             }
         }
     });    
