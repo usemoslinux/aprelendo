@@ -25,7 +25,7 @@ use Aprelendo\Language;
 
 class AIBot
 {
-    private const BASE_URL = 'https://api-inference.huggingface.co/models/microsoft/Phi-3.5-mini-instruct/v1/chat/completions';
+    private const BASE_URL = 'https://router.huggingface.co/v1/chat/completions';
     private $api_key = '';
     private $lang = '';
     private $native_lang = '';
@@ -51,7 +51,7 @@ class AIBot
     {
         $data = [
             // "model" => "bigscience/bloomz-7b1",
-            "model" => "Qwen/Qwen2.5-7B-Instruct",
+            "model" => "Qwen/Qwen2.5-7B-Instruct:featherless-ai",
             "messages" => [
                 [
                     "role" => "system",
@@ -165,7 +165,7 @@ class AIBot
     {
         $decoded = json_decode($line, true);
         if (isset($decoded['error'])) {
-            echo "Hugging Face Error: " . $decoded['error']; // Send the error message
+            echo "Hugging Face Error: " . print_r($decoded['error']); // Send the error message
             $this->flushOutput();
         }
     }
