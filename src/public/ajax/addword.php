@@ -42,7 +42,7 @@ use Aprelendo\UserException;
 function processSingleWord(\PDO $pdo, $user, array $post): void {
     $user_id = $user->id;
     $lang_id = $user->lang_id;
-    $text_is_shared = isset($post['text_is_shared']) ? $post['text_is_shared'] === '1' : false;
+    $text_is_shared = isset($post['text_is_shared']) ? $post['text_is_shared'] : false;
 
     // If a source_id is provided, load the text record and update the language id accordingly.
     if (isset($post['source_id']) && is_numeric($post['source_id'])) {
@@ -55,7 +55,7 @@ function processSingleWord(\PDO $pdo, $user, array $post): void {
     $word = $post['word'];
     $is_phrase = !empty($post['is_phrase']) ? (bool) $post['is_phrase'] : false;
 
-    // 1. Add word to table
+    // // 1. Add word to table
     $words_table = new Words($pdo, $user_id, $lang_id);
     $status = $words_table->exists($word) ? 3 : 2;
     $words_table->add($word, $status, $is_phrase);
