@@ -47,7 +47,7 @@ require_once PUBLIC_PATH . 'header.php';
                     </div>
                     <div class="col-sm-12">
                         <div id="study-card" class="card text-center" data-lang="<?php echo $user->lang; ?>">
-                            <div id="study-card-header" class="study-card-header py-3 placeholder-glow">
+                            <div id="study-card-header" class="study-card-header py-3 text-light placeholder-glow">
                                 <h4 id="study-card-word-title" class="my-0 fw-bold placeholder">&nbsp;</h4>
                                 <span id="study-card-freq-badge" class="badge">&nbsp;</span>
                             </div>
@@ -89,7 +89,7 @@ require_once PUBLIC_PATH . 'header.php';
                             <div id="study-card-footer" class="card-footer">
                                 <p id="card-counter"></p>
                                 <div id="answer-card" class="mx-auto" style="max-width: 550px;">
-                                    <div id="answer-card-page-1">
+                                    <div id="answer-card-page-1" class="smooth-transition">
                                         <div class="card-body">
                                             <h5 class="card-title">Did you know the full meaning before seeing the examples?</h5>
                                             <div class="d-flex flex-column">
@@ -106,7 +106,7 @@ require_once PUBLIC_PATH . 'header.php';
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="answer-card-page-2" class="d-none">
+                                    <div id="answer-card-page-2" class="d-none smooth-transition">
                                         <div class="card-body">
                                             <h5 class="card-title">After reviewing the examples, how well do you understand it now?</h5>
                                             <div class="d-flex flex-column">
@@ -129,11 +129,13 @@ require_once PUBLIC_PATH . 'header.php';
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="mb-3">
+                                        <small class="fw-lighter fst-italic text-secondary">Use keyboard shortcuts: 1, 2, 3, or 4</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </main>
         </div>

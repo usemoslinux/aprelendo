@@ -631,6 +631,12 @@ ol {
     padding: 1rem;
 }
 
+/* TRANSITIONS */
+
+.smooth-transition {
+    transition: opacity 0.3s ease-in-out;
+}
+
 /* COOKIES */
 
 #eucookielaw {

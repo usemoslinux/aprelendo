@@ -439,15 +439,25 @@ $(document).ready(function () {
             .fail(function (xhr, ajaxOptions, thrownError) {
                 showMessage("There was an unexpected error updating this word's status", "alert-danger");
             });
+        $('#btn-answer-prev').trigger('click'); // hide answer card page 2
     }); // end .btn-answer.on.click()
 
-    
+    /**
+     * Triggers when user clicks on "Back to previous question" answer button
+     * @param {event object} e
+    */
     $('#btn-answer-prev').on('click', function(e) {
         e.preventDefault();
         $('#answer-card-page-1').removeClass('d-none');;
         $('#answer-card-page-2').addClass('d-none');
     });
 
+    /**
+     * Triggers when user clicks on "Answer more" button
+     * This button is used to show the second page of the answer card, 
+     * which contains more answer options.
+     * @param {event object} e
+     */
     $('#btn-answer-more').on('click', function(e) {
         e.preventDefault();
         $('#answer-card-page-1').addClass('d-none');
