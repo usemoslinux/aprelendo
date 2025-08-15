@@ -142,13 +142,14 @@ $(document).ready(function () {
 
                 // update card
                 $("#study-card").data('word', word);
+                updateLiveProgressBar(); // reset live progress bar
                 $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
                 $("#study-card-word-title").removeClass('placeholder').text(word);
-                
                 
                 // if example sentence is empty, go to next card, else update example sentences
                 if (examples_array.length === 0) {
                     words[cur_card_index].status = 4;
+                    answers[4][1] = answers[4][1] + 1;
                     cur_card_index++;
                     if (lastCardReached()) {
                         return;
@@ -164,7 +165,7 @@ $(document).ready(function () {
                     showWordFrequency(words[cur_card_index].is_phrase);
 
                     $("#examples-placeholder").addClass('d-none');
-                    $("#study-card-examples").append(examples_html);
+                    $("#study-card-examples").html(examples_html);
                 }
                 
                 $(".btn-answer").prop('disabled', false);
@@ -217,12 +218,12 @@ $(document).ready(function () {
         example_text_html = text.text.replace(word_regex, function (match, g1) {
             return g1 === undefined
                 ? match
-                : "<a class='word fw-bold'>" + match.replace(/\s\s+/g, ' ') + "</a>";
+                : "<a class='word fw-bold bg-warning-subtle border-bottom p-1'>" + match.replace(/\s\s+/g, ' ') + "</a>";
         });
 
         example_html = "<blockquote cite='" + text.source_uri + "'>";
-        example_html += "<p>" + example_text_html + "</p>";
-        example_html += "<cite>" + (text.author == "" ? "Anonymous" : text.author);
+        example_html += "<p  class='mb-0'>" + example_text_html + "</p>";
+        example_html += `<cite style='font-size:.85rem' class='text-secondary fw-medium'>${text.author == "" ? "Anonymous" : text.author}`;
         if (text.source_uri == '' || text.source_uri.endsWith(".epub")) {
             example_html += ", " + text.title;
         } else {
@@ -314,6 +315,7 @@ $(document).ready(function () {
                 + "and take rest intervals.</div>");
             $("#study-card-footer").addClass("d-none");
             $("#examples-placeholder").addClass("d-none");
+            $("#live-progress").addClass("d-none");
             scrollToPageTop();
             return true;
         }
@@ -334,7 +336,18 @@ $(document).ready(function () {
             + "Add some words to your library and try again.</div>");
         $("#study-card-footer").addClass("d-none");
         $("#examples-placeholder").addClass("d-none");
+        $("#live-progress").addClass("d-none");
     } // end showNoMoreCardsMsg()
+
+    /**
+     * Updates the progress bar to reflect the current study progress.
+     */
+    function updateLiveProgressBar() {
+        const percentage = Math.round((cur_card_index / max_cards) * 100);
+        $("#live-progress-bar")
+            .css("width", percentage + "%")
+            .attr("aria-valuenow", percentage);
+    } // end updateLiveProgressBar()
 
     /**
      * Adjusts the style of the study card based on the given word status.
@@ -358,23 +371,23 @@ $(document).ready(function () {
         switch (status) {
             case 0:
                 $card.addClass('border-success');
-                $card_header.addClass('text-bg-success border-success');
+                $card_header.addClass('bg-gradient bg-success border-success');
                 break;
             case 1:
                 $card.addClass('border-warning');
-                $card_header.addClass('text-bg-warning border-warning');
+                $card_header.addClass('bg-gradient bg-warning border-warning');
                 break;
             case 2:
                 $card.addClass('border-primary');
-                $card_header.addClass('text-bg-primary border-primary');
+                $card_header.addClass('bg-gradient bg-primary border-primary');
                 break;
             case 3:
                 $card.addClass('border-danger');
-                $card_header.addClass('text-bg-danger border-danger');
+                $card_header.addClass('bg-gradient bg-danger border-danger');
                 break;
             default:
                 $card.addClass('border-secondary');
-                $card_header.addClass('text-bg-secondary border-secondary');
+                $card_header.addClass('bg-gradient bg-secondary border-secondary');
                 break;
         }
     } // end adaptCardStyleToWordStatus()
@@ -427,6 +440,19 @@ $(document).ready(function () {
                 showMessage("There was an unexpected error updating this word's status", "alert-danger");
             });
     }); // end .btn-answer.on.click()
+
+    
+    $('#btn-answer-prev').on('click', function(e) {
+        e.preventDefault();
+        $('#answer-card-page-1').removeClass('d-none');;
+        $('#answer-card-page-2').addClass('d-none');
+    });
+
+    $('#btn-answer-more').on('click', function(e) {
+        e.preventDefault();
+        $('#answer-card-page-1').addClass('d-none');
+        $('#answer-card-page-2').removeClass('d-none');
+    });
 
     /**
      * Generates an HTML table displaying a summary of the study, showing each word and its recall level.

@@ -59,7 +59,7 @@ class Card extends DBEntity
                 LEFT JOIN frequency_list_$this->lang_iso AS fl ON w.word = fl.word
                 WHERE w.user_id = ?
                 AND w.lang_id = ?
-                ORDER BY w.date_next_review ASC, w.status DESC, w.date_created DESC
+                ORDER BY w.date_next_review ASC, w.status DESC
                 LIMIT $limit";
         
         return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);

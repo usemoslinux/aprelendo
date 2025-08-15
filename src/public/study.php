@@ -46,7 +46,7 @@ require_once PUBLIC_PATH . 'header.php';
                         <div id="alert-box" class="d-none"></div>
                     </div>
                     <div class="col-sm-12">
-                        <div id="study-card" class="card text-center" data-lang="<?php echo $user->lang;?>">
+                        <div id="study-card" class="card text-center" data-lang="<?php echo $user->lang; ?>">
                             <div id="study-card-header" class="study-card-header py-3 placeholder-glow">
                                 <h4 id="study-card-word-title" class="my-0 fw-bold placeholder">&nbsp;</h4>
                                 <span id="study-card-freq-badge" class="badge">&nbsp;</span>
@@ -77,42 +77,59 @@ require_once PUBLIC_PATH . 'header.php';
                                 </div>
                                 <p id="study-card-examples" class="card-examples"></p>
                             </div>
+                            <div id="live-progress" class="progress rounded-0" style="height: 2px;">
+                                <div id="live-progress-bar" class="progress-bar bg-secondary"
+                                    role="progressbar"
+                                    aria-label="Study progress"
+                                    aria-valuenow="0"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100">
+                                </div>
+                            </div>
                             <div id="study-card-footer" class="card-footer">
                                 <p id="card-counter"></p>
-                                <p class="fw-bold">How well did you remember the meaning of this word?</p>
-                                <button id="btn-answer-no-recall" type="button" value="3"
-                                    class="btn btn-lg btn-danger btn-answer mb-3"
-                                    data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                    data-bs-placement="bottom" data-bs-title="I am unsure about the meaning of this
-                                    word, or I might be confusing it with another, even after reviewing example uses.">
-                                    <span class="fw-bold">1. No recall</span>
-                                    <br><span class="small">Forgotten</span>
-                                </button>
-                                <button id="btn-answer-fuzzy" type="button" value="2"
-                                    class="btn btn-lg btn-primary btn-answer mb-3"
-                                    data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                    data-bs-placement="bottom" data-bs-title="I have a general idea of what this
-                                    word means, but my understanding is hazy and uncertain, even after reviewing
-                                    example uses.">
-                                    <span class="fw-bold">2. Fuzzy</span>
-                                    <br><span class="small">New</span>
-                                </button>
-                                <button id="btn-answer-partial" type="button" value="1"
-                                    class="btn btn-lg btn-warning btn-answer mb-3"
-                                    data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                    data-bs-placement="bottom" data-bs-title="I was only able to fully understand the
-                                    meaning of this word after reviewing example uses.">
-                                    <span class="fw-bold">3. Partial</span>
-                                    <br><span class="small">Learning</span>
-                                </button>
-                                <button id="btn-answer-excellent" type="button" value="0"
-                                    class="btn btn-lg btn-success btn-answer mb-3"
-                                    data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                    data-bs-placement="bottom" data-bs-title="I thoroughly understand and can
-                                    confidently use this word.">
-                                    <span class="fw-bold">4. Excellent</span>
-                                    <br><span class="small">Learned</span>
-                                </button>
+                                <div id="answer-card" class="mx-auto" style="max-width: 550px;">
+                                    <div id="answer-card-page-1">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Did you know the full meaning before seeing the examples?</h5>
+                                            <div class="d-flex flex-column">
+                                            <button id="btn-answer-more" type="button"
+                                                class="btn btn-lg btn-danger my-3">
+                                                <span class="fw-bold">(+) No, not really</span>
+                                                <br><span class="small">I had little to no understanding of this word before the examples</span>
+                                            </button>
+                                            <button id="btn-answer-excellent" type="button" value="0"
+                                                class="btn btn-lg btn-success btn-answer mb-3">
+                                                <span class="fw-bold">(4) Yes, of course!</span>
+                                                <br><span class="small">I already knew exactly what this word meant before seeing any examples</span>
+                                            </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="answer-card-page-2" class="d-none">
+                                        <div class="card-body">
+                                            <h5 class="card-title">After reviewing the examples, how well do you understand it now?</h5>
+                                            <div class="d-flex flex-column">
+                                            <button id="btn-answer-no-recall" type="button" value="3"
+                                                class="btn btn-lg btn-danger btn-answer my-3">
+                                                <span class="fw-bold">(1) Still no clue</span>
+                                                <br><span class="small">I have no idea what it means or confuse this word with something else</span>
+                                            </button>
+                                            <button id="btn-answer-fuzzy" type="button" value="2"
+                                                class="btn btn-lg btn-primary btn-answer mb-3">
+                                                <span class="fw-bold">(2) General idea</span>
+                                                <br><span class="small">I have a sense, but can't give the exact meaning or translation</span>
+                                            </button>
+                                            <button id="btn-answer-partial" type="button" value="1"
+                                                class="btn btn-lg btn-warning btn-answer mb-3">
+                                                <span class="fw-bold">(3) Completely understand</span>
+                                                <br><span class="small">I now fully understand what it means</span>
+                                            </button>
+                                            <button id="btn-answer-prev" class="btn btn-lg btn-outline-secondary mb-3" id="prevPageBtn">← Back to previous question</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -124,10 +141,10 @@ require_once PUBLIC_PATH . 'header.php';
 </div>
 
 <?php
-    require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
-    if (!empty($user->hf_token)) {
-        require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
-    }
+require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
+if (!empty($user->hf_token)) {
+    require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
+}
 ?>
 
 <script defer src="/js/study.min.js"></script>
