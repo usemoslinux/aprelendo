@@ -97,13 +97,40 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
         crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
 
-    <?php if($curpage=='login' || $use_google_login): ?>
+    <!-- Cal-Heatmap scripts and style sheets for stats page only -->
+    <?php if($curpage=='stats'): ?>
+    <script src="https://d3js.org/d3.v7.min.js" 
+        integrity="sha512-vc58qvvBdrDR4etbxMdlTt4GBQk1qjvyORR2nrsPsFPyrs+/u5c3+1Ct6upOgdZoIl7eq6k3a1UPDSNAQi/32A=="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/cal-heatmap/dist/cal-heatmap.min.js"
+        integrity="sha512-c30EKKfFAjoXgk+P/C4DF+B0uRWiWL1ZX21nS3FH4SsexSjOBbwM4danZUAnDmVKzdDpbSKrkR4vWO3JFstzcQ=="
+        crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="https://unpkg.com/cal-heatmap/dist/cal-heatmap.css"
+        integrity="sha512-Z9sQ/pYnUJ7hSzK16+NScA+tcAxFXoZ+vQZ5FQ3FgvNCcpI+fKXepuGc2OvamHHOU00tEBOi2CVbS9xRDpslRw=="
+        crossorigin="anonymous">
+    <script src="https://unpkg.com/@popperjs/core@2"
+        integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ=="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/cal-heatmap/dist/plugins/Tooltip.min.js"
+        integrity="sha512-udm+VHvcN//WFrhJG4C/ittWSSaOT+8uN2cZR3IOfMFZhHFYYvGJ8icwWjNKUY2MrMa50iX2Rn40epm6ncBXcA=="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/cal-heatmap/dist/plugins/CalendarLabel.min.js"
+        integrity="sha512-OAfBG8mdMW+HCq1M5znKxyZP2Y/20Dns6Tn2SKxCyWD6bX/Wa0vaYg0e4heK++W5UTWpdr9p6Lwu6rUl3J6vrg=="
+        crossorigin="anonymous">
+    </script>
+    <?php endif; ?>
+
     <!-- Google API -->
+    <?php if($curpage=='login' || $use_google_login): ?>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <?php endif; ?>
 
-    <?php if ($_SERVER['HTTP_HOST'] === 'www.aprelendo.com'): ?>
     <!-- Matomo Analytics -->
+    <?php if ($_SERVER['HTTP_HOST'] === 'www.aprelendo.com'): ?>
         <script src="/js/matomo.min.js" async defer></script>
     <?php endif; ?>
 </head>

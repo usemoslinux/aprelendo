@@ -87,15 +87,6 @@ if ($total_nr_of_badges > 0) {
 }
 ?>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"
-    integrity="sha512-ZwR1/gSZM3ai6vCdI+LVF1zSq/5HznD3ZSTk7kajkaj4D292NLuduDCO1c/NT8Id+jE58KYLKT7hXnbtryGmMg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer">
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
-    integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
@@ -109,6 +100,21 @@ if ($total_nr_of_badges > 0) {
                     </li>
                 </ol>
             </nav>
+        </div>
+    </div>
+
+    <!-- Reviews Heatmap -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card h-100">
+                <div class="card-header text-center fw-bolder">
+                    <div>Reviews Heatmap</div>
+                </div>
+                <div class="card-body small">
+                    <div id="heatmap"></div>
+                    <div class="text-center mt-2">Each square is a day; darker means more words reviewed.</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -300,6 +306,18 @@ if ($total_nr_of_badges > 0) {
     <?php echo $achievements_html; ?>
 </div>
 
+
+<!-- ChartJS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"
+    integrity="sha512-ZwR1/gSZM3ai6vCdI+LVF1zSq/5HznD3ZSTk7kajkaj4D292NLuduDCO1c/NT8Id+jE58KYLKT7hXnbtryGmMg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
+    integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script defer src="/js/stats.min.js"></script>
+<script defer src="/js/reviewheatmap.min.js"></script>
 
 <?php require_once 'footer.php'; ?>

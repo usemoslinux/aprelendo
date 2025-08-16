@@ -57,6 +57,22 @@ class WordStats extends DBEntity
     } // end getRecalledToday()
 
     /**
+     * Returns nr. of words reviewed by user, grouped by date
+     *
+     * @return array
+     */
+    public function getReviewsPerDay(): array
+    {
+        $sql = "SELECT DATE(`date_modified`) AS `date`, COUNT(*) AS `count`
+                FROM `{$this->table}`
+                WHERE `user_id`=? AND `lang_id`=?
+                GROUP BY DATE(`date_modified`)
+                ORDER BY DATE(`date_modified`) DESC";
+
+        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
+    }
+
+    /**
      * Gets total stats for user words in a specific language, grouped by status
      *
      * @return array

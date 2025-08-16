@@ -25,7 +25,7 @@ $(document).ready(function () {
     function drawTotalStats() {
         $.ajax({
             type: "GET",
-            url: "ajax/getstats.php",
+            url: "ajax/getwordsbystatus.php",
             data: { type: "words" },
             dataType: "json"
         })

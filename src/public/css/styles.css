@@ -1191,6 +1191,12 @@ div.blurry-background {
 
 /* STATS */
 
+#heatmap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .word-description {
     color: white;
     margin-right: 5px;
