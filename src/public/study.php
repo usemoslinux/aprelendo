@@ -77,7 +77,7 @@ require_once PUBLIC_PATH . 'header.php';
                                 </div>
                                 <p id="study-card-examples" class="card-examples"></p>
                             </div>
-                            <div id="live-progress" class="progress rounded-0" style="height: 2px;">
+                            <div id="live-progress" class="progress rounded-0" style="height: 1px;">
                                 <div id="live-progress-bar" class="progress-bar bg-secondary"
                                     role="progressbar"
                                     aria-label="Study progress"

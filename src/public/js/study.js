@@ -142,7 +142,7 @@ $(document).ready(function () {
 
                 // update card
                 $("#study-card").data('word', word);
-                updateLiveProgressBar(); // reset live progress bar
+                updateLiveProgressBar(); // update live progress bar
                 $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
                 $("#study-card-word-title").removeClass('placeholder').text(word);
                 
@@ -343,7 +343,7 @@ $(document).ready(function () {
      * Updates the progress bar to reflect the current study progress.
      */
     function updateLiveProgressBar() {
-        const percentage = Math.round((cur_card_index / max_cards) * 100);
+        const percentage = Math.round((cur_card_index + 1 / max_cards) * 100);
         $("#live-progress-bar")
             .css("width", percentage + "%")
             .attr("aria-valuenow", percentage);
@@ -365,7 +365,7 @@ $(document).ready(function () {
 
         // remove "border-*" classes from #study-card-header
         $card_header.removeClass(function (index, className) {
-            return (className.match(/\bborder-\S+|\btext-bg-\S+/g) || []).join(' ');
+            return (className.match(/\bborder-\S+|\bbg-\S+/g) || []).join(' ');
         });
 
         switch (status) {
