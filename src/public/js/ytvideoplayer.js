@@ -100,4 +100,5 @@ function onPlayerStateChange(event) {
 
 function onPlayerReady(event) {
     VideoController.instance.seekTo(VideoController.start_time, true);
+    VideoController.instance.pauseVideo();
 }
