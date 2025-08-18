@@ -61,12 +61,24 @@ $(document).ready(function() {
     // *************************************************************
     // ******************* WORD/PHRASE SELECTION ******************* 
     // *************************************************************
+    let MediaController;
 
-    WordSelection.setupEvents({
-        actionBtns: TextActionBtns,
-        controller: AudioController,
-        linkBuilder: LinkBuilder.forTranslationInText
-    });
+    if (typeof AudioController !== 'undefined') {
+        MediaController = AudioController;
+    } else if (typeof VideoController !== 'undefined') {
+        MediaController = VideoController;
+    } else {
+        // Handle the case where neither controller is available
+        console.log('No suitable media controller found.');
+    }
+
+    if (MediaController) {
+        WordSelection.setupEvents({
+            actionBtns: TextActionBtns,
+            controller: MediaController,
+            linkBuilder: LinkBuilder.forTranslationInText
+        });
+    }
 
     // *************************************************************
     // **** ACTION BUTTONS (ADD, DELETE, FORGOT & DICTIONARIES) **** 
@@ -202,7 +214,7 @@ $(document).ready(function() {
             });
 
         TextActionBtns.hide();
-        AudioController.resume();
+        MediaController.resume();
     }); // end #btn-add.on.click
 
     /**
@@ -293,7 +305,7 @@ $(document).ready(function() {
             });
         
         TextActionBtns.hide();
-        AudioController.resume();
+        MediaController.resume();
     }); // end #btn-remove.on.click
 
 
@@ -331,7 +343,7 @@ $(document).ready(function() {
 
                 setNewTooltip(document.getElementById('btn-next-phase'), 'Go to phase 3: Speaking');
 
-                AudioController.playFromBeginning();
+                MediaController.playFromBeginning();
                 break;
             case 3:
                 scrollToPageTop();
@@ -348,7 +360,7 @@ $(document).ready(function() {
                     + 'you listen to the audio. You can slow it down if necessary.</span>'
                 );
 
-                AudioController.playFromBeginning();
+                MediaController.playFromBeginning();
                 break;
             case 4:
                 scrollToPageTop();

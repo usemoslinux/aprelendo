@@ -254,7 +254,7 @@ class Videos extends DBEntity
      * @param string $url
      * @return string YouTube Id string
      */
-    public function extractYTId(string $url): string
+    public static function extractYTId(string $url): string
     {
         if (preg_match('#^(https?://)?(www\.|m\.)?youtube\.com/watch\?v=([^&]+)#', $url, $matches)) {
             return $matches[3];
@@ -265,6 +265,18 @@ class Videos extends DBEntity
         }
     } // end extractYTId()
 
+    /**
+     * Check if a given URL is a valid YouTube video link
+     *
+     * @param string $url
+     * @return bool
+     */
+    public static function isYTVideo(string $url): bool
+    {
+        return preg_match('#^(https?://)?(www\.|m\.)?youtube\.com/watch\?v=([^&]+)#', $url)
+            || preg_match('#^https?://youtu\.be/([^?]+)#', $url);
+    } // end isYTVideo()
+    
     /**
      * Loads video record data by Id
      *
@@ -285,7 +297,7 @@ class Videos extends DBEntity
             $this->transcript_xml = $row['text'];
             $this->source_url     = $row['source_uri'];
             $this->date_created   = $row['date_created'];
-            $this->youtube_id     = $this->extractYTId($this->source_url);
+            $this->youtube_id     = self::extractYTId($this->source_url);
         }
     } // end loadRecord()
 }

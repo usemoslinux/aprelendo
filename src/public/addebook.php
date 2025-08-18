@@ -88,7 +88,7 @@ require_once PUBLIC_PATH . 'header.php';
                             <input type="text" id="audio-uri" name="audio-uri" class="form-control" maxlength="200"
                                 placeholder="Audio URL (optional)">
                             <div class="form-text" id="audio-url-helptext">
-                                Accepts URLs from Google Drive or any standard audio source.
+                                Accepts URLs from YouTube, Google Drive or any standard audio source.
                             </div>
                         </div>
                     </div>

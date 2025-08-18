@@ -25,6 +25,7 @@ use Aprelendo\Reader;
 use Aprelendo\Texts;
 use Aprelendo\TextsUtilities;
 use Aprelendo\AudioPlayerForEbooks;
+use Aprelendo\Videos;
 use Aprelendo\UserException;
 
 $class = '';
@@ -77,7 +78,7 @@ $text->loadRecord($_GET['id']);
 $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
             ? TextsUtilities::getGoogleDriveAudioUri($text->audio_uri)
             : $text->audio_uri;
-
+$audio_source_is_YT = Videos::isYTVideo($audio_uri);
 ?>
 
 <!DOCTYPE html>
@@ -161,8 +162,14 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
         </div>
         <?php
             if (!empty($audio_uri)) {
-                $audio_player = new AudioPlayerForEbooks($audio_uri);
-                echo $audio_player->show();
+                if ($audio_source_is_YT) {
+                    echo '<div class="video-player">' .
+                        '<div data-ytid="' . Videos::extractYTId($audio_uri) . '" id="videoplayer"></div>' .
+                        '</div>';
+                } else {
+                    $audio_player = new AudioPlayerForEbooks($audio_uri);
+                    echo $audio_player->show();
+                }
             }
         ?>
     </div>
@@ -238,7 +245,11 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
     <script defer src="/js/wordselection.min.js"></script>
     <script defer src="/js/actionbtns.min.js"></script>
     <script defer src="/js/showebook.min.js"></script>
-    <script defer src="/js/audioplayer.min.js"></script>
+    <?php if ($audio_source_is_YT): ?>
+        <script src="/js/ytvideoplayer.min.js"></script>
+    <?php else: ?>
+        <script defer src="/js/audioplayer.min.js"></script>
+    <?php endif; ?>
     <script defer src="/js/dictionaries.min.js"></script>
     <script defer src="/js/helpers.min.js"></script>
     <script defer src="/js/tooltips.min.js"></script>

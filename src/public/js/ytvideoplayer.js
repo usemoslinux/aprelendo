@@ -12,8 +12,8 @@ let VideoController = {}; // Define the custom player object
 // Function called when the YouTube API is ready
 window.onYouTubeIframeAPIReady = function () {
     VideoController.instance = new YT.Player("videoplayer", {
-
         playerVars: {
+            autoplay: 0, // don't autoplay
             loop: 0, // don't play video in a loop
             controls: 2, // minimum controls
             fs: 0, // disable fullscreen
@@ -24,12 +24,14 @@ window.onYouTubeIframeAPIReady = function () {
         },
         videoId: ytId,
         events: {
-            onStateChange: onPlayerStateChange
+            onStateChange: onPlayerStateChange,
+            onReady: onPlayerReady
         }
     });
 
     VideoController.resume_video = false;
     VideoController.timer_id = null;
+    VideoController.start_time = null;
 
     // Add custom methods to the VideoController object
     VideoController.play = function() {
@@ -55,6 +57,14 @@ window.onYouTubeIframeAPIReady = function () {
             VideoController.resume_video = false;
         }
     };
+    
+    VideoController.getCurrentTime = function() {
+        return VideoController.instance.getCurrentTime();
+    };
+
+    VideoController.seekTo = function(seconds) {
+        VideoController.start_time = seconds;
+    };
 };
 
 function onPlayerStateChange(event) {
@@ -63,7 +73,7 @@ function onPlayerStateChange(event) {
 
     const updateTime = (interval) => {
         return setInterval(() => {
-            current_video_time = VideoController.instance.getCurrentTime();
+            current_video_time = VideoController.getCurrentTime();
             const next_obj = objs
                 .filter(div => parseFloat(div.dataset.start) < current_video_time)
                 .slice(-1)[0];
@@ -86,4 +96,8 @@ function onPlayerStateChange(event) {
         clearInterval(VideoController.timer_id);
         VideoController.timer_id = null;
     }
+}
+
+function onPlayerReady(event) {
+    VideoController.instance.seekTo(VideoController.start_time, true);
 }

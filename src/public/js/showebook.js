@@ -119,14 +119,20 @@ $(document).ready(function () {
         // save word status before closing
         $.when(SaveWords()).then(function () {
             // save book position to resume reading from there later
-            let audio = document.getElementById("audioplayer");
-            let audio_pos = audio != null ? audio.currentTime : 0;
+            let audio_pos = 0;
+            const audio = document.getElementById("audioplayer");
+            const video = document.getElementById("videoplayer");
+
+            if (audio) {
+                audio_pos = audio.currentTime;
+            } else if (video) {
+                audio_pos = VideoController.getCurrentTime();
+            }
 
             if (text_pos) {
                 $.when(saveTextAndAudioPos(text_pos, audio_pos)).then(function () {
                     // don't show confirmation dialog when closing window
                     window.parent.show_confirmation_dialog = false;
-
                     window.location.replace("/texts");
                 });
             }
@@ -467,6 +473,7 @@ $(document).ready(function () {
                 const text_pos = data.text_pos;
                 const audio_pos = parseFloat(data.audio_pos);
                 const audio = document.getElementById("audioplayer");
+                const video = document.getElementById("videoplayer");
 
                 // load text position, if available
                 if (text_pos) {
@@ -482,6 +489,8 @@ $(document).ready(function () {
                     } else {
                         audio.currentTime = 0;
                     }
+                } else if (video != null) {
+                    VideoController.seekTo(audio_pos);
                 }
             })
             .fail(function (xhr, ajaxOptions, thrownError) {
