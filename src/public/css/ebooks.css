@@ -54,6 +54,7 @@
 
 #navigation {
     font-size: 14px;
+    width: 401px;
 }
 
 #navigation.fixed {
