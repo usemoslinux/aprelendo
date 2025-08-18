@@ -59,7 +59,7 @@
                     start: new Date(new Date().getFullYear(), new Date().getMonth() - (range - 1), 1),
                 },
 
-                scale: { color: { type: 'quantize', scheme: 'Greens', domain: domain } },
+                scale: { color: { type: "linear", range: ['#BFE6FF', '#0062E6'], interpolate: 'hsl', domain: o, } },
                 theme: 'light'
             },
             [
