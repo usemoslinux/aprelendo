@@ -490,7 +490,7 @@ $(document).ready(function () {
                         audio.currentTime = 0;
                     }
                 } else if (video != null) {
-                    VideoController.seekTo(audio_pos);
+                    initializeVideoPlayer(audio_pos);
                 }
             })
             .fail(function (xhr, ajaxOptions, thrownError) {

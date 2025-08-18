@@ -32,6 +32,9 @@ $(document).ready(function () {
     // Then we set the value in the --vh custom property to the root of the document
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 
+    // initialize video player
+    initializeVideoPlayer(0); // start at 0 seconds
+    
     // initial AJAX calls
     underlineText(); // underline text with user words/phrases
     Dictionaries.fetchURIs(); // get dictionary & translator URIs
