@@ -343,7 +343,7 @@ $(document).ready(function () {
      * Updates the progress bar to reflect the current study progress.
      */
     function updateLiveProgressBar() {
-        const percentage = Math.round((cur_card_index + 1 / max_cards) * 100);
+        const percentage = Math.round((cur_card_index + 1) / max_cards * 100);
         $("#live-progress-bar")
             .css("width", percentage + "%")
             .attr("aria-valuenow", percentage);
