@@ -178,13 +178,13 @@ use Aprelendo\Texts;
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/readability/0.5.0/Readability.min.js"
-    integrity="sha512-XZ0uNdz5h40R7SJavnsSp/TnGvu6WY+U8Q75gZx6orlKCIzutPOd4g+m/zcq7HA1XL8bAQtYLs1zhoCDb4L9sA=="
+<script src="https://cdnjs.cloudflare.com/ajax/libs/readability/0.6.0/Readability.min.js"
+    integrity="sha512-gUyZHlv5aSSuW4HZmQxiuWLagqsiddDmftdPnfgjzjfGlbYnK+Ukam3TAAqKnZ3JXdsaFEwx8o9HGRaj6++ZnA=="
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.11/purify.min.js"
-    integrity="sha512-ce0fmuEgWrpnIXWKQrSgJ5FsBsr/hnOsxdWvk5lu1GThckasLwc+TAFERLNIwWnWqBoWV4GPDJiz2PSPntinVA=="
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.6/purify.min.js"
+    integrity="sha512-YlctBG9PGZIhh9keoqI3eZkQM9T8QUbiBi7qNYAO/TUEo8jqWX5pLp5+x1cKRQDRzJ/lyGyJ9WUVNIRduxIIFw=="
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
 
