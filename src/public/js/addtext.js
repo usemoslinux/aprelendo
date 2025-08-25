@@ -196,6 +196,10 @@ $(document).ready(function() {
     function fetch_readable_text_version(url) {
         resetControls(true);
 
+        function HTMLToPlainText(html) {
+            return $("<input>").html(html).text();
+        }
+
         if (isValidUrl(url)) {
             $("#btn-fetch-img")
                 .removeClass()
@@ -225,8 +229,12 @@ $(document).ready(function() {
                         const doc = document.implementation.createHTMLDocument(
                             "New Document"
                         );
-                        doc.body.parentElement.innerHTML = DOMPurify.sanitize(data.file_contents);
-                        const article = new Readability(doc).parse();
+
+                        doc.documentElement.innerHTML = data.file_contents;
+
+                        // Parse with Readability
+                        const reader = new Readability(doc, { keepClasses: false });
+                        const article = reader.parse();
 
                         if (article == null) {
                             $("#url").val(data.url);
@@ -238,22 +246,28 @@ $(document).ready(function() {
                             return;
                         }
 
-                        $("#title").val($("<input>").html(article.title).text());
-                        $("#author").val($("<input>").html(article.byline).text());
+                        $("#title").val(HTMLToPlainText(article.title));
+                        $("#author").val(HTMLToPlainText(article.byline));
                         $("#url").val(decodeURIComponent(data.url));
-                        let txt = "";
 
-                        const safeContent = DOMPurify.sanitize(article.content, {
-                            FORBID_TAGS: ['figure', 'figcaption', 'img', 'picture', 'video']
+                        // Now sanitise the extracted article HTML before deriving plain text
+                        const clean_HTML = DOMPurify.sanitize(article.content || "", {
+                            USE_PROFILES: { html: true },
+                            FORBID_TAGS: ['figure', 'figcaption', 'img', 'picture', 'video', 'audio', 'iframe', 'form', 'button', 'input'],
+                            KEEP_CONTENT: false
                         });
-                        let $tempDom = $("<output>").append($.parseHTML(safeContent, document, false));
 
-                        txt = $("p, h1, h2, h3, h4, h5, h6", $tempDom).map(function() {
-                            return $(this).text().replace(/\s+/g, " ").trim();
-                        }).get().join("\n\n");
+                        // Derive plain text from headings/paragraphs
+                        const $tmp_DOM = $("<output>").append($.parseHTML(clean_HTML, document, false));
+                        let txt = $("p, h1, h2, h3, h4, h5, h6, li, blockquote", $tmp_DOM)
+                            .map(function () {
+                                return $(this).text().replace(/\s+/g, " ").trim();
+                            })
+                            .get()
+                            .filter(Boolean)
+                            .join("\n\n");
 
-                        txt = normalizeParagraphBreaks(txt);
-                        txt = txt.replace(/\t/g, ""); // remove tabs
+                        txt = normalizeParagraphBreaks(txt).replace(/\t/g, "");
 
                         $("#text").val($.trim(txt));
                         updateCharsLeft();
