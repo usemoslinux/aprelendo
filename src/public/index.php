@@ -45,7 +45,9 @@ require_once PUBLIC_PATH . 'head.php';
                 <div class="container mb-auto">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h1 class="py-5">Learn a new language<br>one story at a time</h1>
+                            <h1 class="display-4 py-5" style="line-height: 2em;">
+                                Learn a new language<br>one story at a time
+                            </h1>
                             <h4 class="py-md-5">Want to know more about our method?</h4><br>
                             <h4 class="py-md-5">It's called
                                 <a href="/totalreading" class="text-warning">
@@ -63,51 +65,51 @@ require_once PUBLIC_PATH . 'head.php';
                                 <div class="card-body">
                                     <h4 class="card-title">I want to learn</h4>
                                     <div class="d-flex flex-wrap justify-content-center">
-                                        <a href="/register?tolang=arabic" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register?tolang=arabic" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/ar.svg" alt="Arabic" class="flag-icon">
                                             &nbsp;Arabic
                                         </a>
-                                        <a href="/register?tolang=chinese" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register?tolang=chinese" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/zh.svg" alt="Chinese" class="flag-icon">
                                             &nbsp;Chinese
                                         </a>
-                                        <a href="/register?tolang=english" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register?tolang=english" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/en.svg" alt="English" class="flag-icon">
                                             &nbsp;English
                                         </a>
-                                        <a href="/register?tolang=french" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register?tolang=french" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/fr.svg" alt="French" class="flag-icon">
                                             &nbsp;French
                                         </a>
-                                        <a href="/register?tolang=german" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register?tolang=german" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/de.svg" alt="German" class="flag-icon">
                                             &nbsp;German
                                         </a>
-                                        <a href="/register?tolang=italian" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register?tolang=italian" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/it.svg" alt="Italian" class="flag-icon">
                                             &nbsp;Italian
                                         </a>
-                                        <a href="/register?tolang=japanese" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register?tolang=japanese" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/ja.svg" alt="Japanese" class="flag-icon">
                                             &nbsp;Japanese
                                         </a>
-                                        <a href="/register?tolang=korean" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register?tolang=korean" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/ko.svg" alt="Korean" class="flag-icon">
                                             &nbsp;Korean
                                         </a>
-                                        <a href="/register?tolang=portuguese" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register?tolang=portuguese" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/pt.svg" alt="Portuguese" class="flag-icon">
                                             &nbsp;Portuguese
                                         </a>
-                                        <a href="/register?tolang=russian" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register?tolang=russian" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/ru.svg" alt="Russian" class="flag-icon">
                                             &nbsp;Russian
                                         </a>
-                                        <a href="/register?tolang=spanish" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register?tolang=spanish" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/es.svg" alt="Spanish" class="flag-icon">
                                             &nbsp;Spanish
                                         </a>
-                                        <a href="/register" class="btn btn-outline-secondary m-1 language-pill">
+                                        <a href="/register" class="btn btn-secondary m-1 language-pill">
                                             <img src="img/flags/un.svg" alt="Spanish" class="flag-icon">
                                             &nbsp;+19 more
                                         </a>
@@ -168,10 +170,10 @@ require_once PUBLIC_PATH . 'head.php';
                                 <div class="card-body">
                                     <span class="bi bi-code-slash display-1"></span>
                                     <h4 class="card-title mt-3 mb-5">Open Source</h4>
-                                    <p class="card-text">Aprelendo is open source software, meaning you can download and fiddle
-                                        with its source code. This allows us to be super transparent and build
-                                        a community of users and developers. With some technical knowledge, you
-                                        can even build your own Aprelendo environment.</p>
+                                    <p class="card-text">Aprelendo is free & open source software, meaning you can
+                                        download and fiddle with its source code. This allows us to be super
+                                        transparent and build a community of users and developers. With some technical
+                                        knowledge, you can even build your own Aprelendo environment.</p>
                                 </div>
                             </div>
                         </a>

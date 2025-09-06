@@ -34,9 +34,9 @@
                 <!-- Navbar links -->
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ms-auto mt-3 mt-md-auto pe-3">
-                        <li class="nav-item my-auto"><a class="nav-link" href="/index#hiw">How it works</a></li>
-                        <li class="nav-item my-auto"><a class="nav-link" href="/donate">Donate</a></li>
-                        <li class="nav-item">
+                        <li class="nav-item my-2 me-md-2"><a class="nav-link" href="/index#hiw">How it works</a></li>
+                        <li class="nav-item my-2 me-md-2"><a class="nav-link" href="/donate">Donate</a></li>
+                        <li class="nav-item my-2">
                             <a class="nav-link" id="login-menu" href="/login">Sign in</a>
                         </li>
                     </ul>

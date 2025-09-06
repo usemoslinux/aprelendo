@@ -66,20 +66,24 @@ $today_is_reading_streak = $gems->today_is_streak;
                 <!-- Navbar links -->
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ms-auto mt-3 mt-md-auto pe-3">
-                        <li id="streak-days" class="nav-item mb-2 mb-md-0 py-2 pe-md-2 gamification">
-                            <img src="/img/gamification/streak.png"
-                            style="<?php echo $today_is_reading_streak ? '' : 'filter: grayscale(1);'; ?>"
-                            class="me-3 me-md-1 header-gamification-icon" alt="Streak"
-                            title="Reading streak days"> <?php echo number_format($streak_days); ?>
+                        <li id="streak-days" class="nav-item my-2 mx-auto me-md-3 gamification">
+                            <span class="d-block py-2">
+                                <img src="/img/gamification/streak.png"
+                                style="<?php echo $today_is_reading_streak ? '' : 'filter: grayscale(1);'; ?>"
+                                class="me-1 me-md-1 header-gamification-icon" alt="Streak"
+                                title="Reading streak days"> <?php echo number_format($streak_days); ?>
+                            </span>
                         </li>
-                        <li id="gems" class="nav-item mb-1 mb-md-0 py-2 pe-md-2 gamification">
-                            <img src="/img/gamification/gems.png" class="me-3 me-md-1 ms-md-2 header-gamification-icon"
-                            alt="Gems" title="Gems earned"> <?php echo number_format($nr_of_gems); ?>
+                        <li id="gems" class="nav-item my-2 mx-auto me-md-3 gamification">
+                            <span class="d-block py-2">
+                                <img src="/img/gamification/gems.png" class="me-1 me-md-1 ms-md-2 header-gamification-icon"
+                                alt="Gems" title="Gems earned"> <?php echo number_format($nr_of_gems); ?>
+                            </span>
                         </li>
-                        <li id="language-dropdown" class="nav-item dropdown">
+                        <li id="language-dropdown" class="nav-item dropdown my-2 me-md-2">
                             <a href="javascript:;" id="language-menu" class="nav-link dropdown-toggle" role="button"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="me-3 me-md-0 language-flag"
+                                <img class="me-1 me-md-0 language-flag"
                                     src="/img/flags/<?php echo $user->lang . '.svg';?>"
                                     alt="<?php echo $lang_full; ?> flag">
                                 <span id="learning-lang-span">
@@ -94,10 +98,10 @@ $today_is_reading_streak = $gems->today_is_streak;
                             </div>
                         </li>
 
-                        <li id="user-dropdown" class="nav-item dropdown">
+                        <li id="user-dropdown" class="nav-item dropdown my-2">
                             <a id="user-menu" href="javascript:;" class="nav-link dropdown-toggle" role="button"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="bi bi-person-circle me-3 me-md-1"></span>
+                                <span class="bi bi-person-circle me-1 me-md-1"></span>
                                 <?php echo ucfirst($user->name); ?>
                                 <strong class="caret"></strong>
                             </a>

@@ -88,24 +88,24 @@ $audio_source_is_YT = Videos::isYTVideo($audio_uri);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
-        content="Language learning platform designed to boost your reading, listening, speaking and writing skills.">
+        content="Aprelendo is a free, open-source language learning platform designed to boost your reading, listening, speaking and writing skills without hidden costs.">
     <meta name="keywords"
         content="language, learning, language learning, flashcards, total reading, reading, ebooks, books, videos">
     <meta name="author" content="Aprelendo">
 
-    <link rel="icon" type="image/png" href="/img/favicons/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/img/favicons/favicon.svg" />
-    <link rel="shortcut icon" href="/img/favicons/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="Aprelendo" />
-    <link rel="manifest" href="/img/favicons/site.webmanifest" />
+    <link rel="icon" type="image/png" href="/img/favicons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/img/favicons/favicon.svg">
+    <link rel="shortcut icon" href="/img/favicons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Aprelendo">
+    <link rel="manifest" href="/img/favicons/site.webmanifest">
 
-    <title>Aprelendo: Learn languages with your favorite texts, ebooks and videos</title>
+    <title>Aprelendo: Free Language Learning Platform</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/css/bootstrap.min.css"
         integrity="sha512-fw7f+TcMjTb7bpbLJZlP8g2Y4XcCyFZW8uy8HsRZsH/SwbMw0plKHFHr99DN3l04VsYNwvzicUX/6qurvIxbxw==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <!-- Extra style sheets -->
     <link rel="stylesheet" type="text/css" href="/css/ebooks.min.css">
@@ -119,7 +119,7 @@ $audio_source_is_YT = Videos::isYTVideo($audio_uri);
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
         integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer">
         
     <!-- Epub.js & jszip -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
