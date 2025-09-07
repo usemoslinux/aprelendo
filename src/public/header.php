@@ -42,14 +42,6 @@ $today_is_reading_streak = $gems->today_is_streak;
 
 ?>
 
-<script>
-    function init() {
-        gapi.load('auth2', function() {
-            gapi.auth2.init();
-        });
-    }
-</script>
-
 <div class="d-flex h-100 flex-column">
     <header>
         <nav class="navbar navbar-expand-md navbar-light">

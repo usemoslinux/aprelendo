@@ -72,7 +72,6 @@ if (!$user_auth->isLoggedIn()) {
                         <p class="mb-3">Help build features, fix bugs, improve performance, and translate the UI.</p>
                         <a href="https://github.com/usemoslinux/aprelendo" target="_blank"
                             class="btn btn-outline-light btn-lg" title="Contribute on GitHub" rel="noopener noreferrer">
-                            a
                             Contribute on <span class="bi bi-github"></span> GitHub
                         </a>
                         <p class="mt-3 mb-0 small opacity-75">Code contributions are different from donations. Both are welcome.</p>
