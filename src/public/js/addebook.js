@@ -122,7 +122,7 @@ $(document).ready(function() {
         if (audio_url.includes('drive.google.com')) {
             help_text.html('<i class="bi bi-cloud-fill"></i> Remember to <a href="https://support.google.com/drive/answer/2494822?hl=en&co=GENIE.Platform%3DDesktop#zippy=%2Cshare-a-file-publicly" target="_blank" rel="noopener noreferrer" class="alert-link">share this file publicly</a>, allowing access to anyone with the link.');
         } else {
-            help_text.text('Accepts URLs from Google Drive or any standard audio source.');
+            help_text.text('Accepts URLs from YouTube, Google Drive or any standard audio source.');
         }
     }); // end #audio-url.on.input
 
