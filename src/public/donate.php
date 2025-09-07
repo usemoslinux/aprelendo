@@ -54,27 +54,45 @@ if (!$user_auth->isLoggedIn()) {
             </div>
 
             <div class="row g-4 mt-2">
-                <div class="col-md-6">
+                <!-- One-time donation -->
+                <div class="col-md-6 col-lg-4">
                     <div class="p-4 h-100 bg-dark bg-opacity-25 rounded-4 shadow-sm text-center">
-                        <h5 class="mb-2">Donate funds</h5>
-                        <p class="mb-3">Financial support pays for servers, storage, bandwidth, and ongoing development.</p>
-                        <a href="https://www.paypal.com/ncp/payment/GJCS2645TD9GN" target="_blank"
-                            class="btn btn-warning btn-lg" title="Support via PayPal" rel="noopener noreferrer">
+                        <h5 class="mb-2">One-time donation</h5>
+                        <p class="mb-3">Support us once — every contribution helps pay for servers, storage, bandwidth, and development.</p>
+                        <a href="https://www.paypal.com/ncp/payment/GJCS2645TD9GN"
+                            target="_blank" rel="noopener noreferrer"
+                            class="btn btn-warning btn-lg" title="One-time support via PayPal" aria-label="One-time support via PayPal">
                             Support via <span class="bi bi-paypal"></span> PayPal
                         </a>
-                        <p class="mt-3 mb-0 small opacity-75">One-time or recurring. The platform remains free for everyone.</p>
+                        <p class="mt-3 mb-0 small opacity-75">The platform remains free for everyone.</p>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <!-- Monthly subscription -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="p-4 h-100 bg-dark bg-opacity-25 rounded-4 shadow-sm text-center">
+                        <h5 class="mb-2">Monthly subscription</h5>
+                        <p class="mb-3">Become a sustaining supporter and help us plan development with steady funding.</p>
+                        <a href="https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-8LR343662E4241010NC66QYQ"
+                            target="_blank" rel="noopener noreferrer"
+                            class="btn btn-warning btn-lg" title="Monthly support via PayPal" aria-label="Monthly support via PayPal">
+                            Subscribe via <span class="bi bi-paypal"></span> PayPal
+                        </a>
+                        <p class="mt-3 mb-0 small opacity-75">Cancel anytime from your PayPal account settings.</p>
+                    </div>
+                </div>
+
+                <!-- Contribute code -->
+                <div class="col-md-12 col-lg-4">
                     <div class="p-4 h-100 bg-dark bg-opacity-25 rounded-4 shadow-sm text-center">
                         <h5 class="mb-2">Contribute code</h5>
                         <p class="mb-3">Help build features, fix bugs, improve performance, and translate the UI.</p>
-                        <a href="https://github.com/usemoslinux/aprelendo" target="_blank"
-                            class="btn btn-outline-light btn-lg" title="Contribute on GitHub" rel="noopener noreferrer">
+                        <a href="https://github.com/usemoslinux/aprelendo"
+                            target="_blank" rel="noopener noreferrer"
+                            class="btn btn-outline-light btn-lg" title="Contribute on GitHub" aria-label="Contribute on GitHub">
                             Contribute on <span class="bi bi-github"></span> GitHub
                         </a>
-                        <p class="mt-3 mb-0 small opacity-75">Code contributions are different from donations. Both are welcome.</p>
+                        <p class="mt-3 mb-0 small opacity-75">Code contributions are also welcome.</p>
                     </div>
                 </div>
             </div>
@@ -90,7 +108,7 @@ if (!$user_auth->isLoggedIn()) {
                     <div class="p-4 h-100 bg-dark bg-opacity-25 rounded-4 shadow-sm">
                         <h5 class="mb-2">Where your donation goes</h5>
                         <p class="mb-2">Servers, storage, bandwidth, and monitoring to keep Aprelendo fast and reliable.</p>
-                        <p class="mb-0">Development time for features that strengthen reading, listening, speaking, and writing—especially for learners stuck on a plateau.</p>
+                        <p class="mb-0">Development time for features that strengthen reading, listening, speaking, and writing, especially for learners stuck on a plateau.</p>
                     </div>
                 </div>
 
