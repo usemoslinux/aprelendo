@@ -173,13 +173,14 @@ try {
             $file_upload_log = new LogFileUploads($pdo, $user->id);
             $nr_of_uploads_today = $file_upload_log->countTodayRecords();
 
-            if ($nr_of_uploads_today >= 1) {
+            if ($nr_of_uploads_today >= $file_upload_log::MAX_UPLOAD_LIMIT) {
                 throw new UserException('Sorry, you have reached your file upload limit for today.');
             }
 
             // upload file & create unique file name
             $ebook_file = new EbookFile($_FILES['url']['name']);
-            $ebook_file->put($_FILES['url']);
+            $ebook_file->put($_FILES['url'], true);
+            $ebook_file->strip();
             $target_file_name = $ebook_file->name;
 
             // save text in db

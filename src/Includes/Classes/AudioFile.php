@@ -30,6 +30,6 @@ class AudioFile extends File
     {
         parent::__construct($file_name);
         $this->allowed_extensions = ['mp3', 'ogg'];
-        $this->max_size = 2097152; // 2 MB
+        $this->max_size = 67108864; // 64 MB
     } // end __construct()
 }

@@ -22,6 +22,8 @@ namespace Aprelendo;
 
 class LogFileUploads extends Log
 {
+    public const MAX_UPLOAD_LIMIT = 3; // max 3 uploads per day
+
     /**
      * Constructor
      *

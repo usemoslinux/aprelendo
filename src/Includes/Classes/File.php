@@ -62,9 +62,10 @@ class File
     /**
      * Uploads files
      * @param array $file_array Array containing file info
+     * @param bool $is_temporary If true, file is temporary and will be deleted
      * @return void
      */
-    public function put(array $file_array): void
+    public function put(array $file_array, bool $is_temporary): void
     {
         $this->name = basename($file_array['name']);
         $this->extension = pathinfo($this->name, PATHINFO_EXTENSION);
@@ -79,7 +80,7 @@ class File
         } while (file_exists($this->path));
         
         // Check file size
-        if ($this->size > $this->max_size || $file_array['error'] == UPLOAD_ERR_INI_SIZE) {
+        if ((!$is_temporary && $this->size > $this->max_size) || $file_array['error'] == UPLOAD_ERR_INI_SIZE) {
             $errors[] = '<li>File size should be less than ' . number_format($this->max_size) .
                 ' bytes. Your file has ' . number_format($this->size) . ' bytes.<br>';
         }

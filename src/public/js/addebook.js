@@ -38,13 +38,7 @@ $(document).ready(function() {
         const file_name = $epub_file[0].files[0].name.split(".");
         const ext = file_name.pop().toLowerCase();
 
-        if ($epub_file[0].files[0].size > 2097152) {
-            showMessage(
-                "This file is bigger than the allowed limit (2 MB). Please try again.",
-                "alert-danger"
-            );
-            resetControls(true);
-        } else if (ext != "epub") {
+        if (ext != "epub") {
             showMessage(
                 "Invalid file extension. Only .epub files are allowed.",
                 "alert-danger"
@@ -80,7 +74,7 @@ $(document).ready(function() {
         $("#btn-upload-epub").addClass("disabled");
         $("#btn-save").addClass("disabled");
         $progressbar.width("33%");
-        $progressbar.text("Uploading epub file...");
+        $progressbar.text("Uploading & converting ebook...");
 
         // try to upload file
         $.ajax({
