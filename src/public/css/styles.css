@@ -1067,6 +1067,11 @@ span.status_learned {
     border-radius: 2px;
 }
 
+.darkmode .video-reading-line {
+    background-color: #2d3238;
+    color: #ffffff;
+}
+
 /* SHOW OFFLINE VIDEO */
 
 #videoplayer {

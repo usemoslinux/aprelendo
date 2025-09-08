@@ -75,37 +75,84 @@ function initializeVideoPlayer(audio_pos) {
         });
 }
 
-function onPlayerStateChange(event) {
-    const objs = Array.from(document.querySelectorAll("#text span"));
-    let current_video_time = 0;
+// helper functions for scrolling and finding spans
+function centerInContainer(el, container) {
+    if (!el || !container) return;
 
-    if (objs.length == 0) {
-        return;
+    const elRect = el.getBoundingClientRect();
+    const contRect = container.getBoundingClientRect();
+    const current = container.scrollTop;
+    const delta = (elRect.top + elRect.height / 2) - (contRect.top + contRect.height / 2);
+    container.scrollTop = current + delta;
+}
+
+function getOffsetTopWithin(el, ancestor) {
+    let top = 0, node = el;
+    while (node && node !== ancestor) {
+        top += node.offsetTop;
+        node = node.offsetParent;
+    }
+    return top;
+}
+
+function getSpans() {
+    return Array.from(document.querySelectorAll("#text-container span"));
+}
+
+function findCurrentIndex(spans, t) {
+    let lo = 0, hi = spans.length - 1, ans = -1;
+    while (lo <= hi) {
+        const mid = (lo + hi) >> 1;
+        const s = parseFloat(spans[mid].dataset.start || "0");
+        if (s <= t) { ans = mid; lo = mid + 1; } else { hi = mid - 1; }
+    }
+    return ans;
+}
+
+// --- ticker driven by rAF while playing ---
+let rafId = null;
+let lastIdx = -1;
+
+function startTicker(VideoController) {
+    if (rafId) cancelAnimationFrame(rafId);
+    const spans = getSpans();
+    if (!spans.length) return;
+    const container = document.getElementById("text-container");
+
+    function tick() {
+        if (!VideoController || VideoController.isPaused()) {
+            rafId = null;
+            return;
+        }
+        const t = VideoController.getCurrentTime();
+        const idx = findCurrentIndex(spans, t);
+        if (idx !== -1 && idx !== lastIdx) {
+            if (lastIdx >= 0 && spans[lastIdx]) spans[lastIdx].classList.remove("video-reading-line");
+            spans[idx].classList.add("video-reading-line");
+            centerInContainer(spans[idx], container);
+            lastIdx = idx;
+        }
+        rafId = requestAnimationFrame(tick);
     }
 
-    const updateTime = (interval) => {
-        return setInterval(() => {
-            current_video_time = VideoController.getCurrentTime();
-            const next_obj = objs
-                .filter(div => parseFloat(div.dataset.start) < current_video_time)
-                .slice(-1)[0];
+    rafId = requestAnimationFrame(tick);
+}
 
-            if (next_obj && !next_obj.classList.contains("video-reading-line")) {
-                objs.forEach(div => div.classList.remove("video-reading-line"));
-                next_obj.classList.add("video-reading-line");
-                next_obj.scrollIntoView({
-                    behavior: 'auto',
-                    block: 'center',
-                    inline: 'center'
-                });
-            }
-        }, interval);
-    };
+function stopTicker() {
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+}
 
-    if (event.data === YT.PlayerState.PLAYING) {
-        VideoController.timer_id = updateTime(500);
-    } else if (VideoController.timer_id !== null) {
-        clearInterval(VideoController.timer_id);
-        VideoController.timer_id = null;
+function onPlayerStateChange(event) {
+    const state = event.data;
+    if (state === YT.PlayerState.PLAYING) {
+        startTicker(VideoController);
+    } else if (state === YT.PlayerState.ENDED) {
+        stopTicker();
+        const spans = getSpans();
+        spans.forEach(s => s.classList.remove("video-reading-line"));
+        lastIdx = -1;
+    } else {
+        stopTicker();
     }
 }
