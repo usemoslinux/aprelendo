@@ -92,7 +92,7 @@ if (!$user_auth->isLoggedIn()) {
                             class="btn btn-outline-light btn-lg" title="Contribute on GitHub" aria-label="Contribute on GitHub">
                             Contribute on <span class="bi bi-github"></span> GitHub
                         </a>
-                        <p class="mt-3 mb-0 small opacity-75">Code contributions are also welcome.</p>
+                        <p class="mt-3 mb-0 small opacity-75">Code contributions are especially welcome.</p>
                     </div>
                 </div>
             </div>
