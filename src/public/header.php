@@ -28,7 +28,7 @@ if (!empty($_GET['lang'])) {
         $lang->loadRecordByName($_GET['lang']);
         $user->setActiveLang($lang->id);
     } catch (\Throwable $th) {
-        header("Location: index.php");
+        header("Location:/");
         exit;
     }
 }
@@ -47,7 +47,7 @@ $today_is_reading_streak = $gems->today_is_streak;
         <nav class="navbar navbar-expand-md navbar-light">
             <div class="container mtb">
                 <!-- Brand -->
-                <a class="navbar-brand" href="/index"></a>
+                <a class="navbar-brand" href="/"></a>
 
                 <!-- Toggler Button -->
                 <button class="navbar-toggler" type="button" aria-label="toggler button" data-bs-toggle="collapse"

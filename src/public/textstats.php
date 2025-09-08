@@ -19,7 +19,7 @@
  */
 
 if (!isset($_POST) || empty($_POST)) {
-    header('Location:texts');
+    header('Location:/texts');
     exit;
 }
 

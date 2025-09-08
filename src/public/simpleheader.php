@@ -23,7 +23,7 @@
         <nav class="navbar navbar-expand-md navbar-light">
             <div class="container mtb">
                 <!-- Brand -->
-                <a class="navbar-brand" href="/index"></a>
+                <a class="navbar-brand" href="/"></a>
 
                 <!-- Toggler Button -->
                 <button class="navbar-toggler" aria-label="toggler button" type="button" data-bs-toggle="collapse"
@@ -34,7 +34,7 @@
                 <!-- Navbar links -->
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ms-auto mt-3 mt-md-auto pe-3">
-                        <li class="nav-item my-2 me-md-2"><a class="nav-link" href="/index#hiw">How it works</a></li>
+                        <li class="nav-item my-2 me-md-2"><a class="nav-link" href="/#hiw">How it works</a></li>
                         <li class="nav-item my-2 me-md-2"><a class="nav-link" href="/donate">Donate</a></li>
                         <li class="nav-item my-2">
                             <a class="nav-link" id="login-menu" href="/login">Sign in</a>

@@ -29,7 +29,7 @@ $user_auth = new UserAuth($user);
 
 // if user is already logged in, go to "My Texts" section
 if ($user_auth->isLoggedIn()) {
-    header('Location:texts');
+    header('Location:/texts');
     exit;
 }
 

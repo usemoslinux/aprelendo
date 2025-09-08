@@ -71,7 +71,7 @@ $(document).ready(function() {
                 if (data.error_msg) {
                     showMessage(data.error_msg, "alert-danger");
                 } else {
-                    window.location.replace("/index");
+                    window.location.replace("/");
                 }
             })
             .fail(function() {

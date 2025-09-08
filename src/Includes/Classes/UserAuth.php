@@ -82,7 +82,7 @@ class UserAuth extends DBEntity
             setcookie('user_token', '', time() - 3600, "/", $domain, true); // delete user_token cookie
         }
         
-        header('Location:/index.php');
+        header('Location:/');
     } // end logout()
         
     /**
