@@ -5,6 +5,7 @@ Clean EPUB for text-only rendering while preserving the cover page.
 - Removes: CSS, fonts, non-cover images, scripts, class attributes, formatting tags
 - Preserves: cover page structure, OPF metadata, cover image, XML prolog, namespaces
 - Outputs XHTML/XML when input is XHTML/XML
+- Skips ALL stripping for the navigation file(s) (EPUB 2 NCX and EPUB 3 nav XHTML)
 
 Usage:
     python epub_cleaner.py input.epub output.epub
@@ -23,9 +24,7 @@ NS = {
     "xlink": "http://www.w3.org/1999/xlink",
 }
 
-# Pre-register known namespaces so ElementTree preserves prefixes/defaults
 for _prefix, _uri in NS.items():
-    # Register default namespace only when explicitly used later
     if _prefix != "":
         ET.register_namespace(_prefix, _uri)
 
@@ -40,12 +39,14 @@ FONT_EXTS = (".otf", ".ttf", ".woff", ".woff2", ".eot")
 CSS_EXTS = (".css",)
 IMAGE_EXTS = (".jpg", ".jpeg", ".png", ".gif", ".svg", ".bmp", ".webp", ".tif", ".tiff")
 
+# Read XML from bytes
 def read_xml(data):
     try:
         return ET.fromstring(data)
     except ET.ParseError:
         return None
 
+# Find OPF file path from container.xml
 def find_opf_path(zf):
     container_data = zf.read("META-INF/container.xml")
     root = read_xml(container_data)
@@ -56,24 +57,26 @@ def find_opf_path(zf):
         raise RuntimeError("No rootfile found")
     return rootfile.get("full-path")
 
+# Resolve relative paths
 def resolve_path(base_dir, href):
     if not href or href.startswith("data:"):
         return href
     return posixpath.normpath(posixpath.join(base_dir, href))
 
+# Detect cover image path from OPF metadata
 def detect_cover_image_path(opf_root, opf_dir):
     manifest = opf_root.find(".//opf:manifest", NS)
     if manifest is None:
         return None
 
-    # EPUB 3
+    # EPUB 3 cover via properties
     for item in manifest.findall("opf:item", NS):
         properties = (item.get("properties") or "").lower()
         if "cover-image" in properties:
             href = item.get("href", "")
             return resolve_path(opf_dir, href)
 
-    # EPUB 2
+    # EPUB 2 cover via <meta name="cover" content="...">
     cover_meta = opf_root.find('.//opf:metadata/opf:meta[@name="cover"]', NS)
     if cover_meta is not None:
         cover_id = cover_meta.get("content")
@@ -84,32 +87,60 @@ def detect_cover_image_path(opf_root, opf_dir):
                     return resolve_path(opf_dir, href)
     return None
 
+# Detect all navigation resources (EPUB 3 nav XHTML and EPUB 2 NCX)
+def detect_nav_paths(opf_root, opf_dir):
+    paths = set()
+    manifest = opf_root.find(".//opf:manifest", NS)
+    if manifest is None:
+        return paths
+
+    # EPUB 3: properties="nav"
+    for item in manifest.findall("opf:item", NS):
+        props = (item.get("properties") or "").lower()
+        href = item.get("href", "")
+        if "nav" in props and href:
+            paths.add(resolve_path(opf_dir, href))
+
+    # EPUB 2: spine toc="idref" -> NCX
+    spine = opf_root.find(".//opf:spine", NS)
+    if spine is not None:
+        toc_idref = spine.get("toc")
+        if toc_idref:
+            for item in manifest.findall("opf:item", NS):
+                if item.get("id") == toc_idref:
+                    href = item.get("href", "")
+                    if href:
+                        paths.add(resolve_path(opf_dir, href))
+
+    # EPUB 2 (also catch by media-type)
+    for item in manifest.findall("opf:item", NS):
+        mt = (item.get("media-type") or "").lower()
+        if mt == "application/x-dtbncx":
+            href = item.get("href", "")
+            if href:
+                paths.add(resolve_path(opf_dir, href))
+
+    return paths
+
+# Clean content XHTML pages
 def clean_content_page(xhtml_bytes, cover_image_path):
-    """Clean content pages while preserving XML declaration and namespaces."""
     root = read_xml(xhtml_bytes)
     if root is None:
-        # Probably tag-soup HTML; leave it untouched
         return xhtml_bytes
 
-    # Remember if the original had an XML declaration
     stripped = xhtml_bytes.lstrip()
     had_xml_decl = stripped.startswith(b"<?xml")
 
-    # If the root uses a default namespace, register it so ET writes xmlns=... instead of ns0:
     if isinstance(root.tag, str) and root.tag.startswith("{"):
         default_uri = root.tag.split("}", 1)[0][1:]
-        # Only register default ns for XHTML/SVG-like docs
         if default_uri:
             try:
-                ET.register_namespace("", default_uri)  # default xmlns
+                ET.register_namespace("", default_uri)
             except ValueError:
-                # Older Pythons may not allow empty prefix; harmless to skip
                 pass
 
-    # Remove stylesheets, fonts, and scripts
     for elem in list(root.iter()):
         tag = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
-
         if tag == "link":
             rel = (elem.get("rel") or "").lower()
             if rel in ("stylesheet", "font"):
@@ -121,14 +152,12 @@ def clean_content_page(xhtml_bytes, cover_image_path):
             if parent is not None:
                 parent.remove(elem)
 
-    # Remove inline style/class only; do NOT touch namespaced attributes
     for elem in root.iter():
         if "style" in elem.attrib:
             del elem.attrib["style"]
         if "class" in elem.attrib:
             del elem.attrib["class"]
 
-    # Remove formatting tags but keep their text content
     formatting_tags = {"a", "b", "i", "u", "strong", "em"}
     for elem in list(root.iter()):
         tag = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
@@ -152,7 +181,6 @@ def clean_content_page(xhtml_bytes, cover_image_path):
                         parent.text = (parent.text or "") + elem.tail
                 parent.remove(elem)
 
-    # Remove images except (optionally) the cover page image if you decide to detect it here.
     for elem in list(root.iter()):
         tag = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
         if tag == "img":
@@ -160,7 +188,6 @@ def clean_content_page(xhtml_bytes, cover_image_path):
             if parent is not None:
                 parent.remove(elem)
 
-    # Remove SVG drawings inside content pages
     for elem in list(root.iter()):
         tag = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
         if tag == "svg":
@@ -168,7 +195,6 @@ def clean_content_page(xhtml_bytes, cover_image_path):
             if parent is not None:
                 parent.remove(elem)
 
-    # Do NOT strip namespaces. Serialize as XML, preserving prolog if it existed.
     return ET.tostring(
         root,
         encoding="utf-8",
@@ -176,12 +202,14 @@ def clean_content_page(xhtml_bytes, cover_image_path):
         method="xml",
     )
 
+# Find parent of an element
 def find_parent(root, child):
     for parent in root.iter():
         if child in list(parent):
             return parent
     return None
 
+# Determine if a file should be removed based on media type and href
 def should_remove_file(media_type, href):
     if media_type in FONT_MEDIA_TYPES or media_type in CSS_MEDIA_TYPES:
         return True
@@ -193,6 +221,7 @@ def should_remove_file(media_type, href):
             return True
     return False
 
+# Main processing function
 def process_epub(input_path, output_path):
     with zipfile.ZipFile(input_path, "r") as zin:
         if "mimetype" not in zin.namelist():
@@ -210,6 +239,9 @@ def process_epub(input_path, output_path):
         manifest = opf_root.find(".//opf:manifest", NS)
         if manifest is None:
             raise RuntimeError("No manifest found")
+
+        # NEW: compute navigation paths (to keep untouched)
+        nav_paths = detect_nav_paths(opf_root, opf_dir)
 
         remove_ids = set()
         items = {}
@@ -243,9 +275,11 @@ def process_epub(input_path, output_path):
                 data = zin.read(file_path)
 
                 if file_path == opf_path:
-                    # Preserve OPF as real XML with prolog
                     new_opf = ET.tostring(opf_root, encoding="utf-8", xml_declaration=True, method="xml")
                     zout.writestr(file_path, new_opf)
+                elif file_path in nav_paths:
+                    # NEW: do not modify navigation resources at all
+                    zout.writestr(file_path, data)
                 elif file_path.lower().endswith((".xhtml", ".html", ".htm")):
                     data = clean_content_page(data, cover_image_path)
                     zout.writestr(file_path, data)
@@ -255,7 +289,7 @@ def process_epub(input_path, output_path):
     print(f"Cleaned EPUB saved to: {output_path}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Clean EPUB: remove CSS, fonts, formatting tags; preserve cover and namespaces")
+    parser = argparse.ArgumentParser(description="Clean EPUB: remove CSS, fonts, formatting tags; preserve cover, nav, and namespaces")
     parser.add_argument("input", help="Input EPUB file")
     parser.add_argument("output", help="Output EPUB file")
     args = parser.parse_args()
