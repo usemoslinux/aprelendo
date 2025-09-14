@@ -156,7 +156,7 @@ const TextActionBtns = (() => {
      */
     const show = ($selword) => {
         ActionBtns.createWordActionBtns($selword, false);
-        $("body").disableScroll();
+        $("#text-container").disableScroll();
         ActionBtns.bindDictionaryBtnsOnClick($selword, 'text');
         ActionBtns.show($selword);
     } // end show()
@@ -165,7 +165,7 @@ const TextActionBtns = (() => {
      * Hides actions pop up toolbar
      */
     const hide = () => {
-        $("body").enableScroll();
+        $("#text-container").enableScroll();
         ActionBtns.hide();
     } // end hide()
 

@@ -547,22 +547,27 @@ $(document).ready(function() {
      * Changes the position of audio player controls (sticky or initial)
      */
     $("#btn-toggle-audio-player-controls").on("click", function () {
-        let audio_player_container = document.getElementById('audioplayer-container');
-        let toggle_sticky_btn = document.getElementById('btn-toggle-audio-player-controls');
-        const sticky_on_title = "Hide audio controls while scrolling";
-        const sticky_off_title = "Keep audio controls visible while scrolling";
-        
-        if (audio_player_container.style.position === 'static') {
-            audio_player_container.style.position = 'sticky';
-            toggle_sticky_btn.style.backgroundColor = 'var(--bs-btn-bg)';
-            setNewTooltip(toggle_sticky_btn, sticky_on_title);
+        const $container = $("#audioplayer-container");
+        const $btn = $(this);
+        const onTitle = "Hide audio controls while scrolling";
+        const offTitle = "Keep audio controls visible while scrolling";
+
+        const isStatic = $container.css("position") === "static";
+
+        if (isStatic) {
+            $container.css("position", "sticky");
+            // $btn.removeClass("btn-outline-primary")
+                // .addClass("btn-primary");
+            $btn.addClass("active");
+            setNewTooltip($btn[0], onTitle);
         } else {
-            audio_player_container.style.position = 'static';
-            toggle_sticky_btn.style.backgroundColor = 'transparent';
-            toggle_sticky_btn.style.borderColor = 'var(--bs-btn-border-color)';
-            setNewTooltip(toggle_sticky_btn, sticky_off_title);
-        }        
-    }); // end #btn-toggle-audio-player-controls
+            $container.css("position", "static");
+            // $btn.removeClass("btn-primary")
+            //     .addClass("btn-outline-primary");
+            $btn.removeClass("active");
+            setNewTooltip($btn[0], offTitle);
+        }
+    });
 
     /**
      * Tries to reload audio

@@ -50,7 +50,7 @@ try {
 
     $yt_id = $video->youtube_id;
 
-    $body_class = "class='position-fixed w-100 h-100 overflow-hidden ";
+    $body_class = "class='dvh-100 dvw-100 overflow-hidden ";
     
     switch ($prefs->display_mode) {
         case 'light':
@@ -84,53 +84,50 @@ require_once PUBLIC_PATH . 'head.php';
 ?>
 
 <body id="readerpage" <?php echo $body_css; ?>>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <div id="main-container" class="d-flex flex-column vh-100">
-                    <div class="d-flex flex-row-reverse my-1">
-                        <button type="button" id="btn-save-ytvideo" class="btn btn-success"
-                            data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+    <div id="main-container" class="container h-100">
+        <div class="row h-100">
+            <div class="col d-flex flex-column h-100">
+                <div class="d-flex flex-row-reverse my-1">
+                    <button type="button" id="btn-save-ytvideo" class="btn btn-success ms-2"
+                        data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                        data-bs-placement="bottom"
+                        data-bs-title="Close & mark underlined words as reviewed">
+                        Save&nbsp;<span class="bi bi-save"></span>
+                    </button>
+                    <span class="ms-2" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                             data-bs-placement="bottom"
-                            data-bs-title="Close and save the learning status of your words">
-                            Save
-                        </button>
+                            data-bs-title="Reader settings">
                         <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
-                            class="btn btn-secondary me-2">
-                            <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                data-bs-placement="bottom"
-                                data-bs-title="Reader settings">
-                                <span class="bi bi-gear-fill"></span>
-                            </span>
+                            class="btn btn-secondary">
+                            <span class="bi bi-gear-fill"></span>
                         </button>
-                        <button type="button" id="btn-fullscreen" data-bs-toggle="tooltip"
-                            data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                            data-bs-title="Toggle fullscreen" class="btn btn-warning me-2">
-                            <span class="bi bi-arrows-fullscreen"></span>
-                        </button>
-                        <button type="button" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                            data-bs-placement="bottom" data-bs-title="Like" class="btn btn-link me-2">
-                            
+                    </span>
+                    <button type="button" id="btn-fullscreen" data-bs-toggle="tooltip"
+                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                        data-bs-title="Toggle fullscreen" class="btn btn-warning ms-2">
+                        <span class="bi bi-arrows-fullscreen"></span>
+                    </button>
+                    <div class="d-flex ms-2" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                        data-bs-placement="bottom" data-bs-title="Like" class="btn btn-link ms-2">
+                        <div class="d-flex align-items-center">
                             <span class="bi <?php echo $user_liked_class; ?>" data-idText="<?php echo $text_id; ?>">
                             </span>
-                            <small>
-                                <?php echo $likes->get($text_id);?>
-                            </small>
-                        </button>
-                        <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                            data-bs-placement="bottom" data-bs-title="Report">
-                            <button type="button" class="btn btn-link me-2" data-bs-toggle="modal"
-                                data-bs-target="#report-text-modal">
-                                <span id="report-flag" class="bi bi-flag"></span>
-                            </button>
-                        </span>
+                            <small class="px-1"><?php echo $likes->get($text_id);?></small>
+                        </div>
                     </div>
-                    <?php
-                    if (isset($reader)) {
-                        echo $reader->showVideo($yt_id, $reader_css);
-                    }
-                    ?>
+                    <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                        data-bs-placement="bottom" data-bs-title="Flag content for review">
+                        <button type="button" class="btn btn-link" data-bs-toggle="modal"
+                            data-bs-target="#report-text-modal">
+                            <span id="report-flag" class="bi bi-flag"></span>
+                        </button>
+                    </span>
                 </div>
+                <?php
+                if (isset($reader)) {
+                    echo $reader->showVideo($yt_id, $reader_css);
+                }
+                ?>
             </div>
         </div>
     </div>

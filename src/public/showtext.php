@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -26,7 +27,7 @@ use Aprelendo\Likes;
 use Aprelendo\UserException;
 
 try {
-    $html = '';
+    $reader_class = 'dvh-100 dvw-100 ';
     if (!empty($_GET['id'])) {
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
 
@@ -46,13 +47,13 @@ try {
 
         switch ($prefs->display_mode) {
             case 'light':
-                $html = "class='lightmode'";
+                $reader_class = "class='lightmode'";
                 break;
             case 'sepia':
-                $html = "class='sepiamode'";
+                $reader_class = "class='sepiamode'";
                 break;
             case 'dark':
-                $html = "class='darkmode'";
+                $reader_class = "class='darkmode'";
                 break;
             default:
                 break;
@@ -67,6 +68,9 @@ try {
         $likes = new Likes($pdo, $text_id, $user->id, $user->lang_id);
         $user_liked_class = $likes->userLiked() ? 'bi-heart-fill' : 'bi-heart';
         $nr_of_likes = $likes->get($text_id);
+
+        $has_next_phase = $assisted_learning && !$is_long_text;
+        $has_external_audio = $reader->hasExternalAudio();
     } else {
         throw new UserException('Error fetching this text.');
     }
@@ -79,79 +83,77 @@ require_once PUBLIC_PATH . 'head.php';
 
 ?>
 
-<body id="readerpage" <?php echo $html; ?>>
-    <div class="container-fluid">
-        <div class="row">
-            <div id="sidebar" class="col-2">
-                <div class="d-flex justify-content-end me-sm-3">
-                    <div class="position-fixed my-3">
-                        <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                            data-bs-placement="right" data-bs-title="Reading settings">
-                            <button type="button" data-bs-toggle="modal"
-                                data-bs-target="#reader-settings-modal" class="btn btn-secondary d-block">
-                                <span class="bi bi-gear-fill"></span>
-                            </button>
-                        </span>
-                        
-                        <?php if ($assisted_learning && !$is_long_text) : ?>
-                            <button id="btn-toggle-audio-player-controls" type="button"
-                                class="btn btn-primary d-block mt-2"
-                                data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                data-bs-placement="right" data-bs-title="Hide audio controls while scrolling">
-                                <span class="bi bi-headphones"></span>
-                            </button>
-                        <?php endif ?>
-                        
-                        <button id="<?php echo $assisted_learning && !$is_long_text
-                            ? 'btn-next-phase'
-                            : 'btn-save-text'; ?>" type="button" class="btn btn-success d-block mt-2"
-                            data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                            data-bs-placement="right" data-bs-title="<?php echo $assisted_learning && !$is_long_text
-                                ? 'Go to phase 2: Listening'
-                                : 'Save'; ?>">
-                            <span class="bi bi-skip-end-circle-fill"></span>
-                        </button>
-                        <?php if ($is_shared) : ?>
-                            <div data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                data-bs-placement="right" data-bs-title="Like">
-                                <div class="d-block text-center mt-2">
-                                    <span class="<?php echo $user_liked_class ?>"
-                                        data-idText="<?php echo $text_id ?>">
-                                    </span>
-                                    <small class="d-block px-1"><?php echo number_format($nr_of_likes) ?></small>
-                                </div>
-                            </div>
-                            <div data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                                data-bs-placement="right" data-bs-title="Report">
-                                <button type="button" class="btn btn-link d-block mt-2" data-bs-toggle="modal"
-                                    data-bs-target="#report-text-modal">
-                                    <span id="report-flag" class="bi bi-flag"></span>
-                                </button>
-                            </div>
-                        <?php endif ?>
+<body id="readerpage" <?php echo $reader_class; ?>>
+    <div class="offset-lg-2 col-lg-8 h-100">
+        <div class="d-flex flex-column h-100">
+            <div id="sidebar" class="d-flex flex-row-reverse mt-2 mx-3">
+                <button id="<?php echo $has_next_phase ? 'btn-next-phase' : 'btn-save-text'; ?>"
+                    type="button" class="btn btn-success ms-2"
+                    data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                    data-bs-placement="bottom"
+                    data-bs-title="<?php echo $has_next_phase 
+                        ? 'Go to phase 2: Listening'
+                        : 'Close & mark underlined words as reviewed'; ?>">
+                    <?php echo $has_next_phase
+                        ? 'Next&nbsp;<span class="bi bi-skip-end-circle-fill"></span>'
+                        : 'Save&nbsp;<span class="bi bi-save"></span>'; ?>
+                    
+                </button>
+                
+                <?php if ($has_next_phase || $has_external_audio) : ?>
+                    <button id="btn-toggle-audio-player-controls" type="button"
+                    class="btn btn-primary ms-2 active"
+                    data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                    data-bs-placement="bottom" data-bs-title="Hide audio controls while scrolling">
+                    <span class="bi bi-headphones"></span>
+                </button>
+                <?php endif ?>
+                
+                <span class="ms-2" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                    data-bs-placement="bottom" data-bs-title="Reading preferences">
+                    <button type="button" data-bs-toggle="modal"
+                        data-bs-target="#reader-settings-modal" class="btn btn-secondary">
+                        <span class="bi bi-gear-fill"></span>
+                    </button>
+                </span>
+
+                <?php if ($is_shared) : ?>
+                    <div class="d-flex ms-2" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                        data-bs-placement="bottom" data-bs-title="Like">
+                        <div class="d-flex align-items-center">
+                            <span class="<?php echo $user_liked_class ?>"
+                                data-idText="<?php echo $text_id ?>">
+                            </span>
+                            <small class="px-1"><?php echo number_format($nr_of_likes) ?></small>
+                        </div>
                     </div>
-                </div>
+                    <div data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                        data-bs-placement="bottom" data-bs-title="Flag content for review">
+                        <button type="button" class="btn btn-link" data-bs-toggle="modal"
+                            data-bs-target="#report-text-modal">
+                            <span id="report-flag" class="bi bi-flag"></span>
+                        </button>
+                    </div>
+                <?php endif ?>
             </div>
-            <div class="col-10 col-sm-8 ps-0 pe-3 pe-sm-0">
-                <?php
-                    echo $reader->showText($reader_css);
-                    if ($is_shared) {
-                        echo '<input type="hidden" id="is_shared">';
-                    }
-                ?>
-            </div>
+            <?php
+            echo $reader->showText($reader_css);
+            if ($is_shared) {
+                echo '<input type="hidden" id="is_shared">';
+            }
+            ?>
         </div>
     </div>
 
     <?php
-        require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
-        require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
-        if ($is_shared) {
-            require_once PUBLIC_PATH . 'showreporttextmodal.php'; // load report text modal window
-        }
-        if (!empty($user->hf_token)) {
-            require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
-        }
+    require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
+    require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
+    if ($is_shared) {
+        require_once PUBLIC_PATH . 'showreporttextmodal.php'; // load report text modal window
+    }
+    if (!empty($user->hf_token)) {
+        require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
+    }
     ?>
 
     <script defer src="/js/showtext.min.js"></script>

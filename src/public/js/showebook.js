@@ -103,18 +103,6 @@ $(document).ready(function () {
         false
     );
 
-    let prev = document.getElementById("prev");
-    prev.addEventListener(
-        "click",
-        function (e) {
-            e.preventDefault();
-            $(prev).tooltip('hide');
-            let url = prev.getAttribute("href");
-            display(url);
-        },
-        false
-    );
-
     $("body").on("click", "#btn-close-ebook", function () {
         // save word status before closing
         $.when(SaveWords()).then(function () {
@@ -208,71 +196,85 @@ $(document).ready(function () {
     }); // end parent.window.unload
 
     book.loaded.navigation.then(function (toc) {
-        let $nav = document.getElementById("toc"),
-            docfrag = document.createDocumentFragment();
+        const $nav = document.getElementById("toc");
+        const docfrag = document.createDocumentFragment();
 
-        const addTocItems = function (parent, tocItems) {
-            let $ul = document.createElement("ul");
-            tocItems.forEach(function (chapter) {
-                let item = document.createElement("li");
-                let link = document.createElement("a");
-                link.textContent = chapter.label;
-                link.href = chapter.href;
+        $nav.classList.add("list-group");
 
-                item.appendChild(link);
+        const makeLink = (label, href, depth = 0) => {
+            const a = document.createElement("a");
+            a.href = href;
+            a.className = "list-group-item list-group-item-action toc-item";
 
-                if (chapter.subitems) {
-                    addTocItems(item, chapter.subitems);
-                }
+            a.style.setProperty("--depth", depth);
+            a.dataset.depth = String(depth);
+            a.setAttribute("aria-level", String(depth + 1));
 
-                link.onclick = function () {
-                    const url = link.getAttribute("href");
+            a.textContent = label;
 
-                    document.getElementById("opener").click();
-
-                    display(url);
-
-
-                    return false;
-                };
-
-                $ul.appendChild(item);
-            });
-            parent.appendChild($ul);
+            a.onclick = function () {
+                const url = a.getAttribute("href");
+                document.getElementById("opener").click();
+                display(url);
+                return false;
+            };
+            return a;
         };
 
-        addTocItems(docfrag, toc);
+        const addFlatItems = (items, depth = 0) => {
+            items.forEach((chapter) => {
+                const hasChildren = Array.isArray(chapter.subitems) && chapter.subitems.length > 0;
+                docfrag.appendChild(makeLink(chapter.label, chapter.href, depth));
+                if (hasChildren) addFlatItems(chapter.subitems, depth + 1);
+            });
+        };
 
+        addFlatItems(toc, 0);
         $nav.appendChild(docfrag);
 
         if ($nav.offsetHeight + 60 < window.innerHeight) {
             $nav.classList.add("fixed");
         }
-    }); // end book.loaded.navigation
+    });
 
     book.loaded.metadata.then(function (meta) {
         let $title = document.getElementById("title");
         let $book_title = document.getElementById("book-title");
         let $author = document.getElementById("author");
+        let $publisher = document.getElementById("publisher");
+        let $pubdate = document.getElementById("pubdate");
         let $cover = document.getElementById("cover");
 
-        if ($title != null) {
-            $title.textContent = meta.title;
-            $book_title.textContent = meta.title;
-            $author.textContent = meta.creator;
-            if (book.archive) {
-                book.archive.createUrl(book.cover).then(function (url) {
-                    $cover.src = url;
-                });
-            } else {
-                $cover.src = book.cover;
-            }
+        $title.textContent = (meta.title && meta.title.trim() !== "") ? meta.title : "Untitled";
+        $book_title.textContent = (meta.title && meta.title.trim() !== "") ? meta.title : "Untitled";
+        $author.textContent = (meta.creator && meta.creator.trim() !== "") ? meta.creator : "Unknown";
+        $publisher.textContent = (meta.publisher && meta.publisher.trim() !== "") ? meta.publisher : "Unknown";
+        $pubdate.textContent = (meta.pubdate && meta.pubdate.trim() !== "") ? new Intl.DateTimeFormat("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }).format(date) : "Not available";
+
+        if (book.archive) {
+            book.archive.createUrl(book.cover).then(function (url) {
+                $cover.src = url;
+            });
+        } else {
+            $cover.src = book.cover;
         }
     }); // end book.loaded.metadata
 
     function display(item) {
         let section = book.spine.get(item);
         let text_html = '';
+
+        function resetNextChapterBtn() {
+            next.textContent = "";
+            next.classList.add('d-none');
+            next.href = "#";
+        }
+
+        resetNextChapterBtn();
 
         if (section) {
             section.render().then(function (ebook_html) {
@@ -301,9 +303,8 @@ $(document).ready(function () {
                         );
                     }); // end $.ajax  
 
-                // create previous and next links on top and bottom of page
+                // create next chapter link on bottom of page
                 let nextSection = section.next();
-                let prevSection = section.prev();
 
                 if (nextSection) {
                     const nextNav = book.navigation.get(nextSection.href);
@@ -324,31 +325,8 @@ $(document).ready(function () {
                             trigger: 'hover'
                         })
                     }
-                } else {
-                    next.textContent = "";
-                }
 
-                if (prevSection) {
-                    const prevNav = book.navigation.get(prevSection.href);
-                    let prevLabel = '';
-
-                    if (prevNav) {
-                        prevLabel = prevNav.label;
-                    } else {
-                        prevLabel = "Previous chapter";
-                    }
-
-                    prev.textContent = "« " + prevLabel;
-                    prev.href = prevSection.href;
-
-                    if (!isMobileDevice()) {
-                        prev.setAttribute('data-bs-title', 'Go to previous chapter');
-                        new bootstrap.Tooltip(prev, {
-                            trigger: 'hover'
-                        })
-                    }
-                } else {
-                    prev.textContent = "";
+                    next.classList.remove('d-none');
                 }
 
                 text_pos = item;
@@ -437,13 +415,13 @@ $(document).ready(function () {
 
     function updateToc(current_chapter_url) {
         let $nav = document.getElementById('toc');
-        let $bold_elements_in_nav = $nav.querySelector('.fw-bold');;
+        let $bold_elements_in_nav = $nav.querySelector('.bg-primary');;
         let $title = document.getElementById('book-title-chapter');
         let $selector;
 
-        // Remove existing bold/text-primary classes if present
+        // Remove existing bg-primary/text-light classes if present
         if ($bold_elements_in_nav) {
-            $bold_elements_in_nav.classList.remove('fw-bold', 'text-primary');
+            $bold_elements_in_nav.classList.remove('bg-primary', 'text-light');
         }
 
         // Determine the proper link selector
@@ -456,7 +434,7 @@ $(document).ready(function () {
 
         // Apply classes and update the title if the link was found
         if ($selector) {
-            $selector.classList.add('fw-bold', 'text-primary');
+            $selector.classList.add('bg-primary', 'text-light');
             $title.textContent = ' - ' + $selector.textContent;
         }
     } // end updateToc

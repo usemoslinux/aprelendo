@@ -72,7 +72,7 @@ if (!$user_auth->isLoggedIn()) {
 
                             <h4>Immersion is the answer</h4>
                             <figure class="d-none d-sm-block img-fluid">
-                                <img src="/img/other/immersion-banner.jpg" class="w-100" alt="Immersion banner">
+                                <img src="/img/other/immersion-banner.webp" class="w-100" alt="Immersion banner">
                             </figure>
                             <p>Language immersion is the process of learning a language using only the target language
                                 for a specified time frame. That means no native language skills are used for
@@ -118,7 +118,7 @@ if (!$user_auth->isLoggedIn()) {
                         <section>
                             <h4>The benefits of reading</h4>
                             <figure class="d-none d-sm-block img-fluid">
-                                <img src="/img/other/reading-banner.jpg" class="w-100" alt="Reading banner">
+                                <img src="/img/other/reading-banner.webp" class="w-100" alt="Reading banner">
                             </figure>
                             <p><strong>Reading</strong> alone has some nice <strong>benefits</strong>. It allows us to
                                 acquire <strong>vocabulary in context</strong>, by presenting words and phrases as they

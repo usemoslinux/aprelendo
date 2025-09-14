@@ -35,7 +35,7 @@ class AudioPlayerForEbooks extends AudioPlayer
 
         return <<<AUDIOPLAYER_CONTAINER
             <hr>
-            <div id="audioplayer-container" class="container mb-3">
+            <div id="audioplayer-container" class="container mb-2 p-2">
                 <audio id="audioplayer" preload="auto">
                     <source id="audio-source" src="$audio_url" type="$audio_mime_type">
                     Your browser does not support the audio element.

@@ -17,15 +17,131 @@
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* ARROWS (NEXT & PREVIOUS) */
-.navlink {
-    padding: 50px;
+/* SIDEBAR */
+
+#navigation {
+    font-size: 14px;
+    /* width: 401px; */
+}
+
+.lightmode #navigation {
+    background: #ffffff;
+    color: #000000;
+}
+
+.sepiamode #navigation {
+    background: #ebe7d9;
+    color: #384452;
+}
+
+.darkmode #navigation {
+    background: #212529;
+    color: #cccccc;
+}
+
+#title::before {
+    content: "Title:\00a0";
+    font-weight: bold;
+    white-space: pre;
+}
+
+#author::before {
+    content: "Author:\00a0";
+    font-weight: bold;
+}
+
+#publisher::before {
+    content: "Publisher:\00a0";
+    font-weight: bold;
+}
+
+#pubdate::before {
+    content: "Published:\00a0";
+    font-weight: bold;
+}
+
+#toc {
     display: block;
-    text-align: center;
+    margin: 25px auto;
+}
+
+#toc .list-group-item {
+    background: inherit;
+    border: none;
+    border-radius: 10px;
+    color: inherit;
+    margin-top: 2px;
+}
+
+#toc .list-group-item:hover {
+    backdrop-filter: invert(0.1);
+}
+
+#toc .toc-item {
+    --indent-step: 1.25rem;
+    --base-padding: 0.75rem;
+    padding-left: calc(var(--base-padding) + var(--indent-step) * var(--depth));
+}
+
+#toc .toc-item[data-depth="0"] { font-weight: 600; }
+
+#navigation ul {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+#navigation ul li {
+    list-style: decimal;
+    font-size: 12px;
+}
+
+#navigation ul li a {
     text-decoration: none;
 }
 
-/* SIDEBAR */
+#navigation ul li a:hover {
+    text-decoration: underline;
+}
+
+#navigation #cover {
+    box-shadow: 2px 2px 5px black;
+    border-radius: 3px;
+}
+
+svg {
+    display: block;
+    overflow: visible !important;
+    visibility: visible !important;
+}
+
+#hamburger {
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    top: 3px;
+}
+
+/* HEADER  */
+
+#header {
+    font-size: 14px;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.lightmode #header {
+    color: #000000;
+}
+
+.sepiamode #header {
+    color: #384452;
+}
+
+.darkmode #header {
+    color: #cccccc;
+}
 
 #opener {
     width: 30px;
@@ -52,95 +168,17 @@
     fill: #5a6268;
 }
 
-#navigation {
-    font-size: 14px;
-    width: 401px;
+#btn-close-ebook:hover {
+	box-shadow: 0 0 3px var(--bs-secondary);
 }
 
-#navigation.fixed {
-    position: fixed;
+#btn-close-ebook {
+	height: 28px;
+	width: 28px;
 }
 
-#title {
-    font-size: 16px;
-    margin: 10px;
-    text-align: center;
-}
-
-#author {
-    font-size: 14px;
-    font-weight: normal;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-#toc {
-    display: block;
-    margin: 25px auto;
-}
-
-#navigation ul {
-    margin-top: 12px;
-    margin-bottom: 12px;
-}
-
-#navigation ul li {
-    list-style: decimal;
-    font-size: 12px;
-}
-
-#navigation ul li a {
-    text-decoration: none;
-}
-
-#navigation ul li a:hover {
-    text-decoration: underline;
-}
-
-#navigation #cover {
-    display: block;
-    margin: 24px auto;
-}
-
-svg {
-    display: block;
-    overflow: visible !important;
-    visibility: visible !important;
-}
-
-#hamburger {
-    cursor: pointer;
-    left: 10px;
-    position: absolute;
-    top: 10px;
-}
-
-/* HEADER  */
-
-#header {
-    font-size: 14px;
-    height: 52px;
-    padding: .5rem 1rem;
-    position: -webkit-sticky;
-    /* Safari */
-    position: sticky;
-    top: 0;
-    z-index: 2;
-}
-
-.lightmode #header {
-    background-color: white;
-    color: #000000;
-}
-
-.sepiamode #header {
-    background-color: #ebe7d9;
-    color: #384452;
-}
-
-.darkmode #header {
-    background-color: #212529;
-    color: #cccccc;
+body.darkmode #btn-close-ebook {
+	filter: invert(1);
 }
 
 /* UNDERLINE WORDS SPINNER */
@@ -253,24 +291,10 @@ svg {
     transform-origin: 0 0;
 }
 
-/* OTHER */
-
-body {
-    margin: 0;
-    padding: 0;
-    background: #fafafa;
-    color: #333;
-}
-
-pre {
-    color: inherit;
-}
-
-img {
+/* NEXT CHANPTER LINK */
+.navlink {
+    padding: 50px;
     display: block;
-}
-
-.epub-view {
-    height: auto !important;
-    width: auto !important;
+    text-align: center;
+    text-decoration: none;
 }

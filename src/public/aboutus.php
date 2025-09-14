@@ -80,7 +80,7 @@ if (!$user_auth->isLoggedIn()) {
                 </div>
                 <div class="col-sm-3 d-none d-sm-block">
                     <figure>
-                        <img class="rounded-circle" src="img/avatar-pablo.jpg" alt="Pablo Castagnino">
+                        <img class="rounded-circle" src="img/avatar-pablo.webp" alt="Pablo Castagnino">
                     </figure>
                 </div>
             </div>
@@ -142,7 +142,7 @@ if (!$user_auth->isLoggedIn()) {
                 </div>
                 <div class="col-sm-3 d-none d-sm-block">
                     <figure>
-                        <img class="img-fluid" src="img/logo.png" alt="Aprelendo logo">
+                        <img class="img-fluid" src="img/logo.webp" alt="Aprelendo logo">
                     </figure>
                 </div>
             </div>

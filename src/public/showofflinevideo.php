@@ -30,7 +30,7 @@ try {
     $reader = new Reader($pdo, $user->id, $user->lang_id);
     $prefs = $reader->prefs;
 
-    $body_class = "class='position-fixed w-100 h-100 overflow-hidden ";
+    $body_class = "class='dvh-100 dvw-100 overflow-hidden ";
 
     switch ($prefs->display_mode) {
         case 'light':
@@ -62,33 +62,38 @@ require_once PUBLIC_PATH . 'head.php';
 ?>
 
 <body id="readerpage" <?php echo $body_css; ?>>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="d-flex flex-column vh-100">
-                <div class="d-flex flex-wrap my-1">
-                    <button type="button" id="btn-selvideo" data-bs-toggle="tooltip"
-                        data-bs-custom-class="custom-tooltip" data-bs-title="Select video (MP4/OGG/WEBM)"
-                        data-bs-placement="bottom" class="btn btn-primary me-2">
-                        <span class="bi bi-file-earmark-play"></span></button>
-                    <button type="button" id="btn-selsubs" data-bs-toggle="tooltip"
-                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                        data-bs-title="Select subtitles (SRT)" class="btn btn-primary me-2">
-                        <span class="bi bi-badge-cc-fill"></span></button>
-                    <button type="button" id="btn-fullscreen" data-bs-toggle="tooltip"
-                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                        data-bs-title="Toggle fullscreen" class="btn btn-warning me-2">
-                        <span class="bi bi-arrows-fullscreen"></span></button>
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
-                        class="btn btn-secondary me-2">
-                        <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                            data-bs-placement="bottom" data-bs-title="Reader settings">
-                            <span class="bi bi-gear-fill"></span>
-                        </span>
-                    </button>
+    <div id="main-container" class="container h-100">
+        <div class="row h-100">
+            <div class="col d-flex flex-column h-100">
+                <div class="d-flex flex-row-reverse my-1">
                     <button type="button" id="btn-save-offline-video" data-bs-toggle="tooltip"
                         data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                        data-bs-title="Save the learning status of your words"
-                        class="btn btn-success ms-auto">Save</button>
+                        data-bs-title="Close & mark underlined words as reviewed"
+                        class="btn btn-success ms-2">
+                        Save&nbsp;<span class="bi bi-save"></span>
+                    </button>
+                    <span class="ms-2" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                        data-bs-placement="bottom" data-bs-title="Reader settings">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
+                            class="btn btn-secondary">
+                            <span class="bi bi-gear-fill"></span>
+                        </button>
+                    </span>
+                    <button type="button" id="btn-fullscreen" data-bs-toggle="tooltip"
+                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                        data-bs-title="Toggle fullscreen" class="btn btn-warning ms-2">
+                        <span class="bi bi-arrows-fullscreen"></span>
+                    </button>
+                    <button type="button" id="btn-selsubs" data-bs-toggle="tooltip"
+                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                        data-bs-title="Select subtitles (SRT)" class="btn btn-primary ms-2">
+                        <span class="bi bi-badge-cc-fill"></span>
+                    </button>
+                    <button type="button" id="btn-selvideo" data-bs-toggle="tooltip"
+                        data-bs-custom-class="custom-tooltip" data-bs-title="Select video (MP4/OGG/WEBM)"
+                        data-bs-placement="bottom" class="btn btn-primary">
+                        <span class="bi bi-file-earmark-play"></span>
+                    </button>
                 </div>
                 <?php
                 if (isset($reader)) {

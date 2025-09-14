@@ -60,7 +60,7 @@ $today_is_reading_streak = $gems->today_is_streak;
                     <ul class="navbar-nav ms-auto mt-3 mt-md-auto pe-3">
                         <li id="streak-days" class="nav-item my-2 mx-auto me-md-3 gamification">
                             <span class="d-block py-2">
-                                <img src="/img/gamification/streak.png"
+                                <img src="/img/gamification/streak.webp"
                                 style="<?php echo $today_is_reading_streak ? '' : 'filter: grayscale(1);'; ?>"
                                 class="me-1 me-md-1 header-gamification-icon" alt="Streak"
                                 title="Reading streak days"> <?php echo number_format($streak_days); ?>
@@ -68,7 +68,7 @@ $today_is_reading_streak = $gems->today_is_streak;
                         </li>
                         <li id="gems" class="nav-item my-2 mx-auto me-md-3 gamification">
                             <span class="d-block py-2">
-                                <img src="/img/gamification/gems.png" class="me-1 me-md-1 ms-md-2 header-gamification-icon"
+                                <img src="/img/gamification/gems.webp" class="me-1 me-md-1 ms-md-2 header-gamification-icon"
                                 alt="Gems" title="Gems earned"> <?php echo number_format($nr_of_gems); ?>
                             </span>
                         </li>

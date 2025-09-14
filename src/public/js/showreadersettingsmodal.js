@@ -21,10 +21,10 @@ $(document).ready(function() {
 
     $('#btn-save-reader-prefs').on('click', function () {
         // apply color mode
-        const className = $('#mode').val() + 'mode';
+        const class_name = $('#mode').val() + 'mode';
         let $doc = $(parent.document.body);
         let $text_container = $("#text-container");
-        $doc.removeClass().addClass(className);
+        $doc.removeClass().addClass(class_name);
         
         $text_container.css({
             'font-family' : $('#fontfamily').val(),
@@ -33,27 +33,23 @@ $(document).ready(function() {
             'line-height': $('#lineheight').val()
         });
 
-        // change audioplayer class
-        let $audioplayer = $doc.find("#audioplayer-container");
+        // change offcanvas color mode if exists
+        const $off_canvas = $doc.find('.offcanvas');
+        const $close_btn = $doc.find('#close-offcanvas');
+        const color_modes = 'lightmode sepiamode darkmode';
+
+        if ($off_canvas.length) {
+            $off_canvas.removeClass(color_modes).addClass(class_name);
+            $close_btn.toggleClass('btn-close-white', class_name === 'darkmode');
+        }
+
+        // change audio player container color mode if exists
+        const $audio_container = $doc.find('#audioplayer-container');
+        if ($audio_container.length) {
+            $audio_container.removeClass(color_modes).addClass(class_name);
+        }
         
-        if (!$audioplayer.hasClass('d-none')) {
-            $audioplayer.removeClass().addClass(className + ' py-3');
-        } else {
-            $audioplayer.removeClass().addClass(className).addClass('py-3 d-none');
-        }
-
-        // change offcanvas classes
-        if ($doc.find('.offcanvas').length) {
-            if (className == 'darkmode') {
-                $doc.find('.offcanvas').addClass('text-bg-dark');
-                $doc.find('#close-offcanvas').addClass('btn-close-white');
-            } else {
-                $doc.find('.offcanvas').removeClass('text-bg-dark');
-                $doc.find('#close-offcanvas').removeClass('btn-close-white');
-            }    
-        }
         // save changes 
-
         $.ajax({
             url: "/ajax/savepreferences.php",
             type: "POST",

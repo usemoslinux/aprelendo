@@ -31,7 +31,7 @@ class UserRegistrationManager extends DBEntity
     }
 
     /**
-     * Creates new user & associated languages and reader preferences
+     * Creates new user & associated languages and reading preferences
      *
      * @param array $user_data
      * @return void

@@ -74,7 +74,7 @@ class Reader
             ? TextsUtilities::getGoogleDriveAudioUri($this->text->audio_uri)
             : $this->text->audio_uri;
         
-        $html = '<div id="text-container" style="' . $reader_css . '" class="my-3" data-type="text" data-IdText="'
+        $html = '<div id="text-container" style="' . $reader_css . '" class="d-flex flex-column m-2 p-3" data-type="text" data-IdText="'
             . $this->text->id . '" data-assisted-learning="' . (int)$this->prefs->assisted_learning
             . '" data-is-long-text="' . (int)$this->is_long_text . '">';
         
@@ -105,7 +105,7 @@ class Reader
             }
 
             // display assisted learning message
-            $html .=   '<div id="alert-box-phase" class="alert alert-info alert-dismissible show" role="alert">
+            $html .=   '<div id="alert-box-phase" class="alert alert-info alert-dismissible mt-2 show" role="alert">
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                             </button>
                             <h5 class="alert-heading">Assisted learning - Phase 1: Reading</h5>
@@ -138,8 +138,8 @@ class Reader
                     '<div data-ytid="' . $yt_id . '" id="videoplayer"></div>' .
                 '</div>';
 
-        $html .= "<div id='text-container' class='overflow-auto text-center my-1 z-1' data-type='video' data-IdText='"
-            . $this->text->id . "' style='" . $reader_css . "'><div id='text'>";
+        $html .= "<div id='text-container' class='overflow-auto m-0 my-1 p-2 z-1' data-type='video' data-IdText='"
+            . $this->text->id . "' style='" . $reader_css . "'><div id='text' class='text-center'>";
         $xml = new SimpleXMLElement($this->text->text);
 
         for ($i=0; $i < sizeof($xml); $i++) {
@@ -174,9 +174,19 @@ class Reader
                         '</video>' .
                 '</div>';
 
-        $html .= '<div id="text-container" class="overflow-auto text-center my-1 z-1" style="'
+        $html .= '<div id="text-container" class="overflow-auto m-0 my-1 p-2 z-1" style="'
             . $reader_css
-            . '"><div id="text"></div></div>';
+            . '"><div id="text" class="text-center"></div></div>';
         return $html;
     } // end showOfflineVideo()
+
+    /**
+     * Returns true if text has an external audio_uri
+     *
+     * @return boolean
+     */
+    public function hasExternalAudio(): bool
+    {
+        return !empty($this->text->audio_uri);
+    } // end hasExternalAudio()
 }

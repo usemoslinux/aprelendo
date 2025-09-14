@@ -44,10 +44,17 @@ function hideMessage(timeout) {
  * @returns {void}
  */
 function scrollToPageTop() {
-    $("html, body").animate({
-        scrollTop: 0
-    }, "fast");
+    const $container = $("#text-container");
+
+    if ($container.length) {
+        // Scroll the container itself
+        $container.animate({ scrollTop: 0 }, "fast");
+    } else {
+        // Fallback: scroll the page
+        $("html, body").animate({ scrollTop: 0 }, "fast");
+    }
 } // end scrollToPageTop()
+
 
 /**
  * Calculates the number of unique elements of a specific class in the document, providing a count of unique occurrences.
@@ -95,7 +102,7 @@ function buildQueryString(paramsObject) {
     if (Object.keys(paramsObject).length === 0) {
         return '';
     }
-    
+
     const params = new URLSearchParams();
 
     for (const [key, value] of Object.entries(paramsObject)) {
@@ -121,10 +128,9 @@ function getCurrentFileName() {
 /**
  * Renables scrolling without making text jump around
  */
-$.fn.enableScroll = function() {
-    return this.each(function() {
-        this.style.overflow = ''; // Restore scrolling
-        this.style.paddingRight = ''; // Reset padding
+$.fn.enableScroll = function () {
+    return this.each(function () {
+        this.style.overflow = '';
         this.classList.remove('overflow-hidden');
         this.classList.add('overflow-auto');
     });
@@ -133,17 +139,9 @@ $.fn.enableScroll = function() {
 /**
  * Disables scrolling without making text jump around
  */
-$.fn.disableScroll = function() {
-    return this.each(function() {
-        let scrollbarWidth;
-        if (this === document.body) {
-            scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-        } else {
-            scrollbarWidth = this.offsetWidth - this.clientWidth
-        }
-        
-        this.style.overflow = 'hidden'; // Disable scrolling
-        this.style.paddingRight = `${scrollbarWidth}px`; // Compensate for scrollbar
+$.fn.disableScroll = function () {
+    return this.each(function () {
+        this.style.overflow = 'hidden';
         this.classList.remove('overflow-auto');
         this.classList.add('overflow-hidden');
     });
@@ -174,7 +172,7 @@ function getScrollbarWidth(element) {
 
         // Clean up the temporary elements
         temp.parentNode.removeChild(temp);
-        
+
         return temp.offsetWidth - inner.offsetWidth;
     }
 } // end getScrollbarWidth
@@ -183,7 +181,7 @@ function getScrollbarWidth(element) {
  * Determines if an element is after another one
  * @param {Jquery object} sel
  */
-$.fn.isAfter = function(sel) {
+$.fn.isAfter = function (sel) {
     return this.prevUntil(sel).length !== this.prevAll().length;
 }; // end $.fn.isAfter
 

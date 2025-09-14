@@ -34,9 +34,9 @@ class AudioPlayerForTexts extends AudioPlayer
         $audio_url = $this->audio_uri;
         $audio_mime_type = $this->getAudioMimeType();
 
-        $html = '<hr>';
+        // $html = '<hr>';
 
-        $html .= '<div id="alert-box-audio" class="alert alert-danger d-none"></div>';
+        $html = '<div id="alert-box-audio" class="alert alert-danger d-none"></div>';
 
         if ($show_loading) {
             $html .= '<div id="audioplayer-loader" class="audio-loading mx-auto" title="Loading audio...">
@@ -50,13 +50,13 @@ class AudioPlayerForTexts extends AudioPlayer
         $audio_controls_class = $show_loading ? 'd-none' : '';
 
         $html .= <<<AUDIOPLAYER_CONTAINER
-            <div id="audioplayer-container" class="$display_mode_css py-3 $audio_controls_class">
+            <div id="audioplayer-container" class="$display_mode_css $audio_controls_class">
                 <audio id="audioplayer" preload="auto">
                     <source id="audio-source" src="$audio_url" type="$audio_mime_type">
                     Your browser does not support the audio element.
                 </audio>
 
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center my-3">
                     <button id="ap-play-btn" class="btn btn-primary">
                         <i id="ap-play-btn-icon" class="bi bi-play-fill"></i>
                     </button>
@@ -99,7 +99,7 @@ class AudioPlayerForTexts extends AudioPlayer
             </div>
             AUDIOPLAYER_CONTAINER;
         
-        $html .= '<hr>';
+        // $html .= '<hr>';
 
         return $html;
     }

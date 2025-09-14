@@ -149,7 +149,7 @@ function printTableFooter($array_table_rows)
         <div class="row">
             <div class="col-12">
                 <div class="alert <?php echo ($gems_earned > 0) ? 'alert-warning' : 'alert-danger'  ?>" role="alert">
-                    <img src="/img/gamification/gems.png" alt="Gems" title="Gems earned"
+                    <img src="/img/gamification/gems.webp" alt="Gems" title="Gems earned"
                         style="width: 1rem;height: 1rem;">
                     <?php echo $gems_message; ?>
                 </div>
