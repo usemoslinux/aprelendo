@@ -253,7 +253,7 @@ $(document).ready(function () {
             year: "numeric",
             month: "long",
             day: "numeric"
-        }).format(date) : "Not available";
+        }).format(new Date(meta.pubdate)) : "Not available";
 
         if (book.archive) {
             book.archive.createUrl(book.cover).then(function (url) {
