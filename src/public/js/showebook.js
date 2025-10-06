@@ -151,8 +151,7 @@ $(document).ready(function () {
 
         return $.ajax({
             type: "POST",
-            url: "/ajax/archivetext.php",
-            // async: false,
+            url: "/ajax/updatewords.php",
             data: {
                 words: oldwords
             }

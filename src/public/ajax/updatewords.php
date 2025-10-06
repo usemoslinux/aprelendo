@@ -26,9 +26,6 @@ if (!isset($_POST) || empty($_POST)) {
     exit;
 }
 
-use Aprelendo\Texts;
-use Aprelendo\ArchivedTexts;
-use Aprelendo\Language;
 use Aprelendo\Words;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
@@ -37,19 +34,10 @@ try {
     $user_id = $user->id;
     $lang_id = $user->lang_id;
 
-    // if text is not shared, then archive or unarchive text accordingly
-    if (!empty($_POST['textIDs']) && !empty($_POST['archivetext'])) {
-        $lang = new Language($pdo, $user_id);
-        $lang->loadRecordById($user->lang_id);
-        $text_ids = json_decode($_POST['textIDs']);
-
-        if ($_POST['archivetext'] === 'true') { //archive text
-            $texts_table = new Texts($pdo, $user_id, $lang_id);
-            $texts_table->archive($text_ids);
-        } else { // unarchive text
-            $texts_table = new ArchivedTexts($pdo, $user_id, $lang_id);
-            $texts_table->unarchive($text_ids);
-        }
+    // update learning status of words first
+    if (isset($_POST['words'])) {
+        $words_table = new Words($pdo, $user_id, $lang_id);
+        $words_table->updateByName($_POST['words']);
     }
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();

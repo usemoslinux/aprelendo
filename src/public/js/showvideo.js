@@ -283,7 +283,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "ajax/archivetext.php",
+            url: "ajax/updatewords.php",
             data: {
                 words: oldwords,
                 textIDs: JSON.stringify(ids)

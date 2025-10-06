@@ -413,7 +413,7 @@ $(document).ready(function() {
                 toggleDictation();
                 break;
             case 6:
-                archiveTextAndSaveWords();
+                updateWordsLearningStatus();
                 break;
             default:
                 break;
@@ -429,12 +429,12 @@ $(document).ready(function() {
      * Finished studying this text. Archives text & saves new status of words/phrases
      * Triggered when the user presses the big green button at the end of the review
      */
-    $("body").on("click", "#btn-save-text", archiveTextAndSaveWords);
+    $("body").on("click", "#btn-save-text", updateWordsLearningStatus);
 
     /**
      * Archives text (only if necessary) and updates status of all underlined words & phrases
      */
-    function archiveTextAndSaveWords() {
+    function updateWordsLearningStatus() {
         // build array with underlined words
         let unique_words = [];
         let id = [];
@@ -461,7 +461,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "/ajax/archivetext.php",
+            url: "/ajax/updatewords.php",
             data: {
                 words: unique_words,
                 textIDs: JSON.stringify(id),
@@ -536,7 +536,7 @@ $(document).ready(function() {
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {
                 alert("Oops! There was an error unexpected error saving this text.");
             });
-    } // end #archiveTextAndSaveWords
+    } // end #updateWordsLearningStatus
 
 
     // *************************************************************

@@ -242,12 +242,12 @@ $(document).ready(function () {
      * Finished studying this text. Archives text & saves new status of words/phrases
      * Executes when the user presses the big green button at the end
      */
-    $("#btn-save-offline-video").on("click", archiveTextAndSaveWords);
+    $("#btn-save-offline-video").on("click", updateWordsLearningStatus);
 
     /**
      * Archives text and updates status of all underlined words & phrases
      */
-    function archiveTextAndSaveWords() {
+    function updateWordsLearningStatus() {
         // build array with underlined words
         let oldwords = [];
         let ids = [];
@@ -265,7 +265,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "ajax/archivetext.php",
+            url: "ajax/updatewords.php",
             data: {
                 words: oldwords,
                 textIDs: JSON.stringify(ids)
