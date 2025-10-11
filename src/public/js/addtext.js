@@ -31,10 +31,17 @@ $(document).ready(function() {
         e.preventDefault();
 
         const form_data = new FormData(document.getElementById("form-addtext"));
+        const get_params = new URLSearchParams(window.location.search);
+        const id = get_params.get("id");
+        const url = !id ? "ajax/addtext.php" : "ajax/edittext.php";
+        
+        if (id) {
+            form_data.append("id", id);    
+        }
 
         $.ajax({
             type: "POST",
-            url: "ajax/addtext.php",
+            url: url,
             data: form_data,
             dataType: "json",
             contentType: false,
@@ -51,7 +58,7 @@ $(document).ready(function() {
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
                 showMessage(
-                    "Oops! There was an unexpected error when uploading this text.",
+                    "Oops! There was an unexpected error processing this text.",
                     "alert-danger"
                 );
             });

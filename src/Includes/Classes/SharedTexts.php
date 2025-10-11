@@ -46,20 +46,22 @@ class SharedTexts extends Texts
         $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ?";
         $row = $this->sqlFetch($sql, [$id]);
 
-        $this->id            = $row['id'];
-        $this->user_id       = $row['user_id'];
-        $this->lang_id       = $row['lang_id'];
-        $this->title         = $row['title'];
-        $this->author        = $row['author'];
-        $this->text          = $row['text'];
-        $this->audio_uri     = $row['audio_uri'] ?? '';
-        $this->source_uri    = $row['source_uri'] ?? '';
-        $this->type          = $row['type'];
-        $this->word_count    = $row['word_count'];
-        $this->level         = $row['level'];
-        $this->date_created  = $row['date_created'];
-        $this->text_pos      = $row['text_pos'] ?? '';
-        $this->audio_pos     = $row['audio_pos'] ?? '';
+        if ($row) {
+            $this->id            = $row['id'];
+            $this->user_id       = $row['user_id'];
+            $this->lang_id       = $row['lang_id'];
+            $this->title         = $row['title'];
+            $this->author        = $row['author'];
+            $this->text          = $row['text'];
+            $this->audio_uri     = $row['audio_uri'] ?? '';
+            $this->source_uri    = $row['source_uri'] ?? '';
+            $this->type          = $row['type'];
+            $this->word_count    = $row['word_count'];
+            $this->level         = $row['level'];
+            $this->date_created  = $row['date_created'];
+            $this->text_pos      = $row['text_pos'] ?? '';
+            $this->audio_pos     = $row['audio_pos'] ?? '';
+        }
     } // end loadRecord()
 
     /**

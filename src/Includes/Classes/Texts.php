@@ -65,20 +65,22 @@ class Texts extends DBEntity
         $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ? AND `user_id` = ?";
         $row = $this->sqlFetch($sql, [$id, $this->user_id]);
 
-        $this->id            = $row['id'];
-        $this->user_id       = $row['user_id'];
-        $this->lang_id       = $row['lang_id'];
-        $this->title         = $row['title'];
-        $this->author        = $row['author'];
-        $this->text          = $row['text'];
-        $this->audio_uri     = $row['audio_uri'] ?? '';
-        $this->source_uri    = $row['source_uri'] ?? '';
-        $this->type          = $row['type'];
-        $this->word_count    = $row['word_count'];
-        $this->level         = $row['level'];
-        $this->date_created  = $row['date_created'];
-        $this->text_pos      = $row['text_pos'] ?? '';
-        $this->audio_pos     = $row['audio_pos'] ?? '';
+        if ($row) {
+            $this->id            = $row['id'];
+            $this->user_id       = $row['user_id'];
+            $this->lang_id       = $row['lang_id'];
+            $this->title         = $row['title'];
+            $this->author        = $row['author'];
+            $this->text          = $row['text'];
+            $this->audio_uri     = $row['audio_uri'] ?? '';
+            $this->source_uri    = $row['source_uri'] ?? '';
+            $this->type          = $row['type'];
+            $this->word_count    = $row['word_count'];
+            $this->level         = $row['level'];
+            $this->date_created  = $row['date_created'];
+            $this->text_pos      = $row['text_pos'] ?? '';
+            $this->audio_pos     = $row['audio_pos'] ?? '';
+        }
     } // end loadRecord()
         
     /**
@@ -202,14 +204,49 @@ class Texts extends DBEntity
     */
     public function archive(array $text_ids): void
     {
+        if (empty($text_ids)) throw new InternalException("Text id is empty");
+
         $id_params = str_repeat("?,", count($text_ids)-1) . "?";
-    
+
         $sql =  "INSERT INTO `archived_texts` SELECT * FROM `{$this->table}` WHERE `id` IN ($id_params)";
         $this->sqlExecute($sql, $text_ids);
 
         $sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
         $this->sqlExecute($sql, $text_ids);
     } // end archive()
+
+    /**
+    * Shares texts in database using ids as a parameter to select them
+    *
+    * @param int $text_id
+    * @return void
+    */
+    public function share(int $text_id): void
+    {
+        if (empty($text_id)) throw new InternalException("Text id is empty");
+
+        // check if source_uri already exists in shared_texts table to avoid duplicates
+        $shared_texts = new SharedTexts($this->pdo, $this->user_id, $this->lang_id);
+        $this->loadRecord($text_id);
+        if ($shared_texts->exists($this->source_uri))
+                throw new UserException('Another text with the same source URL is already listed as shared.');
+
+        // columns shared by both tables, in the exact order they appear in `shared_texts`
+        $cols = [
+            'user_id', 'lang_id', 'title', 'author', 'text', 'audio_uri', 'source_uri', 'type',
+            'word_count', 'level', 'date_created'
+        ];
+        $cols_sql = implode(', ', array_map(fn($c) => "`$c`", $cols));
+
+        $sql = "INSERT INTO `shared_texts` ($cols_sql)
+                SELECT $cols_sql
+                FROM `{$this->table}`
+                WHERE `id` = $text_id";
+        $this->sqlExecute($sql);
+
+        $sql = "DELETE FROM `{$this->table}` WHERE `id` = $text_id";
+        $this->sqlExecute($sql);
+    } // end share()
 
     /**
      * Checks if text already exists in database, to avoid duplicate entries.
@@ -290,9 +327,4 @@ class Texts extends DBEntity
             $this->user_id, $this->lang_id, $search_params->filter_level, $search_params->filter_type, $search_text
         ]);
     } // end search()
-
-    // public function checkLanguageId(int $text_id): int {
-    //     $sql = "SELECT `lang_id` FROM `{$this->table}` WHERE `id` = ?";
-
-    // }
 }

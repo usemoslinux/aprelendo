@@ -33,23 +33,27 @@ $(document).ready(function() {
 
     /**
      * Deletes selected texts from the database
-     * Trigger: when user selects "Delete" in the action menu
+     * Trigger: when user selects "Delete" in the global or individual action menus
      */
-    $("#mDelete").on("click", function() {
+    $("#mDelete, #imDelete").on("click", function() {
         if (confirm("Really delete?")) {
             let ids = [];
-            $("input.chkbox-selrow:checked").each(function() {
-                ids.push($(this).attr("data-idText"));
-            });
+
+            if ($(this).attr("id") === "mDelete") {
+                $("input.chkbox-selrow:checked").each(function() {
+                    ids.push($(this).attr("data-idText"));
+                });
+            } else if ($(this).attr("id") === "imDelete") {
+                ids.push($(this).closest('tr').find('input').attr("data-idText"));
+            }
+
+            if (ids.length === 0) {
+                return;
+            }
 
             const uri_params = getCurrentURIParameters();
             const is_archived = uri_params.sa == "1";
 
-            /**
-             * Deletes selected texts from the database (based on their ID).
-             * When done, also removes selected rows from HTML table.
-             * @param  {integer array} textIDs Ids of the selected elements in the database
-             */
             $.ajax({
                 url: "ajax/removetext.php",
                 type: "POST",
@@ -71,22 +75,24 @@ $(document).ready(function() {
 
     /**
      * Archives selected texts
-     * Trigger: when user selects "Archive" in the action menu
+     * Trigger: when user selects "Archive" in the global or individual action menus
      */
-    $("#mArchive").on("click", function() {
-        const archivetxt = $(this).text() === "Archive";
+    $("#mArchive, #imArchive").on("click", function() {
+        const archivetxt = $(this).text().trim() === "Archive";
         let ids = [];
-        $("input.chkbox-selrow:checked").each(function() {
-            ids.push($(this).attr("data-idText"));
-        });
 
-        /**
-         * Moves selected texts from the "texts" table to the "archived_texts" table in the database (archive);
-         * or, vice-versa, moves texts from the "archived_texts" table to the "texts" table (unarchive)
-         * This is done based on text IDs.
-         * @param {integer array} ids Ids of the selected elements in the database
-         * @param {boolean} archivetxt If true, archive text; else, unarchive text
-         */
+        if ($(this).attr("id") === "mArchive") {
+            $("input.chkbox-selrow:checked").each(function() {
+                ids.push($(this).attr("data-idText"));
+            });    
+        } else if ($(this).attr("id") === "imArchive") {
+            ids.push($(this).closest('tr').find('input').attr("data-idText"));
+        }
+
+        if (ids.length === 0) {
+            return;
+        }
+
         $.ajax({
             url: "ajax/archivetext.php",
             type: "POST",
@@ -104,6 +110,54 @@ $(document).ready(function() {
                 );
             }); // end ajax
     }); // end mArchive.on.click
+
+    /**
+     * Shares selected text
+     * Trigger: when user selects "Share" in the individual action menu
+     */
+    $("#imShare").on("click", function() {
+        if (confirm("Sharing this text is irreversible. Once shared, it cannot be made private again. Are you sure you want to proceed?")) {
+            let id = $(this).closest('tr').find('input').attr("data-idText");
+
+            if (id === undefined) {
+                return;
+            }
+
+            $.ajax({
+                url: "ajax/sharetext.php",
+                type: "POST",
+                data: {
+                    textID: id,
+                }
+            })
+                .done(function(data) {
+                    if (data.error_msg != null) {
+                        alert(data.error_msg)
+                    } else {
+                        reloadPage();
+                    }
+                })
+                .fail(function() {
+                    alert(
+                        "There was an error when trying to share the selected text. Refresh the page and try again."
+                    );
+                }); // end ajax    
+        }
+    }); // end imShare.on.click
+
+    /**
+     * Edits selected text
+     * Trigger: when user selects "Edit" in the individual action menu
+     */
+    $("#imEdit").on("click", function() {
+        let id = $(this).closest('tr').find('input').attr("data-idText");
+
+        if (id === undefined) {
+            return;
+        }
+
+        window.location.href = "addtext?id=" + encodeURIComponent(id);
+    }); // end imEdit.on.click
 
     /**
      * Reloads current page passing the correct URI parameters

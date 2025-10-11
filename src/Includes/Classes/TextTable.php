@@ -39,6 +39,9 @@ class TextTable extends Table
         $this->action_menu = $show_archived
             ? ['mArchive' => 'Unarchive', 'mDelete' => 'Delete']
             : ['mArchive' => 'Archive', 'mDelete' => 'Delete'];
+        $this->individual_action_menu = $show_archived
+            ? ['imEdit' => 'Edit', 'imArchive' => 'Unarchive', 'imShare' => 'Share', 'imDelete' => 'Delete']
+            : ['imEdit' => 'Edit', 'imArchive' => 'Archive', 'imShare' => 'Share', 'imDelete' => 'Delete'];
         $this->sort_menu = ['mSortByNew' => 'New first', 'mSortByOld' => 'Old first'];
         $this->rows = $rows;
         $this->has_chkbox = true;
@@ -78,11 +81,16 @@ class TextTable extends Table
         $shared_by = $this->formatSharedBy($row);
         $text_level = $this->formatTextLevel($row);
         $nr_of_words = $this->formatWordCount($row);
+        $individual_action_menu = $this->generateIndividualActionMenu($row);
     
         $html  = '<tr>';
         $html .= $this->generateCheckboxCell($row);
-        $html .= '<td class="col-title">' . $type_icon . ' ' . $audio_icon . ' ' . $link . '<br>'
-            . '<small>' . $text_author . $shared_by . $text_level . $nr_of_words . '</small></td>';
+
+        $html .= '<td><div class="text-row d-flex justify-content-between align-items-center">'
+            . '<div>' . $type_icon . ' ' . $audio_icon . ' ' . $link . '<br>'
+            . '<small>' . $text_author . $shared_by . $text_level . $nr_of_words . '</small></div>'
+            . $individual_action_menu
+            . '</div></td>';
         $html .= '</tr>';
     
         return $html;
@@ -148,6 +156,51 @@ class TextTable extends Table
 
         return $link_html ;
     } // end generateLink()
+
+    /**
+     * Prints action menu
+     *
+     * @return string
+     */
+    private function generateIndividualActionMenu(array $row): string
+    {
+        if (empty($this->action_menu)) {
+            return '';
+        }
+
+        $is_ebook = $row['type'] === 6;
+        $individual_action_menu = $this->individual_action_menu;
+
+        if ($is_ebook) {
+            unset($individual_action_menu['imEdit'], $individual_action_menu['imShare']);
+        }
+
+        $html = <<<HTML_ACTION_MENU
+            <div class="dropdown">
+                <button class="btn btn-link btn-sm text-muted" type="button"
+                    id="individual-action-menu" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="actions-menu" role="menu">
+            HTML_ACTION_MENU;
+
+        foreach ($individual_action_menu as $menu_id => $menu_text) {
+            $id = htmlspecialchars($menu_id, ENT_QUOTES, 'UTF-8');
+            $text = htmlspecialchars($menu_text, ENT_QUOTES, 'UTF-8');
+
+            $text = $this->generateActionMenuIcon($menu_text) . ' ' . $text;
+
+            if ($menu_text === 'Delete') {
+                $html .= "<a id='{$id}' class='dropdown-item text-danger'>{$text}</a>";
+            } else {
+                $html .= "<a id='{$id}' class='dropdown-item'>{$text}</a>";
+            }
+        }
+
+        $html .= '</div></div>';
+
+        return $html;
+    }
     
     /**
      * Formats and returns the word count HTML for a row

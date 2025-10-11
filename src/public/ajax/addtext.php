@@ -21,11 +21,6 @@
 require_once '../../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
-// check that $_POST is set & not empty
-if (!isset($_POST) || empty($_POST)) {
-    exit;
-}
-
 use Aprelendo\Texts;
 use Aprelendo\SharedTexts;
 use Aprelendo\EbookFile;
@@ -35,179 +30,200 @@ use Aprelendo\Curl;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
+const DEFAULT_LEVEL = 2;
+const TYPE_ARTICLE  = 1;
+const TYPE_EBOOK    = 6;
+
+function respond_json(int $code, array|string|null $payload = null): void {
+    http_response_code($code);
+    if ($payload !== null) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo is_array($payload) ? json_encode($payload) : $payload;
+    }
+}
+
+function normalize_post(array $post): array {
+    return array_map(static function ($v) {
+        return is_string($v) ? trim(str_replace("\r", '', $v)) : $v;
+    }, $post);
+}
+
+function selected_texts_table(PDO $pdo, int $userId, int $langId, bool $isShared): Texts|SharedTexts {
+    return $isShared ? new SharedTexts($pdo, $userId, $langId)
+                     : new Texts($pdo, $userId, $langId);
+}
+
+function ensure_required(string $value, string $message): void {
+    if ($value === '') {
+        throw new UserException($message);
+    }
+}
+
+function validate_audio(?string &$audioUri): void {
+    if ($audioUri === null || $audioUri === '') {
+        return;
+    }
+    $audioUri = Curl::getFinalUrl($audioUri);
+    $headers = @get_headers($audioUri);
+    if (!$headers || stripos($headers[0], '200') === false) {
+        throw new UserException('The provided audio file cannot be accessed. Try another URL address.');
+    }
+}
+
+function ensure_not_exists(Texts|SharedTexts $table, string $sourceUri, bool $isShared): void {
+    if ($sourceUri === '') {
+        return;
+    }
+    if ($table->exists($sourceUri)) {
+        $msg = $isShared
+            ? 'The text you are trying to add already exists. Look for it in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.'
+            : 'The text you are trying to add already exists. Look for it in your <a class="alert-link" href="/texts">private library</a>. '
+            . 'Remember that you may have <a class="alert-link" href="/texts?sa=1">archived</a> it.';
+        throw new UserException($msg);
+    }
+}
+
+function award_gems(PDO $pdo, int $userId, int $langId, string $tz): void {
+    $events = ['texts' => ['new' => 1]];
+    (new Gems($pdo, $userId, $langId, $tz))->updateScore($events);
+}
+
+function handle_simple_or_video(PDO $pdo, int $userId, int $langId, array $r, string $mode): ?array {
+    $title      = $r['title']      ?? '';
+    $author     = $r['author']     ?? '';
+    $source_uri = $r['url']        ?? '';
+    $audio_uri  = $r['audio-url']  ?? '';
+    $text       = $r['text']       ?? '';
+    $type       = (int)($r['type'] ?? 0);
+    $level      = (int)($r['level'] ?? DEFAULT_LEVEL);
+    $is_shared  = ($mode === 'video') || !empty($r['shared-text']);
+
+    ensure_required($title, 'Title is a required field. Please enter one and try again.');
+    ensure_required($text,  'Text is a required field. Please enter one and try again. In case you are uploading a video, enter a valid YouTube URL and fetch the correct transcript. Only videos with subtitles in your target language are supported.');
+    validate_audio($audio_uri);
+
+    $texts_table = selected_texts_table($pdo, $userId, $langId, $is_shared);
+    ensure_not_exists($texts_table, $source_uri, $is_shared);
+
+    $texts_table->add($title, $author, $text, $source_uri, $audio_uri, $type, $level);
+
+    return null; // 204 No Content
+}
+
+function handle_rss(PDO $pdo, int $userId, int $langId, array $r): array {
+    if (!isset($r['title'], $r['text'])) {
+        throw new UserException('Missing fields.');
+    }
+
+    $title      = $r['title'];
+    $author     = $r['author']     ?? '';
+    $source_uri = $r['url']        ?? '';
+    $text       = $r['text'];
+    $type       = TYPE_ARTICLE;
+    $level      = (int)($r['level'] ?? DEFAULT_LEVEL);
+
+    ensure_required($title, 'Title is a required field.');
+    ensure_required($text,  'Text is a required field.');
+
+    $texts_table = new SharedTexts($pdo, $userId, $langId);
+    ensure_not_exists($texts_table, $source_uri, true);
+
+    $insert_id = (int)$texts_table->add($title, $author, $text, $source_uri, '', $type, $level);
+    if ($insert_id <= 0) {
+        throw new UserException('There was an error saving this text.');
+    }
+
+    return ['insert_id' => $insert_id];
+}
+
+function handle_ebook(PDO $pdo, int $userId, int $langId, array $r, array $files): array {
+    if (!isset($r['title'], $r['author'], $files['url'])) {
+        throw new UserException('Please, complete all the required fields: name, author & epub file.');
+    }
+
+    $title  = $r['title'];
+    $author = $r['author'];
+    $type   = TYPE_EBOOK;
+    $level  = (int)($r['level'] ?? DEFAULT_LEVEL);
+    $audio  = $r['audio-uri'] ?? '';
+
+    ensure_required($title,  'Please enter a title.');
+    ensure_required($author, 'Please enter an author.');
+
+    if (!isset($files['url']) || $files['url']['error'] === UPLOAD_ERR_NO_FILE) {
+        throw new UserException('File not found. Please select a file to upload.');
+    }
+
+    $file_upload_log = new LogFileUploads($pdo, $userId);
+    if ($file_upload_log->countTodayRecords() >= $file_upload_log::MAX_UPLOAD_LIMIT) {
+        throw new UserException('Sorry, you have reached your file upload limit for today.');
+    }
+
+    $ebook = new EbookFile($files['url']['name']);
+    $ebook->put($files['url'], true);
+    $ebook->strip();
+    $stored = $ebook->name;
+
+    $texts_table = new Texts($pdo, $userId, $langId);
+    $insert_id = (int)$texts_table->add($title, $author, '', $stored, $audio, $type, $level);
+    if ($insert_id <= 0) {
+        throw new UserException('There was an error uploading this text.');
+    }
+
+    $file_upload_log->addRecord();
+
+    return ['filename' => $stored, 'insert_id' => $insert_id];
+}
+
+// check that $_POST is set & not empty (preserve original behavior)
+if (!isset($_POST) || empty($_POST)) {
+    exit;
+}
+
 try {
-    $user_id = $user->id;
-    $lang_id = $user->lang_id;
+    $user_id = (int)$user->id;
+    $lang_id = (int)$user->lang_id;
 
     $text_added_successfully = false;
-    switch ($_POST['mode']) {
+    $post = normalize_post($_POST);
+    $mode = $post['mode'] ?? '';
+
+    switch ($mode) {
         case 'simple':
-        case 'video':
-        if (isset($_POST['title']) && isset($_POST['text'])) {
-            $title = $_POST['title'];
-            $author = $_POST['author'];
-            $source_uri = $_POST['url'];
-            $audio_uri = isset($_POST['audio-url']) ? $_POST['audio-url'] : '';
-            $text = $_POST['text'];
-            $type = $_POST['type'];
-            $level = isset($_POST['level']) ? $_POST['level'] : 2;  // default to 2 (intermediate) if not set
-            $is_shared = $_POST['mode'] == 'video' || isset($_POST['shared-text']) ? true : false;
-            $errors = [];
-            
-            // initialize text table
-            if ($is_shared) {
-                $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
+        case 'video': {
+            $payload = handle_simple_or_video($pdo, $user_id, $lang_id, $post, $mode);
+            $text_added_successfully = true;
+            if ($payload === null) {
+                respond_json(204);
             } else {
-                $texts_table = new Texts($pdo, $user_id, $lang_id);
+                respond_json(200, $payload);
             }
-            
-            // check if required fields are set
-            if (empty($title)) {
-                $errors[] = "<li>Title is a required field. Please enter one and try again.</li>";
-            }
-                        
-            if (empty($text)) {
-                $errors[] = "<li>Text is a required field. Please enter one and try again. In case you
-                are uploading a video, enter a valid YouTube URL and fetch the correct transcript.
-                Only videos with subtitles in your target language are supported.</li>";
-            }
-
-            // check if audio file exists or is accessible
-            if (!empty($audio_uri)) {
-                $audio_uri = Curl::getFinalUrl($audio_uri);
-
-                $headers = get_headers($audio_uri);
-                if (stripos($headers[0], '200 OK') === false) {
-                    $errors[] = "<li>The provided audio file cannot be accessed. Try another URL address.</li>";
-                }
-            }
-            
-            /*  For some reason new lines on the client side are counted by Jquery/JS as '\n',
-                but on the server side the $_POST variable gets '\r\n' instead.
-                To make them both compatible, we need to eliminate all instances of '\r' */
-            if ($_POST['mode'] == 'simple') {
-                $text = str_replace("\r", '', $text);
-            }
-            
-            // save text in db
-            if (empty($errors)) {
-                if (!empty($_POST['id'])) {
-                    $id = $_POST['id'];
-                    $texts_table->update($id, [$title, $author, $text, $source_uri, $audio_uri, $type]);
-                } else {
-                    if ($texts_table->exists($source_uri)) {
-                        $msg = 'The text you are trying to add already exists. ';
-                        $msg .= $is_shared
-                            ? 'Look for it in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.'
-                            : 'Look for it in your <a class="alert-link" href="/texts">private library</a>. '
-                            . 'Remember that you may have <a class="alert-link" href="/texts?sa=1">archived</a> it.';
-
-                        throw new UserException($msg);
-                    }
-                    $texts_table->add($title, $author, $text, $source_uri, $audio_uri, $type, $level);
-                    $text_added_successfully = true;
-                }
-                
-                // if everything goes fine return HTTP code 204 (No content), as nothing is returned
-                http_response_code(204);
-            } else {
-                $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
-                throw new UserException($error_str);
-            }
-        }
-        break; // end of simple text or video
-        
-        case 'rss':
-        if (isset($_POST['title']) && isset($_POST['text'])) {
-            $title = $_POST['title'];
-            $author = $_POST['author'];
-            $source_uri = $_POST['url'];
-            $audio_uri = '';
-            $type = 1; // assumes that all rss texts are "articles"
-            $level = !empty($_POST['level']) ? $_POST['level'] : 2; // if not set, mark as "intermediate"
-            $text = $_POST['text'];
-            
-            /*  For some reason new lines on the client side are counted by Jquery/JS as '\n',
-            but on the server side the $_POST variable gets '\r\n' instead.
-            To make them both compatible, we need to eliminate all instances of '\r' */
-            $text = str_replace("\r", '', $text);
-
-            $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
-
-            // if text is already in db, show error message
-            if ($texts_table->exists($source_uri)) {
-                $msg = 'The text you are trying to add already exists in our database. ';
-                $msg .= 'Look for it in the <a class="alert-link" href="/sharedtexts">shared texts</a> section.';
-
-                throw new UserException($msg);
-            }
-            
-            // if successful, return insert_id in json format
-            $insert_id = $texts_table->add($title, $author, $text, $source_uri, $audio_uri, $type, $level);
-            if ($insert_id > 0) {
-                $text_added_successfully = true;
-                $arr = ['insert_id' => $insert_id];
-                echo json_encode($arr);
-            }
-        }
-        break; // end of rss
-        
-        case 'ebook':
-        if (!isset($_POST['title']) || !isset($_POST['author']) || !isset($_FILES['url'])) {
-            throw new UserException('Please, complete all the required fields: name, author & epub file.');
-        } else {
-            $title = $_POST['title'];
-            $author = $_POST['author'];
-            $type = 6; // 6 = ebook
-            $level = !empty($_POST['level']) ? $_POST['level'] : 2; // if not set, mark as "intermediate"
-            $audio_uri = $_POST['audio-uri'];
-            $target_file_name = '';
-            $text = '';
-
-            // check if file exists
-            if (!isset($_FILES['url']) || $_FILES['url']['error'] === UPLOAD_ERR_NO_FILE) {
-                throw new UserException('File not found. Please select a file to upload.');
-            }
-
-            // check if user is allowed to upload file & does not exceed the daily upload limit
-            $file_upload_log = new LogFileUploads($pdo, $user->id);
-            $nr_of_uploads_today = $file_upload_log->countTodayRecords();
-
-            if ($nr_of_uploads_today >= $file_upload_log::MAX_UPLOAD_LIMIT) {
-                throw new UserException('Sorry, you have reached your file upload limit for today.');
-            }
-
-            // upload file & create unique file name
-            $ebook_file = new EbookFile($_FILES['url']['name']);
-            $ebook_file->put($_FILES['url'], true);
-            $ebook_file->strip();
-            $target_file_name = $ebook_file->name;
-
-            // save text in db
-            $texts_table = new Texts($pdo, $user_id, $lang_id);
-            $insert_id = $texts_table->add($title, $author, $text, $target_file_name, $audio_uri, $type, $level);
-            
-            if ($insert_id > 0) {
-                // if everything goes fine log upload
-                $text_added_successfully = true;
-                $file_upload_log->addRecord();
-                $filename = ['filename' => $target_file_name];
-                header('Content-Type: application/json');
-                echo json_encode($filename);
-            } else { // in case of error, show message
-                throw new UserException('There was an error uploading this text.');
-            }
-        }
-        default:
             break;
+        }
+
+        case 'rss': {
+            $payload = handle_rss($pdo, $user_id, $lang_id, $post);
+            $text_added_successfully = true;
+            respond_json(200, $payload);
+            break;
+        }
+
+        case 'ebook': {
+            $payload = handle_ebook($pdo, $user_id, $lang_id, $post, $_FILES);
+            $text_added_successfully = true;
+            respond_json(200, $payload);
+            break;
+        }
+
+        default:
+            // keep original silent default by not throwing, but it's clearer to error:
+            throw new UserException('Unknown mode.');
     }
 
-    // if text was added with success, update user score (gems)
     if ($text_added_successfully) {
-        $events = ['texts' => ['new' => 1]];
-        $gems = new Gems($pdo, $user_id, $lang_id, $user->time_zone);
-        $new_gems = $gems->updateScore($events);
+        award_gems($pdo, $user_id, $lang_id, $user->time_zone);
     }
+
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
 }
