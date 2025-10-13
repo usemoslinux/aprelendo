@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright (C) 2019 Pablo Castagnino
- *
- * This file is part of aprelendo.
- *
- * aprelendo is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * aprelendo is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 Pablo Castagnino
+*
+* This file is part of aprelendo.
+*
+* aprelendo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* aprelendo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
+*/
 
 require_once '../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
@@ -33,121 +33,165 @@ try {
     $page = 1;
     $limit = 10; // number of rows per page
     $adjacents = 2; // adjacent page numbers
-
+    
     $sort_by = !empty($_GET['o']) ? $_GET['o'] : 0;
-
+    
     $html = ''; // HTML output to print
-
+    
     // if the page is loaded because user searched for something, show search results
     // otherwise, show complete texts list
-
+    
     // initialize pagination variables
     if (isset($_GET['p'])) {
         $page = !empty($_GET['p']) ? $_GET['p'] : 1;
     }
-
+    
     $search_text = !empty($_GET['s']) ? $_GET['s'] : '';
-
+    
     // calculate page count for pagination
     if ($show_archived) {
         $texts_table = new ArchivedTexts($pdo, $user_id, $lang_id);
     } else {
         $texts_table = new Texts($pdo, $user_id, $lang_id);
     }
-
+    
     $total_rows = $texts_table->countSearchRows($filter_type, $filter_level, $search_text);
     $pagination = new Pagination($total_rows, $page, $limit, $adjacents);
     $offset = $pagination->offset;
-
+    
     // get search result
     $search_params = new SearchTextsParameters($filter_type, $filter_level, $search_text, $offset, $limit, $sort_by);
     $rows = $texts_table->search($search_params);
-
+    
     // print table
     if ($rows) { // if there are any results, show them
         $table = new TextTable($rows, $show_archived);
         $html = $table->print($sort_by);
-
+        
         // print pagination
         $url_query_options = compact("search_text", "sort_by", "filter_type", "filter_level", "show_archived");
         $page_url = new Url('texts', $url_query_options);
         $html .= $pagination->print($page_url);
     } else {
+        $btn_add_html = <<<HTML_BTN_ADD
+            <kbd class="badge bg-success"
+                onclick="window.scrollTo({top:0,behavior:'smooth'});
+                setTimeout(()=>{document.getElementById('btn-add-text').click();},400)">
+                + Add
+            </kbd>
+        HTML_BTN_ADD;
+
+        $btn_filter_html = <<<HTML_BTN_FILTER
+            <kbd class="bg-secondary"
+                onclick="window.scrollTo({top:0,behavior:'smooth'});
+                setTimeout(()=>{document.getElementById('btn-filter').click();},400)">
+                Filter
+            </kbd>
+        HTML_BTN_FILTER;
+
+        $user_menu_html = <<<HTML_USER_MENU
+            <kbd class="badge bg-primary"
+                onclick="window.scrollTo({top:0,behavior:'smooth'});
+                setTimeout(()=>{const t=document.querySelector('.navbar-toggler');
+                if(t&&window.getComputedStyle(t).display!=='none')t.click();
+                document.getElementById('user-menu').click();},400)">
+                <i class="bi bi-person-circle"></i> menu
+            </kbd>
+        HTML_USER_MENU;
+
+        $langs_menu_html = <<<HTML_LANGS_MENU
+            <kbd class='badge bg-primary'
+                onclick="window.scrollTo({top:0,behavior:'smooth'});
+                setTimeout(()=>{const t=document.querySelector('.navbar-toggler');
+                if(t&&window.getComputedStyle(t).display!=='none')t.click();
+                document.getElementById('language-menu').click();},400)">
+                <i class='bi bi-globe'></i> menu
+            </kbd>
+        HTML_LANGS_MENU;
+
         if (!isset($_GET) || empty($_GET)) {
             if (!isset($_COOKIE['hide_welcome_msg'])) {
-                $html = <<<'HTML_MODAL'
-                    <div id="alert-box" class="alert alert-success alert-dismissible fade show">
-                    <div class="alert-flag fs-5"><i class="bi bi-emoji-laughing-fill"></i>Welcome!</div>
+
+                $html = <<<HTML_WELCOME_MSG
+                <div id="alert-box" class="alert alert-info alert-dismissible fade show">
+                    <div class="alert-flag fs-5">
+                        <i class="bi bi-lightbulb-fill"></i> Welcome!
+                    </div>
                     <div class="alert-msg">
-                    <p>It appears this is your first time using Aprelendo. To get started, follow these simple
-                    steps:</p>
-                    <ol>
-                    <li>
-                    <strong>Install our extensions:</strong> download and install our <a href="/extensions#extensions"
-                    target="_blank" rel="noopener noreferrer" class="alert-link">extensions</a> for supported
-                    browsers like <a href="https://chrome.google.com/webstore/detail/aprelendo/
-                    aocicejjgilfkeeklfcomejgphjhjonj/related?hl=en-US" target="_blank" rel="noopener noreferrer"
-                    class="alert-link">Chrome</a>, <a href="https://microsoftedge.microsoft.com/addons/detail/
-                    aprelendo/ckgnfejigfdfppodkhfmdbockfilcefg" target="_blank" rel="noopener noreferrer"
-                    class="alert-link">Edge</a> and <a href="https://addons.mozilla.org/en-US/firefox/addon/aprelendo/"
-                    target="_blank" rel="noopener noreferrer" class="alert-link">Firefox</a>. If you're using a
-                    different web browser (e.g., Safari, Opera, or Internet Explorer), try our bookmarklet.
-                    </li>
-                    <li>
-                    <strong>Add articles:</strong> visit any website that has articles in the language you want to
-                    learn. Make sure it's at your proficiency level or slightly higher. Look for the Aprelendo button in
-                    your browser's toolbar (installed by the extension/bookmarklet) and click it to add the text to
-                    your Aprelendo library.
-                    </li>
-                    <li>
-                    <strong>Practice and learn:</strong> open the newly added article and follow the provided
-                    instructions for each learning phase.
-                    </li>
-                    </ol>
-                    <p>For more info, check our video on <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I"
-                    target="_blank" rel="noopener noreferrer" class="alert-link">how to get started</a>.</p>
+                        <p>
+                            Rather than focusing on memorising vocabulary, <strong>Aprelendo</strong> takes a holistic
+                            approach that emphasises understanding, context and real use. It does require patience and
+                            consistent effort, but over time our <a href="/totalreading" class="alert-link">Total
+                            Reading</a> method leads to deeper comprehension, stronger memory, and genuine confidence
+                            when using the language.
+                        </p>
+                        <p>
+                            Keep in mind that this approach asks more from <em>you</em> than traditional apps. You'll
+                            need to find and upload ebooks, videos, and articles that match <em>your</em>
+                            interests and level, which can feel challenging at first—especially if you're a beginner.
+                            But that process is part of the learning itself. Reading and listening to a text several
+                            times until you understand every detail can also be fatiguing, but will help you make the
+                            language truly yours.
+                        </p>
+                        <p>
+                            <strong>To get started</strong>, follow the instructions in the yellow message box below.
+                            Once you've added your first text, explore the $user_menu_html for tools like your 
+                            <a href="/words" class="alert-link">Word list</a>, 
+                            <a href="/study" class="alert-link">Study</a> sessions for quick reviews, 
+                            and <a href="/stats" class="alert-link">Statistics</a> to track your progress.
+                            From there, you can also access <a href="/preferences" class="alert-link">Preferences</a>
+                            to adjust your reading experience, and <a href="/userprofile" class="alert-link">My Profile
+                            </a> to enable AI-powered features and personalize your account.
+                        </p>
+                        <p>
+                            You can manage your active language, default dictionaries, and translators anytime from the
+                            $langs_menu_html.
+                        </p>
+                        <p>
+                            Want a quick visual walkthrough? Watch our
+                            <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I" target="_blank" 
+                            rel="noopener noreferrer" class="alert-link">intro video</a>.
+                        </p>
                     </div>
-                    <button id="welcome-close" type="button" class="btn-close" data-bs-dismiss="alert"
-                    aria-label="Close">
-                    </button>
-                    </div>
-                    HTML_MODAL;
+                    <button id="welcome-close" type="button" class="btn-close" data-bs-dismiss="alert" 
+                    aria-label="Close"></button>
+                </div>
+                HTML_WELCOME_MSG;
             }
-
-            $html .= <<<'HTML_EMPTY_LIBRARY'
-                <div id="alert-box" class="alert alert-danger">
-                <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
+            
+            $html .= <<<HTML_EMPTY_LIBRARY
+            <div id="alert-box" class="alert alert-warning">
+                <div class="alert-flag fs-5">
+                    <i class="bi bi-stars"></i> Get Started
+                </div>
                 <div class="alert-msg">
-                <p>Your private library is currently empty.</p>
-                <p>To start building it, use the <kbd class="bg-success">Add</kbd> button above, or take advantage of
-                our <a href="/extensions" target="_blank" rel="noopener noreferrer" class="alert-link">extensions</a>,
-                which allow you to easily add texts as you browse the Web. Learn how to do this by watching
-                this <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I" target="_blank"
-                rel="noopener noreferrer" class="alert-link">explanatory video</a>.</p>
+                    <p>Your private library is waiting for its first entry.</p>
+                    <p>Click $btn_add_html to add an ebook, video or text, or try our  <a href="/extensions"
+                    target="_blank" rel="noopener noreferrer" class="alert-link">browser extensions</a> to capture
+                    content as you explore the Web.
+                    </p>
                 </div>
-                </div>
-                HTML_EMPTY_LIBRARY;
-        } else {
-            $html = <<<'HTML_SEARCH_RESULT'
-            <div id="alert-box" class="alert alert-danger">
-            <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
-            <div class="alert-msg">
-            <p>No texts found with that criteria.</p>
-            <p>Consider refining your search using the <kbd class="bg-secondary">Filter</kbd> options on the left.</p>
-
-            <ul><li><strong>Type</strong>: you can narrow down your search by specifying the type of text you're
-            interested in, such as Articles, Conversations, Letters, Lyrics, Ebooks, or Others.</li>
-
-            <li><strong>Archived texts</strong>: if you have archived texts, you can choose to include or exclude them
-            from your search.</li>
-                    
-            <li><strong>Level</strong>: filter texts based on their difficulty level (Beginner, Intermediate, or
-            Advanced).</li></ul>
-        
-            <p>Additionally, keep in mind that searches are case insensitive and include partial matches (i.e.
-            'cat' can find 'cats').</p>
-            <p>With this in mind, feel free to modify your search query and try again.</p>
             </div>
+            HTML_EMPTY_LIBRARY;
+
+        } else {
+            $html = <<<HTML_SEARCH_RESULT
+            <div id="alert-box" class="alert alert-danger">
+                <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>No matches found</div>
+                <div class="alert-msg">
+                    <p>Consider refining your search using the $btn_filter_html options on the left.</p>
+                    <ul>
+                        <li><strong>Type</strong>: you can narrow down your search by specifying the type of text you're
+                            interested in, such as Articles, Conversations, Letters, Lyrics, Ebooks, or Others.</li>
+                        <li><strong>Archived texts</strong>: if you have archived texts, you can choose to include or 
+                        exclude them from your search.</li>
+                        <li><strong>Level</strong>: filter texts based on their difficulty level (Beginner, 
+                        Intermediate, or Advanced).</li>
+                    </ul>
+                    <p>Additionally, keep in mind that searches are case insensitive and include partial matches (i.e.
+                        'cat' can find 'Cats').</p>
+                    <p>With this in mind, feel free to modify your search query and try again.</p>
+                </div>
             </div>
             HTML_SEARCH_RESULT;
         }
@@ -155,10 +199,10 @@ try {
 } catch (\Throwable $e) {
     $html = <<<'HTML_UNEXPECTED_ERROR'
     <div id="alert-box" class="alert alert-danger">
-    <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
-    <div class="alert-msg">
-    <p>There was an unexpected error trying to list the texts in your private library.</p>
-    </div>
+        <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
+        <div class="alert-msg">
+            <p>There was an unexpected error trying to list the texts in your private library.</p>
+        </div>
     </div>
     HTML_UNEXPECTED_ERROR;
 } finally {

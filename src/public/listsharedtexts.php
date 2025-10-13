@@ -69,50 +69,55 @@ try {
         $html .= $pagination->print($page_url);
     } else {
         // if there are no texts to show, print a message
-        if (!empty($_GET)) {
-            $html = <<<'HTML_SEARCH_RESULT'
-            <div id="alert-box" class="alert alert-danger">
-            <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
-            <div class="alert-msg">
-            <p>No shared texts found with that criteria.</p>
-            <p>Consider refining your search using the <kbd class="bg-secondary">Filter</kbd> options on the left.</p>
-
-            <ul><li><strong>Type</strong>: you can narrow down your search by specifying the type of text you're
-            interested in, such as Articles, Conversations, Letters, Lyrics, Videos, or Others.</li>
-                    
-            <li><strong>Level</strong>: filter texts based on their difficulty level (Beginner, Intermediate, or
-            Advanced).</li></ul>
+        $btn_add_html = '<kbd class="bg-success" onclick="window.scrollTo({top:0,behavior:\'smooth\'});setTimeout(()=>{document.getElementById(\'btn-add-text\').click();},400)">+ Add</kbd>';
+        $btn_filter_html = '<kbd class="bg-secondary" onclick="window.scrollTo({top:0,behavior:\'smooth\'});setTimeout(()=>{document.getElementById(\'btn-filter\').click();},400)">Filter</kbd>';
         
-            <p>Additionally, keep in mind that searches are case insensitive and include partial matches (i.e.
-            'cat' can find 'cats').</p>
-            <p>With this in mind, feel free to modify your search query and try again.</p>
-            </div>
+        if (!empty($_GET)) {
+            $html = <<<HTML_SEARCH_RESULT
+            <div id="alert-box" class="alert alert-danger">
+                <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>No matches found</div>
+                <div class="alert-msg">
+                    <p>Consider refining your search using the $btn_filter_html options on the left.</p>
+                    <ul>
+                        <li><strong>Type</strong>: you can narrow down your search by specifying the type of text you're
+                            interested in, such as Articles, Conversations, Letters, Lyrics, Videos, or Others.</li>
+
+                        <li><strong>Level</strong>: filter texts based on their difficulty level (Beginner,
+                            Intermediate, or Advanced).</li>
+                    </ul>
+                    <p>Additionally, keep in mind that searches are case insensitive and include partial matches (i.e.
+                        'cat' can find 'Cats').</p>
+                    <p>With this in mind, feel free to modify your search query and try again.</p>
+                </div>
             </div>
             HTML_SEARCH_RESULT;
         } else {
-            $html = <<<'HTML_EMPTY_LIBRARY'
-            <div id="alert-box" class="alert alert-danger">
-            <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
+            $html = <<<HTML_EMPTY_LIBRARY
+            <div id="alert-box" class="alert alert-warning">
+            <div class="alert-flag fs-5">
+                <i class="bi bi-people-fill"></i> Join the community
+            </div>
             <div class="alert-msg">
-            <p>There are still no shared texts for this language.</p><p>Be the first to add one and start earning
-            precious gems!</p><p>To do so, use the <kbd class="bg-success">Add</kbd> button above, or take advantage
-            of our <a href="/extensions" target="_blank" rel="noopener noreferrer" class="alert-link">extensions</a>,
-            which allow you to easily add texts as you browse the Web. When adding texts, make sure the
-            "share with the community" option is selected. Learn how to do this by watching this
-            <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I" target="_blank" rel="noopener noreferrer"
-            class="alert-link">explanatory video</a>.</p>
+                <p>There are no shared texts for this language yet.</p>
+                <p>Be the first to share one and help others discover great learning material—every contribution makes
+                    Aprelendo stronger!</p>
+                <p>To do so, use the $btn_add_html button above or try our  <a href="/extensions" target="_blank"
+                    rel="noopener noreferrer" class="alert-link">browser extensions</a> to add content while browsing.
+                    When adding, make sure the <em>"share with the community"</em> option is enabled.
+                </p>
             </div>
             </div>
             HTML_EMPTY_LIBRARY;
+
         }
     }
 } catch (\Throwable $e) {
     $html = <<<'HTML_UNEXPECTED_ERROR'
     <div id="alert-box" class="alert alert-danger">
-    <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
-    <div class="alert-msg">
-    <p>There was an unexpected error trying to list the texts in the shared texts section.</p>
-    </div>
+        <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
+        <div class="alert-msg">
+            <p>There was an unexpected error trying to list the texts in the shared texts section.</p>
+        </div>
     </div>
     HTML_UNEXPECTED_ERROR;
 } finally {

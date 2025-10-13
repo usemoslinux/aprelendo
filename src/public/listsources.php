@@ -28,21 +28,45 @@ try {
     $sources = $pop_sources->getAllByLang($user->lang);
     echo printSources($sources);
 } catch (\Exception $e) {
-    echo "<div class='alert alert-info' role='alert'>Hmm, that's weird. "
-        . "We couldn't find any popular sources for the selected language.</div>";
+    $html = <<<'HTML_UNEXPECTED_ERROR'
+    <div id="alert-box" class="alert alert-danger">
+        <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>Oops!</div>
+        <div class="alert-msg">
+            <p>There was an unexpected error trying to show sources for this language.</p>
+        </div>
+    </div>
+    HTML_UNEXPECTED_ERROR;
+    echo $html;
 }
 
 function printSources($sources)
 {
-    if (!isset($sources) || empty($sources)) {
-        echo "<div class='alert alert-info' role='alert'>Hmm, that's weird. "
-        . "We couldn't find any popular sources for the selected language.</div>";
-    }
+    $html = <<<HTML_INFO_SOURCES
+        <div class="alert alert-info">These are the most popular sources for the currently selected language. They
+            are probably a good starting place to find new content to practice. Remember to use our <a
+            href="/extensions" class="alert-link" target="_blank" rel="noopener noreferrer">extensions</a> to add
+            articles from these or other sources to your Aprelendo library.
+        </div>
+    HTML_INFO_SOURCES;
 
-    $html = '<div class="alert alert-info">These are the most popular sources for the currently selected language.'
-        . 'They are probably a good starting place to find new content to practice. Remember to use our '
-        . '<a href="/extensions" class="alert-link" target="_blank" rel="noopener noreferrer">extensions</a> to add '
-        . 'articles from these or other sources to your Aprelendo library.</div>';
+    if (!isset($sources) || empty($sources)) {
+        $html .= <<<HTML_EMPTY_LIBRARY
+            <div id="alert-box" class="alert alert-warning">
+                <div class="alert-flag fs-5">
+                    <i class="bi bi-stars"></i> Nothing here… yet!
+                </div>
+                <div class="alert-msg">
+                    <p>Hmm, that's unusual. We couldn't find any popular sources for the selected language.</p>
+                    <p>
+                        This probably means that there are no <a href="/sharedtexts" class="alert-link">shared texts</a>
+                        available yet for this language. Try exploring another language for now, or be the first to
+                        share something and help grow the collection!
+                    </p>
+                </div>
+            </div>
+        HTML_EMPTY_LIBRARY;
+        return $html;
+    }
 
     $html .= '<div id="list-group-popular-sources" class="list-group">';
 

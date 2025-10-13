@@ -149,7 +149,7 @@ $lvl_active_dropdown_class = ' class="dropdown-item fl active" ';
                             </div><!-- /btn-group -->
                             <!-- Split button -->
                             <div class="dropdown dropdown-add ms-md-2 mb-3">
-                                <button type="button" class="btn btn-success dropdown-toggle"
+                                <button id="btn-add-text" type="button" class="btn btn-success dropdown-toggle"
                                     data-bs-toggle="dropdown">
                                     <span class="bi bi bi-plus-lg"></span> Add
                                 </button>
