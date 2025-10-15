@@ -78,11 +78,11 @@ class ExampleSentences extends DBEntity
         $sql = "INSERT INTO `{$this->table}`
                 (`user_id`, `lang_iso`, `word`, `sentence`, `source_title`, `source_author`, `source_uri`)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE `sentence` = ?";
+                ON DUPLICATE KEY UPDATE `sentence` = ?, `source_title` = ?, `source_author` = ?, `source_uri` = ?";
         
         $this->sqlExecute($sql, [
-            $this->user_id, $lang->name, $word, $sentence,
-            $source_title, $source_author, $source_uri, $sentence
+            $this->user_id, $lang->name, $word, $sentence, $source_title, $source_author, $source_uri,
+                $sentence, $source_title, $source_author, $source_uri
         ]);
     } // end addRecord()
 }
