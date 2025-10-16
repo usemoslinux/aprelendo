@@ -1349,3 +1349,51 @@ small>a:not(.btn):hover {
 .dvh-100 {
   height: 100dvh !important;
 }
+
+/* HALL OF FAME */
+.trophy-icon {
+    font-size: 1.5rem;
+}
+
+.trophy-gold {
+    color: #FFD700;
+}
+
+.trophy-silver {
+    color: #C0C0C0;
+}
+
+.trophy-bronze {
+    color: #CD7F32;
+}
+
+.rank-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.rank-1 {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #fff;
+}
+
+.rank-2 {
+    background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+    color: #fff;
+}
+
+.rank-3 {
+    background: linear-gradient(135deg, #CD7F32, #B8860B);
+    color: #fff;
+}
+
+.stat-icon {
+    /* font-size: 1.3rem; */
+    margin-right: 8px;
+}

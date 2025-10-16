@@ -24,9 +24,25 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
+use Aprelendo\User;
+use Aprelendo\Gems;
 use Aprelendo\Achievements;
 use Aprelendo\WordStats;
 use Aprelendo\WordDailyGoal;
+
+$user_name = !empty($_GET['u']) ? $_GET['u'] : $user->name;
+
+// if the GET u is different from the current user name
+if ($user_name != $user->name) {
+    $user = new User($pdo);
+    $user->loadRecordByName($user_name);
+
+    // recalculate gems and streak days for this user
+    $gems = new Gems($pdo, $user->id, $user->lang_id, $user->time_zone);
+    $nr_of_gems  = (int)$gems->gems;
+    $streak_days = (int)$gems->days_streak;
+    $today_is_reading_streak = $gems->today_is_streak;
+}
 
 // Get daily recall streak statistics
 $stats = new WordStats($pdo, $user->id, $user->lang_id);
@@ -103,12 +119,12 @@ if ($total_nr_of_badges > 0) {
         </div>
     </div>
 
-    <!-- Reviews Heatmap -->
+    <!-- Word Review Heatmap -->
     <div class="row">
         <div class="col-12 mb-4">
             <div class="card h-100">
                 <div class="card-header text-center fw-bolder">
-                    <div>Reviews Heatmap</div>
+                    <div>Word Review Heatmap</div>
                 </div>
                 <div class="card-body small">
                     <div id="heatmap"></div>

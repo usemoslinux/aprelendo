@@ -107,9 +107,10 @@ abstract class DBEntity
     } // end sqlFetchAll()
 
     /**
-     * Executes custom SQL count
+     * Returns first column of first row (typically used with COUNT sql statementscount)
      *
-     * @param array $where list of columns and values to include in where clause
+     * @param string $sql sql statement to execute
+     * @param array $values value parameters passed to PDO
      * @return int
      */
     protected function sqlCount(string $sql, array $values = []): int

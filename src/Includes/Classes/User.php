@@ -103,6 +103,18 @@ class User extends DBEntity
     }
 
     /**
+     * Loads user record data by name
+     *
+     * @param string $name
+     * @return void
+     */
+    public function loadRecordByName(string $name): void
+    {
+        $sql = "SELECT * FROM `{$this->table}` WHERE `name`=?";
+        $this->loadRecord($this->sqlFetch($sql, [$name]));
+    }
+
+    /**
      * Checks if user exists by name
      *
      * @param string $name

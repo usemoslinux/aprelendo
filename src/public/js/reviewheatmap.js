@@ -83,7 +83,16 @@
     }
 
     async function init() {
-        const res = await fetch('/ajax/getreviewsperday.php', { cache: 'no-store' });
+        // Get the 'u' parameter from the current page URL
+        const url_params = new URLSearchParams(window.location.search);
+        const u = url_params.get('u') ?? '';
+
+        // Send it as GET parameter to getreviewsperday.php
+        const res = await fetch(`/ajax/getreviewsperday.php?u=${encodeURIComponent(u)}`, {
+            cache: 'no-store'
+        });
+
+        // Parse JSON response
         data = await res.json();
 
         currentRange = monthsForViewport();
