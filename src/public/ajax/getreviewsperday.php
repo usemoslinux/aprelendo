@@ -21,11 +21,20 @@
 require_once '../../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // loads User class & check if user is logged in
 
+use Aprelendo\User;
 use Aprelendo\WordStats;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
 try {
+    $user_name = !empty($_GET['u']) ? $_GET['u'] : $user->name;
+
+    // if the GET u is different from the current user name
+    if ($user_name != $user->name) {
+        $user = new User($pdo);
+        $user->loadRecordByName($user_name);
+    }
+
     $stats = new WordStats($pdo, $user->id, $user->lang_id);
     $result = $stats->getReviewsPerDay();
     echo json_encode($result);

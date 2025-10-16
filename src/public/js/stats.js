@@ -23,10 +23,14 @@ $(document).ready(function () {
     drawTotalStats();
 
     function drawTotalStats() {
+        // get user from URL param, if any
+        const url_params = new URLSearchParams(window.location.search);
+        const user_name = url_params.get('u');
+
         $.ajax({
             type: "GET",
             url: "ajax/getwordsbystatus.php",
-            data: { type: "words" },
+            data: { u: user_name, type: "words" },
             dataType: "json"
         })
                     .done(handleData)
