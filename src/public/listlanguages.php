@@ -47,10 +47,10 @@ if ($available_langs) {
         $lgname = $lang_record['long_name'];
         
         $is_active = $lg_id == $user->lang_id;
-        $btn_disabled = $is_active ? 'disabled' : '';
-        $active_border = $is_active ? 'border border-warning' : '';
+        $btn_disabled = $is_active ? 'd-none' : '';
+        $active_background = $is_active ? 'active' : '';
         
-        $html .= "<div class='list-group-item d-flex justify-content-between align-items-center $active_border'>"
+        $html .= "<div class='list-group-item d-flex justify-content-between align-items-center $active_background'>"
             . "<div class='align-middle'><img class='language-flag me-1' src='/img/flags/$lg_iso_code.svg' "
             . "alt='$lgname flag'><span class='align-middle'>$lgname</span></div><div>"
             . "<button type='button' onclick='location.href=\"languages?act=$lg_id\"' class='btn btn-primary btn-sm $btn_disabled'>Activate</button>"
