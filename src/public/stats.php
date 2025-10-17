@@ -25,17 +25,25 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\User;
+use Aprelendo\Language;
 use Aprelendo\Gems;
 use Aprelendo\Achievements;
 use Aprelendo\WordStats;
 use Aprelendo\WordDailyGoal;
 
 $user_name = !empty($_GET['u']) ? $_GET['u'] : $user->name;
+$lang_name = $user->lang;
 
 // if the GET u is different from the current user name
 if ($user_name != $user->name) {
     $user = new User($pdo);
     $user->loadRecordByName($user_name);
+
+    $lang = new Language($pdo, $user->id);
+    $lang->loadRecordByName($lang_name);
+
+    $user->lang = $lang->name;
+    $user->lang_id = $lang->id;
 
     // recalculate gems and streak days for this user
     $gems = new Gems($pdo, $user->id, $user->lang_id, $user->time_zone);

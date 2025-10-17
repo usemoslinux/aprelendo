@@ -22,17 +22,25 @@ require_once '../../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // loads User class & check if user is logged in
 
 use Aprelendo\User;
+use Aprelendo\Language;
 use Aprelendo\WordStats;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
 try {
     $user_name = !empty($_GET['u']) ? $_GET['u'] : $user->name;
+    $lang_name = $user->lang;
 
     // if the GET u is different from the current user name
     if ($user_name != $user->name) {
         $user = new User($pdo);
         $user->loadRecordByName($user_name);
+
+        $lang = new Language($pdo, $user->id);
+        $lang->loadRecordByName($lang_name);
+
+        $user->lang = $lang->name;
+        $user->lang_id = $lang->id;
     }
 
     if ($_GET['type'] === "words") {
