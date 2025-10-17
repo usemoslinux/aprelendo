@@ -214,20 +214,17 @@ class Language extends DBEntity
     } // end getNameFromIso()
 
     /**
-     * Gives index of 639-1 iso codes in Language::$iso_codes array
+     * Returns the index of an ISO 639-1 code in Language::$iso_codes array
      *
      * @param string $lang_name
-     * @return int
+     * @return int|null Index if found, null otherwise
      */
-    public static function getIndex(string $lang_name): int
+    public static function getIndex(string $lang_name): ?int
     {
         $keys = array_keys(self::$iso_code);
-        $keys_count = count($keys)-1;
-        for ($i=0; $i <= $keys_count; $i++) {
-            if ($keys[$i] == $lang_name) {
-                return $i;
-            }
-        }
+        $index = array_search($lang_name, $keys, true);
+
+        return $index !== false ? $index : null;
     } // end getIndex()
 
     /**
