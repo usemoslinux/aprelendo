@@ -23,10 +23,10 @@ namespace Aprelendo;
 class WordTable extends Table
 {
     private const STATUS_ICONS = [
-        'bi-hourglass-top status_learned',
-        'bi-hourglass-split status_learning',
-        'bi-hourglass-bottom status_new',
-        'bi-hourglass-bottom status_forgotten',
+        'bi-hourglass-top status-learned',
+        'bi-hourglass-split status-learning',
+        'bi-hourglass-bottom status-new',
+        'bi-hourglass-bottom status-forgotten',
     ];
 
     private const STATUS_TEXT = [

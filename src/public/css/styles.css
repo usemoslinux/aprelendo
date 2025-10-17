@@ -1305,6 +1305,24 @@ small>a:not(.btn):hover {
     }
 }
 
+/* WORDS */
+
+.status-learned {
+    color: var(--w-learned);
+}
+
+.status-learning {
+    color: var(--w-learning);
+}
+
+.status-new {
+    color: var(--w-new);
+}
+
+.status-forgotten {
+    color: var(--w-forgotten);
+}
+
 /* STUDY */
 
 .card-examples blockquote:not(:last-child) {
