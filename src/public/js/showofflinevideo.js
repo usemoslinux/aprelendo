@@ -425,6 +425,7 @@ $(document).ready(function () {
             });
 
             reader.readAsText(file);
+            $("#nosubs").remove(); // remove "no subtitles loaded" message
         }
     }); // end #subs-file-input.on.change
 

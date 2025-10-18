@@ -176,7 +176,10 @@ class Reader
 
         $html .= '<div id="text-container" class="overflow-auto m-0 my-1 p-2 z-1" style="'
             . $reader_css
-            . '"><div id="text" class="text-center"></div></div>';
+            . '"><div id="text" class="text-center"></div>'
+            . '<div id="nosubs" class="d-flex justify-content-center align-items-center h-100">'
+            . '<div class="text-muted">No video or subtitles loaded yet. Use the blue buttons above to load them.</div>'
+            . '</div></div>';
         return $html;
     } // end showOfflineVideo()
 
