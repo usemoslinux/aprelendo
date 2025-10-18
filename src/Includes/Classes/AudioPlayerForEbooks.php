@@ -53,12 +53,9 @@ class AudioPlayerForEbooks extends AudioPlayer
                         </div>
 
                         <div class="d-flex justify-content-between small">
-                            <div id="ap-elapsedtime-stamp" class="small">
-                            00:00
-                            </div>
-                            <div id="ap-totaltime-stamp" class="small">
-                            00:00
-                            </div>
+                            <div id="ap-elapsedtime-stamp" class="small">00:00</div>
+                            <div id="ap-hovertime-stamp" class="small"></div>
+                            <div id="ap-totaltime-stamp" class="small">00:00</div>
                         </div>
                     </div>
 

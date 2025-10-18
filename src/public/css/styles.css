@@ -817,6 +817,13 @@ a[role="menuitem"] {
     font-size: 12px;
 }
 
+#ap-progress-bar-container {
+    cursor: pointer;
+    box-shadow:
+        inset 2px 2px 4px rgba(255,255,255,0.8),
+        inset -2px -2px 4px rgba(0,0,0,0.2);
+}
+
 #ap-abloop-btn {
     background-color: var(--bs-btn-bg);
     color: var(--bs-btn-color);

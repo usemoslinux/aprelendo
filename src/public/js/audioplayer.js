@@ -25,6 +25,7 @@ const AudioController = (() => {
     const progress_bar = document.getElementById('ap-progress-bar');
     const progress_bar_container = document.getElementById('ap-progress-bar-container');
     const elapsed_time_stamp = document.getElementById('ap-elapsedtime-stamp');
+    const hover_time_stamp = document.getElementById('ap-hovertime-stamp');
     const total_time_stamp = document.getElementById('ap-totaltime-stamp');
     const speed_menu_items = document.querySelectorAll('#ap-speed-menu .dropdown-item');
     const ab_loop_btn = document.getElementById("ap-abloop-btn");
@@ -128,26 +129,34 @@ const AudioController = (() => {
 
         progress_bar_container.addEventListener('click', (e) => {
             const rect = progress_bar_container.getBoundingClientRect();
-            const clickPosition = e.clientX - rect.left;
-            const clickPercentage = clickPosition / rect.width;
-            audio.currentTime = clickPercentage * audio.duration;
+            const click_position = e.clientX - rect.left;
+            const click_percentage = click_position / rect.width;
+            audio.currentTime = click_percentage * audio.duration;
         });
 
-        progress_bar_container.addEventListener('mousemove', (e) => {
-            const rect = progress_bar_container.getBoundingClientRect();
-            const hover_position = e.clientX - rect.left;
-            const hover_percentage = hover_position / rect.width;
-            const hover_time = Math.floor(hover_percentage * audio.duration);
-        
-            const hours = Math.floor(hover_time / 3600);
-            const minutes = Math.floor((hover_time % 3600) / 60);
-            const seconds = hover_time % 60;
-        
-            progress_bar_container.title = 
-                hours > 0 
-                    ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}` 
-                    : `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        });        
+        if (window.matchMedia('(hover: hover)').matches) {
+            progress_bar_container.addEventListener('mousemove', (e) => {
+                const rect = progress_bar_container.getBoundingClientRect();
+                const hover_position = e.clientX - rect.left;
+                const hover_percentage = hover_position / rect.width;
+                const hover_time = Math.max(0, Math.floor(hover_percentage * audio.duration));
+            
+                const hours = Math.floor(hover_time / 3600);
+                const minutes = Math.floor((hover_time % 3600) / 60);
+                const seconds = hover_time % 60;
+            
+                hover_time_stamp.textContent = 
+                    hours > 0 
+                        ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}` 
+                        : `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                hover_time_stamp.style.left = `${hover_position}px`;
+                hover_time_stamp.style.display = 'block';
+            });
+
+            progress_bar_container.addEventListener('mouseleave', (e) => {
+                hover_time_stamp.style.display = 'none';
+            });
+        }
 
         speed_menu_items.forEach(item => {
             item.addEventListener('click', (e) => {
