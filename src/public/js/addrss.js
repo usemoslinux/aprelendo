@@ -24,11 +24,14 @@ $(document).ready(function () {
 
     if (feed_count == 0) {
         $("#accordion").html(function () {
-            return showMessage('<p>No RSS feeds found.</p><p>To '
-                + 'get started, head over to the <a class="alert-link" href="/languages.php">languages</a> section '
-                + ' and add up to 3 feeds per language to start enjoying curated <a href="https://en.wikipedia.org/wiki/RSS"'
-                + 'target="_blank" rel="noopener noreferrer" class="alert-link">RSS content</a>.</p>',
-            'alert-danger');
+            return showMessage(
+                '<p>No RSS feeds detected yet.</p>'
+                + '<p>To begin discovering new content, visit the <a class="alert-link" href="/languages">languages</a> '
+                + 'section and add up to three feeds per language.</p><p>If you need further guidance, explore our quick '
+                + '<a href="https://blog.aprelendo.com/2024/12/a-step-by-step-guide-to-adding-rss-texts-to-aprelendo/" '
+                + 'target="_blank" rel="noopener noreferrer" class="alert-link">setup guide</a>.</p>',
+                'alert-warning','Get Started'
+            );
         });
         return;
     }

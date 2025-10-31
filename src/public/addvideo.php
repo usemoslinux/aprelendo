@@ -44,7 +44,9 @@ require_once PUBLIC_PATH . 'header.php';
                     <div class="col-sm-12">
                         <div class="alert alert-info">All YouTube videos you
                             add to Aprelendo will be shared with the rest of our community. You will find them in the
-                            <a href="/sharedtexts" class="alert-link">shared texts</a> section.</div>
+                            <a href="/sharedtexts" target="_blank" rel="noopener noreferrer"
+                                class="alert-link">shared texts</a> section.
+                        </div>
                         <div id="alert-box" class="d-none"></div>
                     </div>
                     <!-- VIDEO CONTAINER -->
@@ -90,6 +92,8 @@ require_once PUBLIC_PATH . 'header.php';
                                         <button id="btn-fetch" class="btn btn-secondary" type="button">
                                             <i id="btn-fetch-img" class="bi bi-arrow-down-right-square text-warning"></i>
                                             Fetch</button>
+                                    </div>
+                                    <div class="mt-2 small">Need help? Read the <a href="https://blog.aprelendo.com/2025/01/how-to-add-youtube-videos-to-aprelendo-for-language-learning/" target="_blank" rel="noopener noreferrer" class="alert-link">guide</a> or watch the <a href="https://www.youtube.com/watch?v=oUI7UCD8U9Y" target="_blank" rel="noopener noreferrer" class="alert-link">video tutorial</a>
                                     </div>
                                 </div>
                             </div>

@@ -134,7 +134,7 @@ if (!$user_auth->isLoggedIn()) {
                         <p>In sum, <strong>Aprelendo has been designed so that you can learn new languages from the
                                 comfort of your own home and adapting to your schedule and interests</strong> with the
                             added benefit of improving all your levels of comprehension and communication in each
-                            session. As long as you can read at least 1 article a day using Aprelendo, I am confident
+                            session. As long as you can read at least one article a day using Aprelendo, I am confident
                             that you will see results in just a few weeks. Give it a try and <a
                                 href="https://www.facebook.com/aprelendo" target="_blank" rel="noopener noreferrer">let
                                 me know</a> what you think.</p>

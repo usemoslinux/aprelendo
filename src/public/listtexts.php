@@ -113,50 +113,41 @@ try {
             if (!isset($_COOKIE['hide_welcome_msg'])) {
 
                 $html = <<<HTML_WELCOME_MSG
-                <div id="alert-box" class="alert alert-info alert-dismissible fade show">
-                    <div class="alert-flag fs-5">
-                        <i class="bi bi-lightbulb-fill"></i> Welcome!
+                    <div id="alert-box" class="alert alert-info alert-dismissible fade show">
+                        <div class="alert-flag fs-5">
+                            <i class="bi bi-lightbulb-fill"></i> Welcome!
+                        </div>
+                        <div class="alert-msg">
+                            <p>
+                                <strong>Aprelendo</strong> helps you learn languages naturally through real content. 
+                                Instead of memorising lists, you explore stories, videos, and articles, absorbing vocabulary through context and use.
+                            </p>
+                            <p>
+                                This method takes curiosity and a bit of patience, especially at the beginning. You will find and upload the content that interests you, then read and listen to it deeply. It may feel challenging at first, yet it builds lasting understanding and real confidence.
+                            </p>
+                            <p>
+                                To begin, follow the steps in the yellow box below. Once you add your first text, visit your 
+                                $user_menu_html to access your <a href="/words" class="alert-link">Word list</a>, 
+                                <a href="/study" class="alert-link">Study</a> sessions, and 
+                                <a href="/stats" class="alert-link">Statistics</a>. You can also open 
+                                <a href="/preferences" class="alert-link">Preferences</a> or 
+                                <a href="/userprofile" class="alert-link">My Profile</a> to tailor your experience and enable
+                                <a href="https://blog.aprelendo.com/2024/11/boost-your-vocabulary-with-aprelendos-proven-ai-language-tool/"
+                                target="_blank" rel="noopener noreferrer" class="alert-link">Lingobot</a>, our AI assistant.
+                            </p>
+                            <p>
+                                You can switch languages and choose dictionaries and translators anytime from the 
+                                $langs_menu_html.
+                            </p>
+                            <p>
+                                Prefer a quick tour? Watch our 
+                                <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I"
+                                target="_blank" rel="noopener noreferrer" class="alert-link">intro video</a>.
+                            </p>
+                        </div>
+                        <button id="welcome-close" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <div class="alert-msg">
-                        <p>
-                            Rather than focusing on memorising vocabulary, <strong>Aprelendo</strong> takes a holistic
-                            approach that emphasises understanding, context and real use. It does require patience and
-                            consistent effort, but over time our <a href="/totalreading" class="alert-link">Total
-                            Reading</a> method leads to deeper comprehension, stronger memory, and genuine confidence
-                            when using the language.
-                        </p>
-                        <p>
-                            Keep in mind that this approach asks more from <em>you</em> than traditional apps. You'll
-                            need to find and upload ebooks, videos, and articles that match <em>your</em>
-                            interests and level, which can feel challenging at first—especially if you're a beginner.
-                            But that process is part of the learning itself. Reading and listening to a text several
-                            times until you understand every detail can also be fatiguing, but will help you make the
-                            language truly yours.
-                        </p>
-                        <p>
-                            <strong>To get started</strong>, follow the instructions in the yellow message box below.
-                            Once you've added your first text, explore the $user_menu_html for tools like your 
-                            <a href="/words" class="alert-link">Word list</a>, 
-                            <a href="/study" class="alert-link">Study</a> sessions for quick reviews, 
-                            and <a href="/stats" class="alert-link">Statistics</a> to track your progress.
-                            From there, you can also access <a href="/preferences" class="alert-link">Preferences</a>
-                            to adjust your reading experience, and <a href="/userprofile" class="alert-link">My Profile
-                            </a> to enable AI-powered features and personalize your account.
-                        </p>
-                        <p>
-                            You can manage your active language, default dictionaries, and translators anytime from the
-                            $langs_menu_html.
-                        </p>
-                        <p>
-                            Want a quick visual walkthrough? Watch our
-                            <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I" target="_blank" 
-                            rel="noopener noreferrer" class="alert-link">intro video</a>.
-                        </p>
-                    </div>
-                    <button id="welcome-close" type="button" class="btn-close" data-bs-dismiss="alert" 
-                    aria-label="Close"></button>
-                </div>
-                HTML_WELCOME_MSG;
+                    HTML_WELCOME_MSG;
             }
             
             $html .= <<<HTML_EMPTY_LIBRARY
