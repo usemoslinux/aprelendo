@@ -72,9 +72,9 @@ if (!$user_auth->isLoggedIn()) {
                                 <li>
                                     <a href="https://huggingface.co/" target="_blank" rel="noopener noreferrer">Hugging
                                         Face</a>, for providing access to machine learning models used to power Aprelendo's
-                                    AI capabilities. The <a href="https://huggingface.co/microsoft/Phi-3.5-mini-instruct"
-                                        target="_blank" rel="noopener noreferrer">Phi 3.5 mini instruct model</a> by
-                                    Microsoft is used to power Lingobot.
+                                    AI capabilities. The <a href="https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct"
+                                        target="_blank" rel="noopener noreferrer">Qwen3-VL-8B instruct model</a> by
+                                    Alibaba is used to power Lingobot.
                                 </li>
                                 <li>
                                     <a href="https://github.com/mozilla/readability" target="_blank"

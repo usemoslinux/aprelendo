@@ -49,28 +49,33 @@ class AIBot
      */
     public function streamReply(string $prompt): void
     {
+        $STOP = "<END>";
+
         $data = [
-            // "model" => "bigscience/bloomz-7b1",
-            "model" => "Qwen/Qwen2.5-7B-Instruct:featherless-ai",
+            "model" => "Qwen/Qwen3-VL-8B-Instruct",
+            // "model" => "Qwen/Qwen2.5-7B-Instruct",
+            "provider" => "auto",
             "messages" => [
                 [
                     "role" => "system",
                     "content" =>
-                        "You are a language tutor. Your role is to help the user understand vocabulary, "
-                        . "usage, and subtle distinctions between words in {$this->lang}, not in English. Always "
-                        . "assume the user's questions refer to words in {$this->lang}, even if the question is "
-                        . "written in English. Explanations should be written in English, but the vocabulary being "
-                        . "analyzed or compared must always be in {$this->lang}, unless the user explicitly states "
-                        . "otherwise. The user is a native {$this->native_lang} speaker, so include helpful "
-                        . "translations to {$this->native_lang} when relevant. Use practical examples, avoid unnecessary "
-                        . "complexity, and always keep your answers under 1200 characters."
+                        "You are a language tutor. Keep every answer extremely concise: at most 3 sentences or 80 words. "
+                        . "If the user asks for examples, give at most 2. End every reply with the marker {$STOP}. "
+                        . "Your role is to explain vocabulary, usage, and subtle distinctions in {$this->lang}. "
+                        . "Always assume questions refer to {$this->lang}, even if written in English. "
+                        . "Write explanations in English, but the vocabulary under analysis must appear in {$this->lang}. "
+                        . "The user is a native {$this->native_lang} speaker, so include helpful translations "
+                        . "to {$this->native_lang} when relevant."
                 ],
                 [
                     "role" => "user",
                     "content" => $prompt
                 ]
             ],
-            "max_tokens" => 500,
+            "max_tokens" => 160,  // conservative cap; raise to ~220 only if you see frequent length stops
+            "temperature" => 0.1, // low = terse, less rambling
+            "top_p" => 0.9,       // optional; keeps sampling stable
+            "stop" => [$STOP],    // the model must end with this marker
             "stream" => true
         ];
 

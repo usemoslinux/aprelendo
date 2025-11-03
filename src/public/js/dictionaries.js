@@ -17,8 +17,6 @@
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-
 const Dictionaries = (() => {
     // dictionary/translator variables
     let URIs = {
@@ -44,7 +42,7 @@ const Dictionaries = (() => {
                 URIs.translator = data.translator_uri;
             }
         }); // end $.ajax
-    }
+    } // end Dictionaries.fetchURIs
 
     /**
      * Shows message for high & medium frequency words in dictionary modal window
@@ -58,7 +56,7 @@ const Dictionaries = (() => {
         } else if (frequency_index < 97) {
             return 'High';
         }
-    } // end getWordFrequency
+    } // end Dictionaries.getWordFrequency
 
     return {
         fetchURIs,
@@ -133,7 +131,7 @@ const SentenceExtractor = (() => {
         }
 
         return count;
-    }
+    } // end SentenceExtractor.isAbbreviation
 
     function hasContraction($all_anchors, sel_index, direction) {
         // check if text is part of an initialism (initials of some sort, like U.S., U.K.)
@@ -142,7 +140,7 @@ const SentenceExtractor = (() => {
             : $($all_anchors[sel_index - 2]).text();
 
         return current_contractions.some(abbr => current_element_text === abbr);
-    }
+    } // end SentenceExtractor.hasContraction
 
     function updateCurrentAbbreviationList(iso_code) {
         current_contractions = [];
@@ -166,14 +164,14 @@ const SentenceExtractor = (() => {
             });
             current_contractions.push(...localized_contractions);
         }
-    }
+    } // end SentenceExtractor.updateCurrentAbbreviationList
 
     /**
- * @function getLanguageQuotes
- * @description Retrieves the quote marks configuration for the specified language ISO code.
- * @param {string} langIso - The ISO code for the language (e.g., 'en', 'fr', etc.).
- * @returns {object} An object containing 'single' and 'double' quote arrays for opening and closing quotes.
- */
+     * @function getLanguageQuotes
+     * @description Retrieves the quote marks configuration for the specified language ISO code.
+     * @param {string} langIso - The ISO code for the language (e.g., 'en', 'fr', etc.).
+     * @returns {object} An object containing 'single' and 'double' quote arrays for opening and closing quotes.
+     */
     function getLanguageQuotes(langIso) {
         const quote_marks = {
             // Western languages
@@ -245,19 +243,19 @@ const SentenceExtractor = (() => {
             }
         };
         return quote_marks[langIso] || quote_marks['en'];
-    }
+    } // end SentenceExtractor.getLanguageQuotes
 
     /**
-  * @function findStrayClosingQuote
-  * @description Scans the text for a closing quote that lacks a corresponding opening quote.
-  * For quotes where the opening and closing characters are identical, it checks if there is an odd number of occurrences
-  * and returns the first (or in this case, the last) stray occurrence. For distinct pairs, it simulates pairing by scanning
-  * the text and returns the corresponding opening quote when a closing quote appears without a matching opener.
-  * @param {string} text - The text to scan.
-  * @param {string[]} open_quotes - Array of opening quote characters.
-  * @param {string[]} close_quotes - Array of closing quote characters.
-  * @returns {string} A string with the missing opening quote character.
-  */
+     * @function findStrayClosingQuote
+     * @description Scans the text for a closing quote that lacks a corresponding opening quote.
+     * For quotes where the opening and closing characters are identical, it checks if there is an odd number of occurrences
+     * and returns the first (or in this case, the last) stray occurrence. For distinct pairs, it simulates pairing by scanning
+     * the text and returns the corresponding opening quote when a closing quote appears without a matching opener.
+     * @param {string} text - The text to scan.
+     * @param {string[]} open_quotes - Array of opening quote characters.
+     * @param {string[]} close_quotes - Array of closing quote characters.
+     * @returns {string} A string with the missing opening quote character.
+     */
     function findStrayClosingQuote(text, open_quotes, close_quotes) {
         // First, handle pairs where opening and closing quotes are identical.
         for (let i = 0; i < open_quotes.length; i++) {
@@ -303,7 +301,7 @@ const SentenceExtractor = (() => {
             }
         }
         return "";
-    }
+    } // end SentenceExtractor.findStrayClosingQuote
 
     /**
      * @function fixUnmatchedQuotes
@@ -331,7 +329,7 @@ const SentenceExtractor = (() => {
         }
 
         return text;
-    }
+    } // end SentenceExtractor.fixUnmatchedQuotes
 
     /**
      * @function buildSentenceFromAnchors
@@ -372,7 +370,7 @@ const SentenceExtractor = (() => {
         }
         // Finally, remove any lingering line breaks and trim extra whitespace.
         return sentence.replace(/(\r\n|\n|\r)/g, " ").trim();
-    }
+    } // end SentenceExtractor.buildSentenceFromAnchors
 
     /**
      * @function extractSentence
@@ -440,8 +438,10 @@ const SentenceExtractor = (() => {
         const lang_quotes = getLanguageQuotes(text_lang_iso);
         sentence = fixUnmatchedQuotes(sentence, lang_quotes);
 
+        // Clean up extra whitespace in sentence
+        sentence = sentence.replace(/\s+/g, " ").trim();
         return sentence;
-    }
+    } // end SentenceExtractor.extractSentence
 
 
     return {
@@ -472,7 +472,7 @@ const LinkBuilder = (() => {
         let sentence = SentenceExtractor.extractSentence($selword);
 
         return translator_URI.replace("%s", encodeURI(sentence));
-    } // end forTranslationInText
+    } // end LinkBuilder.forTranslationInText
 
     /**
      * Builds a translator link including the paragraph to translate as a parameter.
@@ -485,7 +485,7 @@ const LinkBuilder = (() => {
         let sentence = SentenceExtractor.extractSentence($selword);
 
         return translator_URI.replace("%s", encodeURIComponent(sentence));
-    } // end forTranslationInVideo
+    } // end LinkBuilder.forTranslationInVideo
 
     /**
      * Builds translator link using the word object as a parameter
@@ -497,7 +497,7 @@ const LinkBuilder = (() => {
     const forTranslationInStudy = (translator_URI, $selword) => {
         const sentence = $selword.parent("p").text().trim() || $selword.text();
         return translator_URI.replace("%s", encodeURIComponent(sentence));
-    } // end forTranslationInStudy
+    } // end LinkBuilder.forTranslationInStudy
 
     return {
         forWordInDictionary,
