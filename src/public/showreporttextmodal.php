@@ -33,7 +33,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div id="alert-box" class="d-none"></div>
+                <div id="report-alert-box" class="d-none"></div>
                 <p>Please select a reason for reporting this content:</p>
 
                 <form id="report-text-modal-form" method="post">

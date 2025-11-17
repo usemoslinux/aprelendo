@@ -222,7 +222,7 @@ $(document).ready(function () {
         });
 
         example_html = "<blockquote cite='" + text.source_uri + "'>";
-        example_html += "<p  class='mb-0'>" + example_text_html + "</p>";
+        example_html += "<p class='mb-0'>" + example_text_html + "</p>";
         example_html += `<cite style='font-size:.85rem' class='text-secondary fw-medium'>${text.author == "" ? "Anonymous" : text.author}`;
         if (text.source_uri == '' || text.source_uri.endsWith(".epub")) {
             example_html += ", " + text.title;

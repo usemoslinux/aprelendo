@@ -160,7 +160,7 @@ if ($total_nr_of_badges > 0) {
                     <div>Word List Summary</div>
                 </div>
                 <div class="card-body small">
-                    <table aria-describedby="word-list-heading" class="table shadow-none">
+                    <table class="table shadow-none">
                         <thead>
                             <tr>
                                 <th>Status</th>

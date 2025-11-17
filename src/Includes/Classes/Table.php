@@ -97,6 +97,7 @@ abstract class Table
         $html .= $this->printActionMenu();
         $html .= $this->printSortMenu($sort_by);
         $html .= '</div></div>'; // close footer row
+        $html .= '</div></div>'; // close table containers
 
         return $html;
     } // end printFooter()

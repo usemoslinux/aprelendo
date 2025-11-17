@@ -75,7 +75,7 @@ require_once PUBLIC_PATH . 'header.php';
                                         <span class="placeholder col-8"></span>
                                     </p>
                                 </div>
-                                <p id="study-card-examples" class="card-examples"></p>
+                                <div id="study-card-examples" class="card-examples"></div>
                             </div>
                             <div id="live-progress" class="progress rounded-0" style="height: 1px;">
                                 <div id="live-progress-bar" class="progress-bar bg-secondary"

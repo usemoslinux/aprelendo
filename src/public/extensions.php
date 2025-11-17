@@ -55,18 +55,18 @@ if (!$user_auth->isLoggedIn()) {
                             <p>Install the extension that corresponds to your favorite Web browser by clicking on the
                                 matching button below.</p>
                             <div class="btn-group">
-                                <btn type="button" class="btn btn-success"
+                                <button type="button" class="btn btn-success"
                                     onclick="window.open('//chrome.google.com/webstore/detail/aprelendo/aocicejjgilfkeeklfcomejgphjhjonj/related?hl=en-US', '_blank')">
                                     <span class="bi bi-browser-chrome"></span>&nbsp;Install Chrome extension
-                                </btn>
-                                <btn type="button" class="btn btn-primary"
+                                </button>
+                                <button type="button" class="btn btn-primary"
                                     onclick="window.open('//microsoftedge.microsoft.com/addons/detail/aprelendo/ckgnfejigfdfppodkhfmdbockfilcefg', '_blank')">
                                     <span class="bi bi-browser-edge"></span>&nbsp;Install Edge extension
-                                </btn>
-                                <btn type="button" class="btn btn-danger"
+                                </button>
+                                <button type="button" class="btn btn-danger"
                                     onclick="window.open('//addons.mozilla.org/en-US/firefox/addon/aprelendo/', '_blank')">
                                     <span class="bi bi-browser-firefox"></span>&nbsp;Install Firefox extension
-                                </btn>
+                                </button>
                             </div>
                             <p>Once installed, click the Aprelendo button (which should have been added to your
                                 browser's main toolbar) to import the content of the page being displayed in the

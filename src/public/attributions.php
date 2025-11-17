@@ -51,6 +51,7 @@ if (!$user_auth->isLoggedIn()) {
                 <div class="row flex simple-text">
                     <div class="col-sm-12">
                         <section>
+                            <h4>Attributions</h4>
                             <p>Aprelendo was built using the following free and open source tools:</p>
                             <ul>
                                 <li>

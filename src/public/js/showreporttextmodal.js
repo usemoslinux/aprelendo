@@ -29,11 +29,11 @@ $(document).ready(function() {
         const reason = $('input[name="report-reason"]:checked').val();
 
         if (!reason) {
-            showMessage("Please select a reason for reporting.", "alert-danger");
+            showMessage("Please select a reason for reporting.", "alert-danger", null, "report-alert-box");
             throw new Error("User forgot to complete reason for reporting");
         }
 
-        showMessage("Sending... please wait.", "alert-info");
+        showMessage("Sending... please wait.", "alert-info", null, "report-alert-box");
         $btn_report.prop("disabled", true); // disable report button
 
         $.ajax({
@@ -47,7 +47,9 @@ $(document).ready(function() {
                     throw new Error(data.error_msg);
                 }
 
-                showMessage("Thank you! Your report has been submitted. Together, we're making our community safer and more enjoyable for everyone.", "alert-success");
+                showMessage("Thank you! Your report has been submitted. "
+                    + "Together, we're making our community safer and more enjoyable for everyone.",
+                    "alert-success", null, "report-alert-box");
 
                 setTimeout(function() {
                     $('#report-text-modal').modal('hide');
@@ -55,12 +57,13 @@ $(document).ready(function() {
                 }, 3000);
             })
             .fail(function(xhr, ajaxOptions, thrownError) {
-                showMessage("Oops! There was an server error trying to report that text. Try again later.", "alert-danger");
+                showMessage("Oops! There was an server error trying to report that text. Try again later.",
+                    "alert-danger", null, "report-alert-box");
                 throw new Error("Really unexpected error while reporting this content. Probably a problem with the server.");
             });
     }); // end #btn-report-text.on.click
 
     $("#report-text-modal").on('hidden.bs.modal', function() { 
-        hideMessage();
+        $("#report-alert-box").hide(timeout);
     }); // end #report-text-modal.on.hidden.bs.modal
 });

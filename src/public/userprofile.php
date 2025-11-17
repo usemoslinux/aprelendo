@@ -161,7 +161,7 @@ $google_login = !empty($user->google_id);
                                         value="<?php
                                             $crypto = new SecureEncryption(ENCRYPTION_KEY);
                                             echo $crypto->decrypt($user->hf_token);
-                                            ?>" maxlength="40" autoco" maxlength="40" autocomplete="off">
+                                            ?>" maxlength="40" autocomplete="off">
                                     <button class="btn btn-outline-secondary show-hide-password-btn" type="button"
                                         aria-label="Show/hide Hugging Face API key" tabindex="-1">
                                         <span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>
@@ -244,7 +244,7 @@ $google_login = !empty($user->google_id);
 </div>
 
 <!-- Modal window -->
-<aside id="delete-account-modal" class="modal fade" data-keyboard="true" role="dialog">
+<div id="delete-account-modal" class="modal fade" data-keyboard="true">
     <div class="modal-dialog modal-dialog-centered">
         <!-- Modal content-->
         <div class="modal-content">
@@ -276,7 +276,7 @@ $google_login = !empty($user->google_id);
             </div>
         </div>
     </div>
-</aside>
+</div>
 
 <script defer src="/js/userprofile.min.js"></script>
 <script defer src="/js/password.min.js"></script>

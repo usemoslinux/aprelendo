@@ -24,7 +24,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
 
 ?>
 
-<!-- Report Text Modal -->
+<!-- Lingobot Text Modal -->
 <div class="modal fade" id="ask-ai-bot-modal" data-keyboard="true" tabindex="-1"
     aria-labelledby="ask-ai-bot-modal-label" aria-hidden="true" tabindex="-1" data-word="">
     <div class="modal-dialog modal-dialog-centered">
@@ -35,7 +35,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
             </div>
             <!-- Modal Body -->
             <div class="modal-body">
-                <div id="alert-box" class="d-none"></div>
+                <div id="lingobot-alert-box" class="d-none"></div>
                 <!-- Prompt Form -->
                 <div id="prompt-form">
                     <form>

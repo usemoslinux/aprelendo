@@ -35,7 +35,7 @@ $(document).ready(function() {
      * Deletes selected texts from the database
      * Trigger: when user selects "Delete" in the global or individual action menus
      */
-    $("#mDelete, #imDelete").on("click", function() {
+    $("#mDelete, .imDelete").on("click", function() {
         if (confirm("Really delete?")) {
             let ids = [];
 
@@ -43,7 +43,7 @@ $(document).ready(function() {
                 $("input.chkbox-selrow:checked").each(function() {
                     ids.push($(this).attr("data-idText"));
                 });
-            } else if ($(this).attr("id") === "imDelete") {
+            } else if ($(this).hasClass("imDelete")) {
                 ids.push($(this).closest('tr').find('input').attr("data-idText"));
             }
 
@@ -77,15 +77,15 @@ $(document).ready(function() {
      * Archives selected texts
      * Trigger: when user selects "Archive" in the global or individual action menus
      */
-    $("#mArchive, #imArchive").on("click", function() {
+    $("#mArchive, .imArchive").on("click", function() {
         const archivetxt = $(this).text().trim() === "Archive";
         let ids = [];
 
-        if ($(this).attr("id") === "mArchive") {
+        if ($(this).hasClass("mArchive")) {
             $("input.chkbox-selrow:checked").each(function() {
                 ids.push($(this).attr("data-idText"));
             });    
-        } else if ($(this).attr("id") === "imArchive") {
+        } else if ($(this).hasClass("imArchive")) {
             ids.push($(this).closest('tr').find('input').attr("data-idText"));
         }
 
@@ -115,7 +115,7 @@ $(document).ready(function() {
      * Shares selected text
      * Trigger: when user selects "Share" in the individual action menu
      */
-    $("#imShare").on("click", function() {
+    $(".imShare").on("click", function() {
         if (confirm("Sharing this text is irreversible. Once shared, it cannot be made private again. Are you sure you want to proceed?")) {
             let id = $(this).closest('tr').find('input').attr("data-idText");
 
@@ -149,7 +149,7 @@ $(document).ready(function() {
      * Edits selected text
      * Trigger: when user selects "Edit" in the individual action menu
      */
-    $("#imEdit").on("click", function() {
+    $(".imEdit").on("click", function() {
         let id = $(this).closest('tr').find('input').attr("data-idText");
 
         if (id === undefined) {

@@ -38,13 +38,13 @@
                         <a href="attributions">Attributions</a>
                     </li>
                     <li class="list-inline-item">
-                        <a id="extensions" href="/extensions">Extensions</a>
+                        <a href="/extensions">Extensions</a>
                     </li>
                     <li class="list-inline-item">
-                        <a id="contact" href="/contact">Contact</a>
+                        <a href="/contact">Contact</a>
                     </li>
                     <li class="list-inline-item">
-                        <a id="donate" href="/donate">Donate</a>
+                        <a href="/donate">Donate</a>
                     </li>
                 </ul>
                 <ul class="list-inline">

@@ -3,8 +3,9 @@
  * @param {string} html
  * @param {string} type
  * @param {string} custom_title Optional custom title to override the default
+ * @param {string} box Optional custom html element ID to show message
  */
-function showMessage(html, type, custom_title = null) {
+function showMessage(html, type, custom_title = null, box = 'alert-box') {
     const alert = {
         'alert-success': { title: 'Success', image: 'bi-check-circle-fill' },
         'alert-info': { title: 'Information', image: 'bi-info-circle-fill' },
@@ -27,7 +28,7 @@ function showMessage(html, type, custom_title = null) {
     const $div_flag = $("<div>").addClass("alert-flag fs-5").html(div_flag_html);
     const $div_msg = $("<div>").addClass("alert-msg").html(html);
 
-    $("#alert-box")
+    $(`#${box}`)
         .empty()
         .removeAttr('style')
         .removeClass()
@@ -36,10 +37,6 @@ function showMessage(html, type, custom_title = null) {
 
     $(window).scrollTop(0);
 } // end showMessage
-
-function hideMessage(timeout) {
-    $("#alert-box").hide(timeout);
-} // end hideMessage
 
 /**
  * Smoothly scrolls the webpage to the top.

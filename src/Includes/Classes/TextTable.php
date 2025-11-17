@@ -177,11 +177,11 @@ class TextTable extends Table
 
         $html = <<<HTML_ACTION_MENU
             <div class="dropdown">
-                <button class="btn btn-link btn-sm text-muted" type="button"
-                    id="individual-action-menu" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-link btn-sm text-muted" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
                     <i class="bi bi-three-dots-vertical"></i>
                 </button>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="actions-menu" role="menu">
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="actions-menu" role="menu">
             HTML_ACTION_MENU;
 
         foreach ($individual_action_menu as $menu_id => $menu_text) {
@@ -191,9 +191,9 @@ class TextTable extends Table
             $text = $this->generateActionMenuIcon($menu_text) . ' ' . $text;
 
             if ($menu_text === 'Delete') {
-                $html .= "<a id='{$id}' class='dropdown-item text-danger'>{$text}</a>";
+                $html .= "<a class='{$id} dropdown-item text-danger'>{$text}</a>";
             } else {
-                $html .= "<a id='{$id}' class='dropdown-item'>{$text}</a>";
+                $html .= "<a class='{$id} dropdown-item'>{$text}</a>";
             }
         }
 
@@ -242,14 +242,14 @@ class TextTable extends Table
         $text_id = $row['id'];
 
         if ($this->has_chkbox) {
-            return '<tr><td class="col-checkbox"><div><input id="row-' . $text_id . '" class="form-check-input '
+            return '<td class="col-checkbox"><div><input id="row-' . $text_id . '" class="form-check-input '
                 . 'chkbox-selrow" type="checkbox" aria-label="Select row" data-idText="' . $text_id . '">'
                 . '<label class="form-check-label" for="row-' . $text_id . '"></label></div></td>';
         } else {
             $total_likes = $row['total_likes'] ?? 0;
             $user_liked = $row['user_liked'] ? 'bi-heart-fill ' : 'bi-heart';
     
-            return '<tr><td class="text-center"><span title="Like"><span class="' . $user_liked . '" '
+            return '<td class="text-center"><span title="Like"><span class="' . $user_liked . '" '
                 . 'data-idText="' . $text_id . '"></span><br><small>' . $total_likes . '</small></span></td>';
         }
     } // end generateCheckboxCell()

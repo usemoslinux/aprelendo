@@ -51,6 +51,7 @@ if (!$user_auth->isLoggedIn()) {
                 <div class="row flex simple-text">
                     <div class="col-sm-12">
                         <section>
+                            <h4>Contact Support</h4>
                             <p>Use the form below to drop us an e-mail.
                                 <br>
                                 <small>Please note that, for security reasons, your IP and user agent details
@@ -85,8 +86,8 @@ if (!$user_auth->isLoggedIn()) {
                                 </div>
                                 <div class="row">
                                     <div class="mb-3 col-sm-12 text-end">
-                                        <a type="button" id="btn-cancel" class="btn btn-link"
-                                            onclick="window.location='/'">Cancel</a>
+                                        <button type="button" id="btn-cancel" class="btn btn-link"
+                                            onclick="window.location='/'">Cancel</button>
                                         <button type="submit" id="btn-add-text" name="submit"
                                             class="btn btn-success">Send</button>
                                     </div>
