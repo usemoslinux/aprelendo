@@ -138,7 +138,7 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
 <?php
 // show wallpaper on every page, except those in $show_pages array
 if (!$this_is_show_page) {
-    echo $curpage == 'donate' ? '<body class="blue-gradient-wallpaper">' : '<body class="pattern-wallpaper">';
+    echo $curpage == 'donate' ? '<body class="blue-gradient-wallpaper">' : '<body class="light-gradient-wallpaper">';
 }
 
 ?>

@@ -147,7 +147,7 @@ $audio_source_is_YT = Videos::isYTVideo($audio_uri);
     <?php endif; ?>
 </head>
 
-<body id="readerpage" <?php echo ' class="dvh-100 dvw-100 pattern-wallpaper ' . $color_mode . '"' ?>>
+<body id="readerpage" <?php echo ' class="dvh-100 dvw-100 ' . $color_mode . '"' ?>>
     <div class="offcanvas offcanvas-start <?php echo $color_mode; ?>"
         data-bs-scroll="true" tabindex="-1" id="navigation" aria-labelledby="navigation-title">
         <div class="offcanvas-header">

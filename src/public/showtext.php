@@ -27,7 +27,7 @@ use Aprelendo\Likes;
 use Aprelendo\UserException;
 
 try {
-    $reader_class = 'dvh-100 dvw-100 ';
+    $reader_class = "class='dvh-100 dvw-100 ";
     if (!empty($_GET['id'])) {
         $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
 
@@ -47,15 +47,16 @@ try {
 
         switch ($prefs->display_mode) {
             case 'light':
-                $reader_class = "class='lightmode'";
+                $reader_class .= "lightmode'";
                 break;
             case 'sepia':
-                $reader_class = "class='sepiamode'";
+                $reader_class .= "sepiamode'";
                 break;
             case 'dark':
-                $reader_class = "class='darkmode'";
+                $reader_class .= "darkmode'";
                 break;
             default:
+                $reader_class .= "'";
                 break;
         }
         $font_family = $prefs->font_family;

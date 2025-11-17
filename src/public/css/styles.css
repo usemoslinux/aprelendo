@@ -42,10 +42,6 @@
     padding: 0;
 }
 
-html {
-    background-color: inherit;
-    height: 100%;
-}
 
 body {
     background: white;
@@ -1099,8 +1095,9 @@ div.blurry-background {
 
 /* CREATE ACCOUNT */
 
-.pattern-wallpaper {
-    background: url("../img/backgrounds/pattern-wallpaper.webp") 0px 0px/188px 178px repeat;
+.light-gradient-wallpaper {
+    background: linear-gradient(to bottom, #fdfdfd, #f8f8f8);
+    background-repeat: no-repeat;
     margin: 0;
     width: 100%;
 }
