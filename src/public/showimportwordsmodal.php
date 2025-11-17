@@ -35,7 +35,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
             </div>
 
             <div class="modal-body">
-                <input id="words-upload-input" class="words-upload-input d-none" type='file' accept=".txt" />
+                <input id="words-upload-input" class="words-upload-input d-none" type='file' accept=".txt">
                 <div id="words-upload-wrap" class="words-upload-wrap user-select-none">
                     <div class="csvfile-drag-text">
                         <div class="fw-bold">Drag and drop a TXT file or click here</div>

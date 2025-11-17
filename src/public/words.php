@@ -35,7 +35,7 @@ $query_str = '?s=' . $search_text . '&o=0';
 
 ?>
 
-<div class="container mtb d-flex flex-column">
+<div class="container mtb d-flex flex-grow-1 flex-column">
     <div class="row">
         <div class="col-sm-12">
             <nav>

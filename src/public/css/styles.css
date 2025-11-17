@@ -42,6 +42,9 @@
     padding: 0;
 }
 
+html {
+    min-height: 100%;
+}
 
 body {
     background: white;

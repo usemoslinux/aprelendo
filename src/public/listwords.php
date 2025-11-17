@@ -36,7 +36,7 @@ try {
 
     // set variables used for pagination
     $page = 1;
-    $limit = 10; // number of rows per page
+    $limit = 25; // number of rows per page
     $adjacents = 2; // adjacent page numbers
 
     $sort_by = !empty($_GET['o']) ? $_GET['o'] : 0;
