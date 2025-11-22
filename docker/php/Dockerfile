@@ -1,4 +1,4 @@
-FROM php:fpm-alpine
+FROM php:8.3-fpm-alpine
 
 RUN apk add --no-cache autoconf gcc g++ linux-headers make python3 py3-pip python3-dev shadow
 

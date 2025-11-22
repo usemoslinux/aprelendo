@@ -177,7 +177,6 @@ class Videos extends DBEntity
 
         return array_keys($available_langs);
     }
-
     /**
      * Fetch transcript XML for the given YouTube video ID and supported languages
      *
@@ -187,30 +186,56 @@ class Videos extends DBEntity
      */
     private function fetchTranscript(string $youtube_id, array $available_subs): \SimpleXMLElement
     {
-        // Fetch transcript using shell_exec
-        $command = PYTHON_VENV . "/bin/python " . PYTHON_VENV . "/bin/youtube_transcript_api $youtube_id"
-            . " --languages " . implode(" ", $available_subs)
-            . " --format json --exclude-generated 2>&1";
-        $output = shell_exec($command);
+        $error_message = "The video might lack subtitles or they're unavailable in the desired language. "
+            . "Auto-generated subtitles are of low quality and, thus, are not supported. Consider using the "
+            . "<a href='" . $this->getFilmotUrl() . "' target='_blank' class='alert-link'>Filmot search engine</a> "
+            . "to find YouTube videos with manually created subtitles.";
 
-        if ($output === null) {
+        if (!preg_match('/^[A-Za-z0-9_-]{11}$/', $youtube_id)) {
+            throw new UserException('Invalid video ID.');
+        }
+
+        $command = [
+            PYTHON_VENV . '/bin/python',
+            APP_ROOT . 'scripts/fetch-transcript.py',
+            $youtube_id,
+            implode(',', $available_subs)
+        ];
+
+        $descriptor_spec = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ];
+
+        $process = proc_open($command, $descriptor_spec, $pipes);
+
+        if (!is_resource($process)) {
             throw new InternalException();
         }
 
-        $output_array = json_decode($output, true);
+        fclose($pipes[0]);
+        $stdout = stream_get_contents($pipes[1]);
+        $stderr = stream_get_contents($pipes[2]);
+        fclose($pipes[1]);
+        fclose($pipes[2]);
 
-        if (!$output_array) {
-            throw new UserException("The video might lack subtitles or they're unavailable in the desired "
-                . "language. Auto-generated subtitles are of low quality and, thus, are not supported. Consider "
-                . "using the <a href='" . $this->getFilmotUrl() . "' target='_blank' class='alert-link'>"
-                . "Filmot search engine</a>  to find YouTube videos with manually created subtitles.");
+        $status = proc_close($process);
+
+        if ($status !== 0) {
+            throw new UserException($error_message);
         }
 
-        // Convert transcript to XML
+        $transcript_array = json_decode($stdout, true);
+
+        if (!$transcript_array || !is_array($transcript_array) || empty($transcript_array)) {
+            throw new UserException($error_message);
+        }
+
+        // Convert transcript array to XML
+        // The Python script now returns the transcript directly as an array of snippets
         $transcript_xml = new \SimpleXMLElement('<root/>');
-        if (isset($output_array)) {
-            Conversion::arrayToXml($output_array[0], $transcript_xml);
-        }
+        Conversion::arrayToXml($transcript_array, $transcript_xml);
 
         return $transcript_xml;
     }
@@ -276,7 +301,7 @@ class Videos extends DBEntity
         return preg_match('#^(https?://)?(www\.|m\.)?youtube\.com/watch\?v=([^&]+)#', $url)
             || preg_match('#^https?://youtu\.be/([^?]+)#', $url);
     } // end isYTVideo()
-    
+
     /**
      * Loads video record data by Id
      *
