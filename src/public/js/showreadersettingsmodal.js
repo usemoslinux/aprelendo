@@ -22,9 +22,10 @@ $(document).ready(function() {
     $('#btn-save-reader-prefs').on('click', function () {
         // apply color mode
         const class_name = $('#mode').val() + 'mode';
+        const color_modes = 'lightmode sepiamode darkmode';
         let $doc = $(parent.document.body);
         let $text_container = $("#text-container");
-        $doc.removeClass().addClass(class_name);
+        $doc.removeClass(color_modes).addClass(class_name);
         
         $text_container.css({
             'font-family' : $('#fontfamily').val(),
@@ -36,7 +37,6 @@ $(document).ready(function() {
         // change offcanvas color mode if exists
         const $off_canvas = $doc.find('.offcanvas');
         const $close_btn = $doc.find('#close-offcanvas');
-        const color_modes = 'lightmode sepiamode darkmode';
 
         if ($off_canvas.length) {
             $off_canvas.removeClass(color_modes).addClass(class_name);
