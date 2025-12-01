@@ -33,7 +33,7 @@ $(document).ready(function () {
         ["4", 0, "text-warning bg-dark", "No example sentence found!"],
     ];
 
-    $(".btn-answer").prop('disabled', true); // disable Yes/No buttons
+    $(".btn-answer").prop('disabled', true); // disable answer buttons
     Dictionaries.fetchURIs(); // get dictionary & translator URIs
     getListofCards();
 
