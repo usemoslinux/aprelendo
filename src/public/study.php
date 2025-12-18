@@ -91,17 +91,17 @@ require_once PUBLIC_PATH . 'header.php';
                                 <div id="answer-card" class="mx-auto" style="max-width: 550px;">
                                     <div id="answer-card-page-1" class="smooth-transition">
                                         <div class="card-body">
-                                            <h5 class="card-title">Did you know the full meaning before seeing the examples?</h5>
+                                            <h5 id="h-answer-title" class="card-title">Did you know the full meaning before seeing the examples?</h5>
                                             <div class="d-flex flex-column">
                                             <button id="btn-answer-more" type="button"
                                                 class="btn btn-lg btn-danger my-3">
                                                 <span class="fw-bold">(+) No, not really</span>
-                                                <br><span class="small">I had little to no understanding of this word before the examples</span>
+                                                <br><span class="small">Let me explain why...</span>
                                             </button>
                                             <button id="btn-answer-excellent" type="button" value="0"
                                                 class="btn btn-lg btn-success btn-answer mb-3">
                                                 <span class="fw-bold">(4) Yes, of course!</span>
-                                                <br><span class="small">I already knew exactly what this word meant before seeing any examples</span>
+                                                <br><span class="small">I already knew exactly what this word meant</span>
                                             </button>
                                             </div>
                                         </div>

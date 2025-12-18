@@ -65,7 +65,6 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
                         <div class="mb-3">
                             <label for="custom-prompt" class="form-label">Your Prompt</label>
                             <textarea class="form-control" id="custom-prompt" rows="6"></textarea>
-                            <small>Lingobot can make mistakes. Check important info.</small>
                         </div>
                     </form>
                 </div>
@@ -74,7 +73,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
                 <div id="ai-answer" style="display: none;">
                     <!-- AI's response will be displayed here -->
                     <div id="text-ai-answer" class="form-control overflow-auto" style="height: calc(1.2em * 15);"></div>
-                    <small>Lingobot can make mistakes. Check important info.</small>
+                    <small>Lingobot can make mistakes. Use its answers as a reference only.</small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -92,5 +91,6 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
     </div>
 </div>
 
-<script defer src="/js/showaibotmodal.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
+<script defer src="/js/showaibotmodal.min.js"></script>
+<script defer src="/js/aibot.min.js"></script>

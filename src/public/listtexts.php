@@ -128,7 +128,7 @@ try {
                             <p>
                                 To begin, follow the steps in the yellow box below. Once you add your first text, visit your 
                                 $user_menu_html to access your <a href="/words" class="alert-link">Word list</a>, 
-                                <a href="/study" class="alert-link">Study</a> sessions, and 
+                                <a href="/studylauncher" class="alert-link">Study</a> sessions, and 
                                 <a href="/stats" class="alert-link">Statistics</a>. You can also open 
                                 <a href="/preferences" class="alert-link">Preferences</a> or 
                                 <a href="/userprofile" class="alert-link">My Profile</a> to tailor your experience and enable

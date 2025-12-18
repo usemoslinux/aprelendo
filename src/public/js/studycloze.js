@@ -16,10 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
-/* study-jumble.js
- * Variant of your study script that garbles the target word, asks the user to type it,
- * then proceeds with the same session logic. The examples also show the garbled form.
- */
 
 $(document).ready(function () {
 
@@ -48,7 +44,7 @@ $(document).ready(function () {
     getListofCards();
 
     /**
-     * Injects the guess UI (input + buttons) inside the existing card body.
+     * Injects the guess UI (input field and buttons) into the card body if not already present.
      */
     function ensureGuessUI() {
         if ($("#guess-ui").length) return;
@@ -80,7 +76,7 @@ $(document).ready(function () {
     }
 
     /**
-     * Fetches list of words user is learning
+     * Fetches the list of words to study from the server.
      */
     function getListofCards() {
         $.ajax({
@@ -89,39 +85,40 @@ $(document).ready(function () {
             data: { limit: max_cards },
             dataType: "json"
         })
-        .done(function (data) {
-            if (data.error_msg) {
+            .done(function (data) {
+                if (data.error_msg) {
+                    showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning in this language.", "alert-danger");
+                    return;
+                }
+
+                if (data.length == 0) {
+                    showNoMoreCardsMsg();
+                    return true;
+                }
+
+                words = data.map(item => {
+                    return {
+                        ...item,
+                        word: item.word.replace(/\r?\n|\r/g, " ")
+                    };
+                });
+
+                max_cards = words.length > max_cards ? max_cards : words.length;
+
+                $("#card-counter").text("1" + "/" + max_cards);
+                adaptCardStyleToWordStatus(words[0].status);
+                startCard(words[0].word);
+            })
+            .fail(function () {
                 showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning in this language.", "alert-danger");
-                return;
-            }
-
-            if (data.length == 0) {
-                showNoMoreCardsMsg();
-                return true;
-            }
-
-            words = data.map(item => {
-                return {
-                    ...item,
-                    word: item.word.replace(/\r?\n|\r/g, " ")
-                };
             });
-
-            max_cards = words.length > max_cards ? max_cards : words.length;
-
-            $("#card-counter").text("1" + "/" + max_cards);
-            adaptCardStyleToWordStatus(words[0].status);
-            startCard(words[0].word);
-        })
-        .fail(function () {
-            showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning in this language.", "alert-danger");
-        });
     }
 
     /**
-     * Prepares UI for a new card and fetches its examples.
+     * Initializes a new card with scrambled word display and fetches example sentences.
+     * @param {string} original_word - The word to study
      */
-    function startCard(originalWord) {
+    function startCard(original_word) {
         // reset UI to scramble mode
         $("#answer-card").addClass("d-none");
         $(".btn-answer").prop('disabled', true);
@@ -133,8 +130,8 @@ $(document).ready(function () {
             .text("The word above is shuffled; first letter is a hint.");
 
         // compute and set scrambled display (first letter preserved)
-        const scrambled = shuffleKeepFirst(originalWord);
-        $("#study-card").data('word', originalWord);
+        const scrambled = shuffleKeepFirst(original_word);
+        $("#study-card").data('word', original_word);
         $("#study-card").data('scrambled', scrambled);
         $("#study-card").data('revealed', false);
 
@@ -142,15 +139,15 @@ $(document).ready(function () {
         $("#study-card-word-title").removeClass('placeholder').text(scrambled);
 
         // fetch examples for this card
-        getExampleSentencesforCard(originalWord, scrambled);
+        getExampleSentencesforCard(original_word, scrambled);
     }
 
     /**
-     * Fetches examples sentences for a specific word and renders them in "scrambled display" mode.
-     * @param {string} originalWord
-     * @param {string} scrambledWord
+     * Fetches and displays example sentences for the current word in scrambled mode.
+     * @param {string} original_word - The word to find in example sentences
+     * @param {string} scrambled_word - The scrambled version to display
      */
-    function getExampleSentencesforCard(originalWord, scrambledWord) {
+    function getExampleSentencesforCard(original_word, scrambled_word) {
         if (lastCardReached()) return;
 
         $("#examples-placeholder").removeClass('d-none');
@@ -159,70 +156,72 @@ $(document).ready(function () {
         $.ajax({
             type: "POST",
             url: "ajax/getcards.php",
-            data: { word: originalWord },
+            data: { word: original_word },
             dataType: "json"
         })
-        .done(function (data) {
-            let examples_array = [];
-            let examples_html = '';
-            const lang_iso = $("#card").data("lang");
+            .done(function (data) {
+                let examples_array = [];
+                let examples_html = '';
+                const lang_iso = $("#card").data("lang");
 
-            const word_boundary = '(?<![\\p{L}])' + escapeRegex(originalWord) + '(?![\\p{L}])';
-            const sentence_start = '([^\\n.?!]|[\\d][.][\\d]|[A-Z][.](?:[A-Z][.])+)*';
-            const sentence_end = '([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!]';
-            let sentence_regex = new RegExp(sentence_start + word_boundary + sentence_end, 'gmiu');
+                const word_boundary = '(?<![\\p{L}])' + escapeRegex(original_word) + '(?![\\p{L}])';
+                const sentence_start = '([^\\n.?!]|[\\d][.][\\d]|[A-Z][.](?:[A-Z][.])+)*';
+                const sentence_end = '([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!]';
+                let sentence_regex = new RegExp(sentence_start + word_boundary + sentence_end, 'gmiu');
 
-            if (lang_iso == "ja" || lang_iso == "zh") {
-                sentence_regex = new RegExp('[^\\n?!。]*' + escapeRegex(originalWord) + '[^\\n?!。]*[\\n?!。]', 'gmiu');
-            }
+                if (lang_iso == "ja" || lang_iso == "zh") {
+                    sentence_regex = new RegExp('[^\\n?!。]*' + escapeRegex(original_word) + '[^\\n?!。]*[\\n?!。]', 'gmiu');
+                }
 
-            data.forEach(text => {
-                let m;
-                while ((m = sentence_regex.exec(text.text)) !== null) {
-                    if (m.index === sentence_regex.lastIndex) sentence_regex.lastIndex++;
-                    if (examples_array.length < 3) {
-                        let match = m[0];
-                        if (match !== originalWord) {
-                            text.text = doubleQuotesNotClosed(match) ? text.text : match;
-                            examples_array = forceUnique(examples_array, text);
+                data.forEach(text => {
+                    let m;
+                    while ((m = sentence_regex.exec(text.text)) !== null) {
+                        if (m.index === sentence_regex.lastIndex) sentence_regex.lastIndex++;
+                        if (examples_array.length < 3) {
+                            let match = m[0];
+                            if (match !== original_word) {
+                                text.text = doubleQuotesNotClosed(match) ? text.text : match;
+                                examples_array = forceUnique(examples_array, text);
+                            }
                         }
                     }
-                }
-            });
-
-            $("#study-card").data('word', originalWord);
-            updateLiveProgressBar();
-            $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
-
-            // store for reuse on reveal (preserve this array order)
-            current_examples_array = examples_array.slice();
-
-            if (examples_array.length === 0) {
-                words[cur_card_index].status = 4;
-                answers[4][1] = answers[4][1] + 1;
-                cur_card_index++;
-                if (lastCardReached()) return;
-                startCard(words[cur_card_index].word);
-            } else {
-                // initial render: we can shuffle for variety while scrambled
-                examples_array = shuffleExamples(examples_array);
-                examples_array.forEach(example => {
-                    examples_html += buildExampleHTML(example, originalWord, scrambledWord, true); // scrambledDisplay = true
                 });
 
-                showWordFrequency(words[cur_card_index].is_phrase);
+                $("#study-card").data('word', original_word);
+                updateLiveProgressBar();
+                $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
 
-                $("#examples-placeholder").addClass('d-none');
-                $("#study-card-examples").html(examples_html);
-            }
-        })
-        .fail(function () {
-            showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.", "alert-danger");
-        });
+                // shuffle once and store that order for both scrambled and revealed display
+                examples_array = shuffleExamples(examples_array);
+                current_examples_array = examples_array;
+
+                if (examples_array.length === 0) {
+                    words[cur_card_index].status = 4;
+                    answers[4][1] = answers[4][1] + 1;
+                    cur_card_index++;
+                    if (lastCardReached()) return;
+                    startCard(words[cur_card_index].word);
+                } else {
+                    examples_array.forEach(example => {
+                        examples_html += buildExampleHTML(example, original_word, scrambled_word, true);
+                    });
+
+                    showWordFrequency(words[cur_card_index].is_phrase);
+
+                    $("#examples-placeholder").addClass('d-none');
+                    $("#study-card-examples").html(examples_html);
+                }
+            })
+            .fail(function () {
+                showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.", "alert-danger");
+            });
     }
 
     /**
-     * Keep only unique/longest near-duplicate examples.
+     * Ensures only unique examples are kept, preferring longer versions.
+     * @param {Array} example_list - Current list of examples
+     * @param {Object} new_example - New example to add
+     * @returns {Array} Updated example list
      */
     function forceUnique(example_list, new_example) {
         if (example_list.length === 0) {
@@ -243,28 +242,27 @@ $(document).ready(function () {
     }
 
     /**
-     * Builds the example sentence HTML.
-     * Always adds bg-warning-subtle.
-     * Only adds class "word" when unscrambled (so modal works only after reveal).
-     * @param {object} text
-     * @param {string} originalWord
-     * @param {string} displayWord
-     * @param {boolean} scrambledDisplay
+     * Builds the HTML for a single example sentence with highlighted word.
+     * @param {Object} text - Example object with text, source_uri, author, title
+     * @param {string} original_word - The original word
+     * @param {string} display_word - The word to display (scrambled or original)
+     * @param {boolean} scrambled_display - If true, show scrambled version without "word" class
+     * @returns {string} HTML string for the example
      */
-    function buildExampleHTML(text, originalWord, displayWord, scrambledDisplay) {
-        const word_regex = new RegExp('(?<![\\p{L}|\\d])' + escapeRegex(originalWord) + '(?![\\p{L}|\\d])', 'gmiu');
+    function buildExampleHTML(text, original_word, display_word, scrambled_display) {
+        const word_regex = new RegExp('(?<![\\p{L}|\\d])' + escapeRegex(original_word) + '(?![\\p{L}|\\d])', 'gmiu');
         let example_html = '';
         let example_text_html = '';
 
         example_text_html = text.text.replace(word_regex, function () {
-            const shown = scrambledDisplay ? displayWord : originalWord;
-            const isUnscrambled = !scrambledDisplay;
+            const shown = scrambled_display ? display_word : original_word;
+            const is_unscrambled = !scrambled_display;
 
-            const baseClasses = 'fw-bold bg-warning-subtle border-bottom p-1';
-            const anchorClass = (isUnscrambled ? 'word ' : '') + baseClasses; // "word" only when revealed
-            const hintTitle = scrambledDisplay ? "title='scrambled – guess the original word'" : "";
+            const base_classes = 'fw-bold bg-warning-subtle border-bottom p-1';
+            const anchor_class = (is_unscrambled ? 'word ' : '') + base_classes; // "word" only when revealed
+            const hint_title = scrambled_display ? "title='scrambled – guess the original word'" : "";
 
-            return `<a class='${anchorClass}' ${hintTitle}>${encodeHtml(shown)}</a>`;
+            return `<a class='${anchor_class}' ${hint_title}>${encodeHtml(shown)}</a>`;
         });
 
         example_html = "<blockquote cite='" + text.source_uri + "'>";
@@ -280,13 +278,23 @@ $(document).ready(function () {
         return example_html;
     }
 
+    /**
+     * Checks if double quotes in text are properly closed.
+     * @param {string} text - Text to check
+     * @returns {boolean} True if quotes are not properly closed
+     */
     function doubleQuotesNotClosed(text) {
-        const doubleQuotesCount = (text.match(/"/g) || []).length;
-        const openingCurlyQuotesCount = (text.match(/“/g) || []).length;
-        const closingCurlyQuotesCount = (text.match(/”/g) || []).length;
-        return (doubleQuotesCount % 2 !== 0 || openingCurlyQuotesCount !== closingCurlyQuotesCount);
+        const double_quotes_count = (text.match(/"/g) || []).length;
+        const opening_curly_quotes_count = (text.match(/"/g) || []).length;
+        const closing_curly_quotes_count = (text.match(/"/g) || []).length;
+        return (double_quotes_count % 2 !== 0 || opening_curly_quotes_count !== closing_curly_quotes_count);
     }
 
+    /**
+     * Randomizes the order of examples using Fisher-Yates shuffle.
+     * @param {Array} examples - Array of example objects
+     * @returns {Array} Shuffled array
+     */
     function shuffleExamples(examples) {
         let current_index = examples.length, random_index;
         while (current_index > 0) {
@@ -297,6 +305,10 @@ $(document).ready(function () {
         return examples;
     }
 
+    /**
+     * Checks if all cards have been studied and displays appropriate end screen.
+     * @returns {boolean} True if last card was reached
+     */
     function lastCardReached() {
         if (max_cards == 0) {
             showNoMoreCardsMsg();
@@ -334,6 +346,9 @@ $(document).ready(function () {
         return false;
     }
 
+    /**
+     * Displays message when there are no cards available to study.
+     */
     function showNoMoreCardsMsg() {
         $("#study-card-header").text("Sorry, no cards to practice");
         adaptCardStyleToWordStatus(3);
@@ -344,11 +359,18 @@ $(document).ready(function () {
         $("#guess-ui").addClass("d-none");
     }
 
+    /**
+     * Updates the progress bar showing study session completion.
+     */
     function updateLiveProgressBar() {
         const percentage = Math.round((cur_card_index + 1) / max_cards * 100);
         $("#live-progress-bar").css("width", percentage + "%").attr("aria-valuenow", percentage);
     }
 
+    /**
+     * Updates card styling based on word status (recall level).
+     * @param {number} status - Status code (0=excellent, 1=partial, 2=fuzzy, 3=no recall)
+     */
     function adaptCardStyleToWordStatus(status) {
         const $card = $("#study-card");
         const $card_header = $("#study-card-header");
@@ -384,13 +406,19 @@ $(document).ready(function () {
         }
     }
 
-    // Open dictionary modal only when clicking an unscrambled word (i.e., element has class "word")
+    /**
+     * Event: Triggered when clicking on a revealed word (has "word" class).
+     * Opens the dictionary modal for the selected word.
+     */
     $("body").on("click", ".word", function () {
         $selword = $(this);
         StudyActionBtns.show($selword);
     });
 
-    // Answer buttons (visible/enabled only after reveal)
+    /**
+     * Event: Triggered when clicking any answer button (1-4).
+     * Saves the user's recall level and loads the next card.
+     */
     $(".btn-answer").click(function (e) {
         e.preventDefault();
         const word = $("#study-card").data('word');
@@ -406,32 +434,44 @@ $(document).ready(function () {
             url: "ajax/updatecard.php",
             data: { word: word, answer: answer }
         })
-        .done(function () {
-            cur_card_index++;
-            if (lastCardReached()) return;
-            adaptCardStyleToWordStatus(words[cur_card_index].status);
-            scrollToPageTop();
-            startCard(words[cur_card_index].word);
-        })
-        .fail(function () {
-            showMessage("There was an unexpected error updating this word's status", "alert-danger");
-        });
+            .done(function () {
+                cur_card_index++;
+                if (lastCardReached()) return;
+                adaptCardStyleToWordStatus(words[cur_card_index].status);
+                scrollToPageTop();
+                startCard(words[cur_card_index].word);
+            })
+            .fail(function () {
+                showMessage("There was an unexpected error updating this word's status", "alert-danger");
+            });
 
         $('#btn-answer-prev').trigger('click'); // hide answer card page 2
     });
 
-    $('#btn-answer-prev').on('click', function(e) {
+    /**
+     * Event: Triggered when clicking "Back" button on answer card page 2.
+     * Returns to page 1 of the answer card.
+     */
+    $('#btn-answer-prev').on('click', function (e) {
         e.preventDefault();
         $('#answer-card-page-1').removeClass('d-none');
         $('#answer-card-page-2').addClass('d-none');
     });
 
-    $('#btn-answer-more').on('click', function(e) {
+    /**
+     * Event: Triggered when clicking "More" button on answer card page 1.
+     * Shows page 2 of the answer card with additional options.
+     */
+    $('#btn-answer-more').on('click', function (e) {
         e.preventDefault();
         $('#answer-card-page-1').addClass('d-none');
         $('#answer-card-page-2').removeClass('d-none');
     });
 
+    /**
+     * Builds the HTML table showing all studied words and their recall levels.
+     * @returns {string} HTML table string
+     */
     function buildResultsTable() {
         const table_header =
             `<table class="table table-bordered table-striped text-end small mx-auto mt-3" style="max-width: 550px">
@@ -456,6 +496,10 @@ $(document).ready(function () {
         return table_header + table_rows + table_footer;
     }
 
+    /**
+     * Displays the frequency badge for the current word.
+     * @param {boolean} is_phrase - Whether the current item is a phrase or single word
+     */
     function showWordFrequency(is_phrase) {
         const $freq_badge = $("#study-card-freq-badge");
         if (is_phrase) {
@@ -466,7 +510,10 @@ $(document).ready(function () {
         }
     }
 
-    // Translator opens with whatever is selected (unscrambled only, since scrambled anchors lack "word")
+    /**
+     * Event: Triggered when clicking the translate button.
+     * Opens the selected word in the translator.
+     */
     $("#btn-translate").on("click", function () {
         const base_uris = Dictionaries.getURIs();
         if ($selword.length) {
@@ -474,6 +521,10 @@ $(document).ready(function () {
         }
     });
 
+    /**
+     * Event: Triggered when clicking the image dictionary button.
+     * Opens the selected word in the image dictionary.
+     */
     $("#btn-img-dic").on("click", function () {
         const base_uris = Dictionaries.getURIs();
         if ($selword.length) {
@@ -481,7 +532,10 @@ $(document).ready(function () {
         }
     });
 
-    // Context menu translation only applies to unscrambled anchors (have class "word")
+    /**
+     * Event: Triggered on right-click (non-mobile) on a revealed word.
+     * Opens the word in the translator in a new tab.
+     */
     $(document).on("contextmenu", function (e) {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (!isMobile && $(e.target).is(".word")) {
@@ -491,7 +545,10 @@ $(document).ready(function () {
         return false;
     });
 
-    // Keyboard shortcuts (answer buttons after reveal)
+    /**
+     * Event: Triggered when pressing keys 1-4 after answer is revealed.
+     * Allows keyboard shortcuts for answer buttons.
+     */
     $(document).keypress(function (e) {
         if (!$(".btn-answer").prop('disabled')) {
             switch (e.which) {
@@ -504,7 +561,10 @@ $(document).ready(function () {
         }
     });
 
-    // Hide action buttons when clicking outside
+    /**
+     * Event: Triggered when clicking or tapping outside of word and action buttons.
+     * Hides the action buttons modal.
+     */
     $(document).on("mouseup touchend", function (e) {
         if ($(e.target).is(".word") === false && !$(e.target).closest('#action-buttons').length > 0) {
             e.stopPropagation();
@@ -514,6 +574,9 @@ $(document).ready(function () {
 
     // -------- SCRAMBLE GAME HELPERS --------
 
+    /**
+     * Validates user's guess against the original word and provides feedback.
+     */
     function onGuessSubmit() {
         const guess = ($("#guess-input").val() || "").trim();
         const original = $("#study-card").data('word');
@@ -528,9 +591,8 @@ $(document).ready(function () {
     }
 
     /**
-     * Reveals the original word in the title and re-renders examples with the original.
-     * Keeps the same example order shown before reveal.
-     * Also shows and enables the existing answer buttons.
+     * Reveals the answer by showing the original word and updating examples.
+     * Also displays and enables the answer buttons.
      */
     function revealAnswer() {
         const original = $("#study-card").data('word');
@@ -556,8 +618,9 @@ $(document).ready(function () {
     }
 
     /**
-     * Shuffle a word keeping its first letter as-is.
-     * Uses Array.from to be friendlier to Unicode; if length < 3, returns same word.
+     * Shuffles a word while keeping the first letter in place.
+     * @param {string} word - Word to shuffle
+     * @returns {string} Shuffled word with first letter preserved
      */
     function shuffleKeepFirst(word) {
         const arr = Array.from(word);
@@ -578,14 +641,29 @@ $(document).ready(function () {
         return shuffled;
     }
 
+    /**
+     * Normalizes a string for comparison (lowercase, NFKC normalized, trimmed).
+     * @param {string} s - String to normalize
+     * @returns {string} Normalized string
+     */
     function normalize(s) {
         return s.toLocaleLowerCase().normalize("NFKC").trim();
     }
 
+    /**
+     * Escapes special regex characters in a string.
+     * @param {string} s - String to escape
+     * @returns {string} Escaped string safe for regex
+     */
     function escapeRegex(s) {
         return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
+    /**
+     * Encodes HTML special characters to prevent XSS.
+     * @param {string} s - String to encode
+     * @returns {string} HTML-safe string
+     */
     function encodeHtml(s) {
         return String(s)
             .replace(/&/g, "&amp;")

@@ -184,8 +184,8 @@ $google_login = !empty($user->google_id);
                                     security for all users.
                                 </p>
 
-                                <p>Follow these steps to create a Hugging Face account and generate an access token for
-                                    Lingobot:</p>
+                                <p>Follow these steps to create a free Hugging Face account and generate an access
+                                    token for Lingobot:</p>
 
                                 <ol>
                                     <li>

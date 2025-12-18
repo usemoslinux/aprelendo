@@ -118,62 +118,31 @@ $(document).ready(function () {
             $('#custom-prompt').val('');
         }
     });
-    
-    $('#btn-ask-ai-bot').click(async function () {
+
+    $('#btn-ask-ai-bot').click(function () {
         const custom_prompt = $('#custom-prompt').val();
-        if (custom_prompt) {
-            const current_word = $('#ask-ai-bot-modal').attr('data-word');
-            const prompt = replaceWordWithQuotes(custom_prompt, current_word);
-    
-            $('#prompt-form').hide();
-            $('#ai-answer').show();
-            $('#normal-footer').hide();
-            $('#back-footer').show();
-            $('#text-ai-answer').html(''); // Clear previous response
-    
-            let isFirstChunk = true;
-            let markdownResponse = '';
-    
-            try {
-                const response = await fetch('/ajax/getaireply.php', {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: `prompt=${encodeURIComponent(prompt)}`
-                });
-    
-                if (!response.ok) {
-                    throw new Error('Failed to get AI response');
-                }
-    
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                const converter = new showdown.Converter();
-                
-                while (true) {
-                    const { value, done } = await reader.read();
-                    if (done) break;
-                    
-                    let chunk = decoder.decode(value, { stream: true });
-                    
-                    if (isFirstChunk) {
-                        chunk = chunk.trimStart();
-                        isFirstChunk = false;
-                    }
-                    
-                    markdownResponse += chunk;
-                    
-                    // Render progressively
-                    const html = converter.makeHtml(markdownResponse);
-                    $('#text-ai-answer').html(html);
-                }
-            } catch (error) {
-                console.error('Error:', error);
+        if (!custom_prompt) return;
+
+        const current_word = $('#ask-ai-bot-modal').attr('data-word');
+        const prompt = replaceWordWithQuotes(custom_prompt, current_word);
+        const converter = new showdown.Converter();
+        
+        $('#prompt-form').hide();
+        $('#ai-answer').show();
+        $('#normal-footer').hide();
+        $('#back-footer').show();
+        $('#text-ai-answer').html('');
+
+        AIBot.streamReply(prompt, {
+            onUpdate(markdownSoFar) {
+                const html = converter.makeHtml(markdownSoFar);
+                $('#text-ai-answer').html(html);
+            },
+            onError() {
                 $('#text-ai-answer').html('<p>Failed to get response from AI. Please try again.</p>');
             }
-        }
-    });    
+        });
+    });
 
     // Handle Back button click
     $(document).on('click', '#back-to-form', function () {
