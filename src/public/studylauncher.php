@@ -25,7 +25,6 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
 $lingobot_configured = !empty($user->hf_token);
-$lingobot_configured = false;
 
 $ai_card_border_class = $lingobot_configured ? 'border-success' : 'border-secondary';
 $ai_card_text_bg_class = $lingobot_configured ? 'text-bg-success' : 'text-bg-secondary';
