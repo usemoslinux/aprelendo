@@ -131,7 +131,7 @@ $(document).ready(function () {
         $('#ai-answer').show();
         $('#normal-footer').hide();
         $('#back-footer').show();
-        $('#text-ai-answer').html('');
+        $('#text-ai-answer').html('Lingobot is thinking...');
 
         AIBot.streamReply(prompt, {
             onUpdate(markdownSoFar) {

@@ -204,23 +204,27 @@ $(document).ready(function () {
      * Triggers when user clicks submit button to get AI evaluation of user answer
      */
     $('#btn-submit-user-answer').click(function () {
-        const answer_format = "Evaluate user response in two lines: first line with one of the four ratings (1) Completely incorrect (major mistakes or confused meaning); (2) Incorrect, but close (made some significant usage mistakes, but I was on the right track); (3) Mostly correct (made minor errors (missing details, awkward phrasing, etc.); or (4) Correct & comprehensive (perfect answer). Second line with a brief explanation and, if useful, a corrected version. Keep it concise.";
-        const prompt = answer_format + '\n Question:' + $('#select-prompt').val() + '\n Answer: ' + $('#text-user-answer').val();
-        if (!prompt) return;
+        if ($('#text-user-answer').val().trim() !== '') {
+            const answer_format = "Evaluate user response in two lines: first line with one of the four ratings (1) Completely incorrect (major mistakes or confused meaning); (2) Incorrect, but close (made some significant usage mistakes, but I was on the right track); (3) Mostly correct (made minor errors (missing details, awkward phrasing, etc.); or (4) Correct & comprehensive (perfect answer). Second line with a brief explanation and, if useful, a corrected version. Keep it concise.";
+            const prompt = answer_format + '\n Question:' + $('#select-prompt').val() + '\n Answer: ' + $('#text-user-answer').val();
+            if (!prompt) return;
 
-        const converter = new showdown.Converter();
-        
-        $('#text-ai-answer').html('Retrieving response from Lingobot...');
+            const converter = new showdown.Converter();
+            
+            $('#text-ai-answer').html('Lingobot is thinking...');
 
-        AIBot.streamReply(prompt, {
-            onUpdate(markdownSoFar) {
-                const html = converter.makeHtml(markdownSoFar);
-                $('#text-ai-answer').html(html);
-            },
-            onError() {
-                $('#text-ai-answer').html('<p>Failed to get response from AI. Please try again.</p>');
-            }
-        });
+            AIBot.streamReply(prompt, {
+                onUpdate(markdownSoFar) {
+                    const html = converter.makeHtml(markdownSoFar);
+                    $('#text-ai-answer').html(html);
+                },
+                onError() {
+                    $('#text-ai-answer').html('<p>Failed to get response from AI. Please try again.</p>');
+                }
+            });
+        } else {
+            $('#text-ai-answer').html("(1) Completely incorrect — couldn't provide an answer.");
+        }
 
         $(".btn-answer").prop('disabled', false); // enable answer buttons
     }); // end #btn-submit-user-answer.on.click()
@@ -314,6 +318,24 @@ $(document).ready(function () {
         }
     } // end showWordFrequency()
 
+    /**
+     * Event: Triggered when clicking on a revealed word (has "word" class).
+     * Opens the dictionary modal for the selected word.
+     */
+    $("body").on("click", ".word", function () {
+        StudyActionBtns.show($(this));
+    });
+
+    /**
+     * Event: Triggered when clicking or tapping outside of word and action buttons.
+     * Hides the action buttons modal.
+     */
+    $(document).on("mouseup touchend", function (e) {
+        if ($(e.target).is(".word") === false && !$(e.target).closest('#action-buttons').length > 0) {
+            e.stopPropagation();
+            ActionBtns.hide();
+        }
+    });
 
     /**
      * Disables right click context menu

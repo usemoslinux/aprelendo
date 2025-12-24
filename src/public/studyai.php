@@ -132,7 +132,7 @@ if (!empty($user->hf_token)) {
 }
 ?>
 
-<script defer src="/js/studyai.js"></script>
+<script defer src="/js/studyai.min.js"></script>
 <script defer src="/js/underlinewords.min.js"></script>
 <script defer src="/js/wordselection.min.js"></script>
 <script defer src="/js/actionbtns.min.js"></script>
