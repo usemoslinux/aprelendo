@@ -90,8 +90,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         </p>
                         <p class="text-muted text-center">Not registered? <a href="/register">Create an account</a>
                             <br>
-                            <small>If you enjoy using Aprelendo, please consider <a href="/donate">becoming a
-                                Patron!</a></small>
+                            <small>If you enjoy using Aprelendo, please consider <a href="/donate">donating!</a></small>
                         </p>
 
                     </footer>

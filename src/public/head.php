@@ -129,8 +129,8 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <?php endif; ?>
 
-    <!-- Matomo Analytics -->
-    <?php if ($_SERVER['HTTP_HOST'] === 'www.aprelendo.com'): ?>
+    <?php if (!IS_SELF_HOSTED): ?>
+        <!-- Matomo Analytics -->
         <script src="/js/matomo.min.js" async defer></script>
     <?php endif; ?>
 </head>

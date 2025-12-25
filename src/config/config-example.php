@@ -58,3 +58,5 @@ defined('PYTHON_VENV')            ? null : define('PYTHON_VENV', '/opt/venv');
 defined('PROXY')                  ? null : define('PROXY', '');
 
 define('ENCRYPTION_KEY', 'Replace this with a nice encryption key'); // << update this
+
+define('IS_SELF_HOSTED', $_SERVER['HTTP_HOST'] !== 'www.aprelendo.com');

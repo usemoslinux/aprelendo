@@ -141,7 +141,7 @@ $audio_source_is_YT = Videos::isYTVideo($audio_uri);
         crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
 
-    <?php if ($_SERVER['HTTP_HOST'] === 'www.aprelendo.com'): ?>
+    <?php if (!IS_SELF_HOSTED): ?>
         <!-- Matomo Analytics -->
         <script src="/js/matomo.min.js" async defer></script>
     <?php endif; ?>
