@@ -72,7 +72,7 @@ docker compose up -d
 
 Do you find the app useful and want to contribute to make it even better? Here are some ways you can help:
 
-* **Report issues.** A very simple way of contributing to the project is to report crashes and bugs, as well as suggest possible new features. You can join our [General Matrix Room](https://matrix.to/#/!gjBUJUxIWqLZeLofbU:matrix.org?via=matrix.org) and share your ideas regarding the app.
+* **Report issues.** A vital way to contribute is by reporting bugs, crashes, or suggesting new features directly through our [GitHub Issues page](https://github.com/usemoslinux/aprelendo/issues).
 * **Share the app.** Tell your friends, family, and colleagues about the app, in real life and online. You could, for example, write a post about Aprelendo on your favorite social media networks.
 * **Write code.** If you're able to write PHP/JS/SQL code, please consider working on fixing [bugs](https://github.com/usemoslinux/aprelendo/issues) or implementing new features. If you need help, don't hesitate to join us in our [Contributing Matrix Room](https://matrix.to/#/!EUTYnKqqplfKVYzgTM:matrix.org?via=matrix.org).
 
@@ -81,9 +81,6 @@ Do you find the app useful and want to contribute to make it even better? Here a
 When I started programming this app I decided that it should be completely free and open-source. This also means that there will be no income for me from ads or paid features. So if you enjoy the app and want to support my work you can do so:
 
 * [Paypal](https://www.paypal.com/ncp/payment/GJCS2645TD9GN)
-* [Patreon](https://www.patreon.com/aprelendo/)
-
-You can also join our [Matrix Space](https://matrix.to/#/#aprelendo:matrix.org) to get in touch with me.
 
 ## License
 
