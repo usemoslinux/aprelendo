@@ -93,8 +93,13 @@
     </div>
 </div>
 </div>
-<?php require_once 'eucookies.php' ?>
-<?php require_once 'jsonldbase.php' ?>
+<?php
+if (!IS_SELF_HOSTED) {
+    require_once 'eucookies.php';
+    require_once 'jsonldbase.php';
+} 
+?>
+
 </body>
 
 </html>
