@@ -192,7 +192,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                     <br>
                     <footer>
                         <p class="text-muted text-center">
-                            Already have an account? <a href="/login">Sign in</a>
+                            Already have an account? <a href="/login">Log in</a>
                         </p>
                     </footer>
                 </section>

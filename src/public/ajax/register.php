@@ -62,12 +62,15 @@ try {
         'native_lang' => $_POST['native-lang'],
         'lang' => $_POST['learning-lang'],
         'time_zone' => $_POST['time-zone'],
-        'send_email' => true
+        'send_email' => !IS_SELF_HOSTED
     ];
                     
     $user = new User($pdo);
     $user_reg = new UserRegistrationManager($user);
     $user_reg->register($user_data);
+
+    header('Content-Type: application/json');
+    echo json_encode(['is_self_hosted' => IS_SELF_HOSTED]);
 } catch (InternalException | UserException $e) {
     $user->delete();
     echo $e->getJsonError();

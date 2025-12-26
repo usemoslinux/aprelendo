@@ -115,13 +115,15 @@ require_once PUBLIC_PATH . 'head.php';
                             <small class="px-1"><?php echo $likes->get($text_id);?></small>
                         </div>
                     </div>
-                    <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-                        data-bs-placement="bottom" data-bs-title="Flag content for review">
-                        <button type="button" class="btn btn-link" data-bs-toggle="modal"
-                            data-bs-target="#report-text-modal">
-                            <span id="report-flag" class="bi bi-flag"></span>
-                        </button>
-                    </span>
+                    <?php if (!IS_SELF_HOSTED): ?>
+                        <span data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                            data-bs-placement="bottom" data-bs-title="Flag content for review">
+                            <button type="button" class="btn btn-link" data-bs-toggle="modal"
+                                data-bs-target="#report-text-modal">
+                                <span id="report-flag" class="bi bi-flag"></span>
+                            </button>
+                        </span>
+                    <?php endif; ?>
                 </div>
                 <?php
                 if (isset($reader)) {
@@ -135,10 +137,8 @@ require_once PUBLIC_PATH . 'head.php';
     <?php
     require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
     require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
-    require_once PUBLIC_PATH . 'showreporttextmodal.php'; // load report text modal window
-    if (!empty($user->hf_token)) {
-        require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
-    }
+    if (!IS_SELF_HOSTED) require_once PUBLIC_PATH . 'showreporttextmodal.php'; // load report text modal window
+    if (!empty($user->hf_token)) require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
     ?>
 
     <script defer src="/js/showvideo.min.js"></script>

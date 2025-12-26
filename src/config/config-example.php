@@ -43,12 +43,14 @@ defined('GOOGLE_DRIVE_API_KEY')   ? null : define('GOOGLE_DRIVE_API_KEY', 'your_
 // VoiceRSS API key to provide TTS support in assisted learning mode (voicerss.org)
 defined('VOICERSS_API_KEY')       ? null : define('VOICERSS_API_KEY', 'your_voicerss_api_key'); // << update this
 
-// Email
-defined('EMAIL_HOST')             ? null : define('EMAIL_HOST', 'EMAIL_HOST'); // << update this
-defined('EMAIL_SENDER')           ? null : define('EMAIL_SENDER', 'Sender <example@mail.com>'); // << update this
-defined('EMAIL_SENDER_USERNAME')  ? null : define('EMAIL_SENDER_USERNAME', 'USER'); // << update this
-defined('EMAIL_SENDER_PASSWORD')  ? null : define('EMAIL_SENDER_PASSWORD', 'PASSWORD'); // << update this
-defined('SUPPORT_EMAIL')          ? null : define('SUPPORT_EMAIL', 'example@mail.com'); // << update this
+define('IS_SELF_HOSTED', $_SERVER['HTTP_HOST'] !== 'www.aprelendo.com');
+
+// Email (shouldn't be necessary to set these if IS_SELF_HOSTED is TRUE)
+defined('EMAIL_HOST')             ? null : define('EMAIL_HOST', 'EMAIL_HOST');
+defined('EMAIL_SENDER')           ? null : define('EMAIL_SENDER', 'Sender <example@mail.com>');
+defined('EMAIL_SENDER_USERNAME')  ? null : define('EMAIL_SENDER_USERNAME', 'USER');
+defined('EMAIL_SENDER_PASSWORD')  ? null : define('EMAIL_SENDER_PASSWORD', 'PASSWORD');
+defined('SUPPORT_EMAIL')          ? null : define('SUPPORT_EMAIL', 'example@mail.com');
 
 defined('MOCK_USER_AGENT')        ? null : define('MOCK_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
     .'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
@@ -59,4 +61,3 @@ defined('PROXY')                  ? null : define('PROXY', '');
 
 define('ENCRYPTION_KEY', 'Replace this with a nice encryption key'); // << update this
 
-define('IS_SELF_HOSTED', $_SERVER['HTTP_HOST'] !== 'www.aprelendo.com');

@@ -128,6 +128,7 @@ require_once PUBLIC_PATH . 'head.php';
                             <small class="px-1"><?php echo number_format($nr_of_likes) ?></small>
                         </div>
                     </div>
+                    <?php if (!IS_SELF_HOSTED): ?>
                     <div data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                         data-bs-placement="bottom" data-bs-title="Flag content for review">
                         <button type="button" class="btn btn-link" data-bs-toggle="modal"
@@ -135,7 +136,8 @@ require_once PUBLIC_PATH . 'head.php';
                             <span id="report-flag" class="bi bi-flag"></span>
                         </button>
                     </div>
-                <?php endif ?>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
             <?php
             echo $reader->showText($reader_css);
@@ -149,12 +151,8 @@ require_once PUBLIC_PATH . 'head.php';
     <?php
     require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
     require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
-    if ($is_shared) {
-        require_once PUBLIC_PATH . 'showreporttextmodal.php'; // load report text modal window
-    }
-    if (!empty($user->hf_token)) {
-        require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
-    }
+    if (!IS_SELF_HOSTED && $is_shared) require_once PUBLIC_PATH . 'showreporttextmodal.php'; // load report text modal window
+    if (!empty($user->hf_token)) require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
     ?>
 
     <script defer src="/js/showtext.min.js"></script>

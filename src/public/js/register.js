@@ -40,15 +40,21 @@ $(document).ready(function() {
         })
             .done(function(data) {
                 if (data.error_msg == null) {
-                    showMessage(
+                    if (data.is_self_hosted === true) {
+                        showMessage("Registration successful! You will soon be redirected to the login page.",
+                            "alert-success");
+                        setTimeout(() => { window.location.replace("/login"); }, 2000);
+                    } else {
+                        showMessage(
                         "Registration successful! We've sent an activation email to the address you provided. "
-                        + "Please check your inbox to complete the registration process. "
-                        + "The email might take a few minutes to arrive. If you don't find it in your inbox, check "
-                        + "your spam or junk folder as it might have been filtered there. "
-                        + "Once you locate the email, click on the activation link to activate your account and "
-                        + "start using our platform.",
-                        "alert-success"
-                    );
+                            + "Please check your inbox to complete the registration process. "
+                            + "The email might take a few minutes to arrive. If you don't find it in your inbox, check "
+                            + "your spam or junk folder as it might have been filtered there. "
+                            + "Once you locate the email, click on the activation link to activate your account and "
+                            + "start using our platform.",
+                            "alert-success"
+                        );
+                    }
                 } else {
                     showMessage(data.error_msg, "alert-danger");
                 }

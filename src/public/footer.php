@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -40,9 +41,11 @@
                     <li class="list-inline-item">
                         <a href="/extensions">Extensions</a>
                     </li>
-                    <li class="list-inline-item">
-                        <a href="/contact">Contact</a>
-                    </li>
+                    <?php if (!IS_SELF_HOSTED): ?>
+                        <li class="list-inline-item">
+                            <a href="/contact">Contact</a>
+                        </li>
+                    <?php endif; ?>
                     <li class="list-inline-item">
                         <a href="/donate">Donate</a>
                     </li>
@@ -90,8 +93,8 @@
     </div>
 </div>
 </div>
-<?php require_once 'eucookies.php'?>
-<?php require_once 'jsonldbase.php'?>
+<?php require_once 'eucookies.php' ?>
+<?php require_once 'jsonldbase.php' ?>
 </body>
 
 </html>

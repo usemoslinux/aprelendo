@@ -54,12 +54,12 @@ use Aprelendo\UserRegistrationManager;
                                         </p>
 
                                         <p class="mt-4">
-                                            Sign in now to start learning new words
+                                            Log in now to start learning new words
                                             and expanding your vocabulary in fun and engaging ways!
                                         </p>
 
                                         <a href="/login" class="btn btn-success btn-lg mt-3 px-5">
-                                            <i class="bi bi-box-arrow-in-right"></i> Sign in
+                                            <i class="bi bi-box-arrow-in-right"></i> Log in
                                         </a>
                                     HTML_REGISTRATION_SUCCESS;
                                 } catch (\Exception $e) {

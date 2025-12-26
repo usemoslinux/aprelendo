@@ -42,13 +42,14 @@ require_once PUBLIC_PATH . 'simpleheader.php';
             <div class="col-sm-12 col-md-10 offset-md-1 col-lg-6 offset-lg-3">
                 <section>
                     <header>
-                        <h3 class="text-center">Sign in</h3>
+                        <h3 class="text-center">Log in</h3>
                     </header>
                     <br>
                     <div id="alert-box" class="d-none"></div>
+                <?php if (!IS_SELF_HOSTED): ?>
                     <div id="g_id_onload"
                         data-client_id="913422235077-082170c2l6b58ck8ie0f03rigombl2pc.apps.googleusercontent.com"
-                        data-callback="googleSignIn">
+                        data-callback="googleLogIn">
                     </div>
                     <div class="g_id_signin" data-type="standard"></div>
 
@@ -57,6 +58,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             <span class="or__text">Or</span>
                         </p>
                     </div>
+                <?php endif; ?>
                     <form id="form_login">
                         <div class="mb-3">
                             <label for="username">Username:</label>
@@ -80,14 +82,16 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         </div>
                         <p></p>
                         <div class="d-grid gap-2">
-                            <button type="submit" id="btn_login" class="btn btn-success">Sign in</button>
+                            <button type="submit" id="btn_login" class="btn btn-success">Log in</button>
                         </div>
                     </form>
                     <br>
                     <footer>
+                    <?php if (!IS_SELF_HOSTED): ?>
                         <p class="text-muted text-center">
                             <a href="/forgotpassword">Forgot password</a>?
                         </p>
+                    <?php endif; ?>
                         <p class="text-muted text-center">Not registered? <a href="/register">Create an account</a>
                             <br>
                             <small>If you enjoy using Aprelendo, please consider <a href="/donate">donating!</a></small>
@@ -100,7 +104,10 @@ require_once PUBLIC_PATH . 'simpleheader.php';
     </div>
 </main>
 
-<script src="/js/login.min.js"></script> <!-- Don't user "defer" for this one, otherwise google login won't work -->
+<?php if (!IS_SELF_HOSTED): ?>
+<script src="/js/googlelogin.min.js"></script> <!-- Don't user "defer" for this one, otherwise google login won't work -->
+<?php endif; ?>
+<script defer src="/js/login.min.js"></script>
 <script defer src="/js/password.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 

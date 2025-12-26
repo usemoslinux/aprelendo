@@ -18,7 +18,7 @@
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-if (!IS_SELF_HOSTED && !isset($_COOKIE['accept_cookies'])) { ?>
+if (!IS_SELF_HOSTED && !isset($_COOKIE['accept_cookies'])): ?>
 
     <div id="eucookielaw">
         <img src="/img/other/cookie-dude.gif" class="d-none d-md-block float-start" alt="Cookie Gif">
@@ -31,4 +31,4 @@ if (!IS_SELF_HOSTED && !isset($_COOKIE['accept_cookies'])) { ?>
     <script defer src="/js/cookies.min.js"></script>
     <script defer src="/js/eucookies.min.js"></script>
 
-<?php } ?>
+<?php endif; ?>

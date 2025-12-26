@@ -37,7 +37,7 @@
                         <li class="nav-item my-2 me-md-2"><a class="nav-link" href="/#hiw">How it works</a></li>
                         <li class="nav-item my-2 me-md-2"><a class="nav-link" href="/donate">Donate</a></li>
                         <li class="nav-item my-2">
-                            <a class="nav-link" id="login-menu" href="/login">Sign in</a>
+                            <a class="nav-link" id="login-menu" href="/login">Get started</a>
                         </li>
                     </ul>
                 </div>
