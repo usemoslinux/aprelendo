@@ -21,7 +21,7 @@
 
 namespace Aprelendo;
 
-use Aprelendo\Language;
+use Aprelendo\SupportedLanguages;
 
 class AIBot
 {
@@ -37,8 +37,8 @@ class AIBot
     {
         $crypto = new SecureEncryption(ENCRYPTION_KEY);
         $this->api_key = $crypto->decrypt($api_key);
-        $this->lang = Language::getNameFromIso($learning_lang_iso);
-        $this->native_lang = Language::getNameFromIso($native_lang_iso);
+        $this->lang = SupportedLanguages::get($learning_lang_iso, 'name');
+        $this->native_lang = SupportedLanguages::get($native_lang_iso, 'name');
     } // end __construct()
 
     /**

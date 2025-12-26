@@ -25,6 +25,7 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Language;
+use Aprelendo\SupportedLanguages;
 use Aprelendo\HallOfFame;
 
 $hall_of_fame = new HallOfFame($pdo, $user->lang, 'all_time');
@@ -41,8 +42,7 @@ $total_words_learned = $hall_of_fame->getTotalWordsLearned();
 $total_gems_earned = $hall_of_fame->getTotalGemsEarned();
 $avg_streak_days = $hall_of_fame->GetAvgStreakDays();
 
-$iso_codes = Language::getIsoCodeArray();
-$full_lang_name = ucfirst($iso_codes[$user->lang]) ?? $user->lang;
+$full_lang_name = ucfirst(SupportedLanguages::get($user->lang, 'name')) ?? $user->lang;
 
 ?>
 

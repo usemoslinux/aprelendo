@@ -29,6 +29,7 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Language;
+use Aprelendo\SupportedLanguages;
 
 $user_id = $user->id;
 $lang = new Language($pdo, $user_id);
@@ -55,7 +56,7 @@ if (isset($_GET['chg'])) {
                         <?php
                             if (isset($_GET['chg'])) {
                                 echo '<li class="breadcrumb-item"><span class="active">'
-                                . ucfirst(Language::getNameFromIso($lang->name)) . '</span></li>';
+                                . ucfirst(SupportedLanguages::get($lang->name, 'name')) . '</span></li>';
                             }
                         ?>
                     </ol>

@@ -20,6 +20,9 @@
 
 namespace Aprelendo;
 
+use Aprelendo\Tatoeba;
+use Aprelendo\SupportedLanguages;
+
 class Card extends DBEntity
 {
     protected $user_id = 0;
@@ -92,6 +95,15 @@ class Card extends DBEntity
             }
         }
         
+        // if no example sentences found or less than 3 found, rely on Tatoeba
+        if (empty($result) || count($result) < 3) {
+            $iso_code = SupportedLanguages::get($this->lang_iso, 'ISO-639-3');
+            $tatoeba = new Tatoeba($iso_code, $word);
+            $tatoeba_result = $tatoeba->fetchExampleSentences();
+
+            $result = array_merge((array)$result, (array)$tatoeba_result);
+        }
+
         return $result;
     } // end getExampleSentencesForWord()
 

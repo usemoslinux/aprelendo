@@ -20,6 +20,8 @@
 
 namespace Aprelendo;
 
+use Aprelendo\SupportedLanguages;
+
 class Dictionaries extends DBEntity
 {
     private $monolingual = [];
@@ -28,12 +30,12 @@ class Dictionaries extends DBEntity
     private $translators = [];
 
     /**
-    * Constructor
-    *
-    * @param \PDO $pdo
-    * @param string $native_lang_iso
-    * @param string $learning_lang_iso
-    */
+     * Initialize dictionary lists for the target language.
+     *
+     * @param \PDO $pdo
+     * @param string $native_lang_iso
+     * @param string $learning_lang_iso
+     */
     public function __construct(\PDO $pdo, string $native_lang_iso, string $learning_lang_iso)
     {
         parent::__construct($pdo);
@@ -46,15 +48,15 @@ class Dictionaries extends DBEntity
                     array_push($this->monolingual, $dictionary);
                     break;
                 case 2:
-                    $dictionary = $this->replaceNativeLangInURI($dictionary, $native_lang_iso, $learning_lang_iso);
+                    $dictionary = $this->bindLanguageParamsToUri($dictionary, $native_lang_iso, $learning_lang_iso);
                     array_push($this->bilingual, $dictionary);
                     break;
                 case 3:
-                    $dictionary = $this->replaceNativeLangInURI($dictionary, $native_lang_iso, $learning_lang_iso);
+                    $dictionary = $this->bindLanguageParamsToUri($dictionary, $native_lang_iso, $learning_lang_iso);
                     array_push($this->visual, $dictionary);
                     break;
                 case 4:
-                    $dictionary = $this->replaceNativeLangInURI($dictionary, $native_lang_iso, $learning_lang_iso);
+                    $dictionary = $this->bindLanguageParamsToUri($dictionary, $native_lang_iso, $learning_lang_iso);
                     array_push($this->translators, $dictionary);
                     break;
                 default:
@@ -63,7 +65,13 @@ class Dictionaries extends DBEntity
         }
     } // end __construct()
 
-    private function load(string $learning_lang_iso)
+    /**
+     * Load dictionaries matching the learning language (or all).
+     *
+     * @param string $learning_lang_iso
+     * @return array
+     */
+    private function load(string $learning_lang_iso): array
     {
         $sql = "SELECT * FROM `{$this->table}` WHERE FIND_IN_SET(?, `lang_iso`) > 0 OR `lang_iso` = 'all' ORDER BY `name`";
 
@@ -72,18 +80,36 @@ class Dictionaries extends DBEntity
         ]);
     }
 
-    private function replaceNativeLangInURI(array $dictionary, string $native_lang_iso,
+    /**
+     * Replace URI template tokens with language names and ISO codes.
+     *
+     * @param array $dictionary
+     * @param string $native_lang_iso
+     * @param string $learning_lang_iso
+     * @return array
+     */
+    private function bindLanguageParamsToUri(array $dictionary, string $native_lang_iso,
         string $learning_lang_iso): array
     {
-        $iso_codes = Language::getIsoCodeArray();
+        $native_lang_name = SupportedLanguages::get($native_lang_iso, 'name');
+        $learning_lang_name = SupportedLanguages::get($learning_lang_iso, 'name');
+        
         $dictionary['uri'] = str_replace('{native-lang-iso}', $native_lang_iso, $dictionary['uri']);
-        $dictionary['uri'] = str_replace('{native-lang}', $iso_codes[$native_lang_iso], $dictionary['uri']);
+        $dictionary['uri'] = str_replace('{native-lang}', $native_lang_name, $dictionary['uri']);
         $dictionary['uri'] = str_replace('{learning-lang-iso}', $learning_lang_iso, $dictionary['uri']);
-        $dictionary['uri'] = str_replace('{learning-lang}', $iso_codes[$learning_lang_iso], $dictionary['uri']);
+        $dictionary['uri'] = str_replace('{learning-lang}', $learning_lang_name, $dictionary['uri']);
+
         return $dictionary;
     }
 
-    private function getItems(string $type, bool $iframe_support_only)
+    /**
+     * Get items by type, optionally filtering by iframe support.
+     *
+     * @param string $type
+     * @param bool $iframe_support_only
+     * @return array
+     */
+    private function getItems(string $type, bool $iframe_support_only): array
     {
         $items = $this->$type;
 
@@ -92,27 +118,56 @@ class Dictionaries extends DBEntity
             : $items;
     }
 
-    public function getMonolingual(bool $iframe_support_only = false)
+    /**
+     * Return monolingual dictionaries.
+     *
+     * @param bool $iframe_support_only
+     * @return array
+     */
+    public function getMonolingual(bool $iframe_support_only = false): array
     {
         return $this->getItems('monolingual', $iframe_support_only);
     }
 
-    public function getBilingual(bool $iframe_support_only = false)
+    /**
+     * Return bilingual dictionaries.
+     *
+     * @param bool $iframe_support_only
+     * @return array
+     */
+    public function getBilingual(bool $iframe_support_only = false): array
     {
         return $this->getItems('bilingual', $iframe_support_only);
     }
 
-    public function getVisual(bool $iframe_support_only = false)
+    /**
+     * Return visual dictionaries.
+     *
+     * @param bool $iframe_support_only
+     * @return array
+     */
+    public function getVisual(bool $iframe_support_only = false): array
     {
         return $this->getItems('visual', $iframe_support_only);
     }
 
-    public function getTranslators(bool $iframe_support_only = false)
+    /**
+     * Return translator dictionaries.
+     *
+     * @param bool $iframe_support_only
+     * @return array
+     */
+    public function getTranslators(bool $iframe_support_only = false): array
     {
         return $this->getItems('translators', $iframe_support_only);
     }
 
-    public function getAll()
+    /**
+     * Return all dictionaries in a single list.
+     *
+     * @return array
+     */
+    public function getAll(): array
     {
         return array_merge($this->monolingual, $this->bilingual, $this->visual, $this->translators);
     }

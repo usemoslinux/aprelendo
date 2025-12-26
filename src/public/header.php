@@ -20,6 +20,7 @@
 
 require_once '../Includes/dbinit.php'; // connect to database
 use Aprelendo\Language;
+use Aprelendo\SupportedLanguages;
 use Aprelendo\Gems;
 
 if (!empty($_GET['lang'])) {
@@ -33,7 +34,7 @@ if (!empty($_GET['lang'])) {
     }
 }
 
-$lang_full = ucfirst(Language::getNameFromIso($user->lang));
+$lang_full = ucfirst(SupportedLanguages::get($user->lang, 'name'));
 
 $gems = new Gems($pdo, $user->id, $user->lang_id, $user->time_zone);
 $nr_of_gems  = (int)$gems->gems;

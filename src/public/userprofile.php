@@ -24,7 +24,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
-use Aprelendo\Language;
+use Aprelendo\SupportedLanguages;
 use Aprelendo\SecureEncryption;
 
 $google_login = !empty($user->google_id);
@@ -115,15 +115,16 @@ $google_login = !empty($user->google_id);
                                 <label for="src_lang">Your native language:</label>
                                 <select name="src_lang" class="form-control form-select" id="src_lang">
                                     <?php
-                                    $iso_codes = Language::getIsoCodeArray();
+                                    $sort_by = 'name';
+                                    $languages = SupportedLanguages::getAll($sort_by);
                                     $native_lang_iso = $user->native_lang;
                                     $html = '';
 
-                                    foreach ($iso_codes as $iso_code => $iso_name) {
-                                        $selected = ($iso_code === $native_lang_iso) ? ' selected' : '';
-                                        $html .= '<option value="' . $iso_code . '"'
+                                    foreach ($languages as $language) {
+                                        $selected = ($language['ISO-639-1'] === $native_lang_iso) ? ' selected' : '';
+                                        $html .= '<option value="' . $language['ISO-639-1'] . '"'
                                             . $selected . '>'
-                                            . ucfirst($iso_name) . "</option>";
+                                            . ucfirst($language['name']) . "</option>";
                                     }
 
                                     echo $html;
@@ -137,11 +138,11 @@ $google_login = !empty($user->google_id);
                                     $learning_lang_iso = $user->lang;
                                     $html = '';
 
-                                    foreach ($iso_codes as $iso_code => $iso_name) {
-                                        $selected = ($iso_code === $learning_lang_iso) ? ' selected' : '';
-                                        $html .= '<option value="' . $iso_code . '"'
+                                    foreach ($languages as $language) {
+                                        $selected = ($language['ISO-639-1'] === $learning_lang_iso) ? ' selected' : '';
+                                        $html .= '<option value="' . $language['ISO-639-1'] . '"'
                                             . $selected . '>'
-                                            . ucfirst($iso_name) . "</option>";
+                                            . ucfirst($language['name']) . "</option>";
                                     }
 
                                     echo $html;

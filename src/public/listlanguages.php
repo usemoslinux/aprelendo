@@ -22,6 +22,7 @@ require_once '../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
 use Aprelendo\Language;
+use Aprelendo\SupportedLanguages;
 
 $lang = new Language($pdo, $user->id);
 $available_langs = $lang->getAvailableLangs();
@@ -31,7 +32,7 @@ if ($available_langs) {
 
     // add long language name to $available_langs array
     $available_langs = array_map(function ($record) {
-        $record['long_name'] = ucfirst(Language::getNameFromIso($record['name']));
+        $record['long_name'] = ucfirst(SupportedLanguages::get($record['name'], 'name'));
         return $record;
     }, $available_langs);
 

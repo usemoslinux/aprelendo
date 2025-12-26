@@ -203,41 +203,6 @@ class Language extends DBEntity
     } // end createInitialRecordsForUser()
 
     /**
-     * Converts 639-1 iso codes to full language names (ie. 'en' => 'English')
-     *
-     * @param string $iso_code
-     * @return string
-     */
-    public static function getNameFromIso(string $iso_code): string
-    {
-        return array_key_exists($iso_code, self::$iso_code) ? self::$iso_code[$iso_code] : '';
-    } // end getNameFromIso()
-
-    /**
-     * Returns the index of an ISO 639-1 code in Language::$iso_codes array
-     *
-     * @param string $lang_name
-     * @return int|null Index if found, null otherwise
-     */
-    public static function getIndex(string $lang_name): ?int
-    {
-        $keys = array_keys(self::$iso_code);
-        $index = array_search($lang_name, $keys, true);
-
-        return $index !== false ? $index : null;
-    } // end getIndex()
-
-    /**
-     * Returns complete list of iso codes
-     *
-     * @return array
-     */
-    public static function getIsoCodeArray(): array
-    {
-        return self::$iso_code;
-    } // end getIsoCodeArray()
-
-    /**
      * Returns list of available languages for active user
      *
      * @return array
