@@ -34,7 +34,7 @@ class Curl
         $ch = curl_init();
         
         if (!isset($options) || empty($options)) {
-            $referer = 'https://www.aprelendo.com';
+            $referer = $_SERVER['HTTP_HOST'];
             $options = [
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_CONNECTTIMEOUT => 5,
