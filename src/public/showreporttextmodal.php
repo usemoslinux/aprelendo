@@ -25,7 +25,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
 
 <!-- Report Text Modal -->
 <div class="modal fade" id="report-text-modal" data-keyboard="true" tabindex="-1"
-    aria-labelledby="report-text-modal-label" aria-hidden="true">
+    aria-labelledby="report-text-modal-label" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
