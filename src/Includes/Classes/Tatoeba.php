@@ -50,7 +50,13 @@ class Tatoeba
      */
     public function fetchExampleSentences(): mixed
     {
-        $url = sprintf("%s/sentences?lang=%s&q=%s&word_count=%s-&sort=relevance&limit=%s", self::BASE_URL, $this->lang, $this->word, self::MIN_NR_OF_WORDS, self::MAX_NR_OF_SENTENCES);
+        $url = sprintf("%s/sentences?lang=%s&q=%s&word_count=%s-&sort=relevance&limit=%s", 
+            self::BASE_URL,
+            $this->lang,
+            rawurlencode($this->word),
+            self::MIN_NR_OF_WORDS,
+            self::MAX_NR_OF_SENTENCES
+        );
         
         $options = [
             CURLOPT_RETURNTRANSFER => true,

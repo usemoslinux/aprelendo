@@ -48,9 +48,8 @@ $(document).ready(function () {
             dataType: "json"
         })
             .done(function (data) {
-                if (data.error_msg) {
-                    showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning "
-                        + "in this language.", "alert-danger");
+                if (data && data.error_msg) {
+                    showMessage(data.error_msg, "alert-danger");
                     return;
                 }
 
@@ -73,8 +72,8 @@ $(document).ready(function () {
                 getExampleSentencesforCard(words[0].word);
             })
             .fail(function (xhr, ajaxOptions, thrownError) {
-                showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning "
-                    + "in this language.", "alert-danger");
+                showMessage("Oops! There was an unexpected error trying to fetch study cards for this language.",
+                        "alert-danger");
             }); // end $.ajax
     } // end getListofCards()
 
@@ -99,6 +98,11 @@ $(document).ready(function () {
             dataType: "json"
         })
             .done(function (data) {
+                if (data && data.error_msg) {
+                    showMessage(data.error_msg, "alert-danger");
+                    return;
+                }
+
                 let examples_array = [];
                 let examples_html = '';
                 const lang_iso = $("#card").data("lang");
@@ -116,8 +120,10 @@ $(document).ready(function () {
                         'gmiu'
                     );
                 }
+                
+                const texts = Array.isArray(data) ? data : (data ? [data] : []);
 
-                data.forEach(text => {
+                texts.forEach(text => {
                     // extract example sentences from text
                     let m;
                     while ((m = sentence_regex.exec(text.text)) !== null) {
@@ -172,7 +178,7 @@ $(document).ready(function () {
             })
             .fail(function (xhr, ajaxOptions, thrownError) {
                 showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.",
-                    "alert-danger");
+                        "alert-danger");
             }); // end $.ajax
     } // end getExampleSentencesforCard()
 
