@@ -66,9 +66,9 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
     <title>Aprelendo: Free Language Learning Platform</title>
 
     <!-- Bootstrap core CSS -->  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/css/bootstrap.min.css"
-        integrity="sha512-fw7f+TcMjTb7bpbLJZlP8g2Y4XcCyFZW8uy8HsRZsH/SwbMw0plKHFHr99DN3l04VsYNwvzicUX/6qurvIxbxw==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css"
+        integrity="sha512-2bBQCjcnw658Lho4nlXJcc6WkV/UxpE/sAokbXPxQNGqmNdQrWqtw26Ns9kFF/yG792pKR1Sx8/Y1Lf1XN4GKA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -92,36 +92,36 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
     </script>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/js/bootstrap.bundle.min.js"
-        integrity="sha512-Tc0i+vRogmX4NN7tuLbQfBxa8JkfUSAxSFVzmU31nVdHyiHElPPy2cWfFacmCJKw0VqovrzKhdd2TSTMdAxp2g==" 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.min.js"
+        integrity="sha512-nKXmKvJyiGQy343jatQlzDprflyB5c+tKCzGP3Uq67v+lmzfnZUi/ZT+fc6ITZfSC5HhaBKUIvr/nTLCV+7F+Q=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
 
     <!-- Cal-Heatmap scripts and style sheets for stats page only -->
     <?php if($curpage=='stats'): ?>
-    <script src="https://d3js.org/d3.v7.min.js" 
-        integrity="sha512-vc58qvvBdrDR4etbxMdlTt4GBQk1qjvyORR2nrsPsFPyrs+/u5c3+1Ct6upOgdZoIl7eq6k3a1UPDSNAQi/32A=="
-        crossorigin="anonymous">
-    </script>
-    <script src="https://unpkg.com/cal-heatmap/dist/cal-heatmap.min.js"
-        integrity="sha512-c30EKKfFAjoXgk+P/C4DF+B0uRWiWL1ZX21nS3FH4SsexSjOBbwM4danZUAnDmVKzdDpbSKrkR4vWO3JFstzcQ=="
-        crossorigin="anonymous">
-    </script>
-    <link rel="stylesheet" href="https://unpkg.com/cal-heatmap/dist/cal-heatmap.css"
-        integrity="sha512-Z9sQ/pYnUJ7hSzK16+NScA+tcAxFXoZ+vQZ5FQ3FgvNCcpI+fKXepuGc2OvamHHOU00tEBOi2CVbS9xRDpslRw=="
-        crossorigin="anonymous">
-    <script src="https://unpkg.com/@popperjs/core@2"
-        integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ=="
-        crossorigin="anonymous">
-    </script>
-    <script src="https://unpkg.com/cal-heatmap/dist/plugins/Tooltip.min.js"
-        integrity="sha512-udm+VHvcN//WFrhJG4C/ittWSSaOT+8uN2cZR3IOfMFZhHFYYvGJ8icwWjNKUY2MrMa50iX2Rn40epm6ncBXcA=="
-        crossorigin="anonymous">
-    </script>
-    <script src="https://unpkg.com/cal-heatmap/dist/plugins/CalendarLabel.min.js"
-        integrity="sha512-OAfBG8mdMW+HCq1M5znKxyZP2Y/20Dns6Tn2SKxCyWD6bX/Wa0vaYg0e4heK++W5UTWpdr9p6Lwu6rUl3J6vrg=="
-        crossorigin="anonymous">
-    </script>
+        <script src="https://d3js.org/d3.v7.min.js" 
+            integrity="sha512-vc58qvvBdrDR4etbxMdlTt4GBQk1qjvyORR2nrsPsFPyrs+/u5c3+1Ct6upOgdZoIl7eq6k3a1UPDSNAQi/32A=="
+            crossorigin="anonymous">
+        </script>
+        <script src="https://unpkg.com/cal-heatmap/dist/cal-heatmap.min.js"
+            integrity="sha512-c30EKKfFAjoXgk+P/C4DF+B0uRWiWL1ZX21nS3FH4SsexSjOBbwM4danZUAnDmVKzdDpbSKrkR4vWO3JFstzcQ=="
+            crossorigin="anonymous">
+        </script>
+        <link rel="stylesheet" href="https://unpkg.com/cal-heatmap/dist/cal-heatmap.css"
+            integrity="sha512-Z9sQ/pYnUJ7hSzK16+NScA+tcAxFXoZ+vQZ5FQ3FgvNCcpI+fKXepuGc2OvamHHOU00tEBOi2CVbS9xRDpslRw=="
+            crossorigin="anonymous">
+        <script src="https://unpkg.com/@popperjs/core@2"
+            integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ=="
+            crossorigin="anonymous">
+        </script>
+        <script src="https://unpkg.com/cal-heatmap/dist/plugins/Tooltip.min.js"
+            integrity="sha512-udm+VHvcN//WFrhJG4C/ittWSSaOT+8uN2cZR3IOfMFZhHFYYvGJ8icwWjNKUY2MrMa50iX2Rn40epm6ncBXcA=="
+            crossorigin="anonymous">
+        </script>
+        <script src="https://unpkg.com/cal-heatmap/dist/plugins/CalendarLabel.min.js"
+            integrity="sha512-OAfBG8mdMW+HCq1M5znKxyZP2Y/20Dns6Tn2SKxCyWD6bX/Wa0vaYg0e4heK++W5UTWpdr9p6Lwu6rUl3J6vrg=="
+            crossorigin="anonymous">
+        </script>
     <?php endif; ?>
 
     <!-- Google API -->
