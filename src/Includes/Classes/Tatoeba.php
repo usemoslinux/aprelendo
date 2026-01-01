@@ -26,7 +26,7 @@ class Tatoeba
     public $lang      = '';
     public $word      = '';
     public $sentences = [];
-    private const BASE_URL = 'https://api.dev.tatoeba.org/unstable';
+    private const BASE_URL = 'https://api.tatoeba.org/unstable';
     private const MIN_NR_OF_WORDS = 3;
     private const MAX_NR_OF_SENTENCES = 10;
 
