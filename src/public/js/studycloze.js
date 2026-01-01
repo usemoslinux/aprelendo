@@ -58,7 +58,7 @@ $(document).ready(function () {
                     <button id="guess-reveal" class="btn btn-secondary" type="button">Show answer</button>
                 </div>
                 <div id="guess-feedback" class="form-text mt-2 text-secondary">
-                    The word above is shuffled; first letter is a hint.
+                    First letters, spaces & word length are locked as hints.
                 </div>
             </div>
         `;
@@ -111,7 +111,7 @@ $(document).ready(function () {
             })
             .fail(function () {
                 showMessage("Oops! There was an unexpected error trying to fetch study cards for this language.",
-                        "alert-danger");
+                    "alert-danger");
             });
     }
 
@@ -128,10 +128,10 @@ $(document).ready(function () {
         $("#guess-feedback")
             .removeClass("text-danger text-success")
             .addClass("text-secondary")
-            .text("The word above is shuffled; first letter is a hint.");
+            .text("First letters, spaces & word length are locked as hints.");
 
-        // compute and set scrambled display (first letter preserved)
-        const scrambled = shuffleKeepFirst(original_word);
+        // compute and set scrambled display (first letter and spaces preserved)
+        const scrambled = scramblePhrase(original_word);
         $("#study-card").data('word', original_word);
         $("#study-card").data('scrambled', scrambled);
         $("#study-card").data('revealed', false);
@@ -222,7 +222,7 @@ $(document).ready(function () {
             })
             .fail(function () {
                 showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.",
-                        "alert-danger");
+                    "alert-danger");
             });
     }
 
@@ -627,27 +627,41 @@ $(document).ready(function () {
     }
 
     /**
-     * Shuffles a word while keeping the first letter in place.
-     * @param {string} word - Word to shuffle
-     * @returns {string} Shuffled word with first letter preserved
+     * Scrambles a phrase word-by-word.
+     * Keeps the first letter of every word and preserves space positions as a hint.
      */
-    function shuffleKeepFirst(word) {
-        const arr = Array.from(word);
-        if (arr.length < 3) return word;
-        const head = arr[0];
-        const tail = arr.slice(1);
+    function scramblePhrase(phrase) {
+        // 1. Separate phrase by spaces to handle each word individually
+        const words = phrase.split(' ');
 
-        let shuffled;
-        for (let attempts = 0; attempts < 10; attempts++) {
-            const temp = tail.slice();
-            for (let i = temp.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [temp[i], temp[j]] = [temp[j], temp[i]];
+        // 2. Scramble each word, separately
+        const scrambled = words.map(word => {
+            const arr = Array.from(word);
+            
+            // Words shorter than 3 chars (e.g., "to", "I", "it") can't be scrambled effectively
+            if (arr.length < 3) return word;
+
+            const head = arr[0];      // The "Hint" letter
+            const tail = arr.slice(1); // The letters to be scrambled
+            let scrambled_tail;
+
+            // Scramble logic for the tail of the current word
+            for (let attempts = 0; attempts < 10; attempts++) {
+                scrambled_tail = [...tail];
+                for (let i = scrambled_tail.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [scrambled_tail[i], scrambled_tail[j]] = [scrambled_tail[j], scrambled_tail[i]];
+                }
+                
+                // Ensure the word actually looks different if possible
+                if (scrambled_tail.join('') !== tail.join('')) break;
             }
-            shuffled = head + temp.join('');
-            if (shuffled !== word) break;
-        }
-        return shuffled;
+
+            return head + scrambled_tail.join('');
+        });
+
+        // 3. Join everything back together with the original space placement
+        return scrambled.join(' ');
     }
 
     /**

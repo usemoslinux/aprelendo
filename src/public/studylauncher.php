@@ -91,14 +91,20 @@ $ai_button_class = $lingobot_configured ? 'btn-success' : 'btn-secondary';
                                 Fill in the Blanks (Cloze)
                             </div>
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">Reconstruct the Missing Word</h5>
-                                <p class="card-text">Unscramble the hint to fill in the missing word. The clue is
-                                    an anagram of the solution and retains the correct initial letter for guidance.</p>
+                                <h5 class="card-title">Reconstruct the Expression</h5>
+                                <p class="card-text">
+                                    Unscramble the hint to complete the blank. Each word in the expression 
+                                    is scrambled but <b>retains its original first letter and position</b> to guide you.
+                                </p>
                                 <ul class="small text-start ps-3">
-                                    <li><b>Benefits</b>: Directly reinforces spelling and active use of the target
-                                        word without requiring full sentence construction.</li>
-                                    <li><b>Drawbacks</b>: Practice is highly focused on the individual word;
-                                        limited exposure to wider syntactic patterns.</li>
+                                    <li>
+                                        <b>Benefits</b>: Reinforces spelling and active recall of the specific 
+                                        expression without the complexity of full sentence building.
+                                    </li>
+                                    <li>
+                                        <b>Drawbacks</b>: Highly focused on vocabulary; provides less practice 
+                                        with broader grammar and sentence structure.
+                                    </li>
                                 </ul>
                                 <div class="mt-auto d-grid">
                                     <a href="/studycloze" class="btn btn-warning text-dark">
