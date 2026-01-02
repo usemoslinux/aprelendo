@@ -24,6 +24,7 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Language;
+use Aprelendo\TextTypes;
 
 $search_text    = '';
 $filter_type    = 0;
@@ -45,11 +46,14 @@ if (!empty($_GET)) {
     $filter_level = $lang->level;
 }
 
-$type_dropdown_class = 'class="dropdown-item ft"';
-$type_active_dropdown_class = ' class="dropdown-item ft active" ';
+$type_dropdown_class = 'dropdown-item ft';
+$type_active_dropdown_class = 'dropdown-item ft active';
 
-$lvl_dropdown_class = 'class="dropdown-item fl"';
-$lvl_active_dropdown_class = ' class="dropdown-item fl active" ';
+$lvl_dropdown_class = 'dropdown-item fl';
+$lvl_active_dropdown_class = 'dropdown-item fl active';
+
+$text_types = new TextTypes($pdo);
+$text_types_arr = $text_types->getAll(true);
 
 ?>
 
@@ -76,52 +80,27 @@ $lvl_active_dropdown_class = ' class="dropdown-item fl active" ';
                             </button>
                             <div id="filter-dropdown" class="dropdown-menu">
                                 <h6 class="dropdown-header">Type</h6>
-                                <a data-value="0" <?php echo $filter_type==0 ?
-                                    $type_active_dropdown_class : $type_dropdown_class ; ?> >
-                                    All
-                                </a>
-                                <a data-value="1"  <?php echo $filter_type==1 ?
-                                    $type_active_dropdown_class : $type_dropdown_class ; ?> >
-                                    Articles
-                                </a>
-                                <a data-value="2" <?php echo $filter_type==2 ?
-                                    $type_active_dropdown_class : $type_dropdown_class ; ?> >
-                                    Conversations
-                                </a>
-                                <a data-value="3" <?php echo $filter_type==3 ?
-                                    $type_active_dropdown_class : $type_dropdown_class ; ?> >
-                                    Letters
-                                </a>
-                                <a data-value="4" <?php echo $filter_type==4 ?
-                                    $type_active_dropdown_class : $type_dropdown_class ; ?> >
-                                    Lyrics
-                                </a>
-                                <a data-value="5" <?php echo $filter_type==5 ?
-                                    $type_active_dropdown_class : $type_dropdown_class ; ?> >
-                                    Videos
-                                </a>
-                                <a data-value="7" <?php echo $filter_type==7 ?
-                                    $type_active_dropdown_class : $type_dropdown_class ; ?> >
-                                    Others
-                                </a>
+                                <?php foreach ($text_types_arr as $type): ?>
+                                        <a data-value="<?= $type['id'] ?>"
+                                            class="<?= $filter_type == $type['id']
+                                                ? $type_active_dropdown_class
+                                                : $type_dropdown_class ?>">
+                                            <?= $type['name'] ?>
+                                        </a>
+                                    <?php endforeach; ?>
                                 <div role="separator" class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">Level</h6>
-                                <a data-value="0" <?php echo $filter_level==0 ?
-                                    $lvl_active_dropdown_class : $lvl_dropdown_class ; ?>>
-                                    All
-                                </a>
-                                <a data-value="1" <?php echo $filter_level==1 ?
-                                    $lvl_active_dropdown_class : $lvl_dropdown_class ; ?>>
-                                    Beginner
-                                </a>
-                                <a data-value="2" <?php echo $filter_level==2 ?
-                                    $lvl_active_dropdown_class : $lvl_dropdown_class ; ?>>
-                                    Intermediate
-                                </a>
-                                <a data-value="3" <?php echo $filter_level==3 ?
-                                    $lvl_active_dropdown_class : $lvl_dropdown_class ; ?>>
-                                    Advanced
-                                </a>
+                                <?php
+                                    $levels = [0 => 'All', 1 => 'Beginner', 2 => 'Intermediate', 3 => 'Advanced'];
+
+                                    foreach ($levels as $level => $level_name): ?>
+                                        <a data-value="<?= $level ?>"
+                                            class="<?= $filter_level == $level
+                                                ? $lvl_active_dropdown_class
+                                                : $lvl_dropdown_class ?>">
+                                            <?= $level_name ?>
+                                        </a>
+                                    <?php endforeach; ?>
                             </div>
                             <input type="text" id="s" name="s" class="form-control" aria-label="Search text"
                                 placeholder="Search..." value="<?php echo isset($search_text) ? $search_text : '' ?>">

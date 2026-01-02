@@ -262,19 +262,7 @@ class TextTable extends Table
      */
     private function generateTypeIcon(array $row): string
     {
-        $type_icons = [
-            'Article' => '<span title="Article" class="bi bi-newspaper"></span>',
-            'Conversation' => '<span title="Conversation" class="bi bi-chat-left-dots"></span>',
-            'Letter' => '<span title="Letter" class="bi bi-envelope-open-fill"></span>',
-            'Lyrics' => '<span title="Lyrics" class="bi bi-file-earmark-music-fill"></span>',
-            'Video' => '<span title="Video" class="bi bi-file-earmark-play-fill"></span>',
-            'Ebook' => '<span title="Ebook" class="bi bi-journal-bookmark-fill"></span>',
-            'Other' => '<span title="Other" class="bi bi-file-earmark-text-fill"></span>'
-        ];
-
-        $keys  = array_values($type_icons);
-
-        return $keys[$row['type']-1];
+        return $row['icon_html'] ?? '';
     } // end generateTypeIcon()
     
     /**

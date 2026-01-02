@@ -304,22 +304,25 @@ class Texts extends DBEntity
         $filter_level_sql = $search_params->buildFilterLevelSQL();
         $search_text = '%' . $search_params->search_text . '%';
         
-        $sql = "SELECT `id`,
+        $sql = "SELECT texts.`id`,
                         NULL,
-                        `title`,
-                        `author`,
-                        `audio_uri`,
-                        `source_uri`,
-                        `type`,
-                        `word_count`,
-                        CHAR_LENGTH(`text`) AS `char_length`,
-                        `level`
-                FROM `{$this->table}`
-                WHERE `user_id` = ?
-                AND `lang_id` = ?
-                AND `level` $filter_level_sql
-                AND `type` $filter_type_sql
-                AND `title` LIKE ?
+                        texts.`title`,
+                        texts.`author`,
+                        texts.`audio_uri`,
+                        texts.`source_uri`,
+                        texts.`type`,
+                        texts.`word_count`,
+                        CHAR_LENGTH(texts.`text`) AS `char_length`,
+                        texts.`level`,
+                        text_types.`icon_html`
+                FROM `{$this->table}` texts
+                LEFT JOIN `text_types` text_types
+                    ON text_types.`id` = texts.`type`
+                WHERE texts.`user_id` = ?
+                AND texts.`lang_id` = ?
+                AND texts.`level` $filter_level_sql
+                AND texts.`type` $filter_type_sql
+                AND texts.`title` LIKE ?
                 ORDER BY $sort_sql
                 LIMIT {$search_params->offset}, {$search_params->limit}";
 

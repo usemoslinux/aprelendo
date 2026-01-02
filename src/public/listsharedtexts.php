@@ -80,7 +80,7 @@ try {
                     <p>Consider refining your search using the $btn_filter_html options on the left.</p>
                     <ul>
                         <li><strong>Type</strong>: you can narrow down your search by specifying the type of text you're
-                            interested in, such as Articles, Conversations, Letters, Lyrics, Videos, or Others.</li>
+                            interested in, such as Articles, Conversations, Short Stories, Lyrics, Videos, or Others.</li>
 
                         <li><strong>Level</strong>: filter texts based on their difficulty level (Beginner,
                             Intermediate, or Advanced).</li>

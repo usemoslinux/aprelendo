@@ -90,6 +90,7 @@ class SharedTexts extends Texts
                     t.word_count,
                     CHAR_LENGTH(t.text) AS `char_length`,
                     t.level,
+                    (SELECT `icon_html` FROM `text_types` WHERE `id` = t.type) AS `icon_html`,
                     l.name,
                     (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
                     (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id

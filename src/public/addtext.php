@@ -25,6 +25,10 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
 use Aprelendo\Texts;
+use Aprelendo\TextTypes;
+
+$text_types = new TextTypes($pdo);
+$text_types_arr = $text_types->getAll();
 
 ?>
 
@@ -89,19 +93,21 @@ use Aprelendo\Texts;
                         <div class="mb-3 col-lg-6">
                             <label for="type">Type:</label>
                             <select name="type" id="type" class="form-control form-select">
-                                <option value="1" <?= $text_type == 1 ? 'selected' : '' ?>>Article</option>
-                                <option value="2" <?= $text_type == 2 ? 'selected' : '' ?>>Conversation</option>
-                                <option value="3" <?= $text_type == 3 ? 'selected' : '' ?>>Letter</option>
-                                <option value="4" <?= $text_type == 4 ? 'selected' : '' ?>>Lyrics</option>
-                                <option value="7" <?= $text_type == 7 ? 'selected' : '' ?>>Other</option>
+                                <?php foreach ([1,2,3,4,7] as $i): ?>
+                                    <option value="<?= $text_types_arr[$i]['id'] ?>"
+                                        <?= $text_type == $text_types_arr[$i]['id'] ? 'selected' : '' ?>>
+                                        <?= $text_types_arr[$i]['name'] ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="mb-3 col-lg-6">
                             <label for="level">Level:</label>
                             <select name="level" id="level" class="form-control form-select">
-                                <option value="1" <?= $text_level == 1 ? 'selected' : '' ?>>Beginner</option>
-                                <option value="2" <?= $text_level == 2 ? 'selected' : '' ?>>Intermediate</option>
-                                <option value="3" <?= $text_level == 3 ? 'selected' : '' ?>>Advanced</option>
+                                <?php foreach ([1 => 'Beginner', 2 => 'Intermediate', 3 => 'Advanced'] as $level => $level_name): ?>
+                                    <option value="<?= $level ?>"
+                                    <?= $text_level == $level ? 'selected' : '' ?>><?= $level_name ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>

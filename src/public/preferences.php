@@ -228,8 +228,8 @@ $sel = ' selected ';
                                                     target="_blank" rel="noopener noreferrer">active vocabulary</a>.
                                             </li>
                                         </ol>
-                                        Remember: assisted mode only works for simple texts (articles, lyrics,
-                                        conversation transcripts, etc.), not videos or ebooks.
+                                        Remember: assisted mode only works for simple texts (everything except videos
+                                        or ebooks).
                                     </div>
                                 </div>
                             </div>
