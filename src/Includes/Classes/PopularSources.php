@@ -121,6 +121,7 @@ class PopularSources extends DBEntity
             'yandex.ru',
             // Video / Media
             'youtube.com',
+            'm.youtube.com',
             'youtu.be',
             'vimeo.com',
             'dailymotion.com',
