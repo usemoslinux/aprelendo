@@ -204,13 +204,21 @@ class PopularSources extends DBEntity
 
     /**
      * Normalizes the domain for consistency across the database.
-     * 
-     * @param string $domin
+     * Handles protocols, www variations (www1, www2), and strips paths.
+     * @param string $domain
      * @return string
      */
     private function normalizeDomain(string $domain): string
     {
+        // lowercase and trim whitespace
         $domain = mb_strtolower(trim($domain));
-        return preg_replace('/^www\./', '', $domain);
+
+        // remove protocol and www variants (www, www1, etc.) from the start
+        $domain = preg_replace('/^https?:\/\/(www[0-9]*\.)?/', '', $domain);
+
+        // remove everything after the first forward slash (the path)
+        $domain = explode('/', $domain)[0];
+
+        return $domain;
     }
 }
