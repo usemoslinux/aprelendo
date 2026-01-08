@@ -81,7 +81,7 @@ $(document).ready(function() {
         const archivetxt = $(this).text().trim() === "Archive";
         let ids = [];
 
-        if ($(this).hasClass("mArchive")) {
+        if ($(this).attr("id") === "mArchive") {
             $("input.chkbox-selrow:checked").each(function() {
                 ids.push($(this).attr("data-idText"));
             });    
@@ -228,6 +228,8 @@ $(document).ready(function() {
                 $(this).toggleClass("active");
             });
         }
+
+        $('form').submit();
     }); // end #btn-filter + div > a.on.click
 
     /**
