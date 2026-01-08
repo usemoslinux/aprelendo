@@ -155,7 +155,7 @@ $text_types_arr = $text_types->getAll();
                                             echo $text_audio_url;
                                         } ?>">
                             <div class="form-text" id="audio-url-helptext">
-                                Accepts URLs from Google Drive or any standard audio source.
+                                Accepts URLs from Google Drive, M3U playlists, RSS feeds, or any standard audio source.
                             </div>
                         </div>
                     </div>

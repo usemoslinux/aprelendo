@@ -80,6 +80,20 @@ $(document).ready(function() {
         });
     }
 
+    function hasAudioSource() {
+        const $audio = $("#audioplayer");
+        if ($audio.length === 0) {
+            return false;
+        }
+
+        const playlist_src = $audio.data("playlistSrc");
+        if (playlist_src && String(playlist_src).trim() !== "") {
+            return true;
+        }
+
+        return $("#audioplayer").find("source").attr("src") != "";
+    }
+
     // *************************************************************
     // **** ACTION BUTTONS (ADD, DELETE, FORGOT & DICTIONARIES) **** 
     // *************************************************************
@@ -92,7 +106,7 @@ $(document).ready(function() {
         const $selword = WordSelection.get();
         const is_phrase = $selword.length > 1 ? 1: 0;
         const sel_text = $selword.text();
-        const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
+        const audio_is_loaded = hasAudioSource();
         const url_params = new URLSearchParams(window.location.search);
         const text_is_shared = url_params.get('sh');
 
@@ -319,7 +333,7 @@ $(document).ready(function() {
      * Phases: 1 = reading; 2 = listening; 3 = speaking; 4 = writing; 5 = reviewing
      */
     $("body").on("click", "#btn-next-phase", function() {
-        const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
+        const audio_is_loaded = hasAudioSource();
         const btn_next_phase = document.getElementById('btn-next-phase');
         let $msg_phase = $("#alert-box-phase");
 
@@ -585,10 +599,9 @@ $(document).ready(function() {
      * Helper function to skip audio phases
      */
     function skipAudioPhases() {
-        const audio_is_loaded = $("#audioplayer").find("source").attr("src") != "";
         const btn_next_phase = document.getElementById('btn-next-phase');
 
-        if (!audio_is_loaded) {
+        if (!hasAudioSource()) {
             if ($(".learning, .new, .forgotten").length == 0) {
                 setNewTooltip(btn_next_phase, 
                     'Finish & Save - Will skip some phases: no audio detected & no underlined words');
@@ -609,9 +622,11 @@ $(document).ready(function() {
     function loadAudio() {
         let $audio_player = $("#audioplayer");
         let audio_player_src = $("#audio-source").attr('src');
+        const playlist_src = $audio_player.data("playlistSrc");
         // if audio player is found, src is empty and not an ebook...
         if ($audio_player.length > 0 && audio_player_src === '' 
-            && !$('#readerpage > :first').is('#navigation')) {
+            && !$('#readerpage > :first').is('#navigation')
+            && (!playlist_src || String(playlist_src).trim() === '')) {
             const txt = $("#text").text();
 
             $.ajax({

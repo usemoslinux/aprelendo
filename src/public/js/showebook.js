@@ -112,7 +112,11 @@ $(document).ready(function () {
             const video = document.getElementById("videoplayer");
 
             if (audio) {
-                audio_pos = audio.currentTime;
+                if (typeof AudioController !== "undefined" && AudioController.isPlaylist()) {
+                    audio_pos = AudioController.getPlaylistPositionString();
+                } else {
+                    audio_pos = audio.currentTime;
+                }
             } else if (video) {
                 audio_pos = VideoController.getCurrentTime();
             }
@@ -448,7 +452,8 @@ $(document).ready(function () {
         })
             .done(function (data) {
                 const text_pos = data.text_pos;
-                const audio_pos = parseFloat(data.audio_pos);
+                const audio_pos = data.audio_pos;
+                const audio_pos_number = parseFloat(audio_pos);
                 const audio = document.getElementById("audioplayer");
                 const video = document.getElementById("videoplayer");
 
@@ -461,13 +466,15 @@ $(document).ready(function () {
 
                 // load audio position, if available
                 if (audio != null) {
-                    if (!isNaN(audio_pos)) {
-                        audio.currentTime = audio_pos;
+                    if (audio_pos && audio_pos.includes('|') && typeof AudioController !== "undefined") {
+                        AudioController.setPlaylistPositionFromString(audio_pos);
+                    } else if (!isNaN(audio_pos_number)) {
+                        audio.currentTime = audio_pos_number;
                     } else {
                         audio.currentTime = 0;
                     }
                 } else if (video != null) {
-                    initializeVideoPlayer(audio_pos);
+                    initializeVideoPlayer(audio_pos_number);
                 }
             })
             .fail(function (xhr, ajaxOptions, thrownError) {

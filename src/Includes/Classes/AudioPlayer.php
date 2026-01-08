@@ -40,7 +40,7 @@ class AudioPlayer
      */
     protected function getAudioMimeType(): string {
         // Get file extension
-        $file_extension = pathinfo($this->audio_uri, PATHINFO_EXTENSION);
+        $file_extension = $this->getFileExtension();
 
         // Map file extensions to audio types
         $audio_types = array(
@@ -56,5 +56,65 @@ class AudioPlayer
 
         // Set the appropriate MIME type based on the file extension
         return isset($audio_types[$file_extension]) ? $audio_types[$file_extension] : 'audio/mpeg';
+    }
+
+    /**
+     * Check if the current URI points to an M3U playlist
+     *
+     * @return bool
+     */
+    protected function isM3uPlaylist(): bool
+    {
+        return in_array($this->getFileExtension(), ['m3u', 'm3u8'], true);
+    }
+
+    /**
+     * Check if the current URI points to an RSS feed
+     *
+     * @return bool
+     */
+    protected function isRssFeed(): bool
+    {
+        $extension = $this->getFileExtension();
+        if (in_array($extension, ['rss', 'xml'], true)) {
+            return true;
+        }
+
+        $uri = strtolower($this->audio_uri);
+        if (preg_match('/[?&](format|type|feed)=rss\b/', $uri)) {
+            return true;
+        }
+
+        return (bool)preg_match('#/(rss|feed)(/|$)#', $uri);
+    }
+
+    /**
+     * Return playlist type if supported
+     *
+     * @return string
+     */
+    protected function getPlaylistType(): string
+    {
+        if ($this->isM3uPlaylist()) {
+            return 'm3u';
+        }
+        if ($this->isRssFeed()) {
+            return 'rss';
+        }
+
+        return '';
+    }
+
+    /**
+     * Extract file extension from URI path
+     *
+     * @return string
+     */
+    protected function getFileExtension(): string
+    {
+        $path = parse_url($this->audio_uri, PHP_URL_PATH) ?? '';
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+
+        return strtolower($extension);
     }
 }

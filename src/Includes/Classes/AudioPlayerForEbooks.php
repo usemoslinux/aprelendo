@@ -31,12 +31,20 @@ class AudioPlayerForEbooks extends AudioPlayer
     public function show(): string
     {
         $audio_url = $this->audio_uri;
+        $playlist_attr = '';
+        $playlist_type = $this->getPlaylistType();
+        if ($playlist_type !== '') {
+            $audio_url = '';
+            $playlist_src = htmlspecialchars($this->audio_uri, ENT_QUOTES);
+            $playlist_attr = ' data-playlist-src="' . $playlist_src . '" data-playlist-type="' . $playlist_type . '"';
+        }
+        $audio_url = htmlspecialchars($audio_url, ENT_QUOTES);
         $audio_mime_type = $this->getAudioMimeType();
 
         return <<<AUDIOPLAYER_CONTAINER
             <hr>
             <div id="audioplayer-container" class="container mb-2 p-2">
-                <audio id="audioplayer" preload="auto">
+                <audio id="audioplayer" preload="auto"$playlist_attr>
                     <source id="audio-source" src="$audio_url" type="$audio_mime_type">
                     Your browser does not support the audio element.
                 </audio>
@@ -74,6 +82,15 @@ class AudioPlayerForEbooks extends AudioPlayer
                         <li><a class="dropdown-item" href="#" data-speed="2">2x</a></li>
                     </ul>
                     </div>
+                </div>
+                <div id="ap-chapter-controls" class="d-none d-flex align-items-center gap-2 mt-2">
+                    <button id="ap-prev-chapter" class="btn btn-outline-secondary btn-sm" type="button">
+                        <i class="bi bi-skip-backward-fill"></i>
+                    </button>
+                    <select id="ap-chapter-select" class="form-select form-select-sm flex-grow-1"></select>
+                    <button id="ap-next-chapter" class="btn btn-outline-secondary btn-sm" type="button">
+                        <i class="bi bi-skip-forward-fill"></i>
+                    </button>
                 </div>
             </div>
             AUDIOPLAYER_CONTAINER;
