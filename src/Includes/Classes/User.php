@@ -34,6 +34,8 @@ class User extends DBEntity
     public bool   $is_active = false;
     public string $google_id = '';
     public string $hf_token = '';
+    public ?string $reset_token = null;
+    public ?string $reset_token_expires = null;
     public string $date_created = '';
     public string $error_msg = '';
     
@@ -58,18 +60,20 @@ class User extends DBEntity
     private function loadRecord(array $record): void
     {
         if ($record) {
-            $this->id              = $record['id'];
-            $this->name            = $record['name'];
-            $this->password_hash   = $record['password_hash'];
-            $this->email           = $record['email'];
-            $this->native_lang     = $record['native_lang_iso'];
-            $this->lang            = $record['learning_lang_iso'];
-            $this->time_zone       = $record['time_zone'];
-            $this->activation_hash = $record['activation_hash'];
-            $this->is_active       = $record['is_active'];
-            $this->google_id       = $record['google_id'];
-            $this->hf_token        = $record['hf_token'];
-            $this->date_created    = $record['date_created'];
+            $this->id                  = $record['id'];
+            $this->name                = $record['name'];
+            $this->password_hash       = $record['password_hash'];
+            $this->email               = $record['email'];
+            $this->native_lang         = $record['native_lang_iso'];
+            $this->lang                = $record['learning_lang_iso'];
+            $this->time_zone           = $record['time_zone'];
+            $this->activation_hash     = $record['activation_hash'];
+            $this->is_active           = $record['is_active'];
+            $this->google_id           = $record['google_id'];
+            $this->hf_token            = $record['hf_token'];
+            $this->reset_token         = $record['reset_token'];
+            $this->reset_token_expires = $record['reset_token_expires'];
+            $this->date_created        = $record['date_created'];
 
             // get active language id (lang_id)
             $lang = new Language($this->pdo, $this->id);
@@ -139,19 +143,6 @@ class User extends DBEntity
     }
 
     /**
-     * Checks if user exists by email and password hash
-     *
-     * @param string $email
-     * @param string $password_hash
-     * @return bool
-     */
-    public function existsByEmailAndPasswordHash(string $email, string $password_hash): bool
-    {
-        $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `email`=? AND `password_hash`=?";
-        return $this->sqlCount($sql, [$email, $password_hash]) > 0;
-    }
-    
-    /**
      * Updates user profile in db
      *
      * @param array $user_data
@@ -219,6 +210,54 @@ class User extends DBEntity
         $sql = "UPDATE `users` SET `password_hash`=? WHERE `email`=?";
         $this->sqlExecute($sql, [$password_hash, $email]);
     } // end updatePasswordHash()
+
+    /**
+     * Generates and saves a password reset token for the user.
+     * The plaintext token is returned so it can be emailed to the user.
+     * The hash of the token is stored in the database.
+     *
+     * @return string The plaintext reset token.
+     */
+    public function setResetToken(): string
+    {
+        $token = bin2hex(random_bytes(32));
+        $expires = new \DateTime('+15 minutes');
+
+        $sql = "UPDATE `{$this->table}` SET `reset_token`=?, `reset_token_expires`=? WHERE `id`=?";
+        $this->sqlExecute($sql, [hash('sha256', $token), $expires->format('Y-m-d H:i:s'), $this->id]);
+        
+        return $token; // Return plaintext token to be emailed
+    }
+
+    /**
+     * Finds a user by a valid, non-expired password reset token.
+     *
+     * @param string $token The plaintext token from the user.
+     * @return boolean True if a user was found and loaded, false otherwise.
+     */
+    public function loadUserByValidResetToken(string $token): bool
+    {
+        $hashed_token = hash('sha256', $token);
+        $sql = "SELECT * FROM `{$this->table}` WHERE `reset_token`=? AND `reset_token_expires` >= NOW()";
+        $record = $this->sqlFetch($sql, [$hashed_token]);
+        
+        if ($record) {
+            $this->loadRecord($record);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Clears the password reset token and expiry for the user.
+     *
+     * @return void
+     */
+    public function clearResetToken(): void
+    {
+        $sql = "UPDATE `{$this->table}` SET `reset_token`=NULL, `reset_token_expires`=NULL WHERE `id`=?";
+        $this->sqlExecute($sql, [$this->id]);
+    }
 
     /**
      * Updates User's Google Id

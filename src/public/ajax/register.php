@@ -30,6 +30,8 @@ use Aprelendo\UserRegistrationManager;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
+$user = new User($pdo);
+
 try {
     // check username, email & password are set and not empty
     if (!isset($_POST['username']) || empty($_POST['username']) ||
@@ -64,8 +66,7 @@ try {
         'time_zone' => $_POST['time-zone'],
         'send_email' => !IS_SELF_HOSTED
     ];
-                    
-    $user = new User($pdo);
+
     $user_reg = new UserRegistrationManager($user);
     $user_reg->register($user_data);
 

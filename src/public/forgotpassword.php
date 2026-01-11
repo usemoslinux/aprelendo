@@ -22,8 +22,6 @@ require_once '../Includes/dbinit.php'; // connect to database
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'simpleheader.php';
 
-use Aprelendo\User;
-
 ?>
 
 <main class="d-flex flex-grow-1 flex-column">
@@ -38,15 +36,9 @@ use Aprelendo\User;
                     <br>
 
                     <?php
-                    // 1. check if email & password values passed by the reset link are set
-                    if (isset($_GET['email']) && isset($_GET['reset'])) {
-                        // check if email & password exist in db
-                        $email = $_GET['email'];
-                        $password_hash = $_GET['reset'];
-                        $user = new User($pdo);
-                                
-                        // 1.1. if email & password values passed by the reset link are found in db, then...
-                        if ($user->existsByEmailAndPasswordHash($email, $password_hash)) {
+                    // 1. Check if a token is present in the URL. If so, show the password reset form.
+                    if (isset($_GET['token']) && !empty($_GET['token'])) {
+                        $token = htmlspecialchars($_GET['token'], ENT_QUOTES, 'UTF-8');
                     ?>
 
                     <div id="alert-box" class="alert alert-info">
@@ -60,7 +52,7 @@ use Aprelendo\User;
                     </div>
 
                     <form id="form_create_new_password">
-                        <input type="hidden" id="email" name="email" value="<?php echo $email ; ?>">
+                        <input type="hidden" id="token" name="token" value="<?php echo $token; ?>">
                         <div class="mb-3">
                             <label for="newpassword">Password:</label>
                             <small>
@@ -97,22 +89,7 @@ use Aprelendo\User;
                     </form>
 
                     <?php
-                        } else { // 1.2. if email & password are set but not found in db, then ...
-                    ?>
-
-                    <div id="alert-box" class="alert alert-danger">
-                        <div class="alert-flag fs-5">
-                            <i class="bi bi-exclamation-circle-fill"></i>
-                            Information
-                        </div>
-                        <div class="alert-msg">
-                            Can't reset user password. Possibly the recovery link has expired.
-                        </div>
-                    </div>
-
-                    <?php
-                        }
-                    } else { // 2. if email & password are NOT set, show form to send the reset password link
+                    } else { // 2. If no token is present, show the form to request a reset link.
                     ?>
 
                     <div id="alert-box" class="alert alert-info">
@@ -123,7 +100,7 @@ use Aprelendo\User;
                         <div class="alert-msg">
                             Please provide your email address below, and we will send you a secure link that will
                             allow you to reset your password. This link will be sent to the email address associated
-                            with your account, so please make sure it's accurate.
+                            with your account, so please make sure it's accurate. If an account exists for this email, you will receive instructions shortly.
                         </div>
                     </div>
 
@@ -134,7 +111,7 @@ use Aprelendo\User;
                         </div>
                         <div class="d-grid gap-2">
                             <button type="submit" id="btn_forgot_password" class="btn btn-success">
-                                Request password
+                                Request password reset
                             </button>
                         </div>
                     </form>

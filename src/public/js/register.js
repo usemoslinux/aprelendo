@@ -33,12 +33,15 @@ $(document).ready(function() {
             "alert-info"
         );
 
+        $("#btn_register").prop("disabled", true); // Disable button to prevent multiple submissions
+
         $.ajax({
             type: "POST",
             url: "ajax/register.php",
             data: form_data
         })
             .done(function(data) {
+                $("#btn_register").prop("disabled", false); // Re-enable button
                 if (data.error_msg == null) {
                     if (data.is_self_hosted === true) {
                         showMessage("Registration successful! You will soon be redirected to the login page.",

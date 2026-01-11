@@ -114,7 +114,7 @@ class WordTable extends Table
      */
     private function generateLink(array $row): string
     {
-        $word = $row['word'];
+        $word = htmlspecialchars($row['word'], ENT_QUOTES, 'UTF-8');
         $freq_badge = $this->generateFrequencyBadge($row['freq_level']);
         return "<td class='col-title'><a class='word word-list'>$word</a> $freq_badge</td>";
     } // end generateLink()

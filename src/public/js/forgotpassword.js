@@ -80,15 +80,15 @@ $(document).ready(function() {
                 .done(function(data) {
                     if (data.error_msg == null) {
                         showMessage(
-                            "Your new password has been successfully saved! Please wait a moment, and you will be "
-                            + "automatically redirected to the home page shortly.",
+                            "Your new password has been successfully saved! You will be soon be redirected to "
+                                + "the login page.",
                             "alert-success"
                         );
                         setTimeout(function() {
                             window.location.replace(
                                 "https://www.aprelendo.com/login.php"
                             );
-                        }, 5000);
+                        }, 2000);
                     } else {
                         showMessage(data.error_msg, "alert-danger");
                     }

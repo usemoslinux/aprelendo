@@ -127,7 +127,7 @@ class TextTable extends Table
      */
     private function generateLink(array $row): string
     {
-        $title = $row['title'];
+        $title = htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8');
 
         if ($this->show_archived) {
             return $title;
@@ -275,11 +275,11 @@ class TextTable extends Table
     {
         $shared_by = '';
         if (!empty($row[1])) {
-            $shared_by = " via {$row[1]}";
+            $shared_by = " via " . htmlspecialchars($row[1], ENT_QUOTES, 'UTF-8');
         }
     
         if (!empty($row['author'])) {
-            $text_author = "by {$row['author']}";
+            $text_author = "by " . htmlspecialchars($row['author'], ENT_QUOTES, 'UTF-8');
         } else {
             $source_uri = !empty($row['source_uri'])
                 ? ' (' . Url::getDomainName($row['source_uri']) . ')'

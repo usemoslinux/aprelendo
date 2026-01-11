@@ -31,24 +31,50 @@ class Curl
      */
     public static function getUrlContents(string $url, array $options = []): string
     {
-        $ch = curl_init();
-        
-        if (!isset($options) || empty($options)) {
-            $referer = $_SERVER['HTTP_HOST'];
-            $options = [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_CONNECTTIMEOUT => 5,
-                CURLOPT_REFERER => $referer,
-                CURLOPT_USERAGENT => MOCK_USER_AGENT,
-                CURLOPT_ENCODING => "", // Enable automatic decompression
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_SSL_VERIFYHOST => false,
-                CURLOPT_FOLLOWLOCATION => true
-            ];
+        // 1. Validate URL scheme
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        if (!in_array($scheme, ['http', 'https'])) {
+            throw new UserException("Invalid URL scheme. Only http and https are allowed.");
         }
 
-        $options[CURLOPT_URL] = $url;
+        // 2. Resolve hostname and check for private/reserved IPs
+        $host = parse_url($url, PHP_URL_HOST);
+        if ($host) {
+            // Prevent DNS rebinding attacks by resolving first
+            $ips = dns_get_record($host, DNS_A);
+            if ($ips === false || empty($ips)) {
+                throw new UserException("Could not resolve the hostname: $host");
+            }
+            // Check all resolved IPs against block list
+            foreach ($ips as $ip) {
+                if (!filter_var($ip['ip'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                    throw new UserException("Request to a private or reserved IP address is not allowed.");
+                }
+            }
+        } else {
+            throw new UserException("Could not parse hostname from URL.");
+        }
+
+        $ch = curl_init();
         
+        $referer = $_SERVER['HTTP_HOST'];
+        // Set secure default cURL options
+        $default_options = [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_REFERER => $referer,
+            CURLOPT_USERAGENT => MOCK_USER_AGENT,
+            CURLOPT_ENCODING => "",
+            CURLOPT_SSL_VERIFYPEER => true, // MUST be true
+            CURLOPT_SSL_VERIFYHOST => 2,   // MUST be 2
+            CURLOPT_FOLLOWLOCATION => false, // MUST be false to prevent redirect-based SSRF
+            CURLOPT_MAXREDIRS => 0,
+        ];
+        
+        // Merge default options with any custom options provided
+        $options = $options + $default_options;
+        $options[CURLOPT_URL] = $url;
+
         if (!empty(PROXY)) {
             $options[CURLOPT_PROXY] = PROXY;
         }
@@ -58,15 +84,23 @@ class Curl
         $result = curl_exec($ch);
         $info = curl_getinfo($ch);
     
-        // Check the http response
+        // Check for cURL errors first
+        if ($result === false) {
+            throw new UserException("cURL error while fetching the URL: " . curl_error($ch));
+        }
+
+        // Check the http response code
         $httpCode = $info['http_code'];
         if ($httpCode != 200) {
-            throw new UserException("The URL $url returned HTTP error $httpCode");
+            if ($httpCode >= 300 && $httpCode < 400) {
+                throw new UserException("The URL resulted in a redirect (HTTP $httpCode). Automatic redirects are disabled for security.");
+            }
+            throw new UserException("The URL returned an unexpected HTTP error: $httpCode");
         }
 
         curl_close($ch);
 
-        // convert to utf-8 if necessary
+        // Convert to utf-8 if necessary
         $charset = 'utf-8';
         if (isset($info['content_type']) && preg_match('/charset=([^;]+)/i', $info['content_type'], $match)) {
             $charset = trim($match[1]);

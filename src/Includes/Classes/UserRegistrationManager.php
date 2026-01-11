@@ -64,7 +64,7 @@ class UserRegistrationManager extends DBEntity
         $password_hash = UserPassword::createHash($password);
 
         // create account activation hash
-        $activation_hash = $this->user->activation_hash = md5(rand(0, 1000));
+        $activation_hash = $this->user->activation_hash = bin2hex(random_bytes(32));
 
         // save user data in db
         $user_active = !$send_email;

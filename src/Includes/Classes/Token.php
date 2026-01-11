@@ -71,7 +71,7 @@ class Token extends DBEntity
      */
     public function loadRecordByCookieString(string $token_cookie): void
     {
-        $sql = "SELECT * FROM `{$this->table}` WHERE `token`=?";
+        $sql = "SELECT * FROM `{$this->table}` WHERE `token`=? AND `expires` >= NOW()";
         $row = $this->sqlFetch($sql, [$token_cookie]);
         
         $this->loadObject($row);

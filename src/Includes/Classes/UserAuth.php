@@ -92,23 +92,26 @@ class UserAuth extends DBEntity
      */
     public function isLoggedIn(): bool
     {
-        $result = false;
-
-        if (isset($_COOKIE['user_token'])) {
-            $token_cookie = $_COOKIE['user_token'];
-            $token = new Token($this->pdo);
-            $token->loadRecordByCookieString($token_cookie);
-            
-            if (!$token->user_id) {
-                $result = false;
-            }
-
-            // get username & other user data
-            $this->user->loadRecordById($token->user_id);
-
-            $result = true;
+        if (!isset($_COOKIE['user_token'])) {
+            return false;
         }
-
-        return $result;
+    
+        $token_cookie = $_COOKIE['user_token'];
+        $token = new Token($this->pdo);
+        $token->loadRecordByCookieString($token_cookie);
+    
+        if (!$token->user_id) {
+            return false; // Token from cookie is not valid or not in DB
+        }
+    
+        // Token is valid, now try to load the associated user
+        $this->user->loadRecordById($token->user_id);
+    
+        if (!$this->user->id) {
+            return false; // The user_id from the token does not correspond to a real user
+        }
+    
+        // Both token and user are valid
+        return true;
     } // end isLoggedIn()
 }
