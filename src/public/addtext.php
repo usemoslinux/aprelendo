@@ -49,6 +49,7 @@ $text_types_arr = $text_types->getAll();
             $text_lang = $user->lang;
             $text_type = 1;  // Article: default type
             $text_level = 2; // Intermediate: default level
+            $rss_import = false;
 
             if (isset($_GET['id'])) {
                 // modify text
@@ -71,6 +72,7 @@ $text_types_arr = $text_types->getAll();
                 $text_url = $_POST['text_url'];
                 $text_content = $_POST['text_content'];
                 $text_is_shared = $_POST['text_is_shared'];
+                $rss_import = true;
             } elseif (isset($_GET['sh'])) {
                 // shared text
                 $text_is_shared = true;
@@ -218,5 +220,17 @@ $text_types_arr = $text_types->getAll();
 <script defer src="/js/addtext.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 
+<?php if ($rss_import): ?>
+<script>
+window.addEventListener("load", function () {
+    const urlInput = document.getElementById("url");
+    const fetchButton = document.getElementById("btn-fetch");
+
+    if (fetchButton && urlInput && urlInput.value.trim()) {
+        fetchButton.click();
+    }
+});
+</script>
+<?php endif; ?>
 
 <?php require_once 'footer.php' ?>

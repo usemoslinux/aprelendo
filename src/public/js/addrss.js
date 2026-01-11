@@ -83,142 +83,69 @@ $(document).ready(function () {
     } // end htmlEscape
 
     /**
-     * Adds RSS text to the db
+     * Opens the RSS entry in the editor.
      * @param {html entity} $entry_info contains text info (author, src, pubdate, etc.)
      * @param {html entity} $entry_text contains text to add
-     * @param {string} add_mode three possibilities, each corresponding to one button: 'edit', 'readlater', 'readnow'
      */
-    function addTextToLibrary($entry_info, $entry_text, add_mode) {
+    function openRSSInEditor($entry_info, $entry_text) {
         const text_title = $.trim($entry_info.text());
         const text_author = $entry_info.attr("data-author");
         const text_url = $entry_info.attr("data-src");
         const art_pubdate = $entry_info.attr("data-pubdate");
         const text_content = $entry_text[0].innerText;
 
-        if (add_mode == "edit") {
-            // create a hidden form and submit it
-            const form = $(
-                '<form id="form_add_audio" action="../addtext" method="post"></form>'
+        // create a hidden form and submit it
+        const form = $(
+            '<form id="form_add_audio" action="../addtext" method="post"></form>'
+        )
+            .append(
+                '<input type="hidden" name="text_title" value="' +
+                text_title +
+                '">'
             )
-                .append(
-                    '<input type="hidden" name="text_title" value="' +
-                    text_title +
-                    '">'
-                )
-                .append(
-                    '<input type="hidden" name="text_author" value="' +
-                    htmlEscape(text_author) +
-                    '">'
-                )
-                .append(
-                    '<input type="hidden" name="text_url" value="' +
-                    htmlEscape(text_url) +
-                    '">'
-                )
-                .append(
-                    '<input type="hidden" name="art_pubdate" value="' +
-                    htmlEscape(art_pubdate) +
-                    '">'
-                )
-                .append(
-                    '<input type="hidden" name="text_content" value="' +
-                    htmlEscape(text_content) +
-                    '">'
-                )
-                .append(
-                    '<input type="hidden" name="text_is_shared" value="true">'
-                );
-            $("body").append(form);
-            form.submit();
-        } else {
-            $.ajax({
-                type: "POST",
-                url: "ajax/addtext.php",
-                dataType: "JSON",
-                data: {
-                    title: text_title,
-                    author: text_author,
-                    url: text_url,
-                    pubdate: art_pubdate,
-                    text: text_content,
-                    mode: "rss"
-                }
-            })
-                .done(function (data) {
-                    if (data.error_msg != null) {
-                        showRSSMessage(
-                            $entry_text,
-                            data.error_msg,
-                            "alert-danger"
-                        );
-                    } else {
-                        switch (add_mode) {
-                            case "readlater":
-                                showRSSMessage(
-                                    $entry_text,
-                                    "Text was successfully added to the shared texts library",
-                                    "alert-success"
-                                );
-                                break;
-                            case "readnow":
-                                location.replace(
-                                    "../showtext?id=" +
-                                    data.insert_id +
-                                    "&sh=1"
-                                );
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                })
-                .fail(function () {
-                    showRSSMessage(
-                        $entry_text,
-                        "There was an error trying to add this text to your library!",
-                        "alert-danger"
-                    );
-                });
-        }
-    } // end addTextToLibrary
+            .append(
+                '<input type="hidden" name="text_author" value="' +
+                htmlEscape(text_author) +
+                '">'
+            )
+            .append(
+                '<input type="hidden" name="text_url" value="' +
+                htmlEscape(text_url) +
+                '">'
+            )
+            .append(
+                '<input type="hidden" name="art_pubdate" value="' +
+                htmlEscape(art_pubdate) +
+                '">'
+            )
+            .append(
+                '<input type="hidden" name="text_content" value="' +
+                htmlEscape(text_content) +
+                '">'
+            )
+            .append(
+                '<input type="hidden" name="text_is_shared" value="true">'
+            );
+        $("body").append(form);
+        form.submit();
+    } // end openRSSInEditor
 
     /**
-     * Shows custom message in the top section of the screen
-     * @param {Jquery object} $entry_text
-     * @param {string} html
-     * @param {string} type
-     */
-    function showRSSMessage($entry_text, html, type) {
-        html = '<p class="alert ' + type + '">' + html + "</p>";
-        $entry_text
-            .siblings()
-            .remove()
-            .end()
-            .after(html)
-            .next()
-            .show()
-            .fadeOut(3000);
-    } // end showRSSMessage
-
-    /**
-     * Triggers when user clicks the Edit, Read now or Read later buttons
+     * Triggers when user clicks the Edit button
      * @param e {Event}
      */
-    $(document).on("click", ".btn-readlater, .btn-readnow, .btn-edit", function (e) {
+    $(document).on("click", ".btn-edit", function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        const action = $(this).data("type");
-        addTextToLibrary(
+        openRSSInEditor(
             $(this)
                 .closest(".accordion-item")
                 .find(".entry-info"),
             $(this)
                 .parent()
                 .siblings(".entry-text"),
-            action
         );
     });
 });
-
 
