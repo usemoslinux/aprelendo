@@ -105,16 +105,24 @@ class Reader
             }
 
             // display assisted learning message
-            $html .=   '<div id="alert-box-phase" class="alert alert-info alert-dismissible mt-2 show" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                            </button>
-                            <h5 class="alert-heading">Assisted learning - Phase 1: Reading</h5>
-                            <span class="small">Read the text and try to understand what is going on. When you come
-                                across a word or phrase you don\'t understand, keep reading until the end of the
-                                sentence, or better yet, the paragraph. If by the end of the passage you still
-                                haven\'t guessed its meaning, click on it to look it up in the dictionary or right
-                                click on any word to translate the whole sentence.</span>
-                        </div>';
+            $html .= <<<HTML_PHASE1_MSG
+            <div id="alert-box-phase" class="alert alert-info alert-dismissible mt-2 show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <h5 class="alert-heading">Assisted learning - Phase 1: Reading</h5>
+                <span class="small">
+                    Focus on understanding the overall meaning. Try to guess unknown words from context before
+                    clicking them for a definition or right-clicking for a translation.
+                    <br><br>
+                        Once finished, click
+                        <kbd class="bg-success me-1">
+                            Next <span class="bi bi-skip-end-circle-fill"></span>
+                        </kbd>
+                        to continue to the next phase. <strong>Tip</strong>: prefer a standard reading experience?
+                        Disable the assisted learning 5-phase mode in
+                        <a href="/preferences" class="alert-link">preferences</a>.
+                </span>
+            </div>
+            HTML_PHASE1_MSG;
         }
         
         // display text

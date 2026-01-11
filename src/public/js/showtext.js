@@ -394,10 +394,7 @@ $(document).ready(function() {
                         '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
                         + '<h5 class="alert-heading">Assisted learning - Phase 4: Writing</h5><span class="small">'
                         + 'Fill in the blanks as you listen to the dictation. To toggle audio playback press '
-                        + '<kbd>2</kbd>. To rewind or fast-forward 5 seconds, use <kbd>1</kbd> and <kbd>3</kbd>. '
-                        + 'You can also click on the hint beside any misspelled word to include it in '
-                        + 'your word list. We recommend you do this once the dictation is complete and you are '
-                        + 'reviewing your mistakes.</span>'
+                        + '<kbd>2</kbd>. To rewind or fast-forward 5 seconds, use <kbd>1</kbd> and <kbd>3</kbd>.</span>'
                     );
 
                 toggleDictation();
@@ -606,7 +603,7 @@ $(document).ready(function() {
                 setNewTooltip(btn_next_phase, 
                     'Finish & Save - Will skip some phases: no audio detected & no underlined words');
         
-                next_phase = 6;    
+                next_phase = 6;
             } else {
                 setNewTooltip(btn_next_phase, 
                     'Go to phase 5: Reviewing - Will skip some phases: no audio detected');

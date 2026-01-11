@@ -17,6 +17,23 @@
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * Normalizes punctuation in a string for lenient comparison.
+ * Replaces smart quotes, dashes, and ellipses with their simple ASCII equivalents.
+ * @param {string} text The string to normalize.
+ * @returns {string} The normalized string.
+ */
+function normalize(text) {
+    if (typeof text !== 'string') {
+        return '';
+    }
+    return text
+        .replace(/[’‘]/g, "'") // Single quotes
+        .replace(/[“”]/g, '"') // Double quotes
+        .replace(/…/g, '...') // Ellipsis
+        .replace(/[–—]/g, '-'); // Dashes
+}
+
 $(document).ready(function () {
     /**
      * Checks if answer is correct and shows a cue to indicate status when user moves
@@ -24,24 +41,33 @@ $(document).ready(function () {
      */
     $("body").on("blur", ".dict", function () {
         let $curinput = $(this);
-        if (
-            $curinput.val().toLowerCase() ==
-            $curinput.attr("data-text").toLowerCase()
-        ) {
+        let user_answer = $.trim($curinput.val().toLowerCase());
+
+        // 1. Handle Empty Input (Reset State)
+        if (user_answer === "") {
+            $curinput.css("border-color", ""); // Reset to default
+            $curinput.next("span").addClass("d-none");
+            return;
+        }
+
+        // Normalize both for a fair comparison
+        let normalized_user_answer = normalize(user_answer);
+        let normalized_correct_answer = normalize($curinput.attr("data-text").toLowerCase());
+
+        // 2. Check if Correct
+        if (normalized_user_answer === normalized_correct_answer) {
             $curinput.css("border-color", "var(--w-learned)");
-            $curinput
-                .next("span")
-                .not(".d-none")
-                .addClass("d-none");
-        } else if ($.trim($curinput.val()) != "") {
+            $curinput.next("span").addClass("d-none");
+        }
+        // 3. Handle Wrong Answer
+        else {
             $curinput.css("border-color", "var(--w-forgotten)");
-            $curinput
-                .next("span")
+            $curinput.next("span")
                 .removeClass("d-none")
                 .addClass("dict-wronganswer")
                 .text("[ " + $curinput.attr("data-text") + " ]");
         }
-    }); // end .dict.on.blur
+    });
 
     /**
      * Modify backspace and space normal behavior in dictation mode

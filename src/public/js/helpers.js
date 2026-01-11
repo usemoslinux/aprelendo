@@ -193,16 +193,30 @@ function openInNewTab($url) {
 } // end openInNewTab
 
 /**
- * Determines if the user is on a mobile device.
- * This function combines user agent string detection, screen width, and touch capability checks
- * for a robust and accurate mobile device detection.
+ * Determines if the user is on a touch-only device.
+ * Prefers input capability checks (hover/pointer) so touchscreen laptops
+ * with a mouse/trackpad are treated as non-mobile.
  *
  * @returns {boolean} - True if the user is on a mobile device, false otherwise.
  */
 function isMobileDevice() {
     const userAgentCheck = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
-    const screenWidthCheck = window.innerWidth <= 768;
     const touchDeviceCheck = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 
-    return userAgentCheck || screenWidthCheck || touchDeviceCheck;
+    if (typeof window.matchMedia === 'function') {
+        const canHover = window.matchMedia('(hover: hover)').matches;
+        const finePointer = window.matchMedia('(pointer: fine)').matches;
+        const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+        const noHover = window.matchMedia('(hover: none)').matches;
+
+        if (canHover || finePointer) {
+            return false;
+        }
+
+        if (coarsePointer || noHover) {
+            return true;
+        }
+    }
+
+    return userAgentCheck || touchDeviceCheck;
 } // end isMobileDevice
