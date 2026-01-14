@@ -770,7 +770,7 @@ a[role="menuitem"] {
     border-color: var(--w-learning);
 }
 
-.word.learning:hover
+.word.learning:hover,
 .word.learning:active {
     background-color: var(--w-learning);
     color: ghostwhite;

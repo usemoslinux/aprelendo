@@ -321,7 +321,7 @@ $(document).ready(function () {
                                     '<input type="hidden" name="created" value="' +
                                     $(".reviewing.new").length +
                                     '" />' +
-                                    '<input type="hidden" name="reviewed" value="' +
+                                    '<input type="hidden" name="learning" value="' +
                                     $(".reviewing.learning").length +
                                     '" />' +
                                     '<input type="hidden" name="learned" value="' +

@@ -30,10 +30,10 @@ require_once PUBLIC_PATH . 'header.php';
 
 $total = !empty($_POST['total']) ? $_POST['total'] : 0;
 $created = !empty($_POST['created']) ? $_POST['created'] : 0;
-$reviewed = !empty($_POST['reviewed']) ? $_POST['reviewed'] : 0;
+$learning = !empty($_POST['learning']) ? $_POST['learning'] : 0;
 $learned = !empty($_POST['learned']) ? $_POST['learned'] : 0;
 $forgotten = !empty($_POST['forgotten']) ? $_POST['forgotten'] : 0;
-$other = $total - $created - $reviewed - $learned - $forgotten;
+$other = $total - $created - $learning - $learned - $forgotten;
 
 $gems_earned = !empty($_POST['gems_earned']) ? (int)$_POST['gems_earned'] : 0;
 $gems_message = '';
@@ -47,24 +47,27 @@ $gems_message = ($gems_earned < 0)
 const TWO_DECIMALS = "%.2f%%";
 
 $array_table1 = [
-    ['New', $created, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($created / $total) * 100)],
-    ['Reviewed', $reviewed, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($reviewed / $total) * 100)],
-    ['Learned', $learned, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($learned / $total) * 100)],
-    ['Forgotten', $forgotten, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($forgotten / $total) * 100)],
-    ['Other', $other, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($other / $total) * 100)],
+    ['<span class="word reviewing new">New</span>', $created, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($created / $total) * 100)],
+    ['<span class="word reviewing learning">Learning</span>', $learning, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($learning / $total) * 100)],
+    ['<span class="word reviewing learned">Learned</span>', $learned, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($learned / $total) * 100)],
+    ['<span class="word reviewing forgotten">Forgotten</span>', $forgotten, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($forgotten / $total) * 100)],
+    ['<span class="word frequency-list">Other</span>', $other, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($other / $total) * 100)],
     ['Total', $total, '100%']
 ];
 
-$learning_group = $created + $forgotten + $reviewed;
+$learning_group = $created + $forgotten + $learning;
 $learned_group = $learned + $other;
 
 $array_table2 = [
     [
-        'Learning (new &#43; forgotten &#43; reviewed)',
+        'Still learning (<span class="word reviewing forgotten">Forgotten</span> &#43; '
+            . '<span class="word reviewing new">New</span> &#43; '
+            . '<span class="word reviewing learning">Learning</span>)',
         $learning_group, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($learning_group / $total) * 100)
     ],
     [
-        'Already learned (learned &#43; other)',
+        'Already learned (<span class="word reviewing learned">Learned</span> &#43; '
+            . '<span class="word frequency-list">Other</span>)',
         $learned_group, $total === 0 ? '-' : sprintf(TWO_DECIMALS, ($learned_group / $total) * 100)
     ],
     ['Total', $total, '100%']
@@ -187,18 +190,19 @@ function printTableFooter($array_table_rows)
                 </table>
             </div>
             <div class="col-12">
-                <p><strong class="word reviewing new">New</strong>: words you've just added to your learning list.</p>
-                <p><strong class="word reviewing learning">Learning</strong>: words that you already reviewed at
-                    least once, but still need to review more times.</p>
-                <p><strong class="word learned">Learned</strong>: words that the system thinks you have already reviewed
-                    enough times.</p>
-                <p><strong class="word reviewing forgotten">Forgotten</strong>: words you reviewed or learned in the
-                    past and you marked for learning once again.</p>
-                <p><strong class="word frequency-list">Other</strong>: words that you never marked for learning and you
-                    seem to understand well.</p>
-                <p><small>Note: if a word appeared more than once in the text it will count as the number of times it
-                    appeared in the text.</small></p>
+                <p><strong class="word reviewing new">New</strong>: words at the start of a learning cycle, either newly
+                    added or reintroduced after being forgotten.</p>
+                <p><strong class="word reviewing learning">Learning</strong>: words you are actively practicing, which
+                    you have already reviewed at least once but haven't mastered yet.</p>
+                <p><strong class="word learned">Learned</strong>: words you consistently recall correctly and are
+                    considered mastered.</p>
+                <p><strong class="word reviewing forgotten">Forgotten</strong>: words you previously learned or
+                    practiced but recently failed to recall, and which will restart the learning cycle.</p>
+                <p><strong class="word frequency-list">Other</strong>: words you haven't marked for learning and that
+                    you appear to understand without active practice.</p>
+                <p><small>Note: if a word appears multiple times in the text, each occurrence is counted.</small></p>
             </div>
+
         </div>
     </main>
 </div>
