@@ -192,10 +192,9 @@ if (!$user_auth->isLoggedIn()) {
                                         <li><strong>Phase 5 - Review</strong>: this is the most
                                             <a href="https://en.wikipedia.org/wiki/Testing_effect" target="_blank"
                                                 rel="noopener noreferrer">critical phase</a> for long-term language
-                                            acquisition. Review all the underlined words. Revisit all underlined words,
-                                            actively recalling their meanings and pronunciations. Focus on spelling and
-                                            explore alternative phrases in which you could apply them. . This step is
-                                            crucial for transitioning your
+                                            acquisition. Review all underlined words, actively recalling their meanings
+                                            and pronunciations. Focus on spelling and explore alternative phrases in
+                                            which you could apply them. This step is crucial for transitioning your
                                             <a href="https://en.wiktionary.org/wiki/passive_vocabulary" target="_blank"
                                                 rel="noopener noreferrer">passive vocabulary</a> into
                                             <a href="https://en.wiktionary.org/wiki/active_vocabulary" target="_blank"

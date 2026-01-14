@@ -430,12 +430,13 @@ $(document).ready(function() {
                     <h5 class="alert-heading">🚀 Phase 5: Review</h5>
                     <p class="small mb-2">This is the most <strong>critical step</strong> for long-term memory.</p>
                     <ul class="small ps-3">
-                        <li><strong>Review:</strong> Check all underlined words (including green).</li>
-                        <li><strong>Correct:</strong> Pay attention to misspellings in 
-                        <span class="text-danger">[red brackets]</span>.</li>
-                        <li><strong>Practice:</strong> Speak original sentences aloud to turn 
-                            <a href="https://en.wiktionary.org/wiki/passive_vocabulary" class="alert-link">passive</a> knowledge into 
-                            <a href="https://en.wiktionary.org/wiki/active_vocabulary" class="alert-link">active</a> skill.</li>
+                        <li><strong>Review:</strong> Review all underlined words. Try to recall their meanings and
+                        pronunciations.</li>
+                        <li><strong>Correct:</strong> Pay attention to misspellings shown in 
+                        <span class="text-danger">[red brackets]</span> (if any).</li>
+                        <li><strong>Practice:</strong> Try to create original sentences using words underlined in green
+                        to turn <a href="https://en.wiktionary.org/wiki/passive_vocabulary"
+                        class="alert-link">passive</a> knowledge into <a href="https://en.wiktionary.org/wiki/active_vocabulary" class="alert-link">active</a> skill.</li>
                     </ul>
                 `);
 
