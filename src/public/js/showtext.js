@@ -212,7 +212,7 @@ $(document).ready(function() {
                         skipAudioPhases();
                     } else {
                         let elem = document.getElementById('btn-next-phase');
-                        let title = 'Go to phase 4: Writing (be patient, may take a while to load depending on text length)';
+                        let title = 'Go to phase 4: Dictation';
                         setNewTooltip(elem, title);
 
                         next_phase = 4;
@@ -347,13 +347,20 @@ $(document).ready(function() {
 
                 next_phase++;
 
-                $msg_phase
-                    .html(
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-                            + '<h5 class="alert-heading">Assisted learning - Phase 2: Listening</h5>'
-                            + '<span class="small">Pay attention to the pronunciation of each word. You can slow down '
-                            + 'the audio if necessary.</span>'
-                    );
+                $msg_phase.html(`
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <h5 class="alert-heading">🎧 Phase 2: Listening</h5>
+                    <p class="small mb-2">Shift your focus from meaning to <strong>auditory patterns</strong> 
+                    and phonetic details.</p>
+                    <ul class="small ps-3">
+                        <li><strong>Analyze:</strong> Focus on how individual words blend together in natural speech.</li>
+                        <li><strong>Slow Down:</strong> If the pace feels too fast, reduce the playback speed to
+                        hear distinct sounds.</li>
+                        <li><strong>Identify:</strong> Try to spot the difference between the written spelling and
+                        the actual <a href="https://en.wikipedia.org/wiki/Phonology" class="alert-link">phonetic</a>
+                        output.</li>
+                    </ul>
+                `);
 
                 setNewTooltip(document.getElementById('btn-next-phase'), 'Go to phase 3: Speaking');
 
@@ -365,14 +372,22 @@ $(document).ready(function() {
                 next_phase++;
                 
                 setNewTooltip(btn_next_phase, 
-                    'Go to phase 4: Writing (be patient, may take a while to load depending on text length)');
+                    'Go to phase 4: Dictation');
 
-                $msg_phase.html(
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-                    + '<h5 class="alert-heading">Assisted learning - Phase 3: Speaking</h5>'
-                    + '<span class="small">Read the text out loud and try to emulate the pronunciation of each word as '
-                    + 'you listen to the audio. You can slow it down if necessary.</span>'
-                );
+                $msg_phase.html(`
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <h5 class="alert-heading">🎙️ Phase 3: Speaking</h5>
+                    <p class="small mb-2">Focus on <strong>vocalizing</strong> the language to build muscle memory
+                    and fluency.</p>
+                    <ul class="small ps-3">
+                        <li><strong>Listen:</strong> Pay close attention to the native rhythm, intonation, and stress
+                        patterns.</li>
+                        <li><strong>Shadow:</strong> Read the text aloud while trying to <strong>emulate</strong> the
+                        exact pronunciation.</li>
+                        <li><strong>Adjust:</strong> Use the speed controls to slow down the audio if you need to
+                        catch complex sounds.</li>
+                    </ul>
+                `);
 
                 MediaController.playFromBeginning();
                 break;
@@ -381,21 +396,25 @@ $(document).ready(function() {
 
                 if ($(".learning, .new, .forgotten").length == 0) {
                     setNewTooltip(btn_next_phase, 
-                        'Finish & Save - Will skip phase 5 (reviewing): no underlined words');
+                        'Finish & Save - Will skip phase 5 (Review): no underlined words');
                     
                     next_phase = 6;
                 } else {
                     next_phase++;
-                    setNewTooltip(btn_next_phase, 'Go to phase 5: Reviewing');
+                    setNewTooltip(btn_next_phase, 'Go to phase 5: Review');
                 }
 
-                $msg_phase
-                    .html(
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-                        + '<h5 class="alert-heading">Assisted learning - Phase 4: Writing</h5><span class="small">'
-                        + 'Fill in the blanks as you listen to the dictation. To toggle audio playback press '
-                        + '<kbd>2</kbd>. To rewind or fast-forward 5 seconds, use <kbd>1</kbd> and <kbd>3</kbd>.</span>'
-                    );
+                $msg_phase.html(`
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <h5 class="alert-heading">✍️ Phase 4: Dictation</h5>
+                    <p class="small mb-2">Listen to the audio and fill in the blanks as accurately as possible.</p>
+                    <div class="small bg-light p-2 rounded border">
+                        <strong>Controls:</strong> 
+                        <kbd>1</kbd> Back 5s | 
+                        <kbd>2</kbd> Play/Pause | 
+                        <kbd>3</kbd> Forward 5s
+                    </div>
+                `);
 
                 toggleDictation();
                 break;
@@ -406,20 +425,19 @@ $(document).ready(function() {
 
                 setNewTooltip(btn_next_phase, 'Finish & Save');
 
-                $msg_phase
-                    .html(
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-                        + '<h5 class="alert-heading">Assisted learning - Phase 5: Reviewing</h5><span class="small"><u>'
-                        + 'This is the most <a href="https://en.wikipedia.org/wiki/Testing_effect" class="alert-link" '
-                        + 'target="_blank" rel="noopener noreferrer">critical phase</a> for long-term language '
-                        + 'acquisition.</u><br>Review all the underlined words, even the ones with green underlining. '
-                        + 'Make an effort to remember their meaning and pronunciation, while also paying attention to '
-                        + 'their spelling. Speak out alternative sentences using these words. The latter is essential '
-                        + 'to turn your <a href="https://en.wiktionary.org/wiki/passive_vocabulary" class="alert-link" '
-                        + 'target="_blank" rel="noopener noreferrer">passive vocabulary</a> into '
-                        + '<a href="https://en.wiktionary.org/wiki/active_vocabulary" class="alert-link" '
-                        + 'target="_blank" rel="noopener noreferrer">active vocabulary</a>.</span>'
-                    );
+                $msg_phase.html(`
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <h5 class="alert-heading">🚀 Phase 5: Review</h5>
+                    <p class="small mb-2">This is the most <strong>critical step</strong> for long-term memory.</p>
+                    <ul class="small ps-3">
+                        <li><strong>Review:</strong> Check all underlined words (including green).</li>
+                        <li><strong>Correct:</strong> Pay attention to misspellings in 
+                        <span class="text-danger">[red brackets]</span>.</li>
+                        <li><strong>Practice:</strong> Speak original sentences aloud to turn 
+                            <a href="https://en.wiktionary.org/wiki/passive_vocabulary" class="alert-link">passive</a> knowledge into 
+                            <a href="https://en.wiktionary.org/wiki/active_vocabulary" class="alert-link">active</a> skill.</li>
+                    </ul>
+                `);
 
                 toggleDictation();
                 break;
@@ -606,7 +624,7 @@ $(document).ready(function() {
                 next_phase = 6;
             } else {
                 setNewTooltip(btn_next_phase, 
-                    'Go to phase 5: Reviewing - Will skip some phases: no audio detected');
+                    'Go to phase 5: Review - Will skip some phases: no audio detected');
         
                 next_phase = 5;
             }    

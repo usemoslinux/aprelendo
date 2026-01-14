@@ -108,7 +108,7 @@ class Reader
             $html .= <<<HTML_PHASE1_MSG
             <div id="alert-box-phase" class="alert alert-info alert-dismissible mt-2 show" role="alert">
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                <h5 class="alert-heading">Assisted learning - Phase 1: Reading</h5>
+                <h5 class="alert-heading">📖 Phase 1: Reading & Recognition</h5>
                 <span class="small">
                     Focus on understanding the overall meaning. Try to guess unknown words from context before
                     clicking them for a definition or right-clicking for a translation.

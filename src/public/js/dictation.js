@@ -62,10 +62,6 @@ $(document).ready(function () {
         // 3. Handle Wrong Answer
         else {
             $curinput.css("border-color", "var(--w-forgotten)");
-            $curinput.next("span")
-                .removeClass("d-none")
-                .addClass("dict-wronganswer")
-                .text("[ " + $curinput.attr("data-text") + " ]");
         }
     });
 
@@ -192,13 +188,25 @@ function toggleDictation() {
             $(":text:first").focus(); // focus first input
         } else {
             // toggle dictation off
-            $elems.each(function (index, value) {
+            $elems.each(function () {
                 let $elem = $(this);
-                $elem
-                    .show()
-                    .nextAll(":lt(1)")
-                    .remove();
+                let $input = $elem.next(".dict-input-group").find(".dict");
+
+                if ($input.length > 0) {
+                    let userAnswer = $input.val();
+                    let correctAnswer = $input.attr("data-text");
+                    let normalized_user_answer = normalize(userAnswer.toLowerCase().trim());
+                    let normalized_correct_answer = normalize(correctAnswer.toLowerCase());
+                    
+                    if (normalized_user_answer !== '' && normalized_user_answer !== normalized_correct_answer) {
+                        $elem.after('<span class="misspelled-word text-danger fw-bold"> [' + userAnswer + ']</span>');
+                    }
+                }
+
+                $elem.show();
             });
+
+            $container.find(".dict-input-group").remove();
 
             $("#text").replaceWith($container);
             TextProcessor.updateAnchorsList();
