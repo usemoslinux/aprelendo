@@ -1,6 +1,7 @@
 .rsyncignore
 .vscode/
 **/*.log
+AGENTS.md
 docker-compose.yml
 src/config/config.php
 src/GEMINI.md
