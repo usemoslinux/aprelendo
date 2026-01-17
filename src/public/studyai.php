@@ -56,10 +56,10 @@ require_once PUBLIC_PATH . 'header.php';
                                     <div class="mb-3">
                                         <label for="select-prompt" class="form-label">Select a question for Lingobot:</label>
                                         <select id="select-prompt" class="form-select mb-3">
-                                            <option value="example_sentences" selected>Give one or more example sentences using this word/phrase</option>
-                                            <option value="synonym_antonym">Give one synonym & antonym for this word/phrase</option>
-                                            <option value="register">Is this word/phrase formal, informal, or neutral?</option>
-                                            <option value="multiple_meanings">If this word/phrase has multiple meanings, give at least two</option>
+                                            <option value="example_sentences" selected>Give one or more example sentences using {word}</option>
+                                            <option value="synonym_antonym">Give one synonym & antonym for {word}</option>
+                                            <option value="register">Is {word} formal, informal, or neutral?</option>
+                                            <option value="multiple_meanings">If {word} has multiple meanings, give at least two</option>
                                         </select>
 
                                         <label for="text-user-answer" class="form-label">Your answer:</label>

@@ -42,7 +42,7 @@ $(document).ready(function () {
         $.ajax({
             type: "POST",
             url: "ajax/getcards.php",
-            data: { limit: max_cards },
+            data: { limit: max_cards, status: 0 },
             dataType: "json"
         })
             .done(function (data) {
@@ -83,9 +83,28 @@ $(document).ready(function () {
         updateLiveProgressBar(); // update live progress bar
         $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
         $("#study-card-word-title").removeClass('placeholder').text(wordObj.word);
+        updatePromptSelect(wordObj.word);
         showWordFrequency(words[cur_card_index].is_phrase);
         adaptCardStyleToWordStatus(wordObj.status);
     } // end updateCard()
+
+    /**
+     * Updates the prompt select options to include the current word.
+     * @param {string} word 
+     */
+    function updatePromptSelect(word) {
+        $('#select-prompt option').each(function() {
+            const $option = $(this);
+            const template = $option.data('template') || $option.text();
+
+            if (!$option.data('template')) {
+                $option.data('template', template);
+            }
+
+            const updated_text = template.replace(/{word}/, `"${word}"`);
+            $option.text(updated_text);
+        });
+    }
 
     /**
      * Checks if the last card in the study session has been reached.

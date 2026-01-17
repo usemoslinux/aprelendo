@@ -50,22 +50,30 @@ class Card extends DBEntity
 
     /**
      * Gets a list of all the words the user is learning.
-     * The result is ordered by `status` and `date_created`, meaning that the ones
-     * with more difficulty and the newest will go first.
+     * The result is ordered by next review date and `status`.
+     * If $status is provided, results are limited to that status.
      *
      * @return array
      */
-    public function getWordsUserIsLearning(int $limit): array
+    public function getWordsUserIsLearning(int $limit, ?int $status = null): array
     {
+        $status_filter = '';
+        $params = [$this->user_id, $this->lang_id];
+
+        if ($status !== null) {
+            $status_filter = ' AND w.status = ?';
+            $params[] = $status;
+        }
+
         $sql = "SELECT w.word, w.status, w.is_phrase, w.date_next_review, COALESCE(fl.frequency_index, 100) AS 'frequency_index'
                 FROM {$this->table} AS w
                 LEFT JOIN frequency_list_$this->lang_iso AS fl ON w.word = fl.word
                 WHERE w.user_id = ?
-                AND w.lang_id = ?
+                AND w.lang_id = ?{$status_filter}
                 ORDER BY w.date_next_review ASC, w.status DESC
                 LIMIT $limit";
-        
-        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
+
+        return $this->sqlFetchAll($sql, $params);
     } // end getWordsUserIsLearning()
 
     /**

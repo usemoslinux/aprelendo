@@ -34,7 +34,8 @@ try {
 
     if (!isset($_POST['word']) || empty($_POST['word'])) {
         $limit = $_POST['limit'];
-        $result = $card->getWordsUserIsLearning((int)$limit);
+        $status = isset($_POST['status']) && $_POST['status'] !== '' ? (int)$_POST['status'] : null;
+        $result = $card->getWordsUserIsLearning((int)$limit, $status);
     } else {
         $result = $card->getExampleSentencesForWord($_POST['word']);
     }
