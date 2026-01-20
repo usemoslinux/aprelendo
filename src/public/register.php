@@ -24,12 +24,12 @@ require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'simpleheader.php';
 ?>
 
-<div class="d-flex flex-grow-1 flex-column">
+<div class="d-flex flex-grow-1 align-items-center">
     <div class="container mtb">
         <div class="row">
             <div class="col-12 col-lg-6 offset-lg-3">
-                <section>
-                    <header>
+                <div class="card">
+                    <div class="card-body">
                         <h1 class="text-center">
                             <?php
                             $title_array = [
@@ -73,129 +73,131 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             echo '<img id="learning-flag" src="img/flags/'
                                 . $title_array["$to_lang"][0]
                                 . '.svg" alt="' . $to_lang . '"><br>';
-                            echo $title_array["$to_lang"][1];
+                            echo '<div class="pacifico my-3">' . $title_array["$to_lang"][1] . '</div>';
                             ?>
                         </h1>
                         <div id="welcome-msg" class="text-muted text-center">You are only one step away from learning
                             <?php echo $to_lang; ?>.</div>
-                    </header>
-                    <br>
-                    <div id="alert-box" class="d-none"></div>
-                    <form id="form-register">
-                        <div class="mb-3">
-                            <label for="native-lang">Native language:</label>
-                            <select name="native-lang" class="form-control form-select" id="native-lang">
-                                <option value="ar">Arabic</option>
-                                <option value="bg">Bulgarian</option>
-                                <option value="ca">Catalan</option>
-                                <option value="zh">Chinese</option>
-                                <option value="hr">Croatian</option>
-                                <option value="cs">Czech</option>
-                                <option value="da">Danish</option>
-                                <option value="nl">Dutch</option>
-                                <option value="en" selected>English</option>
-                                <option value="fr">French</option>
-                                <option value="de">German</option>
-                                <option value="el">Greek</option>
-                                <option value="he">Hebrew</option>
-                                <option value="hi">Hindi</option>
-                                <option value="hu">Hungarian</option>
-                                <option value="it">Italian</option>
-                                <option value="ja">Japanese</option>
-                                <option value="ko">Korean</option>
-                                <option value="no">Norwegian</option>
-                                <option value="pl">Polish</option>
-                                <option value="pt">Portuguese</option>
-                                <option value="ro">Romanian</option>
-                                <option value="ru">Russian</option>
-                                <option value="sk">Slovak</option>
-                                <option value="sl">Slovenian</option>
-                                <option value="es">Spanish</option>
-                                <option value="sv">Swedish</option>
-                                <option value="tr">Turkish</option>
-                                <option value="vi">Vietnamese</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="learning-lang">Want to learn:</label>
-                            <select name="learning-lang" class="form-control form-select" id="learning-lang">
-                                <option value="ar" <?php echo $to_lang == 'Arabic'     ? 'selected' : ''; ?>>Arabic</option>
-                                <option value="bg" <?php echo $to_lang == 'Bulgarian'  ? 'selected' : ''; ?>>Bulgarian</option>
-                                <option value="ca" <?php echo $to_lang == 'Catalan'    ? 'selected' : ''; ?>>Catalan</option>
-                                <option value="zh" <?php echo $to_lang == 'Chinese'    ? 'selected' : ''; ?>>Chinese</option>
-                                <option value="hr" <?php echo $to_lang == 'Croatian'   ? 'selected' : ''; ?>>Croatian</option>
-                                <option value="cs" <?php echo $to_lang == 'Czech'      ? 'selected' : ''; ?>>Czech</option>
-                                <option value="da" <?php echo $to_lang == 'Danish'     ? 'selected' : ''; ?>>Danish</option>
-                                <option value="nl" <?php echo $to_lang == 'Dutch'      ? 'selected' : ''; ?>>Dutch</option>
-                                <option value="en" <?php echo $to_lang == 'English'    ? 'selected' : ''; ?>>English</option>
-                                <option value="fr" <?php echo $to_lang == 'French'     ? 'selected' : ''; ?>>French</option>
-                                <option value="de" <?php echo $to_lang == 'German'     ? 'selected' : ''; ?>>German</option>
-                                <option value="el" <?php echo $to_lang == 'Greek'      ? 'selected' : ''; ?>>Greek</option>
-                                <option value="he" <?php echo $to_lang == 'Hebrew'     ? 'selected' : ''; ?>>Hebrew</option>
-                                <option value="hi" <?php echo $to_lang == 'Hindi'      ? 'selected' : ''; ?>>Hindi</option>
-                                <option value="hu" <?php echo $to_lang == 'Hungarian'  ? 'selected' : ''; ?>>Hungarian</option>
-                                <option value="it" <?php echo $to_lang == 'Italian'    ? 'selected' : ''; ?>>Italian</option>
-                                <option value="ja" <?php echo $to_lang == 'Japanese'   ? 'selected' : ''; ?>>Japanese</option>
-                                <option value="ko" <?php echo $to_lang == 'Korean'     ? 'selected' : ''; ?>>Korean</option>
-                                <option value="no" <?php echo $to_lang == 'Norwegian'  ? 'selected' : ''; ?>>Norwegian</option>
-                                <option value="pl" <?php echo $to_lang == 'Polish'     ? 'selected' : ''; ?>>Polish</option>
-                                <option value="pt" <?php echo $to_lang == 'Portuguese' ? 'selected' : ''; ?>>Portuguese</option>
-                                <option value="ro" <?php echo $to_lang == 'Romanian'   ? 'selected' : ''; ?>>Romanian</option>
-                                <option value="ru" <?php echo $to_lang == 'Russian'    ? 'selected' : ''; ?>>Russian</option>
-                                <option value="sk" <?php echo $to_lang == 'Slovak'     ? 'selected' : ''; ?>>Slovak</option>
-                                <option value="sl" <?php echo $to_lang == 'Slovenian'  ? 'selected' : ''; ?>>Slovenian</option>
-                                <option value="es" <?php echo $to_lang == 'Spanish'    ? 'selected' : ''; ?>>Spanish</option>
-                                <option value="sv" <?php echo $to_lang == 'Swedish'    ? 'selected' : ''; ?>>Swedish</option>
-                                <option value="tr" <?php echo $to_lang == 'Turkish'    ? 'selected' : ''; ?>>Turkish</option>
-                                <option value="vi" <?php echo $to_lang == 'Vietnamese' ? 'selected' : ''; ?>>Vietnamese</option>
-                            </select>
-                        </div>
-                        <div>
+                        <br>
+                        <div id="alert-box" class="d-none"></div>
+                        <form id="form-register">
                             <div class="mb-3">
-                                <label for="username">Username:</label>
-                                <input type="text" id="username" name="username" class="form-control" maxlength="20" required>
+                                <label for="native-lang">I speak:</label>
+                                <select name="native-lang" class="form-control form-select" id="native-lang">
+                                    <option value="ar">Arabic</option>
+                                    <option value="bg">Bulgarian</option>
+                                    <option value="ca">Catalan</option>
+                                    <option value="zh">Chinese</option>
+                                    <option value="hr">Croatian</option>
+                                    <option value="cs">Czech</option>
+                                    <option value="da">Danish</option>
+                                    <option value="nl">Dutch</option>
+                                    <option value="en" selected>English</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                    <option value="el">Greek</option>
+                                    <option value="he">Hebrew</option>
+                                    <option value="hi">Hindi</option>
+                                    <option value="hu">Hungarian</option>
+                                    <option value="it">Italian</option>
+                                    <option value="ja">Japanese</option>
+                                    <option value="ko">Korean</option>
+                                    <option value="no">Norwegian</option>
+                                    <option value="pl">Polish</option>
+                                    <option value="pt">Portuguese</option>
+                                    <option value="ro">Romanian</option>
+                                    <option value="ru">Russian</option>
+                                    <option value="sk">Slovak</option>
+                                    <option value="sl">Slovenian</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="sv">Swedish</option>
+                                    <option value="tr">Turkish</option>
+                                    <option value="vi">Vietnamese</option>
+                                </select>
                             </div>
                             <div class="mb-3">
-                                <label for="email">E-mail address:</label>
-                                <input type="email" id="email" name="email" class="form-control" maxlength="50" required>
+                                <label for="learning-lang">I want to learn:</label>
+                                <select name="learning-lang" class="form-control form-select" id="learning-lang">
+                                    <option value="ar" <?php echo $to_lang == 'Arabic'     ? 'selected' : ''; ?>>Arabic</option>
+                                    <option value="bg" <?php echo $to_lang == 'Bulgarian'  ? 'selected' : ''; ?>>Bulgarian</option>
+                                    <option value="ca" <?php echo $to_lang == 'Catalan'    ? 'selected' : ''; ?>>Catalan</option>
+                                    <option value="zh" <?php echo $to_lang == 'Chinese'    ? 'selected' : ''; ?>>Chinese</option>
+                                    <option value="hr" <?php echo $to_lang == 'Croatian'   ? 'selected' : ''; ?>>Croatian</option>
+                                    <option value="cs" <?php echo $to_lang == 'Czech'      ? 'selected' : ''; ?>>Czech</option>
+                                    <option value="da" <?php echo $to_lang == 'Danish'     ? 'selected' : ''; ?>>Danish</option>
+                                    <option value="nl" <?php echo $to_lang == 'Dutch'      ? 'selected' : ''; ?>>Dutch</option>
+                                    <option value="en" <?php echo $to_lang == 'English'    ? 'selected' : ''; ?>>English</option>
+                                    <option value="fr" <?php echo $to_lang == 'French'     ? 'selected' : ''; ?>>French</option>
+                                    <option value="de" <?php echo $to_lang == 'German'     ? 'selected' : ''; ?>>German</option>
+                                    <option value="el" <?php echo $to_lang == 'Greek'      ? 'selected' : ''; ?>>Greek</option>
+                                    <option value="he" <?php echo $to_lang == 'Hebrew'     ? 'selected' : ''; ?>>Hebrew</option>
+                                    <option value="hi" <?php echo $to_lang == 'Hindi'      ? 'selected' : ''; ?>>Hindi</option>
+                                    <option value="hu" <?php echo $to_lang == 'Hungarian'  ? 'selected' : ''; ?>>Hungarian</option>
+                                    <option value="it" <?php echo $to_lang == 'Italian'    ? 'selected' : ''; ?>>Italian</option>
+                                    <option value="ja" <?php echo $to_lang == 'Japanese'   ? 'selected' : ''; ?>>Japanese</option>
+                                    <option value="ko" <?php echo $to_lang == 'Korean'     ? 'selected' : ''; ?>>Korean</option>
+                                    <option value="no" <?php echo $to_lang == 'Norwegian'  ? 'selected' : ''; ?>>Norwegian</option>
+                                    <option value="pl" <?php echo $to_lang == 'Polish'     ? 'selected' : ''; ?>>Polish</option>
+                                    <option value="pt" <?php echo $to_lang == 'Portuguese' ? 'selected' : ''; ?>>Portuguese</option>
+                                    <option value="ro" <?php echo $to_lang == 'Romanian'   ? 'selected' : ''; ?>>Romanian</option>
+                                    <option value="ru" <?php echo $to_lang == 'Russian'    ? 'selected' : ''; ?>>Russian</option>
+                                    <option value="sk" <?php echo $to_lang == 'Slovak'     ? 'selected' : ''; ?>>Slovak</option>
+                                    <option value="sl" <?php echo $to_lang == 'Slovenian'  ? 'selected' : ''; ?>>Slovenian</option>
+                                    <option value="es" <?php echo $to_lang == 'Spanish'    ? 'selected' : ''; ?>>Spanish</option>
+                                    <option value="sv" <?php echo $to_lang == 'Swedish'    ? 'selected' : ''; ?>>Swedish</option>
+                                    <option value="tr" <?php echo $to_lang == 'Turkish'    ? 'selected' : ''; ?>>Turkish</option>
+                                    <option value="vi" <?php echo $to_lang == 'Vietnamese' ? 'selected' : ''; ?>>Vietnamese</option>
+                                </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="newpassword">Password:</label>
-                                <small>
-                                    <em>at least 8 characters (including letters, digits &amp; special characters)</em>
+                            <div>
+                                <div class="mb-3">
+                                    <label for="username">Username:</label>
+                                    <input type="text" id="username" name="username" class="form-control" maxlength="20" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email">E-mail address:</label>
+                                    <input type="email" id="email" name="email" class="form-control" maxlength="50" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newpassword">Password:</label>
+                                    <div class="input-group">
+                                        <input type="password" id="newpassword" name="newpassword" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" autocomplete="off" required>
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button" aria-label="Show/hide password" tabindex="-1"><span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>
+                                    </div>
+                                    <small>
+                                        <em>at least 8 characters (including letters, digits &amp; special characters)</em>
+                                    </small>
+                                    <br>
+                                    <small id="password-strength-text"></small>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newpassword-confirmation">Confirm password:</label>
+                                    <div class="input-group">
+                                        <input type="password" id="newpassword-confirmation" name="newpassword-confirmation" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" autocomplete="off" required>
+                                        <button class="btn btn-outline-secondary show-hide-password-btn" type="button" aria-label="Show/hide password confirmation" tabindex="-1">
+                                            <span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>
+                                    </div>
+                                    <small id="passwords-match-text"></small>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" id="btn_register" class="btn btn-success">
+                                        <i class="bi bi-person-plus me-2" aria-hidden="true"></i>
+                                        Sign up
+                                    </button>
+                                </div>
+                                <small class="text-center">By registering, you declare to have read and accepted our
+                                    <a href="/termsofservice" target="_blank" rel="noopener noreferrer">
+                                        Terms of Service</a> and our <a href="/privacy" target="_blank"
+                                        rel="noopener noreferrer">Privacy Policy</a>.
                                 </small>
-                                <div class="input-group">
-                                    <input type="password" id="newpassword" name="newpassword" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" autocomplete="off" required>
-                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button" aria-label="Show/hide password" tabindex="-1"><span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>
-                                </div>
-                                <small id="password-strength-text"></small>
                             </div>
-                            <div class="mb-3">
-                                <label for="newpassword-confirmation">Confirm password:</label>
-                                <div class="input-group">
-                                    <input type="password" id="newpassword-confirmation" name="newpassword-confirmation" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" autocomplete="off" required>
-                                    <button class="btn btn-outline-secondary show-hide-password-btn" type="button" aria-label="Show/hide password confirmation" tabindex="-1">
-                                        <span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>
-                                </div>
-                                <small id="passwords-match-text"></small>
-                            </div>
-                            <div class="d-grid gap-2">
-                                <button type="submit" id="btn_register" class="btn btn-success">Sign up</button>
-                            </div>
-                            <small class="text-center">By registering, you declare to have read and accepted our
-                                <a href="/termsofservice" target="_blank" rel="noopener noreferrer">Terms of Service</a>
-                                and our <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
-                            </small>
-                        </div>
-                    </form>
-
-                    <br>
-                    <footer>
+                        </form>
+                        <br>
                         <p class="text-muted text-center">
                             Already have an account? <a href="/login">Log in</a>
                         </p>
-                    </footer>
-                </section>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -146,13 +146,13 @@ $(document).ready(function() {
         const img_uri = "img/flags/" + iso_array[sel_index] + ".svg";
 
         $("h1")
-            .text(welcome_array[sel_index])
-            .prepend(
+            .html(
                 '<img id="learning-flag" class="flag-icon" src="' +
                     img_uri +
                     '" alt="' +
                     lang_array[sel_index] +
-                    '"></img><br>'
+                    '"></img><br>' +
+                    '<div class="pacifico my-3">' + welcome_array[sel_index] + '</div>'
             );
         $("#welcome-msg").text(
             "You are only one step away from learning " + lang_array[sel_index]

@@ -1126,24 +1126,36 @@ div.blurry-background {
 
 /* LOGIN */
 
-.or-line {
-    margin: 1.875rem auto;
+.or-divider {
+    position: relative;
+    margin: 2.5rem 0;
+    border: none;
+    height: 1px;
+    background-color: #A7B0B7;
+    opacity: 1;
+    overflow: visible;
 }
 
-.or__line {
-    display: block;
-    text-align: center;
-    line-height: 0;
-    border-bottom: 1px solid #A7B0B7;
-}
-
-.or__text {
-    display: inline;
+.or-divider::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     padding: 0 10px;
     background: #fff;
     color: #666E7E;
-    text-transform: lowercase;
+    font-size: 0.9rem;
+    line-height: 1;
+    white-space: nowrap;
 }
+
+.pacifico {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
 
 /* STATS */
 
