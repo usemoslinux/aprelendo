@@ -35,6 +35,40 @@ function normalize(text) {
 }
 
 $(document).ready(function () {
+    function focusNextIfComplete($input) {
+        const maxLength = Number($input.attr("maxlength"));
+
+        if (!maxLength || $input.val().length !== maxLength) {
+            return;
+        }
+
+        const index = $(".dict").index($input[0]) + 1;
+        $(".dict")
+            .eq(index)
+            .focus();
+    }
+
+    function isComposingInput($input) {
+        return $input.data("isComposing") === true;
+    }
+
+    $("body").on("compositionstart", ".dict", function () {
+        $(this).data("isComposing", true);
+    });
+
+    $("body").on("compositionend", ".dict", function () {
+        const $input = $(this);
+        $input.data("isComposing", false);
+
+        if (document.activeElement !== this) {
+            return;
+        }
+
+        setTimeout(function () {
+            focusNextIfComplete($input);
+        }, 0);
+    });
+
     /**
      * Checks if answer is correct and shows a cue to indicate status when user moves
      * focus out of an input box.
@@ -97,7 +131,6 @@ $(document).ready(function () {
      */
     $("body").on("input", ".dict", function (e) {
         let keyCode = e.keyCode || e.which;
-        const maxLength = $(this).attr("maxlength");
         const curTime = $("#audioplayer")[0].currentTime;
 
         // make sure keycode is correct (fix for IME on mobile devices)
@@ -130,11 +163,8 @@ $(document).ready(function () {
         $(this).val($(this).val().replace(/\d/gi, '')); // don't allow digits to get printed
 
         // if maxlength reached, switch focus to next input
-        if (maxLength == $(this).val().length && !e.originalEvent.isComposing) {
-            const index = $(".dict").index(this) + 1;
-            $(".dict")
-                .eq(index)
-                .focus();
+        if (!isComposingInput($(this))) {
+            focusNextIfComplete($(this));
         }
     }); // end .dict.on.input
 });
