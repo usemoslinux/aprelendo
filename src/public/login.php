@@ -46,14 +46,6 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <h3 class="card-title pacifico text-center my-2">Welcome back</h3>
                         <br>
                         <div id="alert-box" class="d-none"></div>
-                        <?php //if (!IS_SELF_HOSTED): ?>
-                            <div id="g_id_onload"
-                                data-client_id="913422235077-082170c2l6b58ck8ie0f03rigombl2pc.apps.googleusercontent.com"
-                                data-callback="googleLogIn">
-                            </div>
-                            <div class="g_id_signin" data-type="standard"></div>
-                            <hr class="or-divider" data-text="Or">
-                        <?php //endif; ?>
                         <form id="form_login">
                             <div class="mb-3">
                                 <label for="username">Username:</label>
@@ -79,12 +71,27 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                     Log in
                                 </button>
                             </div>
-                            <?php //if (!IS_SELF_HOSTED): ?>
+                            <?php if (!IS_SELF_HOSTED): ?>
                                 <div class="small text-muted text-center mt-2">
                                     <a href="/forgotpassword">Forgot password</a>?
                                 </div>
-                            <?php //endif; ?>
+                            <?php endif; ?>
                         </form>
+                        <?php if (!IS_SELF_HOSTED): ?>
+                            <hr class="or-divider" data-text="Or">
+                            <div id="g_id_onload"
+                                data-client_id="913422235077-082170c2l6b58ck8ie0f03rigombl2pc.apps.googleusercontent.com"
+                                data-callback="googleLogIn">
+                            </div>
+                            <div class="google-btn-wrapper">
+                                <div class="g_id_signin" data-type="standard"
+                                    data-type="standard"
+                                    data-theme="outline"
+                                    data-size="large"
+                                    data-width="300">
+                                </div>
+                            </div>
+                        <?php endif; ?>
                         <hr class="or-divider" data-text="Not registered yet?">
                         <div class="d-grid gap-2">
                             <a href="/register" class="btn btn-outline-primary" role="button">

@@ -1126,6 +1126,13 @@ div.blurry-background {
 
 /* LOGIN */
 
+.google-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .or-divider {
     position: relative;
     margin: 2.5rem 0;
