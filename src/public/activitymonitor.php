@@ -63,8 +63,7 @@ $motivational_msg_ongoing_streak = ["You've taken a new step towards mastering a
 $message_html = '<span class="text-muted">';
 
 if ($daily_goal_streak_days > 0) {
-    $message_html .= '<span class="badge text-bg-warning me-1 bg-opacity-50"><i class="bi bi-fire text-danger me-1">'
-        . '</i><strong>' . $daily_goal_streak_days . ' day streak!</strong></span>'
+    $message_html .= '<span class="badge text-bg-warning me-1 bg-opacity-50"><strong>' . $daily_goal_streak_days . ' day streak</strong></span>'
         . '<em>' . $motivational_msg_ongoing_streak[rand(0, 9)] . '</em>';
 } else {
     $message_html .= '<em>' . $motivational_msg_no_streak[rand(0, 9)] . '</em>';
@@ -78,8 +77,11 @@ $message_html .= '</span>';
 <div id="activity-monitor" class="row flex">
     <div class="col-sm-12">
         <div class="card mb-3">
-            <div class="card-header">
-                <div class="">Daily Goal: Recall 10 words</div>
+            <div class="card-header fw-bolder">
+                <div class="">
+                    <img src="/img/gamification/words-today.webp" class="me-1 me-md-1" alt="Streak" title="Daily goal streak">
+                    Daily Goal: Recall 10 words
+                </div>
             </div>
             <div class="card-body">
                 <div class="progress mb-2" style="height: 13px;">
@@ -87,7 +89,7 @@ $message_html .= '</span>';
                         style="width: <?php echo strval($percentage_words_recalled_today) . '%'; ?>">
                         <?php echo $msg_progress_bar; ?></div>
                 </div>
-                <div class="d-flex d-inline-block small">
+                <div class="d-flex d-inline-block align-items-center small">
                     <?php echo $message_html; ?>
                     <div class="mx-2 ms-auto">
                         <a href="/stats" title="My statistics" class="d-flex">
@@ -119,7 +121,7 @@ $message_html .= '</span>';
                     <p>
                         Additionally, it's important to differentiate between the recall streak and the <u>reading
                         streak</u>. This other metric reflects your overall engagement with learning materials and is
-                        displayed next to the flame icon in the blue header.
+                        displayed next to the book stack icon in the blue header.
                     </p>
                 </div>
             </div>

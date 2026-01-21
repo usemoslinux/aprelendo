@@ -328,6 +328,12 @@ body.blue-gradient-wallpaper .navbar-light {
     font-size: 1rem;
 }
 
+.card-header img {
+    width: 24px;
+    height: 24px;
+    vertical-align: bottom;
+}
+
 .btn-outline-secondary {
     border-color: #ced4da;
 }
