@@ -131,7 +131,6 @@ $(document).ready(function () {
      */
     $("body").on("input", ".dict", function (e) {
         let keyCode = e.keyCode || e.which;
-        const curTime = $("#audioplayer")[0].currentTime;
 
         // make sure keycode is correct (fix for IME on mobile devices)
         if (keyCode == 0 || keyCode == 229) {
@@ -149,13 +148,13 @@ $(document).ready(function () {
                 }
                 break;
             case 49: // 1
-                $("#audioplayer")[0].currentTime = curTime - 5;
+                AudioController.seekRelative(-3);
                 break;
             case 50: // 2
                 AudioController.togglePlayPause();
                 break;
             case 51: // 3       
-                $("#audioplayer")[0].currentTime = curTime + 5;
+                AudioController.seekRelative(3);
                 break;
             default:
                 break;

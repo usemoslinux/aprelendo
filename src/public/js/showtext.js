@@ -416,6 +416,7 @@ $(document).ready(function() {
                     </div>
                 `);
 
+                MediaController.setSpeed(0.75);
                 toggleDictation();
                 break;
             case 5:

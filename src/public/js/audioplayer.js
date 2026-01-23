@@ -62,6 +62,9 @@ const AudioController = (() => {
     let isPlaylist = () => false;
     let setPlaylistPositionFromString = () => {};
     let getPlaylistPositionString = () => '';
+    let setSpeed = () => {};
+    let getSpeed = () => 1;
+    let seekRelative = () => {};
     
     // If the audio element exists, redefine the functions
     if (audio) {
@@ -413,7 +416,10 @@ const AudioController = (() => {
         };
 
         // Change Playback Speed
-        const changeSpeed = (speed) => {
+        setSpeed = (speed) => {
+            if (!Number.isFinite(speed)) {
+                return;
+            }
             audio.playbackRate = speed;
 
             // Update active class
@@ -424,7 +430,22 @@ const AudioController = (() => {
                     option.classList.remove('active');
                 }
             });
-        }
+        };
+
+        getSpeed = () => audio.playbackRate;
+
+        seekRelative = (seconds) => {
+            if (!Number.isFinite(seconds)) {
+                return;
+            }
+            const duration = audio.duration;
+            const target_time = audio.currentTime + seconds;
+            if (Number.isFinite(duration)) {
+                audio.currentTime = Math.min(Math.max(target_time, 0), duration);
+            } else {
+                audio.currentTime = Math.max(target_time, 0);
+            }
+        };
 
         // event listeners
         
@@ -480,7 +501,7 @@ const AudioController = (() => {
         
                 if (target.hasAttribute('data-speed')) {
                     const speed = parseFloat(target.getAttribute('data-speed'));
-                    changeSpeed(speed);
+                    setSpeed(speed);
                 }
             });
         });
@@ -590,6 +611,9 @@ const AudioController = (() => {
         playFromBeginning,
         isPlaylist,
         setPlaylistPositionFromString,
-        getPlaylistPositionString
+        getPlaylistPositionString,
+        setSpeed,
+        getSpeed,
+        seekRelative
     };
 })();
