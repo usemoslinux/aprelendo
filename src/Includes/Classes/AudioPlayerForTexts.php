@@ -100,6 +100,11 @@ class AudioPlayerForTexts extends AudioPlayer
                     id="ap-abloop-btn" class="btn btn-outline-warning">
                     A
                 </button>
+                <button id="ap-autopause-btn" class="btn btn-outline-secondary ms-1" type="button"
+                    data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
+                    data-bs-title="Auto-pause while typing: Off" aria-pressed="false">
+                    <i class="bi bi-keyboard"></i>
+                </button>
                 </div>
                 <div id="ap-chapter-controls" class="d-none d-flex align-items-center gap-2 mt-2">
                     <button id="ap-prev-chapter" class="btn btn-outline-secondary btn-sm" type="button">

@@ -407,12 +407,13 @@ $(document).ready(function() {
                 $msg_phase.html(`
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     <h5 class="alert-heading">✍️ Phase 4: Dictation</h5>
-                    <p class="small mb-2">Listen to the audio and fill in the blanks as accurately as possible.</p>
+                    <p class="small">Listen to the audio and fill in the blanks as accurately as possible.</p>
+                    <p class="small mb-2">Auto-pause while typing is on by default. You can turn it off in the audio controls.</p>
                     <div class="small bg-light p-2 rounded border">
                         <strong>Controls:</strong> 
-                        <kbd>1</kbd> Back 5s | 
+                        <kbd>1</kbd> Back 3s | 
                         <kbd>2</kbd> Play/Pause | 
-                        <kbd>3</kbd> Forward 5s
+                        <kbd>3</kbd> Forward 3s
                     </div>
                 `);
 

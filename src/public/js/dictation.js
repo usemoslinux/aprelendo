@@ -52,6 +52,107 @@ $(document).ready(function () {
         return $input.data("isComposing") === true;
     }
 
+    const $autopause_btn = $("#ap-autopause-btn");
+    let autopause_resume_timer = null;
+    let autopause_paused = false;
+
+    function updateAutopauseTooltip(btn, enabled) {
+        const title = enabled ? "Auto-pause while typing: On" : "Auto-pause while typing: Off";
+        btn.setAttribute("data-bs-title", title);
+
+        if (typeof setNewTooltip === "function"
+            && typeof bootstrap !== "undefined"
+            && bootstrap.Tooltip
+            && typeof bootstrap.Tooltip.getInstance === "function") {
+            const existingTooltip = bootstrap.Tooltip.getInstance(btn);
+            if (existingTooltip) {
+                setNewTooltip(btn, title);
+            }
+        }
+    }
+
+    function clearAutopauseResumeTimer() {
+        if (autopause_resume_timer) {
+            clearTimeout(autopause_resume_timer);
+            autopause_resume_timer = null;
+        }
+    }
+
+    function setAutopauseState(enabled) {
+        if (!$autopause_btn.length) {
+            return;
+        }
+
+        if (!enabled) {
+            autopause_paused = false;
+            clearAutopauseResumeTimer();
+        }
+
+        $autopause_btn.toggleClass("active", enabled);
+        if (enabled) {
+            $autopause_btn.removeClass("btn-outline-secondary").addClass("btn-secondary");
+        } else {
+            $autopause_btn.removeClass("btn-secondary").addClass("btn-outline-secondary");
+        }
+        $autopause_btn.attr("aria-pressed", enabled ? "true" : "false");
+        $autopause_btn.attr("data-autopause", enabled ? "on" : "off");
+        updateAutopauseTooltip($autopause_btn[0], enabled);
+    }
+
+    function isAutopauseEnabled() {
+        return $autopause_btn.length && $autopause_btn.attr("data-autopause") === "on";
+    }
+
+    function scheduleAutopauseResume() {
+        clearAutopauseResumeTimer();
+
+        if (!isAutopauseEnabled() || !autopause_paused) {
+            return;
+        }
+
+        autopause_resume_timer = setTimeout(function () {
+            if (!isAutopauseEnabled() || !autopause_paused) {
+                return;
+            }
+
+            AudioController.resume();
+
+            autopause_paused = false;
+        }, 1000);
+    }
+
+    function maybeAutopause(keyCode) {
+        if (!isAutopauseEnabled()) {
+            return;
+        }
+
+        if (keyCode === 49 || keyCode === 50 || keyCode === 51) {
+            return;
+        }
+
+        AudioController.pause(true);
+        autopause_paused = true;
+    }
+
+    if ($autopause_btn.length) {
+        setAutopauseState(true);
+
+        $autopause_btn.on("click", function () {
+            setAutopauseState(!$autopause_btn.hasClass("active"));
+        });
+    }
+
+    const $playPauseBtn = $("#ap-play-btn");
+    if ($playPauseBtn.length) {
+        $playPauseBtn.on("click", function () {
+            if (!isAutopauseEnabled()) {
+                return;
+            }
+            autopause_paused = false;
+            clearAutopauseResumeTimer();
+        });
+    }
+
     $("body").on("compositionstart", ".dict", function () {
         $(this).data("isComposing", true);
     });
@@ -151,6 +252,8 @@ $(document).ready(function () {
                 AudioController.seekRelative(-3);
                 break;
             case 50: // 2
+                autopause_paused = false;
+                clearAutopauseResumeTimer();
                 AudioController.togglePlayPause();
                 break;
             case 51: // 3       
@@ -159,6 +262,10 @@ $(document).ready(function () {
             default:
                 break;
         }
+
+        maybeAutopause(keyCode);
+        scheduleAutopauseResume();
+
         $(this).val($(this).val().replace(/\d/gi, '')); // don't allow digits to get printed
 
         // if maxlength reached, switch focus to next input
