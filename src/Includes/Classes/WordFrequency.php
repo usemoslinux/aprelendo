@@ -32,7 +32,7 @@ class WordFrequency extends DBEntity
     public function __construct(\PDO $pdo, string $lg_iso) {
         parent::__construct($pdo);
         $this->lg_iso = $lg_iso;
-        $this->table = 'frequency_list_' . $this->lg_iso;
+        $this->table = 'frequency_lists';
     }
 
     /**
@@ -52,9 +52,11 @@ class WordFrequency extends DBEntity
     {
         $word = mb_strtolower($word);
 
-        $sql = "SELECT * FROM {$this->table} WHERE word=?";
+        $sql = "SELECT *
+                FROM `{$this->table}`
+                WHERE `lang_iso`=? AND `word`=?";
 
-        $row = self::sqlFetch($sql, [$word]);
+        $row = self::sqlFetch($sql, [$this->lg_iso, $word]);
 
         if (!$row) {
             return 0;
@@ -72,7 +74,7 @@ class WordFrequency extends DBEntity
     {
         $sql = "SELECT `word`, `frequency_index`
                 FROM `{$this->table}`
-                WHERE `frequency_index` < 81";
-        return self::sqlFetchAll($sql, []);
+                WHERE `lang_iso`=? AND `frequency_index` < 81";
+        return self::sqlFetchAll($sql, [$this->lg_iso]);
     } // end getHighFrequencyList()
 }
