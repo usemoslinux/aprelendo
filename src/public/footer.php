@@ -97,8 +97,12 @@
 if (!IS_SELF_HOSTED) {
     require_once 'eucookies.php';
     require_once 'jsonldbase.php';
-} 
+}
 ?>
+
+<?php if (!in_array($curpage, $no_login_required_pages)): ?>
+    <script defer src="/js/logout.min.js"></script>
+<?php endif; ?>
 
 </body>
 

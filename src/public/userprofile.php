@@ -69,7 +69,7 @@ $google_login = !empty($user->google_id);
                             <div class="mb-3">
                                 <label for="password">Current password:</label>
                                 <small>
-                                    <em>at least 8 characters (including letters, digits &amp; special characters)</em>
+                                    <em>8+ characters, with uppercase, lowercase, and a number.</em>
                                 </small>
                                 <div class="input-group">
                                     <input type="password" id="password" name="password" class="form-control"
@@ -82,7 +82,7 @@ $google_login = !empty($user->google_id);
                             <div class="mb-3">
                                 <label for="password">New password:</label>
                                 <small>
-                                    <em>at least 8 characters (including letters, digits &amp; special characters)</em>
+                                    <em>8+ characters, with uppercase, lowercase, and a number.</em>
                                 </small>
                                 <div class="input-group">
                                     <input type="password" id="newpassword" name="newpassword" class="form-control"

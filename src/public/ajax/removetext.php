@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2019 Pablo Castagnino
  *
@@ -19,10 +20,13 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-// check that $_POST is set & not empty
-if (!isset($_POST) || empty($_POST)) {
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);
     exit;
 }
 
@@ -37,18 +41,23 @@ try {
         $is_archived = $_POST['is_archived'];
         $user_id = $user->id;
         $lang_id = $user->lang_id;
-    
+
         // decide wether we are deleting an archived text or not
         if ($is_archived) {
             $texts_table = new ArchivedTexts($pdo, $user_id, $lang_id);
         } else {
             $texts_table = new Texts($pdo, $user_id, $lang_id);
         }
-    
+
         $texts_table->delete($text_ids);
-    } else {
-        throw new UserException('There was an error in the parameters provided to remove this text');
-    }
+        $response = ['success' => true];
+    } 
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

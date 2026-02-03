@@ -22,7 +22,7 @@
 
 <!-- Action buttons -->
 
-<div id="action-buttons" style="display: none;">
+<div id="action-buttons" class="invisible">
     <div class="btn-group" id="word-actions-g1">
         <button type="button" class="btn btn-primary" id="btn-add" data-bs-toggle="tooltip"
         data-bs-custom-class="custom-tooltip" data-bs-placement="top" data-bs-title="New">

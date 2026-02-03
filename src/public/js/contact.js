@@ -22,36 +22,39 @@ $(document).ready(function() {
      * Sends email
      * This is triggered when user presses the "Send" button & submits the form
      */
-    $("#form-support").on("submit", function(e) {
+    $("#form-support").on("submit", async function(e) {
         e.preventDefault();
 
         showMessage("Sending message to our support team...", "alert-info");
 
         const form_data = $(this).serialize();
 
-        $.ajax({
-            type: "POST",
-            url: "ajax/contact.php",
-            data: form_data
-        })
-            .done(function(data) {
-                if (data.error_msg == null) {
-                    showMessage(
-                        "Your message was successfully sent. You shall receive an answer briefly.",
-                        "alert-success"
-                    );
+        try {
+            const response = await fetch("ajax/contact.php", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: form_data
+            });
 
-                    setTimeout(resetControls, 3000);
-                } else {
-                    showMessage(data.error_msg, "alert-danger");
-                }
-            })
-            .fail(function(xhr, ajaxOptions, thrownError) {
-                showMessage(
-                    "Oops! There was an unexpected error trying to send your message. Please try again later.",
-                    "alert-danger"
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to send message.');
+            }
+
+            showMessage(
+                    "Your message was successfully sent. You shall receive an answer briefly.",
+                    "alert-success"
                 );
-            }); // end of ajax
+            setTimeout(resetControls, 2000);
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "alert-danger");
+        }
     }); // end #form-support.on.submit
 
     /**

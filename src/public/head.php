@@ -33,7 +33,7 @@ $use_google_login = false;
 
 // check if login is required to access page
 if (!in_array($curpage, $no_login_required_pages)) {
-    require_once APP_ROOT . 'Includes/checklogin.php'; // check if user is logged in and set $user object
+    require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
     $google_id = $user->google_id;
     $use_google_login = !empty($google_id);
 }
@@ -86,11 +86,12 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
         crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <!-- JQuery JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="https://code.jquery.com/jquery-4.0.0.slim.min.js"
+        integrity="sha512-1g+lD9RHY4sYTrehMnFuWSqn3GS1xE2nhSSb5a8JS0WYMnvm1iuxpajRACu0C9tmJSL78O7eQw9TUhGUsRFc0g=="
+        crossorigin="anonymous">
     </script>
 
+    <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js"
         integrity="sha512-HvOjJrdwNpDbkGJIG2ZNqDlVqMo77qbs4Me4cah0HoDrfhrbA+8SBlZn1KrvAQw7cILLPFJvdwIgphzQmMm+Pw=="
         crossorigin="anonymous" referrerpolicy="no-referrer">

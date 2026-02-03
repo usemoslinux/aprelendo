@@ -35,9 +35,7 @@ const AIBot = (() => {
                 body: `prompt=${encodeURIComponent(prompt)}`
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to get AI response');
-            }
+            if (!response.ok) { throw new Error('Failed to get AI response.'); }
 
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
@@ -64,7 +62,7 @@ const AIBot = (() => {
                 onDone(markdownResponse);
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error(error);
             if (typeof onError === 'function') {
                 onError(error);
             }

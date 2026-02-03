@@ -19,10 +19,13 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-// check that $_POST is set & not empty
-if (!isset($_POST) || empty($_POST)) {
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);
     exit;
 }
 
@@ -35,10 +38,20 @@ try {
     $lang_id = $user->lang_id;
 
     // update learning status of words first
-    if (isset($_POST['words'])) {
+    $words = json_decode($_POST['words']);
+
+    if (!empty($words)) {
         $words_table = new Words($pdo, $user_id, $lang_id);
-        $words_table->updateByName($_POST['words']);
+        $words_table->updateByName($words);
     }
+        
+    $response = ['success' => true];
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

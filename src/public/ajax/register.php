@@ -20,8 +20,11 @@
 
 require_once '../../Includes/dbinit.php'; // connect to database
 
-// check that $_POST is set & not empty
-if (!isset($_POST) || empty($_POST)) {
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);
     exit;
 }
 
@@ -70,9 +73,14 @@ try {
     $user_reg = new UserRegistrationManager($user);
     $user_reg->register($user_data);
 
-    header('Content-Type: application/json');
-    echo json_encode(['is_self_hosted' => IS_SELF_HOSTED]);
+    $response = ['success' => true, 'is_self_hosted' => IS_SELF_HOSTED];
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     $user->delete();
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

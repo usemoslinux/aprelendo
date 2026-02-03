@@ -19,7 +19,7 @@
 
 $(document).ready(function() {
 
-    $('#btn-save-reader-prefs').on('click', function () {
+    $('#btn-save-reader-prefs').on('click', async function () {
         // apply color mode
         const class_name = $('#mode').val() + 'mode';
         const color_modes = 'lightmode sepiamode darkmode';
@@ -50,10 +50,23 @@ $(document).ready(function() {
         }
         
         // save changes 
-        $.ajax({
-            url: "/ajax/savepreferences.php",
-            type: "POST",
-            data: $("#prefs-modal-form").serialize()
-        });
+        try {
+            const form_data = new URLSearchParams($("#prefs-modal-form").serialize());
+            const response = await fetch("/ajax/savepreferences.php", {
+                method: "POST",
+                body: form_data
+            });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to save reader preferences.');
+            }
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "alert-danger");
+        }
     }); // end #btn-save-reader-prefs.on.click
 });

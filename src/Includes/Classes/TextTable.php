@@ -40,7 +40,7 @@ class TextTable extends Table
             ? ['mArchive' => 'Unarchive', 'mDelete' => 'Delete']
             : ['mArchive' => 'Archive', 'mDelete' => 'Delete'];
         $this->individual_action_menu = $show_archived
-            ? ['imEdit' => 'Edit', 'imArchive' => 'Unarchive', 'imShare' => 'Share', 'imDelete' => 'Delete']
+            ? ['imArchive' => 'Unarchive', 'imDelete' => 'Delete']
             : ['imEdit' => 'Edit', 'imArchive' => 'Archive', 'imShare' => 'Share', 'imDelete' => 'Delete'];
         $this->sort_menu = ['mSortByNew' => 'New first', 'mSortByOld' => 'Old first'];
         $this->rows = $rows;

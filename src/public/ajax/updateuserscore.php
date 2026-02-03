@@ -19,10 +19,13 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-// check that $_POST is set & not empty
-if (!isset($_POST) || empty($_POST)) {
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);    
     exit;
 }
 
@@ -31,17 +34,23 @@ use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
 try {
-    if (isset($_POST['words']) || isset($_POST['texts'])) {
+    if (isset($_POST['review_data'])) {
         $user_id = $user->id;
         $lang_id = $user->lang_id;
 
         $gems = new Gems($pdo, $user_id, $lang_id, $user->time_zone);
-        $new_gems = $gems->updateScore($_POST);
+        $payload = json_decode($_POST['review_data'] ?? '[]', true);
+        $new_gems = $gems->updateScore($payload);
 
-        $result = ['gems_earned' => $new_gems];
-        header('Content-Type: application/json');
-        echo json_encode($result);
+        $response = ['success' => true, 'gems_earned' => $new_gems];
     }
+
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

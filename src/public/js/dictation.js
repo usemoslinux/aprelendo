@@ -45,7 +45,7 @@ $(document).ready(function () {
         const index = $(".dict").index($input[0]) + 1;
         $(".dict")
             .eq(index)
-            .focus();
+            .trigger("focus");
     }
 
     function isComposingInput($input) {
@@ -176,7 +176,7 @@ $(document).ready(function () {
      */
     $("body").on("blur", ".dict", function () {
         let $curinput = $(this);
-        let user_answer = $.trim($curinput.val().toLowerCase());
+        let user_answer = $curinput.val().toLowerCase().trim();
 
         // 1. Handle Empty Input (Reset State)
         if (user_answer === "") {
@@ -219,7 +219,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 $(".dict")
                     .eq(index)
-                    .focus();
+                    .trigger("focus");
             } else if (keyCode == 32) {
                 // if space key is pressed, prevent default behavior
                 e.preventDefault();
@@ -245,7 +245,7 @@ $(document).ready(function () {
                     const index = $(".dict").index(this) - 1;
                     $(".dict")
                         .eq(index)
-                        .focus();
+                        .trigger("focus");
                 }
                 break;
             case 49: // 1
@@ -307,12 +307,18 @@ function toggleDictation() {
                 }
 
                 $elem
-                    .hide()
+                    .addClass('d-none')
                     .after(
-                        '<div class="input-group dict-input-group"><input type="text" class="dict" ' +
-                        'style="width:' + width + "px; line-height:" + line_height + "; border-color:" +
-                        border_color + ';" ' + 'maxlength="' + length + '" data-text="' + $elem.text() + '">' +
-                        '<span class="dict-answer d-none"></span></div>'
+                        `<div class="input-group dict-input-group">
+                            <input type="text"
+                                class="dict"
+                                style="width:${width}px;
+                                line-height:${line_height};
+                                border-color:${border_color};" 
+                                maxlength="${length}" 
+                                data-text="${$elem.text()}">
+                            <span class="dict-answer d-none"></span>
+                        </div>`
                     );
             });
 
@@ -321,7 +327,7 @@ function toggleDictation() {
             scrollToPageTop();
             AudioController.playFromBeginning();
 
-            $(":text:first").focus(); // focus first input
+            $(":text:first").trigger("focus"); // focus first input
         } else {
             // toggle dictation off
             $elems.each(function () {
@@ -339,7 +345,7 @@ function toggleDictation() {
                     }
                 }
 
-                $elem.show();
+                $elem.removeClass('d-none');
             });
 
             $container.find(".dict-input-group").remove();

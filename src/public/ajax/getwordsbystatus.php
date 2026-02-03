@@ -19,7 +19,15 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // loads User class & check if user is logged in
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_GET)) {
+    echo json_encode($response);
+    exit;
+}
 
 use Aprelendo\User;
 use Aprelendo\Language;
@@ -45,10 +53,16 @@ try {
 
     if ($_GET['type'] === "words") {
         $stats = new WordStats($pdo, $user->id, $user->lang_id);
-        $result = $stats->getTotals();
+        $payload = $stats->getTotals();
     }
     
-    echo json_encode($result);
+    $response = ['success' => true, 'payload' => $payload];
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

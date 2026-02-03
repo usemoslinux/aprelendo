@@ -326,7 +326,7 @@ const AudioController = (() => {
             return fetch(playlist_url, { cache: 'no-store' })
                 .then((response) => {
                     if (!response.ok) {
-                        throw new Error('Failed to fetch playlist');
+                        throw new Error('Failed to fetch playlist.');
                     }
                     return response.text().then((text) => ({
                         text,
@@ -342,12 +342,12 @@ const AudioController = (() => {
             return fetch(request_url)
                 .then((response) => response.json())
                 .then((data) => {
-                    if (data && data.error_msg) {
+                    if (!data.success) {
                         throw new Error(data.error_msg);
                     }
                     return {
-                        text: data && data[payload_key] ? data[payload_key] : '',
-                        url: data && data.url ? data.url : playlist_url
+                        text: data.payload && data.payload[payload_key] ? data.payload[payload_key] : '',
+                        url: data.payload && data.payload.url ? data.payload.url : playlist_url
                     };
                 });
         };

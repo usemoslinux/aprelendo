@@ -41,32 +41,32 @@ $(document).ready(function () {
         const feed_full_id = '#' + $feed.attr('id');
         const feed_index = $feed.data('feed-index');
 
-        $.ajax({
-            type: "GET",
-            data: { feed_index: feed_index },
-            url: "ajax/fetchrssfeeds.php"
-        })
-        .done(function (data) {            
-            if (data.error_msg != null) {
-                let $acordion_item = $(feed_full_id);
-                let item_index = feed_index+1;
+        (async (feed_full_id, feed_index) => {
+            try {
+                const params = new URLSearchParams({ feed_index: feed_index });
+                
+                const response = await fetch(`ajax/fetchrssfeeds.php?${params.toString()}`);
+                
+                const data = await response.json();;
 
-                $acordion_item.find('.rss-placeholder-text').text("Error!");
-                $acordion_item.find('.accordion-button').removeClass('rss-placeholder-glow').addClass('text-bg-danger');
-                $acordion_item.find('h2').after('<div id="item-' + item_index 
-                    + '" class="collapse" data-bs-parent="#accordion"><div class="accordion-body"><div>'
-                    + data.error_msg + '</div></div></div>');
+                if (!data.success) {
+                    let $acordion_item = $(feed_full_id);
+                    let item_index = feed_index+1;
+
+                    $acordion_item.find('.rss-placeholder-text').text("Error loading feed");
+                    $acordion_item.find('.accordion-button').removeClass('rss-placeholder-glow').addClass('text-bg-danger');
+                    $acordion_item.find('h2').after('<div id="item-' + item_index 
+                        + '" class="collapse" data-bs-parent="#accordion"><div class="accordion-body"><div>'
+                        + data.error_msg + '</div></div></div>');
+
+                    throw new Error(data.error_msg || 'Failed to fetch RSS feed');
+                }
+
+                $(feed_full_id).html(data.payload);
+            } catch (error) {
+                console.error(error);
             }
-            else {
-                $(feed_full_id).html(data);
-            }
-        })
-        .fail(function (xhr, ajaxOptions, thrownError) {
-            $("#accordion").fadeOut(function () {
-                showMessage('There was an error trying to retrieve your RSS feeds. Please try again later.',
-                'alert-danger');
-            });
-        }); // end $.ajax
+        })(feed_full_id, feed_index); // Immediately invoke with current loop variables
     }
 
     /**
@@ -88,7 +88,7 @@ $(document).ready(function () {
      * @param {html entity} $entry_text contains text to add
      */
     function openRSSInEditor($entry_info, $entry_text) {
-        const text_title = $.trim($entry_info.text());
+        const text_title = $entry_info.text().trim();
         const text_author = $entry_info.attr("data-author");
         const text_url = $entry_info.attr("data-src");
         const art_pubdate = $entry_info.attr("data-pubdate");
@@ -127,7 +127,7 @@ $(document).ready(function () {
                 '<input type="hidden" name="text_is_shared" value="true">'
             );
         $("body").append(form);
-        form.submit();
+        form.trigger( "submit" );
     } // end openRSSInEditor
 
     /**

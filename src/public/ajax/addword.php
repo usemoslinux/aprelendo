@@ -19,10 +19,13 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-// check that $_POST is set & not empty
-if (!isset($_POST) || empty($_POST)) {
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);
     exit;
 }
 
@@ -42,7 +45,7 @@ use Aprelendo\UserException;
 function processSingleWord(\PDO $pdo, $user, array $post): void {
     $user_id = $user->id;
     $lang_id = $user->lang_id;
-    $text_is_shared = isset($post['text_is_shared']) ? $post['text_is_shared'] : false;
+    $text_is_shared = filter_var($post['text_is_shared'], FILTER_VALIDATE_BOOLEAN);
 
     // If a source_id is provided, load the text record and update the language id accordingly.
     if (isset($post['source_id']) && is_numeric($post['source_id'])) {
@@ -105,6 +108,14 @@ try {
     } elseif (isset($_POST['words'])) {
         processWordsImport($pdo, $user, $_POST);
     }
+
+    $response = ['success' => true];
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

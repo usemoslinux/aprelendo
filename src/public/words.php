@@ -61,7 +61,7 @@ $query_str = '?s=' . $search_text . '&o=0';
                             </div>
                             <!-- Import words button -->
                             <div class="dropdown-add">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#import-words-modal"
+                                <button id="btn-show-import-modal" type="button"
                                     class="btn btn-primary text-nowrap ms-md-2 mb-3">
                                     <span class="bi bi-cloud-upload-fill"></span> Import
                                 </button>
@@ -76,7 +76,7 @@ $query_str = '?s=' . $search_text . '&o=0';
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a id="export-all" href="ajax/exportwords" class="dropdown-item">Export all</a>
                                     <a id="export-search"
-                                        href="ajax/exportwords<?php echo !empty($query_str) ? $query_str : '' ?>"
+                                        href="/ajax/exportwords<?php echo !empty($query_str) ? $query_str : '' ?>"
                                         class="dropdown-item">
                                         Export search results
                                     </a>

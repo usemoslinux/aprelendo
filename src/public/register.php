@@ -165,7 +165,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                         <button class="btn btn-outline-secondary show-hide-password-btn" type="button" aria-label="Show/hide password" tabindex="-1"><span class="bi bi-eye-slash-fill" aria-hidden="true"></span></button>
                                     </div>
                                     <small>
-                                        <em>at least 8 characters (including letters, digits &amp; special characters)</em>
+                                        <em>8+ characters, with uppercase, lowercase, and a number.</em>
                                     </small>
                                     <br>
                                     <small id="password-strength-text"></small>

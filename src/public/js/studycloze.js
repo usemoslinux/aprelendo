@@ -72,59 +72,62 @@ $(document).ready(function () {
                 e.preventDefault();
                 onGuessSubmit();
             }
-        });
+        }); // end #guess-input.on.keypress()
     }
 
     /**
      * Fetches the list of words to study from the server.
      */
-    function getListofCards() {
-        $.ajax({
-            type: "POST",
-            url: "ajax/getcards.php",
-            data: { limit: max_cards },
-            dataType: "json"
-        })
-            .done(function (data) {
-                if (data && data.error_msg) {
-                    showMessage(data.error_msg, "alert-danger");
-                    return;
-                }
-
-                if (data.length == 0) {
-                    showNoMoreCardsMsg();
-                    return true;
-                }
-
-                words = data.map(item => {
-                    return {
-                        ...item,
-                        word: item.word.replace(/\r?\n|\r/g, " ")
-                    };
-                });
-
-                max_cards = words.length > max_cards ? max_cards : words.length;
-
-                $("#card-counter").text("1" + "/" + max_cards);
-                adaptCardStyleToWordStatus(words[0].status);
-                startCard(words[0].word);
-            })
-            .fail(function () {
-                showMessage("Oops! There was an unexpected error trying to fetch study cards for this language.",
-                    "alert-danger");
+    async function getListofCards() {
+        try {
+            const form_data = new URLSearchParams({ limit: max_cards });
+            
+            const response = await fetch("/ajax/getcards.php", {
+                method: "POST",
+                body: form_data
             });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to fetch list of cards.');
+            }
+
+            if (data.payload.length == 0) {
+                showNoMoreCardsMsg();
+                return true;
+            }
+
+            words = data.payload.map(item => {
+                return {
+                    ...item,
+                    word: item.word.replace(/\r?\n|\r/g, " ")
+                };
+            });
+
+            max_cards = words.length > max_cards ? max_cards : words.length;
+
+            $("#card-counter").text("1" + "/" + max_cards);
+            adaptCardStyleToWordStatus(words[0].status);
+            await startCard(words[0].word);
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
     }
 
     /**
      * Initializes a new card with scrambled word display and fetches example sentences.
      * @param {string} original_word - The word to study
      */
-    function startCard(original_word) {
+    async function startCard(original_word) {
         // reset UI to scramble mode
         $("#answer-card").addClass("d-none");
         $(".btn-answer").prop('disabled', true);
         $("#guess-ui").removeClass("d-none");
-        $("#guess-input").val("").focus();
+        $("#guess-input").val("").trigger("focus");
         $("#guess-feedback")
             .removeClass("text-danger text-success")
             .addClass("text-secondary")
@@ -140,7 +143,7 @@ $(document).ready(function () {
         $("#study-card-word-title").removeClass('placeholder').text(scrambled);
 
         // fetch examples for this card
-        getExampleSentencesforCard(original_word, scrambled);
+        await getExampleSentencesforCard(original_word, scrambled);
     }
 
     /**
@@ -148,82 +151,85 @@ $(document).ready(function () {
      * @param {string} original_word - The word to find in example sentences
      * @param {string} scrambled_word - The scrambled version to display
      */
-    function getExampleSentencesforCard(original_word, scrambled_word) {
+    async function getExampleSentencesforCard(original_word, scrambled_word) {
         if (lastCardReached()) return;
 
         $("#examples-placeholder").removeClass('d-none');
         $("#study-card-examples").empty();
 
-        $.ajax({
-            type: "POST",
-            url: "ajax/getcards.php",
-            data: { word: original_word },
-            dataType: "json"
-        })
-            .done(function (data) {
-                if (data && data.error_msg) {
-                    showMessage(data.error_msg, "alert-danger");
-                    return;
-                }
+        try {
+            const form_data = new URLSearchParams({ word: original_word });
+            
+            const response = await fetch("/ajax/getcards.php", {
+                method: "POST",
+                body: form_data
+            });
 
-                let examples_array = [];
-                let examples_html = '';
-                const lang_iso = $("#card").data("lang");
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+            
+            const data = await response.json();
 
-                const word_boundary = '(?<![\\p{L}])' + escapeRegex(original_word) + '(?![\\p{L}])';
-                const sentence_start = '([^\\n.?!]|[\\d][.][\\d]|[A-Z][.](?:[A-Z][.])+)*';
-                const sentence_end = '([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!]';
-                let sentence_regex = new RegExp(sentence_start + word_boundary + sentence_end, 'gmiu');
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to fetch example sentences.');
+            }
 
-                if (lang_iso == "ja" || lang_iso == "zh") {
-                    sentence_regex = new RegExp('[^\\n?!。]*' + escapeRegex(original_word) + '[^\\n?!。]*[\\n?!。]', 'gmiu');
-                }
+            let examples_array = [];
+            let examples_html = '';
+            const lang_iso = $("#card").data("lang");
 
-                const texts = Array.isArray(data) ? data : (data ? [data] : []);
+            const word_boundary = '(?<![\\p{L}])' + escapeRegex(original_word) + '(?![\\p{L}])';
+            const sentence_start = '([^\\n.?!]|[\\d][.][\\d]|[A-Z][.](?:[A-Z][.])+)*';
+            const sentence_end = '([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!]';
+            let sentence_regex = new RegExp(sentence_start + word_boundary + sentence_end, 'gmiu');
 
-                texts.forEach(text => {
-                    let m;
-                    while ((m = sentence_regex.exec(text.text)) !== null) {
-                        if (m.index === sentence_regex.lastIndex) sentence_regex.lastIndex++;
-                        if (examples_array.length < 3) {
-                            let match = m[0];
-                            if (match !== original_word) {
-                                text.text = doubleQuotesNotClosed(match) ? text.text : match;
-                                examples_array = forceUnique(examples_array, text);
-                            }
+            if (lang_iso == "ja" || lang_iso == "zh") {
+                sentence_regex = new RegExp('[^\n?!。]*' + escapeRegex(original_word) + '[^\n?!。]*[\n?!。]', 'gmiu');
+            }
+
+            const texts = Array.isArray(data.payload) ? data.payload : (data.payload ? [data.payload] : []);
+
+            texts.forEach(text => {
+                let m;
+                while ((m = sentence_regex.exec(text.text)) !== null) {
+                    if (m.index === sentence_regex.lastIndex) sentence_regex.lastIndex++;
+                    if (examples_array.length < 3) {
+                        let match = m[0];
+                        if (match !== original_word) {
+                            text.text = doubleQuotesNotClosed(match) ? text.text : match;
+                            examples_array = forceUnique(examples_array, text);
                         }
                     }
+                }
+            });
+
+            $("#study-card").data('word', original_word);
+            updateLiveProgressBar();
+            $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
+
+            // shuffle once and store that order for both scrambled and revealed display
+            examples_array = shuffleExamples(examples_array);
+            current_examples_array = examples_array;
+
+            if (examples_array.length === 0) {
+                words[cur_card_index].status = 4;
+                answers[4][1] = answers[4][1] + 1;
+                cur_card_index++;
+                if (lastCardReached()) return;
+                await startCard(words[cur_card_index].word); // Await recursive call
+            } else {
+                examples_array.forEach(example => {
+                    examples_html += buildExampleHTML(example, original_word, scrambled_word, true);
                 });
 
-                $("#study-card").data('word', original_word);
-                updateLiveProgressBar();
-                $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
+                showWordFrequency(words[cur_card_index].is_phrase);
 
-                // shuffle once and store that order for both scrambled and revealed display
-                examples_array = shuffleExamples(examples_array);
-                current_examples_array = examples_array;
-
-                if (examples_array.length === 0) {
-                    words[cur_card_index].status = 4;
-                    answers[4][1] = answers[4][1] + 1;
-                    cur_card_index++;
-                    if (lastCardReached()) return;
-                    startCard(words[cur_card_index].word);
-                } else {
-                    examples_array.forEach(example => {
-                        examples_html += buildExampleHTML(example, original_word, scrambled_word, true);
-                    });
-
-                    showWordFrequency(words[cur_card_index].is_phrase);
-
-                    $("#examples-placeholder").addClass('d-none');
-                    $("#study-card-examples").html(examples_html);
-                }
-            })
-            .fail(function () {
-                showMessage("Oops! There was an unexpected error trying to fetch example sentences for this word.",
-                    "alert-danger");
-            });
+                $("#examples-placeholder").addClass('d-none');
+                $("#study-card-examples").html(examples_html);
+            }
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
     }
 
     /**
@@ -274,13 +280,13 @@ $(document).ready(function () {
             return `<a class='${anchor_class}' ${hint_title}>${encodeHtml(shown)}</a>`;
         });
 
-        example_html = "<blockquote cite='" + text.source_uri + "'>";
-        example_html += "<p class='mb-0'>" + example_text_html + "</p>";
+        example_html = `<blockquote cite='${text.source_uri}'>`;
+        example_html += `<p class='mb-0'>${example_text_html}</p>`;
         example_html += `<cite style='font-size:.85rem' class='text-secondary fw-medium'>${text.author == "" ? "Anonymous" : text.author}`;
         if (text.source_uri == '' || text.source_uri.endsWith(".epub")) {
             example_html += ", " + text.title;
         } else {
-            example_html += ", <a href='" + text.source_uri + "' target='_blank'>" + text.title + "</a>";
+            example_html += `, <a href='${text.source_uri}' target='_blank'>${text.title}</a>`;
         }
         example_html += "</cite></blockquote>";
 
@@ -324,7 +330,7 @@ $(document).ready(function () {
             return true;
         } else if (cur_card_index >= max_cards) {
             $("#study-card-word-title").text("Congratulations!");
-            $("#study-card-freq-badge").hide();
+            $("#study-card-freq-badge").addClass('d-none');
             adaptCardStyleToWordStatus();
 
             let progress_html = "";
@@ -334,17 +340,32 @@ $(document).ready(function () {
                 let bg_class = answer[2];
                 let title = answer[3];
 
-                progress_html += "<div class='progress-bar " + bg_class + "' role='progressbar' aria-valuenow='" +
-                    percentage + "' aria-valuemin='0' aria-valuemax='100' style='width: " + percentage +
-                    "%' title='" + title + ": " + subtotal + " answer(s)'>" + Math.round(percentage) + " %</div>";
+                progress_html += `
+                    <div class="progress-bar ${bg_class}" 
+                        role="progressbar" 
+                        aria-valuenow="${percentage}" 
+                        aria-valuemin="0" 
+                        aria-valuemax="100" 
+                        style="width: ${percentage}%" 
+                        title="${title}: ${subtotal} answer(s)">
+                        ${Math.round(percentage)} %
+                    </div>`;
             }
 
-            $("#study-card-examples").html("<div class='bi bi-trophy text-warning display-3 mt-3'></div>"
-                + "<div class='mt-3'>You have reached the end of your study.</div>"
-                + "<div class='mt-3'>These were your results:</div>"
-                + "<div class='progress mx-auto mt-3 fw-bold' style='height: 25px;max-width: 550px'>" + progress_html + "</div>"
-                + buildResultsTable()
-                + "<div class='small mt-4'>If you want to continue, you can refresh this page (F5).<br>However, we strongly recommend that you keep your study sessions short and take rest intervals.</div>");
+            $("#study-card-examples").html(`
+                <div class="bi bi-trophy text-warning display-3 mt-3"></div>
+                <div class="mt-3">You have reached the end of your study.</div>
+                <div class="mt-3">These were your results:</div>
+                <div class="progress mx-auto mt-3 fw-bold" style="height: 25px; max-width: 550px">
+                    ${progress_html}
+                </div>
+                ${buildResultsTable()}
+                <div class="small mt-4">
+                    If you want to continue, you can refresh this page (F5).<br>
+                    However, we strongly recommend that you keep your study sessions short 
+                    and take rest intervals.
+                </div>
+            `);
             $("#study-card-footer").addClass("d-none");
             $("#examples-placeholder").addClass("d-none");
             $("#live-progress").addClass("d-none");
@@ -428,7 +449,7 @@ $(document).ready(function () {
      * Event: Triggered when clicking any answer button (1-4).
      * Saves the user's recall level and loads the next card.
      */
-    $(".btn-answer").click(function (e) {
+    $(".btn-answer").on("click", async function (e) {
         e.preventDefault();
         const word = $("#study-card").data('word');
         const answer = $(this).attr("value");
@@ -438,21 +459,30 @@ $(document).ready(function () {
 
         $(".btn-answer").prop('disabled', true);
 
-        $.ajax({
-            type: "POST",
-            url: "ajax/updatecard.php",
-            data: { word: word, answer: answer }
-        })
-            .done(function () {
-                cur_card_index++;
-                if (lastCardReached()) return;
-                adaptCardStyleToWordStatus(words[cur_card_index].status);
-                scrollToPageTop();
-                startCard(words[cur_card_index].word);
-            })
-            .fail(function () {
-                showMessage("There was an unexpected error updating this word's status", "alert-danger");
+        try {
+            const form_data = new URLSearchParams({ word: word, answer: answer });
+            const response = await fetch("/ajax/updatecard.php", {
+                method: "POST",
+                body: form_data
             });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to update card status.');
+            }
+            
+            cur_card_index++;
+            if (lastCardReached()) return;
+            adaptCardStyleToWordStatus(words[cur_card_index].status);
+            scrollToPageTop();
+            await startCard(words[cur_card_index].word);
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
 
         $('#btn-answer-prev').trigger('click'); // hide answer card page 2
     });
@@ -520,7 +550,7 @@ $(document).ready(function () {
     }
 
     /**
-     * Event: Triggered when clicking the translate button.
+     * Triggered when clicking the translate button.
      * Opens the selected word in the translator.
      */
     $("#btn-translate").on("click", function () {
@@ -531,7 +561,7 @@ $(document).ready(function () {
     });
 
     /**
-     * Event: Triggered when clicking the image dictionary button.
+     * Triggered when clicking the image dictionary button.
      * Opens the selected word in the image dictionary.
      */
     $("#btn-img-dic").on("click", function () {
@@ -542,12 +572,11 @@ $(document).ready(function () {
     });
 
     /**
-     * Event: Triggered on right-click (non-mobile) on a revealed word.
+     * Triggered on right-click (non-mobile) on a revealed word.
      * Opens the word in the translator in a new tab.
      */
     $(document).on("contextmenu", function (e) {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (!isMobile && $(e.target).is(".word")) {
+        if (!isMobileDevice() && $(e.target).is(".word")) {
             const base_uris = Dictionaries.getURIs();
             openInNewTab(LinkBuilder.forTranslationInStudy(base_uris.translator, $(e.target)));
         }
@@ -555,23 +584,23 @@ $(document).ready(function () {
     });
 
     /**
-     * Event: Triggered when pressing keys 1-4 after answer is revealed.
+     * Triggered when pressing keys 1-4 after answer is revealed.
      * Allows keyboard shortcuts for answer buttons.
      */
-    $(document).keypress(function (e) {
+    $(document).on( "keypress", function (e) {
         if (!$(".btn-answer").prop('disabled')) {
             switch (e.which) {
-                case 49: $("#btn-answer-no-recall").click(); break; // 1
-                case 50: $("#btn-answer-fuzzy").click(); break;     // 2
-                case 51: $("#btn-answer-partial").click(); break;   // 3
-                case 52: $("#btn-answer-excellent").click(); break; // 4
+                case 49: $("#btn-answer-no-recall").trigger("click"); break; // 1
+                case 50: $("#btn-answer-fuzzy").trigger("click"); break;     // 2
+                case 51: $("#btn-answer-partial").trigger("click"); break;   // 3
+                case 52: $("#btn-answer-excellent").trigger("click"); break; // 4
                 default: break;
             }
         }
-    });
+    }); // end $document.on.keypress()
 
     /**
-     * Event: Triggered when clicking or tapping outside of word and action buttons.
+     * Triggered when clicking or tapping outside of word and action buttons.
      * Hides the action buttons modal.
      */
     $(document).on("mouseup touchend", function (e) {
@@ -695,5 +724,4 @@ $(document).ready(function () {
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
     }
-
 });

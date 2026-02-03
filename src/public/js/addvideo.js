@@ -18,116 +18,114 @@
  */
 
 $(document).ready(function() {
-    emptyAll();
-    $("#url").focus();
+    emptyForm();
+    $("#url").trigger("focus");
 
     /**
      * Adds video to database
      * This is triggered when user presses the "Save" button & submits the form
      * @param e {Event}
      */
-    $("#form-addvideo").on("submit", function(e) {
+    $("#form-addvideo").on("submit", async function(e) {
         e.preventDefault();
 
-        const form_data = $("#form-addvideo").serializeArray();
-        form_data.push({ name: "shared-text", value: true });
+        const form_data_array = $("#form-addvideo").serializeArray();
+        form_data_array.push({ name: "shared-text", value: true });
 
-        $.ajax({
-            type: "POST",
-            url: "ajax/addtext.php",
-            data: form_data
-        })
-            .done(function(data) {
-                if (typeof data != "undefined") {
-                    if (typeof data.error_msg != "undefined") {
-                        showMessage(data.error_msg, "alert-danger");
-                    }
-                } else {
-                    window.location.replace("/sharedtexts");
-                }
-            })
-            .fail(function(xhr, ajaxOptions, thrownError) {
-                showMessage(
-                    "Oops! There was an unexpected error when uploading this text.",
-                    "alert-danger"
-                );
-            }); // end of ajax
+        try {
+            const form_data = new URLSearchParams();
+            form_data_array.forEach(item => form_data.append(item.name, item.value));
+
+            const response = await fetch("/ajax/addtext.php", {
+                method: "POST",
+                body: form_data
+            });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to add video');
+            }
+
+            window.location.replace("/sharedtexts");
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "alert-danger");
+        }
     }); // end #form-addvideo.on.submit
 
     /**
      * Fetches YouTube video, including title, channel & subtitle
      */
-    function fetch_url(url) {       
-        emptyAll(); // empty all input boxes
+    async function fetch_url(url) {       
+        try {
+            emptyForm(); // empty all input boxes
 
-        const video_id = extractYTId(url); //get YouTube video id
+            const video_id = extractYTId(url); //get YouTube video id
 
-        if (video_id != "") {
+            if (video_id == "") {
+                throw new Error(`Malformed Youtube URL link. It should have the following format:
+                    https://www.youtube.com/watch?v=video_id or https://youtu.be/video_id.
+                    Remember to replace "video_id" with the corresponding video ID and try again.`
+                );
+            }
+
             const embed_url = "https://www.youtube.com/embed/" + video_id;
 
             $("#btn-fetch-img")
                 .removeClass()
                 .addClass("spinner-border spinner-border-sm text-warning");
 
-            $.ajax({
-                type: "POST",
-                url: "ajax/fetchvideo.php",
-                data: { video_id: video_id }
-            })
-                .done(function(data) {
-                    if (typeof data != "undefined") {
-                        if (typeof data.error_msg != "undefined") {
-                            showMessage(data.error_msg, "alert-danger");
-                        } else {
-                            if ($("#yt-video").length) {
-                                $("#yt-video")
-                                    .get(0)
-                                    .contentWindow.location.replace(embed_url);
-                                // changing $('#yt-video') src attribute would affect browser history, that's why
-                                // we do it this way
-                            }
-                            $("#title").val(toSentenceCase(data.title));
-                            $("#author").val(data.author);
-                            $("#url").val(url);
+            const form_data = new URLSearchParams({ video_id: video_id });
+            
+            const response = await fetch("/ajax/fetchvideo.php", {
+                method: "POST",
+                body: form_data
+            });
 
-                            if (data.text == "") {
-                                $("#text").val("");
-                                showMessage(
-                                    'This video does not include valid subtitles.',
-                                    "alert-danger"
-                                );
-                            } else {
-                                $("#text").val(data.text);
-                                $("#alert-box").addClass("d-none");
-                            }
-                        }
-                    }
-                })
-                .fail(function(xhr, ajaxOptions, thrownError) {
-                    showMessage(
-                        "Oops! There was an unexpected error trying to get that video. Please try again later.",
-                        "alert-danger"
-                    );
-                })
-                .always(function() {
-                    $("#btn-fetch-img")
-                        .removeClass()
-                        .addClass("bi bi-arrow-down-right-square text-warning");
-                }); // end ajax
-        } else {
-            showMessage(
-                'Malformed Youtube URL link. It should have the following format: https://www.youtube.com/watch?' +
-                'v=video_id or https://youtu.be/video_id. Remember to replace "video_id" with the corresponding ' +
-                'video ID and try again.',
-                "alert-danger"
-            );
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to fetch video data');
+            }
+            
+            if ($("#yt-video").length) {
+                $("#yt-video")
+                    .get(0)
+                    .contentWindow.location.replace(embed_url);
+                // changing $('#yt-video') src attribute would affect browser history, that's why
+                // we do it this way
+            }
+
+            $("#title").val(toSentenceCase(data.payload.title));
+            $("#author").val(data.payload.author);
+            $("#url").val(url);
+
+            if (data.payload.text == "") {
+                $("#text").val("");
+                throw new Error("There are no subtitles available for this video.");
+            } else {
+                $("#text").val(data.payload.text);
+                $("#alert-box").addClass("d-none");
+            }
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "alert-danger");
+        } finally {
+            $("#btn-fetch-img")
+                .removeClass()
+                .addClass("bi bi-arrow-down-right-square text-warning");
         }
     } // end fetch_url
 
     /**
      * Empties form
      */
-    function emptyAll() {
+    function emptyForm() {
         if ($("#external_call").length == 0) {
             $("input")
                 .not(":hidden")
@@ -135,7 +133,7 @@ $(document).ready(function() {
             $("#text").val("");
             $("#yt-video").attr("src", "about:blank");
         }
-    } // end emptyAll
+    } // end emptyForm
 
     /**
      * Converts string to Sentence case (first character in upper case, the rest in lower case)
@@ -158,8 +156,10 @@ $(document).ready(function() {
             const yt_urls = new Array(
                 "https://www.youtube.com/watch",
                 "https://youtube.com/watch",
-                "https://m.youtube.com/watch"                
+                "https://m.youtube.com/watch"
             );
+
+            if (!url.includes("?")) return "";
 
             const url_split = url.split("?");
             const url_params = url_split[1].split("&");

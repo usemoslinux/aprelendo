@@ -42,11 +42,11 @@ class UserRegistrationManager extends DBEntity
         $this->user->name = $user_data['username'];
         $this->user->email = $user_data['email'];
         $password = $user_data['password'];
-        $this->user->native_lang = isset($user_data['native_lang']) ? $user_data['native_lang'] : 'en';
-        $this->user->lang = isset($user_data['lang']) ? $user_data['lang'] : 'en';
-        $this->user->time_zone = isset($user_data['time_zone']) ? $user_data['time_zone'] : 'UTC';
+        $this->user->native_lang = $user_data['native_lang'] ?? 'en';
+        $this->user->lang = $user_data['lang'] ?? 'en';
+        $this->user->time_zone = $user_data['time_zone'] ?? 'UTC';
         
-        $send_email = isset($user_data['send_email']) ? $user_data['send_email'] : false;
+        $send_email = $user_data['send_email'] ?? false;
         $this->user->is_active = false;
 
         // check if user already exists

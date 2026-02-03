@@ -18,14 +18,14 @@
  */
 
 $(document).ready(function() {
-    $("#search").focus();
+    $("#search").trigger("focus");
     $("input:checkbox").prop("checked", false);
 
     if ($('#modal-achievements').length) {
         $('#modal-achievements').modal('show');
     }
 
-    $('form').submit(function(e) {
+    $('form').on( "submit", function(e) {
         e.preventDefault();
 
         reloadPage();
@@ -35,7 +35,7 @@ $(document).ready(function() {
      * Deletes selected texts from the database
      * Trigger: when user selects "Delete" in the global or individual action menus
      */
-    $("#mDelete, .imDelete").on("click", function() {
+    $("#mDelete, .imDelete").on("click", async function() {
         if (confirm("Really delete?")) {
             let ids = [];
 
@@ -54,22 +54,29 @@ $(document).ready(function() {
             const uri_params = getCurrentURIParameters();
             const is_archived = uri_params.sa == "1";
 
-            $.ajax({
-                url: "ajax/removetext.php",
-                type: "POST",
-                data: {
-                    textIDs: JSON.stringify(ids),
-                    is_archived: is_archived ? 1 : 0
-                }
-            })
-                .done(function() {
-                    reloadPage();
-                })
-                .fail(function() {
-                    alert(
-                        "There was an error when trying to delete the selected texts. Refresh the page and try again."
-                    );
+            try {
+                const form_data = new URLSearchParams();
+                form_data.append('textIDs', JSON.stringify(ids));
+                form_data.append('is_archived', is_archived ? 1 : 0);
+
+                const response = await fetch("/ajax/removetext.php", {
+                    method: "POST",
+                    body: form_data
                 });
+
+                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+                
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error_msg || 'Failed to delete texts.');
+                }
+
+                reloadPage();
+            } catch (error) {
+                console.error(error);
+                alert(`Oops! ${error.message}`);
+            }
         }
     }); // end #mDelete.on.click
 
@@ -77,7 +84,7 @@ $(document).ready(function() {
      * Archives selected texts
      * Trigger: when user selects "Archive" in the global or individual action menus
      */
-    $("#mArchive, .imArchive").on("click", function() {
+    $("#mArchive, .imArchive").on("click", async function() {
         const archivetxt = $(this).text().trim() === "Archive";
         let ids = [];
 
@@ -93,29 +100,36 @@ $(document).ready(function() {
             return;
         }
 
-        $.ajax({
-            url: "ajax/archivetext.php",
-            type: "POST",
-            data: {
-                textIDs: JSON.stringify(ids),
-                archivetext: archivetxt
+        try {
+            const form_data = new URLSearchParams();
+            form_data.append('textIDs', JSON.stringify(ids));
+            form_data.append('archivetext', archivetxt);
+
+            const response = await fetch("/ajax/archivetext.php", {
+                method: "POST",
+                body: form_data
+            });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+            
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to archive texts.');
             }
-        })
-            .done(function() {
-                reloadPage();
-            })
-            .fail(function() {
-                alert(
-                    "There was an error when trying to archive the selected texts. Refresh the page and try again."
-                );
-            }); // end ajax
+
+            reloadPage();
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
     }); // end mArchive.on.click
 
     /**
      * Shares selected text
      * Trigger: when user selects "Share" in the individual action menu
      */
-    $(".imShare").on("click", function() {
+    $(".imShare").on("click", async function() {
         if (confirm("Sharing this text is irreversible. Once shared, it cannot be made private again. Are you sure you want to proceed?")) {
             let id = $(this).closest('tr').find('input').attr("data-idText");
 
@@ -123,25 +137,26 @@ $(document).ready(function() {
                 return;
             }
 
-            $.ajax({
-                url: "ajax/sharetext.php",
-                type: "POST",
-                data: {
-                    textID: id,
+            try {
+                const form_data = new URLSearchParams({ textID: id });
+                const response = await fetch("/ajax/sharetext.php", {
+                    method: "POST",
+                    body: form_data
+                });
+                
+                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error_msg || 'Sharing text failed.');
                 }
-            })
-                .done(function(data) {
-                    if (data.error_msg != null) {
-                        alert(data.error_msg)
-                    } else {
-                        reloadPage();
-                    }
-                })
-                .fail(function() {
-                    alert(
-                        "There was an error when trying to share the selected text. Refresh the page and try again."
-                    );
-                }); // end ajax    
+                
+                reloadPage();
+            } catch (error) {
+                console.error(error);
+                alert(`Oops! ${error.message}`);
+            }
         }
     }); // end imShare.on.click
 
@@ -229,7 +244,7 @@ $(document).ready(function() {
             });
         }
 
-        $('form').submit();
+        $('form').trigger( "submit" );
     }); // end #btn-filter + div > a.on.click
 
     /**

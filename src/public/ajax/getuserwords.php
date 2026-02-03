@@ -19,10 +19,13 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-// check that $_POST is set & not empty
-if (!isset($_POST) || empty($_POST)) {
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);
     exit;
 }
 
@@ -33,12 +36,12 @@ use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
 try {
-    if (isset($_POST['txt'])) {
+    if (!empty($_POST['txt'])) {
         $text = html_entity_decode($_POST['txt']);
-        $result['text'] = $text;
+        $payload['text'] = $text;
 
         $user_words = new Words($pdo, $user->id, $user->lang_id);
-        $result['user_words'] = $user_words->getAll(10); // 10 = words first, then phrases
+        $payload['user_words'] = $user_words->getAll(10); // 10 = words first, then phrases
 
         $lang = new Language($pdo, $user->id);
         $lang->loadRecordById($user->lang_id);
@@ -46,11 +49,17 @@ try {
         if ($lang->show_freq_words) {
             $word_freq = new WordFrequency($pdo, $lang->name);
             $freq_words = $word_freq->getHighFrequencyList();
-            $result['high_freq'] = \array_column($freq_words, 'word');
+            $payload['high_freq'] = \array_column($freq_words, 'word');
         }
 
-        echo json_encode($result);
+        $response = ['success' => true, 'payload' => $payload];
     }
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

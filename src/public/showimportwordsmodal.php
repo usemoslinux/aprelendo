@@ -57,9 +57,9 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Cancel</button>
+                <button id="btn-cancel-import" type="button" class="btn btn-link">Cancel</button>
                 <button id="btn-import-words" type="button" class="btn btn-primary"
-                    data-bs-dismiss="modal" disabled>Import</button>
+                    disabled>Import</button>
             </div>
         </div>
     </div>

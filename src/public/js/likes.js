@@ -23,27 +23,32 @@ $(document).ready(function() {
      * Toggles like for text
      * Triggers when user clicks on a heart
      */
-    $("span.bi-heart, span.bi-heart-fill").on("click", function() {
+    $("span.bi-heart, span.bi-heart-fill").on("click", async function() {
         const $like_btn = $(this);
         const text_id = $like_btn.attr("data-idText");
 
         toggleLike($like_btn);
 
-        $.ajax({
-            type: "POST",
-            url: "ajax/togglelike.php",
-            data: { id: text_id }
-        })
-            .done(function(data) {
-                if (data.error_msg) {
-                    console.log("Oops! There was an unexpected error");
-                    toggleLike($like_btn);
-                }
-            })
-            .fail(function(xhr, ajaxOptions, thrownError) {
-                console.log("Oops! There was an unexpected error");
-                toggleLike($like_btn);
+        try {
+            const form_data = new URLSearchParams();
+            form_data.append('id', text_id);
+
+            const response = await fetch("/ajax/togglelike.php", {
+                method: "POST",
+                body: form_data
             });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to toggle like for text');
+            }
+        } catch (error) {
+            console.error("Error", error);
+            toggleLike($like_btn); // Revert the like on any error
+        }
     }); // end span.bi-heart-fill.on.click
 
     function toggleLike($like_btn) {

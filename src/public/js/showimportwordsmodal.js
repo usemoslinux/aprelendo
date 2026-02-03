@@ -19,7 +19,15 @@
 
 $(document).ready(function() {
 
-    let wordsArray = [];
+    let words_array = [];
+    let last_trigger_element = null;
+    let modal_element = document.getElementById('import-words-modal');
+    let modal_instance = bootstrap.Modal.getOrCreateInstance(modal_element);
+
+    $('#btn-show-import-modal').on('click', function() {
+        last_trigger_element = this;
+        modal_instance.removeClass('d-none');
+    }); // end #btn-show-import-modal.on.click
 
     $('#words-upload-input').on('change', function(e) {
         let file = e.target.files[0];
@@ -27,15 +35,15 @@ $(document).ready(function() {
     
         reader.onload = function(e) {
             let txtFile = e.target.result;
-            wordsArray = txtFile.split(/\r?\n|\r/);
-            wordsArray = [...new Set(wordsArray)]; // remove duplicates
+            words_array = txtFile.split(/\r?\n|\r/);
+            words_array = [...new Set(words_array)]; // remove duplicates
 
             // trim all elements and convert them to lower case
             // also, apply filter to remove empty and falsy elements and those including spaces
-            wordsArray = wordsArray.map(element => element.trim().toLowerCase())
-                .filter(element => element && !element.includes(' '));
+            words_array = words_array.map(element => element.trim().toLowerCase())
+                .filter(element => element);
 
-            populateTable(wordsArray);
+            populateTable(words_array);
         };
     
         reader.readAsText(file);
@@ -46,11 +54,11 @@ $(document).ready(function() {
         document.getElementById('words-upload-input').value = '';
     }); // end #words-upload-input.on.change
     
-    function populateTable(wordsArray) {
+    function populateTable(words_array) {
         let tableBody = document.getElementById('words-table').querySelector('tbody');
         tableBody.innerHTML = ''; // Clear existing rows
     
-        wordsArray.forEach(item => {
+        words_array.forEach(item => {
             let row = tableBody.insertRow();
             let cellWord = row.insertCell(0);
     
@@ -58,28 +66,53 @@ $(document).ready(function() {
         });
     } // end populateTable
 
+    $('#import-words-modal').on('show.bs.modal', function(event_data) {
+        let trigger_element = event_data.relatedTarget;
+        if (trigger_element) {
+            last_trigger_element = trigger_element;
+        }
+    }); // end #import-words-modal.on.show.bs.modal
+
+    $('#import-words-modal').on('hide.bs.modal', function () {
+        let modal_element = this;
+        let active_element = document.activeElement;
+        if (active_element && modal_element.contains(active_element)) {
+            active_element.blur();
+        }
+    }) // end #import-words-modal.on.hide.bs.modal
+
+    $('#btn-cancel-import').on('click', function() {
+        modal_instance.addClass('d-none');
+    }); // end #btn-cancel-import.on.click
+
     $('#import-words-modal').on('hidden.bs.modal', function () {
         document.getElementById('words-table-wrap').classList.add('d-none');
         document.getElementById('words-upload-wrap').classList.remove('d-none');
         document.getElementById('words-table').querySelector('tbody').innerHTML = '';
         document.getElementById('btn-import-words').disabled = true;
+        if (last_trigger_element) {
+            last_trigger_element.focus();
+            last_trigger_element = null;
+        }
     }) // end #import-words-modal.on.hidden.bs.modal
 
-    $('#btn-import-words').on('click', function() {
-        
-        $.ajax({
-            type: "POST",
-            url: "/ajax/addword.php",
-            data: {
-                words: wordsArray
-            }
-        })
-        .done(function(data) {
-            location.reload();
-        })
-        .fail(function(xhr, ajaxOptions, thrownError) {
-            alert('Oops! There was an unexpected error.');
-        });
+    $('#btn-import-words').on('click', async function() {
+        try {
+            const form_data = new URLSearchParams();
+            words_array.forEach(word => form_data.append('words[]', word));
+
+            const response = await fetch("/ajax/addword.php", {
+                method: "POST",
+                body: form_data
+            });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            window.location.replace("/words");
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
     }); // end #btn-import-words.on.click
 
     $('#words-upload-wrap').on('click', function(e) {

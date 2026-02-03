@@ -23,30 +23,35 @@ $(document).ready(function() {
      * It is executed when user clicks the submit button
      * @param  {event object} e Used to prevent reloading of the page
      */
-    $("#userprofile-form").submit(function(e) {
+    $("#userprofile-form").on( "submit", async function(e) {
         e.preventDefault(); // avoid to execute the actual submit of the form.
 
-        $.ajax({
-            url: "ajax/saveuserprofile.php",
-            type: "POST",
-            data: $("#userprofile-form").serialize()
-        })
-            .done(function(data) {
-                if (data.error_msg) {
-                    showMessage(data.error_msg, "alert-danger");
-                } else {
-                    showMessage("Your user profile information was successfully saved."
-                        + " You will soon be redirected to the main page.", "alert-success");
-
-                    setTimeout(() => { window.location.replace("/texts"); }, 2000);
-                }
-            })
-            .fail(function() {
-                showMessage("<strong>Oops!</strong> Something went wrong when trying to save your user profile information.", "alert-danger");
-            })
-            .always(function() {
-                $("#password, #newpassword, #newpassword-confirmation").val("");
+        try {
+            const form_data = new URLSearchParams($("#userprofile-form").serialize());
+            
+            const response = await fetch("/ajax/saveuserprofile.php", {
+                method: "POST",
+                body: form_data
             });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to save user profile.');
+            }
+
+            showMessage(`Your user profile information was successfully saved.
+                You will soon be redirected to the main page.`, "alert-success");
+
+            setTimeout(() => { window.location.replace("/texts"); }, 2000);
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "alert-danger");
+        } finally {
+            $("#password, #newpassword, #newpassword-confirmation").val("");
+        }
     }); // end #userprofile-form.submit
 
     /**
@@ -61,21 +66,27 @@ $(document).ready(function() {
     /**
      * Deletes account
      */
-    $("#btn-confirm-delete-account").on("click", function() {
-        $.ajax({
-            url: "ajax/deleteaccount.php",
-            type: "POST",
-            data: $("#userprofile-form").serialize()
-        })
-            .done(function(data) {
-                if (data.error_msg) {
-                    showMessage(data.error_msg, "alert-danger");
-                } else {
-                    window.location.replace("/");
-                }
-            })
-            .fail(function() {
-                showMessage("<strong>Oops!</strong> Something went wrong when trying to delete your user account.", "alert-danger");
+    $("#btn-confirm-delete-account").on("click", async function() {
+        try {
+            const form_data = new URLSearchParams($("#userprofile-form").serialize());
+            
+            const response = await fetch("/ajax/deleteaccount.php", {
+                method: "POST",
+                body: form_data
             });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to delete account.');
+            }
+            
+            handleLogout(true); // logout after user deletion
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "alert-danger");
+        }
     }); // #btn-confirm-delete-account.on.click
 });

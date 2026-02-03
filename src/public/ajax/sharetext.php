@@ -19,10 +19,13 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-// check that $_POST is set & not empty
-if (!isset($_POST) || empty($_POST)) {
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);
     exit;
 }
 
@@ -43,9 +46,15 @@ try {
 
         $texts_table = new Texts($pdo, $user_id, $lang_id);
         $texts_table->share($text_id);
+        $response = ['success' => true];
     }
-} catch (UserException $e) {
+
+    echo json_encode($response);
+    exit;
+} catch (InternalException | UserException $e) {
     echo $e->getJsonError();
-} catch (InternalException) {
-    http_response_code(500);
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

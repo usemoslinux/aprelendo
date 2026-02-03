@@ -29,19 +29,25 @@ const Dictionaries = (() => {
      * Fetches dictionary and translator URIs from the server via an AJAX GET request.
      * @returns {jqXHR} A jQuery promise object that resolves with the JSON response or rejects with error information.
      */
-    const fetchURIs = () => {
+    const fetchURIs = async () => {
+        try {
+            const response = await fetch("/ajax/getdicuris.php");
+            
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
-        $.ajax({
-            url: "/ajax/getdicuris.php",
-            type: "GET",
-            dataType: "json"
-        }).done(function (data) {
-            if (data.error_msg == null) {
-                URIs.dictionary = data.dictionary_uri;
-                URIs.img_dictionary = data.img_dictionary_uri;
-                URIs.translator = data.translator_uri;
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to fetch dictionary URIs');
             }
-        }); // end $.ajax
+
+            URIs.dictionary = data.payload.dictionary_uri;
+            URIs.img_dictionary = data.payload.img_dictionary_uri;
+            URIs.translator = data.payload.translator_uri;
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
     } // end Dictionaries.fetchURIs
 
     /**

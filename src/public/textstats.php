@@ -18,7 +18,7 @@
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-if (!isset($_POST) || empty($_POST)) {
+if (empty($_POST)) {
     header('Location:/texts');
     exit;
 }

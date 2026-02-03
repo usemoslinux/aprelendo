@@ -33,41 +33,43 @@ $color_mode = '';
 $doclang = $user->lang;
 
 try {
-    if (!empty($_GET['id'])) {
-        // check if user has access to view this text
-        if (!$user->isAllowedToAccessElement('texts', (int)$_GET['id'])) {
-            http_response_code(403);
-            exit;
-        }
-
-        $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
-        $reader = new Reader($pdo, $user->id, $user->lang_id, $_GET['id'], $is_shared);
-        $result = '';
-
-        // get user preferences & load classes and CSS for ebook
-        $prefs = $reader->prefs;
-
-        switch ($prefs->display_mode) {
-            case 'light':
-                $color_mode = 'lightmode';
-                break;
-            case 'sepia':
-                $color_mode = 'sepiamode';
-                break;
-            case 'dark':
-                $color_mode = 'darkmode';
-                break;
-            default:
-                break;
-        }
-
-        $font_family = $prefs->font_family;
-        $font_size = $prefs->font_size;
-        $text_align = $prefs->text_alignment;
-        $reader_css = "font-family:$font_family;font-size:$font_size;text-align:$text_align;";
-    } else {
+    if (empty($_GET['id'])) {
         throw new UserException('Oops! There was an unexpected error trying to fetch that ebook.');
     }
+    
+    // check if user has access to view this text
+    if (!$user->isAllowedToAccessElement('texts', (int)$_GET['id'])) {
+        http_response_code(403);
+        exit;
+    }
+
+    $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
+    $reader = new Reader($pdo, $user->id, $user->lang_id, $_GET['id'], $is_shared);
+    $result = '';
+
+    // get user preferences & load classes and CSS for ebook
+    $prefs = $reader->prefs;
+
+    switch ($prefs->display_mode) {
+        case 'light':
+            $color_mode = 'lightmode';
+            break;
+        case 'sepia':
+            $color_mode = 'sepiamode';
+            break;
+        case 'dark':
+            $color_mode = 'darkmode';
+            break;
+        default:
+            break;
+    }
+
+    $font_family = $prefs->font_family;
+    $font_size = $prefs->font_size;
+    $line_height = $prefs->line_height;
+    $text_align = $prefs->text_alignment;
+    
+    $reader_css = "font-family:$font_family;font-size:$font_size;line-height:$line_height;text-align:$text_align";
 } catch (Exception $e) {
     header('Location:/login');
     exit;
@@ -124,18 +126,21 @@ $audio_source_is_YT = Videos::isYTVideo($audio_uri);
 
     <!-- Epub.js & jszip -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
-        integrity="sha384-+mbV2IY1Zk/X1p/nWllGySJSUN8uMs+gUAN10Or95UBH0fpj6GfKgPmgC5EXieXG"
-        crossorigin="anonymous" referrerpolicy="no-referrer">
+        integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
+        crossorigin="anonymous">
     </script>
-    <script defer src="/js/epubjs/epub.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"
+        integrity="sha512-qZUwAZnQNbTGK3xweH0p9dJ0/FflhdJwGr5IhvhuBtltqdTi6G8TjsAf8WINe3uhhyt2wueXacvXtQtOiHm26Q=="
+        crossorigin="anonymous">
+    </script>
 
     <!-- JQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="https://code.jquery.com/jquery-4.0.0.slim.min.js"
+        integrity="sha512-1g+lD9RHY4sYTrehMnFuWSqn3GS1xE2nhSSb5a8JS0WYMnvm1iuxpajRACu0C9tmJSL78O7eQw9TUhGUsRFc0g=="
+        crossorigin="anonymous">
     </script>
 
-    <!-- Bootstrap -->
+    <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js"
         integrity="sha512-HvOjJrdwNpDbkGJIG2ZNqDlVqMo77qbs4Me4cah0HoDrfhrbA+8SBlZn1KrvAQw7cILLPFJvdwIgphzQmMm+Pw=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -198,7 +203,7 @@ $audio_source_is_YT = Videos::isYTVideo($audio_uri);
                         </button>
                     </span>
 
-                    <div class="loading-spinner-container me-2">
+                    <div class="loading-spinner-container me-2 fade">
                         <div class="spinner-wrapper">
                             <div></div>
                             <div></div>
@@ -227,7 +232,7 @@ $audio_source_is_YT = Videos::isYTVideo($audio_uri);
 
                 </span>
             </div>
-            <div id="text-container" class="d-flex flex-column m-2 p-3" style="<?php echo $reader_css; ?>">
+            <div id="text-container" class="d-flex flex-column m-2 p-3 fade" style="<?php echo $reader_css; ?>">
                 <div id="text" class="flex-grow-1" data-idText="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
                 </div>
                 <div class="navlink">

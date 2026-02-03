@@ -19,7 +19,15 @@
 */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);
+    exit;
+}
 
 use Aprelendo\Card;
 use Aprelendo\InternalException;
@@ -35,12 +43,18 @@ try {
     if (!isset($_POST['word']) || empty($_POST['word'])) {
         $limit = $_POST['limit'];
         $status = isset($_POST['status']) && $_POST['status'] !== '' ? (int)$_POST['status'] : null;
-        $result = $card->getWordsUserIsLearning((int)$limit, $status);
+        $payload = $card->getWordsUserIsLearning((int)$limit, $status);
     } else {
-        $result = $card->getExampleSentencesForWord($_POST['word']);
+        $payload = $card->getExampleSentencesForWord($_POST['word']);
     }
 
-    echo json_encode($result);
+    $response = ['success' => true, 'payload' => $payload];
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

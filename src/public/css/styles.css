@@ -504,6 +504,7 @@ ol {
     box-shadow: 0 .10rem .10rem 0 rgba(0,0,0,.1);
     font-family: var(--bs-body-font-family);
     font-size: var(--bs-body-font-size);
+    line-height: 1.5;
 }
 
 .alert p:last-child {
@@ -593,18 +594,18 @@ ol {
 /* COOKIES */
 
 #eucookielaw {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    z-index: 10000;
-    position: fixed;
-    box-shadow: 0 .10rem .10rem 0 rgba(0, 0, 0, .1);
-    bottom: 0;
     background: #444;
+    bottom: 0;
+    box-shadow: 0 .10rem .10rem 0 rgba(0, 0, 0, .1);
     color: #fff;
-    padding: .5rem 2rem;
+    display: flex;
     font-weight: 600;
+    justify-content: space-between;
+    padding: .5rem 2rem;
+    position: fixed;
     width: 100%;
+    z-index: 10000;
 }
 
 #eucookielaw a {
@@ -724,24 +725,18 @@ a[role="menuitem"] {
     background-color: var(--color-bg-dark);
 }
 
-#readerpage.lightmode {
-    background: url("../img/backgrounds/container-light.webp") no-repeat center center;
+#readerpage {
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: center center;
     background-size: cover;
     background-attachment: fixed;
+    background-image: var(--bg-image);
 }
 
-#readerpage.sepiamode {
-    background: url("../img/backgrounds/container-sepia.webp") no-repeat center center;
-    background-size: cover;
-    background-attachment: fixed;
-}
-
-#readerpage.darkmode {
-    background: url("../img/backgrounds/container-dark.webp") no-repeat center center;
-    background-size: cover;
-    background-attachment: fixed;
-}
-
+#readerpage.lightmode { --bg-image: url("../img/backgrounds/container-light.webp"); }
+#readerpage.sepiamode { --bg-image: url("../img/backgrounds/container-sepia.webp"); }
+#readerpage.darkmode  { --bg-image: url("../img/backgrounds/container-dark.webp"); }
 
 .lightmode .word:hover,
 .darkmode .word:hover,
@@ -813,6 +808,7 @@ a[role="menuitem"] {
 #audioplayer-container {
     font-family: var(--bs-body-font-family);
     font-size: var(--bs-body-font-size);
+    line-height: 1.5;
     position: sticky;
     top: -16px;
     z-index: 3;

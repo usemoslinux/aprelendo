@@ -56,60 +56,50 @@ $(document).ready(function() {
      * This is triggered when user presses the "Save" button & submits the form
      * @param e {Event}
      */
-    $("#form-addebook").on("submit", function(e) {
+    $("#form-addebook").on("submit", async function(e) {
         e.preventDefault();
         const $progressbar = $("#upload-progress-bar");
         const form_data = new FormData(document.getElementById("form-addebook"));
-        const audio_uri = $("#audio-uri").text();
+        const audio_uri = $("#audio-uri").val();
 
-        $('#alert-box').addClass('d-none');
+        try {
+            $('#alert-box').addClass('d-none');
 
-        // validate audio URL
-        if (audio_uri != "" && !isValidHttpUrl(audio_uri)) {
-            showMessage("Invalid audio URL.", "alert-danger");
-            return;
+            // validate audio URL
+            if (audio_uri != "" && !isValidHttpUrl(audio_uri)) {
+                throw new Error("Invalid audio URL.");
+            }
+
+            // show progress bar & disable buttons
+            $progressbar.parent().removeClass("d-none");
+            $("#btn-upload-epub").addClass("disabled");
+            $("#btn-save").addClass("disabled");
+            $progressbar.width("33%");
+            $progressbar.text("Uploading & converting ebook...");
+
+            const response = await fetch("ajax/addtext.php", {
+                method: "POST",
+                body: form_data
+            });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to add ebook');                
+            }
+
+            $progressbar.width("100%");
+            $progressbar.text("Upload complete...");
+            setTimeout(() => {
+                window.location.replace("/texts");
+            }, 1500);
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "alert-danger");
+            resetControls(false);
         }
-
-        $progressbar.parent().removeClass("d-none");
-        $("#btn-upload-epub").addClass("disabled");
-        $("#btn-save").addClass("disabled");
-        $progressbar.width("33%");
-        $progressbar.text("Uploading & converting ebook...");
-
-        // try to upload file
-        $.ajax({
-            type: "POST",
-            url: "ajax/addtext.php",
-            data: form_data,
-            dataType: "json",
-            contentType: false,
-            processData: false
-        })
-            .done(function(data) {
-                // in case of error while trying to upload, show error message
-                if (data.error_msg != null) {
-                    showMessage(data.error_msg, "alert-danger");
-                    resetControls(false);
-                }
-                // if upload succeeds, validate epub file structure & integrity
-                else {
-                    $progressbar.width("100%");
-                    $progressbar.text("Upload complete...");
-                    $progressbar
-                        .parent()
-                        .delay(1500)
-                        .fadeOut("slow", function() {
-                            window.location.replace("/texts");
-                        });
-                }
-            })
-            .fail(function(xhr, ajaxOptions, thrownError) {
-                showMessage(
-                    "Oops! There was an unexpected error uploading this text.",
-                    "alert-danger"
-                );
-                resetControls(false);
-            }); // end of ajax
     }); // end #form-addebook.on.submit
 
     /**

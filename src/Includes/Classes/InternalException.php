@@ -30,12 +30,7 @@ class InternalException extends Exception {
 
     protected function encodeJsonError(string $error_msg): string
     {
-        $error = ['error_msg' => $error_msg];
-    
-        // Set the JSON content type header
-        header('Content-Type: application/json');
-    
-        // Encode the error array as JSON and return it
+        $error = ['success' => false, 'error_msg' => $error_msg];
         return json_encode($error);
     }
 }

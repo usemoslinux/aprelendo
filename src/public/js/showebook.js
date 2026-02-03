@@ -26,8 +26,8 @@ $(document).ready(function () {
 
     let text = document.getElementById("text");
 
-    let formData = new FormData();
-    formData.append("id", ebook_id);
+    let form_data = new FormData();
+    form_data.append("id", ebook_id);
 
     /**
      * Throws error if response.status !== 200
@@ -36,29 +36,33 @@ $(document).ready(function () {
      * @param response
      */
     function fetchStatusHandler(response) {
-        if (response.status === 200) {
-            return response;
-        } else {
+        if (response.status !== 200) {
             throw new Error(response.statusText);
         }
+        return response;
     } // end fetchStatusHandler
 
     /**
      * Ajax call to fetch an ebook. Response has to be converted to arrayBuffer to allow
      * epub.js (book.open function) to process it correctly
      */
-    fetch("ajax/getebook.php?id=" + ebook_id)
-        .then(fetchStatusHandler)
-        .then(response => response.arrayBuffer())
-        .then(arraybuffer => book.open(arraybuffer))
-        .catch(function (e) {
-            alert('There was an unexpected problem opening this ebook file. Try again later.');
-            window.location.replace("/texts");
-        });
+    function getEbook(ebook_id, fetchStatusHandler, book) {
+        fetch("/ajax/getebook.php?id=" + ebook_id)
+            .then(fetchStatusHandler)
+            .then(response => response.arrayBuffer())
+            .then(arraybuffer => book.open(arraybuffer))
+            .catch((error) => {
+                alert(`Oops! ${error.message}`);
+                window.location.replace("/texts");
+            });
 
-    let rendition = book.renderTo("text", {
-        flow: "scrolled-doc"
-    });
+        let rendition = book.renderTo("text", {
+            flow: "scrolled-doc"
+        });
+        return rendition;
+    }
+
+    let rendition = getEbook(ebook_id, fetchStatusHandler, book);
 
     // theming
     let reader = document.getElementById("readerpage");
@@ -92,49 +96,46 @@ $(document).ready(function () {
     let next = document.getElementById("next");
     next.addEventListener(
         "click",
-        function (e) {
+        async function (e) {
             e.preventDefault();
             $(next).tooltip('hide');
-            $.when(SaveWords()).then(function () {
-                let url = next.getAttribute("href");
-                display(url);
-            });
+            await SaveWords(); // Await the async SaveWords function
+            let url = next.getAttribute("href");
+            display(url);
         },
         false
     );
 
-    $("body").on("click", "#btn-close-ebook", function () {
+    $("body").on("click", "#btn-close-ebook", async function () {
         // save word status before closing
-        $.when(SaveWords()).then(function () {
-            // save book position to resume reading from there later
-            let audio_pos = 0;
-            const audio = document.getElementById("audioplayer");
-            const video = document.getElementById("videoplayer");
+        await SaveWords(); // Await the async SaveWords function
+        // save book position to resume reading from there later
+        let audio_pos = 0;
+        const audio = document.getElementById("audioplayer");
+        const video = document.getElementById("videoplayer");
 
-            if (audio) {
-                if (typeof AudioController !== "undefined" && AudioController.isPlaylist()) {
-                    audio_pos = AudioController.getPlaylistPositionString();
-                } else {
-                    audio_pos = audio.currentTime;
-                }
-            } else if (video) {
-                audio_pos = VideoController.getCurrentTime();
+        if (audio) {
+            if (typeof AudioController !== "undefined" && AudioController.isPlaylist()) {
+                audio_pos = AudioController.getPlaylistPositionString();
+            } else {
+                audio_pos = audio.currentTime;
             }
+        } else if (video) {
+            audio_pos = VideoController.getCurrentTime();
+        }
 
-            if (text_pos) {
-                $.when(saveTextAndAudioPos(text_pos, audio_pos)).then(function () {
-                    // don't show confirmation dialog when closing window
-                    window.parent.show_confirmation_dialog = false;
-                    window.location.replace("/texts");
-                });
-            }
-        });
+        if (text_pos) {
+            await saveTextAndAudioPos(text_pos, audio_pos); // Await the async saveTextAndAudioPos function
+            // don't show confirmation dialog when closing window
+            window.parent.show_confirmation_dialog = false;
+            window.location.replace("/texts");
+        }
     }); // end #btn-close-ebook.on.click
 
     /**
      * Updates status of all underlined words & phrases
      */
-    function SaveWords() {
+    async function SaveWords() {
         // build array with underlined words
         let oldwords = [];
         let word = "";
@@ -153,45 +154,51 @@ $(document).ready(function () {
                 }
             });
 
-        return $.ajax({
-            type: "POST",
-            url: "/ajax/updatewords.php",
-            data: {
-                words: oldwords
-            }
-        })
-            .done(function (data) {
-                if (data.error_msg == null) {
-                    // update user score (gems)
-                    const review_data = {
-                        words: {
-                            new: getUniqueElements('.reviewing.new'),
-                            learning: getUniqueElements('.reviewing.learning'),
-                            forgotten: getUniqueElements('.reviewing.forgotten')
-                        },
-                        texts: { reviewed: 1 }
-                    };
-
-                    return $.ajax({
-                        type: "post",
-                        url: "/ajax/updateuserscore.php",
-                        data: review_data
-                    })
-                        .done(function (data) {
-                            if (data.error_msg != null) {
-                                alert("Oops! There was an unexpected error updating user score.");
-                            }
-                        })
-                        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                            alert("Oops! There was an unexpected error updating user score.");
-                        });
-                } else {
-                    alert("Oops! There was an error unexpected error saving this text.");
-                }
-            })
-            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("Oops! There was an error unexpected error saving this text.");
+        try {
+            const update_words_form_data = new URLSearchParams({ words: JSON.stringify(oldwords) });
+            
+            const update_words_response = await fetch("/ajax/updatewords.php", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: update_words_form_data
             });
+
+            if (!update_words_response.ok) throw new Error(`HTTP error: ${update_words_response.status}`);
+
+            const update_words_data = await update_words_response.json();
+
+            if (!update_words_data.success) {
+                throw new Error(update_words_data.error_msg || 'Failed to save text.');
+            } 
+            
+            const review_data = {
+                words: {
+                    new: getUniqueElements('.reviewing.new'),
+                    learning: getUniqueElements('.reviewing.learning'),
+                    forgotten: getUniqueElements('.reviewing.forgotten')
+                },
+                texts: { reviewed: 1 }
+            };
+
+            const update_user_score_response = await fetch("/ajax/updateuserscore.php", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    'review_data': JSON.stringify(review_data)
+                })
+            });
+
+            if (!update_user_score_response.ok) { throw new Error(`HTTP error: ${update_user_score_response.status}`); }
+
+            const update_user_score_data = await update_user_score_response.json();
+
+            if (!update_user_score_data.success) {
+                throw new Error(update_user_score_data.error_msg || 'Failed to update user score.');
+            }
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
     } // end SaveWords
 
     parent.window.addEventListener("unload", function () {
@@ -267,7 +274,7 @@ $(document).ready(function () {
         }
     }); // end book.loaded.metadata
 
-    function display(item) {
+    async function display(item) {
         let section = book.spine.get(item);
         let text_html = '';
 
@@ -280,47 +287,54 @@ $(document).ready(function () {
         resetNextChapterBtn();
 
         if (section) {
-            section.render().then(function (ebook_html) {
+            await section.render().then(async function (ebook_html) { // Make inner function async
                 let $parsed = cleanEbookHTML(ebook_html);
 
                 // underline text
-                $(".loading-spinner-container").fadeIn(300);
-                $("#text-container").hide();
-                $.ajax({
-                    type: "POST",
-                    url: "/ajax/getuserwords.php",
-                    data: { txt: $parsed.html() },
-                    dataType: "json"
-                })
-                    .done(function (data) {
-                        text_html = TextUnderliner.apply(data, doclang, false);
-                        text.innerHTML = text_html;
-                        TextProcessor.updateAnchorsList();
-                        $("#text-container").fadeIn(300);
-                        $(".loading-spinner-container").fadeOut(300);
-                        scrollToPageTop();
-                    })
-                    .fail(function (xhr, ajaxOptions, thrownError) {
-                        alert(
-                            "There was an unexpected error when trying to underline words for this ebook!"
-                        );
-                    }); // end $.ajax  
+                $(".loading-spinner-container").addClass("show");
+                $("#text-container").removeClass("show");
+                try {
+                    const form_data = new URLSearchParams({ txt: $parsed.html() });
+                    
+                    const response = await fetch("/ajax/getuserwords.php", {
+                        method: "POST",
+                        body: form_data
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+                    const data = await response.json();
+
+                    if (!data.success) {
+                        throw new Error(data.error_msg || 'Failed to get user words for underlining');
+                    }
+                    
+                    text_html = TextUnderliner.apply(data.payload, doclang);
+                    text.innerHTML = text_html;
+                    TextProcessor.updateAnchorsList();
+                    $("#text-container").addClass("show");
+                    $(".loading-spinner-container").removeClass("show");
+                    scrollToPageTop();
+                } catch (error) {
+                    console.error(error);
+                    alert(`Oops! ${error.message}`);
+                }
 
                 // create next chapter link on bottom of page
-                let nextSection = section.next();
+                let next_section = section.next();
 
-                if (nextSection) {
-                    const nextNav = book.navigation.get(nextSection.href);
-                    let nextLabel = '';
+                if (next_section) {
+                    const next_nav = book.navigation.get(next_section.href);
+                    let next_label = '';
 
-                    if (nextNav) {
-                        nextLabel = nextNav.label;
+                    if (next_nav) {
+                        next_label = next_nav.label;
                     } else {
-                        nextLabel = "Next chapter";
+                        next_label = "Next chapter";
                     }
 
-                    next.textContent = nextLabel + " »";
-                    next.href = nextSection.href;
+                    next.textContent = next_label + " »";
+                    next.href = next_section.href;
 
                     if (!isMobileDevice()) {
                         next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as reviewed');
@@ -343,7 +357,7 @@ $(document).ready(function () {
     function cleanEbookHTML(html) {
         // Replace line breaks (\n or \r) with spaces.
         html = html.replace(/[\r\n]+/g, ' ');
-        
+
         // Wrap the provided HTML into a container.
         let $parsed = $('<div/>').append(html);
 
@@ -409,7 +423,7 @@ $(document).ready(function () {
 
         // Process the entire container.
         let result = processNode($parsed[0]);
-        
+
         // Normalize newlines by replacing multiple consecutive newlines with a single newline and trimming.
         result = result.replace(/\n\s*\n/g, "\n\n").trim();
 
@@ -442,62 +456,79 @@ $(document).ready(function () {
         }
     } // end updateToc
 
-    function setTextAndAudioPos() {
+    async function setTextAndAudioPos() {
         // retrieve ebook & audio last reading position
-        $.ajax({
-            type: "POST",
-            url: "/ajax/ebookposition.php",
-            data: { mode: "GET", id: ebook_id },
-            dataType: "json"
-        })
-            .done(function (data) {
-                const text_pos = data.text_pos;
-                const audio_pos = data.audio_pos;
-                const audio_pos_number = parseFloat(audio_pos);
-                const audio = document.getElementById("audioplayer");
-                const video = document.getElementById("videoplayer");
+        try {
+            const form_data = new URLSearchParams({ mode: "GET", id: ebook_id });
+            const response = await fetch("/ajax/ebookposition.php", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: form_data
+            });
 
-                // load text position, if available
-                if (text_pos) {
-                    display(text_pos);
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to get text and audio position.');
+            }
+            
+            const text_pos = data.payload.text_pos;
+            const audio_pos = data.payload.audio_pos;
+            const audio_pos_number = parseFloat(audio_pos);
+            const audio = document.getElementById("audioplayer");
+            const video = document.getElementById("videoplayer");
+
+            // load text position, if available
+            if (text_pos) {
+                await display(text_pos);
+            } else {
+                await display(1);
+            }
+
+            // load audio position, if available
+            if (audio != null) {
+                if (audio_pos && audio_pos.includes('|') && typeof AudioController !== "undefined") {
+                    AudioController.setPlaylistPositionFromString(audio_pos);
+                } else if (!isNaN(audio_pos_number)) {
+                    audio.currentTime = audio_pos_number;
                 } else {
-                    display(1);
-                }
-
-                // load audio position, if available
-                if (audio != null) {
-                    if (audio_pos && audio_pos.includes('|') && typeof AudioController !== "undefined") {
-                        AudioController.setPlaylistPositionFromString(audio_pos);
-                    } else if (!isNaN(audio_pos_number)) {
-                        audio.currentTime = audio_pos_number;
-                    } else {
-                        audio.currentTime = 0;
-                    }
-                } else if (video != null) {
-                    initializeVideoPlayer(audio_pos_number);
-                }
-            })
-            .fail(function (xhr, ajaxOptions, thrownError) {
-                display(1);
-                if (audio != null) {
                     audio.currentTime = 0;
                 }
-            });
+            } else if (video != null) {
+                initializeVideoPlayer(audio_pos_number);
+            }
+        } catch (error) {
+            console.error(error);
+            await display(1);
+            const audio = document.getElementById("audioplayer");
+            if (audio != null) {
+                audio.currentTime = 0;
+            }
+        }
     } // end setTextAndAudioPos
 
-    function saveTextAndAudioPos(text_pos, audio_pos) {
-        return $.ajax({
-            type: "POST",
-            url: "/ajax/ebookposition.php",
-            data: { mode: "SAVE", id: ebook_id, audio_pos: audio_pos, text_pos: text_pos }
-        })
-            .done(function (data) {
-                if (data.error_msg != null) {
-                    alert('Oops! There was an error unexpected error saving text and audio position');
-                }
-            })
-            .fail(function (xhr, ajaxOptions, thrownError) {
-                alert('Oops! There was an error unexpected error saving text and audio position');
+    async function saveTextAndAudioPos(text_pos, audio_pos) {
+        try {
+            const form_data = new URLSearchParams({ mode: "SAVE", id: ebook_id, audio_pos: audio_pos, text_pos: text_pos });
+            const response = await fetch("/ajax/ebookposition.php", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: form_data
             });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to save text and audio position.');
+            }
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
     } // end saveTextAndAudioPos
 });
+

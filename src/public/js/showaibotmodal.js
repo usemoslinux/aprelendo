@@ -78,35 +78,44 @@ $(document).ready(function () {
     $('#ask-ai-bot-modal').on('show.bs.modal', function () {
         // Reset form when modal is shown
         $('#prompt-category').val('');
-        $('#prompt-select').attr('disabled', true).empty().append('<option value="">First select a category...</option>');
+        $("#prompt-select")
+            .prop("disabled", true)
+            .empty()
+            .append('<option value="">First select a category...</option>');
         $('#custom-prompt').val('');
-        $('#prompt-form').show();
-        $('#ai-answer').hide();
+        $('#prompt-form').removeClass('d-none');
+        $('#ai-answer').addClass('d-none');
         $('#text-ai-answer').val('');
-        $('#back-footer').hide();
-        $('#normal-footer').show();
+        $('#back-footer').addClass('d-none');
+        $('#normal-footer').removeClass('d-none');
     });
 
     // Handle category selection
-    $('#prompt-category').change(function () {
+    $('#prompt-category').on( "change", function () {
         const category = $(this).val();
         const prompt_select = $('#prompt-select');
         const current_word = $('#ask-ai-bot-modal').attr('data-word');
 
         if (category) {
-            prompt_select.removeAttr('disabled').empty().append('<option value="">Choose a prompt...</option>');
+            prompt_select
+                .prop('disabled', false)
+                .empty()
+                .append('<option value="">Choose a prompt...</option>');
             prompts[category].forEach((prompt, index) => {
                 const formatted_prompt = replaceWordWithQuotes(prompt, current_word);
                 prompt_select.append(`<option value="${index}">${formatted_prompt}</option>`);
             });
         } else {
-            prompt_select.attr('disabled', true).empty().append('<option value="">First select a category...</option>');
+            prompt_select
+                .prop('disabled', true)
+                .empty()
+                .append('<option value="">First select a category...</option>');
             $('#custom-prompt').val('');
         }
     });
 
     // Handle prompt selection
-    $('#prompt-select').change(function () {
+    $('#prompt-select').on( "change", function () {
         const category = $('#prompt-category').val();
         const prompt_index = $(this).val();
         const current_word = $('#ask-ai-bot-modal').attr('data-word');
@@ -119,7 +128,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#btn-ask-ai-bot').click(function () {
+    $('#btn-ask-ai-bot').on("click", function () {
         const custom_prompt = $('#custom-prompt').val();
         if (!custom_prompt) return;
 
@@ -127,10 +136,10 @@ $(document).ready(function () {
         const prompt = replaceWordWithQuotes(custom_prompt, current_word);
         const converter = new showdown.Converter();
         
-        $('#prompt-form').hide();
-        $('#ai-answer').show();
-        $('#normal-footer').hide();
-        $('#back-footer').show();
+        $('#prompt-form').addClass('d-none');
+        $('#ai-answer').removeClass('d-none');
+        $('#normal-footer').addClass('d-none');
+        $('#back-footer').removeClass('d-none');
         $('#text-ai-answer').html('Lingobot is thinking...');
 
         AIBot.streamReply(prompt, {
@@ -146,10 +155,10 @@ $(document).ready(function () {
 
     // Handle Back button click
     $(document).on('click', '#back-to-form', function () {
-        $('#back-footer').hide();
-        $('#normal-footer').show();
-        $('#ai-answer').hide();
+        $('#back-footer').addClass('d-none');
+        $('#normal-footer').removeClass('d-none');
+        $('#ai-answer').addClass('d-none');
         $('#text-ai-answer').val('');
-        $('#prompt-form').show();
+        $('#prompt-form').removeClass('d-none');
     });
 });

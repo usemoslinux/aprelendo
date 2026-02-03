@@ -120,16 +120,7 @@ $today_is_reading_streak = $gems->today_is_streak;
                                 </div>
                                 <a href="/donate.php" class="dropdown-item">Donate</a>
                                 <div class="dropdown-divider"></div>
-                                <a href="/logout.php" onclick="googleLogOut();" class="dropdown-item">Logout</a>
-                                <?php if (!IS_SELF_HOSTED): ?>
-                                    <script>
-                                        function googleLogOut() {
-                                            if (typeof google !== 'undefined') {
-                                                google.accounts.id.disableAutoSelect();
-                                            }
-                                        }
-                                    </script>
-                                <?php endif; ?>
+                                <a onclick="handleLogout()" class="dropdown-item">Logout</a>
                             </div>
                         </li>
                     </ul>

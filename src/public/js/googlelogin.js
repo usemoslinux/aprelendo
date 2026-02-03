@@ -21,33 +21,34 @@
  * Google Log in
  * Uses the new Google Identity Services library for authentication
  */
-function googleLogIn(googleUser) {
+async function googleLogIn(googleUser) {
     const profile = decodeJwtResponse(googleUser.credential);
 
-    //pass information to server to insert or update the user record
-    $.ajax({
-        type: "POST",
-        data: {
-            "id": profile.sub,
-            "name": profile.name,
-            "email": profile.email,
-            "time-zone": Intl.DateTimeFormat().resolvedOptions().timeZone
-        },
-        url: "ajax/google_oauth.php"
-    })
-        .done(function(data) {
-            if (data.error_msg == undefined) {
-                window.location.replace("/texts");
-            } else {
-                showMessage(data.error_msg, "alert-danger");
-            }
-        })
-        .fail(function(xhr, ajaxOptions, thrownError) {
-            showMessage(
-                "Oops! There was an unexpected error when trying to register you. Please try again later.",
-                "alert-danger"
-            );
+    try {
+        const form_data = new URLSearchParams();
+        form_data.append('id', profile.sub);
+        form_data.append('name', profile.name);
+        form_data.append('email', profile.email);
+        form_data.append('time-zone', Intl.DateTimeFormat().resolvedOptions().timeZone);
+        
+        const response = await fetch("/ajax/google_oauth.php", {
+            method: "POST",
+            body: form_data
         });
+
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.error_msg || 'Failed to log in with Google.');
+        }
+                
+        window.location.replace("/texts");
+    } catch (error) {
+        console.error(error);
+        showMessage(error.message, "alert-danger");
+    }
 } // end googleLogIn
 
 /**

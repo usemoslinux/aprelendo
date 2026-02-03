@@ -280,10 +280,6 @@ class User extends DBEntity
     public function delete(): void
     {
         $user = new UserAuth($this);
-        
-        if ($user->isLoggedIn()) {
-            $user->logout(true);
-        }
 
         $this->deleteFiles();
         

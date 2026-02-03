@@ -106,12 +106,15 @@ require_once PUBLIC_PATH . 'header.php';
 </div>
 
 <!-- Epub.js & jszip -->
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
     integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer">
+    crossorigin="anonymous">
 </script>
 
-<script defer src="/js/epubjs/epub.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"
+    integrity="sha512-qZUwAZnQNbTGK3xweH0p9dJ0/FflhdJwGr5IhvhuBtltqdTi6G8TjsAf8WINe3uhhyt2wueXacvXtQtOiHm26Q=="
+    crossorigin="anonymous">
+</script>
 
 <script defer src="/js/addebook.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>

@@ -20,7 +20,7 @@
  */
 
 require_once '../Includes/dbinit.php';  // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // check if user is logged in and set $user object
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
 use Aprelendo\Reader;
 use Aprelendo\Likes;
@@ -28,53 +28,52 @@ use Aprelendo\UserException;
 
 try {
     $reader_class = "class='dvh-100 dvw-100 ";
-    if (!empty($_GET['id'])) {
-        $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
-
-        $text_id = (int)$_GET['id'];
-
-        $text_table = $is_shared ? 'shared_texts' : 'texts';
-
-        // check if user has access to view this text
-        if (!$user->isAllowedToAccessElement($text_table, $text_id)) {
-            http_response_code(403);
-            exit;
-        }
-
-        $reader = new Reader($pdo, $user->id, $user->lang_id, $text_id, $is_shared);
-        $is_long_text = $reader->is_long_text;
-        $prefs = $reader->prefs;
-
-        switch ($prefs->display_mode) {
-            case 'light':
-                $reader_class .= "lightmode'";
-                break;
-            case 'sepia':
-                $reader_class .= "sepiamode'";
-                break;
-            case 'dark':
-                $reader_class .= "darkmode'";
-                break;
-            default:
-                $reader_class .= "'";
-                break;
-        }
-        $font_family = $prefs->font_family;
-        $font_size = $prefs->font_size;
-        $text_align = $prefs->text_alignment;
-        $reader_css = "font-family:$font_family;font-size:$font_size;text-align:$text_align;";
-
-        $assisted_learning = $prefs->assisted_learning;
-
-        $likes = new Likes($pdo, $text_id, $user->id, $user->lang_id);
-        $user_liked_class = $likes->userLiked() ? 'bi-heart-fill' : 'bi-heart';
-        $nr_of_likes = $likes->get($text_id);
-
-        $has_next_phase = $assisted_learning && !$is_long_text;
-        $has_external_audio = $reader->hasExternalAudio();
-    } else {
+    if (empty($_GET['id'])) {
         throw new UserException('Error fetching this text.');
     }
+    
+    $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
+    $text_id = (int)$_GET['id'];
+    $text_table = $is_shared ? 'shared_texts' : 'texts';
+
+    // check if user has access to view this text
+    if (!$user->isAllowedToAccessElement($text_table, $text_id)) {
+        http_response_code(403);
+        exit;
+    }
+
+    $reader = new Reader($pdo, $user->id, $user->lang_id, $text_id, $is_shared);
+    $is_long_text = $reader->is_long_text;
+    $prefs = $reader->prefs;
+
+    switch ($prefs->display_mode) {
+        case 'light':
+            $reader_class .= "lightmode'";
+            break;
+        case 'sepia':
+            $reader_class .= "sepiamode'";
+            break;
+        case 'dark':
+            $reader_class .= "darkmode'";
+            break;
+        default:
+            $reader_class .= "'";
+            break;
+    }
+    $font_family = $prefs->font_family;
+    $font_size = $prefs->font_size;
+    $line_height = $prefs->line_height;
+    $text_align = $prefs->text_alignment;
+    $reader_css = "font-family:$font_family;font-size:$font_size;line-height:$line_height;text-align:$text_align";
+
+    $assisted_learning = $prefs->assisted_learning;
+
+    $likes = new Likes($pdo, $text_id, $user->id, $user->lang_id);
+    $user_liked_class = $likes->userLiked() ? 'bi-heart-fill' : 'bi-heart';
+    $nr_of_likes = $likes->get($text_id);
+
+    $has_next_phase = $assisted_learning && !$is_long_text;
+    $has_external_audio = $reader->hasExternalAudio();
 } catch (Exception $e) {
     header('Location:/login');
     exit;

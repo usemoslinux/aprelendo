@@ -19,10 +19,19 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);
+    exit;
+}
 
 use Aprelendo\Texts;
 use Aprelendo\SharedTexts;
+use Aprelendo\Videos;
 use Aprelendo\EbookFile;
 use Aprelendo\LogFileUploads;
 use Aprelendo\Gems;
@@ -33,14 +42,6 @@ use Aprelendo\UserException;
 const DEFAULT_LEVEL = 2;
 const TYPE_ARTICLE  = 1;
 const TYPE_EBOOK    = 6;
-
-function respond_json(int $code, array|string|null $payload = null): void {
-    http_response_code($code);
-    if ($payload !== null) {
-        header('Content-Type: application/json; charset=utf-8');
-        echo is_array($payload) ? json_encode($payload) : $payload;
-    }
-}
 
 function normalize_post(array $post): array {
     return array_map(static function ($v) {
@@ -92,6 +93,11 @@ function handle_simple_or_video(PDO $pdo, int $userId, int $langId, array $r, st
     $title      = $r['title']      ?? '';
     $author     = $r['author']     ?? '';
     $source_uri = $r['url']        ?? '';
+
+    if ($mode === 'video' && Videos::isYTVideo($r['url'])) {
+        $source_uri = Videos::toDesktopUrl($r['url']);
+    }
+
     $audio_uri  = $r['audio-url']  ?? '';
     $text       = $r['text']       ?? '';
     $type       = (int)($r['type'] ?? 0);
@@ -99,7 +105,7 @@ function handle_simple_or_video(PDO $pdo, int $userId, int $langId, array $r, st
     $is_shared  = ($mode === 'video') || !empty($r['shared-text']);
 
     ensure_required($title, 'Title is a required field. Please enter one and try again.');
-    ensure_required($text,  'Text is a required field. Please enter one and try again. In case you are uploading a video, enter a valid YouTube URL and fetch the correct transcript. Only videos with subtitles in your target language are supported.');
+    ensure_required($text, 'Text is a required field. Please enter one and try again. In case you are uploading a video, enter a valid YouTube URL and fetch the correct transcript. Only videos with subtitles in your target language are supported.');
     validate_audio($audio_uri);
 
     $texts_table = selected_texts_table($pdo, $userId, $langId, $is_shared);
@@ -107,7 +113,7 @@ function handle_simple_or_video(PDO $pdo, int $userId, int $langId, array $r, st
 
     $texts_table->add($title, $author, $text, $source_uri, $audio_uri, $type, $level);
 
-    return null; // 204 No Content
+    return null;
 }
 
 function handle_rss(PDO $pdo, int $userId, int $langId, array $r): array {
@@ -175,16 +181,10 @@ function handle_ebook(PDO $pdo, int $userId, int $langId, array $r, array $files
     return ['filename' => $stored, 'insert_id' => $insert_id];
 }
 
-// check that $_POST is set & not empty (preserve original behavior)
-if (!isset($_POST) || empty($_POST)) {
-    exit;
-}
-
 try {
     $user_id = (int)$user->id;
     $lang_id = (int)$user->lang_id;
 
-    $text_added_successfully = false;
     $post = normalize_post($_POST);
     $mode = $post['mode'] ?? '';
 
@@ -192,26 +192,19 @@ try {
         case 'simple':
         case 'video': {
             $payload = handle_simple_or_video($pdo, $user_id, $lang_id, $post, $mode);
-            $text_added_successfully = true;
-            if ($payload === null) {
-                respond_json(204);
-            } else {
-                respond_json(200, $payload);
-            }
+            $response = ['success' => true, 'payload' => $payload];
             break;
         }
 
         case 'rss': {
             $payload = handle_rss($pdo, $user_id, $lang_id, $post);
-            $text_added_successfully = true;
-            respond_json(200, $payload);
+            $response = ['success' => true, 'payload' => $payload];
             break;
         }
 
         case 'ebook': {
             $payload = handle_ebook($pdo, $user_id, $lang_id, $post, $_FILES);
-            $text_added_successfully = true;
-            respond_json(200, $payload);
+            $response = ['success' => true, 'payload' => $payload];
             break;
         }
 
@@ -220,10 +213,16 @@ try {
             throw new UserException('Unknown mode.');
     }
 
-    if ($text_added_successfully) {
+    if ($response['success']) {
         award_gems($pdo, $user_id, $lang_id, $user->time_zone);
     }
-
+    
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

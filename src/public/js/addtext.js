@@ -27,41 +27,41 @@ $(document).ready(function () {
      * Adds text to database
      * This is triggered when user presses the "Save" button & submits the form
      */
-    $("#form-addtext").on("submit", function (e) {
+    $("#form-addtext").on("submit", async function (e) {
         e.preventDefault();
 
         const form_data = new FormData(document.getElementById("form-addtext"));
         const get_params = new URLSearchParams(window.location.search);
         const id = get_params.get("id");
-        const url = !id ? "ajax/addtext.php" : "ajax/edittext.php";
+        const url = !id ? "/ajax/addtext.php" : "/ajax/edittext.php";
 
         if (id) {
             form_data.append("id", id);
         }
 
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: form_data,
-            dataType: "json",
-            contentType: false,
-            processData: false
-        })
-            .done(function (data) {
-                if (typeof data != "undefined") {
-                    showMessage(data.error_msg, "alert-danger");
-                } else if (form_data.get("shared-text") == "on") {
-                    window.location.replace("/sharedtexts");
-                } else {
-                    window.location.replace("/texts");
-                }
-            })
-            .fail(function (xhr, ajaxOptions, thrownError) {
-                showMessage(
-                    "Oops! There was an unexpected error processing this text.",
-                    "alert-danger"
-                );
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                body: form_data,
             });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to add text');
+            }
+            
+            if (form_data.get("shared-text") == "on") {
+                window.location.replace("/sharedtexts");
+            } else {
+                window.location.replace("/texts");
+            }
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "alert-danger");
+        }
     }); // end #form-addtext.on.submit
 
     /**
@@ -199,7 +199,7 @@ $(document).ready(function () {
      * Fetches text from url using Mozilla's redability parser
      * This is triggered when user clicks the Fetch button or, externally, by bookmarklet/addons calls
      */
-    function fetch_readable_text_version(url) {
+    async function fetch_readable_text_version(url) {
         resetControls(true);
 
         function HTMLToPlainText(html) {
@@ -211,90 +211,77 @@ $(document).ready(function () {
                 .removeClass()
                 .addClass("spinner-border spinner-border-sm text-warning");
 
-            $.ajax({
-                type: "GET",
-                url: "ajax/fetchurl.php",
-                data: { url: url }
-            })
-                .done(function (data) {
-                    if (data.error_msg != null) {
-                        showMessage(
-                            "It was not possible to extract the text from the URL you provided. " +
-                            "Try doing it manually.",
-                            "alert-danger"
-                        );
-                    } else if (typeof data !== "undefined" && data.length != 0) {
-                        const text_lang = $('#text').data('text-lang');
-                        if (data.lang !== '' && data.lang !== text_lang) {
-                            showMessage("It looks like you might be adding a text in a different language " +
-                                "than the one currently active in Aprelendo. Please double-check to ensure it " +
-                                "matches your selected language before proceeding. This helps keep your learning " +
-                                "experience focused and organized!", "alert-warning");
-                        }
+            try {
+                const params = new URLSearchParams({ url: url });
+                const response = await fetch(`/ajax/fetchurl.php?${params.toString()}`);
 
-                        const doc = document.implementation.createHTMLDocument(
-                            "New Document"
-                        );
+                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
-                        doc.documentElement.innerHTML = data.file_contents;
+                const data = await response.json();
 
-                        // Parse with Readability
-                        const reader = new Readability(doc, { keepClasses: false });
-                        const article = reader.parse();
+                if (!data.success) {
+                    throw new Error(data.error_msg || 'Failed to fetch text from URL.');
+                } 
+                
+                const text_lang = $('#text').data('text-lang');
 
-                        if (article == null) {
-                            $("#url").val(data.url);
-                            showMessage(
-                                "It was not possible to extract the text from the URL you provided. " +
-                                "Try doing it manually.",
-                                "alert-danger"
-                            );
-                            return;
-                        }
+                if (data.payload.lang !== '' && data.payload.lang !== text_lang) {
+                    const LANGUAGE_MISMATCH_MSG = `It looks like you might be adding a text in a different language 
+                        than the one currently active in Aprelendo. Please double-check to ensure it 
+                        matches your selected language before proceeding. This helps keep your learning 
+                        experience focused and organized!`;
 
-                        $("#title").val(HTMLToPlainText(article.title));
-                        $("#author").val(HTMLToPlainText(article.byline));
-                        $("#url").val(decodeURIComponent(data.url));
+                    showMessage(LANGUAGE_MISMATCH_MSG, "alert-warning");
+                }
 
-                        // Now sanitise the extracted article HTML before deriving plain text
-                        const clean_HTML = DOMPurify.sanitize(article.content || "", {
-                            USE_PROFILES: { html: true },
-                            FORBID_TAGS: ['figure', 'figcaption', 'img', 'picture', 'video', 'audio', 'iframe', 'form', 'button', 'input'],
-                            KEEP_CONTENT: false
-                        });
+                const doc = document.implementation.createHTMLDocument(
+                    "New Document"
+                );
 
-                        // Derive plain text from headings/paragraphs
-                        const $tmp_DOM = $("<output>").append($.parseHTML(clean_HTML, document, false));
-                        let txt = $("p, h1, h2, h3, h4, h5, h6, li, blockquote", $tmp_DOM)
-                            .map(function () {
-                                return $(this).text().replace(/\s+/g, " ").trim();
-                            })
-                            .get()
-                            .filter(Boolean)
-                            .join("\n\n");
+                doc.documentElement.innerHTML = data.payload.file_contents;
 
-                        txt = normalizeParagraphBreaks(txt).replace(/\t/g, "");
+                // Parse with Readability
+                const reader = new Readability(doc, { keepClasses: false });
+                const article = reader.parse();
 
-                        $("#text").val($.trim(txt));
-                        updateCharsLeft();
-                    } else {
-                        showMessage(
-                            "There was an unexpected error trying to fetch this text.",
-                            "alert-danger"
-                        );
-                    }
-                })
-                .fail(function (xhr, ajaxOptions, thrownError) {
-                    showMessage(
-                        "There was an unexpected error trying to fetch this text.",
-                        "alert-danger"
-                    );
-                })
-                .always(function () {
-                    $("#btn-fetch-img")
-                        .removeClass()
-                        .addClass("bi bi-arrow-down-right-square text-warning");
+                if (article == null) {
+                    $("#url").val(data.payload.url);
+                    throw new Error('Readability parsing failed.');
+                }
+
+                $("#title").val(HTMLToPlainText(article.title));
+                $("#author").val(HTMLToPlainText(article.byline));
+                $("#url").val(decodeURIComponent(data.payload.url));
+
+                // Now sanitise the extracted article HTML before deriving plain text
+                const clean_HTML = DOMPurify.sanitize(article.content || "", {
+                    USE_PROFILES: { html: true },
+                    FORBID_TAGS: ['figure', 'figcaption', 'img', 'picture', 'video', 'audio', 'iframe', 'form', 'button', 'input'],
+                    KEEP_CONTENT: false
                 });
+
+                // Derive plain text from headings/paragraphs
+                const $tmp_DOM = $("<output>").append($.parseHTML(clean_HTML, document, false));
+                let txt = $("p, h1, h2, h3, h4, h5, h6, li, blockquote", $tmp_DOM)
+                    .map(function () {
+                        return $(this).text().replace(/\s+/g, " ").trim();
+                    })
+                    .get()
+                    .filter(Boolean)
+                    .join("\n\n");
+
+                txt = normalizeParagraphBreaks(txt).replace(/\t/g, "");
+
+                $("#text").val(txt.trim());
+                updateCharsLeft();
+            } catch (error) {
+                console.error(error);
+                showMessage(error.message, "alert-danger");
+            } finally {
+                $("#btn-fetch-img")
+                    .removeClass()
+                    .addClass("bi bi-arrow-down-right-square text-warning");
+            }
         }
     } // end fetch_readable_text_version
 
@@ -312,47 +299,48 @@ $(document).ready(function () {
         return textURI.startsWith(standard_uri) || textURI.startsWith(mobile_uri);
     }
 
-    function fetch_wikipedia_article(title) {
+    async function fetch_wikipedia_article(title) {
         resetControls(true);
 
         let text_lang = $('#text').data('text-lang');
         const url = 'https://' + text_lang + '.wikipedia.org/w/api.php';
-        const params = {
+        const params = new URLSearchParams({
             action: 'query',
             prop: 'extracts',
             titles: title,
             format: 'json',
             explaintext: true,
             origin: '*'  // This is for CORS
-        };
+        });
 
-        $.ajax({
-            url: url,
-            method: 'GET',
-            data: params
-        })
-            .done(function (data) {
-                const page = data.query.pages[Object.keys(data.query.pages)[0]];
-                let raw_text = page.extract;
+        try {
+            const response = await fetch(`${url}?${params.toString()}`);
+            
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
-                let clean_text = stripTrailingSections(raw_text, text_lang);
-                clean_text = removeNumbersInBrackets(clean_text);
-                // clean_text = addLineBreaksAfterDots(clean_text);
-                clean_text = normalizeParagraphBreaks(clean_text);
-                clean_text = cleanWikipediaTitles(clean_text);
+            const data = await response.json();
 
-                const readable_title = decodeURIComponent(title.replace(/_/g, ' '));
+            if (!data.success) {
+                throw new Error(data.error_msg || 'No data received from Wikipedia API.');
+            }
 
-                $("#title").val(readable_title);
-                $("#text").val(clean_text);
-                updateCharsLeft();
-            })
-            .fail(function (xhr, ajaxOptions, thrownError) {
-                showMessage(
-                    "There was an unexpected error trying to fetch this Wikipedia article.",
-                    "alert-danger"
-                );
-            });
+            const page = data.query.pages[Object.keys(data.query.pages)[0]];
+            let raw_text = page.extract;
+
+            let clean_text = stripTrailingSections(raw_text, text_lang);
+            clean_text = removeNumbersInBrackets(clean_text);
+            clean_text = normalizeParagraphBreaks(clean_text);
+            clean_text = cleanWikipediaTitles(clean_text);
+
+            const readable_title = decodeURIComponent(title.replace(/_/g, ' '));
+
+            $("#title").val(readable_title);
+            $("#text").val(clean_text);
+            updateCharsLeft();
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "alert-danger");
+        }
     }
 
     /**

@@ -21,28 +21,32 @@ $(document).ready(function() {
     /**
      * Sends user login form
      */
-    $("#form_login").on("submit", function(e) {
+    $("#form_login").on("submit", async function(e) {
         e.preventDefault();
 
         const form_data = $("#form_login").serialize();
 
-        $.ajax({
-            type: "POST",
-            url: "ajax/login.php",
-            data: form_data
-        })
-            .done(function(data) {
-                if (data.error_msg == null) {
-                    window.location.replace("/texts");
-                } else {
-                    showMessage(data.error_msg, "alert-danger");
-                }
-            })
-            .fail(function(xhr, ajaxOptions, thrownError) {
-                showMessage(
-                    "Oops! There was an unexpected error when trying to log you in. Please try again later.",
-                    "alert-danger"
-                );
-            }); // end of ajax
+        try {
+            const response = await fetch("/ajax/login.php", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: form_data
+            });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Login failed');
+            }
+
+            window.location.replace("/texts");
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "alert-danger");
+        }
     }); // end #form_login.on.submit
 });

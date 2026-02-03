@@ -19,23 +19,22 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);
+    exit;
+}
 
 use Aprelendo\Texts;
-use Aprelendo\SharedTexts;
 use Aprelendo\Curl;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
 const DEFAULT_LEVEL = 2;
-
-function respond_json(int $code, array|string|null $payload = null): void {
-    http_response_code($code);
-    if ($payload !== null) {
-        header('Content-Type: application/json; charset=utf-8');
-        echo is_array($payload) ? json_encode($payload) : $payload;
-    }
-}
 
 function normalize_post(array $post): array {
     return array_map(static function ($v) {
@@ -73,11 +72,6 @@ function load_text_for_edit(PDO $pdo, int $userId, int $langId, int $id): Texts 
     return $texts;
 }
 
-// check that $_POST is set & not empty (preserve original behavior)
-if (!isset($_POST) || empty($_POST)) {
-    exit;
-}
-
 try {
     $user_id = (int)$user->id;
     $lang_id = (int)$user->lang_id;
@@ -112,8 +106,13 @@ try {
         $texts_table->share($id);
     }
     
-    respond_json(204);
-
+    $response = ['success' => true];
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

@@ -57,7 +57,7 @@ ini_set('display_startup_errors', '0');
                                                 aria-hidden="true"></span></button>
                                     </div>
                                     <small>
-                                        <em>at least 8 characters (including letters, digits &amp; special characters)</em>
+                                        <em>8+ characters, with uppercase, lowercase, and a number.</em>
                                     </small>
                                     <br>
                                     <small id="password-strength-text"></small>

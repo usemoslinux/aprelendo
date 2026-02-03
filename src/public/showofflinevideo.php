@@ -20,7 +20,7 @@
  */
 
 require_once '../Includes/dbinit.php';  // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // check if user is logged in and set $user object
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
 use Aprelendo\Reader;
 
@@ -30,7 +30,7 @@ try {
     $reader = new Reader($pdo, $user->id, $user->lang_id);
     $prefs = $reader->prefs;
 
-    $body_class = "class='dvh-100 dvw-100 overflow-hidden ";
+    $body_class = "class='dvh-100 dvw-100 ";
 
     switch ($prefs->display_mode) {
         case 'light':
@@ -48,10 +48,11 @@ try {
     }
     $font_family = $prefs->font_family;
     $font_size = $prefs->font_size;
+    $line_height = $prefs->line_height;
     $text_align = $prefs->text_alignment;
 
     $body_css .= ' style="position:fixed;width:100%;"';
-    $reader_css = 'font-family:' . $font_family . ';font-size:' . $font_size . ';text-align:' . $text_align;
+    $reader_css = "font-family:$font_family;font-size:$font_size;line-height:$line_height;text-align:$text_align";
 } catch (Exception $e) {
     header('Location:/login');
     exit;
@@ -69,7 +70,7 @@ require_once PUBLIC_PATH . 'head.php';
                     <button type="button" id="btn-save-offline-video" data-bs-toggle="tooltip"
                         data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
                         data-bs-title="Close & mark underlined words as reviewed"
-                        class="btn btn-success ms-2">
+                        class="btn btn-success ms-2 disabled">
                         Save&nbsp;<span class="bi bi-save"></span>
                     </button>
                     <span class="ms-2" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
@@ -79,11 +80,6 @@ require_once PUBLIC_PATH . 'head.php';
                             <span class="bi bi-gear-fill"></span>
                         </button>
                     </span>
-                    <button type="button" id="btn-fullscreen" data-bs-toggle="tooltip"
-                        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                        data-bs-title="Toggle fullscreen" class="btn btn-warning ms-2">
-                        <span class="bi bi-arrows-fullscreen"></span>
-                    </button>
                     <button type="button" id="btn-selsubs" data-bs-toggle="tooltip"
                         data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
                         data-bs-title="Select subtitles (SRT)" class="btn btn-primary ms-2">

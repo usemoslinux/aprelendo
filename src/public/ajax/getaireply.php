@@ -19,7 +19,7 @@
 */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
 use Aprelendo\AIBot;
 use Aprelendo\UserException;
@@ -40,4 +40,8 @@ try {
     $ai_bot->streamReply($_POST['prompt']);
 } catch (UserException $e) {
     echo "Error: " . $e->getMessage();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

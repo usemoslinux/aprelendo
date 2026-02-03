@@ -19,7 +19,7 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
 use Aprelendo\Words;
 use Aprelendo\SearchWordsParameters;
@@ -41,7 +41,10 @@ try {
     $words = $words_table->search($search_params);
     
     WordsUtilities::exportToCSV($words);
-
 } catch (UserException $e) {
     http_response_code($e->getCode());
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

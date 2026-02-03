@@ -20,7 +20,7 @@
  */
 
 require_once '../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php';
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
 use Aprelendo\SharedTexts;
 use Aprelendo\SharedTextTable;

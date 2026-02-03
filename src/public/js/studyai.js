@@ -38,40 +38,41 @@ $(document).ready(function () {
     /**
      * Fetches list of words user is learning
      */
-    function getListofCards() {
-        $.ajax({
-            type: "POST",
-            url: "ajax/getcards.php",
-            data: { limit: max_cards, status: 0 },
-            dataType: "json"
-        })
-            .done(function (data) {
-                if (data.error_msg) {
-                    showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning "
-                        + "in this language.", "alert-danger");
-                    return;
-                }
+    async function getListofCards() {
+        try {
+            const form_data = new URLSearchParams({ limit: max_cards, status: 0 });
+            const response = await fetch("/ajax/getcards.php", {
+                method: "POST",
+                body: form_data
+            });
 
-                if (data.length == 0) {
-                    showNoMoreCardsMsg();
-                    return true;
-                }
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+            
+            const data = await response.json();
 
-                words = data.map(item => {
-                    return {
-                        ...item, // Preserve the original properties
-                        word: item.word.replace(/\r?\n|\r/g, " ") // Replace line breaks with spaces
-                    };
-                });
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to fetch list of cards.');
+            }
 
-                max_cards = words.length > max_cards ? max_cards : words.length;
+            if (data.payload.length == 0) {
+                showNoMoreCardsMsg();
+                return true;
+            }
 
-                updateCard(words[0]);
-            })
-            .fail(function (xhr, ajaxOptions, thrownError) {
-                showMessage("Oops! There was an unexpected error trying to fetch the list of words you are learning "
-                    + "in this language.", "alert-danger");
-            }); // end $.ajax
+            words = data.payload.map(item => {
+                return {
+                    ...item, // Preserve the original properties
+                    word: item.word.replace(/\r?\n|\r/g, " ") // Replace line breaks with spaces
+                };
+            });
+
+            max_cards = words.length > max_cards ? max_cards : words.length;
+
+            updateCard(words[0]);
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
     } // end getListofCards()
 
     /**
@@ -119,7 +120,7 @@ $(document).ready(function () {
             return true;
         } else if (cur_card_index >= max_cards) {
             $("#study-card-word-title").text("Congratulations!");
-            $("#study-card-freq-badge").hide();
+            $("#study-card-freq-badge").addClass('d-none');
             adaptCardStyleToWordStatus();
 
             let progress_html = "";
@@ -128,20 +129,33 @@ $(document).ready(function () {
                 let percentage = subtotal / max_cards * 100;
                 let bg_class = answer[2];
                 let title = answer[3];
-
-                progress_html += "<div class='progress-bar " + bg_class + "' role='progressbar' aria-valuenow='" +
-                    percentage + "' aria-valuemin='0' aria-valuemax='100' style='width: " + percentage +
-                    "%' title='" + title + ": " + subtotal + " answer(s)'>" + Math.round(percentage) + " %</div>";
+                
+                progress_html += `
+                    <div class="progress-bar ${bg_class}" 
+                        role="progressbar" 
+                        aria-valuenow="${percentage}" 
+                        aria-valuemin="0" 
+                        aria-valuemax="100" 
+                        style="width: ${percentage}%" 
+                        title="${title}: ${subtotal} answer(s)">
+                        ${Math.round(percentage)} %
+                    </div>`;
             }
 
-            $("#ai-card").html("<div class='bi bi-trophy text-warning display-3 mt-3'></div>"
-                + "<div class='mt-3'>You have reached the end of your study.</div>"
-                + "<div class='mt-3'>These were your results:</div>"
-                + "<div class='progress mx-auto mt-3 fw-bold' style='height: 25px;max-width: 550px'>" + progress_html + "</div>"
-                + buildResultsTable()
-                + "<div class='small mt-4'>If you want to continue, you can "
-                + "refresh this page (F5).<br>However, we strongly recommend that you keep your study sessions short "
-                + "and take rest intervals.</div>");
+            $("#ai-card").html(`
+                <div class="bi bi-trophy text-warning display-3 mt-3"></div>
+                <div class="mt-3">You have reached the end of your study.</div>
+                <div class="mt-3">These were your results:</div>
+                <div class="progress mx-auto mt-3 fw-bold" style="height: 25px; max-width: 550px">
+                    ${progress_html}
+                </div>
+                ${buildResultsTable()}
+                <div class="small mt-4">
+                    If you want to continue, you can refresh this page (F5).<br>
+                    However, we strongly recommend that you keep your study sessions short 
+                    and take rest intervals.
+                </div>
+            `);
             $("#study-card-footer").addClass("d-none");
             $("#live-progress").addClass("d-none");
             scrollToPageTop();
@@ -159,9 +173,11 @@ $(document).ready(function () {
     function showNoMoreCardsMsg() {
         $("#study-card-header").text("Sorry, no cards to practice");
         adaptCardStyleToWordStatus(3); // title in red
-        $("#ai-card").html("<div class='bi bi-exclamation-circle text-danger display-3'>"
-            + "</div><div class='mt-3'>It seems there are no cards in your deck. "
-            + "Add some words to your library and try again.</div>");
+        $("#ai-card").html(`
+            <div class='bi bi-exclamation-circle text-danger display-3'></div>
+            <div class='mt-3'>It seems there are no cards in your deck. Add
+            some words to your library and try again.</div>
+        `);
         $("#study-card-footer").addClass("d-none");
         $("#live-progress").addClass("d-none");
     } // end showNoMoreCardsMsg()
@@ -222,7 +238,7 @@ $(document).ready(function () {
     /**
      * Triggers when user clicks submit button to get AI evaluation of user answer
      */
-    $('#btn-submit-user-answer').click(function () {
+    $('#btn-submit-user-answer').on("click", function () {
         if ($('#text-user-answer').val().trim() !== '') {
             const answer_format = "Evaluate user response in two lines: first line with one of the four ratings (1) Completely incorrect (major mistakes or confused meaning); (2) Incorrect, but close (made some significant usage mistakes, but I was on the right track); (3) Mostly correct (made minor errors (missing details, awkward phrasing, etc.); or (4) Correct & comprehensive (perfect answer). Second line with a brief explanation and, if useful, a corrected version. Keep it concise.";
             const prompt = answer_format + '\n Question:' + $('#select-prompt').val() + '\n Answer: ' + $('#text-user-answer').val();
@@ -252,7 +268,7 @@ $(document).ready(function () {
      * Triggers when user clicks on answer buttons
      * @param {event object} e
      */
-    $(".btn-answer").click(function (e) {
+    $(".btn-answer").on("click", async function (e) {
         e.preventDefault();
         const word = $("#study-card").data('word');
         const answer = $(this).attr("value");
@@ -262,29 +278,35 @@ $(document).ready(function () {
 
         $(".btn-answer").prop('disabled', true); // disable answer buttons
         $("#text-ai-answer").text(''); // clear AI answer box
-        $("#text-user-answer").val('').focus(); // clear user answer box and focus it
+        $("#text-user-answer").val('').trigger("focus"); // clear user answer box and focus it
 
-        // update card status
-        $.ajax({
-            type: "POST",
-            url: "ajax/updatecard.php",
-            data: { word: word, answer: answer }
-            // dataType: "json"
-        })
-            .done(function (data) {
-                // go to next card
-                cur_card_index++;
-
-                if (lastCardReached()) {
-                    return;
-                }
-
-                updateCard(words[cur_card_index]);
-                scrollToPageTop();
-            })
-            .fail(function (xhr, ajaxOptions, thrownError) {
-                showMessage("There was an unexpected error updating this word's status", "alert-danger");
+        try {
+            const form_data = new URLSearchParams({ word: word, answer: answer });
+            const response = await fetch("/ajax/updatecard.php", {
+                method: "POST",
+                body: form_data
             });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to update word status.');
+            }
+
+            cur_card_index++;
+    
+            if (lastCardReached()) {
+                return;
+            }
+
+            updateCard(words[cur_card_index]);
+            scrollToPageTop();
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
     }); // end .btn-answer.on.click()
 
     /**
@@ -338,7 +360,7 @@ $(document).ready(function () {
     } // end showWordFrequency()
 
     /**
-     * Event: Triggered when clicking on a revealed word (has "word" class).
+     * Triggered when clicking on a revealed word (has "word" class).
      * Opens the dictionary modal for the selected word.
      */
     $("body").on("click", ".word", function () {
@@ -346,7 +368,7 @@ $(document).ready(function () {
     });
 
     /**
-     * Event: Triggered when clicking or tapping outside of word and action buttons.
+     * Triggered when clicking or tapping outside of word and action buttons.
      * Hides the action buttons modal.
      */
     $(document).on("mouseup touchend", function (e) {
@@ -367,25 +389,25 @@ $(document).ready(function () {
      * Implements shortcuts for buttons
      * @param {event object} e
      */
-    $(document).keypress(function (e) {
+    $(document).on( "keypress", function (e) {
         // only allow shortcuts if buttons are enabled
         if (!$(".btn-answer").prop('disabled')) {
             switch (e.which) {
                 case 49: // 49 is the keycode for "1" key
-                    $("#btn-answer-no-recall").click();
+                    $("#btn-answer-no-recall").trigger("click");
                     break;
                 case 50: // 50 is the keycode for "2" key
-                    $("#btn-answer-fuzzy").click();
+                    $("#btn-answer-fuzzy").trigger("click");
                     break;
                 case 51: // 51 is the keycode for "3" key
-                    $("#btn-answer-partial").click();
+                    $("#btn-answer-partial").trigger("click");
                     break;
                 case 52: // 52 is the keycode for "4" key
-                    $("#btn-answer-excellent").click();
+                    $("#btn-answer-excellent").trigger("click");
                     break;
                 default:
                     break;
             }
         }
-    }); // end document.keypress()
+    }); // end $document.on.keypress()
 });

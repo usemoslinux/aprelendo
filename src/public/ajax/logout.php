@@ -19,22 +19,34 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
 
-use Aprelendo\Texts;
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);
+    exit;
+}
+
+use Aprelendo\User;
+use Aprelendo\UserAuth;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
 try {
-    $text = new Texts($pdo, $user->id, $user->lang_id);
-    $text->loadRecord($_GET['id']);
-    $audio_uri = $text->audio_uri;
+    $logout_after_user_delete = $_POST['after_user_delete'] ?? false;
+    $user = new User($pdo);
+    $user_auth = new UserAuth($user);
+    
+    $user_auth->logout($logout_after_user_delete);
+    $response = ['success' => true];
 
-    if (!empty($audio_uri)) {
-        echo $audio_uri;
-    } else {
-        throw new UserException("File not found", 404);
-    }
-} catch (UserException $e) {
-    http_response_code($e->getCode());
+    echo json_encode($response);
+    exit;
+} catch (InternalException | UserException $e) {
+    echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

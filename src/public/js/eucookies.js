@@ -18,19 +18,17 @@
  */
 
 $(document).ready(function() {
+    const $banner = $("#eucookielaw");
+
     if (document.cookie.indexOf("accept_cookies") === -1) {
-        $("#eucookielaw").fadeIn(800, function() {
-            $(this).show();
-        });
+        $banner.addClass("show");
     }
 
     /**
      * Triggers when user closes the cookie consent message
      */
-    $("#removecookie").click(function() {
+    $("#removecookie").on("click", function() {
         setCookie("accept_cookies", true, 365 * 10);
-        $("#eucookielaw").slideDown(1500, function() {
-            $(this).remove();
-        });
+        $banner.removeClass("show");
     }); // end #removecookie.on.click
 });

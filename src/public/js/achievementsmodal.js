@@ -26,8 +26,8 @@ function create_achievements_modal() {
         const pages = $(this).find('.modal-split');
 
         if (pages.length > 1) {
-            pages.hide();
-            pages.eq(0).show();
+            pages.addClass('d-none');
+            pages.eq(0).removeClass('d-none');
 
             let b_button = document.createElement("button");
             b_button.setAttribute("type", "button");
@@ -44,9 +44,9 @@ function create_achievements_modal() {
 
             let page_track = 0;
 
-            $(n_button).click(function () {
+            $(n_button).on("click", function () {
                 if (page_track == 0) {
-                    $(b_button).show();
+                    $(b_button).removeClass('d-none');
                 }
 
                 if (page_track == pages.length - 2) {
@@ -58,16 +58,16 @@ function create_achievements_modal() {
                 if (page_track < pages.length - 1) {
                     page_track++;
 
-                    pages.hide();
-                    pages.eq(page_track).show();
+                    pages.addClass('d-none');
+                    pages.eq(page_track).removeClass('d-none');
                 } else {
                     $("#modal-achievements").modal('hide');
                 }
             });
 
-            $(b_button).click(function () {
+            $(b_button).on("click", function () {
                 if (page_track == 1) {
-                    $(b_button).hide();
+                    $(b_button).addClass('d-none');
                 }
 
                 if (page_track == pages.length - 1) {
@@ -79,8 +79,8 @@ function create_achievements_modal() {
                 if (page_track > 0) {
                     page_track--;
 
-                    pages.hide();
-                    pages.eq(page_track).show();
+                    pages.addClass('d-none');
+                    pages.eq(page_track).removeClass('d-none');
                 }
             });
         } else {
@@ -91,7 +91,7 @@ function create_achievements_modal() {
 
             $(this).find('.modal-footer').append(c_button);
 
-            $(c_button).click(function() {
+            $(c_button).on("click", function() {
                 $("#modal-achievements").modal('hide');
             });
         }

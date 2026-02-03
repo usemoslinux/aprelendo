@@ -22,28 +22,32 @@ $(document).ready(function() {
      * Edits language record
      * This is triggered when user presses the "Save" button & submits the form
      */
-    $("#form-editlanguage").on("submit", function(e) {
+    $("#form-editlanguage").on("submit", async function(e) {
         e.preventDefault();
-        $.ajax({
-            type: "post",
-            url: "ajax/editlanguage.php",
-            data: $(this).serialize(),
-        })
-        .done(function (data) {
-            if (typeof data != "undefined" && data !== "") {
-                showMessage(data.error_msg, "alert-danger");
-            } else {
-                showMessage("Your language information was successfully saved."
-                    + " You will soon be redirected to the main page.", "alert-success");
-                setTimeout(() => { window.location.replace("/texts"); }, 2000);
+
+        try {
+            const form_data = new URLSearchParams($(this).serialize());
+            const response = await fetch("/ajax/editlanguage.php", {
+                method: "post",
+                body: form_data,
+            });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to save language information.');
             }
-        })
-        .fail(function (xhr, ajaxOptions, thrownError) {
-            showMessage(
-                "Oops! There was an unexpected error trying to edit your language preferences.",
-                "alert-danger"
-            );
-        });
+
+            showMessage(`Your language information was successfully saved. You
+                will soon be redirected to the main page.`, "alert-success");
+
+            setTimeout(() => { window.location.replace("/texts"); }, 2000);
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "alert-danger");
+        }
     });
 
     /**

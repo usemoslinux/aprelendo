@@ -48,7 +48,7 @@ const ActionBtns = (() => {
             });
         }
 
-        $actions.show();
+        $actions.removeClass('invisible');
     }
 
     /**
@@ -59,7 +59,7 @@ const ActionBtns = (() => {
      * @param {Event} e - The event object (optional), used to capture event data if needed.
      */
     const hide = (e) => {
-        $('#action-buttons').hide();
+        $('#action-buttons').addClass('invisible');
     }
 
     /**
@@ -71,8 +71,8 @@ const ActionBtns = (() => {
         let $word_action_group_2 = $("#word-actions-g2") || $(parent.document).find("#word-actions-g2");
 
         if (is_study) {
-            $word_action_group_1.hide();
-            $word_action_group_2.hide();
+            $word_action_group_1.addClass('d-none');
+            $word_action_group_2.addClass('d-none');
             return;
         }
 
@@ -82,11 +82,11 @@ const ActionBtns = (() => {
         const words_in_selection = $selword.filter(".word").length;
 
         if (words_in_selection == underlined_words_in_selection) {
-            $word_action_group_1.hide();
-            $word_action_group_2.show();
+            $word_action_group_1.addClass('d-none');
+            $word_action_group_2.removeClass('d-none');
         } else {
-            $word_action_group_1.show();
-            $word_action_group_2.hide();
+            $word_action_group_1.removeClass('d-none');
+            $word_action_group_2.addClass('d-none');
         }
     } // end createWordActionBtns
 

@@ -19,17 +19,19 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-// check that $_POST is set & not empty
-if (!isset($_POST) || empty($_POST)) {
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST) || !isset($_POST['textIDs']) || !isset($_POST['archivetext'])) {
+    echo json_encode($response);
     exit;
 }
 
 use Aprelendo\Texts;
 use Aprelendo\ArchivedTexts;
 use Aprelendo\Language;
-use Aprelendo\Words;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
@@ -38,19 +40,25 @@ try {
     $lang_id = $user->lang_id;
 
     // if text is not shared, then archive or unarchive text accordingly
-    if (!empty($_POST['textIDs']) && !empty($_POST['archivetext'])) {
-        $lang = new Language($pdo, $user_id);
-        $lang->loadRecordById($user->lang_id);
-        $text_ids = json_decode($_POST['textIDs']);
+    $lang = new Language($pdo, $user_id);
+    $lang->loadRecordById($user->lang_id);
+    $text_ids = json_decode($_POST['textIDs']);
 
-        if ($_POST['archivetext'] === 'true') { //archive text
-            $texts_table = new Texts($pdo, $user_id, $lang_id);
-            $texts_table->archive($text_ids);
-        } else { // unarchive text
-            $texts_table = new ArchivedTexts($pdo, $user_id, $lang_id);
-            $texts_table->unarchive($text_ids);
-        }
+    if ($_POST['archivetext'] === 'true') { //archive text
+        $texts_table = new Texts($pdo, $user_id, $lang_id);
+        $texts_table->archive($text_ids);
+    } else { // unarchive text
+        $texts_table = new ArchivedTexts($pdo, $user_id, $lang_id);
+        $texts_table->unarchive($text_ids);
     }
+
+    $response = ['success' => true];
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

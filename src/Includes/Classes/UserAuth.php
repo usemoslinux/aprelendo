@@ -60,7 +60,6 @@ class UserAuth extends DBEntity
         }
         
         if (!empty($google_id) || password_verify($password, $hashedPassword)) { // login successful, remember me
-            // throw new UserException('u:' . $username . ', p: ' . $password . ', gi: ' . $google_id . ', r: ' . json_encode($row));
             $token = new Token($this->pdo);
             $token->add($user_id);
         } else { // wrong password
@@ -81,8 +80,6 @@ class UserAuth extends DBEntity
         if ($deleted_account || $this->isLoggedIn()) {
             setcookie('user_token', '', time() - 3600, "/", $domain, true); // delete user_token cookie
         }
-        
-        header('Location:/');
     } // end logout()
         
     /**

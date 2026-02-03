@@ -38,14 +38,12 @@ const TextUnderliner = (() => {
      *
      * @param {string} text - The original text to process.
      * @param {string} doclang - The language code of the document.
-     * @param {boolean} hide_elem - Flag to optionally hide the elements being modified.
      * @param {array} user_phrases - Array of user-specified phrases to underline. These are the phrases the user is learning.
      * @param {string} user_phrases_str - Concatenated string of user phrases to be used in regex.
      * @returns {string} The text with user-specified phrases underlined.
      */
-    function underlineUserPhrases(text, doclang, hide_elem, user_phrases, user_phrases_str) {
+    function underlineUserPhrases(text, doclang, user_phrases, user_phrases_str) {
         let pattern = '';
-        const hide_elem_str = hide_elem ? " style='display: none;'" : "";
 
         if (user_phrases.length > 0) {
             if (langs_with_no_word_separator.includes(doclang)) {
@@ -62,7 +60,7 @@ const TextUnderliner = (() => {
                 const user_phrase_match = user_phrases.find(element => element.word.toLowerCase() === match.toLowerCase());
                 const phrase_status = vocab_status[user_phrase_match.status];
 
-                return "<a class='word reviewing " + phrase_status + "' " + hide_elem_str + ">" + g1 + "</a>";
+                return `<a class="word reviewing ${phrase_status}">${g1}</a>`;
             });
         }
 
@@ -75,14 +73,12 @@ const TextUnderliner = (() => {
      *
      * @param {string} text - The original text to process.
      * @param {string} doclang - The language code of the document.
-     * @param {boolean} hide_elem - Flag to optionally hide the elements being modified.
      * @param {array} user_words - Array of user-specified words to underline. These are the words the user is learning.
      * @param {string} user_words_str - Concatenated string of user words to be used in regex.
      * @returns {string} The text with user-specified words underlined.
      */
-    function underlineUserWords(text, doclang, hide_elem, user_words, user_words_str) {
+    function underlineUserWords(text, doclang, user_words, user_words_str) {
         let pattern = '';
-        const hide_elem_str = hide_elem ? " style='display: none;'" : "";
 
         if (user_words.length > 0) {
             if (langs_with_no_word_separator.includes(doclang)) {
@@ -99,7 +95,7 @@ const TextUnderliner = (() => {
                 const user_word_match = user_words.find(element => element.word.toLowerCase() === match.toLowerCase());
                 const word_status = vocab_status[user_word_match.status];
 
-                return "<a class='word reviewing " + word_status + "' " + hide_elem_str + ">" + g1 + "</a>";
+                return `<a class="word reviewing ${word_status}">${g1}</a>`;
             });
         }
 
@@ -113,13 +109,11 @@ const TextUnderliner = (() => {
      *
      * @param {string} text - The original text to process.
      * @param {string} doclang - The language code of the document.
-     * @param {boolean} hide_elem - Flag to optionally hide the elements being modified.
      * @param {array} high_freq - Array of high-frequency words to be underlined.
      * @returns {string} The text with high-frequency words underlined.
      */
-    function underlineFrequentWords(text, doclang, hide_elem, high_freq) {
+    function underlineFrequentWords(text, doclang, high_freq) {
         let pattern = '';
-        const hide_elem_str = hide_elem ? "style='display: none;'" : "";
 
         high_freq = high_freq.join('|');
 
@@ -132,7 +126,7 @@ const TextUnderliner = (() => {
         text = text.replace(pattern, function (match, p1, offset, string) {
             return p1 === undefined
                 ? match
-                : "<a class='word frequency-list' " + hide_elem_str + ">" + p1 + "</a>";
+                : `<a class="word frequency-list">${p1}</a>`;
         });
 
         return text;
@@ -145,22 +139,20 @@ const TextUnderliner = (() => {
      *
      * @param {string} text - The text to be processed for adding links.
      * @param {string} doclang - The language code of the document (e.g., 'en', 'zh'), used to determine the regex pattern.
-     * @param {boolean} hide_elem - Determines if the newly created links should be initially hidden.
      * @returns {string} The modified text with clickable links added to unknown words.
      */
-    function addLinks(text, doclang, hide_elem) {
-        const hide_elem_style = hide_elem ? 'style="display: none;"' : '';
+    function addLinks(text, doclang) {
         const is_lang_with_no_word_delimeter = langs_with_no_word_separator.includes(doclang);
 
         // Define a regex pattern based on the language type
         const word_pattern = is_lang_with_no_word_delimeter
-            ? /(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(\p{L})/iug
-            : /(?:\s*<a class='word[^>]+>.*?<\/a>|<[^>]*>)|(\p{L}+)/iug;
+            ? /(?:\s*<a class="word[^>]+>.*?<\/a>|<[^>]*>)|(\p{L})/iug
+            : /(?:\s*<a class="word[^>]+>.*?<\/a>|<[^>]*>)|(\p{L}+)/iug;
 
         // Process the text to wrap unknown words
         let result = text.replace(word_pattern, (match, word) => {
             return word !== undefined
-                ? `<a class="word" ${hide_elem_style}>${word}</a>`
+                ? `<a class="word">${word}</a>`
                 : match;
         });
 
@@ -180,10 +172,9 @@ const TextUnderliner = (() => {
      *
      * @param {object} data - An object containing text to be underlined, words known by the user, and high-frequency words.
      * @param {string} doclang - The language code indicating specific processing rules.
-     * @param {boolean} hide_elem - Flag to hide elements (words/phrases) when rendered.
      * @returns {string} The processed text with clickable words and some underlined based on their status and frequency.
      */
-    function apply(data, doclang, hide_elem) {
+    function apply(data, doclang) {
         let text = data.text;
         let user_phrases = [];
         let user_phrases_str = '';
@@ -207,16 +198,16 @@ const TextUnderliner = (() => {
         user_words_str = user_words_str.slice(0, -1);
 
         // 1. underline phrases & words
-        text = underlineUserPhrases(text, doclang, hide_elem, user_phrases, user_phrases_str);
-        text = underlineUserWords(text, doclang, hide_elem, user_words, user_words_str);
+        text = underlineUserPhrases(text, doclang, user_phrases, user_phrases_str);
+        text = underlineUserWords(text, doclang, user_words, user_words_str);
 
         // 2. underline words in frequency list
         if (data.high_freq) {
-            text = underlineFrequentWords(text, doclang, hide_elem, data.high_freq);
+            text = underlineFrequentWords(text, doclang, data.high_freq);
         }
 
         // 3. create links for each word/phrase
-        return addLinks(text, doclang, hide_elem);
+        return addLinks(text, doclang);
     } // apply()
 
     return {

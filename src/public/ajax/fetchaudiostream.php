@@ -20,10 +20,13 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-// check that $_POST is set & not empty
-if (!isset($_POST) || empty($_POST)) {
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_POST)) {
+    echo json_encode($response);
     exit;
 }
 
@@ -77,7 +80,7 @@ try {
     ];
 
     $tts = new VoiceRSS;
-    $voice = $tts->speech([
+    $payload = $tts->speech([
         'key' => VOICERSS_API_KEY,
         'hl' => $audiolang[$_POST['langiso']],
         'src' => $_POST['text'],
@@ -88,14 +91,15 @@ try {
         'b64' => 'true'
     ]);
 
-    echo json_encode($voice);
-
-    // if no errors, log audio stream
-    if ($voice['error'] === null && $voice['response']) {
-        $stream_log->addRecord();
-    } else {
-        throw new UserException($voice['error'], 400);
+    if (!$payload['error'] === null || !$payload['response']) {
+        throw new UserException($payload['error'], 400);
     }
-} catch (\Exception $e) {
+        
+    $stream_log->addRecord(); // if no errors, log audio stream
+    $response = ['success' => true, 'payload' => $payload];
+    echo json_encode($response);
+    exit;
+} catch (Throwable $e) {
     http_response_code($e->getCode());
+    exit;
 }

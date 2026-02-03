@@ -19,7 +19,7 @@
 */
 
 require_once '../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
 use Aprelendo\Texts;
 use Aprelendo\TextTable;
@@ -109,7 +109,7 @@ try {
             </kbd>
         HTML_LANGS_MENU;
 
-        if (!isset($_GET) || empty($_GET)) {
+        if (empty($_GET)) {
             if (!isset($_COOKIE['hide_welcome_msg'])) {
 
                 $html = <<<HTML_WELCOME_MSG

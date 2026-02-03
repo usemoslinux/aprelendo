@@ -19,7 +19,10 @@
 */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
 
 use Aprelendo\Language;
 use Aprelendo\InternalException;
@@ -29,11 +32,17 @@ try {
     $lang = new Language($pdo, $user->id);
     $lang->loadRecordById($user->lang_id);
 
-    $result['dictionary_uri']     = $lang->dictionary_uri;
-    $result['img_dictionary_uri'] = $lang->img_dictionary_uri;
-    $result['translator_uri']     = $lang->translator_uri;
+    $payload['dictionary_uri']     = $lang->dictionary_uri;
+    $payload['img_dictionary_uri'] = $lang->img_dictionary_uri;
+    $payload['translator_uri']     = $lang->translator_uri;
 
-    echo json_encode($result);
+    $response = ['success' => true, 'payload' => $payload];
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

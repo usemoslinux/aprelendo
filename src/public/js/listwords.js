@@ -20,10 +20,10 @@
 $(document).ready(function () {
     let dictionary_URI = "";
 
-    $("#search").focus();
+    $("#search").trigger("focus");
     $("input:checkbox").prop("checked", false);
 
-    $('form').submit(function(e) {
+    $('form').on( "submit", function(e) {
         e.preventDefault();
 
         const params = {    s: $("#s").val().trim(),                // search text
@@ -35,15 +35,24 @@ $(document).ready(function () {
     });
 
     // ajax call to get dictionary URI
-    $.ajax({
-        url: "/ajax/getdicuris.php",
-        type: "GET",
-        dataType: "json"
-    }).done(function (data) {
-        if (data.error_msg == null) {
-            dictionary_URI = data.dictionary_uri;
+    (async () => {
+        try {
+            const response = await fetch("/ajax/getdicuris.php");
+            
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to fetch dictionary URIs');
+            }
+            
+            dictionary_URI = data.payload.dictionary_uri;
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
         }
-    }); // end $.ajax 
+    })();
 
     // action menu implementation
 
@@ -51,35 +60,41 @@ $(document).ready(function () {
      * Deletes selected words from the database
      * Trigger: when user selects "Delete" in the action menu
      */
-    $("#mDelete").on("click", function () {
+    $("#mDelete").on("click", async function () {
         if (confirm("Really delete?")) {
             let ids = [];
             $("input.chkbox-selrow:checked").each(function () {
                 ids.push($(this).attr("data-idWord"));
             });
 
-            /**
-             * Deletes selected words from the database (based on their ID).
-             * When done, also removes selected rows from HTML table.
-             * @param  {integer array} textIDs Ids of the selected elements in the database
-             */
-            $.ajax({
-                url: "ajax/removeword.php",
-                type: "POST",
-                data: {
-                    wordIDs: JSON.stringify(ids)
-                }
-            })
-                .done(function () {
-                    window.location.replace(
-                        "words" + buildQueryString(getCurrentURIParameters())
-                    );
-                })
-                .fail(function (request, status, error) {
-                    alert(
-                        "There was an error when trying to delete the selected words. Refresh the page and try again."
-                    );
+            if (ids.length === 0) {
+                return;
+            }
+
+            try {
+                const form_data = new URLSearchParams();
+                form_data.append('wordIDs', JSON.stringify(ids));
+
+                const response = await fetch("/ajax/removeword.php", {
+                    method: "POST",
+                    body: form_data
                 });
+
+                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error_msg || 'Failed to delete words');
+                }
+
+                window.location.replace(
+                    "words" + buildQueryString(getCurrentURIParameters())
+                );
+            } catch (error) {
+                console.error(error);
+                alert(`Oops! ${error.message}`);
+            }
         }
     }); // end #mDelete.on.click
 

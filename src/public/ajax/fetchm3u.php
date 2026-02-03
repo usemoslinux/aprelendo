@@ -20,30 +20,43 @@
  */
 
 require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // load $user & $user_auth objects & check if user is logged
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
+if (empty($_GET)) {
+    echo json_encode($response);
+    exit;
+}
 
 use Aprelendo\Curl;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
 try {
-    if (!empty($_GET['url'])) {
-        $url = $_GET['url'];
-        $scheme = parse_url($url, PHP_URL_SCHEME);
-
-        if (empty($scheme) || !in_array(strtolower($scheme), ['http', 'https'], true)) {
-            throw new UserException('Invalid M3U URL. Please check it is not empty or malformed.');
-        }
-
-        $final_url = Curl::getFinalUrl($url);
-        $file_contents = Curl::getUrlContents($final_url);
-        $result = $file_contents ? ['url' => $final_url, 'm3u' => $file_contents] : '';
-
-        header('Content-Type: application/json');
-        echo json_encode($result);
-    } else {
-        throw new UserException('Error retrieving that URL. Please check it is not empty or malformed.');
+    if (empty($_GET['url'])) {
+        throw new UserException('Empty URL.');
     }
+
+    $url = $_GET['url'];
+    $scheme = parse_url($url, PHP_URL_SCHEME);
+
+    if (empty($scheme) || !in_array(strtolower($scheme), ['http', 'https'], true)) {
+        throw new UserException('Invalid M3U URL. Please check it is not empty or malformed.');
+    }
+
+    $final_url = Curl::getFinalUrl($url);
+    $file_contents = Curl::getUrlContents($final_url);
+    $payload = $file_contents ? ['url' => $final_url, 'm3u' => $file_contents] : '';
+
+    $response = ['success' => true, 'payload' => $payload];
+    echo json_encode($response);
+    exit;
 } catch (InternalException | UserException $e) {
     echo $e->getJsonError();
+    exit;
+} catch (Throwable $e) {
+    echo json_encode($response);
+    exit;
 }

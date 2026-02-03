@@ -22,7 +22,7 @@
     if (!el) { console.error('#heatmap not found'); return; }
 
     let cal = null;
-    let data = null;
+    let payload = null;
     let currentRange = null;
 
     function monthsForViewport() {
@@ -32,11 +32,11 @@
     }
 
     function paint(range) {
-        if (!data) return;
+        if (!payload) return;
         if (cal) cal.destroy();
 
         // get max value for color scale
-        const values = data.map(d => d.count).filter(v => v != null);
+        const values = payload.map(d => d.count).filter(v => v != null);
         const cap = Math.max(...values);
         const domain = [0, cap];
 
@@ -49,7 +49,7 @@
                 range: range,
 
                 data: {
-                    source: data,
+                    source: payload,
                     x: 'date',
                     y: 'count',
                     groupY: 'sum',
@@ -83,32 +83,48 @@
     }
 
     async function init() {
-        // Get the 'u' parameter from the current page URL
-        const url_params = new URLSearchParams(window.location.search);
-        const u = url_params.get('u') ?? '';
+        try {
+            // Get the 'u' parameter from the current page URL
+            const url_params = new URLSearchParams(window.location.search);
+            const u = url_params.get('u') ?? '';
+    
+            // Send it as GET parameter to getreviewsperday.php
+            const response = await fetch(`/ajax/getreviewsperday.php?u=${encodeURIComponent(u)}`, {
+                cache: 'no-store'
+            });
 
-        // Send it as GET parameter to getreviewsperday.php
-        const res = await fetch(`/ajax/getreviewsperday.php?u=${encodeURIComponent(u)}`, {
-            cache: 'no-store'
-        });
-
-        // Parse JSON response
-        data = await res.json();
-
-        currentRange = monthsForViewport();
-        paint(currentRange);
-
-        let t = null;
-        window.addEventListener('resize', function () {
-            clearTimeout(t);
-            t = setTimeout(() => {
-                const next = monthsForViewport();
-                if (next !== currentRange) {
-                    currentRange = next;
-                    paint(currentRange);
-                }
-            }, 150);
-        });
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+    
+            const data = await response.json();
+    
+            if (!data.success) {
+                el.innerHTML = `
+                    <div class="cal-heatmap-error">
+                    <p>No data available for this period.</p>
+                    </div>
+                `;
+                throw new Error(data.error_msg || 'Failed to fetch review data');
+            }
+    
+            payload = data.payload;
+    
+            currentRange = monthsForViewport();
+            paint(currentRange);
+    
+            let t = null;
+            window.addEventListener('resize', function () {
+                clearTimeout(t);
+                t = setTimeout(() => {
+                    const next = monthsForViewport();
+                    if (next !== currentRange) {
+                        currentRange = next;
+                        paint(currentRange);
+                    }
+                }, 150);
+            });
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     el.style.width = '100%';

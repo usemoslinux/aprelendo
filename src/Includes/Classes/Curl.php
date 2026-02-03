@@ -39,20 +39,20 @@ class Curl
 
         // 2. Resolve hostname and check for private/reserved IPs
         $host = parse_url($url, PHP_URL_HOST);
-        if ($host) {
-            // Prevent DNS rebinding attacks by resolving first
-            $ips = dns_get_record($host, DNS_A);
-            if ($ips === false || empty($ips)) {
-                throw new UserException("Could not resolve the hostname: $host");
-            }
-            // Check all resolved IPs against block list
-            foreach ($ips as $ip) {
-                if (!filter_var($ip['ip'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-                    throw new UserException("Request to a private or reserved IP address is not allowed.");
-                }
-            }
-        } else {
+        if (!$host) {
             throw new UserException("Could not parse hostname from URL.");
+        }
+        
+        // Prevent DNS rebinding attacks by resolving first
+        $ips = dns_get_record($host, DNS_A);
+        if ($ips === false || empty($ips)) {
+            throw new UserException("Could not resolve the hostname: $host");
+        }
+        // Check all resolved IPs against block list
+        foreach ($ips as $ip) {
+            if (!filter_var($ip['ip'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                throw new UserException("Request to a private or reserved IP address is not allowed.");
+            }
         }
 
         $ch = curl_init();

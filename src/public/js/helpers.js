@@ -47,10 +47,10 @@ function scrollToPageTop() {
 
     if ($container.length) {
         // Scroll the container itself
-        $container.animate({ scrollTop: 0 }, "fast");
+        $container.scrollTop(0);
     } else {
         // Fallback: scroll the page
-        $("html, body").animate({ scrollTop: 0 }, "fast");
+        $("html, body").scrollTop(0);
     }
 } // end scrollToPageTop()
 
@@ -145,36 +145,6 @@ $.fn.disableScroll = function () {
         this.classList.add('overflow-hidden');
     });
 }; // end $.fn.disableScroll
-
-/**
- * Gets the width of the scrollbar for either the document body or a specific element
- * Uses a cached value for document body scrollbar to avoid repeated DOM operations
- * @param {HTMLElement} [element=document.body] - The element to measure scrollbar width for
- * @returns {number} The width of the scrollbar in pixels
- */
-function getScrollbarWidth(element) {
-    if (element === document.body) {
-        return window.innerWidth - document.documentElement.clientWidth;
-    } else {
-        // Create a temporary element to measure the scrollbar
-        const temp = document.createElement('div');
-        temp.style.visibility = 'hidden';
-        temp.style.overflow = 'scroll'; // Force a scrollbar
-        temp.style.width = '100px'; // Arbitrary width
-        temp.style.height = '100px'; // Arbitrary height
-        document.body.appendChild(temp);
-
-        // Create a child inside the temp element to measure
-        const inner = document.createElement('div');
-        inner.style.width = '100%';
-        temp.appendChild(inner);
-
-        // Clean up the temporary elements
-        temp.parentNode.removeChild(temp);
-
-        return temp.offsetWidth - inner.offsetWidth;
-    }
-} // end getScrollbarWidth
 
 /**
  * Determines if an element is after another one

@@ -33,6 +33,8 @@ class Videos extends DBEntity
     public $source_url        = '';
     public $date_created      = '';
     public $youtube_id        = '';
+    private const YT_DESKTOP_BASE_URL = 'https://www.youtube.com/watch?v=';
+    private const YT_REGEX = '#(?:youtube\.com/watch\?v=|youtu\.be/)([^&?/\s]{11})#i';
     private const SUPPORTED_VIDEO_LANGUAGES = [
         'ar'       => 'Arabic',
         'ar-DZ'    => 'Arabic (Algeria)',
@@ -147,9 +149,9 @@ class Videos extends DBEntity
      *
      * @param string $lang ISO representation of the video's language
      * @param string $youtube_id YouTube video ID
-     * @return string JSON string representation of video's metadata and subtitles
+     * @return array Array representation of video's metadata and subtitles
      */
-    public function fetchVideo(string $lang, string $youtube_id): string
+    public function fetchVideo(string $lang, string $youtube_id): array
     {
         header('Content-Type: application/json');
         $this->lang = $lang;
@@ -161,7 +163,7 @@ class Videos extends DBEntity
         // Combine metadata & transcript in a single array for response
         $result = array_merge($metadata, ['text' => $transcript_xml->asXML()]);
 
-        return json_encode($result);
+        return $result;
     }
 
     /**
@@ -278,16 +280,15 @@ class Videos extends DBEntity
      *
      * @param string $url
      * @return string YouTube Id string
+     * @throws UserException
      */
     public static function extractYTId(string $url): string
     {
-        if (preg_match('#^(https?://)?(www\.|m\.)?youtube\.com/watch\?v=([^&]+)#', $url, $matches)) {
-            return $matches[3];
-        } elseif (preg_match('#^https?://youtu\.be/([^?]+)#', $url, $matches)) {
+        if (preg_match(self::YT_REGEX, $url, $matches)) {
             return $matches[1];
-        } else {
-            throw new UserException('Malformed YouTube link');
         }
+
+        throw new UserException('Malformed YouTube link');
     } // end extractYTId()
 
     /**
@@ -298,9 +299,18 @@ class Videos extends DBEntity
      */
     public static function isYTVideo(string $url): bool
     {
-        return preg_match('#^(https?://)?(www\.|m\.)?youtube\.com/watch\?v=([^&]+)#', $url)
-            || preg_match('#^https?://youtu\.be/([^?]+)#', $url);
+        return (bool) preg_match(self::YT_REGEX, $url);
     } // end isYTVideo()
+
+    /**
+     * Converts any supported YouTube URL (mobile, shortened) 
+     * into a standard desktop URL.
+     */
+    public static function toDesktopUrl(string $url): string
+    {
+        $id = self::extractYTId($url);
+        return self::YT_DESKTOP_BASE_URL . $id;
+    } // end toDesktopUrl()
 
     /**
      * Loads video record data by Id

@@ -19,7 +19,7 @@
  */
 
 require_once '../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // loads User class & check if user is logged in
+require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
 use Aprelendo\WordStats;
 use Aprelendo\WordDailyGoal;

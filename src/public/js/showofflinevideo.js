@@ -36,7 +36,7 @@ $(document).ready(function () {
     Dictionaries.fetchURIs(); // get dictionary & translator URIs
 
     // *************************************************************
-    // ******************* WORD/PHRASE SELECTION ******************* 
+    // ****************** AUDIO/VIDEO CONTROLLER ******************* 
     // *************************************************************
 
     WordSelection.setupEvents({
@@ -49,47 +49,53 @@ $(document).ready(function () {
     // **** ACTION BUTTONS (ADD, DELETE, FORGOT & DICTIONARIES) **** 
     // *************************************************************
 
-    /**
-     * Adds selected word or phrase to the database and underlines it in the text
-     */
-    $("#btn-add, #btn-forgot").on("click", function (e) {
+    $("#btn-add, #btn-forgot").on("click", async function (e) {
         const $selword = WordSelection.get();
         const sel_text = $selword.text();
         const is_phrase = $selword.length > 1 ? 1 : 0;
 
-        // add selection to "words" table
-        $.ajax({
-            type: "POST",
-            url: "ajax/addword.php",
-            data: {
+        try {
+            const form_data = new URLSearchParams({
                 word: sel_text.toLowerCase(),
                 is_phrase: is_phrase,
-                source_id: $('[data-idtext]').attr('data-idtext'),
+                source_id: $('[data-idtext]').attr('data-idtext') || '',
                 text_is_shared: false,
                 sentence: SentenceExtractor.extractSentence($selword)
-            }
-        })
-        .done(function () {
-            // if successful, underline word or phrase
+            });
+
+            const response = await fetch("/ajax/addword.php", {
+                method: "POST",
+                body: form_data
+            });
+
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to add word.');
+            } 
+
+            // underline word or phrase
             if (is_phrase) {
                 // if it's a phrase
-                const firstword = $selword.eq(0).text();
-                const phraseext = $selword.filter(".word").length;
-                let $filterphrase = $("a.word").filter(function () {
+                const first_word = $selword.eq(0).text();
+                const phrase_ext = $selword.filter(".word").length;
+                let $filter_phrase = $("a.word").filter(function () {
                     return (
                         $(this)
                             .text()
-                            .toLowerCase() === firstword.toLowerCase()
+                            .toLowerCase() === first_word.toLowerCase()
                     );
                 });
 
-                $filterphrase.each(function () {
-                    let lastword = $(this)
+                $filter_phrase.each(function () {
+                    let last_word = $(this)
                         .nextAll("a.word")
-                        .slice(0, phraseext - 1)
+                        .slice(0, phrase_ext - 1)
                         .last();
                     let phrase = $(this)
-                        .nextUntil(lastword)
+                        .nextUntil(last_word)
                         .addBack()
                         .next("a.word")
                         .addBack();
@@ -107,7 +113,7 @@ $(document).ready(function () {
                 });
             } else {
                 // if it's a word
-                let $filterword = $("a.word").filter(function () {
+                let $filter_word = $("a.word").filter(function () {
                     return (
                         $(this)
                             .text()
@@ -115,7 +121,7 @@ $(document).ready(function () {
                     );
                 });
 
-                $filterword.each(function () {
+                $filter_word.each(function () {
                     let $word = $(this);
                     if ($word.is(".new, .learning, .learned, .forgotten")) {
                         $word.wrap(
@@ -128,110 +134,108 @@ $(document).ready(function () {
                     }
                 });
 
-                $filterword.contents().unwrap();
+                $filter_word.contents().unwrap();
             }
 
             TextProcessor.updateAnchorsList();
-        })
-        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-            alert(
-                "Oops! There was an error adding this word or phrase to the database."
-            );
-        });
+
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
 
         VideoActionBtns.hide();
         VideoController.resume();
     }); // end #btn-add.on.click
 
-    /**
-     * Remove selected word or phrase from database
-     */
-    $("#btn-remove").on("click", function () {
+    $("#btn-remove").on("click", async function () {
         const $selword = WordSelection.get();
-        
-        $.ajax({
-            type: "POST",
-            url: "ajax/removeword.php",
-            data: {
-                word: $selword.text().toLowerCase()
-            }
-        })
-            .done(function () {
-                let $filter = $("a.word").filter(function () {
-                    return (
-                        $(this)
-                            .text()
-                            .toLowerCase() === $selword.text().toLowerCase()
-                    );
-                });
 
-                // ajax call to underline text
-                $.ajax({
-                    type: "POST",
-                    url: "/ajax/getuserwords.php",
-                    data: { txt: $selword.text() },
-                    dataType: "json"
-                })
-                    .done(function (data) {
-                        // if everything went fine, remove the underlining and underline once again the whole selection
-                        // also, the case of the word/phrase in the text has to be respected
-                        // for phrases, we need to make sure that new underlining is added for each word
+        try {
+            const remove_word_response = await fetch("/ajax/removeword.php", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ word: $selword.text().toLowerCase() })
+            });
 
-                        let $result = $(TextUnderliner.apply(data, doclang, false));
-                        let $cur_filter = {};
-                        let cur_word = /""/;
+            if (!remove_word_response.ok) throw new Error(`HTTP error: ${remove_word_response.status}`);
 
-                        $filter.each(function () {
-                            $cur_filter = $(this);
+            const remove_word_data = await remove_word_response.json();
 
-                            $result.filter(".word").each(function (key) {
-                                if (TextProcessor.langHasNoWordSeparators(doclang)) {
-                                    cur_word = new RegExp(
-                                        "(?<![^])" + $(this).text() + "(?![$])",
-                                        "iug"
-                                    ).exec($cur_filter.text());
-                                }
-                                else {
-                                    cur_word = new RegExp(
-                                        "(?<![\\p{L}|^])" + $(this).text() + "(?![\\p{L}|$])",
-                                        "iug"
-                                    ).exec($cur_filter.text());
-                                }
-
-                                $(this).text(cur_word);
-
-                                // check if any word marked by PHP as .learning should be marked as .new instead
-                                const word = $(this).text().toLowerCase();
-                                const user_word = data.user_words.find(function (element) {
-                                    return element.word == word;
-                                });
-
-                                if (user_word !== undefined) {
-                                    if (user_word.status == 2) {
-                                        $(this).removeClass("learning").addClass("new");
-                                    } else if (user_word.status == 3) {
-                                        $(this).removeClass("learning").addClass("forgotten");
-                                    }
-                                }
-                            });
-
-                            $cur_filter.replaceWith($result.clone());
-                        });
-
-                        TextProcessor.updateAnchorsList();
-                    })
-                    .fail(function (xhr, ajaxOptions, thrownError) {
-                        console.log("There was an unexpected error trying to underline words in this text")
-                    }); // end $.ajax    
-            })
-            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(
-                    "Oops! There was an error removing the word from the database."
+            if (!remove_word_data.success) {
+                throw new Error(remove_word_data.error_msg || 'Failed to remove word.');
+            } 
+            
+            let $filter = $("a.word").filter(function () {
+                return (
+                    $(this)
+                        .text()
+                        .toLowerCase() === $selword.text().toLowerCase()
                 );
             });
 
-            VideoActionBtns.hide();
-            VideoController.resume();
+            const get_user_words_response = await fetch("/ajax/getuserwords.php", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ txt: $selword.text() })
+            });
+
+            if (!get_user_words_response.ok) throw new Error(`HTTP error: ${get_user_words_response.status}`);
+
+            const get_user_words_data = await get_user_words_response.json();
+
+            if (!get_user_words_data.success) {
+                throw new Error(get_user_words_data.error_msg || 'Failed to get user words for re-underlining.');                    
+            } 
+            
+            let $result = $(TextUnderliner.apply(get_user_words_data.payload, doclang));
+            let $cur_filter = {};
+            let cur_word = /""/;
+
+            $filter.each(function () {
+                $cur_filter = $(this);
+
+                $result.filter(".word").each(function (key) {
+                    if (TextProcessor.langHasNoWordSeparators(doclang)) {
+                        cur_word = new RegExp(
+                            "(?<![^])" + $(this).text() + "(?![$])",
+                            "iug"
+                        ).exec($cur_filter.text());
+                    }
+                    else {
+                        cur_word = new RegExp(
+                            "(?<![\\p{L}|^])" + $(this).text() + "(?![\\p{L}|$])",
+                            "iug"
+                        ).exec($cur_filter.text());
+                    }
+
+                    $(this).text(cur_word);
+
+                    const word = $(this).text().toLowerCase();
+                    const user_word = get_user_words_data.payload.user_words.find(function (element) {
+                        return element.word == word;
+                    });
+
+                    if (user_word !== undefined) {
+                        if (user_word.status == 2) {
+                            $(this).removeClass("learning").addClass("new");
+                        } else if (user_word.status == 3) {
+                            $(this).removeClass("learning").addClass("forgotten");
+                        }
+                    }
+                });
+
+                $cur_filter.replaceWith($result.clone());
+            });
+
+            TextProcessor.updateAnchorsList();
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
+
+        VideoActionBtns.hide();
+        VideoController.resume();
     }); // end #btn-remove.on.click
 
     // *************************************************************
@@ -247,7 +251,7 @@ $(document).ready(function () {
     /**
      * Archives text and updates status of all underlined words & phrases
      */
-    function updateWordsLearningStatus() {
+    async function updateWordsLearningStatus() {
         // build array with underlined words
         let oldwords = [];
         let ids = [];
@@ -263,80 +267,85 @@ $(document).ready(function () {
 
         ids.push($("#text-container").attr("data-IdText")); // get text ID
 
-        $.ajax({
-            type: "POST",
-            url: "ajax/updatewords.php",
-            data: {
-                words: oldwords,
-                textIDs: JSON.stringify(ids)
-            }
-        })
-            .done(function (data) {
-                if (data.error_msg == null) {
-                    // update user score (gems)
-                    const review_data = {
-                        words: {
-                            new: getUniqueElements('.reviewing.new'),
-                            learning: getUniqueElements('.reviewing.learning'),
-                            forgotten: getUniqueElements('.reviewing.forgotten')
-                        },
-                        texts: { reviewed: 1 }
-                    };
-
-                    $.ajax({
-                        type: "post",
-                        url: "ajax/updateuserscore.php",
-                        data: review_data
-                    })
-                        .done(function (data) {
-                            // show text review stats
-                            if (data.error_msg == null) {
-                                gems_earned = data.gems_earned;
-                                show_confirmation_dialog = false;
-                                const url = "/textstats";
-                                const total_words =
-                                    Number($(".word").length) + Number($(".phrase").length);
-                                const form = $(
-                                    '<form action="' +
-                                    url +
-                                    '" method="post">' +
-                                    '<input type="hidden" name="created" value="' +
-                                    $(".reviewing.new").length +
-                                    '" />' +
-                                    '<input type="hidden" name="learning" value="' +
-                                    $(".reviewing.learning").length +
-                                    '" />' +
-                                    '<input type="hidden" name="learned" value="' +
-                                    $(".learned").length +
-                                    '" />' +
-                                    '<input type="hidden" name="forgotten" value="' +
-                                    $(".reviewing.forgotten").length +
-                                    '" />' +
-                                    '<input type="hidden" name="total" value="' +
-                                    total_words +
-                                    '" />' +
-                                    '<input type="hidden" name="gems_earned" value="' +
-                                    gems_earned +
-                                    '" />' +
-                                    '<input type="hidden" name="is_shared" value="1" />' +
-                                    "</form>"
-                                );
-                                $("body").append(form);
-                                form.submit();
-                            } else {
-                                alert("Oops! There was an unexpected error.");
-                            }
-                        })
-                        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                            alert("Oops! There was an unexpected error.");
-                        });
-                } else {
-                    alert("Oops! There was an unexpected error.");
-                }
-            })
-            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("Oops! There was an error updating the database.");
+        try {
+            const update_words_response = await fetch("/ajax/updatewords.php", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    words: JSON.stringify(oldwords),
+                    textIDs: JSON.stringify(ids)
+                })
             });
+
+            if (!update_words_response.ok) { throw new Error(`HTTP error: ${update_words_response.status}`); }
+
+            const update_words_data = await update_words_response.json();
+
+            if (!update_words_data.success) {
+                throw new Error(update_words_data.error_msg || 'Failed to update words status.');
+            }
+            
+            const review_data = {
+                words: {
+                    new: getUniqueElements('.reviewing.new'),
+                    learning: getUniqueElements('.reviewing.learning'),
+                    forgotten: getUniqueElements('.reviewing.forgotten')
+                },
+                texts: { reviewed: 1 }
+            };
+
+            const update_user_score_response = await fetch("/ajax/updateuserscore.php", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    'review_data': JSON.stringify(review_data)
+                })
+            });
+
+            if (!update_user_score_response.ok) { throw new Error(`HTTP error: ${update_user_score_response.status}`); }
+
+            const update_user_score_data = await update_user_score_response.json();
+
+            if (!update_user_score_data.success) {
+                throw new Error(update_user_score_data.error_msg || 'Failed to update user score.');
+            }
+            
+            gems_earned = update_user_score_data.gems_earned;
+            show_confirmation_dialog = false;
+            const url = "/textstats";
+            const total_words =
+                Number($(".word").length) + Number($(".phrase").length);
+            const form = $(
+                '<form action="' +
+                url +
+                '" method="post">' +
+                '<input type="hidden" name="created" value="' +
+                $(".reviewing.new").length +
+                '" />' +
+                '<input type="hidden" name="learning" value="' +
+                $(".reviewing.learning").length +
+                '" />' +
+                '<input type="hidden" name="learned" value="' +
+                $(".learned").length +
+                '" />' +
+                '<input type="hidden" name="forgotten" value="' +
+                $(".reviewing.forgotten").length +
+                '" />' +
+                '<input type="hidden" name="total" value="' +
+                total_words +
+                '" />' +
+                '<input type="hidden" name="gems_earned" value="' +
+                gems_earned +
+                '" />' +
+                '<input type="hidden" name="is_shared" value="1" />' +
+                "</form>"
+            );
+            $("body").append(form);
+            form.trigger( "submit" );
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
     } // end #btn-save-offline-video.on.click
 
     /**
@@ -377,7 +386,7 @@ $(document).ready(function () {
             const file = this.files[0];
             const reader = new FileReader();
 
-            reader.addEventListener('load', (event) => {
+            reader.addEventListener('load', async (event) => {
                 const srt = event.target.result;
                 const data = parser.fromSrt(srt, true);
                 let text = '';
@@ -408,47 +417,34 @@ $(document).ready(function () {
 
                 document.getElementById('text').innerHTML = text;
 
-                // ajax call to underline text
-                $.ajax({
-                    type: "POST",
-                    url: "/ajax/getuserwords.php",
-                    data: { txt: $('#text').html() },
-                    dataType: "json"
-                })
-                    .done(function (data) {
-                        $('#text').html(TextUnderliner.apply(data, doclang, false));
-                        TextProcessor.updateAnchorsList();
-                    })
-                    .fail(function (xhr, ajaxOptions, thrownError) {
-                        console.log("There was an unexpected error trying to underline words in this text")
-                    }); // end $.ajax    
+                try {
+                    const form_data = new URLSearchParams({ txt: $('#text').html() });
+                    const response = await fetch("/ajax/getuserwords.php", {
+                        method: "POST",
+                        body: form_data
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+                    const data = await response.json();
+
+                    if (!data.success) {
+                        throw new Error(data.error_msg || 'Failed to get user words for underlining');
+                    }
+                    
+                    $('#text').html(TextUnderliner.apply(data.payload, doclang));
+                    TextProcessor.updateAnchorsList();
+                } catch (error) {
+                    console.error(error);
+                    alert(`Oops! ${error.message}`);
+                }
             });
 
             reader.readAsText(file);
             $("#nosubs").remove(); // remove "no subtitles loaded" message
+            $("#btn-save-offline-video").removeClass("disabled"); // enable save button
         }
     }); // end #subs-file-input.on.change
-
-    /**
-     * Toggle fullscreen mode
-     */
-    $("#btn-fullscreen").on("click", function(e) {
-        // Check if we're already in fullscreen
-        if (document.fullscreenElement) {
-            // Exit fullscreen
-            document.exitFullscreen().catch((err) => {
-                alert(`An error occurred while trying to exit fullscreen mode: ${err.message} (${err.name})`);
-            });
-        } else {
-            // Request fullscreen
-            let elem = document.documentElement;
-    
-            elem.requestFullscreen({ navigationUI: "show" })
-                .catch((err) => {
-                    alert(`An error occurred while trying to switch into fullscreen mode: ${err.message} (${err.name})`);
-                });
-        }
-    }); // end #btn-fullscreen.on.click
 
     /**
      * Updates vh value on window resize
@@ -464,8 +460,7 @@ $(document).ready(function () {
      */
     $(window).on("beforeunload", function () {
         if (show_confirmation_dialog) {
-            return "To save your progress, please click the Save button before you go. Otherwise, your changes will "
-                + "be lost. Are you sure you want to exit this page?";
+            return 'Press Save before you go or your changes will be lost.';
         }
     }); // end window.on.beforeunload
 });
