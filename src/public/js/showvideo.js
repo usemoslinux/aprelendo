@@ -85,6 +85,8 @@ $(document).ready(function () {
      * Adds selected word or phrase to the database and underlines it in the text
      */
     $("#btn-add, #btn-forgot").on("click", async function (e) {
+        const $action_button = $(this);
+        ActionBtns.setActionMenuLoading($action_button);
         const $selword = WordSelection.get();
         const sel_text = $selword.text();
         const is_phrase = $selword.length > 1 ? 1 : 0;
@@ -177,16 +179,19 @@ $(document).ready(function () {
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
+        } finally {
+            ActionBtns.clearActionMenuLoading($action_button);
+            VideoActionBtns.hide();
+            VideoController.resume();
         }
-
-        VideoActionBtns.hide();
-        VideoController.resume();
     }); // end #btn-add.on.click
 
     /**
      * Remove selected word or phrase from database
      */
     $("#btn-remove").on("click", async function () {
+        const $action_button = $(this);
+        ActionBtns.setActionMenuLoading($action_button);
         const $selword = WordSelection.get();
 
         try {
@@ -270,10 +275,11 @@ $(document).ready(function () {
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
+        } finally {
+            ActionBtns.clearActionMenuLoading($action_button);
+            VideoActionBtns.hide();
+            VideoController.resume();
         }
-
-        VideoActionBtns.hide();
-        VideoController.resume();
     }); // end #btn-remove.on.click
 
     // *************************************************************

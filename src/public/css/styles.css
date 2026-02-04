@@ -738,18 +738,9 @@ a[role="menuitem"] {
 #readerpage.sepiamode { --bg-image: url("../img/backgrounds/container-sepia.webp"); }
 #readerpage.darkmode  { --bg-image: url("../img/backgrounds/container-dark.webp"); }
 
-.lightmode .word:hover,
-.darkmode .word:hover,
-.lightmode .highlighted,
-.darkmode .highlighted {
-    background-color: #e8e8e8;
-    color: #333;
-}
-
-.sepiamode .word:hover,
-.sepiamode .highlighted {
-    background-color: rosybrown;
-    color: #333;
+.word:hover,
+.highlighted {
+    color: var(--w-forgotten);
 }
 
 .reviewing {
@@ -761,20 +752,8 @@ a[role="menuitem"] {
     border-color: var(--w-new);
 }
 
-.word.new:hover,
-.word.new:active {
-    background-color: var(--w-new);
-    color: ghostwhite;
-}
-
 .learning {
     border-color: var(--w-learning);
-}
-
-.word.learning:hover,
-.word.learning:active {
-    background-color: var(--w-learning);
-    color: ghostwhite;
 }
 
 .learned {
@@ -783,20 +762,8 @@ a[role="menuitem"] {
     border-color: var(--w-learned);
 }
 
-.word.learned:hover,
-.word.learned:active {
-    background-color: var(--w-learned);
-    color: ghostwhite;
-}
-
 .forgotten {
     border-color: var(--w-forgotten);
-}
-
-.word.forgotten:hover,
-.word.forgotten:active {
-    background-color: var(--w-forgotten);
-    color: ghostwhite;
 }
 
 .frequency-list {
@@ -894,6 +861,16 @@ input {
 #action-buttons {
     z-index: 1000;
     position: absolute;
+}
+
+#action-buttons .btn:disabled,
+#action-buttons .btn.disabled {
+    opacity: 1;
+}
+
+#action-buttons.is-loading .btn {
+    filter: grayscale(1) brightness(0.85);
+    cursor: not-allowed;
 }
 
 /* TABLE ADJUSTMENTS (USED TO LIST TEXTS/WORDS) */

@@ -110,6 +110,8 @@ $(document).ready(function() {
      * Triggered when user clicks the "Add" button in the action popup
      */
     $doc.on("click", "#btn-add, #btn-forgot", async function(e) {
+        const $action_button = $(this);
+        ActionBtns.setActionMenuLoading($action_button);
         const $selword = WordSelection.get();
         const is_phrase = $selword.length > 1 ? 1: 0;
         const sel_text = $selword.text();
@@ -236,10 +238,11 @@ $(document).ready(function() {
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
+        } finally {
+            ActionBtns.clearActionMenuLoading($action_button);
+            TextActionBtns.hide();
+            MediaController.resume();
         }
-
-        TextActionBtns.hide();
-        MediaController.resume();
     }); // end #btn-add.on.click
 
     /**
@@ -247,6 +250,8 @@ $(document).ready(function() {
      * Triggered when user clicks the "Remove" button in the action popup
      */
     $doc.on("click", "#btn-remove", async function() {
+        const $action_button = $(this);
+        ActionBtns.setActionMenuLoading($action_button);
         const $selword = WordSelection.get();
         
         try {
@@ -334,10 +339,11 @@ $(document).ready(function() {
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
+        } finally {
+            ActionBtns.clearActionMenuLoading($action_button);
+            TextActionBtns.hide();
+            MediaController.resume();
         }
-        
-        TextActionBtns.hide();
-        MediaController.resume();
     }); // end #btn-remove.on.click
 
 

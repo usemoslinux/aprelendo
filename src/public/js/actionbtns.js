@@ -142,11 +142,61 @@ const ActionBtns = (() => {
         });
     }
 
+    const setLoadingOnButton = ($button_elem) => {
+        if (!$button_elem || $button_elem.length === 0) {
+            return;
+        }
+
+        const original_html = $button_elem.data('original-html');
+        if (original_html === undefined) {
+            $button_elem.data('original-html', $button_elem.html());
+        }
+
+        const spinner_html = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="visually-hidden">Loading...</span>
+        `;
+        $button_elem.html(spinner_html.trim());
+        $button_elem.prop('disabled', true);
+    }
+
+    const clearLoadingOnButton = ($button_elem) => {
+        if (!$button_elem || $button_elem.length === 0) {
+            return;
+        }
+
+        const original_html = $button_elem.data('original-html');
+        if (original_html !== undefined) {
+            $button_elem.html(original_html);
+            $button_elem.removeData('original-html');
+        }
+
+        $button_elem.prop('disabled', false);
+    }
+
+    const setActionMenuLoading = ($button_elem) => {
+        const $action_menu = $('#action-buttons');
+        $action_menu.addClass('is-loading');
+        $action_menu.find('button').prop('disabled', true);
+        setLoadingOnButton($button_elem);
+    }
+
+    const clearActionMenuLoading = ($button_elem) => {
+        clearLoadingOnButton($button_elem);
+        const $action_menu = $('#action-buttons');
+        $action_menu.find('button').prop('disabled', false);
+        $action_menu.removeClass('is-loading');
+    }
+
     return {
         show,
         hide,
         createWordActionBtns,
-        bindDictionaryBtnsOnClick
+        bindDictionaryBtnsOnClick,
+        setLoadingOnButton,
+        clearLoadingOnButton,
+        setActionMenuLoading,
+        clearActionMenuLoading
     };
 })();
 

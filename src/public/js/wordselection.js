@@ -43,7 +43,10 @@ const WordSelection = (() => {
             // Only process right-clicks on words inside #text
             if ($(e.target).is("#text .word") && e.pointerType === 'mouse') {
                 controller.pause(false);
-                $selword = $(e.target);
+                TextHighlighter.removeAll();
+                const $target_word = $(e.target);
+                $selword = $target_word;
+                $target_word.addClass('highlighted');
                 const base_uris = Dictionaries.getURIs();
                 openInNewTab(linkBuilder(base_uris.translator, $selword));
                 cancelLongPress();
@@ -178,4 +181,3 @@ const WordSelection = (() => {
         get: () => $selword,
     };
 })();
-

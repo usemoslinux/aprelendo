@@ -341,6 +341,8 @@ $(document).ready(function () {
                         new bootstrap.Tooltip(next, {
                             trigger: 'hover'
                         })
+                    } else {
+                        alert('is mobile');
                     }
 
                     next.classList.remove('d-none');

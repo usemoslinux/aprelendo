@@ -170,23 +170,23 @@ function openInNewTab($url) {
  * @returns {boolean} - True if the user is on a mobile device, false otherwise.
  */
 function isMobileDevice() {
-    const userAgentCheck = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
-    const touchDeviceCheck = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+    // 1. Check for primary input type (Most reliable for modern browsers)
+    if (window.matchMedia) {
+        const is_mobile_query = window.matchMedia('(pointer: coarse)').matches;
+        const is_desktop_query = window.matchMedia('(pointer: fine)').matches;
 
-    if (typeof window.matchMedia === 'function') {
-        const canHover = window.matchMedia('(hover: hover)').matches;
-        const finePointer = window.matchMedia('(pointer: fine)').matches;
-        const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
-        const noHover = window.matchMedia('(hover: none)').matches;
-
-        if (canHover || finePointer) {
-            return false;
-        }
-
-        if (coarsePointer || noHover) {
-            return true;
-        }
+        // If the primary pointer is coarse (finger), it's likely a mobile context
+        if (is_mobile_query && !is_desktop_query) return true;
+        // If the primary pointer is fine (mouse), it's likely desktop
+        if (is_desktop_query) return false;
     }
 
-    return userAgentCheck || touchDeviceCheck;
+    // 2. Fallback to User Agent for specific "Tablet/Mobile" identification
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const is_mobile_ua = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+
+    // 3. Check for touch support as a tie-breaker
+    const hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+    return is_mobile_ua || hasTouch;
 } // end isMobileDevice
