@@ -60,6 +60,7 @@ try {
     
     $email_sender = new EmailSender();
 
+    $email_sender->mail->setFrom(SUPPORT_EMAIL, 'Aprelendo - Contact Form');
     $email_sender->mail->addReplyTo($reply_to);
     $email_sender->mail->addAddress(SUPPORT_EMAIL);
     $email_sender->mail->Subject = $subject;

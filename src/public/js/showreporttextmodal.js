@@ -58,19 +58,15 @@ $(document).ready(function() {
             showMessage(`Thank you! Your report has been submitted. Together,
                 we're making our community safer and more enjoyable
                 for everyone.`, "alert-success", null, "report-alert-box");
-
-            setTimeout(function() {
-                $('#report-text-modal').modal('hide');
-                $btn_report.prop("disabled", false); // re-enable report button
-            }, 3000);
-
         } catch (error) {
             console.error(error);
-            showMessage(error.message, "alert-danger");
+            showMessage(error.message, "alert-danger", null, "report-alert-box");
+        } finally {
+            $btn_report.prop("disabled", false); // re-enable report button
         }
     }); // end #btn-report-text.on.click
 
     $("#report-text-modal").on('hidden.bs.modal', function() { 
-        $("#report-alert-box").hide(timeout);
+        $("#report-alert-box").addClass('d-none');
     }); // end #report-text-modal.on.hidden.bs.modal
 });

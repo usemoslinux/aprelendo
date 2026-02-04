@@ -52,7 +52,7 @@ try {
         
         $email_sender = new EmailSender();
 
-        $email_sender->mail->addReplyTo(SUPPORT_EMAIL);
+        $email_sender->mail->setFrom(SUPPORT_EMAIL, 'Aprelendo - Reported Text');
         $email_sender->mail->addAddress(SUPPORT_EMAIL);
         $email_sender->mail->Subject = $subject;
         $email_sender->mail->Body = $message;
