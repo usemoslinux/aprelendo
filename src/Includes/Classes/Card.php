@@ -58,7 +58,7 @@ class Card extends DBEntity
     public function getWordsUserIsLearning(int $limit, ?int $status = null): array
     {
         $status_filter = '';
-        $params = [$this->user_id, $this->lang_id];
+        $params = [$this->lang_iso, $this->user_id, $this->lang_id];
 
         if ($status !== null) {
             $status_filter = ' AND w.status = ?';
@@ -67,7 +67,7 @@ class Card extends DBEntity
 
         $sql = "SELECT w.word, w.status, w.is_phrase, w.date_next_review, COALESCE(fl.frequency_index, 100) AS 'frequency_index'
                 FROM {$this->table} AS w
-                LEFT JOIN frequency_list_$this->lang_iso AS fl ON w.word = fl.word
+                LEFT JOIN frequency_lists AS fl ON w.word = fl.word AND fl.lang_iso = ?
                 WHERE w.user_id = ?
                 AND w.lang_id = ?{$status_filter}
                 ORDER BY w.date_next_review ASC, w.status DESC

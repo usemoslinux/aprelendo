@@ -213,11 +213,10 @@ class Words extends DBEntity
     {
         $sort_sql = $search_params->buildSortSQL();
         $search_text = '%' . $search_params->search_text . '%';
-        
+
         $lang = new Language($this->pdo, $this->user_id);
         $lang->loadRecordById($this->lang_id);
         $lang_iso = $lang->name;
-        $freq_table = 'frequency_list_' . $lang_iso;
 
         $sql = "SELECT w.`id`, w.`word`, w.`status`,
                     DATEDIFF(CURRENT_DATE(), w.`date_modified`) AS `diff_today_modif`,
@@ -229,7 +228,7 @@ class Words extends DBEntity
                     END AS `freq_level`
                 FROM `{$this->table}` w
                 LEFT JOIN
-                    `$freq_table` f ON w.`word` = f.`word`
+                    `frequency_lists` f ON w.`word` = f.`word` AND f.`lang_iso` = ?
                 WHERE
                     w.`user_id` = ?
                     AND w.`lang_id` = ?
@@ -237,7 +236,7 @@ class Words extends DBEntity
                 ORDER BY $sort_sql LIMIT {$search_params->offset}, {$search_params->limit}";
 
         return $this->sqlFetchAll($sql, [
-            $this->user_id, $this->lang_id, $search_text
+            $lang_iso, $this->user_id, $this->lang_id, $search_text
         ]);
     } // end search()
 
