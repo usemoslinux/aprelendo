@@ -114,16 +114,46 @@ const TextUnderliner = (() => {
      */
     function underlineFrequentWords(text, doclang, high_freq) {
         let pattern = '';
+        const high_freq_str = high_freq.join('|');
+        const has_no_word_separator = langs_with_no_word_separator.includes(doclang);
+        const high_freq_match_pattern = new RegExp("^(?:" + high_freq_str + ")$", 'iu');
+        const word_anchor_pattern = /<a\b([^>]*)>([^<]*)<\/a>/iug;
+        const class_pattern = /\bclass\s*=\s*(['"])([^'"]*)\1/iu;
 
-        high_freq = high_freq.join('|');
+        // Existing word links should be updated in place and reviewing links must be kept unchanged.
+        text = text.replace(word_anchor_pattern, function (match, attrs, anchor_text) {
+            const class_match = attrs.match(class_pattern);
 
-        if (langs_with_no_word_separator.includes(doclang)) {
-            pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(" + high_freq + ")", 'iug');
+            if (!class_match) {
+                return match;
+            }
+
+            const class_value = class_match[2];
+            const class_tokens = class_value.trim().split(/\s+/u);
+            const has_reviewing_class = class_tokens.includes('reviewing');
+            const has_word_class = class_tokens.includes('word');
+
+            if (!has_word_class || has_reviewing_class || !high_freq_match_pattern.test(anchor_text)) {
+                return match;
+            }
+
+            if (class_tokens.includes('frequency-list')) {
+                return match;
+            }
+
+            const updated_class_value = `${class_value} frequency-list`;
+            const updated_attrs = attrs.replace(class_pattern, `class=${class_match[1]}${updated_class_value}${class_match[1]}`);
+
+            return `<a${updated_attrs}>${anchor_text}</a>`;
+        });
+
+        if (has_no_word_separator) {
+            pattern = new RegExp("(?:<a\\b[^>]*>[^<]*<\\/a>|<[^>]*>)|(" + high_freq_str + ")", 'iug');
         } else {
-            pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(?<![\\p{L}])(" + high_freq + ")(?![\\p{L}])", 'iug');
+            pattern = new RegExp("(?:<a\\b[^>]*>[^<]*<\\/a>|<[^>]*>)|(?<![\\p{L}])(" + high_freq_str + ")(?![\\p{L}])", 'iug');
         }
 
-        text = text.replace(pattern, function (match, p1, offset, string) {
+        text = text.replace(pattern, function (match, p1) {
             return p1 === undefined
                 ? match
                 : `<a class="word frequency-list">${p1}</a>`;

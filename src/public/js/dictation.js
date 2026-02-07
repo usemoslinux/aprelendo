@@ -306,16 +306,19 @@ function toggleDictation() {
                     border_color = 'var(--w-forgotten)'
                 }
 
+                let style_string = `width:${width}px;line-height:${line_height};`;
+                if (border_color) {
+                    style_string += `border-color:${border_color};`;
+                }
+
                 $elem
                     .addClass('d-none')
                     .after(
                         `<div class="input-group dict-input-group">
                             <input type="text"
                                 class="dict"
-                                style="width:${width}px;
-                                line-height:${line_height};
-                                border-color:${border_color};" 
-                                maxlength="${length}" 
+                                style="${style_string}"
+                                maxlength="${length}"
                                 data-text="${$elem.text()}">
                             <span class="dict-answer d-none"></span>
                         </div>`
