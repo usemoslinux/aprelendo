@@ -23,6 +23,8 @@ namespace Aprelendo;
 
 class PopularSources extends DBEntity
 {
+    public const SHOW_COUNT = 50;
+
     /**
      * Constructor
      *
@@ -97,10 +99,210 @@ class PopularSources extends DBEntity
             throw new UserException('Wrong parameters provided to update record in the popular sources list.');
         }
 
-        $sql = "SELECT * FROM `{$this->table}` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT 50";
+        $show_count = (int)self::SHOW_COUNT;
+        $sql = "SELECT * FROM `{$this->table}` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT {$show_count}";
 
         return $this->sqlFetchAll($sql, [$lg_iso]);
     } // end getAllByLang()
+
+    /**
+     * Counts shared video texts for a given language.
+     *
+     * All shared texts with type = 5 are considered YouTube sources.
+     *
+     * @param string $lg_iso
+     * @return int
+     */
+    public function getYoutubeVideoCountByLang(string $lg_iso): int
+    {
+        if (!isset($lg_iso) || empty($lg_iso)) {
+            throw new UserException('Wrong parameters provided to get YouTube video count in the popular sources list.');
+        }
+
+        $sql = "SELECT COUNT(st.`id`)
+                FROM `shared_texts` st
+                INNER JOIN `languages` lg ON lg.`id` = st.`lang_id`
+                WHERE lg.`name` = ?
+                AND st.`type` = 5";
+
+        return $this->sqlCount($sql, [$lg_iso]);
+    }
+
+    /**
+     * Returns shared text insights for a specific language.
+     *
+     * @param string $lg_iso
+     * @return array
+     */
+    public function getInsightsByLang(string $lg_iso): array
+    {
+        if (!isset($lg_iso) || empty($lg_iso)) {
+            throw new UserException('Wrong parameters provided to get language insights in the popular sources list.');
+        }
+
+        $sql = "SELECT st.`source_uri`, st.`type`, st.`level`, st.`audio_uri`, st.`word_count`
+                FROM `shared_texts` st
+                INNER JOIN `languages` lg ON lg.`id` = st.`lang_id`
+                WHERE lg.`name` = ?";
+        $rows = $this->sqlFetchAll($sql, [$lg_iso]);
+
+        $type_names = $this->getSharedTypeNames();
+        $level_names = [1 => 'Beginner', 2 => 'Intermediate', 3 => 'Advanced'];
+        $type_counts = [];
+        $level_counts = [1 => 0, 2 => 0, 3 => 0];
+        $domain_metrics = [];
+        $texts_with_audio = 0;
+        $total_word_count = 0;
+        $total_texts_with_words = 0;
+        $total_texts = count($rows);
+
+        foreach ($rows as $row) {
+            $type_id = (int)$row['type'];
+            $level_id = (int)$row['level'];
+            $audio_uri = trim((string)($row['audio_uri'] ?? ''));
+            $word_count = (int)($row['word_count'] ?? 0);
+
+            if (isset($type_names[$type_id])) {
+                $type_counts[$type_id] = ($type_counts[$type_id] ?? 0) + 1;
+            }
+
+            if (isset($level_counts[$level_id])) {
+                $level_counts[$level_id]++;
+            }
+
+            if ($audio_uri !== '') {
+                $texts_with_audio++;
+            }
+
+            if ($word_count > 0) {
+                $total_word_count += $word_count;
+                $total_texts_with_words++;
+            }
+
+            $source_uri = (string)($row['source_uri'] ?? '');
+            $domain = $this->normalizeDomain($source_uri);
+
+            if ($domain === '') {
+                continue;
+            }
+
+            if (!isset($domain_metrics[$domain])) {
+                $domain_metrics[$domain] = [
+                    'text_count' => 0,
+                    'type_counts' => [],
+                    'level_counts' => [1 => 0, 2 => 0, 3 => 0],
+                    'audio_count' => 0
+                ];
+            }
+
+            $domain_metrics[$domain]['text_count']++;
+            $domain_metrics[$domain]['type_counts'][$type_id] = ($domain_metrics[$domain]['type_counts'][$type_id] ?? 0) + 1;
+
+            if (isset($domain_metrics[$domain]['level_counts'][$level_id])) {
+                $domain_metrics[$domain]['level_counts'][$level_id]++;
+            }
+
+            if ($audio_uri !== '') {
+                $domain_metrics[$domain]['audio_count']++;
+            }
+        }
+
+        $type_distribution = [];
+        foreach ($type_names as $type_id => $type_name) {
+            $count = $type_counts[$type_id] ?? 0;
+            $percentage = $total_texts > 0 ? round(($count / $total_texts) * 100, 1) : 0.0;
+
+            $type_distribution[] = [
+                'label' => $type_name,
+                'count' => $count,
+                'percentage' => $percentage
+            ];
+        }
+
+        $level_distribution = [];
+        foreach ($level_names as $level_id => $level_name) {
+            $count = $level_counts[$level_id] ?? 0;
+            $percentage = $total_texts > 0 ? round(($count / $total_texts) * 100, 1) : 0.0;
+
+            $level_distribution[] = [
+                'label' => $level_name,
+                'count' => $count,
+                'percentage' => $percentage
+            ];
+        }
+
+        $domain_insights = [];
+        foreach ($domain_metrics as $domain => $domain_metric) {
+            $domain_text_count = (int)$domain_metric['text_count'];
+            $dominant_type_id = $this->getDominantTypeId($domain_metric['type_counts']);
+            $beginner_share = $domain_text_count > 0
+                ? (int)round((($domain_metric['level_counts'][1] ?? 0) / $domain_text_count) * 100)
+                : 0;
+            $intermediate_share = $domain_text_count > 0
+                ? (int)round((($domain_metric['level_counts'][2] ?? 0) / $domain_text_count) * 100)
+                : 0;
+            $advanced_share = $domain_text_count > 0
+                ? (int)round((($domain_metric['level_counts'][3] ?? 0) / $domain_text_count) * 100)
+                : 0;
+
+            $domain_insights[$domain] = [
+                'dominant_type' => $type_names[$dominant_type_id] ?? 'Mixed',
+                'level_shares' => [
+                    'beginner' => $beginner_share,
+                    'intermediate' => $intermediate_share,
+                    'advanced' => $advanced_share
+                ],
+                'audio_share' => $domain_text_count > 0
+                    ? (int)round((($domain_metric['audio_count'] ?? 0) / $domain_text_count) * 100)
+                    : 0
+            ];
+        }
+
+        return [
+            'total_texts' => $total_texts,
+            'with_audio_percentage' => $total_texts > 0 ? (int)round(($texts_with_audio / $total_texts) * 100) : 0,
+            'avg_word_count' => $total_texts_with_words > 0 ? (int)round($total_word_count / $total_texts_with_words) : 0,
+            'type_distribution' => $type_distribution,
+            'level_distribution' => $level_distribution,
+            'domain_insights' => $domain_insights
+        ];
+    }
+
+    /**
+     * Gets the shared text type labels indexed by type id.
+     *
+     * @return array
+     */
+    private function getSharedTypeNames(): array
+    {
+        $sql = "SELECT `id`, `name` FROM `text_types` WHERE `is_shared` = 1 ORDER BY `id` ASC";
+        $rows = $this->sqlFetchAll($sql);
+        $type_names = [];
+
+        foreach ($rows as $row) {
+            $type_names[(int)$row['id']] = (string)$row['name'];
+        }
+
+        return $type_names;
+    }
+
+    /**
+     * Returns the type id with the highest count.
+     *
+     * @param array $type_counts
+     * @return int
+     */
+    private function getDominantTypeId(array $type_counts): int
+    {
+        if (empty($type_counts)) {
+            return 0;
+        }
+
+        arsort($type_counts);
+        $dominant_type_id = array_key_first($type_counts);
+
+        return (int)$dominant_type_id;
+    }
 
     /**
      * Checks if a domain or extension is on the blacklist.
