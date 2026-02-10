@@ -208,11 +208,21 @@ class Texts extends DBEntity
 
         $id_params = str_repeat("?,", count($text_ids)-1) . "?";
 
-        $sql =  "INSERT INTO `archived_texts` SELECT * FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $this->sqlExecute($sql, $text_ids);
+        $sql_insert = "INSERT INTO `archived_texts` SELECT * FROM `{$this->table}` WHERE `id` IN ($id_params)";
+        $sql_delete = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
 
-        $sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $this->sqlExecute($sql, $text_ids);
+        try {
+            $this->pdo->beginTransaction();
+            $this->sqlExecute($sql_insert, $text_ids);
+            $this->sqlExecute($sql_delete, $text_ids);
+            $this->pdo->commit();
+        } catch (\Throwable $throwable) {
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+
+            throw new InternalException('Could not archive texts.');
+        }
     } // end archive()
 
     /**
@@ -238,14 +248,24 @@ class Texts extends DBEntity
         ];
         $cols_sql = implode(', ', array_map(fn($c) => "`$c`", $cols));
 
-        $sql = "INSERT INTO `shared_texts` ($cols_sql)
+        $sql_insert = "INSERT INTO `shared_texts` ($cols_sql)
                 SELECT $cols_sql
                 FROM `{$this->table}`
                 WHERE `id` = $text_id";
-        $this->sqlExecute($sql);
+        $sql_delete = "DELETE FROM `{$this->table}` WHERE `id` = $text_id";
 
-        $sql = "DELETE FROM `{$this->table}` WHERE `id` = $text_id";
-        $this->sqlExecute($sql);
+        try {
+            $this->pdo->beginTransaction();
+            $this->sqlExecute($sql_insert);
+            $this->sqlExecute($sql_delete);
+            $this->pdo->commit();
+        } catch (\Throwable $throwable) {
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+
+            throw new InternalException('Could not share text.');
+        }
     } // end share()
 
     /**

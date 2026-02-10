@@ -147,13 +147,25 @@ class PopularSources extends DBEntity
 
         $domain = $this->normalizeDomain($domain);
 
-        // Delete if it's currently at 1 use (or safety check for <= 1)
-        $sql = "DELETE FROM `{$this->table}` WHERE `lang_iso`=? AND `domain`=? AND `times_used` <= 1";
-        $this->sqlExecute($sql, [$lg_iso, $domain]);
+        try {
+            $this->pdo->beginTransaction();
 
-        // Decrement the rest
-        $sql = "UPDATE `{$this->table}` SET `times_used`=`times_used` - 1 WHERE `lang_iso`=? AND `domain`=?";
-        $this->sqlExecute($sql, [$lg_iso, $domain]);
+            // Delete if it's currently at 1 use (or safety check for <= 1)
+            $sql_delete = "DELETE FROM `{$this->table}` WHERE `lang_iso`=? AND `domain`=? AND `times_used` <= 1";
+            $this->sqlExecute($sql_delete, [$lg_iso, $domain]);
+
+            // Decrement the rest
+            $sql_update = "UPDATE `{$this->table}` SET `times_used`=`times_used` - 1 WHERE `lang_iso`=? AND `domain`=?";
+            $this->sqlExecute($sql_update, [$lg_iso, $domain]);
+
+            $this->pdo->commit();
+        } catch (\Throwable $throwable) {
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+
+            throw new InternalException('Could not update popular source usage.');
+        }
     }
 
     /**

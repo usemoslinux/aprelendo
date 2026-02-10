@@ -66,28 +66,39 @@ class UserRegistrationManager extends DBEntity
         // create account activation hash
         $activation_hash = $this->user->activation_hash = bin2hex(random_bytes(32));
 
-        // save user data in db
-        $user_active = !$send_email;
-        $sql = "INSERT INTO `{$this->table}` (`name`, `password_hash`, `email`, `native_lang_iso`,
-            `learning_lang_iso`, `time_zone`, `activation_hash`, `is_active`)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            $this->pdo->beginTransaction();
 
-        $this->sqlExecute($sql, [
-            $this->user->name, $password_hash, $this->user->email, $this->user->native_lang,
-            $this->user->lang, $this->user->time_zone, $activation_hash, (int)$user_active
-        ]);
+            // save user data in db
+            $user_active = !$send_email;
+            $sql = "INSERT INTO `{$this->table}` (`name`, `password_hash`, `email`, `native_lang_iso`,
+                `learning_lang_iso`, `time_zone`, `activation_hash`, `is_active`)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        $user_id = $this->user->id = $this->pdo->lastInsertId();
+            $this->sqlExecute($sql, [
+                $this->user->name, $password_hash, $this->user->email, $this->user->native_lang,
+                $this->user->lang, $this->user->time_zone, $activation_hash, (int)$user_active
+            ]);
 
-        // create & save default language preferences for user
-        $lang = new Language($this->pdo, $user_id);
-        $lang->createInitialRecordsForUser($this->user->native_lang);
+            $user_id = $this->user->id = $this->pdo->lastInsertId();
 
-        $sql = "INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`,
-                `display_mode`, `assisted_learning`)
-                VALUES (?, 'Helvetica', '12pt', '1.5', 'left', 'light', '1')";
+            // create & save default language preferences for user
+            $lang = new Language($this->pdo, $user_id);
+            $lang->createInitialRecordsForUser($this->user->native_lang);
 
-        $this->sqlExecute($sql, [$user_id]);
+            $sql = "INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`,
+                    `display_mode`, `assisted_learning`)
+                    VALUES (?, 'Helvetica', '12pt', '1.5', 'left', 'light', '1')";
+
+            $this->sqlExecute($sql, [$user_id]);
+            $this->pdo->commit();
+        } catch (\Throwable $throwable) {
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+
+            throw new InternalException('Could not register user.');
+        }
         
         if ($send_email) {
             $this->sendActivationEmail($this->user->email, $this->user->name, $activation_hash);
