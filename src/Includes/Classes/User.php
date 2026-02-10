@@ -279,12 +279,15 @@ class User extends DBEntity
      */
     public function delete(): void
     {
-        $user = new UserAuth($this);
-
         $this->deleteFiles();
         
         $sql = "DELETE FROM `{$this->table}` WHERE `id`=?";
         $this->sqlExecute($sql, [$this->id]);
+
+        // Rebuild popular sources as some sources could have been removed
+        // and counts need to be updated
+        $popular_sources = new PopularSources($this->pdo);
+        $popular_sources->rebuild();
     } // end delete()
 
     /**

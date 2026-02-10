@@ -24,6 +24,75 @@ namespace Aprelendo;
 class PopularSources extends DBEntity
 {
     public const SHOW_COUNT = 50;
+    private const INVALID_SOURCES = [
+        // RSS / Search
+        'feedproxy.google.com',
+        'google.com',
+        'bing.com',
+        'yahoo.com',
+        'duckduckgo.com',
+        'baidu.com',
+        'yandex.ru',
+        // Video / Media
+        'youtube.com',
+        'm.youtube.com',
+        'youtu.be',
+        'vimeo.com',
+        'dailymotion.com',
+        'twitch.tv',
+        'soundcloud.com',
+        // Social / Aggregators
+        'facebook.com',
+        'm.facebook.com',
+        't.me',
+        'instagram.com',
+        'reddit.com',
+        'pinterest.com',
+        'linkedin.com',
+        'tiktok.com',
+        'twitter.com',
+        'x.com',
+        // URL Shorteners
+        'bit.ly',
+        't.co',
+        'goo.gl',
+        'tinyurl.com',
+        'ow.ly',
+        'is.gd',
+        'buff.ly',
+        'lnkd.in',
+        'bit.do',
+        // CDNs & Infrastructure (Usually non-content sources)
+        'cloudfront.net',
+        'akamaihd.net',
+        'fastly.net',
+        'cloudinary.com',
+        'wp.com',
+        's3.amazonaws.com',
+        // Email & Internal
+        'gmail.com',
+        'outlook.com',
+        'hotmail.com',
+        'localhost',
+        '127.0.0.1'
+    ];
+    private const INVALID_EXTENSIONS = [
+        // document formats and archives
+        'epub',
+        'pdf',
+        'zip',
+        'mp3',
+        'mp4',
+        'onion',
+        'docx',
+        'xlsx',
+        'pptx',
+        'tar',
+        'gz',
+        '7z',
+        'rar',
+        'iso'
+    ];
 
     /**
      * Constructor
@@ -85,6 +154,121 @@ class PopularSources extends DBEntity
         // Decrement the rest
         $sql = "UPDATE `{$this->table}` SET `times_used`=`times_used` - 1 WHERE `lang_iso`=? AND `domain`=?";
         $this->sqlExecute($sql, [$lg_iso, $domain]);
+    }
+
+    /**
+     * Rebuilds the popular sources table from shared texts.
+     *
+     * @return void
+     */
+    public function rebuild(): void
+    {
+        $sql_insert = $this->buildRebuildInsertSql();
+        $sql_delete = "DELETE FROM `{$this->table}`";
+
+        try {
+            $this->pdo->beginTransaction();
+            $this->sqlExecute($sql_delete);
+            $this->sqlExecute($sql_insert);
+            $this->pdo->commit();
+        } catch (\Throwable $throwable) {
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+
+            throw new InternalException('Could not rebuild popular sources table.');
+        }
+    }
+
+    /**
+     * Builds the insert query used to rebuild the popular sources table.
+     *
+     * @return string
+     */
+    private function buildRebuildInsertSql(): string
+    {
+        $invalid_sources_sql = $this->buildCteRows(self::INVALID_SOURCES, 'domain');
+        $invalid_extensions_sql = $this->buildCteRows(self::INVALID_EXTENSIONS, 'ext');
+
+        return <<<SQL
+            INSERT INTO `{$this->table}` (`lang_iso`, `domain`, `times_used`)
+            WITH
+            invalid_sources AS (
+                {$invalid_sources_sql}
+            ),
+            invalid_extensions AS (
+                {$invalid_extensions_sql}
+            ),
+            normalized_rows AS (
+                SELECT
+                    l.name AS lang_iso,
+                    REGEXP_REPLACE(
+                        SUBSTRING_INDEX(
+                            REGEXP_SUBSTR(
+                                REGEXP_REPLACE(LOWER(TRIM(st.source_uri)), '^https?://', ''),
+                                '^[^/?#]+'
+                            ),
+                            ':',
+                            1
+                        ),
+                        '^www[0-9]*\\.',
+                        ''
+                    ) AS domain
+                FROM shared_texts st
+                INNER JOIN languages l
+                    ON l.id = st.lang_id
+                WHERE st.source_uri IS NOT NULL
+                AND TRIM(st.source_uri) <> ''
+            ),
+            filtered_rows AS (
+                SELECT
+                    n.lang_iso,
+                    n.domain
+                FROM normalized_rows n
+                LEFT JOIN invalid_extensions ie
+                    ON ie.ext = SUBSTRING_INDEX(n.domain, '.', -1)
+                WHERE n.domain IS NOT NULL
+                AND n.domain <> ''
+                AND ie.ext IS NULL
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM invalid_sources i
+                    WHERE n.domain = i.domain
+                        OR n.domain LIKE CONCAT('%.', i.domain)
+                )
+            )
+            SELECT
+                lang_iso,
+                domain,
+                COUNT(*) AS times_used
+            FROM filtered_rows
+            GROUP BY lang_iso, domain
+            SQL;
+    }
+
+    /**
+     * Builds SQL rows for CTE value lists.
+     *
+     * @param array $values
+     * @param string $column_name
+     * @return string
+     */
+    private function buildCteRows(array $values, string $column_name): string
+    {
+        $cte_rows = [];
+
+        foreach ($values as $value) {
+            $escaped_value = str_replace("'", "''", (string)$value);
+            $cte_rows[] = "SELECT '{$escaped_value}'";
+        }
+
+        if (empty($cte_rows)) {
+            return "SELECT '' AS {$column_name}";
+        }
+
+        $cte_rows[0] .= " AS {$column_name}";
+
+        return implode(" UNION ALL\n                ", $cte_rows);
     }
 
     /**
@@ -312,91 +496,20 @@ class PopularSources extends DBEntity
      */
     private function isInvalid(string $domain): bool
     {
-        $invalid_sources = [
-            // RSS / Search
-            'feedproxy.google.com',
-            'google.com',
-            'bing.com',
-            'yahoo.com',
-            'duckduckgo.com',
-            'baidu.com',
-            'yandex.ru',
-            // Video / Media
-            'youtube.com',
-            'm.youtube.com',
-            'youtu.be',
-            'vimeo.com',
-            'dailymotion.com',
-            'twitch.tv',
-            'soundcloud.com',
-            // Social / Aggregators
-            'facebook.com',
-            'm.facebook.com',
-            't.me',
-            'instagram.com',
-            'reddit.com',
-            'pinterest.com',
-            'linkedin.com',
-            'tiktok.com',
-            'twitter.com',
-            'x.com',
-            // URL Shorteners
-            'bit.ly',
-            't.co',
-            'goo.gl',
-            'tinyurl.com',
-            'ow.ly',
-            'is.gd',
-            'buff.ly',
-            'lnkd.in',
-            'bit.do',
-            // CDNs & Infrastructure (Usually non-content sources)
-            'cloudfront.net',
-            'akamaihd.net',
-            'fastly.net',
-            'cloudinary.com',
-            'wp.com',
-            's3.amazonaws.com',
-            // Email & Internal
-            'gmail.com',
-            'outlook.com',
-            'hotmail.com',
-            'localhost',
-            '127.0.0.1'
-        ];
-
-        // document formats and archives
-        $invalid_extensions = [
-            'epub',
-            'pdf',
-            'zip',
-            'mp3',
-            'mp4',
-            'onion',
-            'docx',
-            'xlsx',
-            'pptx',
-            'tar',
-            'gz',
-            '7z',
-            'rar',
-            'iso'
-        ];
-
         $extension = pathinfo($domain, PATHINFO_EXTENSION);
 
         // check direct match in blacklist
-        if (in_array($domain, $invalid_sources)) {
+        if (in_array($domain, self::INVALID_SOURCES)) {
             return true;
         }
 
         // check forbidden extensions
-        if (in_array($extension, $invalid_extensions)) {
+        if (in_array($extension, self::INVALID_EXTENSIONS)) {
             return true;
         }
 
         // catch-all for subdomains (e.g., "anything.facebook.com")
-        foreach ($invalid_sources as $bad_domain) {
+        foreach (self::INVALID_SOURCES as $bad_domain) {
             if (str_ends_with($domain, '.' . $bad_domain)) {
                 return true;
             }
