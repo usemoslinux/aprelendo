@@ -125,7 +125,7 @@ $(document).ready(function() {
                 is_phrase: is_phrase,
                 source_id: $('[data-idtext]').attr('data-idtext'),
                 text_is_shared: text_is_shared,
-                sentence: SentenceExtractor.extractSentence($selword)
+                sentence: SentenceExtractor.extractSentence($selword, true)
             });
 
             const response = await fetch("/ajax/addword.php", {

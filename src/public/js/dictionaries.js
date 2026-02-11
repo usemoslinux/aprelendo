@@ -339,42 +339,48 @@ const SentenceExtractor = (() => {
 
     /**
      * @function buildSentenceFromAnchors
-     * @description Combines text from anchors between the given indices while handling line breaks.
-     * If an anchor's text includes a line break and a sentence delimiter, then:
-     *   - If the anchor is before or equal to the selected index, the accumulated sentence is reset.
-     *   - If the anchor is after the selected index, the sentence building stops.
+     * @description Combines text from anchors between the given indices while handling sentence boundaries.
+     * If `use_line_breaks_as_sentence_delimiters` is true, any line break is treated as a sentence boundary.
+     * Otherwise, line breaks are only used as boundaries when accompanied by sentence punctuation.
      * @param {Array} anchors - The list of anchor elements.
      * @param {number} start_index - The starting index for sentence extraction.
      * @param {number} end_index - The ending index for sentence extraction.
      * @param {number} sel_index - The index of the selected word.
      * @param {RegExp} sentence_delimiters - The regular expression for detecting sentence delimiters.
+     * @param {boolean} use_line_breaks_as_sentence_delimiters - Whether line breaks should delimit sentences.
      * @returns {string} The combined sentence text.
      */
-    function buildSentenceFromAnchors(anchors, start_index, end_index, sel_index, sentence_delimiters) {
+    function buildSentenceFromAnchors(anchors, start_index, end_index, sel_index, sentence_delimiters, use_line_breaks_as_sentence_delimiters = false) {
         let sentence = "";
+        const line_break_regex = /[\r\n]/;
+
         for (let i = start_index; i <= end_index; i++) {
             const text = $(anchors[i]).text();
-            // If the anchor's text contains any line break...
-            if (/[\r\n]/.test(text)) {
-                // ...and it also contains a sentence delimiter (Western/Eastern punctuation)...
-                const match = text.match(sentence_delimiters);
 
-                if (match) {
+            if (line_break_regex.test(text)) {
+                if (use_line_breaks_as_sentence_delimiters) {
                     if (i <= sel_index) {
-                        // If this element comes before (or is the selected word),
-                        // reset the accumulated sentence and skip appending this fragment.
                         sentence = "";
                         continue;
-                    } else {
-                        // If this element comes after the selected word, stop sentence accumulation.
-                        sentence += match[0]; // Append the detected delimiter
-                        break;
+                    }
+                    break;
+                } else {
+                    const match = text.match(sentence_delimiters);
+                    if (match) {
+                        if (i <= sel_index) {
+                            sentence = "";
+                            continue;
+                        } else {
+                            sentence += match[0];
+                            break;
+                        }
                     }
                 }
             }
+
             sentence += text;
         }
-        // Finally, remove any lingering line breaks and trim extra whitespace.
+
         return sentence.replace(/(\r\n|\n|\r)/g, " ").trim();
     } // end SentenceExtractor.buildSentenceFromAnchors
 
@@ -383,12 +389,19 @@ const SentenceExtractor = (() => {
      * @description Extracts a complete sentence containing the selected word, handling punctuation, abbreviations,
      * and unmatched quotes appropriately.
      * @param {HTMLElement} $selword - The selected word element.
+     * @param {boolean} use_line_breaks_as_sentence_delimiters - Whether line breaks should delimit sentences.
      * @returns {string} The extracted sentence.
      */
-    function extractSentence($selword) {
+    function extractSentence($selword, use_line_breaks_as_sentence_delimiters = false) {
         // Define sentence delimiters for various languages (Western and Eastern punctuation).
         let sentence_delimiters = /[.!?\u3002\uFF01\uFF1F](?=\s|$)/;
         const $all_anchors = TextProcessor.getAnchorsList();
+        const line_break_regex = /[\r\n]/;
+
+        if (!$all_anchors || $all_anchors.length === 0) {
+            return "";
+        }
+
         const sel_index = TextProcessor.getAnchorIndex($selword);
 
         if (sel_index < 0 || sel_index >= $all_anchors.length) {
@@ -403,6 +416,11 @@ const SentenceExtractor = (() => {
         let start_index = sel_index;
         while (start_index > 0) {
             const prev_element_text = $($all_anchors[start_index - 1]).text();
+
+            if (use_line_breaks_as_sentence_delimiters && line_break_regex.test(prev_element_text)) {
+                break;
+            }
+
             if (sentence_delimiters.test(prev_element_text)) {
                 const abbreviation_length = isAbbreviation($all_anchors, start_index - 2, -1);
                 if (abbreviation_length) {
@@ -421,6 +439,11 @@ const SentenceExtractor = (() => {
         let end_index = sel_index;
         while (end_index < $all_anchors.length - 1) {
             const next_element_text = $($all_anchors[end_index + 1]).text();
+
+            if (use_line_breaks_as_sentence_delimiters && line_break_regex.test(next_element_text)) {
+                break;
+            }
+
             if (sentence_delimiters.test(next_element_text)) {
                 const abbreviation_length = isAbbreviation($all_anchors, end_index, 1);
                 if (abbreviation_length) {
@@ -438,7 +461,14 @@ const SentenceExtractor = (() => {
 
         // Combine the sentence elements between the determined start and end indices.
         sentence_delimiters = /[.!?\u3002\uFF01\uFF1F]/;
-        let sentence = buildSentenceFromAnchors($all_anchors, start_index, end_index, sel_index, sentence_delimiters);
+        let sentence = buildSentenceFromAnchors(
+            $all_anchors,
+            start_index,
+            end_index,
+            sel_index,
+            sentence_delimiters,
+            use_line_breaks_as_sentence_delimiters
+        );
 
         // Handle unmatched quotes by prepending a missing opening quote if needed.
         const lang_quotes = getLanguageQuotes(text_lang_iso);
@@ -475,7 +505,7 @@ const LinkBuilder = (() => {
      * @returns {string} The complete translator link
      */
     const forTranslationInText = (translator_URI, $selword) => {
-        let sentence = SentenceExtractor.extractSentence($selword);
+        let sentence = SentenceExtractor.extractSentence($selword, true);
 
         return translator_URI.replace("%s", encodeURI(sentence));
     } // end LinkBuilder.forTranslationInText
@@ -488,20 +518,23 @@ const LinkBuilder = (() => {
      * @returns {string} The complete translator link
      */
     const forTranslationInVideo = (translator_URI, $selword) => {
-        let sentence = SentenceExtractor.extractSentence($selword);
+        let sentence = SentenceExtractor.extractSentence($selword, false);
 
         return translator_URI.replace("%s", encodeURIComponent(sentence));
     } // end LinkBuilder.forTranslationInVideo
 
     /**
-     * Builds translator link using the word object as a parameter
-     * Used for Study sessions only
-     * @param {string} translator_URI 
-     * @param {string} $selword 
-     * @returns string
+     * Builds translator link for Study sessions using sentence punctuation delimiters only.
+     * Falls back to the containing paragraph text if sentence extraction is unavailable.
+     * @param {string} translator_URI - The initial translator URI.
+     * @param {jQuery} $selword - The element selected by user.
+     * @returns {string} The complete translator link.
      */
     const forTranslationInStudy = (translator_URI, $selword) => {
-        const sentence = $selword.parent("p").text().trim() || $selword.text();
+        const sentence = SentenceExtractor.extractSentence($selword, false)
+            || $selword.parent("p").text().trim()
+            || $selword.text();
+
         return translator_URI.replace("%s", encodeURIComponent(sentence));
     } // end LinkBuilder.forTranslationInStudy
 
