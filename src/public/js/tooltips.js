@@ -17,32 +17,50 @@
  * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-function setNewTooltip(elem, title) {
-    if (isMobileDevice()) {
-        return;
+/**
+ * Replaces the current tooltip instance with a new title.
+ *
+ * @param {?HTMLElement} tooltip_elem Element that owns the tooltip.
+ * @param {string} tooltip_title Tooltip text to render.
+ * @returns {?bootstrap.Tooltip} New tooltip instance or null when unavailable.
+ */
+function setNewTooltip(tooltip_elem, tooltip_title) {
+    if (isMobileDevice() || !tooltip_elem) {
+        return null;
     }
-    
-    // hide old tooltip
-    let old_tooltip = bootstrap.Tooltip.getInstance(elem);
-    old_tooltip.hide();
 
-    // create new tooltip
-    elem.setAttribute('data-bs-title', title);
-    let tooltip = new bootstrap.Tooltip(elem, {
+    if (typeof bootstrap === 'undefined' || !bootstrap.Tooltip) {
+        return null;
+    }
+
+    const old_tooltip = bootstrap.Tooltip.getInstance(tooltip_elem);
+    if (old_tooltip) {
+        old_tooltip.hide();
+        old_tooltip.dispose();
+    }
+
+    tooltip_elem.setAttribute('data-bs-title', tooltip_title);
+    return new bootstrap.Tooltip(tooltip_elem, {
         trigger: 'hover'
     });
-    
-    return tooltip;
 }
 
-$(document).ready(function () {
-    // Use Bootstrap tooltips only on desktop
-    if (!isMobileDevice()) {
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => 
-            new bootstrap.Tooltip(tooltipTriggerEl, {
-                trigger: 'hover'
-            })
-        );
+/**
+ * Initializes all desktop tooltip triggers.
+ *
+ * @returns {void}
+ */
+function initTooltips() {
+    if (isMobileDevice() || typeof bootstrap === 'undefined' || !bootstrap.Tooltip) {
+        return;
     }
-});
+
+    const tooltip_trigger_list = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    [...tooltip_trigger_list].forEach((tooltip_trigger_elem) => {
+        new bootstrap.Tooltip(tooltip_trigger_elem, {
+            trigger: 'hover'
+        });
+    });
+}
+
+$(document).ready(initTooltips);
