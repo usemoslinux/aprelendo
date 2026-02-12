@@ -259,7 +259,7 @@ $(document).ready(function() {
             const remove_word_response = await fetch("/ajax/removeword.php", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ word: $selword.text() })
+                body: new URLSearchParams({ word: $selword.text().toLowerCase() })
             });
 
             if (!remove_word_response.ok) { throw new Error(`HTTP error: ${remove_word_response.status}`); }

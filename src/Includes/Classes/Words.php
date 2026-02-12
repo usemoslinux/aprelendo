@@ -170,8 +170,9 @@ class Words extends DBEntity
      */
     public function deleteByName(string $word): void
     {
+        $normalized_word = mb_strtolower($word);
         $sql = "DELETE FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
-        $this->sqlExecute($sql, [$this->user_id, $this->lang_id, $word]);
+        $this->sqlExecute($sql, [$this->user_id, $this->lang_id, $normalized_word]);
     } // end deleteByName()
 
     /**
@@ -202,7 +203,7 @@ class Words extends DBEntity
         $sql = "SELECT COUNT(`word`) AS `count_search`
                 FROM `{$this->table}`
                 WHERE `user_id`=? AND `lang_id`=?
-                AND `word` LIKE ?";
+                AND `word` COLLATE utf8mb4_unicode_ci LIKE ?";
         $row = $this->sqlFetch($sql, [$this->user_id, $this->lang_id, $like_str]);
         return $row['count_search'];
     } // end countSearchRows()
@@ -236,7 +237,7 @@ class Words extends DBEntity
                 WHERE
                     w.`user_id` = ?
                     AND w.`lang_id` = ?
-                    AND w.`word` LIKE ?
+                    AND w.`word` COLLATE utf8mb4_unicode_ci LIKE ?
                 ORDER BY $sort_sql LIMIT {$search_params->offset}, {$search_params->limit}";
 
         return $this->sqlFetchAll($sql, [
@@ -252,8 +253,9 @@ class Words extends DBEntity
      */
     public function exists(string $word): bool
     {
+        $normalized_word = mb_strtolower($word);
         $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
-        return $this->sqlCount($sql, [$this->user_id, $this->lang_id, $word]) > 0;
+        return $this->sqlCount($sql, [$this->user_id, $this->lang_id, $normalized_word]) > 0;
     } // end exists()
 
     /**
