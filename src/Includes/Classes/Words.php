@@ -23,18 +23,18 @@ namespace Aprelendo;
 
 class Words extends DBEntity
 {
-    public $id               = 0;
-    public $user_id          = 0;
-    public $lang_id          = 0;
-    public $word             = '';
-    public $status           = 0;
-    public $is_phrase        = false;
-    public $date_created     = '';
-    public $date_modified    = '';
-    public $review_interval  = 1;
-    public $easiness         = 2.5;
-    public $repetitions      = 0;
-    public $date_next_review = '';
+    public int $id                   = 0;
+    public int $user_id              = 0;
+    public int $lang_id              = 0;
+    public string $word              = '';
+    public int $status               = 0;
+    public bool $is_phrase           = false;
+    public string $date_created      = '';
+    public string $date_modified     = '';
+    public int $review_interval      = 1;
+    public float $easiness           = 2.5;
+    public int $repetitions          = 0;
+    public string $date_next_review  = '';
 
     /**
      * Constructor
@@ -72,7 +72,7 @@ class Words extends DBEntity
             $this->date_created     = $row['date_created'];
             $this->date_modified    = $row['date_modified'];
             $this->review_interval  = $row['review_interval'];
-            $this->easiness         = $row['easiness'];
+            $this->easiness         = (float)$row['easiness'];
             $this->repetitions      = $row['repetitions'];
             $this->date_next_review = $row['date_next_review'];
         }
@@ -90,13 +90,14 @@ class Words extends DBEntity
     {
         $word = mb_strtolower($word);
         
-        $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`)
-                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
-                `user_id`=?, `lang_id`=?, `word`=?, `status`=?, `date_modified`=NOW()";
+        $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`, `date_next_review`)
+                VALUES (?, ?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL ? DAY))
+                ON DUPLICATE KEY UPDATE
+                `status`=?";
 
         $this->sqlExecute($sql, [
-            $this->user_id, $this->lang_id, $word, $status, (int)$is_phrase,
-            $this->user_id, $this->lang_id, $word, $status
+            $this->user_id, $this->lang_id, $word, $status, (int)$is_phrase, $this->review_interval,
+            $status
         ]);
     } // end add()
 
@@ -111,7 +112,7 @@ class Words extends DBEntity
         $in  = str_repeat('?,', count($words) - 1) . '?';
 
         $sql = "UPDATE `{$this->table}`
-                SET `date_modified`=NOW(), `status`=CASE WHEN `status` > 0 THEN `status`-1 ELSE 0 END
+                SET `status`=CASE WHEN `status` > 0 THEN `status`-1 ELSE 0 END
                 WHERE `user_id`=? AND `lang_id`=? AND `word` IN ($in)";
         
         $this->sqlExecute($sql, array_merge([$this->user_id, $this->lang_id], $words));
@@ -120,7 +121,7 @@ class Words extends DBEntity
     /**
      * Updates the status of an existing word in the database.
      *
-     * This method updates the `status` and `date_modified` fields for a specific word
+     * This method updates the `status` field for a specific word
      * in the database table associated with the current user and language.
      *
      * @param string $word   The word to update.
@@ -130,10 +131,11 @@ class Words extends DBEntity
      */
     public function updateStatus(string $word, int $status): void
     {
-        $sql = "UPDATE `{$this->table}` SET `status`=$status, `date_modified`=NOW()
+        $sql = "UPDATE `{$this->table}` SET `status`=?
                 WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
 
-        $this->sqlExecute($sql, [$this->user_id, $this->lang_id, $word]);
+        $this->sqlExecute($sql, [$status, $this->user_id, $this->lang_id, $word]);
+
     } // end updateStatus()
 
     /**
@@ -154,6 +156,8 @@ class Words extends DBEntity
         $sql = "UPDATE `{$this->table}` SET `review_interval`=?, `easiness`=?, `repetitions`=?,
                 `date_next_review`=DATE_ADD(NOW(), INTERVAL ? DAY)
                 WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
+
+        $easiness = round($easiness, 2);
 
         $this->sqlExecute($sql, [$interval, $easiness, $repetitions, $interval, $this->user_id, $this->lang_id, $word]);
     } // end updateSM2()

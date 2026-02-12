@@ -58,8 +58,8 @@ class Gems extends DBEntity
      */
     private function loadUserRecord(): void
     {
-        $sql = "SELECT * FROM `{$this->table}` WHERE `lang_id` = ?";
-        $row = $this->sqlFetch($sql, [$this->lang_id]);
+        $sql = "SELECT * FROM `{$this->table}` WHERE `user_id` = ? AND `lang_id` = ?";
+        $row = $this->sqlFetch($sql, [$this->user_id, $this->lang_id]);
         
         if ($row) {
             $this->id                 = $row['id'];
