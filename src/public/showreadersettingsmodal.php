@@ -76,6 +76,14 @@ $sel = ' selected ';
                                     ? $sel                                     : ''; ?>>
                                     Roboto
                                 </option>
+                                <option value="'Source Sans 3', sans-serif" <?php echo $font_family=="'Source Sans 3', sans-serif"
+                                    ? $sel                                     : ''; ?>>
+                                    Source Sans 3
+                                </option>
+                                <option value="'Source Serif 4', serif" <?php echo $font_family=="'Source Serif 4', serif"
+                                    ? $sel                                     : ''; ?>>
+                                    Source Serif 4
+                                </option>
                                 <option value="Times New Roman, serif" <?php echo $font_family=='Times New Roman, serif'
                                     ? $sel                                     : ''; ?>>
                                     Times New Roman

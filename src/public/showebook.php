@@ -115,8 +115,11 @@ $audio_source_is_YT = Videos::isYTVideo($audio_uri);
     <link rel="stylesheet" type="text/css" href="/css/styles.min.css">
 
     <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Bootstrap icons -->
     <link rel="stylesheet"

@@ -75,6 +75,8 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Custom styles for this template -->
     <link href="/css/styles.min.css" rel="stylesheet">
