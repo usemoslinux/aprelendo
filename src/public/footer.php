@@ -100,9 +100,7 @@ if (!IS_SELF_HOSTED) {
 }
 ?>
 
-<?php if (!in_array($curpage, $no_login_required_pages)): ?>
-    <script defer src="/js/logout.min.js"></script>
-<?php endif; ?>
+<script defer src="/js/logout.min.js"></script>
 
 </body>
 
