@@ -2,6 +2,9 @@
     "require": {
         "phpmailer/phpmailer": "^6.9"
     },
+    "scripts": {
+        "install:db": "php src/scripts/install.php"
+    },
     "autoload": {
         "psr-4": {
             "Aprelendo\\":"src/Includes/Classes/"

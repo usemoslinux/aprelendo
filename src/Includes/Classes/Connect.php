@@ -62,28 +62,17 @@ class Connect
     public function connect(): \PDO
     {
         try {
-            $dsn = $this->driver . ':host=' . $this->host . ';charset=' . $this->charset;
-            $pdo = new \PDO($dsn, $this->user, $this->password);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-            // make sure db exists (otherwise, create it) and select it
-            $sql = "CREATE DATABASE IF NOT EXISTS `$this->db`";
-            $pdo->exec($sql);
-            $sql = "USE `$this->db`";
-            $pdo->exec($sql);
+            $dsn = $this->driver
+                . ':host=' . $this->host
+                . ';dbname=' . $this->db
+                . ';charset=' . $this->charset;
 
-            // make sure db tables already exist, otherwise run aprelendo-schema.sql
-            // this imports table structure and relationships together with data for frequency list tables
-
-            $db_tables = $pdo->query('SHOW TABLES')->fetchAll();
-
-            if (!$db_tables) {
-                // read SQL file
-                $sql_schema_file = file_get_contents(APP_ROOT . 'config/aprelendo-schema.sql');
-
-                // execute SQL script
-                $pdo->query($sql_schema_file);
-            }
+            $pdo = new \PDO(
+                $dsn,
+                $this->user,
+                $this->password,
+                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+            );
         } catch (\PDOException $e) {
             throw new InternalException($e->getMessage());
         }

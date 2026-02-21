@@ -24,49 +24,43 @@ However, reading alone doesn’t automatically make you fluent. To transform rea
   
 ## Installation
 
-1. Install docker
+1. Install Docker
 
 Follow the appropriate installation instructions described [here](https://docs.docker.com/engine/install/).
 
-2. Github clone
+2. Clone repository
 
 ```bash
 git clone https://github.com/usemoslinux/aprelendo.git
-```
-3. Create and modify config file
-
-Copy config template and create new config file:
-
-```bash
 cd aprelendo
-cp src/config/config-example.php src/config/config.php
 ```
 
-In ``aprelendo/src/config/config.php``: 
-
-- Change ``MYSQL_USER`` and ``MYSQL_PASSWORD``.
-
-- Change API credentials (YouTube, Google Drive, etc.)
-
-- Change email credentials (used to send email to new users, retrieve forgotten passwords, etc.).
-
-4. Create and modify docker YAML file
+3. Run first-time install script
 
 ```bash
-mv docker-compose.yml.example docker-compose.yml
+./install.sh
 ```
 
-In ``docker-compose.yml``: 
+This script provides installation progress feedback and does the following:
 
-- Change ``MYSQL_ROOT_PASSWORD``, ``MYSQL_USER`` and ``MYSQL_PASSWORD``.
+- Creates `src/config/config.php` from template if missing.
+- Creates `docker-compose.yml` from template if missing.
+- Builds and starts containers.
+- Runs one-time DB bootstrap using `src/scripts/install.php`.
 
-5. Build and run container
+4. Update local credentials
 
-In ``aprelendo`` root directory, run:
+In `src/config/config.php`:
 
-```bash
-docker compose up -d
-```
+- Change `DB_USER` and `DB_PASSWORD`.
+- Change API credentials (YouTube, Google Drive, etc.).
+- Change email credentials.
+
+Optional commands:
+
+- Rebuild schema from scratch: `./install.sh --force`
+- Run DB bootstrap only: `docker compose exec -T php php src/scripts/install.php`
+- Run DB bootstrap via Composer: `composer run install:db`
 
 ## Contributing
 
@@ -74,7 +68,7 @@ Do you find the app useful and want to contribute to make it even better? Here a
 
 * **Report issues.** A vital way to contribute is by reporting bugs, crashes, or suggesting new features directly through our [GitHub Issues page](https://github.com/usemoslinux/aprelendo/issues).
 * **Share the app.** Tell your friends, family, and colleagues about the app, in real life and online. You could, for example, write a post about Aprelendo on your favorite social media networks.
-* **Write code.** If you're able to write PHP/JS/SQL code, please consider working on fixing [bugs](https://github.com/usemoslinux/aprelendo/issues) or implementing new features. If you need help, don't hesitate to join us in our [Contributing Matrix Room](https://matrix.to/#/!EUTYnKqqplfKVYzgTM:matrix.org?via=matrix.org).
+* **Write code.** If you're able to write PHP/JS/SQL code, please consider working on fixing [bugs](https://github.com/usemoslinux/aprelendo/issues) or implementing new features.
 
 ## Donate
 
