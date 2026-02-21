@@ -128,23 +128,23 @@ $audio_source_is_YT = Videos::isYTVideo($audio_uri);
         crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <!-- Epub.js & jszip -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
         integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
         crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"
+    <script defer src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"
         integrity="sha512-qZUwAZnQNbTGK3xweH0p9dJ0/FflhdJwGr5IhvhuBtltqdTi6G8TjsAf8WINe3uhhyt2wueXacvXtQtOiHm26Q=="
         crossorigin="anonymous">
     </script>
 
     <!-- JQuery -->
-    <script src="https://code.jquery.com/jquery-4.0.0.slim.min.js"
+    <script defer src="https://code.jquery.com/jquery-4.0.0.slim.min.js"
         integrity="sha512-1g+lD9RHY4sYTrehMnFuWSqn3GS1xE2nhSSb5a8JS0WYMnvm1iuxpajRACu0C9tmJSL78O7eQw9TUhGUsRFc0g=="
         crossorigin="anonymous">
     </script>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js"
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js"
         integrity="sha512-HvOjJrdwNpDbkGJIG2ZNqDlVqMo77qbs4Me4cah0HoDrfhrbA+8SBlZn1KrvAQw7cILLPFJvdwIgphzQmMm+Pw=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
@@ -254,17 +254,17 @@ $audio_source_is_YT = Videos::isYTVideo($audio_uri);
     }
     ?>
 
-    <script defer src="/js/showtext.min.js"></script>
+    <script defer src="/js/dictionaries.min.js"></script>
     <script defer src="/js/underlinewords.min.js"></script>
     <script defer src="/js/wordselection.min.js"></script>
     <script defer src="/js/actionbtns.min.js"></script>
+    <script defer src="/js/showtext.min.js"></script>
     <script defer src="/js/showebook.min.js"></script>
     <?php if ($audio_source_is_YT): ?>
         <script src="/js/ytvideoplayer.min.js"></script>
     <?php else: ?>
         <script defer src="/js/audioplayer.min.js"></script>
     <?php endif; ?>
-    <script defer src="/js/dictionaries.min.js"></script>
     <script defer src="/js/helpers.min.js"></script>
     <script defer src="/js/tooltips.min.js"></script>
 </body>

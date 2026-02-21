@@ -88,13 +88,13 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
         crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <!-- JQuery JS -->
-    <script src="https://code.jquery.com/jquery-4.0.0.slim.min.js"
+    <script defer src="https://code.jquery.com/jquery-4.0.0.slim.min.js"
         integrity="sha512-1g+lD9RHY4sYTrehMnFuWSqn3GS1xE2nhSSb5a8JS0WYMnvm1iuxpajRACu0C9tmJSL78O7eQw9TUhGUsRFc0g=="
         crossorigin="anonymous">
     </script>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js"
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js"
         integrity="sha512-HvOjJrdwNpDbkGJIG2ZNqDlVqMo77qbs4Me4cah0HoDrfhrbA+8SBlZn1KrvAQw7cILLPFJvdwIgphzQmMm+Pw=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
