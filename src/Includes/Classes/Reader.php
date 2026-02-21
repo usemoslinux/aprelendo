@@ -144,7 +144,7 @@ class Reader
         $safe_yt_id = htmlspecialchars($yt_id, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
         $safe_reader_css = htmlspecialchars($reader_css, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-        $html = '<div class="video-player">' .
+        $html = '<div class="video-player video-player-youtube">' .
                     '<div data-ytid="' . $safe_yt_id . '" id="videoplayer"></div>' .
                 '</div>';
 
@@ -172,7 +172,7 @@ class Reader
      */
     public function showOfflineVideo(string $reader_css): string
     {
-        $html = '<div id="offline-video-container" class="video-player bg-dark">' .
+        $html = '<div id="offline-video-container" class="video-player video-player-offline bg-dark">' .
                     '<input id="video-file-input" type="file" name="video-file-input"
                         accept="video/mp4,video/ogg,video/webm" style="display: none;">' .
                     '<input id="subs-file-input" type="file" name="subs-file-input" accept=".srt"
@@ -184,7 +184,7 @@ class Reader
                         '</video>' .
                 '</div>';
 
-        $html .= '<div id="text-container" class="reader-scroll-area overflow-auto m-0 my-1 p-2 z-1" style="'
+        $html .= '<div id="text-container" class="reader-scroll-area overflow-auto m-0 my-1 p-2 z-1" data-type="offline-video" style="'
             . $reader_css
             . '"><div id="text" class="text-center"></div>'
             . '<div id="nosubs" class="d-flex justify-content-center align-items-center h-100">'

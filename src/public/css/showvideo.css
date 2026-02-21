@@ -1,0 +1,55 @@
+/**
+ * Copyright (C) 2019 Pablo Castagnino
+ *
+ * This file is part of aprelendo.
+ *
+ * aprelendo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * aprelendo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with aprelendo.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#offline-video-container {
+    border-radius: 5px;
+}
+
+@media screen and (min-width: 1200px) {
+    #main-container {
+        --showvideo_content_width: min(100%, 80vw, calc(60vh * 16 / 9));
+    }
+
+    .video-player.video-player-youtube,
+    .video-player.video-player-offline,
+    .video-controls-row,
+    #text-container[data-type='video'],
+    #text-container[data-type='offline-video'] {
+        width: var(--showvideo_content_width);
+    }
+
+    .video-player.video-player-youtube,
+    .video-player.video-player-offline,
+    .video-controls-row {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .video-player.video-player-youtube,
+    .video-player.video-player-offline {
+        height: auto;
+    }
+
+    #text-container[data-type='video'],
+    #text-container[data-type='offline-video'] {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        min-height: clamp(8rem, 24vh, 14rem);
+    }
+}

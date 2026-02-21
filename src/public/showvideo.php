@@ -88,7 +88,7 @@ require_once PUBLIC_PATH . 'head.php';
     <div id="main-container" class="container h-100">
         <div class="row h-100">
             <div class="col d-flex flex-column h-100">
-                <div class="d-flex flex-row-reverse my-1">
+                <div class="video-controls-row d-flex flex-row-reverse my-1">
                     <button type="button" id="btn-save-ytvideo" class="btn btn-success ms-2"
                         data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                         data-bs-placement="bottom"

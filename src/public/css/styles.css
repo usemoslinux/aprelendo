@@ -1038,10 +1038,6 @@ input {
     width: 100%;
 }
 
-#offline-video-container {
-    border-radius: 5px;;
-}
-
 /* SET DEFAULT LANGUAGE */
 
 #help-dictionary>ul,
