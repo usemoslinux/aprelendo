@@ -23,6 +23,7 @@ $(document).ready(function () {
     // HTML selectors
     const doclang = $("html").attr("lang");
     const player = document.querySelector('video');
+    let current_blob_url = null;
     
     // configuration to show confirmation dialog on close
     let show_confirmation_dialog = true; // confirmation dialog that shows when closing window before saving data
@@ -370,8 +371,12 @@ $(document).ready(function () {
             const file = this.files[0];
             const type = file.type;
             if (player.canPlayType(type)) {
-                const fileURL = URL.createObjectURL(file);
-                player.src = fileURL;
+                if (current_blob_url) {
+                    URL.revokeObjectURL(current_blob_url);
+                }
+
+                current_blob_url = URL.createObjectURL(file);
+                player.src = current_blob_url;
             }
         }
     }); // end #video-file-input.on.change
@@ -469,4 +474,16 @@ $(document).ready(function () {
             return 'Press Save before you go or your changes will be lost.';
         }
     }); // end window.on.beforeunload
+
+    /**
+     * Releases any video blob URL when the page is actually unloading.
+     *
+     * @returns {void}
+     */
+    $(window).on("unload", function () {
+        if (current_blob_url) {
+            URL.revokeObjectURL(current_blob_url);
+            current_blob_url = null;
+        }
+    }); // end window.on.unload
 });
