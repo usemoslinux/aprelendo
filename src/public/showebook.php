@@ -82,6 +82,7 @@ $audio_uri = TextsUtilities::isGoogleDriveLink($text->audio_uri)
     ? TextsUtilities::getGoogleDriveAudioUri($text->audio_uri)
     : $text->audio_uri;
 $audio_source_is_YT = Videos::isYTVideo($audio_uri);
+$google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Source+Sans+3:wght@400;700&family=Source+Serif+4:wght@400;700&display=swap';
 ?>
 
 <!DOCTYPE html>
@@ -116,10 +117,8 @@ $audio_source_is_YT = Videos::isYTVideo($audio_uri);
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="<?php echo htmlspecialchars($google_fonts_href, ENT_QUOTES, 'UTF-8'); ?>" rel="stylesheet">
 
     <!-- Bootstrap icons -->
     <link rel="stylesheet"

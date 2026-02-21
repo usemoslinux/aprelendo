@@ -121,7 +121,7 @@ $(document).ready(function () {
         $("h1").html(`
             <img id="learning-flag" class="flag-icon" src="${img_uri}" alt="${lang.name}">
             <br>
-            <div class="pacifico my-3">${lang.welcome}</div>
+            <div class="my-3">${lang.welcome}</div>
         `);
 
         $("#welcome-msg").text(`You are only one step away from learning ${lang.name}`);

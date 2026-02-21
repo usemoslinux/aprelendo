@@ -40,6 +40,31 @@ if (!in_array($curpage, $no_login_required_pages)) {
 
 $this_is_show_page = in_array($curpage, $show_pages);
 $doclang = $this_is_show_page ? $user->lang : 'en';
+$reader_font_pages = ['showtext', 'showvideo', 'showofflinevideo'];
+$load_reader_fonts = in_array($curpage, $reader_font_pages);
+$load_pacifico_font = $curpage === 'index';
+
+// Route-based font selection logic: showtext, showvideo, showofflinevideo
+// load Roboto, Source Sans 3, Source Serif 4; index loads Pacifico; 
+// Other routes load no Google Fonts.
+$google_font_families = [];
+
+if ($load_reader_fonts) {
+    $google_font_families[] = 'family=Roboto:wght@400;700';
+    $google_font_families[] = 'family=Source+Sans+3:wght@400;700';
+    $google_font_families[] = 'family=Source+Serif+4:wght@400;700';
+}
+
+if ($load_pacifico_font) {
+    $google_font_families[] = 'family=Pacifico';
+}
+
+$google_fonts_href = '';
+if (!empty($google_font_families)) {
+    $google_fonts_href = 'https://fonts.googleapis.com/css2?'
+        . implode('&', $google_font_families)
+        . '&display=swap';
+}
 
 ?>
 
@@ -71,12 +96,11 @@ $doclang = $this_is_show_page ? $user->lang : 'en';
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet">
+    <?php if (!empty($google_fonts_href)): ?>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="<?php echo htmlspecialchars($google_fonts_href, ENT_QUOTES, 'UTF-8'); ?>" rel="stylesheet">
+    <?php endif; ?>
     
     <!-- Custom styles for this template -->
     <link href="/css/styles.min.css" rel="stylesheet">

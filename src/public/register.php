@@ -73,7 +73,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             echo '<img id="learning-flag" src="img/flags/'
                                 . $title_array["$to_lang"][0]
                                 . '.svg" alt="' . $to_lang . '"><br>';
-                            echo '<div class="pacifico my-3">' . $title_array["$to_lang"][1] . '</div>';
+                            echo '<div class="my-3">' . $title_array["$to_lang"][1] . '</div>';
                             ?>
                         </h1>
                         <div id="welcome-msg" class="text-muted text-center">You are only one step away from learning

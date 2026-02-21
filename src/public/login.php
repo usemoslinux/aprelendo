@@ -43,7 +43,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
             <div class="col-12 col-lg-6 offset-lg-3">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="card-title pacifico text-center my-2">Welcome back</h3>
+                        <h3 class="card-title text-center my-2">Welcome back</h3>
                         <br>
                         <div id="alert-box" class="d-none"></div>
                         <form id="form_login">
