@@ -73,6 +73,7 @@ class SharedTexts extends Texts
     public function search(SearchTextsParameters $search_params): array
     {
         $sort_sql = $search_params->buildSortSQL();
+        $sort_sql = str_replace('`id`', 't.`id`', $sort_sql);
         $filter_type_sql = $search_params->buildFilterTypeSQL();
         $filter_level_sql = $search_params->buildFilterLevelSQL();
         $search_text = '%' . $search_params->search_text . '%';
@@ -81,7 +82,7 @@ class SharedTexts extends Texts
         $lang->loadRecordById($this->lang_id);
 
         $sql = "SELECT t.id,
-                    (SELECT `name` FROM `users` WHERE `id` = t.user_id) AS `user_name`,
+                    u.`name` AS `user_name`,
                     t.title,
                     t.author,
                     t.audio_uri,
@@ -90,17 +91,25 @@ class SharedTexts extends Texts
                     t.word_count,
                     CHAR_LENGTH(t.text) AS `char_length`,
                     t.level,
-                    (SELECT `icon_html` FROM `text_types` WHERE `id` = t.type) AS `icon_html`,
+                    tt.`icon_html`,
                     l.name,
-                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id) AS `total_likes`,
-                    (SELECT COUNT(`id`) FROM `likes` WHERE `text_id` = t.id
-                    AND `user_id` = ?) AS `user_liked`
+                    COALESCE(lc.`total_likes`, 0) AS `total_likes`,
+                    CASE WHEN ul.`text_id` IS NULL THEN 0 ELSE 1 END AS `user_liked`
                 FROM `{$this->table}` t
+                INNER JOIN `users` u ON u.`id` = t.`user_id`
+                INNER JOIN `text_types` tt ON tt.`id` = t.`type`
                 INNER JOIN `languages` l ON t.lang_id = l.id
-                WHERE `name`= ?
+                LEFT JOIN (
+                    SELECT `text_id`, COUNT(*) AS `total_likes`
+                    FROM `likes`
+                    GROUP BY `text_id`
+                ) lc ON lc.`text_id` = t.`id`
+                LEFT JOIN `likes` ul ON ul.`text_id` = t.`id`
+                    AND ul.`user_id` = ?
+                WHERE l.`name` = ?
                 AND t.level $filter_level_sql
                 AND t.type $filter_type_sql
-                AND `title` LIKE ?
+                AND t.`title` LIKE ?
                 ORDER BY $sort_sql
                 LIMIT {$search_params->offset}, {$search_params->limit}";
 

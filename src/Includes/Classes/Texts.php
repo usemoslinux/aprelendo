@@ -336,7 +336,7 @@ class Texts extends DBEntity
                         texts.`level`,
                         text_types.`icon_html`
                 FROM `{$this->table}` texts
-                LEFT JOIN `text_types` text_types
+                INNER JOIN `text_types` text_types
                     ON text_types.`id` = texts.`type`
                 WHERE texts.`user_id` = ?
                 AND texts.`lang_id` = ?
