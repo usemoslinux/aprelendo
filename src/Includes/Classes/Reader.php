@@ -141,13 +141,15 @@ class Reader
     public function showVideo(string $yt_id, string $reader_css): string
     {
         $yt_id = $yt_id ? $yt_id : '';
+        $safe_yt_id = htmlspecialchars($yt_id, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $safe_reader_css = htmlspecialchars($reader_css, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
         $html = '<div class="video-player">' .
-                    '<div data-ytid="' . $yt_id . '" id="videoplayer"></div>' .
+                    '<div data-ytid="' . $safe_yt_id . '" id="videoplayer"></div>' .
                 '</div>';
 
-        $html .= "<div id='text-container' class='reader-scroll-area overflow-auto m-0 my-1 p-2 z-1' data-type='video' data-IdText='"
-            . $this->text->id . "' style='" . $reader_css . "'><div id='text' class='text-center'>";
+        $html .= '<div id="text-container" class="reader-scroll-area overflow-auto m-0 my-1 p-2 z-1" data-type="video" data-IdText="'
+            . $this->text->id . '" style="' . $safe_reader_css . '"><div id="text" class="text-center">';
         $xml = new SimpleXMLElement($this->text->text);
 
         for ($i=0; $i < sizeof($xml); $i++) {
