@@ -289,20 +289,56 @@ const TextUnderliner = (() => {
 
 const TextProcessor = (() => {
     const langs_with_no_word_separator = ['zh', 'ja', 'ko'];
-    let $all_anchors;
+    let all_anchors = $();
 
+    /**
+     * Gets the text container that stores underlined anchors.
+     *
+     * @returns {jQuery} jQuery object for `#text` in the parent document.
+     */
     function getTextContainer() {
         return $(parent.document).find('#text');
     }
 
+    /**
+     * Refreshes and caches all anchor tags inside the text container.
+     *
+     * @returns {jQuery} jQuery object with all cached anchors.
+     */
     function updateAnchorsList() {
-        $all_anchors = getTextContainer().find('a'); // all <a> inside #text
+        all_anchors = getTextContainer().find('a'); // all <a> inside #text
+        return all_anchors;
     }
 
+    /**
+     * Returns the cached anchor list and initializes it if needed.
+     *
+     * @returns {jQuery} jQuery object with all anchors.
+     */
+    function getAnchorsList() {
+        if (!all_anchors || typeof all_anchors.filter !== 'function') {
+            return updateAnchorsList();
+        }
+
+        return all_anchors;
+    }
+
+    /**
+     * Gets the index of an anchor inside the cached anchors list.
+     *
+     * @param {jQuery|HTMLElement} obj - Anchor object to find.
+     * @returns {number} The index in the anchors list, or -1 if not found.
+     */
     function getAnchorIndex(obj) {
-        return $all_anchors.index(obj);
+        return getAnchorsList().index(obj);
     }
 
+    /**
+     * Checks whether the provided language uses word separators.
+     *
+     * @param {string} doclang - Language code.
+     * @returns {boolean} True when the language has no explicit word separators.
+     */
     function langHasNoWordSeparators(doclang) {
         return langs_with_no_word_separator.includes(doclang);
     }
@@ -310,39 +346,87 @@ const TextProcessor = (() => {
     return {
         getTextContainer,
         updateAnchorsList,
-        getAnchorsList: () => $all_anchors,
+        getAnchorsList,
         getAnchorIndex,
         langHasNoWordSeparators
     };
 })();
 
 const TextHighlighter = (() => {
+    /**
+     * Removes highlighting from all currently highlighted anchors.
+     *
+     * @returns {void}
+     */
     function removeAll() {
-        TextProcessor.getAnchorsList().filter('.highlighted').removeClass('highlighted');
+        const anchors_list = TextProcessor.getAnchorsList();
+
+        if (!anchors_list || anchors_list.length === 0) {
+            return;
+        }
+
+        anchors_list.filter('.highlighted').removeClass('highlighted');
     }
 
+    /**
+     * Applies highlighting to every anchor between two indexes (inclusive).
+     *
+     * @param {number} start_index - Selection start index.
+     * @param {number} current_index - Selection end index.
+     * @returns {void}
+     */
     function addSelection(start_index, current_index) {
+        const anchors_list = TextProcessor.getAnchorsList();
+
+        if (!anchors_list || anchors_list.length === 0) {
+            return;
+        }
+
         const min = Math.min(start_index, current_index);
         const max = Math.max(start_index, current_index);
-        const start_obj_parent = TextProcessor.getAnchorsList().eq(start_index).parent()[0];
-        const current_obj_parent = TextProcessor.getAnchorsList().eq(current_index).parent()[0];
+        const start_anchor = anchors_list.eq(start_index);
+        const current_anchor = anchors_list.eq(current_index);
+        const start_obj_parent = start_anchor.parent()[0];
+        const current_obj_parent = current_anchor.parent()[0];
+
+        if (!start_obj_parent || !current_obj_parent) {
+            return;
+        }
 
         if (start_obj_parent === current_obj_parent) {
             for (let i = min; i <= max; i++) {
-                TextProcessor.getAnchorsList().eq(i).addClass('highlighted');
+                anchors_list.eq(i).addClass('highlighted');
             }
         }
     }
 
+    /**
+     * Gets a jQuery object containing anchors between two indexes.
+     *
+     * @param {number} start_index - Selection start index.
+     * @param {number} current_index - Selection end index.
+     * @returns {jQuery} Selected anchors as a jQuery collection.
+     */
     function getSelection(start_index, current_index) {
-        const min = Math.min(start_index, current_index);
-        const max = Math.max(start_index, current_index);
-        let sel_array = [];
-        for (let i = min; i <= max; i++) {
-            sel_array.push(TextProcessor.getAnchorsList().eq(i)[0]);
+        const anchors_list = TextProcessor.getAnchorsList();
+        const selected_nodes = [];
+
+        if (!anchors_list || anchors_list.length === 0) {
+            return $(selected_nodes);
         }
 
-        return $(sel_array);
+        const min = Math.min(start_index, current_index);
+        const max = Math.max(start_index, current_index);
+
+        for (let i = min; i <= max; i++) {
+            const current_node = anchors_list.eq(i)[0];
+
+            if (current_node) {
+                selected_nodes.push(current_node);
+            }
+        }
+
+        return $(selected_nodes);
     }
 
     return {
