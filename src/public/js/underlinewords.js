@@ -46,6 +46,15 @@ const TextUnderliner = (() => {
         let pattern = '';
 
         if (user_phrases.length > 0) {
+            const user_phrase_status_map = new Map();
+            user_phrases.forEach(function (element) {
+                const word_key = element.word.toLowerCase();
+
+                if (!user_phrase_status_map.has(word_key)) {
+                    user_phrase_status_map.set(word_key, element.status);
+                }
+            });
+
             if (langs_with_no_word_separator.includes(doclang)) {
                 pattern = new RegExp("(?:<[^>]*>)|(" + user_phrases_str + ")", 'iug');
             } else {
@@ -57,8 +66,12 @@ const TextUnderliner = (() => {
                     return match
                 }
 
-                const user_phrase_match = user_phrases.find(element => element.word.toLowerCase() === match.toLowerCase());
-                const phrase_status = vocab_status[user_phrase_match.status];
+                const phrase_status_key = user_phrase_status_map.get(g1.toLowerCase());
+                const phrase_status = vocab_status[phrase_status_key];
+
+                if (phrase_status === undefined) {
+                    return match;
+                }
 
                 return `<a class="word reviewing ${phrase_status}">${g1}</a>`;
             });
@@ -81,6 +94,15 @@ const TextUnderliner = (() => {
         let pattern = '';
 
         if (user_words.length > 0) {
+            const user_word_status_map = new Map();
+            user_words.forEach(function (element) {
+                const word_key = element.word.toLowerCase();
+
+                if (!user_word_status_map.has(word_key)) {
+                    user_word_status_map.set(word_key, element.status);
+                }
+            });
+
             if (langs_with_no_word_separator.includes(doclang)) {
                 pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(" + user_words_str + ")", 'iug');
             } else {
@@ -92,8 +114,12 @@ const TextUnderliner = (() => {
                     return match
                 }
 
-                const user_word_match = user_words.find(element => element.word.toLowerCase() === match.toLowerCase());
-                const word_status = vocab_status[user_word_match.status];
+                const word_status_key = user_word_status_map.get(g1.toLowerCase());
+                const word_status = vocab_status[word_status_key];
+
+                if (word_status === undefined) {
+                    return match;
+                }
 
                 return `<a class="word reviewing ${word_status}">${g1}</a>`;
             });
