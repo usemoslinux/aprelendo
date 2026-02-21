@@ -26,7 +26,7 @@ $(document).ready(function() {
 
     $('#btn-show-import-modal').on('click', function() {
         last_trigger_element = this;
-        modal_instance.removeClass('d-none');
+        modal_instance.show();
     }); // end #btn-show-import-modal.on.click
 
     $('#words-upload-input').on('change', function(e) {
@@ -82,7 +82,7 @@ $(document).ready(function() {
     }) // end #import-words-modal.on.hide.bs.modal
 
     $('#btn-cancel-import').on('click', function() {
-        modal_instance.addClass('d-none');
+        modal_instance.hide();
     }); // end #btn-cancel-import.on.click
 
     $('#import-words-modal').on('hidden.bs.modal', function () {

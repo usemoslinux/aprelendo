@@ -96,10 +96,7 @@ function processWordsImport(\PDO $pdo, $user, array $post): void {
     $is_phrase = false;
 
     $words_table = new Words($pdo, $user_id, $lang_id);
-    foreach ($words as $word) {
-        $status = $words_table->exists($word) ? 3 : 2;
-        $words_table->add($word, $status, $is_phrase);
-    }
+    $words_table->addBatchImport($words, $is_phrase);
 }
 
 try {

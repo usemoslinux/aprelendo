@@ -102,6 +102,53 @@ class Words extends DBEntity
     } // end add()
 
     /**
+     * Adds many words using batched upserts.
+     *
+     * New words are inserted with status 2 (new) and duplicated words are updated
+     * to status 3 (forgotten), matching the import behavior used by addword.php.
+     *
+     * @param array $words The list of words to import.
+     * @param bool $is_phrase Indicates if the imported entries are phrases.
+     * @param int $chunk_size Number of words per SQL statement.
+     * @return void
+     */
+    public function addBatchImport(array $words, bool $is_phrase, int $chunk_size = 500): void
+    {
+        if (empty($words)) {
+            return;
+        }
+
+        $insert_status = 2;
+        $duplicate_status = 3;
+        $value_placeholder = "(?, ?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL ? DAY))";
+        $review_interval = $this->review_interval;
+        $is_phrase_int = (int)$is_phrase;
+
+        foreach (array_chunk($words, $chunk_size) as $words_chunk) {
+            $value_placeholders = [];
+            $params = [];
+
+            foreach ($words_chunk as $word) {
+                $normalized_word = mb_strtolower((string)$word);
+                $value_placeholders[] = $value_placeholder;
+                $params[] = $this->user_id;
+                $params[] = $this->lang_id;
+                $params[] = $normalized_word;
+                $params[] = $insert_status;
+                $params[] = $is_phrase_int;
+                $params[] = $review_interval;
+            }
+
+            $params[] = $duplicate_status;
+            $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `word`, `status`, `is_phrase`, `date_next_review`)
+                    VALUES " . implode(', ', $value_placeholders) . "
+                    ON DUPLICATE KEY UPDATE `status`=?";
+
+            $this->sqlExecute($sql, $params);
+        }
+    } // end addBatchImport()
+
+    /**
      * Updates status of existing words in database
      *
      * @param array $words array containing all the words to update
