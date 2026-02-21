@@ -233,45 +233,56 @@ $(document).ready(function () {
             }
 
             let $result = $(TextUnderliner.apply(get_user_words_data.payload, doclang));
-            let $cur_filter = {};
-            let cur_word = /""/;
+            const result_word_nodes = $result.filter(".word").get();
+            const lang_has_no_word_separators = TextProcessor.langHasNoWordSeparators(doclang);
+            const user_words = Array.isArray(get_user_words_data.payload.user_words)
+                ? get_user_words_data.payload.user_words
+                : [];
+            const word_status_map = new Map(
+                user_words.map(function (user_word_item) {
+                    return [String(user_word_item.word).toLowerCase(), user_word_item.status];
+                })
+            );
 
             $filter.each(function () {
-                $cur_filter = $(this);
+                const $cur_filter = $(this);
+                const cur_filter_text = $cur_filter.text();
 
-                $result.filter(".word").each(function (key) {
-                    if (TextProcessor.langHasNoWordSeparators(doclang)) {
-                        cur_word = new RegExp(
-                            "(?<![^])" + $(this).text() + "(?![$])",
+                for (const result_word_node of result_word_nodes) {
+                    const node_text = result_word_node.textContent;
+                    let cur_word_match = null;
+
+                    if (lang_has_no_word_separators) {
+                        cur_word_match = new RegExp(
+                            "(?<![^])" + node_text + "(?![$])",
                             "iug"
-                        ).exec($cur_filter.text());
+                        ).exec(cur_filter_text);
                     }
                     else {
-                        cur_word = new RegExp(
-                            "(?<![\\p{L}|^])" + $(this).text() + "(?![\\p{L}|$])",
+                        cur_word_match = new RegExp(
+                            "(?<![\\p{L}|^])" + node_text + "(?![\\p{L}|$])",
                             "iug"
-                        ).exec($cur_filter.text());
+                        ).exec(cur_filter_text);
                     }
 
-                    $(this).text(cur_word);
+                    result_word_node.textContent = cur_word_match ? cur_word_match[0] : "";
 
-                    const word = $(this).text().toLowerCase();
-                    const user_word = get_user_words_data.payload.user_words.find(function (element) {
-                        return element.word == word;
-                    });
+                    const word = result_word_node.textContent.toLowerCase();
+                    const user_word_status = word_status_map.get(word);
 
-                    if (user_word !== undefined) {
-                        if (user_word.status == 2) {
-                            $(this).removeClass("learning").addClass("new");
-                        } else if (user_word.status == 3) {
-                            $(this).removeClass("learning").addClass("forgotten");
-                        }
+                    if (user_word_status == 2) {
+                        result_word_node.classList.remove("learning");
+                        result_word_node.classList.add("new");
+                    } else if (user_word_status == 3) {
+                        result_word_node.classList.remove("learning");
+                        result_word_node.classList.add("forgotten");
                     }
-                });
+                }
 
                 $cur_filter.replaceWith($result.clone());
-                TextProcessor.updateAnchorsList();
             });
+
+            TextProcessor.updateAnchorsList();
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
