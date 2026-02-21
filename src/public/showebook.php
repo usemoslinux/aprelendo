@@ -234,7 +234,7 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
 
                 </span>
             </div>
-            <div id="text-container" class="d-flex flex-column m-2 p-3 fade" style="<?php echo $reader_css; ?>">
+            <div id="text-container" class="reader-scroll-area d-flex flex-column m-2 p-3 fade" style="<?php echo $reader_css; ?>">
                 <div id="text" class="flex-grow-1" data-idText="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
                 </div>
                 <div class="navlink">

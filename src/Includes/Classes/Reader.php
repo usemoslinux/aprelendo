@@ -74,7 +74,7 @@ class Reader
             ? TextsUtilities::getGoogleDriveAudioUri($this->text->audio_uri)
             : $this->text->audio_uri;
         
-        $html = '<div id="text-container" style="' . $reader_css . '" class="d-flex flex-column m-2 p-3" data-type="text" data-IdText="'
+        $html = '<div id="text-container" style="' . $reader_css . '" class="reader-scroll-area d-flex flex-column m-2 p-3" data-type="text" data-IdText="'
             . $this->text->id . '" data-assisted-learning="' . (int)$this->prefs->assisted_learning
             . '" data-is-long-text="' . (int)$this->is_long_text . '">';
         
@@ -146,7 +146,7 @@ class Reader
                     '<div data-ytid="' . $yt_id . '" id="videoplayer"></div>' .
                 '</div>';
 
-        $html .= "<div id='text-container' class='overflow-auto m-0 my-1 p-2 z-1' data-type='video' data-IdText='"
+        $html .= "<div id='text-container' class='reader-scroll-area overflow-auto m-0 my-1 p-2 z-1' data-type='video' data-IdText='"
             . $this->text->id . "' style='" . $reader_css . "'><div id='text' class='text-center'>";
         $xml = new SimpleXMLElement($this->text->text);
 
@@ -182,7 +182,7 @@ class Reader
                         '</video>' .
                 '</div>';
 
-        $html .= '<div id="text-container" class="overflow-auto m-0 my-1 p-2 z-1" style="'
+        $html .= '<div id="text-container" class="reader-scroll-area overflow-auto m-0 my-1 p-2 z-1" style="'
             . $reader_css
             . '"><div id="text" class="text-center"></div>'
             . '<div id="nosubs" class="d-flex justify-content-center align-items-center h-100">'

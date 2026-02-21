@@ -734,6 +734,12 @@ a[role="menuitem"] {
     background-image: var(--bg-image);
 }
 
+@media (max-width: 1024px) {
+    #readerpage {
+        background-attachment: scroll;
+    }
+}
+
 #readerpage.lightmode { --bg-image: url("../img/backgrounds/container-light.webp"); }
 #readerpage.sepiamode { --bg-image: url("../img/backgrounds/container-sepia.webp"); }
 #readerpage.darkmode  { --bg-image: url("../img/backgrounds/container-dark.webp"); }
@@ -907,7 +913,7 @@ input {
 }
 
 /* SCROLLBARS */
-* {
+.reader-scroll-area {
     scrollbar-width: thin;
     scrollbar-color: #888 transparent;
 }
