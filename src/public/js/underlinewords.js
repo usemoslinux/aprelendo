@@ -140,9 +140,20 @@ const TextUnderliner = (() => {
      */
     function underlineFrequentWords(text, doclang, high_freq) {
         let pattern = '';
-        const high_freq_str = high_freq.join('|');
+
+        if (high_freq.length === 0) {
+            return text;
+        }
+
         const has_no_word_separator = langs_with_no_word_separator.includes(doclang);
-        const high_freq_match_pattern = new RegExp("^(?:" + high_freq_str + ")$", 'iu');
+        const high_freq_set = new Set(
+            high_freq.map(function (word) {
+                return word.toLowerCase();
+            })
+        );
+        const escaped_high_freq_str = high_freq.map(function (word) {
+            return escapeRegExp(word);
+        }).join('|');
         const word_anchor_pattern = /<a\b([^>]*)>([^<]*)<\/a>/iug;
         const class_pattern = /\bclass\s*=\s*(['"])([^'"]*)\1/iu;
 
@@ -158,8 +169,9 @@ const TextUnderliner = (() => {
             const class_tokens = class_value.trim().split(/\s+/u);
             const has_reviewing_class = class_tokens.includes('reviewing');
             const has_word_class = class_tokens.includes('word');
+            const is_high_freq = high_freq_set.has(anchor_text.toLowerCase());
 
-            if (!has_word_class || has_reviewing_class || !high_freq_match_pattern.test(anchor_text)) {
+            if (!has_word_class || has_reviewing_class || !is_high_freq) {
                 return match;
             }
 
@@ -174,15 +186,19 @@ const TextUnderliner = (() => {
         });
 
         if (has_no_word_separator) {
-            pattern = new RegExp("(?:<a\\b[^>]*>[^<]*<\\/a>|<[^>]*>)|(" + high_freq_str + ")", 'iug');
+            pattern = new RegExp("(?:<a\\b[^>]*>[^<]*<\\/a>|<[^>]*>)|(" + escaped_high_freq_str + ")", 'iug');
         } else {
-            pattern = new RegExp("(?:<a\\b[^>]*>[^<]*<\\/a>|<[^>]*>)|(?<![\\p{L}])(" + high_freq_str + ")(?![\\p{L}])", 'iug');
+            pattern = /(?:<a\b[^>]*>[^<]*<\/a>|<[^>]*>)|(\p{L}+)/iug;
         }
 
         text = text.replace(pattern, function (match, p1) {
-            return p1 === undefined
-                ? match
-                : `<a class="word frequency-list">${p1}</a>`;
+            if (p1 === undefined) {
+                return match;
+            }
+
+            return high_freq_set.has(p1.toLowerCase())
+                ? `<a class="word frequency-list">${p1}</a>`
+                : match;
         });
 
         return text;
