@@ -322,6 +322,12 @@ const AudioController = (() => {
             total_time_stamp.textContent = '';
         };
 
+        /**
+         * Fetches a playlist directly from its URL.
+         *
+         * @param {string} playlist_url
+         * @returns {Promise<{text: string, url: string}>}
+         */
         const fetchPlaylist = (playlist_url) => {
             return fetch(playlist_url, { cache: 'no-store' })
                 .then((response) => {
@@ -335,6 +341,12 @@ const AudioController = (() => {
                 });
         };
 
+        /**
+         * Fetches a playlist through server-side proxy endpoints.
+         *
+         * @param {string} playlist_url
+         * @returns {Promise<{text: string, url: string}>}
+         */
         const fetchPlaylistViaProxy = (playlist_url) => {
             const proxy_endpoint = playlist_kind === 'rss' ? '/ajax/fetchrss.php' : '/ajax/fetchm3u.php';
             const payload_key = playlist_kind === 'rss' ? 'rss' : 'm3u';
@@ -352,13 +364,37 @@ const AudioController = (() => {
                 });
         };
 
+        /**
+         * Determines if a URL points to a different origin than the current page.
+         *
+         * @param {string} url
+         * @returns {boolean}
+         */
+        const isCrossOriginUrl = (url) => {
+            try {
+                const parsed_url = new URL(url, window.location.href);
+                return parsed_url.origin !== window.location.origin;
+            } catch (error) {
+                return false;
+            }
+        };
+
+        /**
+         * Initializes playlist loading and sets the first track in the player.
+         *
+         * @returns {void}
+         */
         const initPlaylist = () => {
             if (!playlist_enabled) {
                 return;
             }
 
-            fetchPlaylist(normalized_playlist_src)
-                .catch(() => fetchPlaylistViaProxy(normalized_playlist_src))
+            const must_use_proxy_first = playlist_kind === 'rss' || isCrossOriginUrl(normalized_playlist_src);
+            const fetch_playlist_promise = must_use_proxy_first
+                ? fetchPlaylistViaProxy(normalized_playlist_src).catch(() => fetchPlaylist(normalized_playlist_src))
+                : fetchPlaylist(normalized_playlist_src).catch(() => fetchPlaylistViaProxy(normalized_playlist_src));
+
+            fetch_playlist_promise
                 .then(({ text, url }) => {
                     playlist_tracks = playlist_kind === 'rss'
                         ? parseRss(text, url)
