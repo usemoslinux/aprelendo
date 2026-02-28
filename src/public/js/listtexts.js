@@ -18,24 +18,72 @@
  */
 
 $(document).ready(function() {
+    let current_params = {
+        s: new URLSearchParams(window.location.search).get('s') || '',
+        o: new URLSearchParams(window.location.search).get('o') || 0,
+        ft: new URLSearchParams(window.location.search).get('ft') || 0,
+        fl: new URLSearchParams(window.location.search).get('fl') || 0,
+        sa: new URLSearchParams(window.location.search).get('sa') || 0,
+        p: new URLSearchParams(window.location.search).get('p') || 1
+    };
+
+    /**
+     * Loads texts list via AJAX
+     */
+    async function loadTexts() {
+        $("#texts-loader").removeClass("d-none");
+        $("#texts-content").addClass("opacity-50");
+
+        try {
+            const query_str = new URLSearchParams(current_params).toString();
+            const response = await fetch(`/ajax/gettexts.php?${query_str}`);
+            
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error_msg || 'Failed to fetch texts');
+            }
+            
+            $("#texts-content").html(data.payload.html);
+            
+            // Update URL without reloading
+            const new_url = window.location.pathname + '?' + query_str;
+            window.history.pushState(current_params, '', new_url);
+
+            // Re-initialize tooltips if available
+            if (typeof Tooltips !== 'undefined') Tooltips.init();
+            toggleActionMenu();
+        } catch (error) {
+            console.error(error);
+            $("#texts-content").html(`<div class="alert alert-danger">Error: ${error.message}</div>`);
+        } finally {
+            $("#texts-loader").addClass("d-none");
+            $("#texts-content").removeClass("opacity-50");
+        }
+    }
+
+    // Initial load
+    loadTexts();
+
     $("#search").trigger("focus");
-    $("input:checkbox").prop("checked", false);
 
     if ($('#modal-achievements').length) {
         $('#modal-achievements').modal('show');
     }
 
-    $('form').on( "submit", function(e) {
+    $("#texts-filter-form").on("submit", function(e) {
         e.preventDefault();
-
-        reloadPage();
+        current_params.s = $("#s").val().trim();
+        current_params.p = 1;
+        loadTexts();
     });
 
     /**
-     * Deletes selected texts from the database
-     * Trigger: when user selects "Delete" in the global or individual action menus
+     * Deletes selected texts
      */
-    $("#mDelete, .imDelete").on("click", async function() {
+    $(document).on("click", "#mDelete, .imDelete", async function() {
         if (confirm("Really delete?")) {
             let ids = [];
 
@@ -47,17 +95,12 @@ $(document).ready(function() {
                 ids.push($(this).closest('tr').find('input').attr("data-idText"));
             }
 
-            if (ids.length === 0) {
-                return;
-            }
-
-            const uri_params = getCurrentURIParameters();
-            const is_archived = uri_params.sa == "1";
+            if (ids.length === 0) return;
 
             try {
                 const form_data = new URLSearchParams();
                 form_data.append('textIDs', JSON.stringify(ids));
-                form_data.append('is_archived', is_archived ? 1 : 0);
+                form_data.append('is_archived', current_params.sa == "1" ? 1 : 0);
 
                 const response = await fetch("/ajax/removetext.php", {
                     method: "POST",
@@ -65,26 +108,21 @@ $(document).ready(function() {
                 });
 
                 if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-                
                 const data = await response.json();
+                if (!data.success) throw new Error(data.error_msg || 'Failed to delete texts.');
 
-                if (!data.success) {
-                    throw new Error(data.error_msg || 'Failed to delete texts.');
-                }
-
-                reloadPage();
+                loadTexts();
             } catch (error) {
                 console.error(error);
                 alert(`Oops! ${error.message}`);
             }
         }
-    }); // end #mDelete.on.click
+    });
 
     /**
-     * Archives selected texts
-     * Trigger: when user selects "Archive" in the global or individual action menus
+     * Archives/Unarchives selected texts
      */
-    $("#mArchive, .imArchive").on("click", async function() {
+    $(document).on("click", "#mArchive, .imArchive", async function() {
         const archivetxt = $(this).text().trim() === "Archive";
         let ids = [];
 
@@ -96,9 +134,7 @@ $(document).ready(function() {
             ids.push($(this).closest('tr').find('input').attr("data-idText"));
         }
 
-        if (ids.length === 0) {
-            return;
-        }
+        if (ids.length === 0) return;
 
         try {
             const form_data = new URLSearchParams();
@@ -111,31 +147,23 @@ $(document).ready(function() {
             });
 
             if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-            
             const data = await response.json();
+            if (!data.success) throw new Error(data.error_msg || 'Failed to archive texts.');
 
-            if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to archive texts.');
-            }
-
-            reloadPage();
+            loadTexts();
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
-    }); // end mArchive.on.click
+    });
 
     /**
      * Shares selected text
-     * Trigger: when user selects "Share" in the individual action menu
      */
-    $(".imShare").on("click", async function() {
-        if (confirm("Sharing this text is irreversible. Once shared, it cannot be made private again. Are you sure you want to proceed?")) {
+    $(document).on("click", ".imShare", async function() {
+        if (confirm("Sharing this text is irreversible. Are you sure?")) {
             let id = $(this).closest('tr').find('input').attr("data-idText");
-
-            if (id === undefined) {
-                return;
-            }
+            if (id === undefined) return;
 
             try {
                 const form_data = new URLSearchParams({ textID: id });
@@ -145,137 +173,98 @@ $(document).ready(function() {
                 });
                 
                 if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
                 const data = await response.json();
+                if (!data.success) throw new Error(data.error_msg || 'Sharing text failed.');
                 
-                if (!data.success) {
-                    throw new Error(data.error_msg || 'Sharing text failed.');
-                }
-                
-                reloadPage();
+                loadTexts();
             } catch (error) {
                 console.error(error);
                 alert(`Oops! ${error.message}`);
             }
         }
-    }); // end imShare.on.click
+    });
 
-    /**
-     * Edits selected text
-     * Trigger: when user selects "Edit" in the individual action menu
-     */
-    $(".imEdit").on("click", function() {
+    $(document).on("click", ".imEdit", function() {
         let id = $(this).closest('tr').find('input').attr("data-idText");
+        if (id !== undefined) window.location.href = "addtext?id=" + encodeURIComponent(id);
+    });
 
-        if (id === undefined) {
-            return;
-        }
-
-        window.location.href = "addtext?id=" + encodeURIComponent(id);
-    }); // end imEdit.on.click
-
-    /**
-     * Reloads current page passing the correct URI parameters
-     */
-    function reloadPage() {
-        const filename = getCurrentFileName();
-        const uri_params = getCurrentURIParameters();
-        const cur_page_nr = uri_params.p ? uri_params.p : "1";
-
-        const params = {    
-            p: cur_page_nr,
-            ft: $('.ft.active').data('value') || 0, // filter type
-            fl: $('.fl.active').data('value') || 0, // filter level
-            s: $("#s").val().trim(),                // search text
-            sa: $('.sa').hasClass('active') ? '1' : '0', // is shared
-            o: $('.o.active').data('value') || 0    // order
-        };
-
-        const uri_str = buildQueryString(params);
-        window.location.replace(filename + uri_str);
-    }
-
-    /**
-     * Enables/Disables action menu based on the number of selected elements.
-     * If there is at least 1 element selected, it enables it. Otherwise, it is disabled.
-     */
     function toggleActionMenu() {
-        if ($("input[type=checkbox]:checked").length === 0) {
+        if ($("input.chkbox-selrow:checked").length === 0) {
             $("#actions-menu").addClass("disabled");
         } else {
             $("#actions-menu").removeClass("disabled");
         }
-    } // end toggleActionMenu
+    }
 
     $(document).on("change", ".chkbox-selrow", toggleActionMenu);
 
-    /**
-     * Selects/Unselects all texts from the list
-     */
     $(document).on("click", "#chkbox-selall", function(e) {
-        e.stopPropagation();
-
-        const $chkboxes = $(".chkbox-selrow");
-        $chkboxes.prop("checked", $(this).prop("checked"));
-
+        $(".chkbox-selrow").prop("checked", $(this).prop("checked"));
         toggleActionMenu();
-    }); // end #chkbox-selall.on.click
+    });
 
     /**
-     * Shows selection in Filter menu
+     * Handle Filter menu clicks
      */
-    $("#btn-filter + div > a").on("click", function() {
+    $(document).on("click", "#filter-dropdown .dropdown-item", function(e) {
+        e.preventDefault();
         const $item = $(this);
 
         if ($item.is('.sa')) {
             $item.toggleClass("active");
+            current_params.sa = $item.hasClass('active') ? 1 : 0;
         } else {
-            $item.addClass("active");
+            const is_type = $item.is('.ft');
+            const selector = is_type ? '.ft' : '.fl';
+            
+            $item.parent().find(selector + '.active').removeClass('active');
+            $item.addClass('active');
 
-            let filter = '';
-            if ($item.is('.ft')) {
-                filter = '.ft';
-            } else if ($item.is('.fl')) {
-                filter = '.fl';
+            if (is_type) {
+                current_params.ft = $item.data('value') || 0;
+            } else {
+                current_params.fl = $item.data('value') || 0;
             }
-
-            $item.siblings(".active" + filter).each(function() {
-                $(this).toggleClass("active");
-            });
         }
 
-        $('form').trigger( "submit" );
-    }); // end #btn-filter + div > a.on.click
+        current_params.p = 1;
+        loadTexts();
+    });
 
     /**
-     * Selects sorting
+     * Handle Sorting
      */
-    $("#dropdown-menu-sort .o").on("click", function(e) {
-        const filename = getCurrentFileName();
-        const params = {    ft: $('.ft.active').data('value') || 0, // filter type
-                            fl: $('.fl.active').data('value') || 0, // filter level
-                            s: $("#s").val().trim(),                // search text
-                            sa: $('.sa').hasClass('active') ? '1' : '0', // is shared
-                            o: $(this).data('value') || 0    // order
-                        };
-
-        const uri_str = buildQueryString(params);
-        window.location.replace(filename + uri_str);
-    }); // end #dropdown-menu-sort.on.click
-
-    /**
-     * Turn off clicking for disabled navigation items
-     */
-    $(document).on("click", "li.disabled", function() {
-        return false;
-    }); // end li.disabled.on.click
-
-    /**
-     * Hides welcome message for this and future sessions
-     */
-    $("#welcome-close").on("click", function(e) {
+    $(document).on("click", "#dropdown-menu-sort .o", function(e) {
         e.preventDefault();
+        current_params.o = $(this).data('value') || 0;
+        current_params.p = 1;
+        loadTexts();
+    });
 
+    /**
+     * Handle Pagination clicks
+     */
+    $(document).on("click", ".pagination a", function(e) {
+        e.preventDefault();
+        const url = new URL($(this).attr('href'), window.location.origin);
+        current_params.p = url.searchParams.get('p') || 1;
+        loadTexts();
+    });
+
+    /**
+     * Hides welcome message
+     */
+    $(document).on("click", "#welcome-close", function(e) {
         setCookie("hide_welcome_msg", true, 365 * 10);
-    }); // end .close.on.click
+    });
+
+    // Handle browser back/forward
+    window.onpopstate = function(event) {
+        if (event.state) {
+            current_params = event.state;
+            $("#s").val(current_params.s);
+            loadTexts();
+        }
+    };
 });

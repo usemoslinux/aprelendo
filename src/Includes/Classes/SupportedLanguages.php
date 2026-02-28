@@ -101,7 +101,13 @@ class SupportedLanguages
      */
     public static function getAll(?string $sortBy = null): array
     {
-        $languages = self::$languages;
+        $cache_key = 'languages_list';
+        $languages = Cache::get($cache_key, 86400 * 30); // cache for 30 days
+
+        if ($languages === null) {
+            $languages = self::$languages;
+            Cache::set($cache_key, $languages);
+        }
 
         $first = reset($languages);
         if ($sortBy && $first && isset($first[$sortBy])) {

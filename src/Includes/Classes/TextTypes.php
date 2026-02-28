@@ -40,13 +40,31 @@ class TextTypes extends DBEntity
     }
 
     public function getById(int $id) {
-        $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ?";
+        $cache_key = "text_type_{$id}";
+        $cached = Cache::get($cache_key);
 
-        return $this->sqlFetch($sql, [$id]);
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ?";
+        $row = $this->sqlFetch($sql, [$id]);
+
+        Cache::set($cache_key, $row);
+
+        return $row;
     } // getById()
 
     public function getAll(?bool $is_shared = null): array
     {
+        $is_shared_str = ($is_shared === null) ? 'null' : (string)(int)$is_shared;
+        $cache_key = "text_types_all_{$is_shared_str}";
+        $cached = Cache::get($cache_key);
+
+        if ($cached !== null) {
+            return $cached;
+        }
+
         $filter_sql = '';
 
         if ($is_shared !== null) {
@@ -54,7 +72,10 @@ class TextTypes extends DBEntity
         }
 
         $sql = "SELECT * FROM `{$this->table}` $filter_sql ORDER BY `id` ASC";
+        $rows = array_merge([$this->type_all], $this->sqlFetchAll($sql));
 
-        return array_merge([$this->type_all], $this->sqlFetchAll($sql));
+        Cache::set($cache_key, $rows);
+
+        return $rows;
     } // end getAll()
 }

@@ -140,11 +140,18 @@ class Achievements extends DBEntity
      */
     private function checkByType(int $type_id, int $threshold): ?array
     {
-        $sql = "SELECT *
-                FROM `achievements`
-                WHERE `type_id`=? AND `threshold`<=?
-                ORDER BY `threshold` ASC";
+        $cache_key = 'achievements_rules';
+        $all_achievements = Cache::get($cache_key, 86400); // cache for 1 day
 
-        return $this->sqlFetchAll($sql, [$type_id, $threshold]);
+        if ($all_achievements === null) {
+            $sql = "SELECT * FROM `achievements` ORDER BY `threshold` ASC";
+            $all_achievements = $this->sqlFetchAll($sql);
+            Cache::set($cache_key, $all_achievements);
+        }
+
+        // Filter achievements by type and threshold in memory
+        return array_filter($all_achievements, function ($achievement) use ($type_id, $threshold) {
+            return $achievement['type_id'] == $type_id && $achievement['threshold'] <= $threshold;
+        });
     } // end checkByType()
 }

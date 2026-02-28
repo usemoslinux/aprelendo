@@ -23,6 +23,7 @@ namespace Aprelendo;
 class WordFrequency extends DBEntity
 {
     private string $lg_iso;
+    private array  $local_cache = [];
 
     /**
      * Constructor
@@ -52,17 +53,30 @@ class WordFrequency extends DBEntity
     {
         $word = mb_strtolower($word);
 
-        $sql = "SELECT *
+        if (isset($this->local_cache[$word])) {
+            return $this->local_cache[$word];
+        }
+
+        $cache_key = "freq_{$this->lg_iso}_" . md5($word);
+        $cached_val = Cache::get($cache_key);
+
+        if ($cached_val !== null) {
+            $this->local_cache[$word] = (int)$cached_val;
+            return $this->local_cache[$word];
+        }
+
+        $sql = "SELECT `frequency_index`
                 FROM `{$this->table}`
                 WHERE `lang_iso`=? AND `word`=?";
 
         $row = self::sqlFetch($sql, [$this->lg_iso, $word]);
 
-        if (!$row) {
-            return 0;
-        }
+        $val = $row ? (int)$row['frequency_index'] : 0;
+        
+        $this->local_cache[$word] = $val;
+        Cache::set($cache_key, $val);
 
-        return $row['frequency_index'];
+        return $val;
     } // end get()
 
     /**
@@ -72,9 +86,20 @@ class WordFrequency extends DBEntity
      */
     public function getHighFrequencyList(): array
     {
+        $cache_key = "high_freq_list_{$this->lg_iso}";
+        $cached_list = Cache::get($cache_key);
+
+        if ($cached_list !== null) {
+            return $cached_list;
+        }
+
         $sql = "SELECT `word`, `frequency_index`
                 FROM `{$this->table}`
                 WHERE `lang_iso`=? AND `frequency_index` < 81";
-        return self::sqlFetchAll($sql, [$this->lg_iso]);
+        $rows = self::sqlFetchAll($sql, [$this->lg_iso]);
+
+        Cache::set($cache_key, $rows);
+
+        return $rows;
     } // end getHighFrequencyList()
 }

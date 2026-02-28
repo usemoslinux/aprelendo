@@ -22,16 +22,9 @@ require_once '../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
-    
-$search_text = '';
-$sort_by = 0;
 
-if (!empty($_GET)) {
-    $search_text = isset($_GET['s']) ? $_GET['s'] : '';
-    $sort_by = isset($_GET['o']) ? $_GET['o'] : 0;
-}
-
-$query_str = '?s=' . $search_text . '&o=0';
+$search_text = !empty($_GET['s']) ? $_GET['s'] : '';
+$sort_by     = !empty($_GET['o']) ? (int)$_GET['o'] : 0;
 
 ?>
 
@@ -44,51 +37,56 @@ $query_str = '?s=' . $search_text . '&o=0';
                         <a href="/texts">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <span class="active">Word list</span>
+                        <span class="active">My words</span>
                     </li>
                 </ol>
             </nav>
+
             <main>
                 <div class="row flex">
                     <div class="col-sm-12">
-                        <form class="form-flex-row" method="get">
-                            <div class="input-group mb-3">
-                                <input type="text" id="s" name="s" class="form-control" aria-label="Search text"
-                                    placeholder="Search..." value="<?php echo $search_text ?>">
-                                <button type="submit" name="submit" aria-label="Search" class="btn btn-secondary">
+                        <form id="words-filter-form" class="form-flex-row" method="get">
+                            <div id="search-wrapper-div" class="input-group mb-3">
+                                <input type="text" id="s" name="s" class="form-control" placeholder="Search..."
+                                    aria-label="Search word"
+                                    value="<?php echo htmlspecialchars($search_text); ?>">
+                                <button id="btn-search" type="submit" name="submit" class="btn btn-secondary"
+                                    aria-label="Search">
                                     <span class="bi bi-search"></span>
                                 </button>
                             </div>
-                            <!-- Import words button -->
-                            <div class="dropdown-add">
-                                <button id="btn-show-import-modal" type="button"
-                                    class="btn btn-primary text-nowrap ms-md-2 mb-3">
-                                    <span class="bi bi-cloud-upload-fill"></span> Import
-                                </button>
-                            </div>
-                            <!-- Export words button -->
                             <div class="dropdown dropdown-add ms-md-2 mb-3">
-                                <button type="button"
-                                    class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <span class="bi bi-cloud-download-fill"></span> Export
+                                <button id="btn-import-words" type="button" class="btn btn-success"
+                                    data-bs-toggle="modal" data-bs-target="#import-words-modal">
+                                    <span class="bi bi-upload"></span> Import
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a id="export-all" href="ajax/exportwords" class="dropdown-item">Export all</a>
-                                    <a id="export-search"
-                                        href="/ajax/exportwords<?php echo !empty($query_str) ? $query_str : '' ?>"
-                                        class="dropdown-item">
-                                        Export search results
-                                    </a>
-                                </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                <?php require_once 'listwords.php'; ?>
+
+                <div id="words-list-container" class="position-relative">
+                    <div id="words-loader" class="text-center py-5 d-none">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div id="words-content">
+                        <!-- Content loaded via AJAX -->
+                    </div>
+                </div>
             </main>
         </div>
     </div>
 </div>
 
-<?php require_once 'footer.php'; ?>
+<?php
+require_once PUBLIC_PATH . 'showdicactionmenu.php';
+require_once PUBLIC_PATH . 'showimportwordsmodal.php';
+require_once PUBLIC_PATH . 'footer.php';
+?>
+
+<script defer src="/js/listwords.js"></script>
+<script defer src="/js/dictionaries.js"></script>
+<script defer src="/js/helpers.js"></script>
+<script defer src="/js/tooltips.js"></script>

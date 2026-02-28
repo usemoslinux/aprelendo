@@ -19,57 +19,97 @@
 
 $(document).ready(function () {
     let dictionary_URI = "";
+    let current_params = {
+        s: new URLSearchParams(window.location.search).get('s') || '',
+        o: new URLSearchParams(window.location.search).get('o') || 0,
+        p: new URLSearchParams(window.location.search).get('p') || 1
+    };
 
-    $("#search").trigger("focus");
-    $("input:checkbox").prop("checked", false);
+    /**
+     * Loads words list via AJAX
+     */
+    async function loadWords() {
+        $("#words-loader").removeClass("d-none");
+        $("#words-content").addClass("opacity-50");
 
-    $('form').on( "submit", function(e) {
-        e.preventDefault();
-
-        const params = {    s: $("#s").val().trim(),                // search text
-                            o: $('.o.active').data('value') || 0    // order
-                        };
-
-        const uri_str = buildQueryString(params);
-        window.location.replace("words" + uri_str);
-    });
-
-    // ajax call to get dictionary URI
-    (async () => {
         try {
-            const response = await fetch("/ajax/getdicuris.php");
+            const query_str = new URLSearchParams(current_params).toString();
+            const response = await fetch(`/ajax/getwords.php?${query_str}`);
             
             if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
             const data = await response.json();
 
             if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to fetch dictionary URIs');
+                throw new Error(data.error_msg || 'Failed to fetch words');
             }
             
-            dictionary_URI = data.payload.dictionary_uri;
+            $("#words-content").html(data.payload.html);
+            
+            // Update URL without reloading
+            const new_url = window.location.pathname + '?' + query_str;
+            window.history.pushState(current_params, '', new_url);
+
+            // Re-initialize tooltips and event listeners for new content
+            if (typeof Tooltips !== 'undefined') Tooltips.init();
+            toggleActionMenu();
         } catch (error) {
             console.error(error);
-            alert(`Oops! ${error.message}`);
+            $("#words-content").html(`<div class="alert alert-danger">Error: ${error.message}</div>`);
+        } finally {
+            $("#words-loader").addClass("d-none");
+            $("#words-content").removeClass("opacity-50");
+        }
+    }
+
+    // Initial load
+    loadWords();
+
+    // Fetch dictionary URI
+    (async () => {
+        try {
+            const response = await fetch("/ajax/getdicuris.php");
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+            const data = await response.json();
+            if (data.success) dictionary_URI = data.payload.dictionary_uri;
+        } catch (error) {
+            console.error(error);
         }
     })();
 
-    // action menu implementation
+    // Search form submission
+    $("#words-filter-form").on("submit", function (e) {
+        e.preventDefault();
+        current_params.s = $("#s").val().trim();
+        current_params.p = 1; // reset to first page on search
+        loadWords();
+    });
 
-    /**
-     * Deletes selected words from the database
-     * Trigger: when user selects "Delete" in the action menu
-     */
-    $("#mDelete").on("click", async function () {
+    // Handle sorting
+    $(document).on("click", "#dropdown-menu-sort .o", function (e) {
+        e.preventDefault();
+        current_params.o = $(this).data('value') || 0;
+        current_params.p = 1;
+        loadWords();
+    });
+
+    // Handle pagination clicks
+    $(document).on("click", ".pagination a", function (e) {
+        e.preventDefault();
+        const url = new URL($(this).attr('href'), window.location.origin);
+        current_params.p = url.searchParams.get('p') || 1;
+        loadWords();
+    });
+
+    // Deletes selected words
+    $(document).on("click", "#mDelete", async function () {
         if (confirm("Really delete?")) {
             let ids = [];
             $("input.chkbox-selrow:checked").each(function () {
                 ids.push($(this).attr("data-idWord"));
             });
 
-            if (ids.length === 0) {
-                return;
-            }
+            if (ids.length === 0) return;
 
             try {
                 const form_data = new URLSearchParams();
@@ -81,70 +121,49 @@ $(document).ready(function () {
                 });
 
                 if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
                 const data = await response.json();
                 
-                if (!data.success) {
-                    throw new Error(data.error_msg || 'Failed to delete words');
-                }
+                if (!data.success) throw new Error(data.error_msg || 'Failed to delete words');
 
-                window.location.replace(
-                    "words" + buildQueryString(getCurrentURIParameters())
-                );
+                loadWords(); // Reload list after deletion
             } catch (error) {
                 console.error(error);
                 alert(`Oops! ${error.message}`);
             }
         }
-    }); // end #mDelete.on.click
+    });
 
-    /**
-     * Enables/Disables action menu based on the number of selected elements.
-     * If there is at least 1 element selected, it enables it. Otherwise, it is disabled.
-     */
+    // Toggle action menu
     function toggleActionMenu() {
-        if ($("input[type=checkbox]:checked").length === 0) {
+        if ($("input.chkbox-selrow:checked").length === 0) {
             $("#actions-menu").addClass("disabled");
         } else {
             $("#actions-menu").removeClass("disabled");
         }
-    } // end toggleActionMenu
+    }
 
     $(document).on("change", ".chkbox-selrow", toggleActionMenu);
 
-    /**
-     * Selects/Unselects all words from the list
-     */
+    // Select/Unselect all
     $(document).on("click", "#chkbox-selall", function (e) {
-        e.stopPropagation();
-
-        const $chkboxes = $(".chkbox-selrow");
-        $chkboxes.prop("checked", $(this).prop("checked"));
-
+        const is_checked = $(this).prop("checked");
+        $(".chkbox-selrow").prop("checked", is_checked);
         toggleActionMenu();
-    }); // end #chkbox-selall.on.click
+    });
 
-    /**
-     * Selects sorting
-     */
-    $("#dropdown-menu-sort .o").on("click", function (e) {
-        const filename = getCurrentFileName();
-        const params = {    s: $("#s").val().trim(),   // search text
-                            o: $(this).data('value') || 0    // order
-                        };
-
-        const uri_str = buildQueryString(params);
-        window.location.replace(filename + uri_str);
-    }); // end #dropdown-menu-sort .o.on.click
-
-    /**
-     * Open dictionary modal
-     * Triggers when user clicks word
-     * @param {event object} e
-     */
-    $(".word").on("click", function (e) {
-        const $selword = $(this);
-        const dic_link = LinkBuilder.forWordInDictionary(dictionary_URI, $selword.text());
+    // Open dictionary modal
+    $(document).on("click", ".word", function (e) {
+        if (!dictionary_URI) return;
+        const dic_link = LinkBuilder.forWordInDictionary(dictionary_URI, $(this).text());
         openInNewTab(dic_link);
-    }); // end #.word.on.click
+    });
+
+    // Handle browser back/forward
+    window.onpopstate = function(event) {
+        if (event.state) {
+            current_params = event.state;
+            $("#s").val(current_params.s);
+            loadWords();
+        }
+    };
 });

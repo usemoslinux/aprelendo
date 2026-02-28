@@ -9,3 +9,4 @@ src/public/tests/
 todo.md
 uploads/*
 vendor/
+src/Includes/Cache/*
