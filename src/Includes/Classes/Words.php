@@ -293,6 +293,30 @@ class Words extends DBEntity
     } // end search()
 
     /**
+     * Gets word status for a specific list of words and all phrases for the user/language.
+     *
+     * @param array $words A list of words to check status for.
+     * @return array
+     */
+    public function getByWords(array $words): array
+    {
+        if (empty($words)) {
+            $words = ['']; // Prevent empty IN clause
+        }
+
+        $in_placeholders = str_repeat('?,', count($words) - 1) . '?';
+
+        $sql = "SELECT `word`, `status`, `is_phrase`
+                FROM `{$this->table}`
+                WHERE `user_id`=? AND `lang_id`=?
+                AND (`word` IN ($in_placeholders) OR `is_phrase` = 1)";
+
+        $params = array_merge([$this->user_id, $this->lang_id], $words);
+
+        return $this->sqlFetchAll($sql, $params);
+    } // end getByWords()
+
+    /**
      * Checks if word exists
      *
      * @param string $word
@@ -304,25 +328,6 @@ class Words extends DBEntity
         $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
         return $this->sqlCount($sql, [$this->user_id, $this->lang_id, $normalized_word]) > 0;
     } // end exists()
-
-    /**
-     * Gets all the words for the current user & language combination
-     * Values are returned using a sort pattern ($sort_by)
-     *
-     * @param int $sort_by Is converted to a string using buildSortSQL()
-     * @return array
-     */
-    public function getAll(int $sort_by): array
-    {
-        $search_params = new SearchWordsParameters('', $sort_by);
-        $sort_sql = $search_params->buildSortSQL();
-
-        $sql = "SELECT `id`, `word`, `status`, `is_phrase`
-                FROM `{$this->table}`
-                WHERE `user_id`=? AND `lang_id`=?
-                ORDER BY $sort_sql";
-        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
-    } // end getAll()
 
     /**
      * Gets words user is still learning

@@ -104,9 +104,9 @@ const TextUnderliner = (() => {
             });
 
             if (langs_with_no_word_separator.includes(doclang)) {
-                pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(" + user_words_str + ")", 'iug');
+                pattern = new RegExp("(?:<a\\b[^>]*>[^<]*<\\/a>|<[^>]*>)|(" + user_words_str + ")", 'iug');
             } else {
-                pattern = new RegExp("(?:s*<a class='word[^>]+>.*?</a>|<[^>]*>)|(?<![\\p{L}])(" + user_words_str + ")(?![\\p{L}])", 'iug');
+                pattern = new RegExp("(?:<a\\b[^>]*>[^<]*<\\/a>|<[^>]*>)|(?<![\\p{L}])(" + user_words_str + ")(?![\\p{L}])", 'iug');
             }
 
             text = text.replace(pattern, function (match, g1) {
@@ -261,7 +261,7 @@ const TextUnderliner = (() => {
                 user_phrases_str += escapeRegExp(element.word) + '|';
             } else {
                 user_words.push(element);
-                user_words_str += element.word + '|';
+                user_words_str += escapeRegExp(element.word) + '|';
             }
         });
 
