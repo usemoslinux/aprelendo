@@ -343,27 +343,16 @@ class User extends DBEntity
      */
     public function isAllowedToAccessElement(string $table, int $id): bool
     {
-        $result = false;
-
-        switch ($table) {
-            case 'texts':
-                $sql = "SELECT `id` FROM `texts` WHERE `id` = ? AND `user_id` = ?
-                        UNION ALL
-                        SELECT `id` FROM `archived_texts` WHERE `id` = ? AND `user_id` = ?";
-                $result = $this->sqlCount($sql, [$id, $this->id, $id, $this->id]) > 0;
-                break;
-            case 'shared_texts':
-                $sql = "SELECT `id` FROM `$table` WHERE `id`=?";
-                $result = $this->sqlCount($sql, [$id]) > 0;
-                break;
-            case 'words':
-                $sql = "SELECT `id` FROM `$table` WHERE `id`=? AND `user_id`=?";
-                $result = $this->sqlCount($sql, [$id, $this->id]) > 0;
-                break;
-            default:
-                break;
-        }
-
-        return $result;
+        return match ($table) {
+            'texts' => $this->sqlCount(
+                "SELECT `id` FROM `texts` WHERE `id` = ? AND `user_id` = ?
+                UNION ALL
+                SELECT `id` FROM `archived_texts` WHERE `id` = ? AND `user_id` = ?",
+                [$id, $this->id, $id, $this->id]
+            ) > 0,
+            'shared_texts' => $this->sqlCount("SELECT `id` FROM `$table` WHERE `id`=?", [$id]) > 0,
+            'words' => $this->sqlCount("SELECT `id` FROM `$table` WHERE `id`=? AND `user_id`=?", [$id, $this->id]) > 0,
+            default => false,
+        };
     } // end isAllowedToAccessElement()
 }

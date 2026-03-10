@@ -61,25 +61,13 @@ class SearchTextsParameters extends SearchParameters
      */
     public function buildSortSQL(): string
     {
-        switch ($this->sort_by) {
-            case '0': // new first
-                $sql = '`id` DESC';
-                break;
-            case '1': // old first
-                $sql = '`id`';
-                break;
-            case '2': // more likes first (only for shared texts)
-                $sql = '`total_likes` DESC';
-                break;
-            case '3': // less likes first (only for shared texts)
-                $sql = '`total_likes`';
-                break;
-            default:
-                $sql = '';
-                break;
-        }
-
-        return $sql;
+        return match ($this->sort_by) {
+            0 => '`id` DESC', // new first
+            1 => '`id`', // old first
+            2 => '`total_likes` DESC', // more likes first (only for shared texts)
+            3 => '`total_likes`', // less likes first (only for shared texts)
+            default => '',
+        };
     } // end buildSortSQL
 
     /**

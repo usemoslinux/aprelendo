@@ -119,17 +119,20 @@ class WordTable extends Table
         return "<td class='col-title'><a class='word word-list'>$word</a> $freq_badge</td>";
     } // end generateLink()
 
+    /**
+     * Generates the frequency badge HTML for a row.
+     *
+     * @param string $frequency
+     * @return string
+     */
     private function generateFrequencyBadge(string $frequency): string
     {
-        switch ($frequency) {
-            case 'very high':
-                return '<span class="badge rounded-pill bg-danger" title="Very high frequency">Very high</span>';
-            case 'high':
-                return '<span class="badge rounded-pill bg-warning text-dark" title="High frequency">High</span>';
-            default:
-                return '';
-        }
-    }
+        return match ($frequency) {
+            'very high' => '<span class="badge rounded-pill bg-danger" title="Very high frequency">Very high</span>',
+            'high' => '<span class="badge rounded-pill bg-warning text-dark" title="High frequency">High</span>',
+            default => '',
+        };
+    } // end generateFrequencyBadge()
 
     /**
      * Generates the status icon HTML for a row
@@ -142,24 +145,17 @@ class WordTable extends Table
         $word_status = $row['status'];
         $diff_today_modif = $row['diff_today_modif'];
         
-        switch ($diff_today_modif) {
-            case null:
-                $days_modif_str = ' - never modified';
-                break;
-            case 0:
-                $days_modif_str = ' - modified today';
-                break;
-            case 1:
-                $days_modif_str = ' - modified yesterday';
-                break;
-            default:
-                $days_modif_str = ' - modified ' . $diff_today_modif . ' days ago';
-        }
+        $days_modif_str = match (true) {
+            $diff_today_modif == null => ' - never modified',
+            $diff_today_modif == 0 => ' - modified today',
+            $diff_today_modif == 1 => ' - modified yesterday',
+            default => ' - modified ' . $diff_today_modif . ' days ago',
+        };
 
-        $statusIconClass = self::STATUS_ICONS[$word_status];
-        $statusText = self::STATUS_TEXT[$word_status];
+        $status_icon_class = self::STATUS_ICONS[$word_status];
+        $status_text = self::STATUS_TEXT[$word_status];
 
-        return '<td class="col-status text-center"><span title="' . $statusText . $days_modif_str
-            . '" class="bi ' . $statusIconClass . '"></span></td>';
+        return '<td class="col-status text-center"><span title="' . $status_text . $days_modif_str
+            . '" class="bi ' . $status_icon_class . '"></span></td>';
     } // end generateStatusIcon()
 }

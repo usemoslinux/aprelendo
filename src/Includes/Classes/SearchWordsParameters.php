@@ -45,30 +45,14 @@ class SearchWordsParameters extends SearchParameters
      */
     public function buildSortSQL(): string
     {
-        $result = '';
-        switch ($this->sort_by) {
-            case '0': // new first
-                $result = '`id` DESC';
-                break;
-            case '1': // old first
-                $result = '`id`';
-                break;
-            case '2': // learned first
-                $result = '`status`';
-                break;
-            case '3': // learning first
-                $result = '`status` DESC';
-                break;
-            case '10': // words first
-                $result = '`is_phrase` DESC';
-                break;
-            case '11': // phrases first
-                $result = '`is_phrase`';
-                break;
-            default:
-                $result = '';
-                break;
-        }
-        return $result;
+        return match ($this->sort_by) {
+            0 => '`id` DESC', // new first
+            1 => '`id`', // old first
+            2 => '`status`', // learned first
+            3 => '`status` DESC', // learning first
+            10 => '`is_phrase` DESC', // words first
+            11 => '`is_phrase`', // phrases first
+            default => '',
+        };
     } // end buildSortSQL()
 }

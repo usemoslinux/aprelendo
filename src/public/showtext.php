@@ -46,20 +46,12 @@ try {
     $is_long_text = $reader->is_long_text;
     $prefs = $reader->prefs;
 
-    switch ($prefs->display_mode) {
-        case 'light':
-            $reader_class .= "lightmode'";
-            break;
-        case 'sepia':
-            $reader_class .= "sepiamode'";
-            break;
-        case 'dark':
-            $reader_class .= "darkmode'";
-            break;
-        default:
-            $reader_class .= "'";
-            break;
-    }
+    $reader_class .= match ($prefs->display_mode) {
+        'light' => "lightmode'",
+        'sepia' => "sepiamode'",
+        'dark' => "darkmode'",
+        default => "'",
+    };
     $font_family = $prefs->font_family;
     $font_size = $prefs->font_size;
     $line_height = $prefs->line_height;

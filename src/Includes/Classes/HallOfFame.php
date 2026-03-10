@@ -225,6 +225,13 @@ class HallOfFame extends DBEntity
         return $this->sqlFetchAll($sql);
     } // end getTopAchievements()
 
+    /**
+     * Builds the HTML leaderboard list.
+     *
+     * @param array $leaderboard_data
+     * @param string $follow_str
+     * @return string
+     */
     public function print_leaderboard(array $leaderboard_data, string $follow_str): string
     {
         $total_rows = max($this->top_limit, count($leaderboard_data));
@@ -242,23 +249,12 @@ class HallOfFame extends DBEntity
             }
 
             // Determine badge and trophy style
-            $icon = '';
-            $badge_class = "rank-badge bg-secondary text-white me-3";
-
-            switch ($rank) {
-                case 1:
-                    $icon = '<i class="bi bi-trophy-fill trophy-icon trophy-gold"></i>';
-                    $badge_class = "rank-badge rank-1 me-3";
-                    break;
-                case 2:
-                    $icon = '<i class="bi bi-trophy-fill trophy-icon trophy-silver"></i>';
-                    $badge_class = "rank-badge rank-2 me-3";
-                    break;
-                case 3:
-                    $icon = '<i class="bi bi-trophy-fill trophy-icon trophy-bronze"></i>';
-                    $badge_class = "rank-badge rank-3 me-3";
-                    break;
-            }
+            [$icon, $badge_class] = match ($rank) {
+                1 => ['<i class="bi bi-trophy-fill trophy-icon trophy-gold"></i>', 'rank-badge rank-1 me-3'],
+                2 => ['<i class="bi bi-trophy-fill trophy-icon trophy-silver"></i>', 'rank-badge rank-2 me-3'],
+                3 => ['<i class="bi bi-trophy-fill trophy-icon trophy-bronze"></i>', 'rank-badge rank-3 me-3'],
+                default => ['', 'rank-badge bg-secondary text-white me-3'],
+            };
 
             $html .= <<<HTML_LEADERBOARD
             <div class="list-group-item d-flex align-items-center">
@@ -275,7 +271,12 @@ class HallOfFame extends DBEntity
         return $html;
     } // end print_leaderboard()
 
-
+    /**
+     * Builds the HTML value for a community statistic.
+     *
+     * @param int $community_stat
+     * @return string
+     */
     public function print_community_stat(int $community_stat): string
     {
         $html = '';

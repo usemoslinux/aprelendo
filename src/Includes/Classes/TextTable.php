@@ -135,19 +135,13 @@ class TextTable extends Table
 
         $link_html = '';
         if (!empty($row['type'])) {
-            switch ($row['type']) {
-                case 5:
-                    $link_url = 'showvideo?id=' . $row['id'];
-                    $link_html = !empty($link_url) ? '<a href="' . $link_url : '';
-                    break;
-                case 6:
-                    $link_url = 'showebook?id=' . $row['id'];
-                    $link_html = !empty($link_url) ? '<a href="' . $link_url : '';
-                    break;
-                default:
-                    $link_html = '<a href="showtext?id=' . $row['id'];
-                    break;
-            }
+            $link_url = match ((int)$row['type']) {
+                5 => 'showvideo?id=' . $row['id'],
+                6 => 'showebook?id=' . $row['id'],
+                default => 'showtext?id=' . $row['id'],
+            };
+
+            $link_html = '<a href="' . $link_url;
     
             $link_html .= $this->is_shared ? '&sh=1">' : '&sh=0">';
         }

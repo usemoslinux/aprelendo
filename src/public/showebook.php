@@ -50,19 +50,12 @@ try {
     // get user preferences & load classes and CSS for ebook
     $prefs = $reader->prefs;
 
-    switch ($prefs->display_mode) {
-        case 'light':
-            $color_mode = 'lightmode';
-            break;
-        case 'sepia':
-            $color_mode = 'sepiamode';
-            break;
-        case 'dark':
-            $color_mode = 'darkmode';
-            break;
-        default:
-            break;
-    }
+    $color_mode = match ($prefs->display_mode) {
+        'light' => 'lightmode',
+        'sepia' => 'sepiamode',
+        'dark' => 'darkmode',
+        default => '',
+    };
 
     $font_family = $prefs->font_family;
     $font_size = $prefs->font_size;

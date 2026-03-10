@@ -188,30 +188,21 @@ try {
     $post = normalize_post($_POST);
     $mode = $post['mode'] ?? '';
 
-    switch ($mode) {
-        case 'simple':
-        case 'video': {
-            $payload = handle_simple_or_video($pdo, $user_id, $lang_id, $post, $mode);
-            $response = ['success' => true, 'payload' => $payload];
-            break;
-        }
-
-        case 'rss': {
-            $payload = handle_rss($pdo, $user_id, $lang_id, $post);
-            $response = ['success' => true, 'payload' => $payload];
-            break;
-        }
-
-        case 'ebook': {
-            $payload = handle_ebook($pdo, $user_id, $lang_id, $post, $_FILES);
-            $response = ['success' => true, 'payload' => $payload];
-            break;
-        }
-
-        default:
-            // keep original silent default by not throwing, but it's clearer to error:
-            throw new UserException('Unknown mode.');
-    }
+    $response = match ($mode) {
+        'simple', 'video' => [
+            'success' => true,
+            'payload' => handle_simple_or_video($pdo, $user_id, $lang_id, $post, $mode),
+        ],
+        'rss' => [
+            'success' => true,
+            'payload' => handle_rss($pdo, $user_id, $lang_id, $post),
+        ],
+        'ebook' => [
+            'success' => true,
+            'payload' => handle_ebook($pdo, $user_id, $lang_id, $post, $_FILES),
+        ],
+        default => throw new UserException('Unknown mode.'),
+    };
 
     if ($response['success']) {
         award_gems($pdo, $user_id, $lang_id, $user->time_zone);

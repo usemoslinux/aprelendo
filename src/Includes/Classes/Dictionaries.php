@@ -43,25 +43,25 @@ class Dictionaries extends DBEntity
         $dictionaries = $this->load($learning_lang_iso);
 
         foreach ($dictionaries as $dictionary) {
-            switch ($dictionary['type']) {
-                case 1:
-                    array_push($this->monolingual, $dictionary);
-                    break;
-                case 2:
-                    $dictionary = $this->bindLanguageParamsToUri($dictionary, $native_lang_iso, $learning_lang_iso);
-                    array_push($this->bilingual, $dictionary);
-                    break;
-                case 3:
-                    $dictionary = $this->bindLanguageParamsToUri($dictionary, $native_lang_iso, $learning_lang_iso);
-                    array_push($this->visual, $dictionary);
-                    break;
-                case 4:
-                    $dictionary = $this->bindLanguageParamsToUri($dictionary, $native_lang_iso, $learning_lang_iso);
-                    array_push($this->translators, $dictionary);
-                    break;
-                default:
-                    break;
-            }
+            match ((int)$dictionary['type']) {
+                1 => $this->monolingual[] = $dictionary,
+                2 => $this->bilingual[] = $this->bindLanguageParamsToUri(
+                    $dictionary,
+                    $native_lang_iso,
+                    $learning_lang_iso
+                ),
+                3 => $this->visual[] = $this->bindLanguageParamsToUri(
+                    $dictionary,
+                    $native_lang_iso,
+                    $learning_lang_iso
+                ),
+                4 => $this->translators[] = $this->bindLanguageParamsToUri(
+                    $dictionary,
+                    $native_lang_iso,
+                    $learning_lang_iso
+                ),
+                default => null,
+            };
         }
     } // end __construct()
 

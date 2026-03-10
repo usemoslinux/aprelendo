@@ -32,20 +32,12 @@ try {
 
     $body_class = "class='dvh-100 dvw-100 ";
 
-    switch ($prefs->display_mode) {
-        case 'light':
-            $body_css = $body_class . "lightmode'";
-            break;
-        case 'sepia':
-            $body_css = $body_class . "sepiamode'";
-            break;
-        case 'dark':
-            $body_css = $body_class . "darkmode'";
-            break;
-        default:
-            $body_class = $body_class . "'";
-            break;
-    }
+    $body_css = match ($prefs->display_mode) {
+        'light' => $body_class . "lightmode'",
+        'sepia' => $body_class . "sepiamode'",
+        'dark' => $body_class . "darkmode'",
+        default => '',
+    };
     $font_family = $prefs->font_family;
     $font_size = $prefs->font_size;
     $line_height = $prefs->line_height;
