@@ -54,6 +54,8 @@ class HallOfFame extends DBEntity
      */
     public function getActiveLearners(): int
     {
+        $learned_status_value = WordStatus::learned->value;
+
         $sql = "SELECT 
                     COUNT(DISTINCT w.user_id) AS users
                 FROM 
@@ -61,7 +63,7 @@ class HallOfFame extends DBEntity
                 JOIN 
                     languages AS l ON w.lang_id = l.id
                 WHERE 
-                    l.name = '{$this->lang_iso}' AND w.status = 0";
+                    l.name = '{$this->lang_iso}' AND w.status = {$learned_status_value}";
 
         return $this->sqlCount($sql);
     } // end getActiveLearners()
@@ -73,6 +75,8 @@ class HallOfFame extends DBEntity
      */
     public function getTotalWordsLearned(): int
     {
+        $learned_status_value = WordStatus::learned->value;
+
         $sql = "SELECT 
                     COUNT(*) AS words
                 FROM 
@@ -80,7 +84,7 @@ class HallOfFame extends DBEntity
                 JOIN 
                     languages AS l ON w.lang_id = l.id
                 WHERE 
-                    l.name = '{$this->lang_iso}' AND w.status = 0";
+                    l.name = '{$this->lang_iso}' AND w.status = {$learned_status_value}";
 
         return $this->sqlCount($sql);
     } // end getTotalWordsLearned()
@@ -182,6 +186,8 @@ class HallOfFame extends DBEntity
      */
     public function getTopWordsLearned(): array
     {
+        $learned_status_value = WordStatus::learned->value;
+
         $sql = "SELECT 
                     u.name AS `user_name`,
                     COUNT(*) AS `value`
@@ -192,7 +198,7 @@ class HallOfFame extends DBEntity
                 JOIN 
                     languages AS l ON w.lang_id = l.id
                 WHERE 
-                    l.name = '{$this->lang_iso}' AND w.status = 0
+                    l.name = '{$this->lang_iso}' AND w.status = {$learned_status_value}
                 GROUP BY u.id
                 ORDER BY `value` DESC, u.name ASC
                 LIMIT {$this->top_limit}";

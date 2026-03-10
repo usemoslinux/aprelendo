@@ -22,20 +22,6 @@ namespace Aprelendo;
 
 class WordTable extends Table
 {
-    private const STATUS_ICONS = [
-        'bi-hourglass-top status-learned',
-        'bi-hourglass-split status-learning',
-        'bi-hourglass-bottom status-new',
-        'bi-hourglass-bottom status-forgotten',
-    ];
-
-    private const STATUS_TEXT = [
-        'Learned',
-        'Learning',
-        'New',
-        'Forgotten',
-    ];
-
     /**
      * Constructor
      *
@@ -142,7 +128,7 @@ class WordTable extends Table
      */
     private function generateStatusIcon(array $row): string
     {
-        $word_status = $row['status'];
+        $word_status = WordStatus::tryFrom((int)$row['status']) ?? WordStatus::new_word;
         $diff_today_modif = $row['diff_today_modif'];
         
         $days_modif_str = match (true) {
@@ -152,8 +138,8 @@ class WordTable extends Table
             default => ' - modified ' . $diff_today_modif . ' days ago',
         };
 
-        $status_icon_class = self::STATUS_ICONS[$word_status];
-        $status_text = self::STATUS_TEXT[$word_status];
+        $status_icon_class = $word_status->getIconClass();
+        $status_text = $word_status->getLabel();
 
         return '<td class="col-status text-center"><span title="' . $status_text . $days_modif_str
             . '" class="bi ' . $status_icon_class . '"></span></td>';

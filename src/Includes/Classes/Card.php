@@ -53,16 +53,18 @@ class Card extends DBEntity
      * The result is ordered by next review date and `status`.
      * If $status is provided, results are limited to that status.
      *
+     * @param int $limit
+     * @param WordStatus|null $status
      * @return array
      */
-    public function getWordsUserIsLearning(int $limit, ?int $status = null): array
+    public function getWordsUserIsLearning(int $limit, ?WordStatus $status = null): array
     {
         $status_filter = '';
         $params = [$this->lang_iso, $this->user_id, $this->lang_id];
 
         if ($status !== null) {
             $status_filter = ' AND w.status = ?';
-            $params[] = $status;
+            $params[] = $status->value;
         }
 
         $sql = "SELECT w.word, w.status, w.is_phrase, w.date_next_review, COALESCE(fl.frequency_index, 100) AS 'frequency_index'

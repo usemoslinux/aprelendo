@@ -48,12 +48,14 @@ class WordStats extends DBEntity
      */
     public function getRecalledToday(): int
     {
+        $forgotten_status_value = WordStatus::forgotten->value;
+
         $sql = "SELECT COUNT(word) AS `recalled_today`
                 FROM `{$this->table}`
-                WHERE `user_id`=? AND `lang_id`=? AND `status` < 3
+                WHERE `user_id`=? AND `lang_id`=? AND `status` < ?
                 AND `date_modified` > CURRENT_DATE()";
 
-        return $this->sqlCount($sql, [$this->user_id, $this->lang_id]);
+        return $this->sqlCount($sql, [$this->user_id, $this->lang_id, $forgotten_status_value]);
     } // end getRecalledToday()
 
     /**
@@ -79,25 +81,26 @@ class WordStats extends DBEntity
      */
     public function getTotals(): array
     {
-        $temp = [];
-        $result = [0 => 0,  // learned
-                   1 => 0,  // learning
-                   2 => 0,  // new
-                   3 => 0,  // forgotten
-                   4 => 0]; // total
+        $result = [];
+        foreach (WordStatus::getAll() as $word_status) {
+            $result[$word_status->value] = 0;
+        }
 
         $sql = "SELECT `status`, COUNT(*) as count
             FROM `{$this->table}`
             WHERE `user_id`=? AND `lang_id`=?
             GROUP BY `status`";
 
-        $temp = $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
+        $status_totals = $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
 
-        foreach ($temp as $value) {
-            $result[$value['status']] = $value['count'];
+        foreach ($status_totals as $status_total) {
+            $word_status = WordStatus::tryFrom((int)$status_total['status']);
+            if ($word_status !== null) {
+                $result[$word_status->value] = (int)$status_total['count'];
+            }
         }
 
-        $result[4] = $result[0] + $result[1] + $result[2] + $result[3];
+        $result[4] = array_sum($result);
 
         return $result;
         

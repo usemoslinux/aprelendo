@@ -27,7 +27,7 @@ class Words extends DBEntity
     public int $user_id              = 0;
     public int $lang_id              = 0;
     public string $word              = '';
-    public int $status               = 0;
+    public WordStatus $status        = WordStatus::learned;
     public bool $is_phrase           = false;
     public string $date_created      = '';
     public string $date_modified     = '';
@@ -67,7 +67,7 @@ class Words extends DBEntity
         if ($row) {
             $this->id               = $row['id'];
             $this->word             = $row['word'];
-            $this->status           = $row['status'];
+            $this->status           = WordStatus::fromInt((int)$row['status']);
             $this->is_phrase        = $row['is_phrase'];
             $this->date_created     = $row['date_created'];
             $this->date_modified    = $row['date_modified'];
@@ -82,11 +82,11 @@ class Words extends DBEntity
      * Adds a new word to the database
      *
      * @param string $word
-     * @param int $status
-     * @param int $is_phrase It's an integer but it acts like a boolean (only uses 0 & 1)
+     * @param WordStatus $status
+     * @param bool $is_phrase Indicates if the entry is a phrase.
      * @return void
      */
-    public function add(string $word, int $status, bool $is_phrase): void
+    public function add(string $word, WordStatus $status, bool $is_phrase): void
     {
         $word = mb_strtolower($word);
         
@@ -96,16 +96,16 @@ class Words extends DBEntity
                 `status`=?";
 
         $this->sqlExecute($sql, [
-            $this->user_id, $this->lang_id, $word, $status, (int)$is_phrase, $this->review_interval,
-            $status
+            $this->user_id, $this->lang_id, $word, $status->value, (int)$is_phrase, $this->review_interval,
+            $status->value
         ]);
     } // end add()
 
     /**
      * Adds many words using batched upserts.
      *
-     * New words are inserted with status 2 (new) and duplicated words are updated
-     * to status 3 (forgotten), matching the import behavior used by addword.php.
+     * New words are inserted with status "new" and duplicated words are updated
+     * to status "forgotten", matching the import behavior used by addword.php.
      *
      * @param array $words The list of words to import.
      * @param bool $is_phrase Indicates if the imported entries are phrases.
@@ -118,8 +118,8 @@ class Words extends DBEntity
             return;
         }
 
-        $insert_status = 2;
-        $duplicate_status = 3;
+        $insert_status = WordStatus::new_word->value;
+        $duplicate_status = WordStatus::forgotten->value;
         $value_placeholder = "(?, ?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL ? DAY))";
         $review_interval = $this->review_interval;
         $is_phrase_int = (int)$is_phrase;
@@ -157,12 +157,19 @@ class Words extends DBEntity
     public function updateByName(array $words): void
     {
         $in  = str_repeat('?,', count($words) - 1) . '?';
+        $learned_status_value = WordStatus::learned->value;
 
         $sql = "UPDATE `{$this->table}`
-                SET `status`=CASE WHEN `status` > 0 THEN `status`-1 ELSE 0 END
+                SET `status`=CASE WHEN `status` > ? THEN `status`-1 ELSE ? END
                 WHERE `user_id`=? AND `lang_id`=? AND `word` IN ($in)";
         
-        $this->sqlExecute($sql, array_merge([$this->user_id, $this->lang_id], $words));
+        $this->sqlExecute(
+            $sql,
+            array_merge(
+                [$learned_status_value, $learned_status_value, $this->user_id, $this->lang_id],
+                $words
+            )
+        );
     } // end updateByName()
 
     /**
@@ -172,16 +179,16 @@ class Words extends DBEntity
      * in the database table associated with the current user and language.
      *
      * @param string $word   The word to update.
-     * @param int    $status The new status value to set for the word.
+     * @param WordStatus $status The new status value to set for the word.
      *
      * @return void
      */
-    public function updateStatus(string $word, int $status): void
+    public function updateStatus(string $word, WordStatus $status): void
     {
         $sql = "UPDATE `{$this->table}` SET `status`=?
                 WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
 
-        $this->sqlExecute($sql, [$status, $this->user_id, $this->lang_id, $word]);
+        $this->sqlExecute($sql, [$status->value, $this->user_id, $this->lang_id, $word]);
 
     } // end updateStatus()
 
@@ -336,11 +343,13 @@ class Words extends DBEntity
      */
     public function getLearning(): array
     {
+        $learned_status_value = WordStatus::learned->value;
+
         $sql = "SELECT `word`
                 FROM `words`
-                WHERE `user_id`=? AND `lang_id`=? AND `status`>0
+                WHERE `user_id`=? AND `lang_id`=? AND `status`>?
                 ORDER BY `is_phrase` ASC";
-        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
+        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id, $learned_status_value]);
     } // end getLearned()
 
     /**
@@ -350,11 +359,13 @@ class Words extends DBEntity
      */
     public function getLearned(): array
     {
+        $learned_status_value = WordStatus::learned->value;
+
         $sql = "SELECT `word`
                 FROM `words`
-                WHERE `user_id`=? AND `lang_id`=? AND `status`=0
+                WHERE `user_id`=? AND `lang_id`=? AND `status`=?
                 ORDER BY `is_phrase` ASC";
-        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
+        return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id, $learned_status_value]);
     } // end getLearned()
 
 }

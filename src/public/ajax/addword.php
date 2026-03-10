@@ -30,6 +30,7 @@ if (empty($_POST)) {
 }
 
 use Aprelendo\Words;
+use Aprelendo\WordStatus;
 use Aprelendo\ExampleSentences;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
@@ -58,9 +59,9 @@ function processSingleWord(\PDO $pdo, $user, array $post): void {
     $word = $post['word'];
     $is_phrase = !empty($post['is_phrase']) ? (bool) $post['is_phrase'] : false;
 
-    // // 1. Add word to table
+    // 1. Add word to table
     $words_table = new Words($pdo, $user_id, $lang_id);
-    $status = $words_table->exists($word) ? 3 : 2;
+    $status = $words_table->exists($word) ? WordStatus::forgotten : WordStatus::new_word;
     $words_table->add($word, $status, $is_phrase);
 
     // 2. If a source_id is provided, save the example sentence

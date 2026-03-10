@@ -30,6 +30,7 @@ if (empty($_POST)) {
 }
 
 use Aprelendo\Words;
+use Aprelendo\WordStatus;
 use Aprelendo\SM2;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
@@ -40,12 +41,17 @@ try {
 
     if (!empty($_POST['word']) && isset($_POST['answer'])) {
         $answer = (int)$_POST['answer'];
+        $word_status = WordStatus::tryFrom($answer);
+        if ($word_status === null) {
+            throw new UserException('Invalid card status.');
+        }
+
         $word = $_POST['word'];
 
         $words_table = new Words($pdo, $user_id, $lang_id);
         $words_table->loadRecordByWord($word);
         $sm2 = new SM2($words_table->easiness, $words_table->repetitions, $words_table->review_interval);
-        $sm2->processReview($answer);
+        $sm2->processReview($word_status->value);
 
         $words_table->updateSM2(
             $word,
@@ -54,7 +60,7 @@ try {
             $sm2->getRepetitions()
         );
 
-        $words_table->updateStatus($word, $answer);
+        $words_table->updateStatus($word, $word_status);
         $response = ['success' => true];
     }
 

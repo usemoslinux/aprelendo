@@ -30,6 +30,7 @@ if (empty($_POST)) {
 }
 
 use Aprelendo\Card;
+use Aprelendo\WordStatus;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
@@ -42,7 +43,13 @@ try {
 
     if (!isset($_POST['word']) || empty($_POST['word'])) {
         $limit = $_POST['limit'];
-        $status = isset($_POST['status']) && $_POST['status'] !== '' ? (int)$_POST['status'] : null;
+        $status = null;
+        if (isset($_POST['status']) && $_POST['status'] !== '') {
+            $status = WordStatus::tryFrom((int)$_POST['status']);
+            if ($status === null) {
+                throw new UserException('Invalid card status filter.');
+            }
+        }
         $payload = $card->getWordsUserIsLearning((int)$limit, $status);
     } else {
         $payload = $card->getExampleSentencesForWord($_POST['word']);
