@@ -81,11 +81,22 @@ class AudioPlayer
         }
 
         $uri = strtolower($this->audio_uri);
-        if (preg_match('/[?&](format|type|feed)=rss\b/', $uri)) {
-            return true;
+        $query = parse_url($uri, PHP_URL_QUERY) ?? '';
+        if (!empty($query)) {
+            parse_str($query, $query_params);
+            $rss_query_keys = ['format', 'type', 'feed'];
+            foreach ($rss_query_keys as $query_key) {
+                if (isset($query_params[$query_key]) && strtolower((string)$query_params[$query_key]) === 'rss') {
+                    return true;
+                }
+            }
         }
 
-        return (bool)preg_match('#/(rss|feed)(/|$)#', $uri);
+        $path = parse_url($uri, PHP_URL_PATH) ?? '';
+        return str_contains($path, '/rss/')
+            || str_contains($path, '/feed/')
+            || str_ends_with($path, '/rss')
+            || str_ends_with($path, '/feed');
     }
 
     /**

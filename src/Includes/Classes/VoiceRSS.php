@@ -75,7 +75,7 @@ class VoiceRSS
         ];
 
         $resp = Curl::getUrlContents($url, $curl_options);
-        $is_error = strpos($resp, 'ERROR') === 0;
+        $is_error = str_starts_with($resp, 'ERROR');
         
         return [
             'error' => ($is_error) ? $resp : null,

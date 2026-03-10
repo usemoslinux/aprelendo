@@ -72,7 +72,7 @@ class TextsUtilities
      */
     public static function isGoogleDriveLink(string $audio_uri): bool
     {
-        return strpos($audio_uri, 'https://drive.google.com/file/d') === 0;
+        return str_starts_with($audio_uri, 'https://drive.google.com/file/d');
     }
 
     /**

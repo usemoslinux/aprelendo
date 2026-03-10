@@ -129,7 +129,7 @@ class AIBot
      */
     private function isDataLine(string $line): bool
     {
-        return strpos($line, 'data: ') === 0;
+        return str_starts_with($line, 'data: ');
     }
 
     /**
@@ -140,7 +140,7 @@ class AIBot
      */
     private function isErrorLine(string $line): bool
     {
-        return strpos($line, '{"error":') === 0;
+        return str_starts_with($line, '{"error":');
     }
 
     /**

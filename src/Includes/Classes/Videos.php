@@ -174,7 +174,7 @@ class Videos extends DBEntity
     private function getAvailableSubs(): array
     {
         $available_langs = array_filter(self::SUPPORTED_VIDEO_LANGUAGES, function ($key) {
-            return $key == $this->lang || strpos($key, $this->lang . "-") === 0;
+            return $key == $this->lang || str_starts_with($key, $this->lang . "-");
         }, ARRAY_FILTER_USE_KEY);
 
         return array_keys($available_langs);

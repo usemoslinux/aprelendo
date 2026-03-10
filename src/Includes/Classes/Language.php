@@ -139,12 +139,12 @@ class Language extends DBEntity
         // check for errors first
         if (empty($new_record['dict-uri'])) {
             throw new UserException('You need to specify the URL of the dictionary you want to use.');
-        } elseif (strpos($new_record['dict-uri'], '%s') === false) {
+        } elseif (!str_contains($new_record['dict-uri'], '%s')) {
             throw new UserException("The dictionary URL needs to include the position of the lookup word '
             . 'or phrase. For this, use '%s' (without quotation marks).");
         } elseif (empty($new_record['translator-uri'])) {
             throw new UserException('You need to specify the URL of the translator you want to use.');
-        } elseif (strpos($new_record['translator-uri'], '%s') === false) {
+        } elseif (!str_contains($new_record['translator-uri'], '%s')) {
             throw new UserException("The translator URL needs to include the position of the lookup word '
             . 'or phrase. For this, use '%s' (without quotation marks).");
         }

@@ -157,7 +157,7 @@ class Curl
                 // Handle relative URLs
                 if (parse_url($next_url, PHP_URL_SCHEME) === null) {
                     $parsed_url = parse_url($final_url);
-                    if (strpos($next_url, '/') === 0) {
+                    if (str_starts_with($next_url, '/')) {
                         $next_url = $parsed_url['scheme'] . '://' . $parsed_url['host'] . $next_url;
                     } else {
                         $base_url = dirname($final_url);

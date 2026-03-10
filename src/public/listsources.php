@@ -328,8 +328,12 @@ function normalizeDomainForInsights(string $domain): string
     $normalized_domain = preg_replace('/^https?:\/\//', '', $normalized_domain);
     $normalized_domain = explode('/', $normalized_domain)[0];
 
-    if (preg_match('/^www[0-9]*\./', $normalized_domain)) {
-        $normalized_domain = preg_replace('/^www[0-9]*\./', '', $normalized_domain);
+    if (str_starts_with($normalized_domain, 'www')) {
+        $domain_suffix = substr($normalized_domain, 3);
+        $digits_length = strspn($domain_suffix, '0123456789');
+        if (isset($domain_suffix[$digits_length]) && $domain_suffix[$digits_length] === '.') {
+            $normalized_domain = substr($domain_suffix, $digits_length + 1);
+        }
     }
 
     return $normalized_domain;
