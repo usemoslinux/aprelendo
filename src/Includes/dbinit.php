@@ -21,7 +21,7 @@
 
 // perform all database initialization here, in a single file
 
-require_once dirname(dirname(__FILE__)) . '/config/config.php';
+require_once dirname(__DIR__) . '/config/config.php';
 require_once dirname(APP_ROOT) . '/vendor/autoload.php';
 
 use Aprelendo\Connect;

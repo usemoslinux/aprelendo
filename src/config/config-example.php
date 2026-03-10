@@ -19,7 +19,7 @@
  */
 
 // App paths
-defined('APP_ROOT')     ? null : define('APP_ROOT', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
+defined('APP_ROOT')     ? null : define('APP_ROOT', dirname(__DIR__) . DIRECTORY_SEPARATOR);
 defined('PUBLIC_PATH')  ? null : define('PUBLIC_PATH', APP_ROOT . 'public' . DIRECTORY_SEPARATOR);
 defined('UPLOADS_PATH')
     ? null
