@@ -68,7 +68,7 @@ function processSingleWord(\PDO $pdo, $user, array $post): void {
     if (isset($post['source_id'])) {
         $source_id = $post['source_id'];
         $source_table = $text_is_shared ? 'shared_texts' : 'texts';
-        $sentence = isset($post['sentence']) ? $post['sentence'] : '';
+        $sentence = $post['sentence'] ?? '';
 
         $new_sentence_record = [
             'source_id' => $source_id,

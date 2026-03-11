@@ -39,9 +39,9 @@ try {
     $limit = 10; // number of rows per page
     $adjacents = 2; // adjacent page numbers
     
-    $sort_by        = isset($_GET['o'])  ? (int)$_GET['o'] : 0;
-    $filter_type    = isset($_GET['ft']) ? (int)$_GET['ft'] : 0;
-    $filter_level   = isset($_GET['fl']) ? (int)$_GET['fl'] : 0;
+    $sort_by        = (int)($_GET['o'] ?? 0);
+    $filter_type    = (int)($_GET['ft'] ?? 0);
+    $filter_level   = (int)($_GET['fl'] ?? 0);
     $search_text    = !empty($_GET['s']) ? $_GET['s'] : '';
 
     $texts_table = new SharedTexts($pdo, $user_id, $lang_id);

@@ -26,10 +26,10 @@ require_once PUBLIC_PATH . 'header.php';
 use Aprelendo\Language;
 use Aprelendo\TextTypes;
 
-$search_text    = isset($_GET['s'])  ? $_GET['s']         : '';
-$filter_type    = isset($_GET['ft']) ? (int)$_GET['ft']   : 0;
-$filter_level   = isset($_GET['fl']) ? (int)$_GET['fl']   : 0;
-$sort_by        = isset($_GET['o'])  ? (int)$_GET['o']   : 0;
+$search_text    = $_GET['s'] ?? '';
+$filter_type    = (int)($_GET['ft'] ?? 0);
+$filter_level   = (int)($_GET['fl'] ?? 0);
+$sort_by        = (int)($_GET['o'] ?? 0);
 
 if (empty($_GET)) {
     $lang = new Language($pdo, $user->id);

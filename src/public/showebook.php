@@ -43,7 +43,7 @@ try {
         exit;
     }
 
-    $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
+    $is_shared = ($_GET['sh'] ?? 0) != 0;
     $reader = new Reader($pdo, $user->id, $user->lang_id, $_GET['id'], $is_shared);
     $result = '';
 
@@ -228,7 +228,7 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
                 </span>
             </div>
             <div id="text-container" class="reader-scroll-area d-flex flex-column m-2 p-3 fade" style="<?php echo $reader_css; ?>">
-                <div id="text" class="flex-grow-1" data-idText="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
+                <div id="text" class="flex-grow-1" data-idText="<?php echo $_GET['id'] ?? '' ?>">
                 </div>
                 <div class="navlink">
                     <a id="next" class="btn btn-outline-success d-none" data-bs-toggle="tooltip"

@@ -27,11 +27,11 @@ use Aprelendo\Language;
 use Aprelendo\TextTypes;
 
 // initialize variables from GET for initial state
-$search_text    = isset($_GET['s'])  ? $_GET['s']         : '';
-$filter_type    = isset($_GET['ft']) ? (int)$_GET['ft']   : 0;
-$filter_level   = isset($_GET['fl']) ? (int)$_GET['fl']   : 0;
-$show_archived  = isset($_GET['sa']) && $_GET['sa'] == '1';
-$sort_by        = isset($_GET['o'])  ? (int)$_GET['o']   : 0;
+$search_text    = $_GET['s'] ?? '';
+$filter_type    = (int)($_GET['ft'] ?? 0);
+$filter_level   = (int)($_GET['fl'] ?? 0);
+$show_archived  = ($_GET['sa'] ?? '0') == '1';
+$sort_by        = (int)($_GET['o'] ?? 0);
 
 if (empty($_GET)) {
     // set default language level if no params provided

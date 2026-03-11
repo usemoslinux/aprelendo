@@ -32,8 +32,8 @@ $lang_id = $user->lang_id;
 
 try {
     // set search criteria, if any
-    $search_text = isset($_GET['s']) ? $_GET['s'] : '';
-    $sort_by = isset($_GET['o']) ? $_GET['o'] : 0;
+    $search_text = $_GET['s'] ?? '';
+    $sort_by = $_GET['o'] ?? 0;
 
     // export to csv
     $words_table = new Words($pdo, $user_id, $lang_id);

@@ -38,17 +38,17 @@ try {
     $user_id = $user->id;
 
     // save user profile information
-    $username = isset($_POST['username']) ? $_POST['username'] : '';
-    $email = isset($_POST['email']) ? $_POST['email'] : '';
-    $password = isset($_POST['password']) ? $_POST['password'] : '';
-    $new_password1 = isset($_POST['newpassword']) ? $_POST['newpassword'] : '';
-    $new_password2 = isset($_POST['newpassword-confirmation']) ? $_POST['newpassword-confirmation'] : '';
-    $src_lang = isset($_POST['src_lang']) ? $_POST['src_lang'] : '';
-    $to_lang = isset($_POST['to_lang']) ? $_POST['to_lang'] : '';
-    $hf_token = isset($_POST['hf-token']) ? $_POST['hf-token'] : '';
+    $username = $_POST['username'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $new_password1 = $_POST['newpassword'] ?? '';
+    $new_password2 = $_POST['newpassword-confirmation'] ?? '';
+    $src_lang = $_POST['src_lang'] ?? '';
+    $to_lang = $_POST['to_lang'] ?? '';
+    $hf_token = $_POST['hf-token'] ?? '';
 
     $crypto = new SecureEncryption(ENCRYPTION_KEY);
-    $hf_token = $_POST['hf-token'] === '' ? '' : $crypto->encrypt($_POST['hf-token']);
+    $hf_token = $hf_token === '' ? '' : $crypto->encrypt($hf_token);
 
     $user_data = [
         'new_username' => $username,

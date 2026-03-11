@@ -64,16 +64,14 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                                 'Chinese'   => ['zh', '欢迎！']
                             ];
 
-                            $to_lang = isset($_GET['tolang'])
-                                ? htmlspecialchars(ucfirst($_GET['tolang']), ENT_QUOTES, 'UTF-8')
-                                : 'English';
-
-                            $native_lang = isset($_GET['srclang']) ? ucfirst($_GET['srclang']) : 'English';
+                            $to_lang = htmlspecialchars(ucfirst($_GET['tolang'] ?? 'English'), ENT_QUOTES, 'UTF-8');
+                            $native_lang = ucfirst($_GET['srclang'] ?? 'English');
+                            $to_lang_data = $title_array[$to_lang] ?? $title_array['English'];
 
                             echo '<img id="learning-flag" src="img/flags/'
-                                . $title_array["$to_lang"][0]
+                                . $to_lang_data[0]
                                 . '.svg" alt="' . $to_lang . '"><br>';
-                            echo '<div class="my-3">' . $title_array["$to_lang"][1] . '</div>';
+                            echo '<div class="my-3">' . $to_lang_data[1] . '</div>';
                             ?>
                         </h1>
                         <div id="welcome-msg" class="text-muted text-center">You are only one step away from learning

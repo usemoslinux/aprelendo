@@ -55,7 +55,7 @@ class AudioPlayer
         );
 
         // Set the appropriate MIME type based on the file extension
-        return isset($audio_types[$file_extension]) ? $audio_types[$file_extension] : 'audio/mpeg';
+        return $audio_types[$file_extension] ?? 'audio/mpeg';
     }
 
     /**
@@ -86,7 +86,7 @@ class AudioPlayer
             parse_str($query, $query_params);
             $rss_query_keys = ['format', 'type', 'feed'];
             foreach ($rss_query_keys as $query_key) {
-                if (isset($query_params[$query_key]) && strtolower((string)$query_params[$query_key]) === 'rss') {
+                if (strtolower((string)($query_params[$query_key] ?? '')) === 'rss') {
                     return true;
                 }
             }

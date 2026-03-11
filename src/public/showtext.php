@@ -32,7 +32,7 @@ try {
         throw new UserException('Error fetching this text.');
     }
     
-    $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
+    $is_shared = ($_GET['sh'] ?? 0) != 0;
     $text_id = (int)$_GET['id'];
     $text_table = $is_shared ? 'shared_texts' : 'texts';
 

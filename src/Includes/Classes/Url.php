@@ -41,7 +41,7 @@ class Url
 
         extract($query_options);
         $this->search_text = $search_text ?? "";
-        $this->sort_by = $sort_by ?? "";
+        $this->sort_by = $sort_by ?? 0;
         $this->filter_type = $filter_type ?? 0;
         $this->filter_level = $filter_level ?? 0;
         $this->show_archived = $show_archived ?? -1;
@@ -60,7 +60,7 @@ class Url
         $sort_by = $this->sort_by;
         $filter_type = $this->filter_type;
         $filter_level = $this->filter_level;
-        $show_archived = $this->show_archived ?? -1;
+        $show_archived = $this->show_archived;
         
         if (-1 !== $this->show_archived) {
             $show_archived = $this->show_archived ? 1 : 0;
@@ -90,10 +90,16 @@ class Url
         
         $parseUrl = parse_url(trim($url));
         
-        if (!isset($parseUrl['host']) || !isset($parseUrl['path'])) {
+        $host = $parseUrl['host'] ?? '';
+        $path = $parseUrl['path'] ?? '';
+
+        if ($host === '' && $path === '') {
             return '';
         }
 
-        return trim($parseUrl['host'] ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2)));
+        $path_parts = explode('/', $path, 2);
+        $first_path_segment = $path_parts[0] ?? '';
+
+        return trim($host !== '' ? $host : $first_path_segment);
     } // end getDomainName()
 }

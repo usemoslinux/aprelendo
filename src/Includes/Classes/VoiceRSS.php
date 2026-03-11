@@ -42,16 +42,16 @@ class VoiceRSS
      */
     private function validate($settings): void
     {
-        if (!isset($settings) || empty($settings)) {
+        if (empty($settings)) {
             throw new UserException('The settings are undefined');
         }
-        if (!isset($settings['key']) || empty($settings['key'])) {
+        if (empty($settings['key'] ?? '')) {
             throw new UserException('The API key is undefined');
         }
-        if (!isset($settings['src']) || empty($settings['src'])) {
+        if (empty($settings['src'] ?? '')) {
             throw new UserException('The text is undefined');
         }
-        if (!isset($settings['hl']) || empty($settings['hl'])) {
+        if (empty($settings['hl'] ?? '')) {
             throw new UserException('The language is undefined');
         }
     } // end validate()
@@ -64,7 +64,7 @@ class VoiceRSS
      */
     private function request(array $settings): array
     {
-        $url = ((isset($settings['ssl']) && $settings['ssl']) ? 'https' : 'http') . '://api.voicerss.org/';
+        $url = (($settings['ssl'] ?? false) ? 'https' : 'http') . '://api.voicerss.org/';
         
         $curl_options = [
             CURLOPT_RETURNTRANSFER => 1,

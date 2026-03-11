@@ -34,7 +34,7 @@ try {
 
     $text_id = $_GET['id'];
     $body_css = $reader_css = '';
-    $is_shared = isset($_GET['sh']) && $_GET['sh'] != 0 ? true : false;
+    $is_shared = ($_GET['sh'] ?? 0) != 0;
 
     // check if user has access to view this text
     if (!$user->isAllowedToAccessElement('shared_texts', (int)$text_id)) {

@@ -40,7 +40,7 @@ try {
     $page = !empty($_GET['p']) ? (int)$_GET['p'] : 1;
     $limit = 25; // number of rows per page
     $adjacents = 2; // adjacent page numbers
-    $sort_by = isset($_GET['o']) ? (int)$_GET['o'] : 0;
+    $sort_by = (int)($_GET['o'] ?? 0);
     $search_text = !empty($_GET['s']) ? $_GET['s'] : '';
 
     $words_table = new Words($pdo, $user_id, $lang_id);
