@@ -62,7 +62,7 @@ function extractLang($html) {
 
     $html_tag = $doc->getElementsByTagName('html')->item(0);
     
-    if ($html_tag && $html_tag->hasAttribute('lang')) {
+    if ($html_tag?->hasAttribute('lang')) {
         $lang = $html_tag->getAttribute('lang');
         
         // Normalize to two-letter code

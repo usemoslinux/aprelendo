@@ -82,7 +82,7 @@ class RSSFeed
                 'title' => $article->title,
                 'date' => date("d/m/Y - H:i", strtotime($articleDate)),
                 'author' => $article->author,
-                'src' => ($feed_type === 'atom') ? $article->link->attributes()->href : $article->link,
+                'src' => ($feed_type === 'atom') ? ($article->link?->attributes()?->href ?? '') : $article->link,
                 'content' => ($feed_type === 'atom') ? $article->pdotent : $article->description,
             ];
 

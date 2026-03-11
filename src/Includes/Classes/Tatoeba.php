@@ -92,7 +92,7 @@ class Tatoeba
 
         // filter example sentences that contain the exact word. Tatoeba
         // usually also returns approximate matches.
-        foreach ($response->data as $item) {
+        foreach ($response?->data ?? [] as $item) {
             if (mb_stripos($item->text, $this->word)) {
                 $match_to_add['title'] = 'Tatoeba';
                 $match_to_add['author'] = $item->owner ? ucfirst($item->owner) : 'Anonymous';
