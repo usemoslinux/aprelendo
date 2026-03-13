@@ -23,7 +23,7 @@ $(document).ready(function() {
      * Toggles like for text
      * Triggers when user clicks on a heart
      */
-    $("span.bi-heart, span.bi-heart-fill").on("click", async function() {
+    $(document).on("click", "span.bi-heart, span.bi-heart-fill", async function() {
         const $like_btn = $(this);
         const text_id = $like_btn.attr("data-idText");
 
