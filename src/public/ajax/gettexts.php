@@ -45,6 +45,7 @@ try {
     $filter_level   = (int)($_GET['fl'] ?? 0);
     $search_text    = !empty($_GET['s']) ? $_GET['s'] : '';
     $show_archived  = ($_GET['sa'] ?? '0') == '1';
+    $init_page      = empty($search_text) && !$show_archived && $filter_type === 0 && $filter_level === 0;
 
     // calculate page count for pagination
     if ($show_archived) {
@@ -71,7 +72,115 @@ try {
         $page_url = new Url('texts', $url_query_options);
         $html .= $pagination->print($page_url);
     } else {
-        $html = '<div id="alert-box" class="alert alert-info">No texts found.</div>';
+        $btn_add_html = <<<HTML_BTN_ADD
+            <kbd class="badge bg-success"
+                onclick="window.scrollTo({top:0,behavior:'smooth'});
+                setTimeout(()=>{document.getElementById('btn-add-text').click();},400)">
+                + Add</kbd>
+        HTML_BTN_ADD;
+
+        $btn_filter_html = <<<HTML_BTN_FILTER
+            <kbd class="bg-secondary"
+                onclick="window.scrollTo({top:0,behavior:'smooth'});
+                setTimeout(()=>{document.getElementById('btn-filter').click();},400)">
+                Filter</kbd>
+        HTML_BTN_FILTER;
+
+        $user_menu_html = <<<HTML_USER_MENU
+            <kbd class="badge bg-primary"
+                onclick="window.scrollTo({top:0,behavior:'smooth'});
+                setTimeout(()=>{const t=document.querySelector('.navbar-toggler');
+                if(t&&window.getComputedStyle(t).display!=='none')t.click();
+                document.getElementById('user-menu').click();},400)">
+                <i class="bi bi-person-circle"></i> menu</kbd>
+        HTML_USER_MENU;
+
+        $langs_menu_html = <<<HTML_LANGS_MENU
+            <kbd class='badge bg-primary'
+                onclick="window.scrollTo({top:0,behavior:'smooth'});
+                setTimeout(()=>{const t=document.querySelector('.navbar-toggler');
+                if(t&&window.getComputedStyle(t).display!=='none')t.click();
+                document.getElementById('language-menu').click();},400)">
+                <i class='bi bi-globe'></i> menu</kbd>
+        HTML_LANGS_MENU;
+
+        if ($init_page) {
+            if (!isset($_COOKIE['hide_welcome_msg'])) {
+
+                $html = <<<HTML_WELCOME_MSG
+                    <div id="alert-box" class="alert alert-info alert-dismissible fade show">
+                        <div class="alert-flag fs-5">
+                            <i class="bi bi-lightbulb-fill"></i> Welcome!
+                        </div>
+                        <div class="alert-msg">
+                            <p>
+                                <strong>Aprelendo</strong> helps you learn languages naturally through real content. 
+                                Instead of memorising lists, you explore stories, videos, and articles, absorbing vocabulary through context and use.
+                            </p>
+                            <p>
+                                This method takes curiosity and a bit of patience, especially at the beginning. You will find and upload the content that interests you, then read and listen to it deeply. It may feel challenging at first, yet it builds lasting understanding and real confidence.
+                            </p>
+                            <p>
+                                To begin, follow the steps in the yellow box below. Once you add your first text, visit your 
+                                $user_menu_html to access your <a href="/words" class="alert-link">Word list</a>, 
+                                <a href="/studylauncher" class="alert-link">Study</a> sessions, and 
+                                <a href="/stats" class="alert-link">Statistics</a>. You can also open 
+                                <a href="/preferences" class="alert-link">Preferences</a> or 
+                                <a href="/userprofile" class="alert-link">My Profile</a> to tailor your experience and enable
+                                <a href="https://blog.aprelendo.com/2024/11/boost-your-vocabulary-with-aprelendos-proven-ai-language-tool/"
+                                target="_blank" rel="noopener noreferrer" class="alert-link">Lingobot</a>, our AI assistant.
+                            </p>
+                            <p>
+                                You can switch languages and choose dictionaries and translators anytime from the 
+                                $langs_menu_html.
+                            </p>
+                            <p>
+                                Prefer a quick tour? Watch our 
+                                <a href="https://www.youtube.com/watch?v=AmRq3tNFu9I"
+                                target="_blank" rel="noopener noreferrer" class="alert-link">intro video</a>.
+                            </p>
+                        </div>
+                        <button id="welcome-close" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    HTML_WELCOME_MSG;
+            }
+            
+            $html .= <<<HTML_EMPTY_LIBRARY
+            <div id="alert-box" class="alert alert-warning">
+                <div class="alert-flag fs-5">
+                    <i class="bi bi-stars"></i> Get Started
+                </div>
+                <div class="alert-msg">
+                    <p>Your private library is waiting for its first entry.</p>
+                    <p>Click $btn_add_html to add an ebook, video or text, or try our  <a href="/extensions"
+                    target="_blank" rel="noopener noreferrer" class="alert-link">browser extensions</a> to capture
+                    content as you explore the Web.
+                    </p>
+                </div>
+            </div>
+            HTML_EMPTY_LIBRARY;
+
+        } else {
+            $html = <<<HTML_SEARCH_RESULT
+            <div id="alert-box" class="alert alert-danger">
+                <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>No matches found</div>
+                <div class="alert-msg">
+                    <p>Consider refining your search using the $btn_filter_html options on the left.</p>
+                    <ul>
+                        <li><strong>Type</strong>: you can narrow down your search by specifying the type of text you're
+                            interested in, such as Articles, Conversations, Short Stories, Lyrics, Ebooks, or Others.</li>
+                        <li><strong>Archived texts</strong>: if you have archived texts, you can choose to include or 
+                        exclude them from your search.</li>
+                        <li><strong>Level</strong>: filter texts based on their difficulty level (Beginner, 
+                        Intermediate, or Advanced).</li>
+                    </ul>
+                    <p>Additionally, keep in mind that searches are case insensitive and include partial matches (i.e.
+                        'cat' can find 'Cats').</p>
+                    <p>With this in mind, feel free to modify your search query and try again.</p>
+                </div>
+            </div>
+            HTML_SEARCH_RESULT;
+        }
     }
 
     $response = [

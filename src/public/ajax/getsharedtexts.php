@@ -43,6 +43,7 @@ try {
     $filter_type    = (int)($_GET['ft'] ?? 0);
     $filter_level   = (int)($_GET['fl'] ?? 0);
     $search_text    = !empty($_GET['s']) ? $_GET['s'] : '';
+    $init_page      = empty($search_text) && $filter_type === 0 && $filter_level === 0;
 
     $texts_table = new SharedTexts($pdo, $user_id, $lang_id);
     
@@ -67,17 +68,7 @@ try {
         $btn_add_html = '<kbd class="bg-success" onclick="window.scrollTo({top:0,behavior:\'smooth\'});setTimeout(()=>{document.getElementById(\'btn-add-text\').click();},400)">+ Add</kbd>';
         $btn_filter_html = '<kbd class="bg-secondary" onclick="window.scrollTo({top:0,behavior:\'smooth\'});setTimeout(()=>{document.getElementById(\'btn-filter\').click();},400)">Filter</kbd>';
 
-        if (!empty($_GET)) {
-            $html = <<<HTML_SEARCH_RESULT
-            <div id="alert-box" class="alert alert-danger">
-                <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>No matches found</div>
-                <div class="alert-msg">
-                    <p>Consider refining your search using the $btn_filter_html options on the left.</p>
-                    <p>Additionally, keep in mind that searches are case insensitive and include partial matches.</p>
-                </div>
-            </div>
-            HTML_SEARCH_RESULT;
-        } else {
+        if ($init_page) {
             $html = <<<HTML_EMPTY_LIBRARY
             <div id="alert-box" class="alert alert-warning">
                 <div class="alert-flag fs-5"><i class="bi bi-people-fill"></i> Join the community</div>
@@ -87,6 +78,16 @@ try {
                 </div>
             </div>
             HTML_EMPTY_LIBRARY;
+        } else {
+            $html = <<<HTML_SEARCH_RESULT
+            <div id="alert-box" class="alert alert-danger">
+                <div class="alert-flag fs-5"><i class="bi bi-exclamation-circle-fill"></i>No matches found</div>
+                <div class="alert-msg">
+                    <p>Consider refining your search using the $btn_filter_html options on the left.</p>
+                    <p>Additionally, keep in mind that searches are case insensitive and include partial matches.</p>
+                </div>
+            </div>
+            HTML_SEARCH_RESULT;
         }
     }
 
