@@ -55,10 +55,12 @@ $sort_by     = !empty($_GET['o']) ? (int)$_GET['o'] : 0;
                                     <span class="bi bi-search"></span>
                                 </button>
                             </div>
-                            <div class="dropdown dropdown-add ms-md-2 mb-3">
-                                <button id="btn-import-words" type="button" class="btn btn-success"
+                            <div class="dropdown dropdown-add ms-md-2 mb-3 flex-shrink-0">
+                                <button id="btn-import-words" type="button"
+                                    class="btn btn-success d-inline-flex align-items-center gap-2 text-nowrap"
                                     data-bs-toggle="modal" data-bs-target="#import-words-modal">
-                                    <span class="bi bi-upload"></span> Import
+                                    <span class="bi bi-upload"></span>
+                                    <span>Import</span>
                                 </button>
                             </div>
                         </form>
