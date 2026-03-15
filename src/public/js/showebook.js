@@ -98,7 +98,7 @@ $(document).ready(function () {
         "click",
         async function (e) {
             e.preventDefault();
-            $(next).tooltip('hide');
+            hideTooltip(next);
             await SaveWords(); // Await the async SaveWords function
             let url = next.getAttribute("href");
             display(url);
@@ -531,4 +531,3 @@ $(document).ready(function () {
         }
     } // end saveTextAndAudioPos
 });
-
