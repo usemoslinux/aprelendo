@@ -134,21 +134,18 @@ $(document).ready(function () {
 
         const current_word = $('#ask-ai-bot-modal').attr('data-word');
         const prompt = replaceWordWithQuotes(custom_prompt, current_word);
-        const converter = new showdown.Converter();
-        
         $('#prompt-form').addClass('d-none');
         $('#ai-answer').removeClass('d-none');
         $('#normal-footer').addClass('d-none');
         $('#back-footer').removeClass('d-none');
-        $('#text-ai-answer').html('Lingobot is thinking...');
+        $('#text-ai-answer').val('Lingobot is thinking...');
 
         AIBot.streamReply(prompt, {
-            onUpdate(markdownSoFar) {
-                const html = converter.makeHtml(markdownSoFar);
-                $('#text-ai-answer').html(html);
+            onUpdate(markdown_so_far) {
+                $('#text-ai-answer').val(markdown_so_far);
             },
             onError() {
-                $('#text-ai-answer').html('<p>Failed to get response from AI. Please try again.</p>');
+                $('#text-ai-answer').val('Failed to get response from AI. Please try again.');
             }
         });
     });

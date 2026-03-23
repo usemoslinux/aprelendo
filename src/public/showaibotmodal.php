@@ -72,7 +72,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
                 <!-- AI Answer Section -->
                 <div id="ai-answer" class="d-none">
                     <!-- AI's response will be displayed here -->
-                    <div id="text-ai-answer" class="form-control overflow-auto" style="height: calc(1.2em * 15);"></div>
+                    <textarea id="text-ai-answer" class="form-control" rows="15" readonly></textarea>
                     <small>Lingobot can make mistakes. Use its answers as a reference only.</small>
                 </div>
             </div>
@@ -93,5 +93,5 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
 
 <!-- Showdown is a Markdown to HTML converter -->
 <script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
-<script defer src="/js/showaibotmodal.min.js"></script>
+<script defer src="/js/showaibotmodal.js"></script>
 <script defer src="/js/aibot.min.js"></script>

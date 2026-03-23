@@ -239,30 +239,44 @@ $(document).ready(function () {
      * Triggers when user clicks submit button to get AI evaluation of user answer
      */
     $('#btn-submit-user-answer').on("click", function () {
-        if ($('#text-user-answer').val().trim() !== '') {
-            const answer_format = "Evaluate user response in two lines: first line with one of the four ratings (1) Completely incorrect (major mistakes or confused meaning); (2) Incorrect, but close (made some significant usage mistakes, but I was on the right track); (3) Mostly correct (made minor errors (missing details, awkward phrasing, etc.); or (4) Correct & comprehensive (perfect answer). Second line with a brief explanation and, if useful, a corrected version. Keep it concise.";
-            const prompt = answer_format + '\n Question:' + $('#select-prompt').val() + '\n Answer: ' + $('#text-user-answer').val();
-            if (!prompt) return;
+        const user_answer = $('#text-user-answer').val().trim();
+        const vocab_piece = words[cur_card_index].word;
+        const is_vocab_piece_present = user_answer.toLowerCase().includes(vocab_piece.toLowerCase());
+        
+        $(".btn-answer").prop('disabled', false); // enable answer buttons
 
-            const converter = new showdown.Converter();
-            
-            $('#text-ai-answer').html('Lingobot is thinking...');
-
-            AIBot.streamReply(prompt, {
-                onUpdate(markdownSoFar) {
-                    const html = converter.makeHtml(markdownSoFar);
-                    $('#text-ai-answer').html(html);
-                },
-                onError() {
-                    $('#text-ai-answer').html('<p>Failed to get response from AI. Please try again.</p>');
-                }
-            });
-        } else {
-            $('#text-ai-answer').html("(1) Completely incorrect — couldn't provide an answer.");
+        if (user_answer === '') {
+            return $('#text-ai-answer').val("(1) Completely incorrect — couldn't provide an answer.");
         }
 
-        $(".btn-answer").prop('disabled', false); // enable answer buttons
+        if (!is_vocab_piece_present) {
+            return $('#text-ai-answer').val(`(1) Completely incorrect - "${vocab_piece}" is missing from your sentence.`);
+        }
+
+        const prompt = buildEvalPrompt(vocab_piece, user_answer);
+        $('#text-ai-answer').val('Lingobot is thinking...');
+
+        AIBot.streamReply(prompt, {
+            onUpdate(markdown_so_far) {
+                $('#text-ai-answer').val(markdown_so_far);
+            },
+            onError() {
+                $('#text-ai-answer').val('Failed to get response from AI. Please try again.');
+            }
+        });
     }); // end #btn-submit-user-answer.on.click()
+
+    /**
+     *  Constructs prompt to pass to the AI
+     * @param {string} vocab_piece 
+     * @param {string} user_answer 
+     * @returns 
+     */
+    function buildEvalPrompt(vocab_piece, user_answer) {
+        const answer_format = `Evaluate the user's example sentence. The primary focus is whether "${vocab_piece}" itself is used correctly. Rate on this scale — choose the one that best fits: (1) Completely incorrect — "${vocab_piece}" is absent, used with the wrong meaning, or the sentence is too broken to judge its usage; (2) Incorrect — "${vocab_piece}" is present and its intent is recognizable, but it is grammatically or semantically incorrect (e.g. wrong form, wrong preposition required by this word, wrong register); (3) Mostly Correct — "${vocab_piece}" is used correctly and naturally. The only issues are in other parts of the sentence (e.g. agreement of an unrelated word, spelling of another word, a small grammar slip unrelated to "${vocab_piece}"); (4) Perfect — "${vocab_piece}" and the rest of the sentence are both correct, or any remaining imperfections are too trivial to mention. Do not penalize a short sentence for limited context. Output format — two lines only: Line 1: the rating, e.g. (3) Mostly Correct; Line 2: one concise sentence of feedback; include a corrected version only if something needs fixing.`;
+        
+        return `${answer_format}\nQuestion: ${$('#select-prompt').val()}\nAnswer: ${user_answer}`;
+    }
 
     /**
      * Triggers when user clicks on answer buttons
@@ -277,7 +291,7 @@ $(document).ready(function () {
         words[cur_card_index].status = answer;
 
         $(".btn-answer").prop('disabled', true); // disable answer buttons
-        $("#text-ai-answer").text(''); // clear AI answer box
+        $("#text-ai-answer").val(''); // clear AI answer box
         $("#text-user-answer").val('').trigger("focus"); // clear user answer box and focus it
 
         try {
@@ -377,13 +391,6 @@ $(document).ready(function () {
             ActionBtns.hide();
         }
     });
-
-    /**
-     * Disables right click context menu
-     */
-    $(document).on("contextmenu", function (e) {
-        return false;
-    }); // end document.contextmenu
 
     /**
      * Implements shortcuts for buttons

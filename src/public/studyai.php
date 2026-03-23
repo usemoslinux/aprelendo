@@ -63,12 +63,12 @@ require_once PUBLIC_PATH . 'header.php';
                                         </select>
 
                                         <label for="text-user-answer" class="form-label">Your answer:</label>
-                                        <textarea class="form-control" id="text-user-answer" rows="6"></textarea>
+                                        <textarea id="text-user-answer" class="form-control" rows="6"></textarea>
                                         
                                         <button id="btn-submit-user-answer" type="button" class="btn btn-primary my-2">Ask Lingobot to Evaluate</button>
                                     </div>
                                     <div id="ai-answer">
-                                        <div id="text-ai-answer" class="form-control overflow-auto" style="height: calc(1.2em * 15);"></div>
+                                        <textarea id="text-ai-answer" class="form-control" rows="6" readonly></textarea>
                                         <small>Lingobot can make mistakes. Use its answers as a reference only.</small>
                                     </div>
                                 </div>
@@ -92,22 +92,22 @@ require_once PUBLIC_PATH . 'header.php';
                                                 <button id="btn-answer-no-recall" type="button" value="3"
                                                     class="btn btn-lg btn-danger btn-answer my-3">
                                                     <span class="fw-bold">(1) Completely incorrect</span>
-                                                    <br><span class="small">I was entirely wrong or couldn't provide an answer.</span>
+                                                    <br><span class="small">Missing target word/phrase use, wrong meaning, or too broken.</span>
                                                 </button>
                                                 <button id="btn-answer-fuzzy" type="button" value="2"
                                                     class="btn btn-lg btn-primary btn-answer mb-3">
-                                                    <span class="fw-bold">(2) Incorrect, but close</span>
-                                                    <br><span class="small">I made some significant usage mistakes, but I was on the right track.</span>
+                                                    <span class="fw-bold">(2) Incorrect</span>
+                                                    <br><span class="small">Intended use is clear, but still incorrect.</span>
                                                 </button>
                                                 <button id="btn-answer-partial" type="button" value="1"
                                                     class="btn btn-lg btn-warning btn-answer mb-3">
                                                     <span class="fw-bold">(3) Mostly correct</span>
-                                                    <br><span class="small">I made minor errors (missing details, awkward phrasing, etc.).</span>
+                                                    <br><span class="small">Correct use, with only minor errors elsewhere.</span>
                                                 </button>
                                                 <button id="btn-answer-excellent" type="button" value="0"
                                                     class="btn btn-lg btn-success btn-answer mb-3">
-                                                    <span class="fw-bold">(4) Correct & comprehensive</span>
-                                                    <br><span class="small">I was spot-on and gave a perfect answer.</span>
+                                                    <span class="fw-bold">(4) Perfect</span>
+                                                    <br><span class="small">Correct, natural, and complete.</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -125,17 +125,11 @@ require_once PUBLIC_PATH . 'header.php';
     </div>
 </div>
 
-<?php
-require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
-if (!empty($user->hf_token)) {
-    require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
-}
-?>
-
 <script defer src="/js/dictionaries.min.js"></script>
 <script defer src="/js/underlinewords.min.js"></script>
 <script defer src="/js/wordselection.min.js"></script>
 <script defer src="/js/actionbtns.min.js"></script>
+<script defer src="/js/aibot.min.js"></script>
 <script defer src="/js/studyai.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 <script defer src="/js/tooltips.min.js"></script>
