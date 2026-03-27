@@ -83,7 +83,7 @@ $sort_by     = !empty($_GET['o']) ? (int)$_GET['o'] : 0;
 </div>
 
 <?php
-require_once PUBLIC_PATH . 'showdicactionmenu.php';
+require_once PUBLIC_PATH . 'showactionbuttons.php';
 require_once PUBLIC_PATH . 'showimportwordsmodal.php';
 require_once PUBLIC_PATH . 'footer.php';
 ?>

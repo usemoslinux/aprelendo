@@ -67,8 +67,8 @@ require_once PUBLIC_PATH . 'header.php';
                                         
                                         <button id="btn-submit-user-answer" type="button" class="btn btn-primary my-2">Ask Lingobot to Evaluate</button>
                                     </div>
-                                    <div id="ai-answer">
-                                        <textarea id="text-ai-answer" class="form-control" rows="6" readonly></textarea>
+                                    <div id="studyai-answer">
+                                        <textarea id="text-studyai-answer" class="form-control" rows="6" readonly></textarea>
                                         <small>Lingobot can make mistakes. Use its answers as a reference only.</small>
                                     </div>
                                 </div>
@@ -124,6 +124,13 @@ require_once PUBLIC_PATH . 'header.php';
         </div>
     </div>
 </div>
+
+<?php
+require_once PUBLIC_PATH . 'showactionbuttons.php'; // load dictionary modal window
+if (!empty($user->hf_token)) {
+    require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
+}
+?>
 
 <script defer src="/js/dictionaries.min.js"></script>
 <script defer src="/js/underlinewords.min.js"></script>

@@ -93,7 +93,7 @@ require_once PUBLIC_PATH . 'head.php';
     </div>
 
     <?php
-    require_once PUBLIC_PATH . 'showdicactionmenu.php'; // load dictionary modal window
+    require_once PUBLIC_PATH . 'showactionbuttons.php'; // load dictionary modal window
     require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
     if (!empty($user->hf_token)) {
         require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window

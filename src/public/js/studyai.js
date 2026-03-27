@@ -246,22 +246,22 @@ $(document).ready(function () {
         $(".btn-answer").prop('disabled', false); // enable answer buttons
 
         if (user_answer === '') {
-            return $('#text-ai-answer').val("(1) Completely incorrect — couldn't provide an answer.");
+            return $('#text-studyai-answer').val("(1) Completely incorrect — couldn't provide an answer.");
         }
 
         if (!is_vocab_piece_present) {
-            return $('#text-ai-answer').val(`(1) Completely incorrect - "${vocab_piece}" is missing from your sentence.`);
+            return $('#text-studyai-answer').val(`(1) Completely incorrect - "${vocab_piece}" is missing from your sentence.`);
         }
 
         const prompt = buildEvalPrompt(vocab_piece, user_answer);
-        $('#text-ai-answer').val('Lingobot is thinking...');
+        $('#text-studyai-answer').val('Lingobot is thinking...');
 
         AIBot.streamReply(prompt, {
             onUpdate(markdown_so_far) {
-                $('#text-ai-answer').val(markdown_so_far);
+                $('#text-studyai-answer').val(markdown_so_far);
             },
             onError() {
-                $('#text-ai-answer').val('Failed to get response from AI. Please try again.');
+                $('#text-studyai-answer').val('Failed to get response from AI. Please try again.');
             }
         });
     }); // end #btn-submit-user-answer.on.click()
@@ -291,7 +291,7 @@ $(document).ready(function () {
         words[cur_card_index].status = answer;
 
         $(".btn-answer").prop('disabled', true); // disable answer buttons
-        $("#text-ai-answer").val(''); // clear AI answer box
+        $("#text-studyai-answer").val(''); // clear AI answer box
         $("#text-user-answer").val('').trigger("focus"); // clear user answer box and focus it
 
         try {
