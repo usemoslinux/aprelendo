@@ -126,7 +126,7 @@ require_once PUBLIC_PATH . 'head.php';
     require_once PUBLIC_PATH . 'showactionbuttons.php'; // load dictionary modal window
     require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
     if (!IS_SELF_HOSTED) require_once PUBLIC_PATH . 'showreporttextmodal.php'; // load report text modal window
-    if (!empty($user->hf_token)) require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
+    require_once PUBLIC_PATH . 'showaibotmodal.php'; // load AI bot modal window
     ?>
 
     <script defer src="/js/ytvideoplayer.min.js"></script>

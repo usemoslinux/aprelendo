@@ -22,23 +22,40 @@
 require_once '../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
+$has_hf_token = !empty($user->hf_token);
 ?>
 
-<!-- Lingobot Text Modal -->
-<div class="modal fade" id="ask-ai-bot-modal" data-keyboard="true" tabindex="-1" 
+<!-- AI Bot Text Modal -->
+<div class="modal fade" id="ask-ai-bot-modal" data-keyboard="true" tabindex="-1"
+     data-has-hf-token="<?php echo $has_hf_token ? '1' : '0'; ?>"
      aria-labelledby="ask-ai-bot-modal-label" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ask-ai-bot-modal-label">Ask Lingobot</h5>
+                <h5 class="modal-title" id="ask-ai-bot-modal-label">Ask AI</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!-- Modal Body -->
             <div class="modal-body">
-                <div id="lingobot-alert-box" class="d-none"></div>
+                <div id="ai-bot-alert-box" class="d-none"></div>
                 <!-- Prompt Form -->
                 <div id="prompt-form">
                     <form>
+                        <!-- Provider Selection -->
+                        <div class="mb-3">
+                            <label for="ai-provider" class="form-label">Select AI Provider</label>
+                            <select class="form-select" id="ai-provider">
+                                <option value="lingobot" <?php echo $has_hf_token ? 'selected' : 'disabled'; ?>>
+                                    Lingobot (Hugging Face)
+                                </option>
+                                <option value="claude" <?php echo !$has_hf_token ? 'selected' : ''; ?>>
+                                    Claude
+                                </option>
+                                <option value="openai">OpenAI</option>
+                            </select>
+                            <small id="ai-provider-help" class="text-secondary d-block mt-2"></small>
+                        </div>
+
                         <!-- Category Selection -->
                         <div class="mb-3">
                             <label for="prompt-category" class="form-label">Select a Category</label>
@@ -73,7 +90,7 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
                 <div id="ai-answer" class="d-none">
                     <!-- AI's response will be displayed here -->
                     <textarea id="text-ai-answer" class="form-control" rows="15" readonly></textarea>
-                    <small>Lingobot can make mistakes. Use its answers as a reference only.</small>
+                    <small>AI can make mistakes. Use its answers as a reference only.</small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -91,7 +108,5 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
     </div>
 </div>
 
-<!-- Showdown is a Markdown to HTML converter -->
-<script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
-<script defer src="/js/showaibotmodal.js"></script>
+<script defer src="/js/showaibotmodal.min.js"></script>
 <script defer src="/js/aibot.min.js"></script>

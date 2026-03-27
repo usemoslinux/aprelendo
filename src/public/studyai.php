@@ -127,9 +127,7 @@ require_once PUBLIC_PATH . 'header.php';
 
 <?php
 require_once PUBLIC_PATH . 'showactionbuttons.php'; // load dictionary modal window
-if (!empty($user->hf_token)) {
-    require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
-}
+require_once PUBLIC_PATH . 'showaibotmodal.php'; // load AI bot modal window
 ?>
 
 <script defer src="/js/dictionaries.min.js"></script>

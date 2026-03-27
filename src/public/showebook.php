@@ -241,9 +241,7 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
     <?php
     require_once PUBLIC_PATH . 'showactionbuttons.php'; // load dictionary modal window
     require_once PUBLIC_PATH . 'showreadersettingsmodal.php'; // load preferences modal window
-    if (!empty($user->hf_token)) {
-        require_once PUBLIC_PATH . 'showaibotmodal.php'; // load Lingobot modal window
-    }
+    require_once PUBLIC_PATH . 'showaibotmodal.php'; // load AI bot modal window
     ?>
 
     <script defer src="/js/dictionaries.min.js"></script>
