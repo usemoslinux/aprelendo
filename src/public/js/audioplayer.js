@@ -51,6 +51,7 @@ const AudioController = (() => {
     let pending_playlist_position = null;
     let pending_autoplay = false;
     let pending_play_after_load = false;
+    let selected_speed = 1;
 
     // Default functions (do nothing if audio is not defined)
     let play = () => {};
@@ -240,6 +241,19 @@ const AudioController = (() => {
             }
         };
 
+        /**
+         * Reapplies the playback speed selected by the user after the audio source changes.
+         *
+         * @returns {void}
+         */
+        const applySelectedSpeed = () => {
+            if (!Number.isFinite(selected_speed)) {
+                return;
+            }
+
+            audio.playbackRate = selected_speed;
+        };
+
         const loadTrack = (index, start_time = 0, autoplay = false) => {
             if (!playlist_enabled || !playlist_tracks.length) {
                 return;
@@ -273,6 +287,7 @@ const AudioController = (() => {
             audio_source.src = track.url;
             audio.load();
             pending_seek_time = start_time;
+            applySelectedSpeed();
             updateChapterControls();
 
             if (autoplay) {
@@ -456,6 +471,7 @@ const AudioController = (() => {
             if (!Number.isFinite(speed)) {
                 return;
             }
+            selected_speed = speed;
             audio.playbackRate = speed;
 
             // Update active class
@@ -488,6 +504,7 @@ const AudioController = (() => {
         play_pause_btn.addEventListener('click', togglePlayPause);
         audio.addEventListener('loadedmetadata', playbackProgressUpdate);
         audio.addEventListener('loadedmetadata', applyPendingSeek);
+        audio.addEventListener('loadedmetadata', applySelectedSpeed);
 
         audio.addEventListener('timeupdate', () => {
             if (ab_loop_end > -1) {
