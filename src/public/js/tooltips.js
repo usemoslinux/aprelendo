@@ -35,7 +35,6 @@ function setNewTooltip(tooltip_elem, tooltip_title) {
 
     const old_tooltip = bootstrap.Tooltip.getInstance(tooltip_elem);
     if (old_tooltip) {
-        old_tooltip.hide();
         old_tooltip.dispose();
     }
 
@@ -46,12 +45,12 @@ function setNewTooltip(tooltip_elem, tooltip_title) {
 }
 
 /**
- * Hides the current tooltip instance for an element when one exists.
+ * Disposes the current tooltip instance for an element when one exists.
  *
  * @param {?HTMLElement} tooltip_elem Element that owns the tooltip.
  * @returns {void}
  */
-function hideTooltip(tooltip_elem) {
+function disposeTooltip(tooltip_elem) {
     if (!tooltip_elem) {
         return;
     }
@@ -62,7 +61,7 @@ function hideTooltip(tooltip_elem) {
 
     const existing_tooltip = bootstrap.Tooltip.getInstance(tooltip_elem);
     if (existing_tooltip) {
-        existing_tooltip.hide();
+        existing_tooltip.dispose();
     }
 }
 

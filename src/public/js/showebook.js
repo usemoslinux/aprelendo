@@ -21,13 +21,11 @@ $(document).ready(function () {
     const ebook_id = $("#text").attr("data-idText");
     const book = ePub();
     let text_pos = "";
+    let has_unsaved_reviews = false;
 
     window.parent.show_confirmation_dialog = true; // show confirmation dialog on close
 
     let text = document.getElementById("text");
-
-    let form_data = new FormData();
-    form_data.append("id", ebook_id);
 
     /**
      * Throws error if response.status !== 200
@@ -98,8 +96,11 @@ $(document).ready(function () {
         "click",
         async function (e) {
             e.preventDefault();
-            hideTooltip(next);
-            await SaveWords();
+            disposeTooltip(next);
+            const save_succeeded = await SaveWords();
+            if (!save_succeeded) {
+                return;
+            }
             let url = next.getAttribute("href");
             display(url);
         },
@@ -108,7 +109,11 @@ $(document).ready(function () {
 
     $("body").on("click", "#btn-close-ebook", async function () {
         // save word status before closing
-        await SaveWords();
+        const save_succeeded = await SaveWords();
+        if (!save_succeeded) {
+            return;
+        }
+
         // save book position to resume reading from there later
         let audio_pos = 0;
         const audio = document.getElementById("audioplayer");
@@ -125,7 +130,11 @@ $(document).ready(function () {
         }
 
         if (text_pos) {
-            await saveTextAndAudioPos(text_pos, audio_pos); // Await the async saveTextAndAudioPos function
+            const position_saved = await saveTextAndAudioPos(text_pos, audio_pos);
+            if (!position_saved) {
+                return;
+            }
+
             // don't show confirmation dialog when closing window
             window.parent.show_confirmation_dialog = false;
             window.location.replace("/texts");
@@ -133,15 +142,12 @@ $(document).ready(function () {
     }); // end #btn-close-ebook.on.click
 
     /**
-     * Updates status of all underlined words & phrases
+     * Returns the current list of unique reviewed words in the text.
+     * @returns {string[]}
      */
-    async function SaveWords() {
-        // build array with underlined words
-        let oldwords = [];
+    function collectReviewedWords() {
+        let reviewed_words = [];
         let word = "";
-
-        // don't show confirmation dialog when closing window
-        window.parent.show_confirmation_dialog = false;
 
         $("#text")
             .find(".reviewing")
@@ -149,13 +155,47 @@ $(document).ready(function () {
                 word = $(this)
                     .text()
                     .toLowerCase();
-                if (jQuery.inArray(word, oldwords) == -1) {
-                    oldwords.push(word);
+                if (jQuery.inArray(word, reviewed_words) == -1) {
+                    reviewed_words.push(word);
                 }
             });
 
+        return reviewed_words;
+    } // end collectReviewedWords
+
+    /**
+     * Builds the review payload used to update user score.
+     * @returns {object}
+     */
+    function buildReviewData() {
+        return {
+            words: {
+                new: getUniqueElements('.reviewing.new'),
+                learning: getUniqueElements('.reviewing.learning'),
+                forgotten: getUniqueElements('.reviewing.forgotten')
+            },
+            texts: { reviewed: 1 }
+        };
+    } // end buildReviewData
+
+    /**
+     * Updates status of all underlined words & phrases
+     * @returns {Promise<boolean>}
+     */
+    async function SaveWords() {
+        if (!has_unsaved_reviews) {
+            return true;
+        }
+
+        const reviewed_words = collectReviewedWords();
+
+        if (reviewed_words.length === 0) {
+            has_unsaved_reviews = false;
+            return true;
+        }
+
         try {
-            const update_words_form_data = new URLSearchParams({ words: JSON.stringify(oldwords) });
+            const update_words_form_data = new URLSearchParams({ words: JSON.stringify(reviewed_words) });
             
             const update_words_response = await fetch("/ajax/updatewords.php", {
                 method: "POST",
@@ -171,14 +211,7 @@ $(document).ready(function () {
                 throw new Error(update_words_data.error_msg || 'Failed to save text.');
             } 
             
-            const review_data = {
-                words: {
-                    new: getUniqueElements('.reviewing.new'),
-                    learning: getUniqueElements('.reviewing.learning'),
-                    forgotten: getUniqueElements('.reviewing.forgotten')
-                },
-                texts: { reviewed: 1 }
-            };
+            const review_data = buildReviewData();
 
             const update_user_score_response = await fetch("/ajax/updateuserscore.php", {
                 method: "POST",
@@ -195,9 +228,13 @@ $(document).ready(function () {
             if (!update_user_score_data.success) {
                 throw new Error(update_user_score_data.error_msg || 'Failed to update user score.');
             }
+
+            has_unsaved_reviews = false;
+            return true;
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
+            return false;
         }
     } // end SaveWords
 
@@ -276,58 +313,113 @@ $(document).ready(function () {
         }
     }); // end book.loaded.metadata
 
-    async function display(item) {
-        let section = book.spine.get(item);
-        let text_html = '';
+    /**
+     * Resets the next chapter button before rendering a new section.
+     * @returns {void}
+     */
+    function resetNextChapterButton() {
+        disposeTooltip(next);
+        next.textContent = "";
+        next.classList.add('d-none');
+        next.href = "#";
+    } // end resetNextChapterButton
 
-        function resetNextChapterBtn() {
-            next.textContent = "";
-            next.classList.add('d-none');
-            next.href = "#";
+    /**
+     * Toggles the loading state for the reader content area.
+     * @param {boolean} is_loading
+     * @returns {void}
+     */
+    function setLoadingState(is_loading) {
+        $(".loading-spinner-container").toggleClass("show", is_loading);
+        $("#text-container").toggleClass("show", !is_loading);
+    } // end setLoadingState
+
+    /**
+     * Loads user word data and returns the annotated section HTML.
+     * @param {string} clean_html
+     * @returns {Promise<string>}
+     */
+    async function loadAnnotatedHtml(clean_html) {
+        const form_data = new URLSearchParams({ txt: clean_html });
+        const response = await fetch("/ajax/getuserwords.php", {
+            method: "POST",
+            body: form_data
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
         }
 
-        resetNextChapterBtn();
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.error_msg || 'Failed to get user words for underlining');
+        }
+
+        return TextUnderliner.apply(data.payload, doclang);
+    } // end loadAnnotatedHtml
+
+    /**
+     * Renders annotated section HTML into the text container.
+     * @param {string} text_html
+     * @returns {void}
+     */
+    function renderSectionContent(text_html) {
+        text.innerHTML = text_html;
+        TextProcessor.updateAnchorsList();
+        has_unsaved_reviews = $("#text").find(".reviewing").length > 0;
+        scrollToPageTop();
+    } // end renderSectionContent
+
+    /**
+     * Synchronizes chapter navigation UI after a section render attempt.
+     * @param {object} section
+     * @param {string|number} item
+     * @returns {void}
+     */
+    function syncNavigationUi(section, item) {
+        updateNextChapterButton(section);
+        text_pos = item;
+        updateToc(section.href);
+    } // end syncNavigationUi
+
+    /**
+     * Renders a section, annotates its content, and updates reader UI state.
+     * @param {object} section
+     * @param {string|number} item
+     * @returns {Promise<void>}
+     */
+    async function renderSection(section, item) {
+        const ebook_html = await section.render();
+        const $parsed = cleanEbookHTML(ebook_html);
+
+        setLoadingState(true);
+
+        try {
+            const text_html = await loadAnnotatedHtml($parsed.html());
+            renderSectionContent(text_html);
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        } finally {
+            setLoadingState(false);
+        }
+
+        syncNavigationUi(section, item);
+    } // end renderSection
+
+    /**
+     * Displays an ebook section in the reader.
+     * @param {string|number} item
+     * @returns {Promise<object|undefined>}
+     */
+    async function display(item) {
+        let section = book.spine.get(item);
+
+        resetNextChapterButton();
 
         if (section) {
-            await section.render().then(async function (ebook_html) { // Make inner function async
-                let $parsed = cleanEbookHTML(ebook_html);
-
-                // underline text
-                $(".loading-spinner-container").addClass("show");
-                $("#text-container").removeClass("show");
-                try {
-                    const form_data = new URLSearchParams({ txt: $parsed.html() });
-                    
-                    const response = await fetch("/ajax/getuserwords.php", {
-                        method: "POST",
-                        body: form_data
-                    });
-
-                    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-                    const data = await response.json();
-
-                    if (!data.success) {
-                        throw new Error(data.error_msg || 'Failed to get user words for underlining');
-                    }
-                    
-                    text_html = TextUnderliner.apply(data.payload, doclang);
-                    text.innerHTML = text_html;
-                    TextProcessor.updateAnchorsList();
-                    $("#text-container").addClass("show");
-                    $(".loading-spinner-container").removeClass("show");
-                    scrollToPageTop();
-                } catch (error) {
-                    console.error(error);
-                    alert(`Oops! ${error.message}`);
-                }
-
-                // create next chapter link on bottom of page
-                updateNextChapterButton(section);
-
-                text_pos = item;
-                updateToc(section.href);
-            });
+            await renderSection(section, item);
         }
 
         return section;
@@ -410,10 +502,7 @@ $(document).ready(function () {
         next.href = next_href;
 
         if (!isMobileDevice()) {
-            next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as reviewed');
-            new bootstrap.Tooltip(next, {
-                trigger: 'hover'
-            });
+            setNewTooltip(next, 'Go to next chapter & mark underlined words as reviewed');
         }
 
         next.classList.remove('d-none');
@@ -593,9 +682,12 @@ $(document).ready(function () {
             if (!data.success) {
                 throw new Error(data.error_msg || 'Failed to save text and audio position.');
             }
+
+            return true;
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
+            return false;
         }
     } // end saveTextAndAudioPos
 });
