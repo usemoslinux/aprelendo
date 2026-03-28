@@ -122,6 +122,6 @@ require_once PUBLIC_PATH . 'header.php';
 </div>
 
 <script defer src="/js/addvideo.js"></script>
-<script defer src="/js/helpers.min.js"></script>
+<script defer src="/js/helpers.js"></script>
 
 <?php require_once 'footer.php'?>

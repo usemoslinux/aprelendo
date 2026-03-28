@@ -105,8 +105,8 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Extra style sheets -->
-    <link rel="stylesheet" type="text/css" href="/css/ebooks.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/styles.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/ebooks.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -143,7 +143,7 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
 
     <?php if (!IS_SELF_HOSTED): ?>
         <!-- Matomo Analytics -->
-        <script src="/js/matomo.min.js" async defer></script>
+        <script src="/js/matomo.js" async defer></script>
     <?php endif; ?>
 </head>
 
@@ -244,19 +244,19 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
     require_once PUBLIC_PATH . 'showaibotmodal.php'; // load AI bot modal window
     ?>
 
-    <script defer src="/js/dictionaries.min.js"></script>
-    <script defer src="/js/underlinewords.min.js"></script>
-    <script defer src="/js/wordselection.min.js"></script>
-    <script defer src="/js/actionbtns.min.js"></script>
+    <script defer src="/js/dictionaries.js"></script>
+    <script defer src="/js/underlinewords.js"></script>
+    <script defer src="/js/wordselection.js"></script>
+    <script defer src="/js/actionbtns.js"></script>
     <?php if ($audio_source_is_YT): ?>
-        <script src="/js/ytvideoplayer.min.js"></script>
+        <script src="/js/ytvideoplayer.js"></script>
     <?php else: ?>
-        <script defer src="/js/audioplayer.min.js"></script>
+        <script defer src="/js/audioplayer.js"></script>
     <?php endif; ?>
-    <script defer src="/js/helpers.min.js"></script>
-    <script defer src="/js/tooltips.min.js"></script>
-    <script defer src="/js/showtext.min.js"></script>
-    <script defer src="/js/showebook.min.js"></script>
+    <script defer src="/js/helpers.js"></script>
+    <script defer src="/js/tooltips.js"></script>
+    <script defer src="/js/showtext.js"></script>
+    <script defer src="/js/showebook.js"></script>
 </body>
 
 </html>

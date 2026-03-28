@@ -106,10 +106,10 @@ require_once PUBLIC_PATH . 'simpleheader.php';
 </main>
 
 <?php if (!IS_SELF_HOSTED): ?>
-    <script src="/js/googlelogin.min.js"></script> <!-- Don't user "defer" for this one, otherwise google login won't work -->
+    <script src="/js/googlelogin.js"></script> <!-- Don't user "defer" for this one, otherwise google login won't work -->
 <?php endif; ?>
-<script defer src="/js/login.min.js"></script>
-<script defer src="/js/password.min.js"></script>
-<script defer src="/js/helpers.min.js"></script>
+<script defer src="/js/login.js"></script>
+<script defer src="/js/password.js"></script>
+<script defer src="/js/helpers.js"></script>
 
 <?php require_once 'footer.php' ?>

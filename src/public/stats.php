@@ -340,7 +340,7 @@ if ($total_nr_of_badges > 0) {
     integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script defer src="/js/stats.min.js"></script>
-<script defer src="/js/reviewheatmap.min.js"></script>
+<script defer src="/js/stats.js"></script>
+<script defer src="/js/reviewheatmap.js"></script>
 
 <?php require_once 'footer.php'; ?>

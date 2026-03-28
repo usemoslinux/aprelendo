@@ -98,15 +98,15 @@ require_once PUBLIC_PATH . 'head.php';
     require_once PUBLIC_PATH . 'showaibotmodal.php'; // load AI bot modal window
     ?>
 
-    <script defer src="/js/videoplayer.min.js"></script>
-    <script defer src="/js/subtitles-parser/subtitles.parser.min.js"></script>
-    <script defer src="/js/dictionaries.min.js"></script>
-    <script defer src="/js/underlinewords.min.js"></script>
-    <script defer src="/js/wordselection.min.js"></script>
-    <script defer src="/js/actionbtns.min.js"></script>
-    <script defer src="/js/helpers.min.js"></script>
-    <script defer src="/js/tooltips.min.js"></script>
-    <script defer src="/js/showofflinevideo.min.js"></script>
+    <script defer src="/js/videoplayer.js"></script>
+    <script defer src="/js/subtitles-parser/subtitles.parser.js"></script>
+    <script defer src="/js/dictionaries.js"></script>
+    <script defer src="/js/underlinewords.js"></script>
+    <script defer src="/js/wordselection.js"></script>
+    <script defer src="/js/actionbtns.js"></script>
+    <script defer src="/js/helpers.js"></script>
+    <script defer src="/js/tooltips.js"></script>
+    <script defer src="/js/showofflinevideo.js"></script>
 </body>
 
 </html>

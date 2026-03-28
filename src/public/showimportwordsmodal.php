@@ -65,4 +65,4 @@ require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set
     </div>
 </div>
 
-<script defer src="/js/showimportwordsmodal.min.js"></script>
+<script defer src="/js/showimportwordsmodal.js"></script>

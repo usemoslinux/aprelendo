@@ -160,7 +160,7 @@ if (!empty($google_font_families)) {
 
     <?php if (!IS_SELF_HOSTED): ?>
         <!-- Matomo Analytics -->
-        <script src="/js/matomo.min.js" async defer></script>
+        <script src="/js/matomo.js" async defer></script>
     <?php endif; ?>
 </head>
 

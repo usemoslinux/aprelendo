@@ -201,8 +201,8 @@ require_once PUBLIC_PATH . 'simpleheader.php';
     </div>
 </div>
 
-<script defer src="/js/register.min.js"></script>
-<script defer src="/js/password.min.js"></script>
-<script defer src="/js/helpers.min.js"></script>
+<script defer src="/js/register.js"></script>
+<script defer src="/js/password.js"></script>
+<script defer src="/js/helpers.js"></script>
 
 <?php require_once 'footer.php'; ?>

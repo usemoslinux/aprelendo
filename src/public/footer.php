@@ -100,7 +100,7 @@ if (!IS_SELF_HOSTED) {
 }
 ?>
 
-<script defer src="/js/logout.min.js"></script>
+<script defer src="/js/logout.js"></script>
 
 </body>
 

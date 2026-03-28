@@ -130,13 +130,13 @@ require_once PUBLIC_PATH . 'showactionbuttons.php'; // load dictionary modal win
 require_once PUBLIC_PATH . 'showaibotmodal.php'; // load AI bot modal window
 ?>
 
-<script defer src="/js/dictionaries.min.js"></script>
-<script defer src="/js/underlinewords.min.js"></script>
-<script defer src="/js/wordselection.min.js"></script>
-<script defer src="/js/actionbtns.min.js"></script>
-<script defer src="/js/aibot.min.js"></script>
-<script defer src="/js/helpers.min.js"></script>
-<script defer src="/js/tooltips.min.js"></script>
-<script defer src="/js/studyai.min.js"></script>
+<script defer src="/js/dictionaries.js"></script>
+<script defer src="/js/underlinewords.js"></script>
+<script defer src="/js/wordselection.js"></script>
+<script defer src="/js/actionbtns.js"></script>
+<script defer src="/js/aibot.js"></script>
+<script defer src="/js/helpers.js"></script>
+<script defer src="/js/tooltips.js"></script>
+<script defer src="/js/studyai.js"></script>
 
 <?php require_once 'footer.php' ?>

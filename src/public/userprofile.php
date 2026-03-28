@@ -279,9 +279,9 @@ $google_login = !empty($user->google_id);
     </div>
 </div>
 
-<script defer src="/js/userprofile.min.js"></script>
-<script defer src="/js/password.min.js"></script>
-<script defer src="/js/helpers.min.js"></script>
-<script defer src="/js/tooltips.min.js"></script>
+<script defer src="/js/userprofile.js"></script>
+<script defer src="/js/password.js"></script>
+<script defer src="/js/helpers.js"></script>
+<script defer src="/js/tooltips.js"></script>
 
 <?php require_once 'footer.php'; ?>

@@ -116,7 +116,7 @@ require_once PUBLIC_PATH . 'header.php';
     crossorigin="anonymous">
 </script>
 
-<script defer src="/js/addebook.min.js"></script>
-<script defer src="/js/helpers.min.js"></script>
+<script defer src="/js/addebook.js"></script>
+<script defer src="/js/helpers.js"></script>
 
 <?php require_once 'footer.php'?>

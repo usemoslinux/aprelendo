@@ -217,8 +217,8 @@ $text_types_arr = $text_types->getAll();
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
 
-<script defer src="/js/addtext.min.js"></script>
-<script defer src="/js/helpers.min.js"></script>
+<script defer src="/js/addtext.js"></script>
+<script defer src="/js/helpers.js"></script>
 
 <?php if ($rss_import): ?>
 <script>

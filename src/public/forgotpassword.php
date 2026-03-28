@@ -118,8 +118,8 @@ ini_set('display_startup_errors', '0');
     </div>
 </main>
 
-<script defer src="/js/forgotpassword.min.js"></script>
-<script defer src="/js/password.min.js"></script>
-<script defer src="/js/helpers.min.js"></script>
+<script defer src="/js/forgotpassword.js"></script>
+<script defer src="/js/password.js"></script>
+<script defer src="/js/helpers.js"></script>
 
 <?php require_once 'footer.php' ?>

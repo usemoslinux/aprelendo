@@ -89,6 +89,6 @@ $feeds_count = sizeof($feed_uris);
     </div>
 </div>
 
-<script defer src="/js/addrss.min.js"></script>
-<script defer src="/js/helpers.min.js"></script>
+<script defer src="/js/addrss.js"></script>
+<script defer src="/js/helpers.js"></script>
 <?php require_once 'footer.php'; ?>

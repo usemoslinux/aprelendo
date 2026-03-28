@@ -169,4 +169,4 @@ $sel = ' selected ';
     </div>
 </div>
 
-<script defer src="/js/showreadersettingsmodal.min.js"></script>
+<script defer src="/js/showreadersettingsmodal.js"></script>

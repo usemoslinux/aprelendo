@@ -19,7 +19,7 @@
 
     <title>Aprelendo: Free Language Learning Platform</title>
 
-    <link rel="stylesheet" type="text/css" href="/css/403.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/403.css">
 </head>
 
 <body>

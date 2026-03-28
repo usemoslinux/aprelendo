@@ -28,7 +28,7 @@ if (!isset($_COOKIE['accept_cookies'])): ?>
             <button id="removecookie" class="btn btn-success">OK</button>
         </div>
         
-    <script defer src="/js/cookies.min.js"></script>
-    <script defer src="/js/eucookies.min.js"></script>
+    <script defer src="/js/cookies.js"></script>
+    <script defer src="/js/eucookies.js"></script>
 
 <?php endif; ?>

@@ -65,9 +65,9 @@ $(document).ready(function () {
     // theming
     let reader = document.getElementById("readerpage");
 
-    rendition.themes.register("darkmode", "/css/ebooks.min.css");
-    rendition.themes.register("lightmode", "/css/ebooks.min.css");
-    rendition.themes.register("sepiamode", "/css/ebooks.min.css");
+    rendition.themes.register("darkmode", "/css/ebooks.css");
+    rendition.themes.register("lightmode", "/css/ebooks.css");
+    rendition.themes.register("sepiamode", "/css/ebooks.css");
 
     rendition.themes.default({
         body: {

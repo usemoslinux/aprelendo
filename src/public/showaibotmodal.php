@@ -108,5 +108,5 @@ $has_hf_token = !empty($user->hf_token);
     </div>
 </div>
 
-<script defer src="/js/showaibotmodal.min.js"></script>
-<script defer src="/js/aibot.min.js"></script>
+<script defer src="/js/showaibotmodal.js"></script>
+<script defer src="/js/aibot.js"></script>
