@@ -99,7 +99,7 @@ $(document).ready(function () {
         async function (e) {
             e.preventDefault();
             hideTooltip(next);
-            await SaveWords(); // Await the async SaveWords function
+            await SaveWords();
             let url = next.getAttribute("href");
             display(url);
         },
@@ -108,7 +108,7 @@ $(document).ready(function () {
 
     $("body").on("click", "#btn-close-ebook", async function () {
         // save word status before closing
-        await SaveWords(); // Await the async SaveWords function
+        await SaveWords();
         // save book position to resume reading from there later
         let audio_pos = 0;
         const audio = document.getElementById("audioplayer");
@@ -218,6 +218,8 @@ $(document).ready(function () {
 
             a.style.setProperty("--depth", depth);
             a.dataset.depth = String(depth);
+            a.dataset.chapter_href = normalizeChapterHref(href);
+            a.dataset.chapter_path = normalizeChapterHref(href, false);
             a.setAttribute("aria-level", String(depth + 1));
 
             a.textContent = label;
@@ -321,38 +323,101 @@ $(document).ready(function () {
                 }
 
                 // create next chapter link on bottom of page
-                let next_section = section.next();
-
-                if (next_section) {
-                    const next_nav = book.navigation.get(next_section.href);
-                    let next_label = '';
-
-                    if (next_nav) {
-                        next_label = next_nav.label;
-                    } else {
-                        next_label = "Next chapter";
-                    }
-
-                    next.textContent = next_label + " »";
-                    next.href = next_section.href;
-
-                    if (!isMobileDevice()) {
-                        next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as reviewed');
-                        new bootstrap.Tooltip(next, {
-                            trigger: 'hover'
-                        })
-                    }
-
-                    next.classList.remove('d-none');
-                }
+                updateNextChapterButton(section);
 
                 text_pos = item;
-                updateToc(item);
+                updateToc(section.href);
             });
         }
 
         return section;
     } // end display
+
+    /**
+     * Normalizes an internal EPUB chapter href so spine and TOC links can be matched reliably.
+     * @param {string|number|null} chapter_href
+     * @param {boolean} include_fragment
+     * @returns {string}
+     */
+    function normalizeChapterHref(chapter_href, include_fragment = true) {
+        if (chapter_href === null || chapter_href === undefined || chapter_href === '') {
+            return '';
+        }
+
+        if (chapter_href === 1) {
+            return '1';
+        }
+
+        try {
+            const normalized_url = new URL(String(chapter_href), 'https://ebook.local/');
+            return include_fragment ? normalized_url.pathname + normalized_url.hash : normalized_url.pathname;
+        } catch (error) {
+            const href_string = String(chapter_href);
+            return include_fragment ? href_string : href_string.split('#')[0];
+        }
+    } // end normalizeChapterHref
+
+    /**
+     * Returns the TOC link for the current chapter using normalized href matching.
+     * @param {HTMLElement} $nav
+     * @param {string|number|null} current_chapter_url
+     * @returns {HTMLAnchorElement|null}
+     */
+    function getCurrentTocLink($nav, current_chapter_url) {
+        const toc_links = Array.from($nav.querySelectorAll('a.toc-item'));
+        const normalized_href = normalizeChapterHref(current_chapter_url);
+        const normalized_path = normalizeChapterHref(current_chapter_url, false);
+
+        if (normalized_href === '1') {
+            return toc_links[0] || null;
+        }
+
+        return toc_links.find(($link) => $link.dataset.chapter_href === normalized_href)
+            || toc_links.find(($link) => $link.dataset.chapter_path === normalized_path)
+            || null;
+    } // end getCurrentTocLink
+
+    /**
+     * Updates the next chapter button, preferring TOC order so it behaves like clicking a TOC item.
+     * @param {object} section
+     */
+    function updateNextChapterButton(section) {
+        let next_href = '';
+        let next_label = 'Next chapter';
+        const $nav = document.getElementById('toc');
+        const current_toc_link = getCurrentTocLink($nav, section.href);
+        const next_toc_link = current_toc_link ? current_toc_link.nextElementSibling : null;
+
+        if (next_toc_link && next_toc_link.classList.contains('toc-item')) {
+            next_href = next_toc_link.getAttribute('href');
+            next_label = next_toc_link.textContent;
+        } else {
+            const next_section = section.next();
+
+            if (!next_section) {
+                return;
+            }
+
+            next_href = next_section.href;
+
+            const next_nav = book.navigation.get(next_section.href);
+            if (next_nav && next_nav.label) {
+                next_label = next_nav.label;
+            }
+        }
+
+        next.textContent = next_label + ' »';
+        next.href = next_href;
+
+        if (!isMobileDevice()) {
+            next.setAttribute('data-bs-title', 'Go to next chapter & mark underlined words as reviewed');
+            new bootstrap.Tooltip(next, {
+                trigger: 'hover'
+            });
+        }
+
+        next.classList.remove('d-none');
+    } // end updateNextChapterButton
 
     function cleanEbookHTML(html) {
         // Replace line breaks (\n or \r) with spaces.
@@ -432,27 +497,30 @@ $(document).ready(function () {
 
     function updateToc(current_chapter_url) {
         let $nav = document.getElementById('toc');
-        let $bold_elements_in_nav = $nav.querySelector('.bg-primary');;
+        let $active_items_in_nav = $nav.querySelectorAll('.toc-item.bg-primary');
         let $title = document.getElementById('book-title-chapter');
-        let $selector;
+        let $selector = getCurrentTocLink($nav, current_chapter_url);
+        let current_nav = book.navigation.get(current_chapter_url);
 
-        // Remove existing bg-primary/text-light classes if present
-        if ($bold_elements_in_nav) {
-            $bold_elements_in_nav.classList.remove('bg-primary', 'text-light');
-        }
-
-        // Determine the proper link selector
-        // If it's the first chapter, grab the first link; otherwise, do an exact match
-        if (current_chapter_url === 1) {
-            $selector = $nav.querySelector('a');
-        } else {
-            $selector = $nav.querySelector(`a[href="${current_chapter_url}"]`);
-        }
+        $active_items_in_nav.forEach(($item) => {
+            $item.classList.remove('bg-primary', 'text-light');
+        });
 
         // Apply classes and update the title if the link was found
         if ($selector) {
             $selector.classList.add('bg-primary', 'text-light');
+        }
+
+        if (!current_nav && $selector) {
+            current_nav = book.navigation.get($selector.getAttribute('href'));
+        }
+
+        if (current_nav && current_nav.label) {
+            $title.textContent = ' - ' + current_nav.label;
+        } else if ($selector) {
             $title.textContent = ' - ' + $selector.textContent;
+        } else {
+            $title.textContent = '';
         }
     } // end updateToc
 
