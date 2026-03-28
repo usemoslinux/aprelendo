@@ -150,12 +150,12 @@ require_once PUBLIC_PATH . 'head.php';
     <script defer src="/js/underlinewords.min.js"></script>
     <script defer src="/js/wordselection.min.js"></script>
     <script defer src="/js/actionbtns.min.js"></script>
-    <script defer src="/js/showtext.min.js"></script>
     <script defer src="/js/dictation.min.js"></script>
     <script defer src="/js/audioplayer.min.js"></script>
-    <script defer src="/js/likes.min.js"></script>
     <script defer src="/js/helpers.min.js"></script>
     <script defer src="/js/tooltips.min.js"></script>
+    <script defer src="/js/likes.min.js"></script>
+    <script defer src="/js/showtext.min.js"></script>
 </body>
 
 </html>

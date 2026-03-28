@@ -135,8 +135,8 @@ require_once PUBLIC_PATH . 'showaibotmodal.php'; // load AI bot modal window
 <script defer src="/js/wordselection.min.js"></script>
 <script defer src="/js/actionbtns.min.js"></script>
 <script defer src="/js/aibot.min.js"></script>
-<script defer src="/js/studyai.min.js"></script>
 <script defer src="/js/helpers.min.js"></script>
 <script defer src="/js/tooltips.min.js"></script>
+<script defer src="/js/studyai.min.js"></script>
 
 <?php require_once 'footer.php' ?>

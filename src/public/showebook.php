@@ -248,8 +248,6 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
     <script defer src="/js/underlinewords.min.js"></script>
     <script defer src="/js/wordselection.min.js"></script>
     <script defer src="/js/actionbtns.min.js"></script>
-    <script defer src="/js/showtext.min.js"></script>
-    <script defer src="/js/showebook.min.js"></script>
     <?php if ($audio_source_is_YT): ?>
         <script src="/js/ytvideoplayer.min.js"></script>
     <?php else: ?>
@@ -257,6 +255,8 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
     <?php endif; ?>
     <script defer src="/js/helpers.min.js"></script>
     <script defer src="/js/tooltips.min.js"></script>
+    <script defer src="/js/showtext.min.js"></script>
+    <script defer src="/js/showebook.min.js"></script>
 </body>
 
 </html>
