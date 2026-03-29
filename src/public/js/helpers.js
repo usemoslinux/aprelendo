@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 /**
  * Shows custom message in the top section of the screen
  * @param {string} html

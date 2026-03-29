@@ -1,3 +1,7 @@
+<?php
+// SPDX-License-Identifier: GPL-3.0-or-later
+?>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

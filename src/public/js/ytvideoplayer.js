@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // Load the IFrame Player API code asynchronously
 const tag = document.createElement("script");
 const video_element = document.getElementById("videoplayer");
