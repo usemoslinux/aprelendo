@@ -134,7 +134,6 @@ require_once PUBLIC_PATH . 'showaibotmodal.php'; // load AI bot modal window
 <script defer src="/js/underlinewords.js"></script>
 <script defer src="/js/wordselection.js"></script>
 <script defer src="/js/actionbtns.js"></script>
-<script defer src="/js/aibot.js"></script>
 <script defer src="/js/helpers.js"></script>
 <script defer src="/js/tooltips.js"></script>
 <script defer src="/js/studyai.js"></script>
