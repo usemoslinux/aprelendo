@@ -15,9 +15,9 @@
     --color-text-dark:  #cccccc;
 
     /* reader background color modes */
-    --color-bg-light: rgba(255, 255, 255, 0.9);
-    --color-bg-sepia: rgba(235, 231, 217, 0.9);
-    --color-bg-dark:  rgba(33, 37, 41, 0.9);
+    --color-bg-light: rgba(255, 255, 255, 0.96);
+    --color-bg-sepia: rgba(235, 231, 217, 0.96);
+    --color-bg-dark:  rgba(33, 37, 41, 0.96);
 }
                      
 * {
@@ -107,12 +107,11 @@ a:hover {
     color: white;
 }
 
-.navbar-collapse {
+.navbar-collapbse {
     box-shadow: none;
 }
 
-.navbar-light .navbar-collapse,
-.navbar-light .form-inline {
+.navbar-light .navbar-collapse {
     border: none;
 }
 
@@ -186,7 +185,7 @@ img.language-flag {
 }
 
 @media only screen and (max-width: 767px) {
-    .nav .dropdown-header {
+    .navbar-nav .dropdown-header {
         color: yellow;
     }
 
@@ -208,31 +207,14 @@ img.language-flag {
     color: white;
 }
 
-.navbar-light .nav-item>.active>a:focus,
-.navbar-light .nav-item>.active>a:hover {
-    background-color: transparent;
-    color: var(--color-brand-primary);
-}
-
-.navbar-light .nav-item>li>a:focus,
-.navbar-light .nav-item>li>a:hover {
-    color: white;
-}
-
-.dropdown-menu>.active>a,
-.dropdown-menu>.active>a:focus,
-.dropdown-menu>.active>a:hover {
-    background-color: var(--color-brand-primary);
-}
-
 @media screen and (max-width: 767px) {
 
-    .navbar-light .navbar-nav .open .dropdown-menu>a:focus,
-    .navbar-light .navbar-nav .open .dropdown-menu>a:hover {
+    .navbar-light .navbar-nav .show .dropdown-menu>a:focus,
+    .navbar-light .navbar-nav .show .dropdown-menu>a:hover {
         color: black;
     }
 
-    .navbar-light .navbar-nav .open .dropdown-menu>a {
+    .navbar-light .navbar-nav .show .dropdown-menu>a {
         color: white;
     }
 
@@ -444,9 +426,9 @@ kbd {
 
 /* GENERAL ADJUSTMENTS */
 
-.navbar-light .navbar-nav>.open>a,
-.navbar-light .navbar-nav>.open>a:focus,
-.navbar-light .navbar-nav>.open>a:hover {
+.navbar-light .navbar-nav>.show>a,
+.navbar-light .navbar-nav>.show>a:focus,
+.navbar-light .navbar-nav>.show>a:hover {
     color: white;
     background-color: inherit;
 }
@@ -821,15 +803,6 @@ a[role="menuitem"] {
 
 .dict-answer {
     width: initial;
-}
-
-.dict-wronganswer {
-    background-color: inherit;
-    border: 0;
-    color: var(--w-forgotten);
-    display: inherit;
-    font-size: inherit;
-    padding: 0 4px 0 10px;
 }
 
 input {
