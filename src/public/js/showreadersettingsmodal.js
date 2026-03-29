@@ -1,6 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 $(document).ready(function() {
+    /**
+     * Returns the CSS font size value for the reader preview.
+     *
+     * @param {string} font_size
+     * @returns {string}
+     */
+    function getFontSizeCssValue(font_size) {
+        return font_size + "rem";
+    } // end getFontSizeCssValue
 
     $('#btn-save-reader-prefs').on('click', async function () {
         // apply color mode
@@ -12,7 +21,7 @@ $(document).ready(function() {
         
         $text_container.css({
             'font-family' : $('#fontfamily').val(),
-            'font-size' : $('#fontsize').val(),
+            'font-size' : getFontSizeCssValue($('#fontsize').val()),
             'text-align' : $('#alignment').val(),
             'line-height': $('#lineheight').val()
         });

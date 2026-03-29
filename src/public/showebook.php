@@ -40,7 +40,7 @@ try {
     };
 
     $font_family = $prefs->font_family;
-    $font_size = $prefs->font_size;
+    $font_size = $prefs->getFontSizeCssValue();
     $line_height = $prefs->line_height;
     $text_align = $prefs->text_alignment;
     

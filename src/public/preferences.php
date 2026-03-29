@@ -88,17 +88,17 @@ $sel = ' selected ';
                                         <div>
                                             <select name="fontsize" id="fontsize" class="form-control form-select"
                                                 autocomplete="off">
-                                                <option value="12pt" <?php echo $font_size=='12pt' ? $sel : ''; ?>>
-                                                    12 pt
+                                                <option value="1" <?php echo $font_size=='1' ? $sel : ''; ?>>
+                                                    Default
                                                 </option>
-                                                <option value="14pt" <?php echo $font_size=='14pt' ? $sel : ''; ?>>
-                                                    14 pt
+                                                <option value="1.2" <?php echo $font_size=='1.2' ? $sel : ''; ?>>
+                                                    Medium
                                                 </option>
-                                                <option value="16pt" <?php echo $font_size=='16pt' ? $sel : ''; ?>>
-                                                    16 pt
+                                                <option value="1.4" <?php echo $font_size=='1.4' ? $sel : ''; ?>>
+                                                    Large
                                                 </option>
-                                                <option value="18pt" <?php echo $font_size=='18pt' ? $sel : ''; ?>>
-                                                    18 pt
+                                                <option value="1.6" <?php echo $font_size=='1.6' ? $sel : ''; ?>>
+                                                    Extra large
                                                 </option>
                                             </select>
                                         </div>
@@ -109,16 +109,16 @@ $sel = ' selected ';
                                             <select name="lineheight" id="lineheight" class="form-control form-select"
                                                 autocomplete="off">
                                                 <option value="1.5" <?php echo $line_height=='1.5' ? $sel : ''; ?>>
-                                                    1.5 Lines
+                                                    Default
+                                                </option>
+                                                <option value="1.8" <?php echo $line_height=='1.8' ? $sel : ''; ?>>
+                                                    Relaxed
                                                 </option>
                                                 <option value="2" <?php echo $line_height=='2' ? $sel : ''; ?>>
-                                                    2
+                                                    Wide
                                                 </option>
-                                                <option value="2.5" <?php echo $line_height=='2.5' ? $sel : ''; ?>>
-                                                    2.5
-                                                </option>
-                                                <option value="3" <?php echo $line_height=='3' ? $sel : ''; ?>>
-                                                    3
+                                                <option value="2.4" <?php echo $line_height=='2.4' ? $sel : ''; ?>>
+                                                    Extra wide
                                                 </option>
                                             </select>
                                         </div>

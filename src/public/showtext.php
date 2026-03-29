@@ -35,7 +35,7 @@ try {
         default => "'",
     };
     $font_family = $prefs->font_family;
-    $font_size = $prefs->font_size;
+    $font_size = $prefs->getFontSizeCssValue();
     $line_height = $prefs->line_height;
     $text_align = $prefs->text_alignment;
     $reader_css = "font-family:$font_family;font-size:$font_size;line-height:$line_height;text-align:$text_align";

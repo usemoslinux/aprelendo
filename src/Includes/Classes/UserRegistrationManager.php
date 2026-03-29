@@ -71,7 +71,7 @@ class UserRegistrationManager extends DBEntity
 
             $sql = "INSERT INTO `preferences` (`user_id`, `font_family`, `font_size`, `line_height`, `text_alignment`,
                     `display_mode`, `assisted_learning`)
-                    VALUES (?, 'Helvetica', '12pt', '1.5', 'left', 'light', '1')";
+                    VALUES (?, 'Helvetica', '1', '1.5', 'left', 'light', '1')";
 
             $this->sqlExecute($sql, [$user_id]);
             $this->pdo->commit();

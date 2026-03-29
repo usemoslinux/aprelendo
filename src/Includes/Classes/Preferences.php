@@ -7,7 +7,7 @@ class Preferences extends DBEntity
 {
     public int    $user_id            = 0;
     public string $font_family        = 'var(--bs-body-font-family)';
-    public string $font_size          = '12pt';
+    public string $font_size          = '1';
     public string $line_height        = '1.5';
     public string $text_alignment     = 'left';
     public string $display_mode       = 'light';
@@ -83,4 +83,15 @@ class Preferences extends DBEntity
             $this->assisted_learning = $row['assisted_learning'];
         }
     } // end loadRecord()
+
+    /**
+     * Returns the CSS font size value for reader views.
+     *
+     * @return string
+     */
+    public function getFontSizeCssValue(): string
+    {
+        return $this->font_size . 'rem';
+    } // end getFontSizeCssValue()
+
 }
