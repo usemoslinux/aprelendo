@@ -773,12 +773,11 @@ a[role="menuitem"] {
 }
 
 #text-container {
-    border-top: solid 1px #ccc;
-    box-shadow: 0 0 4px #ccc;
     border-radius: 5px;
     flex: 1 1 auto;
     overflow: auto;
     scrollbar-gutter: stable both-edges;
+    border: solid 1px var(--bs-gray-600);
 }
 
 #text {
