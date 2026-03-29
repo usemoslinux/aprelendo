@@ -103,7 +103,7 @@ if (!empty($google_font_families)) {
     <?php endif; ?>
     
     <!-- Custom styles for this template -->
-    <link href="/css/styles.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
     <?php if ($curpage === 'showvideo' || $curpage === 'showofflinevideo'): ?>
         <link href="/css/showvideo.css" rel="stylesheet">
     <?php endif; ?>
