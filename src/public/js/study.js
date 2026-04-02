@@ -99,7 +99,7 @@ $(document).ready(function () {
 
             const word_boundary = '(?<![\\p{L}])' + word + '(?![\\p{L}])';
             const sentence_start = '([^\\n.?!]|[\\d][.][\\d]|[A-Z][.](?:[A-Z][.])+)*';
-            const sentence_end = '([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!]';
+            const sentence_end = "([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!][\"'”’»\\)\\]]*";
             let sentence_regex = new RegExp(sentence_start + word_boundary + sentence_end, 'gmiu');
 
             // different sentence separator for Japanese and Chinese, as
@@ -124,13 +124,13 @@ $(document).ready(function () {
 
                     if (examples_array.length < 3) {
                         // create html for each example sentence, max 3 examples
-                        let match = m[0];
+                        const match = normalizeExtractedSentence(m[0]);
 
                         // check that match is not the only word in current example sentence
                         if (match !== word) {
                             // make sure example sentence is unique, then add to the list
-                            text.text = doubleQuotesNotClosed(match) ? text.text : match;
-                            examples_array = forceUnique(examples_array, text);
+                            const example_text = doubleQuotesNotClosed(match) ? text.text : match;
+                            examples_array = forceUnique(examples_array, { ...text, text: example_text });
                         }
                     }
                 }
@@ -251,6 +251,19 @@ $(document).ready(function () {
 
         // If nr. of double quotes is uneven or opening and closing curly quotes don't match, return true
         return (doubleQuotesCount % 2 !== 0 || openingCurlyQuotesCount !== closingCurlyQuotesCount);
+    }
+
+    /**
+     * Normalizes an extracted sentence by trimming whitespace and removing stray closing punctuation
+     * that belongs to the previous sentence, such as a leading curly quote in `.” Next sentence`.
+     * @param {string} text Example sentence extracted from example paragraph returned by getcards.php
+     * @returns {string}
+     */
+    function normalizeExtractedSentence(text) {
+        return text
+            .trim()
+            .replace(/^[”’»\)\]\}]+\s*/u, '')
+            .trim();
     }
 
     /**

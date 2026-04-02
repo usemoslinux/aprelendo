@@ -162,7 +162,7 @@ $(document).ready(function () {
 
             const word_boundary = '(?<![\\p{L}])' + escapeRegex(original_word) + '(?![\\p{L}])';
             const sentence_start = '([^\\n.?!]|[\\d][.][\\d]|[A-Z][.](?:[A-Z][.])+)*';
-            const sentence_end = '([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!]';
+            const sentence_end = "([^\\n.?!]|[.][\\d]|[.](?:[A-Z][.])+)*[\\n.?!][\"'”’»\\)\\]]*";
             let sentence_regex = new RegExp(sentence_start + word_boundary + sentence_end, 'gmiu');
 
             if (lang_iso == "ja" || lang_iso == "zh") {
@@ -176,10 +176,10 @@ $(document).ready(function () {
                 while ((m = sentence_regex.exec(text.text)) !== null) {
                     if (m.index === sentence_regex.lastIndex) sentence_regex.lastIndex++;
                     if (examples_array.length < 3) {
-                        let match = m[0];
+                        const match = normalizeExtractedSentence(m[0]);
                         if (match !== original_word) {
-                            text.text = doubleQuotesNotClosed(match) ? text.text : match;
-                            examples_array = forceUnique(examples_array, text);
+                            const example_text = doubleQuotesNotClosed(match) ? text.text : match;
+                            examples_array = forceUnique(examples_array, { ...text, text: example_text });
                         }
                     }
                 }
@@ -307,9 +307,22 @@ $(document).ready(function () {
      */
     function doubleQuotesNotClosed(text) {
         const double_quotes_count = (text.match(/"/g) || []).length;
-        const opening_curly_quotes_count = (text.match(/"/g) || []).length;
-        const closing_curly_quotes_count = (text.match(/"/g) || []).length;
+        const opening_curly_quotes_count = (text.match(/“/g) || []).length;
+        const closing_curly_quotes_count = (text.match(/”/g) || []).length;
         return (double_quotes_count % 2 !== 0 || opening_curly_quotes_count !== closing_curly_quotes_count);
+    }
+
+    /**
+     * Normalizes an extracted sentence by trimming whitespace and removing stray closing punctuation
+     * that belongs to the previous sentence, such as a leading curly quote in `.” Next sentence`.
+     * @param {string} text - Example sentence extracted from example paragraph returned by getcards.php
+     * @returns {string} Normalized sentence text
+     */
+    function normalizeExtractedSentence(text) {
+        return text
+            .trim()
+            .replace(/^[”’»\)\]\}]+\s*/u, '')
+            .trim();
     }
 
     /**
