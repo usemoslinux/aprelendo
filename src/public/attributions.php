@@ -75,8 +75,8 @@ if (!$user_auth->isLoggedIn()) {
                                 Bazhenov</a> (used to parse offline video subtitles).
                         </li>
                         <li>
-                            <a href="https://github.com/futurepress/epub.js/">EpubJS</a>, by Futurepress (used
-                            to render epub files)
+                            <a href="https://github.com/intity/epub-js/" target="_blank"
+                                rel="noopener noreferrer">epub-js</a>, by Intity (used to render epub files)
                         </li>
                         <li>
                             <a href="https://www.chartjs.org/" target="_blank"

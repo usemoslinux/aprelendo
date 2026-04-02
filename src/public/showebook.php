@@ -101,13 +101,13 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
         integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
 
-    <!-- Epub.js & jszip -->
+    <!-- Epub-js & jszip -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
         integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
         crossorigin="anonymous">
     </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"
-        integrity="sha512-qZUwAZnQNbTGK3xweH0p9dJ0/FflhdJwGr5IhvhuBtltqdTi6G8TjsAf8WINe3uhhyt2wueXacvXtQtOiHm26Q=="
+    <script src="https://cdn.jsdelivr.net/npm/@intity/epub-js@0.3.96/dist/epub.min.js"
+        integrity="sha512-l/t0W6be1W1jUipTU2fNuJi4lguXgAnuBL4ogH8OOKI1yrr1EyVLCOLaHYzuS/GvWUfQdX/Pqqd4MKyt3BTSog=="
         crossorigin="anonymous">
     </script>
 

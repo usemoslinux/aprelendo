@@ -28,51 +28,282 @@ $(document).ready(function () {
      * Ajax call to fetch an ebook. Response has to be converted to arrayBuffer to allow
      * epub.js (book.open function) to process it correctly
      */
-    function getEbook(ebook_id, fetchStatusHandler, book) {
-        fetch("/ajax/getebook.php?id=" + ebook_id)
+    function getEbook(ebook_id, fetchStatusHandler, book, reader) {
+        return fetch("/ajax/getebook.php?id=" + ebook_id)
             .then(fetchStatusHandler)
             .then(response => response.arrayBuffer())
-            .then(arraybuffer => book.open(arraybuffer))
+            .then(arraybuffer => {
+                const book_open_promise = book.open(arraybuffer);
+                const rendition = book.renderTo("text", {
+                    flow: "scrolled-doc"
+                });
+
+                setupRendition(rendition, reader);
+
+                return book_open_promise;
+            })
             .catch((error) => {
                 alert(`Oops! ${error.message}`);
                 window.location.replace("/texts");
+                throw error;
             });
-
-        let rendition = book.renderTo("text", {
-            flow: "scrolled-doc"
-        });
-        return rendition;
     }
 
-    let rendition = getEbook(ebook_id, fetchStatusHandler, book);
+    /**
+     * Resolves once the current ebook has been opened and internal epub.js promises are available.
+     * @param {Promise<object>} book_open_promise
+     * @returns {Promise<object>}
+     */
+    function waitForBookOpen(book_open_promise) {
+        return book_open_promise.then(function () {
+            return book;
+        });
+    }
 
-    // theming
-    let reader = document.getElementById("readerpage");
+    /**
+     * Returns the promise that resolves to the book sections collection for the active epub.js build.
+     * @param {object} book
+     * @returns {Promise<object>|undefined}
+     */
+    function getLoadedSections(book) {
+        if (!book.loaded) {
+            return undefined;
+        }
 
-    rendition.themes.register("darkmode", "/css/showebook.css");
-    rendition.themes.register("lightmode", "/css/showebook.css");
-    rendition.themes.register("sepiamode", "/css/showebook.css");
+        return book.loaded.sections || book.loaded.spine;
+    }
 
-    rendition.themes.default({
-        body: {
+    /**
+     * Preloads section documents so later manual section rendering stays responsive.
+     * @param {object} book
+     * @returns {void}
+     */
+    function preloadBookSections(book) {
+        const loaded_sections = getLoadedSections(book);
+
+        if (!loaded_sections || typeof loaded_sections.then !== "function") {
+            return;
+        }
+
+        loaded_sections.then((sections) => {
+            if (!sections) {
+                return;
+            }
+
+            if (typeof sections.each === "function") {
+                sections.each((section) => {
+                    section.load(book.load.bind(book));
+                });
+                return;
+            }
+
+            if (typeof sections.forEach === "function") {
+                sections.forEach((section) => {
+                    section.load(book.load.bind(book));
+                });
+            }
+        });
+    }
+
+    /**
+     * Returns a book section using the API available in the current epub.js build.
+     * @param {object} book
+     * @param {string|number} item
+     * @returns {object|null}
+     */
+    function getBookSection(book, item) {
+        if (typeof book.section === "function") {
+            return book.section(item);
+        }
+
+        if (book.sections && typeof book.sections.get === "function") {
+            return book.sections.get(item);
+        }
+
+        if (book.spine && typeof book.spine.get === "function") {
+            return book.spine.get(item);
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns a normalized array of TOC items for the active epub.js build.
+     * @param {object|Array} navigation_or_toc
+     * @returns {Array}
+     */
+    function getNavigationToc(navigation_or_toc) {
+        if (Array.isArray(navigation_or_toc)) {
+            return navigation_or_toc;
+        }
+
+        if (navigation_or_toc && Array.isArray(navigation_or_toc.toc)) {
+            return navigation_or_toc.toc;
+        }
+
+        return [];
+    }
+
+    /**
+     * Returns a TOC/navigation item for a chapter href across supported epub.js builds.
+     * @param {object} book
+     * @param {string} chapter_href
+     * @returns {object|null}
+     */
+    function getNavigationItem(book, chapter_href) {
+        if (!book.navigation) {
+            return null;
+        }
+
+        if (book.navigation.toc && typeof book.navigation.toc.get === "function") {
+            return book.navigation.toc.get(chapter_href);
+        }
+
+        if (typeof book.navigation.get === "function") {
+            return book.navigation.get(chapter_href);
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns normalized book metadata across supported epub.js builds.
+     * @param {object} book
+     * @returns {Promise<object>}
+     */
+    function getBookMetadata(book, book_open_promise) {
+        if (book.loaded && book.loaded.metadata) {
+            return book.loaded.metadata;
+        }
+
+        return waitForBookOpen(book_open_promise).then(function () {
+            const metadata = book.packaging && book.packaging.metadata ? book.packaging.metadata : null;
+
+            return {
+                title: metadata ? (metadata.get("title") || "") : "",
+                creator: metadata ? (metadata.get("creator") || "") : "",
+                publisher: metadata ? (metadata.get("publisher") || "") : "",
+                pubdate: metadata ? (metadata.get("pubdate") || metadata.get("date") || "") : ""
+            };
+        });
+    }
+
+    /**
+     * Returns a cover URL across supported epub.js builds.
+     * @param {object} book
+     * @returns {Promise<string|null>}
+     */
+    function getBookCoverUrl(book) {
+        if (typeof book.coverUrl === "function") {
+            return book.coverUrl();
+        }
+
+        if (book.archive && typeof book.archive.createUrl === "function" && book.cover) {
+            return book.archive.createUrl(book.cover);
+        }
+
+        return Promise.resolve(book.cover || null);
+    }
+
+    /**
+     * Renders a section using the request signature expected by the active epub.js build.
+     * @param {object} section
+     * @param {object} book
+     * @returns {Promise<string>}
+     */
+    function renderBookSection(section, book) {
+        return section.render(book.load.bind(book));
+    }
+
+    /**
+     * Applies reader typography defaults using the theming API available in the active epub.js build.
+     * @param {object} rendition
+     * @param {HTMLElement} reader
+     * @returns {void}
+     */
+    function applyReaderThemeDefaults(rendition, reader) {
+        const body_styles = {
             "font-family": reader.style.fontFamily + " !important",
             "font-size": reader.style.fontSize + " !important",
             "text-align": reader.style.textAlign + " !important",
             "line-height": reader.style.lineHeight + " !important",
             "padding": "0 5% !important"
+        };
+
+        if (typeof rendition.themes.default === "function") {
+            rendition.themes.default({
+                body: body_styles
+            });
+            return;
         }
-    });
 
-    rendition.themes.select(reader.className);
+        if (typeof rendition.themes.font === "function" && reader.style.fontFamily) {
+            rendition.themes.font(reader.style.fontFamily);
+        }
 
-    book.opened.then(function () {
+        if (typeof rendition.themes.fontSize === "function" && reader.style.fontSize) {
+            rendition.themes.fontSize(reader.style.fontSize);
+        }
+
+        if (typeof rendition.themes.appendRule === "function") {
+            if (reader.style.textAlign) {
+                rendition.themes.appendRule("text-align", reader.style.textAlign, true);
+            }
+
+            if (reader.style.lineHeight) {
+                rendition.themes.appendRule("line-height", reader.style.lineHeight, true);
+            }
+
+            rendition.themes.appendRule("padding", "0 5%", true);
+        }
+    }
+
+    /**
+     * Returns the active reader theme class expected by epub.js.
+     * @param {HTMLElement} reader
+     * @returns {string|null}
+     */
+    function getReaderThemeName(reader) {
+        const theme_names = ["darkmode", "lightmode", "sepiamode"];
+
+        for (const theme_name of theme_names) {
+            if (reader.classList.contains(theme_name)) {
+                return theme_name;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Applies theme registration and reader defaults to a rendition once it exists.
+     * @param {object} rendition
+     * @param {HTMLElement} reader
+     * @returns {void}
+     */
+    function setupRendition(rendition, reader) {
+        rendition.themes.register("darkmode", "/css/showebook.css");
+        rendition.themes.register("lightmode", "/css/showebook.css");
+        rendition.themes.register("sepiamode", "/css/showebook.css");
+
+        applyReaderThemeDefaults(rendition, reader);
+
+        const reader_theme_name = getReaderThemeName(reader);
+        if (reader_theme_name) {
+            rendition.themes.select(reader_theme_name);
+        }
+    }
+
+    // theming
+    let reader = document.getElementById("readerpage");
+    const book_open_promise = getEbook(ebook_id, fetchStatusHandler, book, reader);
+
+    waitForBookOpen(book_open_promise).then(function () {
         setTextAndAudioPos();
     });
 
-    book.loaded.spine.then((spine) => {
-        spine.each((item) => {
-            item.load(book.load.bind(book));
-        });
+    waitForBookOpen(book_open_promise).then(function () {
+        preloadBookSections(book);
     });
 
     let next = document.getElementById("next");
@@ -226,9 +457,12 @@ $(document).ready(function () {
         book.destroy();
     }); 
 
-    book.loaded.navigation.then(function (toc) {
+    waitForBookOpen(book_open_promise).then(function () {
+        return book.loaded.navigation;
+    }).then(function (navigation_or_toc) {
         const $nav = document.getElementById("toc");
         const docfrag = document.createDocumentFragment();
+        const toc = getNavigationToc(navigation_or_toc);
 
         $nav.classList.add("list-group");
 
@@ -270,7 +504,7 @@ $(document).ready(function () {
         }
     });
 
-    book.loaded.metadata.then(function (meta) {
+    getBookMetadata(book, book_open_promise).then(function (meta) {
         let $title = document.getElementById("title");
         let $book_title = document.getElementById("book-title");
         let $author = document.getElementById("author");
@@ -288,13 +522,11 @@ $(document).ready(function () {
             day: "numeric"
         }).format(new Date(meta.pubdate)) : "Not available";
 
-        if (book.archive) {
-            book.archive.createUrl(book.cover).then(function (url) {
+        getBookCoverUrl(book).then(function (url) {
+            if (url) {
                 $cover.src = url;
-            });
-        } else {
-            $cover.src = book.cover;
-        }
+            }
+        });
     }); 
 
     /**
@@ -374,7 +606,7 @@ $(document).ready(function () {
      * @returns {Promise<void>}
      */
     async function renderSection(section, item) {
-        const ebook_html = await section.render();
+        const ebook_html = await renderBookSection(section, book);
         const $parsed = cleanEbookHTML(ebook_html);
 
         setLoadingState(true);
@@ -398,7 +630,7 @@ $(document).ready(function () {
      * @returns {Promise<object|undefined>}
      */
     async function display(item) {
-        let section = book.spine.get(item);
+        let section = getBookSection(book, item);
 
         resetNextChapterButton();
 
@@ -476,7 +708,7 @@ $(document).ready(function () {
 
             next_href = next_section.href;
 
-            const next_nav = book.navigation.get(next_section.href);
+            const next_nav = getNavigationItem(book, next_section.href);
             if (next_nav && next_nav.label) {
                 next_label = next_nav.label;
             }
@@ -573,7 +805,7 @@ $(document).ready(function () {
         let $active_items_in_nav = $nav.querySelectorAll('.toc-item.bg-primary');
         let $title = document.getElementById('book-title-chapter');
         let $selector = getCurrentTocLink($nav, current_chapter_url);
-        let current_nav = book.navigation.get(current_chapter_url);
+        let current_nav = getNavigationItem(book, current_chapter_url);
 
         $active_items_in_nav.forEach(($item) => {
             $item.classList.remove('bg-primary', 'text-light');
@@ -585,7 +817,7 @@ $(document).ready(function () {
         }
 
         if (!current_nav && $selector) {
-            current_nav = book.navigation.get($selector.getAttribute('href'));
+            current_nav = getNavigationItem(book, $selector.getAttribute('href'));
         }
 
         if (current_nav && current_nav.label) {

@@ -116,15 +116,35 @@ $(document).ready(function() {
     } 
 
     /**
+     * Returns normalized book metadata across supported epub.js builds.
+     * @param {object} book
+     * @returns {Promise<object>}
+     */
+    function getBookMetadata(book) {
+        if (book.loaded && book.loaded.metadata) {
+            return book.loaded.metadata;
+        }
+
+        return book.opened.then(function() {
+            const metadata = book.packaging && book.packaging.metadata ? book.packaging.metadata : null;
+
+            return {
+                title: metadata ? (metadata.get("title") || "") : "",
+                creator: metadata ? (metadata.get("creator") || "") : ""
+            };
+        });
+    }
+
+    /**
      * Opens and renders an ebook using epub.js
      * @param {arrayBuffer} e
      */
     function openBook(e) {
         const book = ePub();
-        const bookData = e.target.result;
-        book.open(bookData);
+        const book_data = e.target.result;
+        book.open(book_data);
 
-        book.loaded.metadata.then(function(meta) {
+        getBookMetadata(book).then(function(meta) {
             const $title = document.getElementById("title");
             const $author = document.getElementById("author");
 
