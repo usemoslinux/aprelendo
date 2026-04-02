@@ -4,12 +4,13 @@ $(document).ready(function () {
     const doclang = $("html").attr("lang");
     const ebook_id = $("#text").attr("data-idText");
     const book = ePub();
+    const text = document.getElementById("text");
+    const reader = document.getElementById("readerpage");
+    const next = document.getElementById("next");
     let text_pos = "";
     let has_unsaved_reviews = false;
 
     window.parent.show_confirmation_dialog = true; // show confirmation dialog on close
-
-    let text = document.getElementById("text");
 
     /**
      * Throws error if response.status !== 200
@@ -50,14 +51,34 @@ $(document).ready(function () {
     }
 
     /**
-     * Resolves once the current ebook has been opened and internal epub.js promises are available.
-     * @param {Promise<object>} book_open_promise
+     * Posts URL-encoded form data and returns the JSON response payload.
+     *
+     * @param {string} url
+     * @param {Object|URLSearchParams} form_fields
+     * @param {string} default_error_message
      * @returns {Promise<object>}
      */
-    function waitForBookOpen(book_open_promise) {
-        return book_open_promise.then(function () {
-            return book;
+    async function postFormJson(url, form_fields, default_error_message) {
+        const form_data = form_fields instanceof URLSearchParams
+            ? form_fields
+            : new URLSearchParams(form_fields);
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: form_data
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (!data.success) {
+            throw new Error(data.error_msg || default_error_message);
+        }
+
+        return data;
     }
 
     /**
@@ -171,20 +192,18 @@ $(document).ready(function () {
      * @param {object} book
      * @returns {Promise<object>}
      */
-    function getBookMetadata(book, book_open_promise) {
+    function getBookMetadata(book) {
         if (book.loaded && book.loaded.metadata) {
             return book.loaded.metadata;
         }
 
-        return waitForBookOpen(book_open_promise).then(function () {
-            const metadata = book.packaging && book.packaging.metadata ? book.packaging.metadata : null;
+        const metadata = book.packaging && book.packaging.metadata ? book.packaging.metadata : null;
 
-            return {
-                title: metadata ? (metadata.get("title") || "") : "",
-                creator: metadata ? (metadata.get("creator") || "") : "",
-                publisher: metadata ? (metadata.get("publisher") || "") : "",
-                pubdate: metadata ? (metadata.get("pubdate") || metadata.get("date") || "") : ""
-            };
+        return Promise.resolve({
+            title: metadata ? (metadata.get("title") || "") : "",
+            creator: metadata ? (metadata.get("creator") || "") : "",
+            publisher: metadata ? (metadata.get("publisher") || "") : "",
+            pubdate: metadata ? (metadata.get("pubdate") || metadata.get("date") || "") : ""
         });
     }
 
@@ -203,16 +222,6 @@ $(document).ready(function () {
         }
 
         return Promise.resolve(book.cover || null);
-    }
-
-    /**
-     * Renders a section using the request signature expected by the active epub.js build.
-     * @param {object} section
-     * @param {object} book
-     * @returns {Promise<string>}
-     */
-    function renderBookSection(section, book) {
-        return section.render(book.load.bind(book));
     }
 
     /**
@@ -294,37 +303,33 @@ $(document).ready(function () {
         }
     }
 
-    // theming
-    let reader = document.getElementById("readerpage");
-    const book_open_promise = getEbook(ebook_id, fetchStatusHandler, book, reader);
+    /**
+     * Handles the next chapter button click.
+     *
+     * @param {Event} event
+     * @returns {Promise<void>}
+     */
+    async function handleNextChapterClick(event) {
+        event.preventDefault();
+        disposeTooltip(next);
 
-    waitForBookOpen(book_open_promise).then(function () {
-        setTextAndAudioPos();
-    });
+        const save_succeeded = await saveWords();
+        if (!save_succeeded) {
+            return;
+        }
 
-    waitForBookOpen(book_open_promise).then(function () {
-        preloadBookSections(book);
-    });
+        const url = next.getAttribute("href");
+        await display(url);
+    }
 
-    let next = document.getElementById("next");
-    next.addEventListener(
-        "click",
-        async function (e) {
-            e.preventDefault();
-            disposeTooltip(next);
-            const save_succeeded = await SaveWords();
-            if (!save_succeeded) {
-                return;
-            }
-            let url = next.getAttribute("href");
-            display(url);
-        },
-        false
-    );
-
-    $("body").on("click", "#btn-close-ebook", async function () {
+    /**
+     * Saves review state and reading position before closing the ebook reader.
+     *
+     * @returns {Promise<void>}
+     */
+    async function handleCloseEbookClick() {
         // save word status before closing
-        const save_succeeded = await SaveWords();
+        const save_succeeded = await saveWords();
         if (!save_succeeded) {
             return;
         }
@@ -354,7 +359,16 @@ $(document).ready(function () {
             window.parent.show_confirmation_dialog = false;
             window.location.replace("/texts");
         }
-    }); 
+    }
+
+    /**
+     * Destroys the ebook instance when the parent window unloads.
+     *
+     * @returns {void}
+     */
+    function handleReaderUnload() {
+        book.destroy();
+    }
 
     /**
      * Returns the current list of unique reviewed words in the text.
@@ -397,7 +411,7 @@ $(document).ready(function () {
      * Updates status of all underlined words & phrases
      * @returns {Promise<boolean>}
      */
-    async function SaveWords() {
+    async function saveWords() {
         if (!has_unsaved_reviews) {
             return true;
         }
@@ -410,39 +424,15 @@ $(document).ready(function () {
         }
 
         try {
-            const update_words_form_data = new URLSearchParams({ words: JSON.stringify(reviewed_words) });
-            
-            const update_words_response = await fetch("/ajax/updatewords.php", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: update_words_form_data
-            });
+            await postFormJson("/ajax/updatewords.php", {
+                words: JSON.stringify(reviewed_words)
+            }, "Failed to save text.");
 
-            if (!update_words_response.ok) throw new Error(`HTTP error: ${update_words_response.status}`);
-
-            const update_words_data = await update_words_response.json();
-
-            if (!update_words_data.success) {
-                throw new Error(update_words_data.error_msg || 'Failed to save text.');
-            } 
-            
             const review_data = buildReviewData();
 
-            const update_user_score_response = await fetch("/ajax/updateuserscore.php", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    'review_data': JSON.stringify(review_data)
-                })
-            });
-
-            if (!update_user_score_response.ok) { throw new Error(`HTTP error: ${update_user_score_response.status}`); }
-
-            const update_user_score_data = await update_user_score_response.json();
-
-            if (!update_user_score_data.success) {
-                throw new Error(update_user_score_data.error_msg || 'Failed to update user score.');
-            }
+            await postFormJson("/ajax/updateuserscore.php", {
+                review_data: JSON.stringify(review_data)
+            }, "Failed to update user score.");
 
             has_unsaved_reviews = false;
             return true;
@@ -451,15 +441,15 @@ $(document).ready(function () {
             alert(`Oops! ${error.message}`);
             return false;
         }
-    } 
+    }
 
-    parent.window.addEventListener("unload", function () {
-        book.destroy();
-    }); 
-
-    waitForBookOpen(book_open_promise).then(function () {
-        return book.loaded.navigation;
-    }).then(function (navigation_or_toc) {
+    /**
+     * Builds the table of contents UI for the loaded ebook.
+     *
+     * @returns {Promise<void>}
+     */
+    async function buildToc() {
+        const navigation_or_toc = await book.loaded.navigation;
         const $nav = document.getElementById("toc");
         const docfrag = document.createDocumentFragment();
         const toc = getNavigationToc(navigation_or_toc);
@@ -502,15 +492,21 @@ $(document).ready(function () {
         if ($nav.offsetHeight + 60 < window.innerHeight) {
             $nav.classList.add("fixed");
         }
-    });
+    }
 
-    getBookMetadata(book, book_open_promise).then(function (meta) {
-        let $title = document.getElementById("title");
-        let $book_title = document.getElementById("book-title");
-        let $author = document.getElementById("author");
-        let $publisher = document.getElementById("publisher");
-        let $pubdate = document.getElementById("pubdate");
-        let $cover = document.getElementById("cover");
+    /**
+     * Populates ebook metadata in the off-canvas sidebar.
+     *
+     * @returns {Promise<void>}
+     */
+    async function populateBookMetadata() {
+        const meta = await getBookMetadata(book);
+        const $title = document.getElementById("title");
+        const $book_title = document.getElementById("book-title");
+        const $author = document.getElementById("author");
+        const $publisher = document.getElementById("publisher");
+        const $pubdate = document.getElementById("pubdate");
+        const $cover = document.getElementById("cover");
 
         $title.textContent = (meta.title && meta.title.trim() !== "") ? meta.title : "Untitled";
         $book_title.textContent = (meta.title && meta.title.trim() !== "") ? meta.title : "Untitled";
@@ -522,12 +518,11 @@ $(document).ready(function () {
             day: "numeric"
         }).format(new Date(meta.pubdate)) : "Not available";
 
-        getBookCoverUrl(book).then(function (url) {
-            if (url) {
-                $cover.src = url;
-            }
-        });
-    }); 
+        const url = await getBookCoverUrl(book);
+        if (url) {
+            $cover.src = url;
+        }
+    }
 
     /**
      * Resets the next chapter button before rendering a new section.
@@ -556,21 +551,9 @@ $(document).ready(function () {
      * @returns {Promise<string>}
      */
     async function loadAnnotatedHtml(clean_html) {
-        const form_data = new URLSearchParams({ txt: clean_html });
-        const response = await fetch("/ajax/getuserwords.php", {
-            method: "POST",
-            body: form_data
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (!data.success) {
-            throw new Error(data.error_msg || 'Failed to get user words for underlining');
-        }
+        const data = await postFormJson("/ajax/getuserwords.php", {
+            txt: clean_html
+        }, "Failed to get user words for underlining");
 
         return TextUnderliner.apply(data.payload, doclang);
     } 
@@ -588,16 +571,17 @@ $(document).ready(function () {
     } 
 
     /**
-     * Synchronizes chapter navigation UI after a section render attempt.
+     * Updates navigation state after a section render completes.
+     *
      * @param {object} section
      * @param {string|number} item
      * @returns {void}
      */
-    function syncNavigationUi(section, item) {
+    function updateSectionNavigation(section, item) {
         updateNextChapterButton(section);
         text_pos = item;
         updateToc(section.href);
-    } 
+    }
 
     /**
      * Renders a section, annotates its content, and updates reader UI state.
@@ -606,7 +590,7 @@ $(document).ready(function () {
      * @returns {Promise<void>}
      */
     async function renderSection(section, item) {
-        const ebook_html = await renderBookSection(section, book);
+        const ebook_html = await section.render(book.load.bind(book));
         const $parsed = cleanEbookHTML(ebook_html);
 
         setLoadingState(true);
@@ -621,7 +605,7 @@ $(document).ready(function () {
             setLoadingState(false);
         }
 
-        syncNavigationUi(section, item);
+        updateSectionNavigation(section, item);
     } 
 
     /**
@@ -724,82 +708,124 @@ $(document).ready(function () {
         next.classList.remove('d-none');
     } 
 
-    function cleanEbookHTML(html) {
-        // Replace line breaks (\n or \r) with spaces.
-        html = html.replace(/[\r\n]+/g, ' ');
+    /**
+     * Wraps raw ebook HTML into a detached container after normalizing line breaks.
+     *
+     * @param {string} html
+     * @returns {JQuery}
+     */
+    function parseEbookHtml(html) {
+        const normalized_html = html.replace(/[\r\n]+/g, " ");
+        return $("<div/>").append(normalized_html);
+    }
 
-        // Wrap the provided HTML into a container.
-        let $parsed = $('<div/>').append(html);
-
-        // Remove HTML comments.
+    /**
+     * Removes comments and non-content elements from parsed ebook HTML.
+     *
+     * @param {JQuery} $parsed
+     * @returns {void}
+     */
+    function removeEbookNonContent($parsed) {
         $parsed.contents().filter(function () {
-            return this.nodeType === 8; // Node.COMMENT_NODE
+            return this.nodeType === 8;
         }).remove();
 
-        // Remove linked stylesheets.
-        $parsed.find('link[rel="stylesheet"]').remove();
+        $parsed.find("link[rel='stylesheet']").remove();
+        $parsed.find("head, meta, style, title, br").remove();
+    }
 
-        // Remove unwanted elements.
-        $parsed.find('head, meta, style, title, br').remove();
+    /**
+     * Removes formatting attributes while preserving minimal image attributes.
+     *
+     * @param {JQuery} $parsed
+     * @returns {void}
+     */
+    function stripEbookAttributes($parsed) {
+        $parsed.find("*").each(function () {
+            const tag = this.tagName.toLowerCase();
+            if (tag !== "img") {
+                $(this).removeAttr("class").removeAttr("style").removeAttr("id");
+                return;
+            }
 
-        // Remove formatting from all elements.
-        // For non-image elements, remove class, style, and id.
-        // For images, remove any attribute except 'src' and 'alt'.
-        $parsed.find('*').each(function () {
-            let tag = this.tagName.toLowerCase();
-            if (tag !== 'img') {
-                $(this).removeAttr('class').removeAttr('style').removeAttr('id');
-            } else {
-                // For each image, iterate over its attributes in reverse order.
-                for (let i = this.attributes.length - 1; i >= 0; i--) {
-                    let attr_name = this.attributes[i].name;
-                    if (attr_name !== 'src' && attr_name !== 'alt') {
-                        $(this).removeAttr(attr_name);
-                    }
+            for (let i = this.attributes.length - 1; i >= 0; i--) {
+                const attr_name = this.attributes[i].name;
+                if (attr_name !== "src" && attr_name !== "alt") {
+                    $(this).removeAttr(attr_name);
                 }
             }
         });
-
-        // Define the set of block-level elements that should have newline separation.
-        const block_elements = ['div', 'blockquote', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
-
-        // Recursively process nodes to build a plain string.
-        // For text nodes, return their content.
-        // For images, return the cleaned outerHTML.
-        // For block-level elements, insert newlines before and after their content.
-        function processNode(node) {
-            if (node.nodeType === Node.TEXT_NODE) {
-                return node.nodeValue;
-            }
-            if (node.nodeType === Node.ELEMENT_NODE) {
-                let tag = node.tagName.toLowerCase();
-                if (tag === 'img') {
-                    // Return the image element as minimal HTML.
-                    return node.outerHTML;
-                } else {
-                    let content = '';
-                    $(node).contents().each(function () {
-                        content += processNode(this);
-                    });
-                    if (block_elements.indexOf(tag) !== -1) {
-                        return "\n" + content + "\n";
-                    } else {
-                        return content;
-                    }
-                }
-            }
-            return '';
-        }
-
-        // Process the entire container.
-        let result = processNode($parsed[0]);
-
-        // Normalize newlines by replacing multiple consecutive newlines with a single newline and trimming.
-        result = result.replace(/\n\s*\n/g, "\n\n").trim();
-
-        return $('<div/>').append(result);
     }
 
+    /**
+     * Serializes a parsed ebook node into simplified HTML/text.
+     *
+     * @param {Node} node
+     * @param {string[]} block_elements
+     * @returns {string}
+     */
+    function serializeEbookNode(node, block_elements) {
+        if (node.nodeType === Node.TEXT_NODE) {
+            return node.nodeValue;
+        }
+
+        if (node.nodeType !== Node.ELEMENT_NODE) {
+            return "";
+        }
+
+        const tag = node.tagName.toLowerCase();
+        if (tag === "img") {
+            return node.outerHTML;
+        }
+
+        let content = "";
+        $(node).contents().each(function () {
+            content += serializeEbookNode(this, block_elements);
+        });
+
+        if (block_elements.includes(tag)) {
+            return "\n" + content + "\n";
+        }
+
+        return content;
+    }
+
+    /**
+     * Converts parsed ebook HTML into a simplified container ready for annotation.
+     *
+     * @param {JQuery} $parsed
+     * @returns {JQuery}
+     */
+    function buildCleanEbookContainer($parsed) {
+        const block_elements = ["div", "blockquote", "p", "h1", "h2", "h3", "h4", "h5", "h6"];
+        let result = serializeEbookNode($parsed[0], block_elements);
+
+        result = result.replace(/\n\s*\n/g, "\n\n").trim();
+
+        return $("<div/>").append(result);
+    }
+
+    /**
+     * Removes most ebook formatting while preserving the content needed for word annotation.
+     *
+     * @param {string} html
+     * @returns {JQuery}
+     */
+    function cleanEbookHTML(html) {
+        const $parsed = parseEbookHtml(html);
+
+        removeEbookNonContent($parsed);
+        stripEbookAttributes($parsed);
+
+        return buildCleanEbookContainer($parsed);
+    }
+
+    /**
+     * Highlights the current TOC item and updates the chapter title in the header.
+     *
+     * @param {string|number|null} current_chapter_url
+     * @returns {void}
+     */
     function updateToc(current_chapter_url) {
         let $nav = document.getElementById('toc');
         let $active_items_in_nav = $nav.querySelectorAll('.toc-item.bg-primary');
@@ -829,33 +855,28 @@ $(document).ready(function () {
         }
     } 
 
+    /**
+     * Restores the saved ebook section and media playback position.
+     *
+     * @returns {Promise<void>}
+     */
     async function setTextAndAudioPos() {
         // retrieve ebook & audio last reading position
         try {
-            const form_data = new URLSearchParams({ mode: "GET", id: ebook_id });
-            const response = await fetch("/ajax/ebookposition.php", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: form_data
-            });
+            const data = await postFormJson("/ajax/ebookposition.php", {
+                mode: "GET",
+                id: ebook_id
+            }, "Failed to get text and audio position.");
 
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-            const data = await response.json();
-
-            if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to get text and audio position.');
-            }
-            
-            const text_pos = data.payload.text_pos;
+            const saved_text_pos = data.payload.text_pos;
             const audio_pos = data.payload.audio_pos;
             const audio_pos_number = parseFloat(audio_pos);
             const audio = document.getElementById("audioplayer");
             const video = document.getElementById("videoplayer");
 
             // load text position, if available
-            if (text_pos) {
-                await display(text_pos);
+            if (saved_text_pos) {
+                await display(saved_text_pos);
             } else {
                 await display(1);
             }
@@ -882,28 +903,51 @@ $(document).ready(function () {
         }
     } 
 
+    /**
+     * Persists the current ebook section and media playback position.
+     *
+     * @param {string|number} text_pos
+     * @param {string|number} audio_pos
+     * @returns {Promise<boolean>}
+     */
     async function saveTextAndAudioPos(text_pos, audio_pos) {
         try {
-            const form_data = new URLSearchParams({ mode: "SAVE", id: ebook_id, audio_pos: audio_pos, text_pos: text_pos });
-            const response = await fetch("/ajax/ebookposition.php", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: form_data
-            });
-
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-            const data = await response.json();
-
-            if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to save text and audio position.');
-            }
-
+            await postFormJson("/ajax/ebookposition.php", {
+                mode: "SAVE",
+                id: ebook_id,
+                audio_pos: audio_pos,
+                text_pos: text_pos
+            }, "Failed to save text and audio position.");
             return true;
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
             return false;
         }
-    } 
+    }
+
+    /**
+     * Initializes ebook startup flow and binds page-level events.
+     *
+     * @returns {Promise<void>}
+     */
+    async function initializeEbookReader() {
+        next.addEventListener("click", handleNextChapterClick, false);
+        $("body").on("click", "#btn-close-ebook", handleCloseEbookClick);
+        parent.window.addEventListener("unload", handleReaderUnload);
+
+        await getEbook(ebook_id, fetchStatusHandler, book, reader);
+
+        preloadBookSections(book);
+
+        await Promise.all([
+            setTextAndAudioPos(),
+            buildToc(),
+            populateBookMetadata()
+        ]);
+    }
+
+    initializeEbookReader().catch((error) => {
+        console.error(error);
+    });
 });
