@@ -25,7 +25,7 @@ abstract class Table
         $html .= $this->printContent();
         $html .= $this->printFooter($sort_by);
         return $html;
-    } // end print()
+    } 
 
     /**
      * Prints table header
@@ -64,7 +64,7 @@ abstract class Table
         $html .= '</tr></thead><tbody>';
 
         return $html;
-    } // end printHeader()
+    } 
 
     /**
      * Prints table footer
@@ -82,7 +82,7 @@ abstract class Table
         $html .= '</div></div>'; // close table containers
 
         return $html;
-    } // end printFooter()
+    } 
 
     /**
      * Prints action menu
@@ -139,7 +139,7 @@ abstract class Table
         ];
 
         return $icons[$menu_text];
-    } // end generateActionMenuIcon()
+    } 
 
     /**
      * Prints sort menu

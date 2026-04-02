@@ -23,7 +23,7 @@ class ReportedTexts extends DBEntity
         $this->table = 'reported_texts';
         $this->text_id = $text_id;
         $this->user_id = $user_id;
-    } // end __construct()
+    } 
 
     /**
      * Adds record to reported_texts table
@@ -42,7 +42,7 @@ class ReportedTexts extends DBEntity
         $sql = "INSERT INTO `{$this->table}` (`text_id`, `user_id`, `reason`)
                 VALUES (?, ?, ?)";
         $this->sqlExecute($sql, [$this->text_id,$this->user_id, $this->reason]);
-    } // end add()
+    } 
 
     /**
      * Checks if text already was reported by this same user.
@@ -54,7 +54,7 @@ class ReportedTexts extends DBEntity
     {
         $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `text_id` = ? AND `user_id` = ?";
         return $this->sqlCount($sql, [$this->text_id, $this->user_id]);
-    } // end exists()
+    } 
 
     /**
      * Loads reported text data into class properties
@@ -70,5 +70,5 @@ class ReportedTexts extends DBEntity
         if ($row) {
             $this->reason = $row['reason'];
         }
-    } // end loadRecord()
+    } 
 }

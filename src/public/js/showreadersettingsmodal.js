@@ -9,7 +9,7 @@ $(document).ready(function() {
      */
     function getFontSizeCssValue(font_size) {
         return font_size + "rem";
-    } // end getFontSizeCssValue
+    } 
 
     $('#btn-save-reader-prefs').on('click', async function () {
         // apply color mode
@@ -60,5 +60,5 @@ $(document).ready(function() {
             console.error(error);
             showMessage(error.message, "alert-danger");
         }
-    }); // end #btn-save-reader-prefs.on.click
+    }); 
 });

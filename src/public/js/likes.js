@@ -32,7 +32,7 @@ $(document).ready(function() {
             console.error("Error", error);
             toggleLike($like_btn); // Revert the like on any error
         }
-    }); // end span.bi-heart-fill.on.click
+    }); 
 
     function toggleLike($like_btn) {
         $like_btn.toggleClass("bi-heart bi-heart-fill");

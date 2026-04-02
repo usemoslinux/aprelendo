@@ -14,7 +14,7 @@ class Conversion
     public static function jsonToCsv(string $json)
     {
         return implode(',', json_decode($json));
-    } // end jsonToCsv()
+    } 
 
     /**
      * Converts Array to CSV
@@ -29,7 +29,7 @@ class Conversion
         } else {
             return "'$array'";
         }
-    } // end arrayToCsv()
+    } 
 
     /**
      * Convert an array to XML

@@ -60,7 +60,7 @@ class WordFrequency extends DBEntity
         Cache::set($cache_key, $val);
 
         return $val;
-    } // end get()
+    } 
 
     /**
      * Gets High Frequency List for language
@@ -84,5 +84,5 @@ class WordFrequency extends DBEntity
         Cache::set($cache_key, $rows);
 
         return $rows;
-    } // end getHighFrequencyList()
+    } 
 }

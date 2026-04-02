@@ -10,7 +10,7 @@ $(document).ready(function() {
     $('#btn-show-import-modal').on('click', function() {
         last_trigger_element = this;
         modal_instance.show();
-    }); // end #btn-show-import-modal.on.click
+    }); 
 
     $('#words-upload-input').on('change', function(e) {
         let file = e.target.files[0];
@@ -35,7 +35,7 @@ $(document).ready(function() {
         document.getElementById('words-table-wrap').classList.toggle('d-none');
         document.getElementById('btn-import-words').disabled = false;
         document.getElementById('words-upload-input').value = '';
-    }); // end #words-upload-input.on.change
+    }); 
     
     function populateTable(words_array) {
         let tableBody = document.getElementById('words-table').querySelector('tbody');
@@ -47,14 +47,14 @@ $(document).ready(function() {
     
             cellWord.textContent = item;
         });
-    } // end populateTable
+    } 
 
     $('#import-words-modal').on('show.bs.modal', function(event_data) {
         let trigger_element = event_data.relatedTarget;
         if (trigger_element) {
             last_trigger_element = trigger_element;
         }
-    }); // end #import-words-modal.on.show.bs.modal
+    }); 
 
     $('#import-words-modal').on('hide.bs.modal', function () {
         let modal_element = this;
@@ -62,11 +62,11 @@ $(document).ready(function() {
         if (active_element && modal_element.contains(active_element)) {
             active_element.blur();
         }
-    }) // end #import-words-modal.on.hide.bs.modal
+    }) 
 
     $('#btn-cancel-import').on('click', function() {
         modal_instance.hide();
-    }); // end #btn-cancel-import.on.click
+    }); 
 
     $('#import-words-modal').on('hidden.bs.modal', function () {
         document.getElementById('words-table-wrap').classList.add('d-none');
@@ -77,7 +77,7 @@ $(document).ready(function() {
             last_trigger_element.focus();
             last_trigger_element = null;
         }
-    }) // end #import-words-modal.on.hidden.bs.modal
+    }) 
 
     $('#btn-import-words').on('click', async function() {
         try {
@@ -96,7 +96,7 @@ $(document).ready(function() {
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
-    }); // end #btn-import-words.on.click
+    }); 
 
     $('#words-upload-wrap').on('click', function(e) {
         e.preventDefault();
@@ -109,14 +109,14 @@ $(document).ready(function() {
         e.stopPropagation();
         // Add some visual feedback for drag over
         $(this).addClass('words-dropping');
-    }); // end #words-upload-wrap.on.dragover
+    }); 
 
     $('#words-upload-wrap').on('dragleave', function(e) {
         e.preventDefault();
         e.stopPropagation();
         // Remove visual feedback
         $(this).removeClass('words-dropping');
-    }); // end #words-upload-wrap.on.dragleave
+    }); 
     
     $('#words-upload-wrap').on('drop', function(e) {
         e.preventDefault();
@@ -135,5 +135,5 @@ $(document).ready(function() {
             // Trigger change event
             $('#words-upload-input').trigger('change');
         }
-    }); // end #words-upload-wrap.on.drop
+    }); 
 });

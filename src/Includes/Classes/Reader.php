@@ -43,7 +43,7 @@ class Reader
             
             $this->is_long_text = mb_strlen($this->text->text) > self::MAX_TEXT_LENGTH;
         }
-    } // end __construct()
+    } 
 
     /**
      * Constructs HTML code to show text in reader
@@ -112,7 +112,7 @@ class Reader
         $html .= '<div id="text">' . $this->text->text . '</div>';
         $html .= '</div>';
         return $html;
-    } // end showText()
+    } 
 
     /**
      * Constructs HTML code to show text in reader
@@ -145,7 +145,7 @@ class Reader
         $html .= '</div></div>';
 
         return $html;
-    } // end showVideo()
+    } 
 
     /**
      * Constructs HTML code to show an offline video
@@ -174,7 +174,7 @@ class Reader
             . '<div class="text-muted">No video or subtitles loaded yet. Use the blue buttons above to load them.</div>'
             . '</div></div>';
         return $html;
-    } // end showOfflineVideo()
+    } 
 
     /**
      * Returns true if text has an external audio_uri
@@ -184,5 +184,5 @@ class Reader
     public function hasExternalAudio(): bool
     {
         return !empty($this->text->audio_uri);
-    } // end hasExternalAudio()
+    } 
 }

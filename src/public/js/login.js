@@ -31,5 +31,5 @@ $(document).ready(function() {
             console.error(error);
             showMessage(error.message, "alert-danger");
         }
-    }); // end #form_login.on.submit
+    }); 
 });

@@ -90,7 +90,7 @@ class Curl
         }
     
         return (strtolower($charset) === 'utf-8') ? $result : iconv($charset, 'utf-8', $result);
-    } // end getUrlContents()
+    } 
 
     /**
      * Gets final URL after HTTP redirects

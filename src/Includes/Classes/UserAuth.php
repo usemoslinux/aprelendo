@@ -48,7 +48,7 @@ class UserAuth extends DBEntity
         } else { // wrong password
             throw new UserException('Username and password combination is incorrect. Please try again.');
         }
-    } // end login()
+    } 
     
     /**
      * Logout user
@@ -63,7 +63,7 @@ class UserAuth extends DBEntity
         if ($deleted_account || $this->isLoggedIn()) {
             setcookie('user_token', '', time() - 3600, "/", $domain, true); // delete user_token cookie
         }
-    } // end logout()
+    } 
         
     /**
      * Checks if user is logged
@@ -93,5 +93,5 @@ class UserAuth extends DBEntity
     
         // Both token and user are valid
         return true;
-    } // end isLoggedIn()
+    } 
 }

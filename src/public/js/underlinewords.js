@@ -12,7 +12,7 @@ const TextUnderliner = (() => {
      */
     function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-    } // end escapeRegExp()
+    } 
 
     /**
      * Adds underlining to user-specified phrases within the text, marking them based on their learning status.
@@ -61,7 +61,7 @@ const TextUnderliner = (() => {
         }
 
         return text;
-    } // end underlineUserPhrases()
+    } 
 
     /**
      * Adds underlining to user-specified words within the text, marking them based on their learning status.
@@ -185,7 +185,7 @@ const TextUnderliner = (() => {
         });
 
         return text;
-    } // end underlineFrequentWords()
+    } 
 
     /**
      * Modifies the provided text to make unknown words clickable.
@@ -218,7 +218,7 @@ const TextUnderliner = (() => {
         });
 
         return result;
-    } // end addLinks()
+    } 
 
     /**
      * Processes the given text to underline words based on their status in the user's vocabulary list and their frequency

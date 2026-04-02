@@ -24,7 +24,7 @@ class Preferences extends DBEntity
         parent::__construct($pdo);
         $this->table = 'preferences';
         $this->user_id = $user_id;
-    } // end __construct()
+    } 
 
     /**
      * Saves user preferences
@@ -61,7 +61,7 @@ class Preferences extends DBEntity
             $this->user_id, $this->font_family, $this->font_size, $this->line_height,
             $this->text_alignment, $this->display_mode, (int)$this->assisted_learning
         ]);
-    } // end edit()
+    } 
 
     /**
      * Loads user preferences data
@@ -82,7 +82,7 @@ class Preferences extends DBEntity
             $this->display_mode      = $row['display_mode'];
             $this->assisted_learning = $row['assisted_learning'];
         }
-    } // end loadRecord()
+    } 
 
     /**
      * Returns the CSS font size value for reader views.
@@ -92,6 +92,6 @@ class Preferences extends DBEntity
     public function getFontSizeCssValue(): string
     {
         return $this->font_size . 'rem';
-    } // end getFontSizeCssValue()
+    } 
 
 }

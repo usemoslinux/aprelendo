@@ -208,7 +208,7 @@ $(document).ready(function () {
                 e.preventDefault();
             }
         }
-    }); // end .dict.on.keydown
+    }); 
 
     /**
      * Implements shortcuts for dictation
@@ -255,7 +255,7 @@ $(document).ready(function () {
         if (!isComposingInput($(this))) {
             focusNextIfComplete($(this));
         }
-    }); // end .dict.on.input
+    }); 
 });
 
 /**
@@ -343,4 +343,4 @@ function toggleDictation() {
             AudioController.stop();
         }
     }
-} // end toggleDictation
+} 

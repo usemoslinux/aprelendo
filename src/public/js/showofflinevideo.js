@@ -133,7 +133,7 @@ $(document).ready(function () {
             VideoActionBtns.hide();
             VideoController.resume();
         }
-    }); // end #btn-add.on.click
+    }); 
 
     $("#btn-remove").on("click", async function () {
         const $action_button = $(this);
@@ -236,7 +236,7 @@ $(document).ready(function () {
             VideoActionBtns.hide();
             VideoController.resume();
         }
-    }); // end #btn-remove.on.click
+    }); 
 
     // *************************************************************
     // ******************* MAIN MENU BUTTONS ***********************
@@ -346,7 +346,7 @@ $(document).ready(function () {
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
-    } // end #btn-save-offline-video.on.click
+    } 
 
     /**
      * Open video selection dialog
@@ -354,7 +354,7 @@ $(document).ready(function () {
     $("#btn-selvideo").on("click", function (e) {
         e.preventDefault();
         $("#video-file-input").trigger('click');
-    }); // end #btn-selvideo.on.click
+    }); 
 
     /**
      * After user selects video, load it
@@ -372,7 +372,7 @@ $(document).ready(function () {
                 player.src = current_blob_url;
             }
         }
-    }); // end #video-file-input.on.change
+    }); 
 
     /**
      * Open subtitle selection dialog
@@ -380,7 +380,7 @@ $(document).ready(function () {
     $("#btn-selsubs").on("click", function (e) {
         e.preventDefault();
         $("#subs-file-input").trigger('click');
-    }); // end #btn-selsubs.on.click
+    }); 
     
     /**
      * Load subtitles selected by user
@@ -448,7 +448,7 @@ $(document).ready(function () {
             $("#nosubs").remove(); // remove "no subtitles loaded" message
             $("#btn-save-offline-video").removeClass("disabled"); // enable save button
         }
-    }); // end #subs-file-input.on.change
+    }); 
 
     /**
      * Updates vh value on window resize
@@ -466,7 +466,7 @@ $(document).ready(function () {
         if (show_confirmation_dialog) {
             return 'Press Save before you go or your changes will be lost.';
         }
-    }); // end window.on.beforeunload
+    }); 
 
     /**
      * Releases any video blob URL when the page is actually unloading.
@@ -478,5 +478,5 @@ $(document).ready(function () {
             URL.revokeObjectURL(current_blob_url);
             current_blob_url = null;
         }
-    }); // end window.on.unload
+    }); 
 });

@@ -29,7 +29,7 @@ class TextTable extends Table
         $this->has_chkbox = true;
         $this->is_shared = false;
         $this->show_archived = $show_archived;
-    } // end __construct()
+    } 
 
     /**
      * Generates the HTML content for the table rows
@@ -45,7 +45,7 @@ class TextTable extends Table
         }
     
         return $html;
-    } // end printContent()
+    } 
     
     /**
      * Generates the HTML for a single table row
@@ -76,7 +76,7 @@ class TextTable extends Table
         $html .= '</tr>';
     
         return $html;
-    } // end generateTableRow()
+    } 
 
     /**
      * Generates the audio icon HTML for a row
@@ -99,7 +99,7 @@ class TextTable extends Table
         }
         
         return $result;
-    } // end generateAudioIcon()
+    } 
 
     /**
      * Generates the HTML link for a row
@@ -131,7 +131,7 @@ class TextTable extends Table
         $link_html .= $title . '</a>';
 
         return $link_html ;
-    } // end generateLink()
+    } 
 
     /**
      * Prints action menu
@@ -189,7 +189,7 @@ class TextTable extends Table
         return !empty($row['word_count'])
             ? ' - ' . number_format($row['word_count']) . ' words'
             : '';
-    } // end formatWordCount()
+    } 
     
     /**
      * Formats and returns the text level HTML for a row
@@ -204,7 +204,7 @@ class TextTable extends Table
         return !empty($row['level'])
             ? ' - ' . $levels[$row['level'] - 1]
             : '';
-    } // end formatTextLevel()
+    } 
     
     /**
      * Generates the HTML for the checkbox cell
@@ -228,7 +228,7 @@ class TextTable extends Table
             return '<td class="text-center"><span title="Like"><span class="' . $user_liked . '" '
                 . 'data-idText="' . $text_id . '"></span><br><small>' . $total_likes . '</small></span></td>';
         }
-    } // end generateCheckboxCell()
+    } 
 
     /**
      * Generates the audio icon HTML for a row
@@ -239,7 +239,7 @@ class TextTable extends Table
     private function generateTypeIcon(array $row): string
     {
         return $row['icon_html'] ?? '';
-    } // end generateTypeIcon()
+    } 
     
     /**
      * Formats and returns the text author information
@@ -264,7 +264,7 @@ class TextTable extends Table
         }
     
         return $text_author . $shared_by;
-    } // end formatTextAuthor()
+    } 
     
     /**
      * Formats and returns the shared by information
@@ -275,5 +275,5 @@ class TextTable extends Table
     private function formatSharedBy(array $row): string
     {
         return !empty($row[1]) ? " via {$row[1]}" : '';
-    } // end formatSharedBy()
+    } 
 }

@@ -16,7 +16,7 @@ class ArchivedTexts extends Texts
     {
         parent::__construct($pdo, $user_id, $lang_id);
         $this->table = 'archived_texts';
-    } // end __construct()
+    } 
 
     /**
      * Unarchives text by using their $ids
@@ -46,4 +46,4 @@ class ArchivedTexts extends Texts
             throw new InternalException('Could not unarchive texts.');
         }
     }
-} // end unarchive()
+} 

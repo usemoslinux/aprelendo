@@ -29,7 +29,7 @@ class Card extends DBEntity
         $lang = new Language($pdo, $user_id);
         $lang->loadRecordById($lang_id);
         $this->lang_iso = $lang->name;
-    } // end __construct()
+    } 
 
     /**
      * Gets a list of all the words the user is learning.
@@ -59,7 +59,7 @@ class Card extends DBEntity
                 LIMIT $limit";
 
         return $this->sqlFetchAll($sql, $params);
-    } // end getWordsUserIsLearning()
+    } 
 
     /**
      * Gets example sentences in private texts (both active and archived), except ebooks, as well as
@@ -98,7 +98,7 @@ class Card extends DBEntity
         }
 
         return $result;
-    } // end getExampleSentencesForWord()
+    } 
 
     /**
      * Returns a list of texts that include a specific word/phrase

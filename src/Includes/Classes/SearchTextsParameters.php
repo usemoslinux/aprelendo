@@ -50,7 +50,7 @@ class SearchTextsParameters extends SearchParameters
             3 => '`total_likes`', // less likes first (only for shared texts)
             default => '',
         };
-    } // end buildSortSQL
+    } 
 
     /**
      * Converts filter patterns selected by user (expressed as an integer value in the filter menu)
@@ -61,7 +61,7 @@ class SearchTextsParameters extends SearchParameters
     public function buildFilterTypeSQL(): string
     {
         return $this->filter_type == 0 ? '>= ?' : '= ?';
-    } // end buildFilterTypeSQL()
+    } 
 
     /**
      * Converts sorting patterns selected by user (expressed as an integer value in the filter menu)
@@ -72,5 +72,5 @@ class SearchTextsParameters extends SearchParameters
     public function buildFilterLevelSQL(): string
     {
         return $this->filter_level == 0 ? '>= ?' : '= ?';
-    } // end buildFilterLevelSQL()
+    } 
 }

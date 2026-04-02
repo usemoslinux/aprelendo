@@ -124,7 +124,7 @@ class Videos extends DBEntity
         $this->table = 'shared_texts';
         $this->user_id = $user_id;
         $this->lang_id = $lang_id;
-    } // end __construct()
+    } 
 
     /**
      * Fetches video from YouTube
@@ -233,7 +233,7 @@ class Videos extends DBEntity
     {
         return "https://filmot.com/captionLanguageSearch?captionLanguages=" . $this->lang
             . "&sortField=viewcount&sortOrder=desc&capLangExactMatch=1";
-    } // end getFilmotUrl()
+    } 
 
     /**
      * Fetch video metadata (title and author) using YouTube API
@@ -271,7 +271,7 @@ class Videos extends DBEntity
         }
 
         throw new UserException('Malformed YouTube link');
-    } // end extractYTId()
+    } 
 
     /**
      * Check if a given URL is a valid YouTube video link
@@ -282,7 +282,7 @@ class Videos extends DBEntity
     public static function isYTVideo(string $url): bool
     {
         return (bool) preg_match(self::YT_REGEX, $url);
-    } // end isYTVideo()
+    } 
 
     /**
      * Converts any supported YouTube URL (mobile, shortened) 
@@ -292,7 +292,7 @@ class Videos extends DBEntity
     {
         $id = self::extractYTId($url);
         return self::YT_DESKTOP_BASE_URL . $id;
-    } // end toDesktopUrl()
+    } 
 
     /**
      * Loads video record data by Id
@@ -316,5 +316,5 @@ class Videos extends DBEntity
             $this->date_created   = $row['date_created'];
             $this->youtube_id     = self::extractYTId($this->source_url);
         }
-    } // end loadRecord()
+    } 
 }

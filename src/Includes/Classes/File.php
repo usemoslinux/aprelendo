@@ -24,7 +24,7 @@ class File
         $this->path = realpath(UPLOADS_PATH . $file_name);
         $this->extension = empty($file_name) ? 0 : pathinfo($file_name, PATHINFO_EXTENSION);
         $this->size = empty($file_name) ? 0 : filesize($this->path);
-    } // end __construct()
+    } 
 
     /**
      * Deletes file from system
@@ -40,7 +40,7 @@ class File
             }
         }
         return false;
-    } // end delete()
+    } 
 
     /**
      * Uploads files
@@ -95,7 +95,7 @@ class File
             $error_str = '<ul>' . implode("<br>", $errors) . '</ul>'; // show upload errors
             throw new UserException($error_str);
         }
-    } // end put()
+    } 
     
     /**
      * Moves file from temporary folder to uploads folder
@@ -113,7 +113,7 @@ class File
         if (!move_uploaded_file($source_path, $destination_path)) {
             throw new UserException("<li>There was an error uploading your file.</li>");
         }
-    } // end move()
+    } 
     
     /**
      * Gets file
@@ -134,5 +134,5 @@ class File
         }
 
         return readfile($file);
-    } // end get()
+    } 
 }

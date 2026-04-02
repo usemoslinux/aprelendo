@@ -20,7 +20,7 @@ class Token extends DBEntity
     {
         parent::__construct($pdo);
         $this->table = 'auth_tokens';
-    } // end __construct()
+    } 
 
     /**
      * Deletes old tokens from db
@@ -30,7 +30,7 @@ class Token extends DBEntity
     private function deleteOld(): void
     {
         $this->pdo->query("DELETE FROM `{$this->table}` WHERE `expires` < NOW()");
-    } // end deleteOld()
+    } 
 
     /**
      * Loads Record data in object properties (looks record in db by id)
@@ -44,7 +44,7 @@ class Token extends DBEntity
         $row = $this->sqlFetch($sql, [$id]);
         
         $this->loadObject($row);
-    } // end loadRecord()
+    } 
 
     /**
      * Loads Record data in object properties (looks record in db by token)
@@ -58,7 +58,7 @@ class Token extends DBEntity
         $row = $this->sqlFetch($sql, [$token_cookie]);
         
         $this->loadObject($row);
-    } // end loadRecordByCookieString()
+    } 
 
     /**
      * Loads Record data in object properties
@@ -74,7 +74,7 @@ class Token extends DBEntity
             $this->token    = $record['token'];
             $this->expires  = $record['expires'];
         }
-    } // end loadObject()
+    } 
 
     /**
      * Generate token to store in cookie
@@ -85,7 +85,7 @@ class Token extends DBEntity
     private function generate($length = 20)
     {
         return bin2hex(random_bytes($length));
-    } // end generate()
+    } 
 
     /**
      * Adds token to db
@@ -120,5 +120,5 @@ class Token extends DBEntity
                 throw new UserException('Error creating token cookie.');
             }
         }
-    } // end add()
+    } 
 }

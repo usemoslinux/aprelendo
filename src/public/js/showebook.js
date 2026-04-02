@@ -22,7 +22,7 @@ $(document).ready(function () {
             throw new Error(response.statusText);
         }
         return response;
-    } // end fetchStatusHandler
+    } 
 
     /**
      * Ajax call to fetch an ebook. Response has to be converted to arrayBuffer to allow
@@ -123,7 +123,7 @@ $(document).ready(function () {
             window.parent.show_confirmation_dialog = false;
             window.location.replace("/texts");
         }
-    }); // end #btn-close-ebook.on.click
+    }); 
 
     /**
      * Returns the current list of unique reviewed words in the text.
@@ -145,7 +145,7 @@ $(document).ready(function () {
             });
 
         return reviewed_words;
-    } // end collectReviewedWords
+    } 
 
     /**
      * Builds the review payload used to update user score.
@@ -160,7 +160,7 @@ $(document).ready(function () {
             },
             texts: { reviewed: 1 }
         };
-    } // end buildReviewData
+    } 
 
     /**
      * Updates status of all underlined words & phrases
@@ -220,11 +220,11 @@ $(document).ready(function () {
             alert(`Oops! ${error.message}`);
             return false;
         }
-    } // end SaveWords
+    } 
 
     parent.window.addEventListener("unload", function () {
         book.destroy();
-    }); // end parent.window.unload
+    }); 
 
     book.loaded.navigation.then(function (toc) {
         const $nav = document.getElementById("toc");
@@ -295,7 +295,7 @@ $(document).ready(function () {
         } else {
             $cover.src = book.cover;
         }
-    }); // end book.loaded.metadata
+    }); 
 
     /**
      * Resets the next chapter button before rendering a new section.
@@ -306,7 +306,7 @@ $(document).ready(function () {
         next.textContent = "";
         next.classList.add('d-none');
         next.href = "#";
-    } // end resetNextChapterButton
+    } 
 
     /**
      * Toggles the loading state for the reader content area.
@@ -316,7 +316,7 @@ $(document).ready(function () {
     function setLoadingState(is_loading) {
         $(".loading-spinner-container").toggleClass("show", is_loading);
         $("#text-container").toggleClass("show", !is_loading);
-    } // end setLoadingState
+    } 
 
     /**
      * Loads user word data and returns the annotated section HTML.
@@ -341,7 +341,7 @@ $(document).ready(function () {
         }
 
         return TextUnderliner.apply(data.payload, doclang);
-    } // end loadAnnotatedHtml
+    } 
 
     /**
      * Renders annotated section HTML into the text container.
@@ -353,7 +353,7 @@ $(document).ready(function () {
         TextProcessor.updateAnchorsList();
         has_unsaved_reviews = $("#text").find(".reviewing").length > 0;
         scrollToPageTop();
-    } // end renderSectionContent
+    } 
 
     /**
      * Synchronizes chapter navigation UI after a section render attempt.
@@ -365,7 +365,7 @@ $(document).ready(function () {
         updateNextChapterButton(section);
         text_pos = item;
         updateToc(section.href);
-    } // end syncNavigationUi
+    } 
 
     /**
      * Renders a section, annotates its content, and updates reader UI state.
@@ -390,7 +390,7 @@ $(document).ready(function () {
         }
 
         syncNavigationUi(section, item);
-    } // end renderSection
+    } 
 
     /**
      * Displays an ebook section in the reader.
@@ -407,7 +407,7 @@ $(document).ready(function () {
         }
 
         return section;
-    } // end display
+    } 
 
     /**
      * Normalizes an internal EPUB chapter href so spine and TOC links can be matched reliably.
@@ -431,7 +431,7 @@ $(document).ready(function () {
             const href_string = String(chapter_href);
             return include_fragment ? href_string : href_string.split('#')[0];
         }
-    } // end normalizeChapterHref
+    } 
 
     /**
      * Returns the TOC link for the current chapter using normalized href matching.
@@ -451,7 +451,7 @@ $(document).ready(function () {
         return toc_links.find(($link) => $link.dataset.chapter_href === normalized_href)
             || toc_links.find(($link) => $link.dataset.chapter_path === normalized_path)
             || null;
-    } // end getCurrentTocLink
+    } 
 
     /**
      * Updates the next chapter button, preferring TOC order so it behaves like clicking a TOC item.
@@ -490,7 +490,7 @@ $(document).ready(function () {
         }
 
         next.classList.remove('d-none');
-    } // end updateNextChapterButton
+    } 
 
     function cleanEbookHTML(html) {
         // Replace line breaks (\n or \r) with spaces.
@@ -595,7 +595,7 @@ $(document).ready(function () {
         } else {
             $title.textContent = '';
         }
-    } // end updateToc
+    } 
 
     async function setTextAndAudioPos() {
         // retrieve ebook & audio last reading position
@@ -648,7 +648,7 @@ $(document).ready(function () {
                 audio.currentTime = 0;
             }
         }
-    } // end setTextAndAudioPos
+    } 
 
     async function saveTextAndAudioPos(text_pos, audio_pos) {
         try {
@@ -673,5 +673,5 @@ $(document).ready(function () {
             alert(`Oops! ${error.message}`);
             return false;
         }
-    } // end saveTextAndAudioPos
+    } 
 });

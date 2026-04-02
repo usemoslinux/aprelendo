@@ -16,7 +16,7 @@ abstract class DBEntity
     public function __construct(\PDO $pdo)
     {
         $this->pdo = $pdo;
-    } // end __construct()
+    } 
 
     /**
      * Executes custom SQL
@@ -35,7 +35,7 @@ abstract class DBEntity
         } finally {
             $stmt = null;
         }
-    } // end sqlExecute()
+    } 
 
     /**
      * Executes custom SQL fetch
@@ -61,7 +61,7 @@ abstract class DBEntity
         } finally {
             $stmt = null;
         }
-    } // end sqlFetch()
+    } 
 
     /**
      * Executes custom SQL fetchAll
@@ -87,7 +87,7 @@ abstract class DBEntity
         } finally {
             $stmt = null;
         }
-    } // end sqlFetchAll()
+    } 
 
     /**
      * Returns first column of first row (typically used with COUNT sql statementscount)
@@ -107,5 +107,5 @@ abstract class DBEntity
         } finally {
             $stmt = null;
         }
-    } // end sqlCount()
+    } 
 }

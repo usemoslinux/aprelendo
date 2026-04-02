@@ -13,5 +13,5 @@ $(document).ready(function() {
     $("#removecookie").on("click", function() {
         setCookie("accept_cookies", true, 365 * 10);
         $banner.removeClass("show");
-    }); // end #removecookie.on.click
+    }); 
 });

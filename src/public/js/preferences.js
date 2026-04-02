@@ -33,5 +33,5 @@ $(document).ready(function() {
             console.error(error);
             showMessage(error.message, "alert-danger");
         }
-    }); // end #prefs-form.submit
+    }); 
 });

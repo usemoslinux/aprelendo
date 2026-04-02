@@ -35,7 +35,7 @@ class Texts extends DBEntity
         $this->table = 'texts';
         $this->user_id = $user_id;
         $this->lang_id = $lang_id;
-    } // end __construct()
+    } 
 
     /**
      * Loads text record data
@@ -64,7 +64,7 @@ class Texts extends DBEntity
             $this->text_pos      = $row['text_pos'] ?? '';
             $this->audio_pos     = $row['audio_pos'] ?? '';
         }
-    } // end loadRecord()
+    } 
         
     /**
     * Adds a new text to the database
@@ -122,7 +122,7 @@ class Texts extends DBEntity
         $pop_sources->add($lang_iso, Url::getDomainName($source_url));
 
         return $insert_id;
-    } // end add()
+    } 
 
     /**
     * Updates existing text in database
@@ -144,7 +144,7 @@ class Texts extends DBEntity
         $params = array_values($columns);
         $params[] = $id; // add $id last
         $this->sqlExecute($sql, $params);
-    } // end update()
+    } 
     
     /**
     * Deletes texts in database using ids as a parameter to select them
@@ -177,7 +177,7 @@ class Texts extends DBEntity
             
             $pop_sources->update($lang->name, Url::getDomainName($uri['source_uri']));
         }
-    } // end delete()
+    } 
     
     /**
     * Archives texts in database using ids as a parameter to select them
@@ -206,7 +206,7 @@ class Texts extends DBEntity
 
             throw new InternalException('Could not archive texts.');
         }
-    } // end archive()
+    } 
 
     /**
     * Shares texts in database using ids as a parameter to select them
@@ -249,7 +249,7 @@ class Texts extends DBEntity
 
             throw new InternalException('Could not share text.');
         }
-    } // end share()
+    } 
 
     /**
      * Checks if text already exists in database, to avoid duplicate entries.
@@ -270,7 +270,7 @@ class Texts extends DBEntity
                 (SELECT COUNT(*) FROM `archived_texts` WHERE `user_id` = ? AND `source_uri` = ?)
                 AS SumCount";
         return $this->sqlCount($sql, [$this->user_id, $source_url, $this->user_id, $source_url]);
-    } // end exists()
+    } 
     
     /**
     * Counts the number of rows (i.e. texts) for a specific search
@@ -292,7 +292,7 @@ class Texts extends DBEntity
                 AND `lang_id`=? $filter_level_sql $filter_type_sql AND `title` LIKE ?";
 
         return $this->sqlCount($sql, [$this->user_id, $this->lang_id, $filter_level, $filter_type, $search_text]);
-    } // end countSearchRows()
+    } 
     
     /**
     * Returns the search results for a text using the parameters chosen by the user
@@ -332,5 +332,5 @@ class Texts extends DBEntity
         return $this->sqlFetchAll($sql, [
             $this->user_id, $this->lang_id, $search_params->filter_level, $search_params->filter_type, $search_text
         ]);
-    } // end search()
+    } 
 }

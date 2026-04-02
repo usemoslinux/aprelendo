@@ -32,7 +32,7 @@ async function googleLogIn(googleUser) {
         console.error(error);
         showMessage(error.message, "alert-danger");
     }
-} // end googleLogIn
+} 
 
 /**
  * Decodes Google credentials JWT token
@@ -46,4 +46,4 @@ function decodeJwtResponse(token) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
     return JSON.parse(jsonPayload)
-} // end decodeJwtResponse
+} 

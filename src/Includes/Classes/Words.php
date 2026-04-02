@@ -33,7 +33,7 @@ class Words extends DBEntity
         $this->table = 'words';
         $this->user_id = $user_id;
         $this->lang_id = $lang_id;
-    } // end __construct()
+    } 
 
     /**
      * Loads word record from database
@@ -58,7 +58,7 @@ class Words extends DBEntity
             $this->repetitions      = $row['repetitions'];
             $this->date_next_review = $row['date_next_review'];
         }
-    } // end loadRecord()
+    } 
 
     /**
      * Adds a new word to the database
@@ -81,7 +81,7 @@ class Words extends DBEntity
             $this->user_id, $this->lang_id, $word, $status->value, (int)$is_phrase, $this->review_interval,
             $status->value
         ]);
-    } // end add()
+    } 
 
     /**
      * Adds many words using batched upserts.
@@ -128,7 +128,7 @@ class Words extends DBEntity
 
             $this->sqlExecute($sql, $params);
         }
-    } // end addBatchImport()
+    } 
 
     /**
      * Updates status of existing words in database
@@ -152,7 +152,7 @@ class Words extends DBEntity
                 $words
             )
         );
-    } // end updateByName()
+    } 
 
     /**
      * Updates the status of an existing word in the database.
@@ -172,7 +172,7 @@ class Words extends DBEntity
 
         $this->sqlExecute($sql, [$status->value, $this->user_id, $this->lang_id, $word]);
 
-    } // end updateStatus()
+    } 
 
     /**
      * Updates the SM2 algorithm parameters for a specific word in the database.
@@ -196,7 +196,7 @@ class Words extends DBEntity
         $easiness = round($easiness, 2);
 
         $this->sqlExecute($sql, [$interval, $easiness, $repetitions, $interval, $this->user_id, $this->lang_id, $word]);
-    } // end updateSM2()
+    } 
 
     /**
      * Deletes 1 word in database using word (not the id, the actual word) as a parameter to select it
@@ -209,7 +209,7 @@ class Words extends DBEntity
         $normalized_word = mb_strtolower($word);
         $sql = "DELETE FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
         $this->sqlExecute($sql, [$this->user_id, $this->lang_id, $normalized_word]);
-    } // end deleteByName()
+    } 
 
     /**
      * Deletes words in database using ids as a parameter to select them
@@ -242,7 +242,7 @@ class Words extends DBEntity
                 AND `word` COLLATE utf8mb4_unicode_ci LIKE ?";
         $row = $this->sqlFetch($sql, [$this->user_id, $this->lang_id, $like_str]);
         return $row['count_search'];
-    } // end countSearchRows()
+    } 
 
     /**
     * Returns the search results for a text using the parameters chosen by the user
@@ -279,7 +279,7 @@ class Words extends DBEntity
         return $this->sqlFetchAll($sql, [
             $lang_iso, $this->user_id, $this->lang_id, $search_text
         ]);
-    } // end search()
+    } 
 
     /**
      * Gets word status for a specific list of words and all phrases for the user/language.
@@ -303,7 +303,7 @@ class Words extends DBEntity
         $params = array_merge([$this->user_id, $this->lang_id], $words);
 
         return $this->sqlFetchAll($sql, $params);
-    } // end getByWords()
+    } 
 
     /**
      * Checks if word exists
@@ -316,7 +316,7 @@ class Words extends DBEntity
         $normalized_word = mb_strtolower($word);
         $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `word`=?";
         return $this->sqlCount($sql, [$this->user_id, $this->lang_id, $normalized_word]) > 0;
-    } // end exists()
+    } 
 
     /**
      * Gets words user is still learning
@@ -332,7 +332,7 @@ class Words extends DBEntity
                 WHERE `user_id`=? AND `lang_id`=? AND `status`>?
                 ORDER BY `is_phrase` ASC";
         return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id, $learned_status_value]);
-    } // end getLearned()
+    } 
 
     /**
      * Gets words already learned by user
@@ -348,6 +348,6 @@ class Words extends DBEntity
                 WHERE `user_id`=? AND `lang_id`=? AND `status`=?
                 ORDER BY `is_phrase` ASC";
         return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id, $learned_status_value]);
-    } // end getLearned()
+    } 
 
 }

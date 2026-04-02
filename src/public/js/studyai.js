@@ -56,7 +56,7 @@ $(document).ready(function () {
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
-    } // end getListofCards()
+    } 
 
     /**
      * Updates the study card with the given word object.
@@ -70,7 +70,7 @@ $(document).ready(function () {
         updatePromptSelect(wordObj.word);
         showWordFrequency(words[cur_card_index].is_phrase);
         adaptCardStyleToWordStatus(wordObj.status);
-    } // end updateCard()
+    } 
 
     /**
      * Updates the prompt select options to include the current word.
@@ -145,7 +145,7 @@ $(document).ready(function () {
             return true;
         }
         return false;
-    } // end lastCardReached()
+    } 
 
     /**
      * Displays a message indicating that there are no more cards available for practice.
@@ -163,7 +163,7 @@ $(document).ready(function () {
         `);
         $("#study-card-footer").addClass("d-none");
         $("#live-progress").addClass("d-none");
-    } // end showNoMoreCardsMsg()
+    } 
 
     /**
      * Updates the progress bar to reflect the current study progress.
@@ -173,7 +173,7 @@ $(document).ready(function () {
         $("#live-progress-bar")
             .css("width", percentage + "%")
             .attr("aria-valuenow", percentage);
-    } // end updateLiveProgressBar()
+    } 
 
     /**
      * Adjusts the style of the study card based on the given word status.
@@ -216,7 +216,7 @@ $(document).ready(function () {
                 $card_header.addClass('bg-gradient bg-secondary border-secondary');
                 break;
         }
-    } // end adaptCardStyleToWordStatus()
+    } 
 
     /**
      * Triggers when user clicks submit button to get AI evaluation of user answer
@@ -247,7 +247,7 @@ $(document).ready(function () {
                 $('#text-studyai-answer').val('Failed to get response from AI. Please try again.');
             }
         });
-    }); // end #btn-submit-user-answer.on.click()
+    }); 
 
     /**
      *  Constructs prompt to pass to the AI
@@ -304,7 +304,7 @@ $(document).ready(function () {
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
-    }); // end .btn-answer.on.click()
+    }); 
 
     /**
      * Generates an HTML table displaying a summary of the study, showing each word and its recall level.
@@ -334,7 +334,7 @@ $(document).ready(function () {
         });
 
         return table_header + table_rows + table_footer;
-    } // end buildResultsTable()
+    } 
 
     /**
      * Updates the frequency badge on the study card to display the frequency level of the current word.
@@ -354,7 +354,7 @@ $(document).ready(function () {
                 .addClass('border border-light')
                 .text(freq_level);
         }
-    } // end showWordFrequency()
+    } 
 
     /**
      * Triggered when clicking on a revealed word (has "word" class).
@@ -399,5 +399,5 @@ $(document).ready(function () {
                     break;
             }
         }
-    }); // end $document.on.keypress()
+    }); 
 });

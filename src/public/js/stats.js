@@ -126,5 +126,5 @@ $(document).ready(function () {
             const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage
             return `${context.label}: ${value} (${percentage}%)`;
         }
-    } // end drawTotalStats
+    } 
 });

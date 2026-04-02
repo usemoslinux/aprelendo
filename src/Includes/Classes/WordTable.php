@@ -56,7 +56,7 @@ class WordTable extends Table
         $html .= "</tr>";
 
         return $html;
-    } // end generateTableRow()
+    } 
 
     /**
      * Generates the HTML for the checkbox cell
@@ -73,7 +73,7 @@ class WordTable extends Table
                 . 'chkbox-selrow" type="checkbox" aria-label="Select row" data-idWord="' . $word_id
                 . '"><label class="form-check-label" for="row-' . $word_id . '"></label></div></td>'
             : '';
-    } // end generateCheckboxCell()
+    } 
 
     /**
      * Generates the HTML link for a row
@@ -86,7 +86,7 @@ class WordTable extends Table
         $word = htmlspecialchars($row['word'], ENT_QUOTES, 'UTF-8');
         $freq_badge = $this->generateFrequencyBadge($row['freq_level']);
         return "<td class='col-title'><a class='word word-list'>$word</a> $freq_badge</td>";
-    } // end generateLink()
+    } 
 
     /**
      * Generates the frequency badge HTML for a row.
@@ -101,7 +101,7 @@ class WordTable extends Table
             'high' => '<span class="badge rounded-pill bg-warning text-dark" title="High frequency">High</span>',
             default => '',
         };
-    } // end generateFrequencyBadge()
+    } 
 
     /**
      * Generates the status icon HTML for a row
@@ -126,5 +126,5 @@ class WordTable extends Table
 
         return '<td class="col-status text-center"><span title="' . $status_text . $days_modif_str
             . '" class="bi ' . $status_icon_class . '"></span></td>';
-    } // end generateStatusIcon()
+    } 
 }

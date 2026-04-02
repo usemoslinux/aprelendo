@@ -31,7 +31,7 @@ const Dictionaries = (() => {
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
-    } // end Dictionaries.fetchURIs
+    } 
 
     /**
      * Shows message for high & medium frequency words in dictionary modal window
@@ -45,7 +45,7 @@ const Dictionaries = (() => {
         } else if (frequency_index < 97) {
             return 'High';
         }
-    } // end Dictionaries.getWordFrequency
+    } 
 
     return {
         fetchURIs,
@@ -120,7 +120,7 @@ const SentenceExtractor = (() => {
         }
 
         return count;
-    } // end SentenceExtractor.isAbbreviation
+    } 
 
     function hasContraction($all_anchors, sel_index, direction) {
         // check if text is part of an initialism (initials of some sort, like U.S., U.K.)
@@ -129,7 +129,7 @@ const SentenceExtractor = (() => {
             : $($all_anchors[sel_index - 2]).text();
 
         return current_contractions.some(abbr => current_element_text === abbr);
-    } // end SentenceExtractor.hasContraction
+    } 
 
     function updateCurrentAbbreviationList(iso_code) {
         current_contractions = [];
@@ -153,7 +153,7 @@ const SentenceExtractor = (() => {
             });
             current_contractions.push(...localized_contractions);
         }
-    } // end SentenceExtractor.updateCurrentAbbreviationList
+    } 
 
     /**
      * @function getLanguageQuotes
@@ -232,7 +232,7 @@ const SentenceExtractor = (() => {
             }
         };
         return quote_marks[langIso] || quote_marks['en'];
-    } // end SentenceExtractor.getLanguageQuotes
+    } 
 
     /**
      * @function findStrayClosingQuote
@@ -290,7 +290,7 @@ const SentenceExtractor = (() => {
             }
         }
         return "";
-    } // end SentenceExtractor.findStrayClosingQuote
+    } 
 
     /**
      * @function fixUnmatchedQuotes
@@ -318,7 +318,7 @@ const SentenceExtractor = (() => {
         }
 
         return text;
-    } // end SentenceExtractor.fixUnmatchedQuotes
+    } 
 
     /**
      * @function buildSentenceFromAnchors
@@ -365,7 +365,7 @@ const SentenceExtractor = (() => {
         }
 
         return sentence.replace(/(\r\n|\n|\r)/g, " ").trim();
-    } // end SentenceExtractor.buildSentenceFromAnchors
+    } 
 
     /**
      * @function extractSentence
@@ -460,7 +460,7 @@ const SentenceExtractor = (() => {
         // Clean up extra whitespace in sentence
         sentence = sentence.replace(/\s+/g, " ").trim();
         return sentence;
-    } // end SentenceExtractor.extractSentence
+    } 
 
 
     return {
@@ -478,7 +478,7 @@ const LinkBuilder = (() => {
     const forWordInDictionary = (dictionary_URI, sel_word) => {
         const word = sel_word.replace(/\s+/g, " ").trim();
         return dictionary_URI.replace("%s", encodeURIComponent(word));
-    } // end LinkBuilder.forWordInDictionary
+    } 
 
     /**
      * Builds translator link including the paragraph to translate as a parameter
@@ -491,7 +491,7 @@ const LinkBuilder = (() => {
         let sentence = SentenceExtractor.extractSentence($selword, true);
 
         return translator_URI.replace("%s", encodeURI(sentence));
-    } // end LinkBuilder.forTranslationInText
+    } 
 
     /**
      * Builds a translator link including the paragraph to translate as a parameter.
@@ -504,7 +504,7 @@ const LinkBuilder = (() => {
         let sentence = SentenceExtractor.extractSentence($selword, false);
 
         return translator_URI.replace("%s", encodeURIComponent(sentence));
-    } // end LinkBuilder.forTranslationInVideo
+    } 
 
     /**
      * Builds translator link for Study sessions using sentence punctuation delimiters only.
@@ -519,7 +519,7 @@ const LinkBuilder = (() => {
             || $selword.text();
 
         return translator_URI.replace("%s", encodeURIComponent(sentence));
-    } // end LinkBuilder.forTranslationInStudy
+    } 
 
     return {
         forWordInDictionary,

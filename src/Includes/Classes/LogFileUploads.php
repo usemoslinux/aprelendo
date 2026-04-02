@@ -17,5 +17,5 @@ class LogFileUploads extends Log
     {
         parent::__construct($pdo, $user_id);
         $this->table = 'log_file_uploads';
-    } // end __construct()
+    } 
 }

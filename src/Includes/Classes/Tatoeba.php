@@ -22,7 +22,7 @@ class Tatoeba
     {
         $this->lang = $lang;
         $this->word = $word;
-    } // end __construct()
+    } 
 
     /**
      * Get example sentences from Tatoeba
@@ -57,7 +57,7 @@ class Tatoeba
         }
 
         return $this->filterExampleSentences($json_response);
-    } // end fetchExampleSentences()
+    } 
 
     /**
      * Removes unnecessary meta data from json response by Tatoeba. Only leaves an array with the example
@@ -87,5 +87,5 @@ class Tatoeba
 
         shuffle($filtered_sentences); // shuffle example sentences to randomize order
         return $filtered_sentences;
-    } // end filterExampleSentences()
+    } 
 }

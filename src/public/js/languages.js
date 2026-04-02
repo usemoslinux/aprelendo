@@ -70,7 +70,7 @@ $(document).ready(function() {
             e.preventDefault();
             e.stopPropagation();
         }
-    }); // end #savebtn.on.click
+    }); 
 
     // Listen for clicks on dropdown items
     $('.dict-select .dropdown-item').on('click', function () {

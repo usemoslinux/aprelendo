@@ -27,7 +27,7 @@ class HallOfFame extends DBEntity
             throw new \InvalidArgumentException("Invalid period: $period");
         }
         $this->period = $period;
-    } // end __construct()
+    } 
 
     /**
      * Returns nr. of users who have added at least one word
@@ -48,7 +48,7 @@ class HallOfFame extends DBEntity
                     l.name = '{$this->lang_iso}' AND w.status = {$learned_status_value}";
 
         return $this->sqlCount($sql);
-    } // end getActiveLearners()
+    } 
 
     /**
      * Returns total nr. of words added by all users
@@ -69,7 +69,7 @@ class HallOfFame extends DBEntity
                     l.name = '{$this->lang_iso}' AND w.status = {$learned_status_value}";
 
         return $this->sqlCount($sql);
-    } // end getTotalWordsLearned()
+    } 
 
     /**
      * Returns total nr. of gems eaerned by all users
@@ -88,7 +88,7 @@ class HallOfFame extends DBEntity
                     l.name = '{$this->lang_iso}'";
 
         return $this->sqlCount($sql);
-    } // end getTotalGemsEarned()
+    } 
 
     /**
      * Returns average streak considering all users
@@ -108,7 +108,7 @@ class HallOfFame extends DBEntity
 
         $result = $this->sqlFetch($sql)['days_streak'];
         return $result ? (int)round($result) : 0;
-    } // end GetAvgStreakDays()
+    } 
 
     /**
      * Returns top users with most gems earned (user name & nr. of gems)
@@ -133,7 +133,7 @@ class HallOfFame extends DBEntity
                 LIMIT {$this->top_limit}";
 
         return $this->sqlFetchAll($sql);
-    } // end GetTopGemsEarned()
+    } 
 
     /**
      * Returns top users with longest streaks (user name & longest streak)
@@ -159,7 +159,7 @@ class HallOfFame extends DBEntity
                 LIMIT {$this->top_limit}";
 
         return $this->sqlFetchAll($sql);
-    } // end getTopStreaks()
+    } 
 
     /**
      * Returns top users with most words learned (user name & nr. of words learned)
@@ -186,7 +186,7 @@ class HallOfFame extends DBEntity
                 LIMIT {$this->top_limit}";
 
         return $this->sqlFetchAll($sql);
-    } // end getTopWordsLearned()
+    } 
 
     /**
      * Returns top achievement hunters (user names & nr. of achievements)
@@ -211,7 +211,7 @@ class HallOfFame extends DBEntity
                 LIMIT {$this->top_limit}";
 
         return $this->sqlFetchAll($sql);
-    } // end getTopAchievements()
+    } 
 
     /**
      * Builds the HTML leaderboard list.
@@ -257,7 +257,7 @@ class HallOfFame extends DBEntity
         }
 
         return $html;
-    } // end print_leaderboard()
+    } 
 
     /**
      * Builds the HTML value for a community statistic.
@@ -278,5 +278,5 @@ class HallOfFame extends DBEntity
         $html = "<h4 class='mt-3'>$value</h4>";
 
         return $html;
-    } // end print_community_stat()
+    } 
 }

@@ -60,5 +60,5 @@ class TextTypes extends DBEntity
         Cache::set($cache_key, $rows);
 
         return $rows;
-    } // end getAll()
+    } 
 }

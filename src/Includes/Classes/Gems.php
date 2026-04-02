@@ -31,7 +31,7 @@ class Gems extends DBEntity
         $this->lang_id = $lang_id;
         $this->time_zone = $time_zone;
         $this->loadUserRecord();
-    } // end __construct()
+    } 
 
     /**
      * Loads gems record data
@@ -56,7 +56,7 @@ class Gems extends DBEntity
             $this->days_streak        = ($diff_days == -1 || $diff_days == 0) ? $row['days_streak'] : 0;
             $this->today_is_streak    = $diff_days >= 0;
         }
-    } // end loadRecord()
+    } 
         
     /**
     * Updates user gems score in database
@@ -108,7 +108,7 @@ class Gems extends DBEntity
         ]);
 
         return $gems;
-    } // end update()
+    } 
 
     /**
      * Calculates the number of days from last study session (0 = today; -1 = yesterday and so on)

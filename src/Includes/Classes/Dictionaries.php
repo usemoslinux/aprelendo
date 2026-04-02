@@ -46,7 +46,7 @@ class Dictionaries extends DBEntity
                 default => null,
             };
         }
-    } // end __construct()
+    } 
 
     /**
      * Load dictionaries matching the learning language (or all).
@@ -155,4 +155,4 @@ class Dictionaries extends DBEntity
         return array_merge($this->monolingual, $this->bilingual, $this->visual, $this->translators);
     }
     
-} // end checkByType()
+} 

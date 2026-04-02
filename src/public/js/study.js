@@ -61,7 +61,7 @@ $(document).ready(function () {
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
-    } // end getListofCards()
+    } 
 
     /**
      * Fetches examples sentences for a specific word
@@ -170,7 +170,7 @@ $(document).ready(function () {
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
-    } // end getExampleSentencesforCard()
+    } 
 
     /**
      * 
@@ -328,7 +328,7 @@ $(document).ready(function () {
             return true;
         }
         return false;
-    } // end lastCardReached()
+    } 
 
     /**
      * Displays a message indicating that there are no more cards available for practice.
@@ -347,7 +347,7 @@ $(document).ready(function () {
         $("#study-card-footer").addClass("d-none");
         $("#examples-placeholder").addClass("d-none");
         $("#live-progress").addClass("d-none");
-    } // end showNoMoreCardsMsg()
+    } 
 
     /**
      * Updates the progress bar to reflect the current study progress.
@@ -357,7 +357,7 @@ $(document).ready(function () {
         $("#live-progress-bar")
             .css("width", percentage + "%")
             .attr("aria-valuenow", percentage);
-    } // end updateLiveProgressBar()
+    } 
 
     /**
      * Adjusts the style of the study card based on the given word status.
@@ -400,7 +400,7 @@ $(document).ready(function () {
                 $card_header.addClass('bg-gradient bg-secondary border-secondary');
                 break;
         }
-    } // end adaptCardStyleToWordStatus()
+    } 
 
     /**
      * Open dictionary modal
@@ -410,7 +410,7 @@ $(document).ready(function () {
     $("body").on("click", ".word", function (e) {
         $selword = $(this);
         StudyActionBtns.show($selword);
-    }); // end #.word.on.click
+    }); 
 
     /**
      * Triggers when user clicks on answer buttons
@@ -458,7 +458,7 @@ $(document).ready(function () {
         }
         
         $('#btn-answer-prev').trigger('click'); // hide answer card page 2
-    }); // end .btn-answer.on.click()
+    }); 
 
     /**
      * Triggers when user clicks on "Back to previous question" answer button
@@ -510,7 +510,7 @@ $(document).ready(function () {
         });
 
         return table_header + table_rows + table_footer;
-    } // end buildResultsTable()
+    } 
 
     /**
      * Updates the frequency badge on the study card to display the frequency level of the current word.
@@ -530,7 +530,7 @@ $(document).ready(function () {
                 .addClass('border border-light')
                 .text(freq_level);
         }
-    } // end showWordFrequency()
+    } 
 
     /**
      * Opens translator in new window. 
@@ -539,12 +539,12 @@ $(document).ready(function () {
     $("#btn-translate").on("click", function () {
         const base_uris = Dictionaries.getURIs();
         openInNewTab(LinkBuilder.forTranslationInStudy(base_uris.translator, $selword));
-    }); // end #btn-translate.on.click()
+    }); 
 
     $("#btn-img-dic").on("click", function () {
         const base_uris = Dictionaries.getURIs();
         openInNewTab(LinkBuilder.forWordInDictionary(base_uris.img_dictionary, $selword.text()));
-    }); // end #btn-img-dic.on.click()
+    }); 
 
     /**
      * Disables right click context menu
@@ -558,7 +558,7 @@ $(document).ready(function () {
             openInNewTab(LinkBuilder.forTranslationInStudy(base_uris.translator, $(e.target)));
         }
         return false;
-    }); // end document.contextmenu
+    }); 
 
     /**
      * Implements shortcuts for buttons
@@ -584,7 +584,7 @@ $(document).ready(function () {
                     break;
             }
         }
-    }); // end $document.on.keypress()
+    }); 
 
     /**
      * Removes selection when user clicks in white-space
@@ -594,5 +594,5 @@ $(document).ready(function () {
             e.stopPropagation();
             ActionBtns.hide();
         }
-    }); // end $document.on.mouseup
+    }); 
 });

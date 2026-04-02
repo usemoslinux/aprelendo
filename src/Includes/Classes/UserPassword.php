@@ -23,7 +23,7 @@ class UserPassword
         } catch (\Exception $e) {
             throw new UserException($e->getMessage());
         }
-    } // end verify()
+    } 
 
     /**
      * Creates hash for a given password

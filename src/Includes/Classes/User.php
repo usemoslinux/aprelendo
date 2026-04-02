@@ -31,7 +31,7 @@ class User extends DBEntity
     {
         parent::__construct($pdo);
         $this->table = 'users';
-    } // end __construct()
+    } 
 
     /**
      * Loads user record data in current object
@@ -192,7 +192,7 @@ class User extends DBEntity
     {
         $sql = "UPDATE `users` SET `password_hash`=? WHERE `email`=?";
         $this->sqlExecute($sql, [$password_hash, $email]);
-    } // end updatePasswordHash()
+    } 
 
     /**
      * Generates and saves a password reset token for the user.
@@ -253,7 +253,7 @@ class User extends DBEntity
     {
         $sql = "UPDATE `users` SET `google_id`=?, `is_active`=true WHERE `email`=?";
         $this->sqlExecute($sql, [$google_id, $google_email]);
-    } // end updateGoogleId()
+    } 
 
     /**
      * Delete user account
@@ -271,7 +271,7 @@ class User extends DBEntity
         // and counts need to be updated
         $popular_sources = new PopularSources($this->pdo);
         $popular_sources->rebuild();
-    } // end delete()
+    } 
 
     /**
      * Delete user files
@@ -295,7 +295,7 @@ class User extends DBEntity
                 $file->delete();
             }
         }
-    } // end deleteFiles()
+    } 
     
     /**
      * Update active language in db
@@ -314,7 +314,7 @@ class User extends DBEntity
 
         $this->lang_id = $lang_id;
         $this->lang = $lang_name;
-    } // end setActiveLang()
+    } 
 
     /**
      * Checks if user is allowed to access element in db
@@ -337,5 +337,5 @@ class User extends DBEntity
             'words' => $this->sqlCount("SELECT `id` FROM `$table` WHERE `id`=? AND `user_id`=?", [$id, $this->id]) > 0,
             default => false,
         };
-    } // end isAllowedToAccessElement()
+    } 
 }

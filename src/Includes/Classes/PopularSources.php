@@ -88,7 +88,7 @@ class PopularSources extends DBEntity
     {
         parent::__construct($pdo);
         $this->table = 'popular_sources';
-    } // end __construct()
+    } 
 
     /**
      * Adds a new domain to the database
@@ -281,7 +281,7 @@ class PopularSources extends DBEntity
         $sql = "SELECT * FROM `{$this->table}` WHERE `lang_iso`=? ORDER BY `times_used` DESC LIMIT {$show_count}";
 
         return $this->sqlFetchAll($sql, [$lg_iso]);
-    } // end getAllByLang()
+    } 
 
     /**
      * Counts shared video texts for a given language.

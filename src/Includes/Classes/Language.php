@@ -62,7 +62,7 @@ class Language extends DBEntity
         parent::__construct($pdo);
         $this->table   = 'languages';
         $this->user_id = $user_id;
-    } // end __construct()
+    } 
 
     /**
      * Loads record data in object
@@ -85,7 +85,7 @@ class Language extends DBEntity
             $this->show_freq_words    = $record['show_freq_words'];
             $this->level              = $record['level'];
         }
-    } // end loadRecord()
+    } 
 
     /**
      * Loads record data in object properties by id
@@ -97,7 +97,7 @@ class Language extends DBEntity
     {
         $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ?";
         $this->loadRecord($this->sqlFetch($sql, [$id]));
-    } // end loadRecord()
+    } 
 
     /**
      * Loads record data in object properties by name
@@ -109,7 +109,7 @@ class Language extends DBEntity
     {
         $sql = "SELECT * FROM `{$this->table}` WHERE `user_id`=? AND `name`=?";
         $this->loadRecord($this->sqlFetch($sql, [$this->user_id, $lang]));
-    } // end loadRecordByName()
+    } 
 
     /**
      * Updates language settings in db
@@ -152,7 +152,7 @@ class Language extends DBEntity
             $this->rss_feed2_uri, $this->rss_feed3_uri, (int)$this->show_freq_words, $this->level,
             $this->user_id, $this->id
         ]);
-    } // end editRecord()
+    } 
 
     /**
      * Creates & saves default preferences for user
@@ -183,7 +183,7 @@ class Language extends DBEntity
                     VALUES (?, ?, ?, ?, ?)";
             $this->sqlExecute($sql, [$this->user_id, $key, $dictionary_uri, $img_dictionary_uri, $translator_uri]);
         }
-    } // end createInitialRecordsForUser()
+    } 
 
     /**
      * Returns list of available languages for active user
@@ -194,7 +194,7 @@ class Language extends DBEntity
     {
         $sql = "SELECT `id`, `name` FROM `{$this->table}` WHERE `user_id`=? ORDER BY `name` ASC";
         return $this->sqlFetchAll($sql, [$this->user_id]);
-    } // end getAvailableLangs()
+    } 
 
     /**
      * Save URI as string, even if null
@@ -204,5 +204,5 @@ class Language extends DBEntity
     private function setUri(?string $uri): string
     {
         return is_null($uri) ? '' : $uri;
-    } // end setUri()
+    } 
 }

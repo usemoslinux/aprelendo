@@ -27,5 +27,5 @@ class EmailSender
         $this->mail->Port       = 587;
 
         $this->mail->setFrom(EMAIL_SENDER, 'Aprelendo');
-    } // end __construct()
+    } 
 }

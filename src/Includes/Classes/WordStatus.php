@@ -27,7 +27,7 @@ enum WordStatus: int
         }
 
         return $status;
-    } // end fromInt()
+    } 
 
     /**
      * Returns all possible word statuses in logical progression order.
@@ -42,7 +42,7 @@ enum WordStatus: int
             self::new_word,
             self::forgotten,
         ];
-    } // end getAll()
+    } 
 
     /**
      * Returns the human-readable label for the status.
@@ -57,7 +57,7 @@ enum WordStatus: int
             self::new_word => 'New',
             self::forgotten => 'Forgotten',
         };
-    } // end getLabel()
+    } 
 
     /**
      * Returns the icon class used to render the status in tables.
@@ -72,5 +72,5 @@ enum WordStatus: int
             self::new_word => 'bi-hourglass-bottom status-new',
             self::forgotten => 'bi-hourglass-bottom status-forgotten',
         };
-    } // end getIconClass()
+    } 
 }

@@ -21,7 +21,7 @@ class WordStats extends DBEntity
         $this->table = 'words';
         $this->user_id = $user_id;
         $this->lang_id = $lang_id;
-    } // end __construct()
+    } 
 
     /**
      * Returns nr. of words reviewed by user today, except those marked as forgotten
@@ -38,7 +38,7 @@ class WordStats extends DBEntity
                 AND `date_modified` > CURRENT_DATE()";
 
         return $this->sqlCount($sql, [$this->user_id, $this->lang_id, $forgotten_status_value]);
-    } // end getRecalledToday()
+    } 
 
     /**
      * Returns nr. of words reviewed by user, grouped by date
@@ -86,5 +86,5 @@ class WordStats extends DBEntity
 
         return $result;
         
-    } // end getTotals()
+    } 
 }

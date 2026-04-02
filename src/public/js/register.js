@@ -88,7 +88,7 @@ $(document).ready(function () {
             console.error(error);
             showMessage(error.message, "alert-danger");
         }
-    }); // end #form-register.on.submit
+    }); 
 
     /**
      * Updates flag and welcome message based on changes in the selected learning language

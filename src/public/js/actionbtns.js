@@ -71,7 +71,7 @@ const ActionBtns = (() => {
             $word_action_group_1.removeClass('d-none');
             $word_action_group_2.addClass('d-none');
         }
-    } // end createWordActionBtns
+    } 
 
     /**
      * Sets up click event listeners on dictionary and translator action buttons.
@@ -192,7 +192,7 @@ const TextActionBtns = (() => {
         $("#text-container").disableScroll();
         ActionBtns.bindDictionaryBtnsOnClick($selword, 'text');
         ActionBtns.show($selword);
-    } // end show()
+    } 
 
     /**
      * Hides actions pop up toolbar
@@ -200,7 +200,7 @@ const TextActionBtns = (() => {
     const hide = () => {
         $("#text-container").enableScroll();
         ActionBtns.hide();
-    } // end hide()
+    } 
 
 
     return {
@@ -218,7 +218,7 @@ const VideoActionBtns = (() => {
         ActionBtns.createWordActionBtns($selword, false);
         ActionBtns.bindDictionaryBtnsOnClick($selword, 'video');
         ActionBtns.show($selword);
-    } // end show
+    } 
 
     /**
      * Hides actions pop up toolbar
@@ -226,7 +226,7 @@ const VideoActionBtns = (() => {
     const hide = () => {
         $("#text-container").enableScroll();
         ActionBtns.hide();
-    } // end hide
+    } 
 
 
     return {
@@ -243,14 +243,14 @@ const StudyActionBtns = (() => {
         ActionBtns.createWordActionBtns($selword, true);
         ActionBtns.bindDictionaryBtnsOnClick($selword, 'study');
         ActionBtns.show($selword);
-    } // end show
+    } 
 
     /**
      * Hides actions pop up toolbar
      */
     const hide = () => {
         ActionBtns.hide();
-    } // end hide
+    } 
 
     return {
         show,

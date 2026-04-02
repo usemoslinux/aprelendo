@@ -100,6 +100,6 @@ class SupportedLanguages
         }
 
         return $languages;
-    } // end getAll()
+    } 
 
 }

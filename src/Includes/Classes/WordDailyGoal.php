@@ -31,7 +31,7 @@ class WordDailyGoal extends DBEntity
         $this->lang_id = $lang_id;
         $this->time_zone = $time_zone;
         $this->loadRecord($today_is_streak);
-    } // end __construct()
+    } 
 
     /**
      * Loads word_daily_goal record data
@@ -60,7 +60,7 @@ class WordDailyGoal extends DBEntity
         if ($today_is_streak) {
             $this->update();
         }
-    } // end loadRecord()
+    } 
         
     /**
     * Updates user daily goal table
@@ -90,7 +90,7 @@ class WordDailyGoal extends DBEntity
             $this->user_id, $this->lang_id, $this->last_streak, $this->days_streak,
             $this->user_id, $this->lang_id, $this->last_streak, $this->days_streak
         ]);
-    } // end update()
+    } 
 
     /**
      * Calculates the number of days from last streak (0 = today; -1 = yesterday and so on)

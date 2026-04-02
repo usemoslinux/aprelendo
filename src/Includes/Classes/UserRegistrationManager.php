@@ -86,7 +86,7 @@ class UserRegistrationManager extends DBEntity
         if ($send_email) {
             $this->sendActivationEmail($this->user->email, $this->user->name, $activation_hash);
         }
-    } // end register()
+    } 
     
     /**
      * Send activation email to user.
@@ -125,7 +125,7 @@ class UserRegistrationManager extends DBEntity
         } catch (\Exception $e) {
             throw new InternalException($e);
         }
-    } // end sendActivationEmail()
+    } 
 
     /**
      * Activates user
@@ -151,5 +151,5 @@ class UserRegistrationManager extends DBEntity
                 WHERE `name`=? AND `activation_hash`=?";
         
         $this->sqlExecute($sql, [$username, $hash]);
-    } // end activate()
+    } 
 }

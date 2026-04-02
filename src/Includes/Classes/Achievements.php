@@ -23,7 +23,7 @@ class Achievements extends DBEntity
         $this->user_id = $user_id;
         $this->lang_id = $lang_id;
         $this->time_zone = $time_zone;
-    } // end __construct()
+    } 
     
     /**
      * Calculates all user achievements, no matter if they were saved in the db or not
@@ -46,7 +46,7 @@ class Achievements extends DBEntity
         $word_achievements = $this->checkByType(3, $word_count);
 
         return array_merge($gems_achievements, $streak_achievements, $word_achievements);
-    } // end checkAll()
+    } 
 
     /**
      * Verifies which user achievements were not yet saved in the db
@@ -80,7 +80,7 @@ class Achievements extends DBEntity
         }
 
         return $diff_array;
-    } // end checkUnannounced()
+    } 
 
     /**
      * Saves in the db the achievements that are passed as a parameter
@@ -95,7 +95,7 @@ class Achievements extends DBEntity
                 VALUES (?, ?, ?); ";
             $this->sqlExecute($sql, [$this->user_id, $this->lang_id, $achievement['id']]);
         }
-    } // end saveUnannounced()
+    } 
 
     /**
      * Gets user achievements already saved in db
@@ -112,7 +112,7 @@ class Achievements extends DBEntity
                 ORDER BY ua.achievement_id ASC";
 
         return $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
-    } // end checkSaved()
+    } 
 
     /**
      * Returns achievements by $type_id and $threshold
@@ -136,5 +136,5 @@ class Achievements extends DBEntity
         return array_filter($all_achievements, function ($achievement) use ($type_id, $threshold) {
             return $achievement['type_id'] == $type_id && $achievement['threshold'] <= $threshold;
         });
-    } // end checkByType()
+    } 
 }

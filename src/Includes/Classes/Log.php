@@ -18,7 +18,7 @@ abstract class Log extends DBEntity
     {
         parent::__construct($pdo);
         $this->user_id = $user_id;
-    } // end __construct()
+    } 
 
     /**
      * Gets today's records for the current user in the log table
@@ -35,7 +35,7 @@ abstract class Log extends DBEntity
         $row = $this->sqlFetch($sql, [$this->user_id]);
 
         return $row['exists'];
-    } // end countTodayRecords()
+    } 
 
     /**
      * Adds log record for current user
@@ -48,7 +48,7 @@ abstract class Log extends DBEntity
         $this->sqlExecute($sql, [$this->user_id]);
         
         $this->purgeOldRecords(); // if successful, purge old records
-    } // end addRecord()
+    } 
 
     /**
      * Remove old log records
@@ -59,5 +59,5 @@ abstract class Log extends DBEntity
     {
         $sql = "DELETE FROM `{$this->table}` WHERE `date_created` < NOW() - INTERVAL 2 DAY";
         $this->sqlExecute($sql, []);
-    } // end purgeOldRecords()
+    } 
 }

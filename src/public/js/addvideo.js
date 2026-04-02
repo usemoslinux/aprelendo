@@ -37,7 +37,7 @@ $(document).ready(function() {
             console.error(error);
             showMessage(error.message, "alert-danger");
         }
-    }); // end #form-addvideo.on.submit
+    }); 
 
     /**
      * Fetches YouTube video, including title, channel & subtitle
@@ -103,7 +103,7 @@ $(document).ready(function() {
                 .removeClass()
                 .addClass("bi bi-arrow-down-right-square text-warning");
         }
-    } // end fetch_url
+    } 
 
     /**
      * Empties form
@@ -116,7 +116,7 @@ $(document).ready(function() {
             $("#text").val("");
             $("#yt-video").attr("src", "about:blank");
         }
-    } // end emptyForm
+    } 
 
     /**
      * Converts string to Sentence case (first character in upper case, the rest in lower case)
@@ -124,7 +124,7 @@ $(document).ready(function() {
      */
     function toSentenceCase(str) {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-    } // end toSentenceCase
+    } 
 
     function extractYTId(url) {
         if (url == "") {
@@ -159,7 +159,7 @@ $(document).ready(function() {
                 }
             }
         }
-    } // end extractYTId
+    } 
 
     // Check for an external api call. If detected, try to fetch text using Mozilla's readability parser
     if ($("#external_call").length) {

@@ -8,7 +8,7 @@ $(document).ready(function() {
      */
     $("#btn-upload-epub").on("click", function() {
         $("#url").trigger("click");
-    }); // end #btn-upload-epub.on.click
+    }); 
 
     /**
      * Checks if selected file meets our requirements for upload
@@ -32,7 +32,7 @@ $(document).ready(function() {
             reader.onload = openBook;
             reader.readAsArrayBuffer($epub_file[0].files[0]);
         }
-    }); // end #file-upload-epub.on.change
+    }); 
 
     /**
      * Adds ebook to database
@@ -83,7 +83,7 @@ $(document).ready(function() {
             showMessage(error.message, "alert-danger");
             resetControls(false);
         }
-    }); // end #form-addebook.on.submit
+    }); 
 
     /**
      * Checks if audio URL is a Google Drive link
@@ -97,7 +97,7 @@ $(document).ready(function() {
         } else {
             help_text.text('Accepts URLs from YouTube, Google Drive, M3U playlists, RSS feeds, or any standard audio source.');
         }
-    }); // end #audio-url.on.input
+    }); 
 
     /**
      * Empties form input fields
@@ -113,7 +113,7 @@ $(document).ready(function() {
             $("#author").val("");
             $("#url").val("");
         }
-    } // end resetControls
+    } 
 
     /**
      * Opens and renders an ebook using epub.js
@@ -137,7 +137,7 @@ $(document).ready(function() {
         window.addEventListener("unload", function() {
             book.destroy();
         });
-    } // end openBook
+    } 
 
     function isValidHttpUrl(string) {
         let url;

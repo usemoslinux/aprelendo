@@ -167,7 +167,7 @@ $(document).ready(function () {
             VideoActionBtns.hide();
             VideoController.resume();
         }
-    }); // end #btn-add.on.click
+    }); 
 
     /**
      * Remove selected word or phrase from database
@@ -274,7 +274,7 @@ $(document).ready(function () {
             VideoActionBtns.hide();
             VideoController.resume();
         }
-    }); // end #btn-remove.on.click
+    }); 
 
     // *************************************************************
     // ******************* MAIN MENU BUTTONS ***********************
@@ -379,7 +379,7 @@ $(document).ready(function () {
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
-    }); // end #btn-save-ytvideo.on.click
+    }); 
 
     /**
      * Updates vh value on window resize
@@ -397,5 +397,5 @@ $(document).ready(function () {
         if (show_confirmation_dialog) {
             return 'Press Save before you go or your changes will be lost.';
         }
-    }); // end window.on.beforeunload
+    }); 
 });

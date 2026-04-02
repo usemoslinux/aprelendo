@@ -21,7 +21,7 @@ class RSSFeed
             $this->url = $url;
             $this->fetchXMLFeed($url);
         }
-    } // end __construct()
+    } 
 
     /**
      * Get RSS feed elements and initialize class variables
@@ -74,5 +74,5 @@ class RSSFeed
 
             $itemIndex++;
         }
-    } // end fetchXMLFeed()
+    } 
 }

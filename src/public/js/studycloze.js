@@ -55,7 +55,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 onGuessSubmit();
             }
-        }); // end #guess-input.on.keypress()
+        }); 
     }
 
     /**
@@ -580,7 +580,7 @@ $(document).ready(function () {
                 default: break;
             }
         }
-    }); // end $document.on.keypress()
+    }); 
 
     /**
      * Triggered when clicking or tapping outside of word and action buttons.

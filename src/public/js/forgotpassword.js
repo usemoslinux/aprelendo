@@ -39,7 +39,7 @@ $(document).ready(function() {
             console.error(error);
             showMessage(error.message, "alert-danger");
         }
-    }); // end #form_forgot_password.on.submit
+    }); 
 
     /**
      * Checks & saves new user password in db
@@ -90,5 +90,5 @@ $(document).ready(function() {
             console.error(error);
             showMessage(error.message, "alert-danger");
         }
-    }); // end #form_create_new_password.on.submit
+    }); 
 });

@@ -35,7 +35,7 @@ class Connect
         $this->password = $password;
         $this->db       = $db_name;
         $this->charset  = $charset;
-    } // end __construct()
+    } 
 
     /**
      * Connects to database using parameters passed to the constructor

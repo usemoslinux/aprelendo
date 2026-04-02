@@ -21,7 +21,7 @@ class AIBot
         $this->api_key = $crypto->decrypt($api_key);
         $this->lang = SupportedLanguages::get($learning_lang_iso, 'name');
         $this->native_lang = SupportedLanguages::get($native_lang_iso, 'name');
-    } // end __construct()
+    } 
 
     /**
      * Stream a reply from the AI model based on the given prompt.

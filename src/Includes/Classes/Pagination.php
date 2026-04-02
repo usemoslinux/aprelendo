@@ -9,7 +9,7 @@ class Pagination
     private $total_pages  = 0; // total number of pages
     private $page         = 0; // current page
     private $start        = 0; // beginning of range
-    private $end          = 0; // end of range
+    private $end          = 0; 
     public $offset        = 0; // offset used to retrieve rows
 
     /**
@@ -31,7 +31,7 @@ class Pagination
         }
 
         $this->setStartEndPageRange();
-    } // end __construct()
+    } 
 
 
     /**
@@ -81,7 +81,7 @@ class Pagination
         }
 
         return $result;
-    } // end print()
+    } 
 
     /**
      * Create pagination header HTML code

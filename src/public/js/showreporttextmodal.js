@@ -47,9 +47,9 @@ $(document).ready(function() {
         } finally {
             $btn_report.prop("disabled", false); // re-enable report button
         }
-    }); // end #btn-report-text.on.click
+    }); 
 
     $("#report-text-modal").on('hidden.bs.modal', function() { 
         $("#report-alert-box").addClass('d-none');
-    }); // end #report-text-modal.on.hidden.bs.modal
+    }); 
 });

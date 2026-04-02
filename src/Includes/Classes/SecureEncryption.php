@@ -16,7 +16,7 @@ class SecureEncryption
     {
         // Hash the key to make sure it is 256 bits (32 bytes) for AES-256
         $this->encryption_key = substr(hash('sha256', $encryption_key, true), 0, 32);
-    } // end __construct()
+    } 
 
     /**
      * Encrypt the given text
@@ -39,7 +39,7 @@ class SecureEncryption
 
         // Encode IV and encrypted text together in base64
         return base64_encode($iv . $encrypted_text);
-    } // end encrypt()
+    } 
 
     /**
      * Decrypt the given text
@@ -61,6 +61,6 @@ class SecureEncryption
             0,
             $iv
         );
-    } // end decrypt()
+    } 
 }
 

@@ -16,7 +16,7 @@ class SharedTexts extends Texts
     {
         parent::__construct($pdo, $user_id, $lang_id);
         $this->table = 'shared_texts';
-    } // end __construct()
+    } 
 
     /**
      * Loads text record data
@@ -45,7 +45,7 @@ class SharedTexts extends Texts
             $this->text_pos      = $row['text_pos'] ?? '';
             $this->audio_pos     = $row['audio_pos'] ?? '';
         }
-    } // end loadRecord()
+    } 
 
     /**
     * Returns the search results for a text using the parameters chosen by the user
@@ -99,7 +99,7 @@ class SharedTexts extends Texts
         return $this->sqlFetchAll($sql, [
             $this->user_id, $lang->name, $search_params->filter_level, $search_params->filter_type, $search_text
         ]);
-    } // end search()
+    } 
 
     /**
     * Counts the number of rows (i.e. texts) for a specific search
@@ -125,7 +125,7 @@ class SharedTexts extends Texts
                 $filter_level_sql $filter_type_sql AND t.title LIKE ?";
 
         return $this->sqlCount($sql, [$lang->name, $filter_level, $filter_type, $search_text]);
-    } // end countSearchRows()
+    } 
 
     /**
      * Checks if text was already exists in database, to avoid duplicate entries.
@@ -145,5 +145,5 @@ class SharedTexts extends Texts
                 WHERE `source_uri` = ?";
 
         return $this->sqlCount($sql, [$source_url]) > 0;
-    } // end exists()
+    } 
 }

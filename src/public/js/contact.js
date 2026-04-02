@@ -38,7 +38,7 @@ $(document).ready(function() {
             console.error(error);
             showMessage(error.message, "alert-danger");
         }
-    }); // end #form-support.on.submit
+    }); 
 
     /**
      * Empties form input fields
@@ -48,5 +48,5 @@ $(document).ready(function() {
         $("#name").val("");
         $("#email").val("");
         $("#message").val("");
-    } // end resetControls
+    } 
 });

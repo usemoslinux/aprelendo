@@ -15,5 +15,5 @@ class LogAudioStreams extends Log
     {
         parent::__construct($pdo, $user_id);
         $this->table = 'log_audio_streams';
-    } // end __construct()
+    } 
 }

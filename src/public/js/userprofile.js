@@ -35,7 +35,7 @@ $(document).ready(function() {
         } finally {
             $("#password, #newpassword, #newpassword-confirmation").val("");
         }
-    }); // end #userprofile-form.submit
+    }); 
 
     /**
      * Shows delete account confirmation dialog
@@ -44,7 +44,7 @@ $(document).ready(function() {
         $(document)
             .find("#delete-account-modal")
             .modal("show");
-    }); // end #btn-delete-account.on.click
+    }); 
 
     /**
      * Deletes account

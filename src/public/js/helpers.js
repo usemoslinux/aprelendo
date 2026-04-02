@@ -38,7 +38,7 @@ function showMessage(html, type, custom_title = null, box = 'alert-box') {
         .append($div_flag, $div_msg);
 
     $(window).scrollTop(0);
-} // end showMessage
+} 
 
 /**
  * Smoothly scrolls the webpage to the top.
@@ -54,7 +54,7 @@ function scrollToPageTop() {
         // Fallback: scroll the page
         $("html, body").scrollTop(0);
     }
-} // end scrollToPageTop()
+} 
 
 
 /**
@@ -72,7 +72,7 @@ function getUniqueElements(class_name) {
     });
 
     return unique_elements.size;
-} // end getUniqueElements()
+} 
 
 /**
  * Retrieves the current URI parameters from the URL.
@@ -89,7 +89,7 @@ function getCurrentURIParameters() {
     }
 
     return result;
-} // end getCurrentURIParameters
+} 
 
 /**
  * Converts an object of key-value pairs into a URI query string.
@@ -113,7 +113,7 @@ function buildQueryString(paramsObject) {
     }
 
     return params.toString() ? '?' + params.toString() : '';
-} // end buildQueryString()
+} 
 
 /**
  * Retrieves the file name of the current page.
@@ -124,7 +124,7 @@ function buildQueryString(paramsObject) {
 function getCurrentFileName() {
     const pathname = new URL(window.location.href).pathname;
     return pathname.substring(pathname.lastIndexOf('/') + 1);
-} // end getCurrentFileName
+} 
 
 /**
  * Renables scrolling without making text jump around
@@ -135,7 +135,7 @@ $.fn.enableScroll = function () {
         this.classList.remove('overflow-hidden');
         this.classList.add('overflow-auto');
     });
-}; // end $.fn.enableScroll
+}; 
 
 /**
  * Disables scrolling without making text jump around
@@ -146,7 +146,7 @@ $.fn.disableScroll = function () {
         this.classList.remove('overflow-auto');
         this.classList.add('overflow-hidden');
     });
-}; // end $.fn.disableScroll
+}; 
 
 /**
  * Determines if an element is after another one
@@ -154,7 +154,7 @@ $.fn.disableScroll = function () {
  */
 $.fn.isAfter = function (sel) {
     return this.prevUntil(sel).length !== this.prevAll().length;
-}; // end $.fn.isAfter
+}; 
 
 /**
  * Opens link in new tab
@@ -162,7 +162,7 @@ $.fn.isAfter = function (sel) {
  */
 function openInNewTab($url) {
     window.open($url, '_blank', 'noopener,noreferrer');
-} // end openInNewTab
+} 
 
 /**
  * Determines if the user is on a touch-only device.
@@ -191,4 +191,4 @@ function isMobileDevice() {
     const hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
     return is_mobile_ua || hasTouch;
-} // end isMobileDevice
+} 

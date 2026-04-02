@@ -63,7 +63,7 @@ $(document).ready(function () {
             .replace(/'/g, "&#39;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;");
-    } // end htmlEscape
+    } 
 
     /**
      * Opens the RSS entry in the editor.
@@ -111,7 +111,7 @@ $(document).ready(function () {
             );
         $("body").append(form);
         form.trigger( "submit" );
-    } // end openRSSInEditor
+    } 
 
     /**
      * Triggers when user clicks the Edit button

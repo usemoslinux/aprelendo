@@ -26,7 +26,7 @@ class ExampleSentences extends DBEntity
         parent::__construct($pdo);
         $this->table   = 'example_sentences';
         $this->user_id = $user_id;
-    } // end __construct()
+    } 
 
     /**
      * Loads record data in object properties by id
@@ -67,5 +67,5 @@ class ExampleSentences extends DBEntity
             $this->user_id, $lang->name, $word, $sentence, $source_title, $source_author, $source_uri,
                 $sentence, $source_title, $source_author, $source_uri
         ]);
-    } // end addRecord()
+    } 
 }

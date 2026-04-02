@@ -25,7 +25,7 @@ class Likes extends DBEntity
         $this->user_id = $user_id;
         $this->text_id = $text_id;
         $this->lang_id = $lang_id;
-    } // end __construct()
+    } 
 
     /**
      * Toggles like for a specific text
@@ -43,7 +43,7 @@ class Likes extends DBEntity
             $sql = "INSERT INTO `{$this->table}` (`text_id`, `user_id`, `lang_id`) VALUES (?, ?, ?)";
             $this->sqlExecute($sql, [$this->text_id, $this->user_id, $this->lang_id]);
         }
-    } // end toggle()
+    } 
 
     /**
      * Returns total likes for current text
@@ -54,7 +54,7 @@ class Likes extends DBEntity
     {
         $sql = "SELECT COUNT(*) FROM `{$this->table}` WHERE `text_id` = ?";
         return $this->sqlCount($sql, [$this->text_id]);
-    } // end get()
+    } 
 
     /**
      * Checks if user already gave like to current text
@@ -65,5 +65,5 @@ class Likes extends DBEntity
     {
         $sql = "SELECT COUNT(*) AS `user_liked` FROM `{$this->table}` WHERE `text_id` = ? AND `user_id` = ?";
         return $this->sqlCount($sql, [$this->text_id, $this->user_id]) === 1;
-    } // end userLiked()
+    } 
 }

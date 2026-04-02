@@ -19,7 +19,7 @@ class TextsUtilities
         $xml = (array)simplexml_load_string(html_entity_decode(stripslashes($xml)));
         
         return array_key_exists('text', $xml) ? implode(" ", $xml['text']) : false;
-    } // end extractFromXML()
+    } 
 
     /**
      * Get audio_uri for embedding
@@ -44,7 +44,7 @@ class TextsUtilities
         }
         
         return $url;
-    } // end getGoogleDriveAudioUri()
+    } 
 
     /**
      * Checks if the provided URL is a Google Drive link with the specific format
@@ -81,5 +81,5 @@ class TextsUtilities
             },
             $author
         );
-    } // end formatAuthorCase()
+    } 
 }

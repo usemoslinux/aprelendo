@@ -45,14 +45,14 @@ $(document).ready(function () {
             console.error(error);
             showMessage(error.message, "alert-danger");
         }
-    }); // end #form-addtext.on.submit
+    }); 
 
     /**
      * Checks how many characters are left for user input
      */
     $("#text").on("input", function () {
         updateCharsLeft();
-    }); // end #text.on.input
+    }); 
 
     /**
      * Inserts text from file in textarea
@@ -68,7 +68,7 @@ $(document).ready(function () {
         };
         reader.readAsText(file);
         $(this).val(""); // reset value, allows user to select same file if necessary
-    }); // end #upload-text.on.change
+    }); 
 
     /**
      * Process text pasted inside textarea
@@ -127,7 +127,7 @@ $(document).ready(function () {
         if (!exceptSourceURI) {
             $("#url").val("");
         }
-    } // end resetControls
+    } 
 
     /**
      * Tells user how many characters are left in message box
@@ -151,7 +151,7 @@ $(document).ready(function () {
                 .addClass("text-success");
             $msg_box.text(chars_left.toLocaleString() + " left");
         }
-    } // end updateCharsLeft()
+    } 
 
     /**
      * Checks that the URL passed as a parameter is valid
@@ -266,7 +266,7 @@ $(document).ready(function () {
                     .addClass("bi bi-arrow-down-right-square text-warning");
             }
         }
-    } // end fetch_readable_text_version
+    } 
 
     // when page loads, check if text was imported from RSS feed
     // in that case, refresh the amount of chars left

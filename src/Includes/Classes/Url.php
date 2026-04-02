@@ -84,5 +84,5 @@ class Url
         $first_path_segment = $path_parts[0] ?? '';
 
         return trim($host !== '' ? $host : $first_path_segment);
-    } // end getDomainName()
+    } 
 }

@@ -14,7 +14,7 @@ class EbookFile extends File
         parent::__construct($file_name);
         $this->allowed_extensions = ['epub'];
         $this->max_size = 67108864; // 64 MB
-    } // end __construct()
+    } 
 
     /**
      * Strips images, scripts and styles from the uploaded epub file

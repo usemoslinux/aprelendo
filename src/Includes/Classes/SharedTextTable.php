@@ -24,5 +24,5 @@ class SharedTextTable extends TextTable
         ];
         $this->is_shared = true;
         $this->has_chkbox = false;
-    } // end __construct()
+    } 
 }

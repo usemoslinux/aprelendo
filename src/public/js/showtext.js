@@ -46,7 +46,7 @@ $(document).ready(function() {
                 skipAudioPhases();
             }
         }
-    } // end underlineText()
+    } 
 
     // *************************************************************
     // ****************** AUDIO/VIDEO CONTROLLER ******************* 
@@ -226,7 +226,7 @@ $(document).ready(function() {
             TextActionBtns.hide();
             MediaController.resume();
         }
-    }); // end #btn-add.on.click
+    }); 
 
     /**
      * Removes word from db
@@ -337,7 +337,7 @@ $(document).ready(function() {
             TextActionBtns.hide();
             MediaController.resume();
         }
-    }); // end #btn-remove.on.click
+    }); 
 
 
     // *************************************************************
@@ -467,7 +467,7 @@ $(document).ready(function() {
             default:
                 break;
         }
-    }); // end #btn-next-phase.on.click
+    }); 
 
 
     // *************************************************************
@@ -591,7 +591,7 @@ $(document).ready(function() {
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
-    } // end #updateWordsLearningStatus
+    } 
 
 
     // *************************************************************
@@ -634,7 +634,7 @@ $(document).ready(function() {
         $("#alert-box-audio").addClass("d-none");
         $("#audioplayer-loader").removeClass("d-none");
         loadAudio();
-    }); // end #retry-audio-load.on.click
+    }); 
 
     /**
      * Helper function to skip audio phases
@@ -655,7 +655,7 @@ $(document).ready(function() {
                 next_phase = 5;
             }    
         }
-    } // end skipAudioPhases
+    } 
 
     /**
      * Loads audio for text
@@ -710,7 +710,7 @@ $(document).ready(function() {
                 skipAudioPhases();
             }
         }
-    } // end loadAudio
+    } 
 
     /**
      * Shows dialog message reminding users to save changes before leaving
@@ -719,5 +719,5 @@ $(document).ready(function() {
         if (window.parent.show_confirmation_dialog) {
             return 'Press Save before you go or your changes will be lost.';
         }
-    }); // end window.on.beforeunload
+    }); 
 });

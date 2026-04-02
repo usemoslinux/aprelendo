@@ -36,5 +36,5 @@ class SearchWordsParameters extends SearchParameters
             11 => '`is_phrase`', // phrases first
             default => '',
         };
-    } // end buildSortSQL()
+    } 
 }

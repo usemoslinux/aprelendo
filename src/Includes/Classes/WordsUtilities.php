@@ -37,7 +37,7 @@ abstract class WordsUtilities
         }, $matches[0]);
 
         return array_unique($words);
-    } // end splitIntoUniqueWords()
+    } 
 
     /**
      * Exports words to a CSV file
@@ -68,5 +68,5 @@ abstract class WordsUtilities
 
             fclose($fp);
         }
-    } // end exportToCSV()
+    } 
 }

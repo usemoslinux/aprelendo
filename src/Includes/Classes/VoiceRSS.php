@@ -15,7 +15,7 @@ class VoiceRSS
     {
         $this->validate($settings);
         return $this->request($settings);
-    } // end speech()
+    } 
 
     /**
      * Validates request before sending it to VoiceRSS server
@@ -37,7 +37,7 @@ class VoiceRSS
         if (empty($settings['hl'] ?? '')) {
             throw new UserException('The language is undefined');
         }
-    } // end validate()
+    } 
 
     /**
      * Requests TTS conversion to VoiceRSS server
@@ -64,7 +64,7 @@ class VoiceRSS
             'error' => ($is_error) ? $resp : null,
             'response' => (!$is_error) ? $resp: null
         ];
-    } // end request()
+    } 
 
     /**
      * Builds CURL request based on $settings array
@@ -86,5 +86,5 @@ class VoiceRSS
                 'b64' => $settings['b64'] ?? ''
             ]
         );
-    } // end buildRequest()
+    } 
 }

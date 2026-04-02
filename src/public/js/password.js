@@ -24,7 +24,7 @@ $(document).ready(function() {
             $password_confirmation.css('border-bottom', '2px solid green');
             $password_match_text.text('Passwords match');
         }
-    } // end checkPasswordsAreEqual
+    } 
 
     /**
      * Updates password strength state
@@ -32,7 +32,7 @@ $(document).ready(function() {
     function setPasswordStrengthState(border_style, message) {
         $password.css('border-bottom', border_style);
         $password_strength_text.text(message);
-    } // end setPasswordStrengthState
+    } 
 
     /**
      * Checks password strength and changes progress bar accordingly
@@ -69,7 +69,7 @@ $(document).ready(function() {
         if (confirmation_value !== '') {
             checkPasswordsAreEqual(password_value, confirmation_value);
         }
-    }); // end #newpassword.on.input
+    }); 
 
     /**
      * Triggered when user is writing password confirmation
@@ -79,7 +79,7 @@ $(document).ready(function() {
         const confirmation_value = $password_confirmation.val();
 
         checkPasswordsAreEqual(password_value, confirmation_value);
-    }); // end #newpassword-confirmation.on.input
+    }); 
 
     /**
      * Shows/hides password
@@ -98,5 +98,5 @@ $(document).ready(function() {
             $password_input.attr('type', 'text');
             $password_span.removeClass('bi-eye-slash-fill').addClass('bi-eye-fill');
         }
-    }); // end .show-hide-password-btn.on.click
+    }); 
 });
