@@ -185,10 +185,6 @@ img.language-flag {
 }
 
 @media only screen and (max-width: 767px) {
-    .navbar-nav .dropdown-header {
-        color: yellow;
-    }
-
     #learning-lang-span {
         display: inline;
     }
