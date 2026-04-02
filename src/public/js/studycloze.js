@@ -252,8 +252,11 @@ $(document).ready(function () {
         let example_html = '';
         let example_text_html = '';
 
-        example_text_html = text.text.replace(word_regex, function () {
-            const shown = scrambled_display ? display_word : original_word;
+        example_text_html = text.text.replace(word_regex, function (match) {
+            const normalized_match = match.replace(/\s\s+/g, ' ');
+            const shown = scrambled_display
+                ? preserveInitialCase(display_word, normalized_match)
+                : normalized_match;
             const is_unscrambled = !scrambled_display;
 
             const base_classes = 'fw-bold bg-warning-subtle border-bottom p-1';
@@ -274,6 +277,27 @@ $(document).ready(function () {
         example_html += "</cite></blockquote>";
 
         return example_html;
+    }
+
+    /**
+     * Preserves the initial capitalization pattern of the original match.
+     * @param {string} display_text - Replacement text to render
+     * @param {string} match_text - Original regex match from the sentence
+     * @returns {string} Replacement text with initial case preserved
+     */
+    function preserveInitialCase(display_text, match_text) {
+        const normalized_display_text = display_text.replace(/\s\s+/g, ' ');
+        const first_match_char = match_text.charAt(0);
+
+        if (
+            first_match_char !== '' &&
+            first_match_char === first_match_char.toLocaleUpperCase() &&
+            first_match_char !== first_match_char.toLocaleLowerCase()
+        ) {
+            return normalized_display_text.charAt(0).toLocaleUpperCase() + normalized_display_text.slice(1);
+        }
+
+        return normalized_display_text;
     }
 
     /**
