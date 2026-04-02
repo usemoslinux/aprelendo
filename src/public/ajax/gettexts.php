@@ -9,7 +9,6 @@ $response = ['success' => false];
 
 use Aprelendo\Texts;
 use Aprelendo\TextTable;
-use Aprelendo\ArchivedTexts;
 use Aprelendo\SearchTextsParameters;
 use Aprelendo\Pagination;
 use Aprelendo\Url;
@@ -31,11 +30,8 @@ try {
     $init_page      = empty($search_text) && !$show_archived && $filter_type === 0 && $filter_level === 0;
 
     // calculate page count for pagination
-    if ($show_archived) {
-        $texts_table = new ArchivedTexts($pdo, $user_id, $lang_id);
-    } else {
-        $texts_table = new Texts($pdo, $user_id, $lang_id);
-    }
+    $texts_table = new Texts($pdo, $user_id, $lang_id);
+    $texts_table->setArchiveFilter($show_archived);
     
     $total_rows = $texts_table->countSearchRows($filter_type, $filter_level, $search_text);
     $pagination = new Pagination($total_rows, $page, $limit, $adjacents);

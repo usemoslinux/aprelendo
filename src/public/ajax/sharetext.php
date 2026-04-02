@@ -13,7 +13,6 @@ if (empty($_POST)) {
 }
 
 use Aprelendo\Texts;
-use Aprelendo\Language;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
@@ -21,10 +20,7 @@ try {
     $user_id = $user->id;
     $lang_id = $user->lang_id;
 
-    // if text is not shared, then archive or unarchive text accordingly
     if (!empty($_POST['textID'])) {
-        $lang = new Language($pdo, $user_id);
-        $lang->loadRecordById($user->lang_id);
         $text_id = $_POST['textID'];
 
         $texts_table = new Texts($pdo, $user_id, $lang_id);

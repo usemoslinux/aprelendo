@@ -112,13 +112,7 @@ class Card extends DBEntity
                 FROM texts
                 WHERE texts.lang_id = ? AND texts.user_id = ? AND texts.type <> 6 AND
                 MATCH(texts.text) AGAINST(? IN BOOLEAN MODE)
-                LIMIT 3)
-                UNION ALL
-                (SELECT archived_texts.title, archived_texts.author, archived_texts.text, archived_texts.source_uri
-                FROM archived_texts
-                WHERE archived_texts.lang_id = ? AND archived_texts.user_id = ? AND archived_texts.type <> 6 AND
-                MATCH(archived_texts.text) AGAINST(? IN BOOLEAN MODE)
-                LIMIT 3)
+                LIMIT 6)
                 UNION ALL
                 (SELECT shared_texts.title, shared_texts.author, shared_texts.text, shared_texts.source_uri
                 FROM shared_texts
@@ -132,7 +126,6 @@ class Card extends DBEntity
                 LIMIT 3)";
 
         return $this->sqlFetchAll($sql, [
-            $this->lang_id, $this->user_id, $word,
             $this->lang_id, $this->user_id, $word,
             $this->lang_id, $word,
             $this->lang_iso, $word

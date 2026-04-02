@@ -19,6 +19,8 @@ class Texts extends DBEntity
     public $date_created  = '';
     public $text_pos      = '';
     public $audio_pos     = '';
+    public $is_archived   = false;
+    protected $archive_filter = null;
     
     /**
     * Constructor
@@ -36,6 +38,46 @@ class Texts extends DBEntity
         $this->user_id = $user_id;
         $this->lang_id = $lang_id;
     } 
+
+    /**
+     * Sets the archive-state filter used by archive-aware queries.
+     *
+     * @param ?bool $is_archived
+     * @return void
+     */
+    public function setArchiveFilter(?bool $is_archived): void
+    {
+        $this->archive_filter = $is_archived;
+    }
+
+    /**
+     * Builds the SQL fragment used to filter by archive state.
+     *
+     * @param string $column_name
+     * @return string
+     */
+    protected function getArchiveFilterSql(string $column_name = '`is_archived`'): string
+    {
+        if ($this->archive_filter === null) {
+            return '';
+        }
+
+        return " AND {$column_name} = ?";
+    }
+
+    /**
+     * Returns the parameter list used by the archive-state filter.
+     *
+     * @return array
+     */
+    protected function getArchiveFilterParams(): array
+    {
+        if ($this->archive_filter === null) {
+            return [];
+        }
+
+        return [(int)$this->archive_filter];
+    }
 
     /**
      * Loads text record data
@@ -63,6 +105,7 @@ class Texts extends DBEntity
             $this->date_created  = $row['date_created'];
             $this->text_pos      = $row['text_pos'] ?? '';
             $this->audio_pos     = $row['audio_pos'] ?? '';
+            $this->is_archived   = !empty($row['is_archived']);
         }
     } 
         
@@ -140,9 +183,10 @@ class Texts extends DBEntity
             $sql .= empty($sql) ? "`$key`=?" : ", `$key`=?";
         }
 
-        $sql = "UPDATE `{$this->table}` SET $sql WHERE `id`=?";
+        $sql = "UPDATE `{$this->table}` SET $sql WHERE `id`=? AND `user_id`=?";
         $params = array_values($columns);
-        $params[] = $id; // add $id last
+        $params[] = $id;
+        $params[] = $this->user_id;
         $this->sqlExecute($sql, $params);
     } 
     
@@ -155,13 +199,16 @@ class Texts extends DBEntity
     public function delete(array $text_ids): void
     {
         $id_params = str_repeat("?,", count($text_ids)-1) . "?";
-    
-        $sql =  "SELECT `source_uri` FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $uris = $this->sqlFetchAll($sql, $text_ids);
+
+        $archive_filter_sql = $this->getArchiveFilterSql();
+        $params = array_merge($text_ids, [$this->user_id], $this->getArchiveFilterParams());
+
+        $sql =  "SELECT `source_uri` FROM `{$this->table}` WHERE `id` IN ($id_params) AND `user_id`=?{$archive_filter_sql}";
+        $uris = $this->sqlFetchAll($sql, $params);
         
         // delete entries from db
-        $sql =  "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $this->sqlExecute($sql, $text_ids);
+        $sql =  "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params) AND `user_id`=?{$archive_filter_sql}";
+        $this->sqlExecute($sql, $params);
 
         // delete audio (mp3, oggs) & source files (epubs, etc.)
         $pop_sources = new PopularSources($this->pdo);
@@ -190,21 +237,38 @@ class Texts extends DBEntity
         if (empty($text_ids)) throw new InternalException("Text id is empty");
 
         $id_params = str_repeat("?,", count($text_ids)-1) . "?";
+        $params = array_merge($text_ids, [$this->user_id]);
 
-        $sql_insert = "INSERT INTO `archived_texts` SELECT * FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $sql_delete = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
+        $sql = "UPDATE `{$this->table}` SET `is_archived` = 1
+                WHERE `id` IN ($id_params) AND `user_id`=? AND `is_archived` = 0";
 
         try {
-            $this->pdo->beginTransaction();
-            $this->sqlExecute($sql_insert, $text_ids);
-            $this->sqlExecute($sql_delete, $text_ids);
-            $this->pdo->commit();
+            $this->sqlExecute($sql, $params);
         } catch (\Throwable $throwable) {
-            if ($this->pdo->inTransaction()) {
-                $this->pdo->rollBack();
-            }
-
             throw new InternalException('Could not archive texts.');
+        }
+    } 
+
+    /**
+    * Unarchives texts in database using ids as a parameter to select them
+    *
+    * @param array $text_ids
+    * @return void
+    */
+    public function unarchive(array $text_ids): void
+    {
+        if (empty($text_ids)) throw new InternalException("Text id is empty");
+
+        $id_params = str_repeat("?,", count($text_ids)-1) . "?";
+        $params = array_merge($text_ids, [$this->user_id]);
+
+        $sql = "UPDATE `{$this->table}` SET `is_archived` = 0
+                WHERE `id` IN ($id_params) AND `user_id`=? AND `is_archived` = 1";
+
+        try {
+            $this->sqlExecute($sql, $params);
+        } catch (\Throwable $throwable) {
+            throw new InternalException('Could not unarchive texts.');
         }
     } 
 
@@ -234,13 +298,14 @@ class Texts extends DBEntity
         $sql_insert = "INSERT INTO `shared_texts` ($cols_sql)
                 SELECT $cols_sql
                 FROM `{$this->table}`
-                WHERE `id` = $text_id";
-        $sql_delete = "DELETE FROM `{$this->table}` WHERE `id` = $text_id";
+                WHERE `id` = ? AND `user_id` = ?";
+        $sql_delete = "DELETE FROM `{$this->table}` WHERE `id` = ? AND `user_id` = ?";
+        $params = [$text_id, $this->user_id];
 
         try {
             $this->pdo->beginTransaction();
-            $this->sqlExecute($sql_insert);
-            $this->sqlExecute($sql_delete);
+            $this->sqlExecute($sql_insert, $params);
+            $this->sqlExecute($sql_delete, $params);
             $this->pdo->commit();
         } catch (\Throwable $throwable) {
             if ($this->pdo->inTransaction()) {
@@ -264,12 +329,8 @@ class Texts extends DBEntity
             return false;
         }
 
-        // check if source_url exists in 'texts' or 'archived_texts' table
-        $sql = "SELECT
-                (SELECT COUNT(*) FROM `{$this->table}` WHERE `user_id` = ? AND `source_uri` = ?) +
-                (SELECT COUNT(*) FROM `archived_texts` WHERE `user_id` = ? AND `source_uri` = ?)
-                AS SumCount";
-        return $this->sqlCount($sql, [$this->user_id, $source_url, $this->user_id, $source_url]);
+        $sql = "SELECT COUNT(*) FROM `texts` WHERE `user_id` = ? AND `source_uri` = ?";
+        return $this->sqlCount($sql, [$this->user_id, $source_url]) > 0;
     } 
     
     /**
@@ -286,12 +347,16 @@ class Texts extends DBEntity
         $search_text = '%' . $search_text . '%';
         $filter_type_sql = $filter_type == 0 ? 'AND `type`>=?' : 'AND `type`=?';
         $filter_level_sql = $filter_level == 0 ? 'AND `level`>=?' : 'AND `level`=?';
+        $archive_filter_sql = $this->getArchiveFilterSql();
         
         $sql = "SELECT COUNT(`id`) FROM `{$this->table}`
                 WHERE `user_id`=?
-                AND `lang_id`=? $filter_level_sql $filter_type_sql AND `title` LIKE ?";
+                AND `lang_id`=? $filter_level_sql $filter_type_sql AND `title` LIKE ?{$archive_filter_sql}";
 
-        return $this->sqlCount($sql, [$this->user_id, $this->lang_id, $filter_level, $filter_type, $search_text]);
+        return $this->sqlCount($sql, array_merge(
+            [$this->user_id, $this->lang_id, $filter_level, $filter_type, $search_text],
+            $this->getArchiveFilterParams()
+        ));
     } 
     
     /**
@@ -306,6 +371,7 @@ class Texts extends DBEntity
         $filter_type_sql = $search_params->buildFilterTypeSQL();
         $filter_level_sql = $search_params->buildFilterLevelSQL();
         $search_text = '%' . $search_params->search_text . '%';
+        $archive_filter_sql = $this->getArchiveFilterSql('texts.`is_archived`');
         
         $sql = "SELECT texts.`id`,
                         NULL,
@@ -325,12 +391,13 @@ class Texts extends DBEntity
                 AND texts.`lang_id` = ?
                 AND texts.`level` $filter_level_sql
                 AND texts.`type` $filter_type_sql
-                AND texts.`title` LIKE ?
+                AND texts.`title` LIKE ?{$archive_filter_sql}
                 ORDER BY $sort_sql
                 LIMIT {$search_params->offset}, {$search_params->limit}";
 
-        return $this->sqlFetchAll($sql, [
-            $this->user_id, $this->lang_id, $search_params->filter_level, $search_params->filter_type, $search_text
-        ]);
+        return $this->sqlFetchAll($sql, array_merge(
+            [$this->user_id, $this->lang_id, $search_params->filter_level, $search_params->filter_type, $search_text],
+            $this->getArchiveFilterParams()
+        ));
     } 
 }

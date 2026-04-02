@@ -13,24 +13,18 @@ if (empty($_POST)) {
 }
 
 use Aprelendo\Texts;
-use Aprelendo\ArchivedTexts;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
 try {
     if (isset($_POST['textIDs']) && isset($_POST['is_archived'])) {
         $text_ids = json_decode($_POST['textIDs']);
-        $is_archived = $_POST['is_archived'];
+        $is_archived = $_POST['is_archived'] === '1';
         $user_id = $user->id;
         $lang_id = $user->lang_id;
 
-        // decide wether we are deleting an archived text or not
-        if ($is_archived) {
-            $texts_table = new ArchivedTexts($pdo, $user_id, $lang_id);
-        } else {
-            $texts_table = new Texts($pdo, $user_id, $lang_id);
-        }
-
+        $texts_table = new Texts($pdo, $user_id, $lang_id);
+        $texts_table->setArchiveFilter($is_archived);
         $texts_table->delete($text_ids);
         $response = ['success' => true];
     } 

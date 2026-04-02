@@ -280,10 +280,8 @@ class User extends DBEntity
      */
     private function deleteFiles(): void
     {
-        $sql = "SELECT `source_uri` FROM `texts` WHERE `user_id`=?
-                UNION ALL
-                SELECT `source_uri` FROM `archived_texts` WHERE `user_id`=?";
-        $rows = $this->sqlFetchAll($sql, [$this->id, $this->id]);
+        $sql = "SELECT `source_uri` FROM `texts` WHERE `user_id`=?";
+        $rows = $this->sqlFetchAll($sql, [$this->id]);
                     
         $filename = '';
         $file_extensions = ['.epub', '.mp3', '.ogg'];
@@ -328,10 +326,8 @@ class User extends DBEntity
     {
         return match ($table) {
             'texts' => $this->sqlCount(
-                "SELECT `id` FROM `texts` WHERE `id` = ? AND `user_id` = ?
-                UNION ALL
-                SELECT `id` FROM `archived_texts` WHERE `id` = ? AND `user_id` = ?",
-                [$id, $this->id, $id, $this->id]
+                "SELECT `id` FROM `texts` WHERE `id` = ? AND `user_id` = ?",
+                [$id, $this->id]
             ) > 0,
             'shared_texts' => $this->sqlCount("SELECT `id` FROM `$table` WHERE `id`=?", [$id]) > 0,
             'words' => $this->sqlCount("SELECT `id` FROM `$table` WHERE `id`=? AND `user_id`=?", [$id, $this->id]) > 0,
