@@ -284,11 +284,11 @@ class User extends DBEntity
         $rows = $this->sqlFetchAll($sql, [$this->id]);
                     
         $filename = '';
-        $file_extensions = ['.epub', '.mp3', '.ogg'];
+        $file_extensions = ['epub', 'mp3', 'ogg'];
 
         foreach ($rows as $row) {
             $filename = $row['source_uri'];
-            if (in_array(substr($filename, -5), $file_extensions)) {
+            if (in_array(strtolower(pathinfo($filename, PATHINFO_EXTENSION)), $file_extensions, true)) {
                 $file = new File($filename);
                 $file->delete();
             }

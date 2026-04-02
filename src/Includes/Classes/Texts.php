@@ -217,7 +217,7 @@ class Texts extends DBEntity
         
         // delete associated file
         foreach ($uris as $uri) {
-            if (!empty($uri['source_uri']) && str_contains($uri['source_uri'], '.epub')) {
+            if (!empty($uri['source_uri']) && str_ends_with(strtolower($uri['source_uri']), '.epub')) {
                 $file = new File($uri['source_uri']);
                 $file->delete();
             }
