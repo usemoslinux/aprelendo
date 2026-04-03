@@ -20,7 +20,6 @@ $(document).ready(function () {
 
     // initial AJAX calls
     underlineText(); // underline text with user words/phrases
-    Dictionaries.fetchURIs(); // get dictionary & translator URIs
 
     /**
      * Fetches user words/phrases from the server and underlines them in the text, but only if this
@@ -28,21 +27,7 @@ $(document).ready(function () {
      */
     async function underlineText() {
         try {
-            const form_data = new URLSearchParams({ txt: $('#text').html() });
-            const response = await fetch("/ajax/getuserwords.php", {
-                method: "POST",
-                body: form_data
-            });
-
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-            const data = await response.json();
-
-            if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to get user words for underlining');
-            }
-
-            $('#text').html(TextUnderliner.apply(data.payload, doclang));
+            $('#text').html(await ReaderHelpers.annotateText($('#text').html(), doclang));
             TextProcessor.updateAnchorsList();
         } catch (error) {
             console.error(error);
@@ -54,227 +39,30 @@ $(document).ready(function () {
     // ****************** AUDIO/VIDEO CONTROLLER ******************* 
     // *************************************************************
 
-    WordSelection.setupEvents({
-        actionBtns: VideoActionBtns,
+    ReaderHelpers.initializeReaderActions({
+        action_btns: VideoActionBtns,
         controller: VideoController,
-        linkBuilder: LinkBuilder.forTranslationInVideo
+        source: "video"
     });
 
     // *************************************************************
     // **** ACTION BUTTONS (ADD, DELETE, FORGOT & DICTIONARIES) **** 
     // *************************************************************
 
-    /**
-     * Adds selected word or phrase to the database and underlines it in the text
-     */
-    $("#btn-add, #btn-forgot").on("click", async function (e) {
-        const $action_button = $(this);
-        ActionBtns.setActionMenuLoading($action_button);
-        const $selword = WordSelection.get();
-        const sel_text = $selword.text();
-        const is_phrase = $selword.length > 1 ? 1 : 0;
-
-        try {
-            const form_data = new URLSearchParams({
-                word: sel_text.toLowerCase(),
-                is_phrase: is_phrase,
-                source_id: $('[data-idtext]').attr('data-idtext'),
-                text_is_shared: true,
-                sentence: SentenceExtractor.extractSentence($selword)
-            });
-
-            const response = await fetch("/ajax/addword.php", {
-                method: "POST",
-                body: form_data
-            });
-
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-            const data = await response.json();
-
-            if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to add word.');
-            }
-
-            // underline word or phrase
-            if (is_phrase) {
-                // if it's a phrase
-                const firstword = $selword.eq(0).text();
-                const phraseext = $selword.filter(".word").length;
-                let $filterphrase = $("a.word").filter(function () {
-                    return (
-                        $(this)
-                            .text()
-                            .toLowerCase() === firstword.toLowerCase()
-                    );
-                });
-
-                $filterphrase.each(function () {
-                    let lastword = $(this)
-                        .nextAll("a.word")
-                        .slice(0, phraseext - 1)
-                        .last();
-                    let phrase = $(this)
-                        .nextUntil(lastword)
-                        .addBack()
-                        .next("a.word")
-                        .addBack();
-
-                    if (
-                        phrase.text().toLowerCase() ===
-                        sel_text.toLowerCase()
-                    ) {
-                        phrase.wrapAll(
-                            "<a class='word reviewing new'></a>"
-                        );
-
-                        phrase.contents().unwrap();
-                    }
-                });
-            } else {
-                // if it's a word
-                let $filterword = $("a.word").filter(function () {
-                    return (
-                        $(this)
-                            .text()
-                            .toLowerCase() === sel_text.toLowerCase()
-                    );
-                });
-
-                $filterword.each(function () {
-                    let $word = $(this);
-                    if ($word.is(".new, .learning, .learned, .forgotten")) {
-                        $word.wrap(
-                            "<a class='word reviewing forgotten'></a>"
-                        );
-                    } else {
-                        $word.wrap(
-                            "<a class='word reviewing new'></a>"
-                        );
-                    }
-                });
-
-                $filterword.contents().unwrap();
-            }
-
-            TextProcessor.updateAnchorsList();
-
-        } catch (error) {
-            console.error(error);
-            alert(`Oops! ${error.message}`);
-        } finally {
-            ActionBtns.clearActionMenuLoading($action_button);
-            VideoActionBtns.hide();
-            VideoController.resume();
-        }
-    }); 
-
-    /**
-     * Remove selected word or phrase from database
-     */
-    $("#btn-remove").on("click", async function () {
-        const $action_button = $(this);
-        ActionBtns.setActionMenuLoading($action_button);
-        const $selword = WordSelection.get();
-
-        try {
-            const remove_word_response = await fetch("/ajax/removeword.php", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ word: $selword.text().toLowerCase() })
-            });
-
-            if (!remove_word_response.ok) { throw new Error(`HTTP error: ${remove_word_response.status}`); }
-
-            const remove_word_data = await remove_word_response.json();
-
-            if (!remove_word_data.success) {
-                throw new Error(remove_word_data.error_msg || 'Failed to remove word.');
-            }
-
-            let $filter = $("a.word").filter(function () {
-                return (
-                    $(this)
-                        .text()
-                        .toLowerCase() === $selword.text().toLowerCase()
-                );
-            });
-
-            const get_user_words_response = await fetch("/ajax/getuserwords.php", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ txt: $selword.text() })
-            });
-
-            if (!get_user_words_response.ok) { throw new Error(`HTTP error: ${get_user_words_response.status}`); }
-
-            const get_user_words_data = await get_user_words_response.json();
-
-            if (!get_user_words_data.success) {
-                throw new Error(get_user_words_data.error_msg || 'Failed to get user words for re-underlining.');
-
-            }
-
-            let $result = $(TextUnderliner.apply(get_user_words_data.payload, doclang));
-            const result_word_nodes = $result.filter(".word").get();
-            const lang_has_no_word_separators = TextProcessor.langHasNoWordSeparators(doclang);
-            const user_words = Array.isArray(get_user_words_data.payload.user_words)
-                ? get_user_words_data.payload.user_words
-                : [];
-            const word_status_map = new Map(
-                user_words.map(function (user_word_item) {
-                    return [String(user_word_item.word).toLowerCase(), user_word_item.status];
-                })
-            );
-
-            $filter.each(function () {
-                const $cur_filter = $(this);
-                const cur_filter_text = $cur_filter.text();
-
-                for (const result_word_node of result_word_nodes) {
-                    const node_text = result_word_node.textContent;
-                    let cur_word_match = null;
-
-                    if (lang_has_no_word_separators) {
-                        cur_word_match = new RegExp(
-                            "(?<![^])" + node_text + "(?![$])",
-                            "iug"
-                        ).exec(cur_filter_text);
-                    }
-                    else {
-                        cur_word_match = new RegExp(
-                            "(?<![\\p{L}|^])" + node_text + "(?![\\p{L}|$])",
-                            "iug"
-                        ).exec(cur_filter_text);
-                    }
-
-                    result_word_node.textContent = cur_word_match ? cur_word_match[0] : "";
-
-                    const word = result_word_node.textContent.toLowerCase();
-                    const user_word_status = word_status_map.get(word);
-
-                    if (user_word_status == 2) {
-                        result_word_node.classList.remove("learning");
-                        result_word_node.classList.add("new");
-                    } else if (user_word_status == 3) {
-                        result_word_node.classList.remove("learning");
-                        result_word_node.classList.add("forgotten");
-                    }
-                }
-
-                $cur_filter.replaceWith($result.clone());
-            });
-
-            TextProcessor.updateAnchorsList();
-        } catch (error) {
-            console.error(error);
-            alert(`Oops! ${error.message}`);
-        } finally {
-            ActionBtns.clearActionMenuLoading($action_button);
-            VideoActionBtns.hide();
-            VideoController.resume();
-        }
-    }); 
+    ReaderHelpers.bindWordActionButtons({
+        doclang: doclang,
+        action_btns: VideoActionBtns,
+        controller: VideoController,
+        get_source_id: function () {
+            return $('[data-idtext]').attr('data-idtext');
+        },
+        text_is_shared: true,
+        sentence_with_context: false,
+        get_word_anchors: function () {
+            return $("a.word");
+        },
+        word_value_mode: "lowercase"
+    });
 
     // *************************************************************
     // ******************* MAIN MENU BUTTONS ***********************
@@ -285,96 +73,20 @@ $(document).ready(function () {
      * Executes when the user presses the big green button at the end
      */
     $(document).on("click", "#btn-save-ytvideo", async function () {
-        // build array with underlined words
-        let oldwords = [];
-        let ids = [];
-        let word = "";
-        $(".learning").each(function () {
-            word = $(this)
-                .text()
-                .toLowerCase();
-            if ($.inArray(word, oldwords) == -1) {
-                oldwords.push(word);
-            }
-        });
-
-        ids.push($("#text-container").attr("data-IdText")); // get text ID
+        const text_ids = [$("#text-container").attr("data-IdText")];
 
         try {
-            const update_words_response = await fetch("/ajax/updatewords.php", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    words: JSON.stringify(oldwords),
-                    textIDs: JSON.stringify(ids)
-                })
+            const save_data = await ReaderHelpers.saveReviewProgress({
+                words_selector: ".learning",
+                text_ids: text_ids
             });
 
-            if (!update_words_response.ok) { throw new Error(`HTTP error: ${update_words_response.status}`); }
-
-            const update_words_data = await update_words_response.json();
-
-            if (!update_words_data.success) {
-                throw new Error(update_words_data.error_msg || 'Failed to update words status.');
-            }
-
-            const review_data = {
-                    words: {
-                        new: getUniqueElements('.reviewing.new'),
-                        learning: getUniqueElements('.reviewing.learning'),
-                        forgotten: getUniqueElements('.reviewing.forgotten')
-                    },
-                    texts: { reviewed: 1 }
-                };
-
-                const update_user_score_response = await fetch("/ajax/updateuserscore.php", {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({
-                        'review_data': JSON.stringify(review_data)
-                    })
-                });
-
-                if (!update_user_score_response.ok) { throw new Error(`HTTP error: ${update_user_score_response.status}`); }
-
-                const update_user_score_data = await update_user_score_response.json();
-
-                if (!update_user_score_data.success) {
-                    throw new Error(update_user_score_data.error_msg || 'Failed to update user score.');
-                }
-                
-                gems_earned = update_user_score_data.gems_earned;
-                show_confirmation_dialog = false;
-                const url = "/textstats";
-                const total_words =
-                    Number($(".word").length) + Number($(".phrase").length);
-                const form = $(
-                    '<form action="' +
-                    url +
-                    '" method="post">' +
-                    '<input type="hidden" name="created" value="' +
-                    $(".reviewing.new").length +
-                    '" />' +
-                    '<input type="hidden" name="learning" value="' +
-                    $(".reviewing.learning").length +
-                    '" />' +
-                    '<input type="hidden" name="learned" value="' +
-                    $(".learned").length +
-                    '" />' +
-                    '<input type="hidden" name="forgotten" value="' +
-                    $(".reviewing.forgotten").length +
-                    '" />' +
-                    '<input type="hidden" name="total" value="' +
-                    total_words +
-                    '" />' +
-                    '<input type="hidden" name="gems_earned" value="' +
-                    gems_earned +
-                    '" />' +
-                    '<input type="hidden" name="is_shared" value="1" />' +
-                    "</form>"
-                );
-                $("body").append(form);
-                form.trigger("submit");
+            gems_earned = save_data.gems_earned;
+            show_confirmation_dialog = false;
+            ReaderHelpers.submitTextStatsForm({
+                gems_earned: gems_earned,
+                is_shared: 1
+            });
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
@@ -393,9 +105,7 @@ $(document).ready(function () {
     /**
      * Shows dialog message reminding users to save changes before leaving
      */
-    $(window).on("beforeunload", function () {
-        if (show_confirmation_dialog) {
-            return 'Press Save before you go or your changes will be lost.';
-        }
+    ReaderHelpers.bindBeforeUnloadWarning(function () {
+        return show_confirmation_dialog;
     }); 
 });

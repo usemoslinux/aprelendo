@@ -230,6 +230,7 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
     <script defer src="/js/underlinewords.js"></script>
     <script defer src="/js/wordselection.js"></script>
     <script defer src="/js/actionbtns.js"></script>
+    <script defer src="/js/readerhelpers.js"></script>
     <?php if ($audio_source_is_YT): ?>
         <script src="/js/ytvideoplayer.js"></script>
     <?php else: ?>
@@ -237,7 +238,6 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
     <?php endif; ?>
     <script defer src="/js/helpers.js"></script>
     <script defer src="/js/tooltips.js"></script>
-    <script defer src="/js/showtext.js"></script>
     <script defer src="/js/showebook.js"></script>
 </body>
 

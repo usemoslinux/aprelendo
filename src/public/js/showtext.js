@@ -14,7 +14,6 @@ $(document).ready(function() {
     // initial AJAX calls
     loadAudio();
     underlineText(); // underline text with user words/phrases
-    Dictionaries.fetchURIs(); // get dictionary & translator URIs
 
     /**
      * Fetches user words/phrases from the server and underlines them in the text, but only if this
@@ -23,21 +22,7 @@ $(document).ready(function() {
     async function underlineText() {
         if ($('#text-container').data('type') == 'text') {
             try {
-                const form_data = new URLSearchParams({ txt: $('#text').text() });
-                const response = await fetch("/ajax/getuserwords.php", {
-                    method: "POST",
-                    body: form_data
-                });
-
-                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-                const data = await response.json();
-
-                if (!data.success) {
-                    throw new Error(data.error_msg || 'Failed to get user words for underlining');
-                } 
-                
-                $('#text').html(TextUnderliner.apply(data.payload, doclang));
+                $('#text').html(await ReaderHelpers.annotateText($('#text').text(), doclang));
                 TextProcessor.updateAnchorsList();
             } catch (error) {
                 console.error(error);
@@ -53,20 +38,16 @@ $(document).ready(function() {
     // *************************************************************
     let MediaController;
 
-    if (typeof AudioController !== 'undefined') {
-        MediaController = AudioController;
-    } else if (typeof VideoController !== 'undefined') {
-        MediaController = VideoController;
-    } else {
+    MediaController = ReaderHelpers.resolveMediaController();
+
+    if (!MediaController) {
         // Handle the case where neither controller is available
         console.log('No suitable media controller found.');
-    }
-
-    if (MediaController) {
-        WordSelection.setupEvents({
-            actionBtns: TextActionBtns,
+    } else {
+        ReaderHelpers.initializeReaderActions({
+            action_btns: TextActionBtns,
             controller: MediaController,
-            linkBuilder: LinkBuilder.forTranslationInText
+            source: "text"
         });
     }
 
@@ -88,256 +69,38 @@ $(document).ready(function() {
     // **** ACTION BUTTONS (ADD, DELETE, FORGOT & DICTIONARIES) **** 
     // *************************************************************
 
-    /**
-     * Adds word to user db
-     * Triggered when user clicks the "Add" button in the action popup
-     */
-    $doc.on("click", "#btn-add, #btn-forgot", async function(e) {
-        const $action_button = $(this);
-        ActionBtns.setActionMenuLoading($action_button);
-        const $selword = WordSelection.get();
-        const is_phrase = $selword.length > 1 ? 1: 0;
-        const sel_text = $selword.text();
-        const audio_is_loaded = hasAudioSource();
-        const url_params = new URLSearchParams(window.location.search);
-        const text_is_shared = url_params.get('sh');
-
-        try {
-            const form_data = new URLSearchParams({
-                word: sel_text,
-                is_phrase: is_phrase,
-                source_id: $('[data-idtext]').attr('data-idtext'),
-                text_is_shared: text_is_shared,
-                sentence: SentenceExtractor.extractSentence($selword, true)
-            });
-
-            const response = await fetch("/ajax/addword.php", {
-                method: "POST",
-                body: form_data
-            });
-
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-            data = await response.json();
-
-            if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to add word.');
-            }
-
-            const no_prev_underlined_words = $(".learning, .new, .forgotten").length == 0;
+    ReaderHelpers.bindWordActionButtons({
+        doclang: doclang,
+        action_btns: TextActionBtns,
+        controller: MediaController,
+        get_source_id: function () {
+            return $('[data-idtext]').attr('data-idtext');
+        },
+        text_is_shared: function () {
+            const url_params = new URLSearchParams(window.location.search);
+            return url_params.get('sh');
+        },
+        sentence_with_context: true,
+        get_word_anchors: function () {
+            return TextProcessor.getTextContainer().find("a.word");
+        },
+        get_new_word_attributes: function () {
             const there_is_audio = $("#audioplayer")[0]?.readyState > 0;
-            const hide_elem_if_dictation_is_on = there_is_audio && next_phase == 5
+            return there_is_audio && next_phase == 5
                 ? "style='display: none;'"
                 : "";
-
-            // underline word or phrase
-            if (is_phrase) {
-                // if it's a phrase
-                const word_count = $selword.filter(".word").length;
-
-                // build filter based on first word of the phrase
-                let $filterphrase = TextProcessor.getTextContainer()
-                    .find("a.word")
-                    .filter(function() {
-                        return (
-                            $(this)
-                                .text()
-                                .toLowerCase() ===
-                            $selword
-                                .eq(0)
-                                .text()
-                                .toLowerCase()
-                        );
-                    });
-
-                // loop through the filter and underline all instances of the phrase
-                $filterphrase.each(function() {
-                    let $lastword = $(this)
-                        .nextAll("a.word")
-                        .slice(0, word_count - 1)
-                        .last();
-                    let $phrase = $(this)
-                        .nextUntil($lastword)
-                        .addBack()
-                        .next("a.word")
-                        .addBack();
-
-                    if (
-                        $phrase.text().toLowerCase() ===
-                        sel_text.toLowerCase()
-                    ) {
-                        $phrase.wrapAll(
-                            `<a class="word reviewing new" ${hide_elem_if_dictation_is_on}></a>`
-                        );
-
-                        $phrase.contents().unwrap();
-                    }
-                });
-            } else {
-                // if it's a word
-                // build filter with all the instances of the word in the text
-                let $filterword = TextProcessor.getTextContainer()
-                    .find("a.word")
-                    .filter(function() {
-                        return (
-                            $(this)
-                                .text()
-                                .toLowerCase() === sel_text.toLowerCase()
-                        );
-                    });
-
-                // loop through the filter and underline all instances of the word
-                $filterword.each(function() {
-                    let $word = $(this);
-                    if ($word.is(".new, .learning, .learned, .forgotten")) {
-                        $word.wrap(
-                            `<a class='word reviewing forgotten' ${hide_elem_if_dictation_is_on}></a>`
-                        );
-                    } else {
-                        $word.wrap(
-                            `<a class='word reviewing new' ${hide_elem_if_dictation_is_on}></a>`
-                        );
-                    }
-                });
-
-                $filterword.contents().unwrap();
-            }
-
-            // if there were no previous words underlined, therefore phases 2 & 3 were off,
-            // when user adds his first new word, activate these phases
-            if (next_phase == 6 && no_prev_underlined_words) {
-                if (!audio_is_loaded) {
+        },
+        on_add_success: function () {
+            if (next_phase == 6 && $(".learning, .new, .forgotten").length > 0) {
+                if (!hasAudioSource()) {
                     skipAudioPhases();
                 } else {
-                    let elem = document.getElementById('btn-next-phase');
-                    let title = 'Go to phase 4: Dictation';
-                    setNewTooltip(elem, title);
-
+                    setNewTooltip(document.getElementById('btn-next-phase'), 'Go to phase 4: Dictation');
                     next_phase = 4;
                 }
             }
-
-            TextProcessor.updateAnchorsList();
-        } catch (error) {
-            console.error(error);
-            alert(`Oops! ${error.message}`);
-        } finally {
-            ActionBtns.clearActionMenuLoading($action_button);
-            TextActionBtns.hide();
-            MediaController.resume();
         }
-    }); 
-
-    /**
-     * Removes word from db
-     * Triggered when user clicks the "Remove" button in the action popup
-     */
-    $doc.on("click", "#btn-remove", async function() {
-        const $action_button = $(this);
-        ActionBtns.setActionMenuLoading($action_button);
-        const $selword = WordSelection.get();
-        
-        try {
-            // First ajax call to remove the word
-            const remove_word_response = await fetch("/ajax/removeword.php", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ word: $selword.text().toLowerCase() })
-            });
-
-            if (!remove_word_response.ok) { throw new Error(`HTTP error: ${remove_word_response.status}`); }
-
-            const remove_word_data = await remove_word_response.json();
-            
-            if (!remove_word_data.success) {
-                throw new Error(remove_word_data.error_msg || 'Failed to remove word.');
-            }
-            
-                            let $filter = TextProcessor.getTextContainer()
-                    .find("a.word")
-                    .filter(function() {
-                        return (
-                            $(this)
-                                .text()
-                                .toLowerCase() === $selword.text().toLowerCase()
-                        );
-                    });
-    
-                // Second ajax call to get user words and re-underline
-                const get_user_words_response = await fetch("/ajax/getuserwords.php", {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({ txt: $selword.text() })
-                });
-    
-                if (!get_user_words_response.ok) { throw new Error(`HTTP error: ${get_user_words_response.status}`); }
-                
-                const get_user_words_data = await get_user_words_response.json();
-                
-                if (!get_user_words_data.success) {
-                    throw new Error(get_user_words_data.error_msg || 'Failed to get user words for re-underlining.');
-                }
-                
-                let $result = $(TextUnderliner.apply(get_user_words_data.payload, doclang));
-                const result_word_nodes = $result.filter(".word").get();
-                const lang_has_no_word_separators = TextProcessor.langHasNoWordSeparators(doclang);
-                const user_words = Array.isArray(get_user_words_data.payload.user_words)
-                    ? get_user_words_data.payload.user_words
-                    : [];
-                const word_status_map = new Map(
-                    user_words.map(function(user_word_item) {
-                        return [String(user_word_item.word).toLowerCase(), user_word_item.status];
-                    })
-                );
-
-                $filter.each(function() {
-                    const $cur_filter = $(this);
-                    const cur_filter_text = $cur_filter.text();
-
-                    for (const result_word_node of result_word_nodes) {
-                        const node_text = result_word_node.textContent;
-                        let cur_word_match = null;
-
-                        if (lang_has_no_word_separators) {
-                            cur_word_match = new RegExp(
-                                "(?<![^])" + node_text + "(?![$])",
-                                "iug"
-                            ).exec(cur_filter_text);
-                        } else {
-                            cur_word_match = new RegExp(
-                                "(?<![\\p{L}|^])" + node_text + "(?![\\p{L}|$])",
-                                "iug"
-                            ).exec(cur_filter_text);
-                        }
-
-                        result_word_node.textContent = cur_word_match ? cur_word_match[0] : "";
-
-                        // check if any word marked by PHP as .learning should be marked as .new instead
-                        const word = result_word_node.textContent.toLowerCase();
-                        const user_word_status = word_status_map.get(word);
-
-                        if (user_word_status == 2) {
-                            result_word_node.classList.remove("learning");
-                            result_word_node.classList.add("new");
-                        } else if (user_word_status == 3) {
-                            result_word_node.classList.remove("learning");
-                            result_word_node.classList.add("forgotten");
-                        }
-                    }
-
-                    $cur_filter.replaceWith($result.clone());
-                });
-                TextProcessor.updateAnchorsList();
-
-        } catch (error) {
-            console.error(error);
-            alert(`Oops! ${error.message}`);
-        } finally {
-            ActionBtns.clearActionMenuLoading($action_button);
-            TextActionBtns.hide();
-            MediaController.resume();
-        }
-    }); 
+    });
 
 
     // *************************************************************
@@ -484,109 +247,27 @@ $(document).ready(function() {
      * Archives text (only if necessary) and updates status of all underlined words & phrases
      */
     async function updateWordsLearningStatus() {
-        // build array with underlined words
-        let unique_words = [];
-        let id = [];
-        let word = "";
         let archive_text = true;
         const is_shared = $("#is_shared").length > 0;
-        let gems_earned = 0;
-
-        $("#text").find(".reviewing").each(function() {
-            word = $(this)
-                .text()
-                .toLowerCase();
-            if ($.inArray(word, unique_words) == -1) {
-                unique_words.push(word);
-            }
-        });
-
-        id.push($("#text-container").attr("data-IdText")); // get text ID
+        let text_ids = [$("#text-container").attr("data-IdText")];
 
         if (is_shared) {
-            id = undefined;
+            text_ids = undefined;
             archive_text = undefined;
         }
 
         try {
-            const update_words_response = await fetch("/ajax/updatewords.php", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    words: JSON.stringify(unique_words),
-                    textIDs: JSON.stringify(id),
-                    archivetext: archive_text
-                })
+            const save_data = await ReaderHelpers.saveReviewProgress({
+                words_selector: "#text .reviewing",
+                text_ids: text_ids,
+                archive_text: archive_text
             });
 
-            if (!update_words_response.ok) { throw new Error(`HTTP error: ${update_words_response.status}`); }
-
-            const update_words_data = await update_words_response.json();
-
-            if (!update_words_data.success) {
-                throw new Error(update_words_data.error_msg || 'Failed to update words status.');
-            }
-            
-            // update user score (gems)
-                const review_data = {
-                    words: {
-                        new: getUniqueElements('.reviewing.new'),
-                        learning: getUniqueElements('.reviewing.learning'),
-                        forgotten: getUniqueElements('.reviewing.forgotten')
-                    },
-                    texts: { reviewed: 1 }
-                };
-
-                const update_user_score_response = await fetch("ajax/updateuserscore.php", {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({
-                        'review_data': JSON.stringify(review_data)
-                    })
-                });
-
-                if (!update_user_score_response.ok) { throw new Error(`HTTP error: ${update_user_score_response.status}`); }
-
-                const update_user_score_data = await update_user_score_response.json();
-
-                if (!update_user_score_data.success) {
-                    throw new Error(update_user_score_data.error_msg || 'Failed to update user score.');
-                }
-
-                gems_earned = update_user_score_data.gems_earned;
-                window.parent.show_confirmation_dialog = false;
-                const url = "/textstats";
-                const total_words =
-                    Number($(".word").length) + Number($(".phrase").length);
-                const form = $(
-                    '<form action="' +
-                        url +
-                        '" method="post">' +
-                        '<input type="hidden" name="created" value="' +
-                        $(".reviewing.new").length +
-                        '" />' +
-                        '<input type="hidden" name="learning" value="' +
-                        $(".reviewing.learning").length +
-                        '" />' +
-                        '<input type="hidden" name="learned" value="' +
-                        $(".learned").length +
-                        '" />' +
-                        '<input type="hidden" name="forgotten" value="' +
-                        $(".reviewing.forgotten").length +
-                        '" />' +
-                        '<input type="hidden" name="total" value="' +
-                        total_words +
-                        '" />' +
-                        '<input type="hidden" name="gems_earned" value="' +
-                        gems_earned +
-                        '" />' +
-                        '<input type="hidden" name="is_shared" value="' +
-                        $("#is_shared").length +
-                        '" />' +
-                        "</form>"
-                );
-                $("body").append(form);
-                form.trigger( "submit" );
+            window.parent.show_confirmation_dialog = false;
+            ReaderHelpers.submitTextStatsForm({
+                gems_earned: save_data.gems_earned,
+                is_shared: $("#is_shared").length
+            });
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
@@ -715,9 +396,7 @@ $(document).ready(function() {
     /**
      * Shows dialog message reminding users to save changes before leaving
      */
-    $(window).on("beforeunload", function () {
-        if (window.parent.show_confirmation_dialog) {
-            return 'Press Save before you go or your changes will be lost.';
-        }
+    ReaderHelpers.bindBeforeUnloadWarning(function () {
+        return window.parent.show_confirmation_dialog;
     }); 
 });

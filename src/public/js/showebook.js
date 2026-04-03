@@ -4,6 +4,7 @@ $(document).ready(function () {
     const doclang = $("html").attr("lang");
     const ebook_id = $("#text").attr("data-idText");
     const book = ePub();
+    const media_controller = ReaderHelpers.resolveMediaController();
     const text = document.getElementById("text");
     const reader = document.getElementById("readerpage");
     const next = document.getElementById("next");
@@ -48,37 +49,6 @@ $(document).ready(function () {
                 window.location.replace("/texts");
                 throw error;
             });
-    }
-
-    /**
-     * Posts URL-encoded form data and returns the JSON response payload.
-     *
-     * @param {string} url
-     * @param {Object|URLSearchParams} form_fields
-     * @param {string} default_error_message
-     * @returns {Promise<object>}
-     */
-    async function postFormJson(url, form_fields, default_error_message) {
-        const form_data = form_fields instanceof URLSearchParams
-            ? form_fields
-            : new URLSearchParams(form_fields);
-
-        const response = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: form_data
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (!data.success) {
-            throw new Error(data.error_msg || default_error_message);
-        }
-
-        return data;
     }
 
     /**
@@ -371,43 +341,6 @@ $(document).ready(function () {
     }
 
     /**
-     * Returns the current list of unique reviewed words in the text.
-     * @returns {string[]}
-     */
-    function collectReviewedWords() {
-        let reviewed_words = [];
-        let word = "";
-
-        $("#text")
-            .find(".reviewing")
-            .each(function () {
-                word = $(this)
-                    .text()
-                    .toLowerCase();
-                if (jQuery.inArray(word, reviewed_words) == -1) {
-                    reviewed_words.push(word);
-                }
-            });
-
-        return reviewed_words;
-    } 
-
-    /**
-     * Builds the review payload used to update user score.
-     * @returns {object}
-     */
-    function buildReviewData() {
-        return {
-            words: {
-                new: getUniqueElements('.reviewing.new'),
-                learning: getUniqueElements('.reviewing.learning'),
-                forgotten: getUniqueElements('.reviewing.forgotten')
-            },
-            texts: { reviewed: 1 }
-        };
-    } 
-
-    /**
      * Updates status of all underlined words & phrases
      * @returns {Promise<boolean>}
      */
@@ -416,24 +349,15 @@ $(document).ready(function () {
             return true;
         }
 
-        const reviewed_words = collectReviewedWords();
-
-        if (reviewed_words.length === 0) {
+        if ($("#text").find(".reviewing").length === 0) {
             has_unsaved_reviews = false;
             return true;
         }
 
         try {
-            await postFormJson("/ajax/updatewords.php", {
-                words: JSON.stringify(reviewed_words)
-            }, "Failed to save text.");
-
-            const review_data = buildReviewData();
-
-            await postFormJson("/ajax/updateuserscore.php", {
-                review_data: JSON.stringify(review_data)
-            }, "Failed to update user score.");
-
+            await ReaderHelpers.saveReviewProgress({
+                words_selector: "#text .reviewing"
+            });
             has_unsaved_reviews = false;
             return true;
         } catch (error) {
@@ -551,11 +475,7 @@ $(document).ready(function () {
      * @returns {Promise<string>}
      */
     async function loadAnnotatedHtml(clean_html) {
-        const data = await postFormJson("/ajax/getuserwords.php", {
-            txt: clean_html
-        }, "Failed to get user words for underlining");
-
-        return TextUnderliner.apply(data.payload, doclang);
+        return ReaderHelpers.annotateText(clean_html, doclang);
     } 
 
     /**
@@ -863,7 +783,7 @@ $(document).ready(function () {
     async function setTextAndAudioPos() {
         // retrieve ebook & audio last reading position
         try {
-            const data = await postFormJson("/ajax/ebookposition.php", {
+            const data = await ReaderHelpers.postFormJson("/ajax/ebookposition.php", {
                 mode: "GET",
                 id: ebook_id
             }, "Failed to get text and audio position.");
@@ -912,7 +832,7 @@ $(document).ready(function () {
      */
     async function saveTextAndAudioPos(text_pos, audio_pos) {
         try {
-            await postFormJson("/ajax/ebookposition.php", {
+            await ReaderHelpers.postFormJson("/ajax/ebookposition.php", {
                 mode: "SAVE",
                 id: ebook_id,
                 audio_pos: audio_pos,
@@ -932,6 +852,32 @@ $(document).ready(function () {
      * @returns {Promise<void>}
      */
     async function initializeEbookReader() {
+        ReaderHelpers.initializeReaderActions({
+            action_btns: TextActionBtns,
+            controller: media_controller,
+            source: "text"
+        });
+
+        ReaderHelpers.bindWordActionButtons({
+            doclang: doclang,
+            action_btns: TextActionBtns,
+            controller: media_controller,
+            get_source_id: function () {
+                return ebook_id;
+            },
+            text_is_shared: function () {
+                return new URLSearchParams(window.location.search).get("sh");
+            },
+            sentence_with_context: true,
+            get_word_anchors: function () {
+                return TextProcessor.getTextContainer().find("a.word");
+            }
+        });
+
+        ReaderHelpers.bindBeforeUnloadWarning(function () {
+            return window.parent.show_confirmation_dialog;
+        });
+
         next.addEventListener("click", handleNextChapterClick, false);
         $("body").on("click", "#btn-close-ebook", handleCloseEbookClick);
         parent.window.addEventListener("unload", handleReaderUnload);

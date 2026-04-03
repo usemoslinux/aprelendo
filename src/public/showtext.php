@@ -132,6 +132,7 @@ require_once PUBLIC_PATH . 'head.php';
     <script defer src="/js/underlinewords.js"></script>
     <script defer src="/js/wordselection.js"></script>
     <script defer src="/js/actionbtns.js"></script>
+    <script defer src="/js/readerhelpers.js"></script>
     <script defer src="/js/dictation.js"></script>
     <script defer src="/js/audioplayer.js"></script>
     <script defer src="/js/helpers.js"></script>
