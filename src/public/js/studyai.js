@@ -376,28 +376,46 @@ $(document).ready(function () {
     });
 
     /**
-     * Implements shortcuts for buttons
-     * @param {event object} e
+     * Implements keyboard shortcuts for answer buttons.
+     * @param {JQuery.KeyDownEvent} e - Keyboard event triggered on the document.
      */
-    $(document).on( "keypress", function (e) {
-        // only allow shortcuts if buttons are enabled
-        if (!$(".btn-answer").prop('disabled')) {
-            switch (e.which) {
-                case 49: // 49 is the keycode for "1" key
-                    $("#btn-answer-no-recall").trigger("click");
-                    break;
-                case 50: // 50 is the keycode for "2" key
-                    $("#btn-answer-fuzzy").trigger("click");
-                    break;
-                case 51: // 51 is the keycode for "3" key
-                    $("#btn-answer-partial").trigger("click");
-                    break;
-                case 52: // 52 is the keycode for "4" key
-                    $("#btn-answer-excellent").trigger("click");
-                    break;
-                default:
-                    break;
-            }
+    $(document).on("keydown", function (e) {
+        let $button = null;
+
+        if (
+            (e.ctrlKey || e.metaKey)
+            && e.key === "Enter"
+            && $(e.target).is("#text-user-answer")
+        ) {
+            e.preventDefault();
+            e.stopPropagation();
+            $("#btn-submit-user-answer").trigger("click");
+            return;
         }
+
+        if ($(".btn-answer").prop('disabled')) {
+            return;
+        }
+
+        switch (e.key) {
+            case "1":
+                $button = $("#btn-answer-no-recall");
+                break;
+            case "2":
+                $button = $("#btn-answer-fuzzy");
+                break;
+            case "3":
+                $button = $("#btn-answer-partial");
+                break;
+            case "4":
+                $button = $("#btn-answer-excellent");
+                break;
+            default:
+                return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+        $button.trigger("click");
     }); 
 });
