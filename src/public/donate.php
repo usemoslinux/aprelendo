@@ -40,7 +40,7 @@ if (!$user_auth->isLoggedIn()) {
                 <div class="col-md-6 col-lg-4">
                     <div class="p-4 h-100 bg-dark bg-opacity-25 rounded-4 shadow-sm text-center">
                         <h5 class="mb-2">One-time donation</h5>
-                        <p class="mb-3">Support us once — every contribution helps pay for servers, storage, bandwidth, and development.</p>
+                        <p class="mb-3">Support us once — every contribution helps pay for hosting, domain registration & API fees.</p>
                         <a href="https://www.paypal.com/ncp/payment/GJCS2645TD9GN"
                             target="_blank" rel="noopener noreferrer"
                             class="btn btn-warning btn-lg" title="One-time support via PayPal" aria-label="One-time support via PayPal">
