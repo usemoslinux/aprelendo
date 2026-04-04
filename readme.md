@@ -1,27 +1,50 @@
 # Aprelendo
 
-Note: Aprelendo is still under heavy development.
+Aprelendo is a 100% free and 100% open-source language-learning platform built to help you turn real content into active vocabulary.
 
-Aprelendo was created with one simple goal: to make language learning enjoyable and effective. Instead of relying on repetitive flashcard drills, it focuses on learning through real and meaningful content—the kind that actually keeps you reading.
+It is especially useful for intermediate and advanced learners who already know the basics but feel stuck on a plateau. Instead of asking you to learn isolated words first, Aprelendo starts with material you actually want to read or watch, then helps you revisit that vocabulary until you can understand it, recall it, and use it more confidently.
 
-The philosophy behind Aprelendo is that reading texts that truly interest you is the most natural and powerful way to acquire vocabulary. By engaging with authentic materials, you absorb words and grammar in their proper context, rather than memorizing them in isolation. This approach breaks away from traditional language-learning software and encourages deep, contextual understanding.
+Aprelendo is under active development. There is no paid tier, no ads, and no plan to introduce hidden fees later.
 
-## A new approach: total reading
+## What Aprelendo is for
 
-Reading offers countless advantages. It exposes you to vocabulary in context, showing how words and phrases are used naturally—with all their nuances in grammar, spelling, and meaning. Frequent exposure also helps you identify which words are essential and which are rare, guiding your learning intuitively.
+Aprelendo helps you study from real material, especially:
 
-When you read something you care about, this process becomes even more effective. Your emotional engagement enhances memory retention: your brain prioritizes words that feel relevant to you and that you expect to use.
+- ebooks
+- audiobooks and audio-backed texts
+- YouTube videos
+- offline videos
+- web texts and articles
 
-However, reading alone doesn’t automatically make you fluent. To transform reading into a complete language-learning tool, Aprelendo builds upon the following principles:
+The goal is simple: capture words in context while you read or watch, then keep practicing them in ways that fit your time and level.
 
-1. Focus on short, digestible texts—like articles or short stories—instead of long novels.
-2. Re-read texts to ensure full comprehension.
-3. Prioritize understanding the overall meaning before analysing individual words.
-4. Access definitions and translations instantly.
-5. Track your progress and comprehension over time.
-6. Listen to integrated audio to improve pronunciation and listening skills.
-7. Read out loud and practise speaking in a stress-free environment.
-  
+## How it works
+
+A typical Aprelendo workflow looks like this:
+
+1. Import a text or video you actually care about.
+2. Read or watch it inside the learning interface.
+3. Look up unfamiliar words and save them directly from context.
+4. Revisit the same vocabulary through review, flashcards, cloze cards, or assisted phases such as listening, speaking, and dictation.
+
+This makes vocabulary collection less dull than building cards by hand from scratch. Instead of inventing examples later, you add words from real sentences you already encountered.
+
+## Total reading is optional
+
+Aprelendo includes an assisted workflow called total reading. It is designed to help one piece of content become several kinds of practice: reading, listening, speaking, dictation, and review.
+
+Total reading is not presented here as the one true method for language learning, and it is not a replacement for grammar study, conversation, classes, or other tools. It is a complementary workflow inside Aprelendo for learners who want deeper practice from the same material.
+
+If you prefer a lighter setup, you can rely on reading plus flashcards or cloze review instead. On busy days, that may be the better option.
+
+## Why Aprelendo is different
+
+- It is built around real content rather than generic beginner exercises.
+- It helps you keep vocabulary tied to the sentence, audio, or scene where you found it.
+- It gives intermediate and advanced learners a practical way to keep progressing after the beginner stage.
+- It combines immersive input with lighter review tools, instead of forcing you to choose one approach.
+- It is fully open source and intended to stay free for everyone.
+
 ## Installation
 
 1. Install Docker
@@ -64,18 +87,18 @@ Optional commands:
 
 ## Contributing
 
-Do you find the app useful and want to contribute to make it even better? Here are some ways you can help:
+If you want to help improve Aprelendo, there are several useful ways to contribute:
 
-* **Report issues.** A vital way to contribute is by reporting bugs, crashes, or suggesting new features directly through our [GitHub Issues page](https://github.com/usemoslinux/aprelendo/issues).
-* **Share the app.** Tell your friends, family, and colleagues about the app, in real life and online. You could, for example, write a post about Aprelendo on your favorite social media networks.
-* **Write code.** If you're able to write PHP/JS/SQL code, please consider working on fixing [bugs](https://github.com/usemoslinux/aprelendo/issues) or implementing new features.
+- Report bugs or suggest improvements through [GitHub Issues](https://github.com/usemoslinux/aprelendo/issues).
+- Share Aprelendo with learners, teachers, friends, or colleagues who may benefit from it.
+- Contribute code, fixes, translations, or documentation through the [GitHub repository](https://github.com/usemoslinux/aprelendo).
 
-## Donate
+## Support
 
-When I started programming this app I decided that it should be completely free and open-source. This also means that there will be no income for me from ads or paid features. So if you enjoy the app and want to support my work you can do so:
+Aprelendo is free and open source, with no ads or locked features. If you use it and want to support hosting and development, you can make a donation:
 
-* [Paypal](https://www.paypal.com/ncp/payment/GJCS2645TD9GN)
+- [PayPal](https://www.paypal.com/ncp/payment/GJCS2645TD9GN)
 
 ## License
 
-This project is licensed under the GPL v3 License - see the [license.md](license.md) file for details.
+This project is licensed under the GPL v3 License. See [license.md](license.md) for details.

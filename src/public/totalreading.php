@@ -32,159 +32,67 @@ if (!$user_auth->isLoggedIn()) {
             </nav>
             <main class="simple-text">
                 <section>
-                    <h4>Fluency</h4>
-                    <p>Language proficiency can be grouped into three dimensions of academic literacy:
-                        linguistic, cognitive, and sociocultural. In addition, there are <strong>four
-                            language domains</strong>: listening, speaking, reading, and writing. A person must
-                        be knowledgable in each of these domains in order to be language proficient.</p>
-                    <p>During the process of learning a second language, it may seem logical to segment your
-                        efforts and even prioritize these domains. In this line of reasoning, you might be
-                        tempted to think that passive domains (listening & reading) are easier than active
-                        (speaking & writing) ones or, conversely, that improving your oral skills is easier
-                        or even more important than mastering the written word. However, this depends on many
-                        factors, like the complexity of the language and its grammar, in what context you are
-                        thinking of using this language, or how much this language resembles your mother
-                        tongue or some other language you've already mastered. Truth is, none of these
-                        domains is more important than the other, as all are equally required to be proficient
-                        in a language.</p>
-                    <p>In fact, all these domains are so intrinsically interconnected that <strong>it is
-                            better to study them together</strong>. So, how do you achieve this objective?</p>
-                    <br>
+                    <h4>What total reading means</h4>
+                    <p><strong>Total reading</strong> is the name we use for an optional Aprelendo workflow in
+                        which one piece of content becomes several kinds of practice. Instead of reading once and
+                        moving on, you return to the same material with different objectives: understanding,
+                        listening, speaking, dictation, and review.</p>
 
-                    <h4>Immersion is the answer</h4>
-                    <figure class="d-none d-sm-block img-fluid">
-                        <img src="/img/other/immersion-banner.webp" class="w-100" alt="Immersion banner">
-                    </figure>
-                    <p>Language immersion is the process of learning a language using only the target language
-                        for a specified time frame. That means no native language skills are used for
-                        communication of any kind. It's sink or swim, so you swim.</p>
-                    <p>There are different ways to achieve language immersion: living abroad, dating a foreign
-                        person, an immersive classroom setting or online learning. Aprelendo is one of the
-                        latter.</p>
-                    <p>Regarding <strong>online tools</strong>, there is a catch. Although many are more or
-                        less immersive, they are not complete, since they focus on one of the dimensions of
-                        the language you are trying to learn. For example, language learning platforms that
-                        allow you to hire language teachers or speak with foreign people tend to focus on
-                        improving your speaking skills. Other tools, especially those that use cards and <a
-                            href="https://en.wikipedia.org/wiki/Spaced_repetition">spaced repetition
-                            algorithms</a>, target vocabulary acquisition.</p>
-                    <p>Aprelendo was designed to overcome this as well as other limitations associated with
-                        flashcards and spaced repetition software. Let's analyze them in detail before delving
-                        into the concept of total reading.</p>
+                    <p>The idea is not that total reading is the only correct way to learn a language. It is
+                        simply one useful workflow inside Aprelendo for learners who want deeper practice from
+                        the same material, especially when the goal is to move vocabulary from recognition into
+                        active use.</p>
                 </section>
                 <br>
 
                 <section>
-                    <h4>Why using flashcards might not be a good idea to learn a new language?</h4>
-                    <p>If you have ever used spaced repetition software like <a
-                            href="https://apps.ankiweb.net/">Anki</a> you probably know that creating new
-                        flashcards can rapidly become a very tiresome and time consuming task and, after a
-                        while, reviewing them also becomes dull and monotonous.</p>
-                    <p>Also, most of these programs are not specifically designed for language learning. If they
-                        are used correctly, they might help you achieving that goal and give you the impression
-                        you are advancing your language skills. However, the overall results will be
-                        suboptimal, to say the least.</p>
-                    <p>
-                        The reason for this is that flashcard programs only help you train your card deck,
-                        which most probably has little bearing on the real situations you will face. Besides,
-                        they are very easy to misuse. They usually do not encourage you to add context or
-                        visual and phonetic cues to your cards. Dealing with different verb conjugations or
-                        words with more than one meaning is also usually a problem. Of course, there are ways
-                        to handle these cases, but they are often convoluted and easy to miss for the average
-                        user.</p>
-                    <p></p>
+                    <h4>Start from real content</h4>
+                    <p>Aprelendo is built around <strong>real content</strong>: ebooks, audiobooks and
+                        audio-backed texts, YouTube videos, offline videos, and web texts. For many learners,
+                        these formats are easier to sustain over time than abstract drills because they connect
+                        vocabulary to a story, topic, voice, or scene that already matters to them.</p>
+
+                    <p>That context matters. When you add a word while reading or watching, you are not creating
+                        a card out of thin air. You are saving vocabulary from a sentence you already saw in use.
+                        This makes collection less tedious and usually makes later review easier because meaning,
+                        spelling, tone, and usage are already anchored in memory.</p>
                 </section>
                 <br>
 
                 <section>
-                    <h4>The benefits of reading</h4>
-                    <figure class="d-none d-sm-block img-fluid">
-                        <img src="/img/other/reading-banner.webp" class="w-100" alt="Reading banner">
-                    </figure>
-                    <p><strong>Reading</strong> alone has some nice <strong>benefits</strong>. It allows us to
-                        acquire <strong>vocabulary in context</strong>, by presenting words and phrases as they
-                        are used, including grammar, spelling, inflections, etc. Also, the importance of
-                        commonly used words or phrases is more evident while we read them.
-                    <p>
-                    <p>These benefits are enhaced whenever we are interested in the topic of the text.
-                        In that case, the context of the words or phrases we are trying to learn becomes
-                        <strong>more relevant and memorable</strong>, therefore facilitating vocabulary
-                        acquisition. Learning vocabulary that we know we will often want to use
-                        ourselves creates a hidden need to incorporate it in our long term memory.
-                    </p>
-                    <p>Reading has one final advantage: we already do it a lot every day as we surf the
-                        Web. We only need to take advantage of this to learn new languages.</p>
+                    <h4>Real content and flashcards work together</h4>
+                    <p>Aprelendo does <strong>not</strong> treat flashcards as the enemy. Flashcards and cloze
+                        review are useful, especially on busy days, while commuting, or whenever you do not have
+                        time for a full study session. They are part of the platform because they solve a real
+                        problem: helping you keep progressing when time is limited.</p>
+
+                    <p>The difference is that Aprelendo tries to make flashcard creation less stressful and less
+                        dull by letting you collect words directly from meaningful content. In that sense, total
+                        reading and flashcards are complements: one gives you richer context, the other gives you
+                        a lighter way to revisit what you saved.</p>
                 </section>
                 <br>
+
                 <section>
-                    <h4>7 steps to practicing total reading</h4>
-                    <p>Reading alone would only cover one of the four dimensions mentioned above. In order to
-                        practice "total reading", you should follow these steps:</p>
-                    <ol>
-                        <li>Read <strong>short texts</strong> (the length of a newspaper article or a short
-                            story, not a book). The less proficient you are in the language, the shorter the
-                            text. Also, make sure it is at <strong>your level or slightly above it</strong>.
-                        </li>
-                        <li>Start by focusing on <strong>understanding</strong> the general meaning of the text,
-                            then its parts (paragraphs, phrases and specific words)
-                        </li>
-                        <li><strong>Search</strong> the meaning of words and phrases you don't understand and
-                            add them to your learning stack
-                        </li>
-                        <li><strong>Highlight</strong> these words every time you encounter them, as a way to
-                            check if you understand their meaning in each particular context.
-                        </li>
-                        <li><strong>Listen</strong> to an audio version of the text and pay attention to
-                            pronunciation.
-                        </li>
-                        <li>Read the text out loud, trying to imitate the recording that is being played.
-                            Training mouth muscles is key to achieving a good accent. A natural and stress-free
-                            way of improving speaking skills is by repeating someone else's words without
-                            thinking what is the correct way to say this or that, or how the phrase should be
-                            constructed. Eventually, it will become second nature.
-                        </li>
-                        <li>Finally, in the <strong>dictation phase</strong>, play the audio again and try to
-                            write the words that you had previously marked as difficult.
-                        </li>
-                    </ol>
-                </section>
-                <br>
-                <section>
-                    <h4>How does Aprelendo implement total reading?</h4>
+                    <h4>The assisted workflow in Aprelendo</h4>
                     <div class="row">
                         <div class="col-12 col-lg-6">
-                            <p>In Aprelendo, conventional text reading is just the beginning. You have the
-                                option to delve deeper into the material through our assisted learning feature.
-                                This unique approach encourages you to revisit the text multiple times, each
-                                time with a specific objective, enhancing your comprehension and vocabulary
-                                acquisition.</p>
+                            <p>When you want more structure, Aprelendo can guide you through an assisted
+                                workflow built around five phases:</p>
                             <ol>
-                                <li><strong>Phase 1 - Reading</strong>: gain a grasp of the text's meaning. If
-                                    you encounter unfamiliar words or phrases, effortlessly consult our built-in
-                                    dictionary.</li>
-                                <li><strong>Phase 2 - Listening</strong>: immerse yourself in the automatically
-                                    generated audio version of the text, paying attention to diverse sounds.
-                                </li>
-                                <li><strong>Phase 3 - Speaking</strong>: elevate your learning by verbally
-                                    engaging with the material. Mimic the pronunciation of each word by speaking
-                                    over the recording, adjusting the speed as needed.</li>
-                                <li><strong>Phase 4 - Dictation</strong>: solidify your learning by typing the
-                                    marked words as they are spoken.</li>
-                                <li><strong>Phase 5 - Review</strong>: this is the most
-                                    <a href="https://en.wikipedia.org/wiki/Testing_effect" target="_blank"
-                                        rel="noopener noreferrer">critical phase</a> for long-term language
-                                    acquisition. Review all underlined words, actively recalling their meanings
-                                    and pronunciations. Focus on spelling and explore alternative phrases in
-                                    which you could apply them. This step is crucial for transitioning your
-                                    <a href="https://en.wiktionary.org/wiki/passive_vocabulary" target="_blank"
-                                        rel="noopener noreferrer">passive vocabulary</a> into
-                                    <a href="https://en.wiktionary.org/wiki/active_vocabulary" target="_blank"
-                                        rel="noopener noreferrer">active vocabulary</a>.
-                                </li>
+                                <li><strong>Reading</strong>: focus first on understanding the overall meaning,
+                                    then identify the words or phrases that deserve attention.</li>
+                                <li><strong>Listening</strong>: revisit the same material through audio and pay
+                                    attention to rhythm, pronunciation, and phrasing.</li>
+                                <li><strong>Speaking</strong>: read aloud or speak along with the audio to make
+                                    pronunciation and sentence patterns more familiar.</li>
+                                <li><strong>Dictation</strong>: type or reconstruct difficult words as you hear
+                                    them to reinforce spelling and sound.</li>
+                                <li><strong>Review</strong>: return to the saved vocabulary and actively recall
+                                    meaning, form, and possible use in your own sentences.</li>
                             </ol>
-                            <p>As you see, by using Aprelendo you will be practicing all four dimensions of
-                                the language you want to learn at the same time, in a systematic and
-                                integrated way.</p>
+                            <p>This is the core idea behind total reading: one text can train several language
+                                skills when you revisit it with purpose instead of consuming it only once.</p>
                         </div>
                         <div class="col-12 col-lg-6 mt-lg-3">
                             <div class="ratio ratio-16x9">
@@ -197,24 +105,29 @@ if (!$user_auth->isLoggedIn()) {
                     </div>
                 </section>
                 <br>
+
                 <section>
-                    <h4>Is total reading a good method for complete beginners?</h4>
-                    <p>Our method has proven to be very beneficial, particularly for those who are on a learning
-                        "plateau" or anyone seeking to improve their language skills. It is true that <strong>
-                            complete beginners may encounter some difficulties</strong> with this system, as
-                        their
-                        initial vocabulary is very limited and due to the fact that there are not many curated
-                        texts adapted to their level freely available online.</p>
-                    <p>In any case, a good recommendation to keep in mind is to <strong>
-                            practice using texts that are at your level (or slightly above it)</strong>. Thus,
-                        if
-                        you are a beginner you should try to use very short texts, with very basic
-                        vocabulary. Intermediate and advanced users, on the other hand, can try using longer
-                        and more complex texts.
-                    <p>To alleviate the lack of curated texts, we created the "<a href="/sharedtexts">shared
-                            texts</a>" section, which allows our community to add and share texts that fit
-                        different levels of learning.
-                    </p>
+                    <h4>Who benefits most</h4>
+                    <p>Total reading is especially helpful for learners who are already past the absolute beginner
+                        stage and want to break out of a plateau. Intermediate and advanced learners often need
+                        more than isolated word review: they need richer input, repeated exposure, and more
+                        chances to turn passive vocabulary into something they can actually use.</p>
+
+                    <p>Beginners can still benefit, but the material should be shorter, simpler, and closer to
+                        their current level. If you are just starting out, choose easier texts and combine
+                        Aprelendo with grammar study, classes, or other structured support.</p>
+                </section>
+                <br>
+
+                <section>
+                    <h4>If this workflow is not for you</h4>
+                    <p>Total reading is optional. If you prefer a lighter workflow, you can disable the assisted
+                        phases and use Aprelendo in a simpler way: read or watch, save useful vocabulary, and
+                        revisit it later with flashcards or cloze review.</p>
+
+                    <p>That flexibility is intentional. Aprelendo is meant to complement your language studies,
+                        not dictate a single method. Use the deeper workflow when it helps, skip it when it does
+                        not, and combine it with whatever else is already working for you.</p>
                 </section>
             </main>
         </div>
