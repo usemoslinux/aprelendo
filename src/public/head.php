@@ -25,21 +25,15 @@ $this_is_show_page = in_array($curpage, $show_pages);
 $doclang = $this_is_show_page ? $user->lang : 'en';
 $reader_font_pages = ['showtext', 'showvideo', 'showofflinevideo'];
 $load_reader_fonts = in_array($curpage, $reader_font_pages);
-$load_pacifico_font = $curpage === 'index';
 
 // Route-based font selection logic: showtext, showvideo, showofflinevideo
-// load Roboto, Source Sans 3, Source Serif 4; index loads Pacifico; 
-// Other routes load no Google Fonts.
+// load Roboto, Source Sans 3, Source Serif 4.
 $google_font_families = [];
 
 if ($load_reader_fonts) {
     $google_font_families[] = 'family=Roboto:wght@400;700';
     $google_font_families[] = 'family=Source+Sans+3:wght@400;700';
     $google_font_families[] = 'family=Source+Serif+4:wght@400;700';
-}
-
-if ($load_pacifico_font) {
-    $google_font_families[] = 'family=Pacifico';
 }
 
 $google_fonts_href = '';
@@ -87,6 +81,9 @@ if (!empty($google_font_families)) {
     
     <!-- Custom styles for this template -->
     <link href="/css/styles.css" rel="stylesheet">
+    <?php if ($curpage === 'index'): ?>
+        <link href="/css/landing.css" rel="stylesheet">
+    <?php endif; ?>
     <?php if ($curpage === 'showvideo' || $curpage === 'showofflinevideo'): ?>
         <link href="/css/showvideo.css" rel="stylesheet">
     <?php endif; ?>

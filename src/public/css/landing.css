@@ -1,0 +1,302 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+
+div.blurry-background .navbar-light {
+    box-shadow: none;
+}
+
+.headerwrap .navbar-light {
+    background: transparent;
+}
+
+#languages-card.faded-background {
+    background: rgba(255,255,255,.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.2);
+    color: white;
+}
+
+#languages-card .flag-icon {
+    width: 24px;
+    height: 24px;
+}
+
+#languages-card .language-pill {
+    display: inline-flex;
+    align-items: center;
+}
+
+.landing-page {
+    color: #304454;
+}
+
+.landing-page .blurry-background {
+    background:
+        linear-gradient(135deg, rgba(8, 28, 52, 0.88) 0%, rgb(2 117 216 / 28%) 58%, rgb(2 4 26 / 58%) 100%), radial-gradient(circle at top right, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 30%), url(../img/backgrounds/welcome-page-background.webp);
+    display: flex;
+    flex-direction: column;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: white;
+    min-height: 100vh;
+    text-align: center;
+    text-shadow: none;
+}
+
+.blurry-background a:hover,
+.blurry-background a:focus {
+    color: inherit;
+}
+
+.blurry-background .dropdown-item {
+    text-shadow: none;
+}
+
+.landing-hero-content {
+    flex: 1 0 auto;
+    min-height: 0;
+}
+
+.landing-hero-copy {
+    max-width: 50rem;
+    margin: 0 auto;
+}
+
+.landing-eyebrow {
+    display: inline-block;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.96);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.landing-title {
+    font-family: var(--bs-body-font-family);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    max-width: 15ch;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.landing-lead {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 1.125rem;
+    max-width: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.landing-support {
+    color: rgba(255, 255, 255, 0.78);
+    max-width: 36rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.landing-card-label,
+.landing-section-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.landing-card-label {
+    color: var(--color-brand-primary);
+}
+
+.landing-primary-cta {
+    box-shadow: 0 1rem 2rem rgba(8, 28, 52, 0.22);
+}
+
+.landing-page .blurry-background .landing-primary-cta,
+.landing-page .blurry-background .landing-primary-cta:hover,
+.landing-page .blurry-background .landing-primary-cta:focus {
+    color: #08203d;
+}
+
+.landing-page .blurry-background .btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.65);
+}
+
+.landing-page .blurry-background .btn-outline-light:hover,
+.landing-page .blurry-background .btn-outline-light:focus {
+    background-color: #fff;
+    border-color: #fff;
+    color: #08203d;
+}
+
+.landing-language-card {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 1.25rem 3rem rgba(8, 28, 52, 0.18);
+    color: white;
+}
+
+.landing-language-card p {
+    color: rgba(255, 255, 255, 0.84);
+}
+
+.landing-language-card .card-body {
+    padding: 1.5rem 1.75rem;
+}
+
+.landing-language-card .language-pill {
+    justify-content: center;
+    padding: 0.65rem 1rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: none;
+    color: white;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.landing-page .blurry-background .landing-language-card .language-pill:hover,
+.landing-page .blurry-background .landing-language-card .language-pill:focus {
+    background: rgba(255, 255, 255, 0.24);
+    border-color: rgba(255, 255, 255, 0.32);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.landing-section {
+    padding: 5.5rem 0;
+}
+
+.landing-section-label {
+    color: var(--color-brand-primary);
+}
+
+.landing-section-title {
+    color: #17324d;
+    font-size: clamp(2rem, 2.4vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.landing-section-intro {
+    max-width: 48rem;
+    margin: 0 auto;
+    color: #5c6d7e;
+    font-size: 1.05rem;
+}
+
+.landing-step-card,
+.landing-feature-card,
+.landing-video-card,
+.landing-cta-panel {
+    border: 1px solid #e4ecf3;
+    border-radius: 1rem;
+    box-shadow: 0 1rem 2.5rem rgba(15, 35, 55, 0.08);
+    background: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.landing-step-card:hover,
+.landing-feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 1.25rem 3rem rgba(15, 35, 55, 0.12);
+    border-color: #d5e2ee;
+}
+
+.landing-page #main-features .landing-feature-card:hover {
+    background-color: #fff;
+}
+
+.landing-step-icon,
+.landing-feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1rem;
+    border-radius: 0.9rem;
+    background: linear-gradient(135deg, #eaf4ff, #f7fbff);
+    color: var(--color-brand-primary);
+    font-size: 1.35rem;
+}
+
+.landing-step-number {
+    color: var(--color-brand-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.landing-page .landing-step-card a:not(.btn),
+.landing-page .landing-video-card a:not(.btn) {
+    color: var(--color-brand-primary);
+    text-decoration: underline;
+}
+
+.landing-page .landing-step-card a:not(.btn):hover,
+.landing-page .landing-video-card a:not(.btn):hover {
+    text-decoration: none;
+}
+
+.landing-video-card {
+    overflow: hidden;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fbfd 100%);
+}
+
+.landing-video-card .landing-card-label,
+.landing-cta-panel .landing-card-label {
+    color: var(--color-brand-primary);
+}
+
+.landing-video-frame {
+    overflow: hidden;
+    border-radius: 1rem;
+    box-shadow: 0 1rem 2.5rem rgba(15, 35, 55, 0.14);
+    background: #0e2235;
+}
+
+.landing-video-frame iframe {
+    border: 0;
+}
+
+.landing-value-section {
+    background: linear-gradient(to bottom, #fdfdfd 0%, #f8f8f8 100%);
+}
+
+.landing-cta-panel {
+    background: linear-gradient(135deg, #f7fbff 0%, #eef6ff 100%);
+}
+
+.landing-cta-panel p {
+    color: #516273;
+}
+
+@media (max-width: 991.98px) {
+    .landing-section {
+        padding: 4.5rem 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .landing-title {
+        max-width: 16ch;
+    }
+
+    .landing-language-card .card-body,
+    .landing-step-card .card-body,
+    .landing-feature-card .card-body,
+    .landing-video-card .card-body,
+    .landing-cta-panel .card-body {
+        padding: 1.25rem !important;
+    }
+}

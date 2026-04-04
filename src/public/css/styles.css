@@ -229,47 +229,12 @@ img.language-flag {
     box-shadow: 0 .125rem .25rem 0 rgba(0, 0, 0, .15);
 }
 
-div.blurry-background .navbar-light,
 body.blue-gradient-wallpaper .navbar-light {
     box-shadow: none;
 }
 
-.headerwrap .navbar-light {
-    background: transparent;
-}
-
-.cursive-titles h1, .cursive-titles h2, .cursive-titles h3,
-.cursive-titles h4, .cursive-titles h5, .cursive-titles h6 {
-    font-family: "Pacifico", cursive;
-    font-weight: 400;
-    font-style: normal;
-}
-
 .full-vh {
     min-height: 100vh;
-}
-
-#main-features .card:hover {
-    background-color: #eee;
-}
-
-#languages-card.faded-background {
-    background: rgba(255,255,255,.2);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 16px;
-    border: 1px solid rgba(255,255,255,.2);
-    color: white;
-}
-
-#languages-card .flag-icon {
-    width: 24px;
-    height: 24px;
-}
-
-#languages-card .language-pill {
-    display: inline-flex;
-    align-items: center;
 }
 
 .dropdown-menu {
@@ -996,38 +961,6 @@ input {
     margin-left: 24px;
 }
 
-/* SELECT LANGUAGE (LANDING PAGE) */
-
-span.flag-icon {
-    padding: 10px;
-    margin: 10px;
-    text-align: center;
-}
-
-img.flag-icon {
-    width: 32px;
-}
-
-div.blurry-background {
-    background: radial-gradient(circle, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%), url("../img/backgrounds/welcome-page-background.webp");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    text-align: center;
-    text-shadow: 1px 1px #333;
-    color: white;
-    min-height: 100vh;
-}
-
-.blurry-background a:hover,
-.blurry-background a:focus {
-    color: inherit;
-}
-
-.blurry-background .dropdown-item {
-    text-shadow: none;
-}
-
 /* CREATE ACCOUNT */
 
 .light-gradient-wallpaper {
@@ -1088,13 +1021,6 @@ div.blurry-background {
     line-height: 1;
     white-space: nowrap;
 }
-
-.pacifico {
-    font-family: "Pacifico", cursive;
-    font-weight: 400;
-    font-style: normal;
-}
-
 
 /* STATS */
 
@@ -1195,27 +1121,6 @@ div.blurry-background {
 p>a:hover,
 small>a:not(.btn):hover {
     text-decoration: none;
-}
-
-/* HOW IT WORKS */
-
-.hiw h1 {
-    padding-bottom: 25px;
-}
-
-.hiw .video-container {
-    position: relative;
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%;
-}
-
-.hiw .video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
 }
 
 /* AUDIO LOADER */
