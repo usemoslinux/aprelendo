@@ -9,7 +9,7 @@ $show_pages = ['showtext', 'showvideo', 'showebook', 'showofflinevideo'];
 // these are the same pages that use simpleheader.php instead of header.php
 $no_login_required_pages = [
     'index', 'register', 'login', 'accountactivation', 'aboutus', 'privacy', 'attributions', 'extensions', 'contact',
-    'totalreading', 'exampledics', 'error', 'forgotpassword', 'donate'
+    'totalreading', 'exampledics', 'error', 'forgotpassword', 'donate', 'termsofservice'
 ];
 
 $use_google_login = false;
