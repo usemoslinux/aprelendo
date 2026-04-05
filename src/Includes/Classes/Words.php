@@ -260,7 +260,6 @@ class Words extends DBEntity
         $lang_iso = $lang->name;
 
         $sql = "SELECT w.`id`, w.`word`, w.`status`,
-                    DATEDIFF(CURRENT_DATE(), w.`date_modified`) AS `diff_today_modif`,
                     DATEDIFF(`date_modified`, w.`date_created`) AS `frequency`,
                     CASE
                         WHEN f.`frequency_index` < 81 THEN 'very high'

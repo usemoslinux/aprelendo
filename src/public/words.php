@@ -68,10 +68,11 @@ $sort_by     = !empty($_GET['o']) ? (int)$_GET['o'] : 0;
 <?php
 require_once PUBLIC_PATH . 'showactionbuttons.php';
 require_once PUBLIC_PATH . 'showimportwordsmodal.php';
+require_once PUBLIC_PATH . 'showaibotmodal.php';
 require_once PUBLIC_PATH . 'footer.php';
 ?>
 
-<script defer src="/js/listwords.js"></script>
 <script defer src="/js/dictionaries.js"></script>
 <script defer src="/js/helpers.js"></script>
 <script defer src="/js/tooltips.js"></script>
+<script defer src="/js/listwords.js"></script>

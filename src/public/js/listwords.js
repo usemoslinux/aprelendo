@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 $(document).ready(function () {
-    let dictionary_URI = "";
     let current_params = {
         s: new URLSearchParams(window.location.search).get('s') || '',
         o: new URLSearchParams(window.location.search).get('o') || 0,
@@ -44,7 +43,11 @@ $(document).ready(function () {
             window.history.pushState(current_params, '', new_url);
 
             // Re-initialize tooltips and event listeners for new content
-            if (typeof Tooltips !== 'undefined') Tooltips.init();
+            if (typeof Tooltips !== 'undefined') {
+                Tooltips.init();
+            } else if (typeof initTooltips === 'function') {
+                initTooltips();
+            }
             toggleActionMenu();
         } catch (error) {
             console.error(error);
@@ -58,16 +61,9 @@ $(document).ready(function () {
     // Initial load
     loadWords();
 
-    // Fetch dictionary URI
+    // Fetch dictionary and translator URIs
     (async () => {
-        try {
-            const response = await fetch("/ajax/getdicuris.php");
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-            const data = await response.json();
-            if (data.success) dictionary_URI = data.payload.dictionary_uri;
-        } catch (error) {
-            console.error(error);
-        }
+        await Dictionaries.fetchURIs();
     })();
 
     // Search form submission
@@ -94,36 +90,193 @@ $(document).ready(function () {
         loadWords();
     });
 
-    // Deletes selected words
-    $(document).on("click", "#mDelete", async function () {
-        if (confirm("Really delete?")) {
-            let ids = [];
+    /**
+     * Returns the word row data associated with a row action trigger.
+     *
+     * @param {HTMLElement} trigger_elem
+     * @returns {{word: string, word_id: string, $row: jQuery}}
+     */
+    function getWordRowData(trigger_elem) {
+        const $row = $(trigger_elem).closest('tr');
+
+        return {
+            word: String($row.attr('data-word') || '').trim(),
+            word_id: String($row.find('.chkbox-selrow').attr('data-idWord') || '').trim(),
+            $row: $row
+        };
+    }
+
+    /**
+     * Opens a word-specific external service when the corresponding base URI is available.
+     *
+     * @param {string} base_uri
+     * @param {string} word
+     * @returns {void}
+     */
+    function openWordService(base_uri, word) {
+        if (!base_uri || !word) {
+            return;
+        }
+
+        openInNewTab(LinkBuilder.forWordInDictionary(base_uri, word));
+    }
+
+    /**
+     * Opens the AI bot modal with the selected word prefilled.
+     *
+     * @param {string} word
+     * @returns {void}
+     */
+    function openAIBotModal(word) {
+        if (!word) {
+            return;
+        }
+
+        const $ai_bot_modal = $('#ask-ai-bot-modal');
+        $ai_bot_modal.attr('data-word', word);
+        $ai_bot_modal.modal('show');
+    }
+
+    /**
+     * Marks a single word as forgotten using the existing add-word flow.
+     *
+     * @param {string} word
+     * @returns {Promise<void>}
+     */
+    async function markWordAsForgotten(word) {
+        const form_data = new URLSearchParams();
+        form_data.append('word', word);
+        form_data.append('text_is_shared', '0');
+
+        const response = await fetch("/ajax/addword.php", {
+            method: "POST",
+            body: form_data
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.error_msg || 'Failed to mark word as forgotten');
+        }
+    }
+
+    /**
+     * Deletes selected words or a single word row.
+     *
+     * @param {jQuery} $trigger_elem
+     * @returns {Promise<void>}
+     */
+    async function deleteWords($trigger_elem) {
+        let ids = [];
+
+        if ($trigger_elem.attr("id") === "mDelete") {
             $("input.chkbox-selrow:checked").each(function () {
                 ids.push($(this).attr("data-idWord"));
             });
+        } else if ($trigger_elem.hasClass("imDelete")) {
+            const row_data = getWordRowData($trigger_elem);
 
-            if (ids.length === 0) return;
+            if (row_data.word_id) {
+                ids.push(row_data.word_id);
+            }
+        }
 
+        if (ids.length === 0) {
+            return;
+        }
+
+        const form_data = new URLSearchParams();
+        form_data.append('wordIDs', JSON.stringify(ids));
+
+        const response = await fetch("/ajax/removeword.php", {
+            method: "POST",
+            body: form_data
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.error_msg || 'Failed to delete words');
+        }
+    }
+
+    // Deletes selected words
+    $(document).on("click", "#mDelete, .imDelete", async function () {
+        if (confirm("Really delete?")) {
             try {
-                const form_data = new URLSearchParams();
-                form_data.append('wordIDs', JSON.stringify(ids));
-
-                const response = await fetch("/ajax/removeword.php", {
-                    method: "POST",
-                    body: form_data
-                });
-
-                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-                const data = await response.json();
-                
-                if (!data.success) throw new Error(data.error_msg || 'Failed to delete words');
-
+                await deleteWords($(this));
                 loadWords(); // Reload list after deletion
             } catch (error) {
                 console.error(error);
                 alert(`Oops! ${error.message}`);
             }
         }
+    });
+
+    /**
+     * Marks an individual word row as forgotten.
+     */
+    $(document).on("click", ".imForgot", async function () {
+        const row_data = getWordRowData(this);
+
+        if (!row_data.word) {
+            return;
+        }
+
+        try {
+            await markWordAsForgotten(row_data.word);
+            loadWords();
+        } catch (error) {
+            console.error(error);
+            alert(`Oops! ${error.message}`);
+        }
+    });
+
+    /**
+     * Opens the selected word in the configured dictionary.
+     */
+    $(document).on("click", ".imOpenDictionary", function () {
+        const row_data = getWordRowData(this);
+        const base_uris = Dictionaries.getURIs();
+
+        openWordService(base_uris.dictionary, row_data.word);
+    });
+
+    /**
+     * Opens the selected word in the configured image dictionary.
+     */
+    $(document).on("click", ".imOpenImageDictionary", function () {
+        const row_data = getWordRowData(this);
+        const base_uris = Dictionaries.getURIs();
+
+        openWordService(base_uris.img_dictionary, row_data.word);
+    });
+
+    /**
+     * Opens the selected word in the configured translator.
+     */
+    $(document).on("click", ".imOpenTranslator", function () {
+        const row_data = getWordRowData(this);
+        const base_uris = Dictionaries.getURIs();
+
+        openWordService(base_uris.translator, row_data.word);
+    });
+
+    /**
+     * Opens the AI bot modal for the selected word.
+     */
+    $(document).on("click", ".imOpenAIBot", function () {
+        const row_data = getWordRowData(this);
+
+        openAIBotModal(row_data.word);
     });
 
     // Toggle action menu
@@ -163,8 +316,13 @@ $(document).ready(function () {
 
     // Open dictionary modal
     $(document).on("click", ".word", function (e) {
-        if (!dictionary_URI) return;
-        const dic_link = LinkBuilder.forWordInDictionary(dictionary_URI, $(this).text());
+        const base_uris = Dictionaries.getURIs();
+
+        if (!base_uris.dictionary) {
+            return;
+        }
+
+        const dic_link = LinkBuilder.forWordInDictionary(base_uris.dictionary, $(this).text());
         openInNewTab(dic_link);
     });
 
