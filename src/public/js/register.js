@@ -32,6 +32,36 @@ $(document).ready(function () {
         { name: "Turkish", iso: "tr", welcome: "Hoş geldiniz!" },
         { name: "Vietnamese", iso: "vi", welcome: "Chào mừng!" }
     ];
+
+    /**
+     * Gets a language object from its ISO code.
+     *
+     * @param {string} language_iso
+     * @returns {Object|null}
+     */
+    function getLanguageByIso(language_iso) {
+        return languages.find(language => language.iso === language_iso) || null;
+    }
+
+    /**
+     * Updates the register side panel based on the selected learning language.
+     *
+     * @param {string} language_iso
+     * @returns {void}
+     */
+    function updateWelcomeMessage(language_iso) {
+        const language_data = getLanguageByIso(language_iso);
+
+        if (!language_data) {
+            return;
+        }
+
+        $("#register-language-title").text(language_data.welcome);
+        $("#welcome-msg").text(`You are only one step away from learning ${language_data.name}.`);
+
+        $(".auth-language-pill[data-learning-lang]").removeClass("is-active");
+        $(`.auth-language-pill[data-learning-lang="${language_iso}"]`).addClass("is-active");
+    }
     
     /**
      * Sends user registration form
@@ -91,22 +121,27 @@ $(document).ready(function () {
     }); 
 
     /**
-     * Updates flag and welcome message based on changes in the selected learning language
+     * Updates the side panel based on changes in the selected learning language.
      */
     $("#learning-lang").on("change", function () {
-        const sel_index = $(this).prop("selectedIndex");
-        const lang = languages[sel_index];
-
-        if (!lang) return;
-
-        const img_uri = `img/flags/${lang.iso}.svg`;
-
-        $("h1").html(`
-            <img id="learning-flag" class="flag-icon" src="${img_uri}" alt="${lang.name}">
-            <br>
-            <div class="my-3">${lang.welcome}</div>
-        `);
-
-        $("#welcome-msg").text(`You are only one step away from learning ${lang.name}`);
+        updateWelcomeMessage($(this).val());
     });
+
+    /**
+     * Syncs side-panel language pills with the learning language selector.
+     */
+    $(".auth-language-pill[data-learning-lang]").on("click", function () {
+        const language_iso = $(this).data("learning-lang");
+
+        $("#learning-lang").val(language_iso).trigger("change");
+    });
+
+    /**
+     * Focuses the learning language selector when the user wants the full language list.
+     */
+    $(".auth-language-pill[data-focus-learning-lang]").on("click", function () {
+        $("#learning-lang").trigger("focus");
+    });
+
+    updateWelcomeMessage($("#learning-lang").val());
 });

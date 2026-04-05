@@ -1,6 +1,16 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+$header_cta_href = '/login';
+$header_cta_label = 'Get started';
+
+if (isset($curpage) && $curpage === 'login') {
+    $header_cta_href = '/register';
+    $header_cta_label = 'Create account';
+} elseif (isset($curpage) && ($curpage === 'register' || $curpage === 'forgotpassword')) {
+    $header_cta_href = '/login';
+    $header_cta_label = 'Log in';
+}
 ?>
 <div class="d-flex flex-column full-vh">
     <header>
@@ -21,7 +31,9 @@
                         <li class="nav-item my-2 me-md-2"><a class="nav-link" href="/#hiw">How it works</a></li>
                         <li class="nav-item my-2 me-md-2"><a class="nav-link" href="/donate">Donate</a></li>
                         <li class="nav-item my-2">
-                            <a class="nav-link" id="login-menu" href="/login">Get started</a>
+                            <a class="nav-link" id="login-menu" href="<?php echo $header_cta_href; ?>">
+                                <?php echo $header_cta_label; ?>
+                            </a>
                         </li>
                     </ul>
                 </div>

@@ -5,6 +5,7 @@ require_once '../Includes/dbinit.php';  // connect to database
 
 $curpage = basename($_SERVER['PHP_SELF'], '.php'); // returns the current file Name
 $show_pages = ['showtext', 'showvideo', 'showebook', 'showofflinevideo'];
+$auth_pages = ['login', 'register'];
 
 // these are the same pages that use simpleheader.php instead of header.php
 $no_login_required_pages = [
@@ -81,6 +82,9 @@ if (!empty($google_font_families)) {
     
     <!-- Custom styles for this template -->
     <link href="/css/styles.css" rel="stylesheet">
+    <?php if (in_array($curpage, $auth_pages, true)): ?>
+        <link href="/css/auth.css" rel="stylesheet">
+    <?php endif; ?>
     <?php if ($curpage === 'index'): ?>
         <link href="/css/landing.css" rel="stylesheet">
     <?php endif; ?>
@@ -147,7 +151,19 @@ if (!empty($google_font_families)) {
 <?php
 // show wallpaper on every page, except those in $show_pages array
 if (!$this_is_show_page) {
-    echo $curpage == 'donate' ? '<body class="blue-gradient-wallpaper">' : '<body class="light-gradient-wallpaper">';
+    $body_classes = [];
+
+    if ($curpage == 'donate' || in_array($curpage, $auth_pages, true)) {
+        $body_classes[] = 'blue-gradient-wallpaper';
+    } else {
+        $body_classes[] = 'light-gradient-wallpaper';
+    }
+
+    if (in_array($curpage, $auth_pages, true)) {
+        $body_classes[] = 'auth-page';
+    }
+
+    echo '<body class="' . implode(' ', $body_classes) . '">';
 }
 
 ?>

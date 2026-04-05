@@ -982,46 +982,6 @@ input {
     flex-wrap: wrap;
 }
 
-/* REGISTER */
-
-#learning-flag {
-    width: 64px;
-    height: 64px;
-}
-
-/* LOGIN */
-
-.google-btn-wrapper {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.or-divider {
-    position: relative;
-    margin: 2.5rem 0;
-    border: none;
-    height: 1px;
-    background-color: #A7B0B7;
-    opacity: 1;
-    overflow: visible;
-}
-
-.or-divider::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 0 10px;
-    background: #fff;
-    color: #666E7E;
-    font-size: 0.9rem;
-    line-height: 1;
-    white-space: nowrap;
-}
-
 /* STATS */
 
 #heatmap {

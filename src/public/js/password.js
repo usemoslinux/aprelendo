@@ -18,10 +18,10 @@ $(document).ready(function() {
             $password_confirmation.css('border-bottom', '1px solid #ced4da');
             $password_match_text.text('');
         } else if (confirmation_value !== password_value) {
-            $password_confirmation.css('border-bottom', '2px solid red');
+            $password_confirmation.css('border-bottom', '2px solid #E0115F');
             $password_match_text.text("Passwords don't match");
         } else {
-            $password_confirmation.css('border-bottom', '2px solid green');
+            $password_confirmation.css('border-bottom', '2px solid #3cb371');
             $password_match_text.text('Passwords match');
         }
     } 
@@ -48,7 +48,7 @@ $(document).ready(function() {
 
         if (password_value.length < 8) {
             setPasswordStrengthState(
-                '2px solid red',
+                '2px solid #E0115F',
                 'Weak - should be at least 8 characters long'
             );
         } else {
@@ -57,10 +57,10 @@ $(document).ready(function() {
             const has_special_chars = special_chars.test(password_value);
 
             if (has_number && has_letters && has_special_chars) {
-                setPasswordStrengthState('2px solid green', 'Strong');
+                setPasswordStrengthState('2px solid #3cb371', 'Strong');
             } else {
                 setPasswordStrengthState(
-                    '2px solid yellow',
+                    '2px solid #ffa500',
                     'Medium - should include letters, numbers, and special characters'
                 );
             }
