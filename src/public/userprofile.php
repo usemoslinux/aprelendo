@@ -159,12 +159,11 @@ $google_login = !empty($user->google_id);
                             <div id="help-hf-api-key" class="collapse small">
                                 <hr>
                                 <p>
-                                    To use Aprelendo's AI features (i.e. Lingobot), we rely on Hugging Face's
-                                    powerful servers. By creating your own Hugging Face account, you ensure that AI
-                                    usage remains free while giving you full control over your access. This means you
-                                    can add or remove tokens anytime if you suspect an issue. The only drawback is that
-                                    Hugging Face may set a limit on your AI usage. This setup provides transparency and
-                                    security for all users.
+                                    To use Lingobot, Aprelendo sends your question to Hugging Face and
+                                    authenticates the request with the Hugging Face token you choose to save here.
+                                    Using your own Hugging Face account keeps that access under your control: you can
+                                    replace or revoke the token at any time if you suspect an issue. Hugging Face may
+                                    also apply its own usage limits.
                                 </p>
 
                                 <p>Follow these steps to create a free Hugging Face account and generate an access
@@ -199,9 +198,11 @@ $google_login = !empty($user->google_id);
                                     <li>
                                         <p><strong>Copy the token:</strong></p>
                                         <p>Once the token is created, copy it. Then, paste it into the "Hugging Face
-                                            API key" text box above and click the "Save" button below. Your token will
-                                            be stored in our servers using strong encryption and will not be shared
-                                            with anyone.
+                                            API key" text box above and click the "Save" button below. Your token is
+                                            stored encrypted on our servers and used only to authenticate Lingobot
+                                            requests made from your account. It is not exposed to other users, and you
+                                            can remove or replace it here at any time. If you want to invalidate it
+                                            completely, revoke it from your Hugging Face account.
                                         </p>
                                     </li>
                                 </ol>

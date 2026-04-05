@@ -290,11 +290,11 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                             </div>
 
                             <p class="auth-legal-copy mb-0">
-                                By registering, you declare to have read and accepted our
+                                By creating an account, you agree to our
                                 <a href="/termsofservice" target="_blank" rel="noopener noreferrer" class="auth-muted-link">
                                     Terms of Service
                                 </a>
-                                and
+                                and acknowledge our
                                 <a href="/privacy" target="_blank" rel="noopener noreferrer" class="auth-muted-link">
                                     Privacy Policy
                                 </a>.

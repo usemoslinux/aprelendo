@@ -31,112 +31,144 @@ if (!$user_auth->isLoggedIn()) {
                 </ol>
             </nav>
             <main class="simple-text">
-                <section>
-                    <h4>Our Privacy Policy</h4>
-                    <em>Last updated: July 2024</em>
-                    <p>Protecting the privacy of our users is important to us.</p>
-                    <p> This Privacy Policy explains how we collect, use, and protect your personal
-                        information when you visit our website.</p>
+                <section aria-labelledby="privacy-policy-title">
+                    <h1 id="privacy-policy-title" class="h4">Privacy Policy</h1>
+                    <p><em><time datetime="2026-04-05">Last updated: April 5, 2026</time></em></p>
+                    <p>This Privacy Policy explains what information Aprelendo collects, how we use it,
+                        when it is shared, and what choices you have.</p>
+                    <div class="alert alert-light border my-4">
+                        <p class="mb-2"><strong>In short</strong></p>
+                        <ul class="mb-0">
+                            <li>We collect the account, learning, and content data needed to run Aprelendo.</li>
+                            <li>Google Sign-In and Lingobot are optional features.</li>
+                            <li>We do not sell your personal information.</li>
+                            <li>If you delete your account, Aprelendo removes your profile data, uploaded files,
+                                word list, and your private and shared texts from our servers.</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section aria-labelledby="what-we-collect">
+                    <h2 id="what-we-collect" class="h6">1. What we collect</h2>
+                    <ul>
+                        <li><strong>Account data:</strong> your username, email address, password hash if you
+                            create an email/password account, and your selected language settings.</li>
+                        <li><strong>Optional Google Sign-In data:</strong> if you choose Google Sign-In, we
+                            receive your Google account ID, name, and email address to authenticate your
+                            account.</li>
+                        <li><strong>User content:</strong> texts, files, imports, vocabulary items, study
+                            activity, and related metadata that you choose to save in Aprelendo. Content kept in
+                            <a href="/texts">My texts</a> stays private to your account unless you choose to share
+                            it publicly.
+                        </li>
+                        <li><strong>Optional Lingobot data:</strong> if you choose to use Lingobot, you may save a
+                            Hugging Face token in your profile. We store that token in encrypted form and use it
+                            only to authenticate Lingobot requests made from your account. When you use Lingobot,
+                            the prompts you submit are sent to Hugging Face to generate a reply.</li>
+                        <li><strong>Technical and security data:</strong> IP address, browser or device details,
+                            and similar request data may be processed for security, contact requests, password
+                            reset emails, diagnostics, embedded third-party content, and analytics on the hosted
+                            service.</li>
+                    </ul>
                 </section>
                 <br>
-                <section>
-                    <h6>1. What Information We Collect</h6>
-                    <p>We collect the following types of information:</p>
-                    <ul>
-                        <li><strong>Personal information:</strong> this includes your username and email address
-                            when you register. If you log in with Google, we collect your basic profile
-                            information (full name, email address, and profile image).</li>
-                        <li><strong>Technical information:</strong> this includes your IP address, browser type,
-                            and other technical details about the device you use.</li>
 
+                <section aria-labelledby="how-we-use-it">
+                    <h2 id="how-we-use-it" class="h6">2. How we use it</h2>
+                    <ul>
+                        <li>To create, authenticate, and secure your account.</li>
+                        <li>To save your reading library, vocabulary, study progress, and other learning data.</li>
+                        <li>To display and moderate public content you choose to share.</li>
+                        <li>To send account, security, and service-related emails such as activation and password
+                            reset messages.</li>
+                        <li>To provide Lingobot replies when you choose to use that feature.</li>
+                        <li>To understand product usage and improve the hosted Aprelendo service. On the hosted
+                            service, this may include privacy-focused analytics through
+                            <a href="https://matomo.org/" target="_blank" rel="noopener noreferrer">Matomo</a>.
+                        </li>
                     </ul>
-                    <p>In addition to the above, we use <a href="https://matomo.org/" target="_blank"
-                            rel="noopener noreferrer">Matomo</a>, an open-source analytics platform, to gather
-                        anonymized usage data for improving user experience and understanding how our platform
-                        is used. Matomo respects your privacy by anonymizing your IP address and not tracking
-                        you across websites. You can opt out of Matomo tracking by adjusting your browser
-                        settings or by using the <a href="https://allaboutdnt.com/" target="_blank">Do Not
-                            Track</a> (DNT) feature.
+                </section>
+                <br>
+
+                <section aria-labelledby="cookies-and-tracking">
+                    <h2 id="cookies-and-tracking" class="h6">3. Cookies and tracking technologies</h2>
+                    <p>Aprelendo uses a small number of first-party cookies to keep the site working properly and
+                        to remember basic preferences.</p>
+                    <ul>
+                        <li><strong>user_token:</strong> keeps you signed in when auto-login is enabled.</li>
+                        <li><strong>accept_cookies:</strong> remembers that you dismissed the cookie notice.</li>
+                        <li><strong>hide_welcome_msg:</strong> remembers that you hid the welcome message shown to
+                            new users.</li>
+                    </ul>
+                    <p>We do not use cookies for targeted advertising.</p>
+                    <p>Some optional or embedded third-party services may also use cookies or similar
+                        technologies. For example, Google Sign-In is optional, YouTube videos may use third-party
+                        cookies, PayPal may use cookies during donation flows, and external assets such as Google
+                        Fonts or CDN-hosted libraries may receive your IP address and browser information when a
+                        page loads.</p>
+                    <p>You can control or block cookies through your browser settings, but some features may stop
+                        working correctly if you do.</p>
+                </section>
+                <br>
+
+                <section aria-labelledby="sharing-and-third-parties">
+                    <h2 id="sharing-and-third-parties" class="h6">4. Sharing and third-party services</h2>
+                    <p>We do not sell your personal information. We share information only when it is needed to
+                        operate features you choose to use, deliver the service, or comply with legal obligations.</p>
+                    <ul>
+                        <li><strong>Google:</strong> if you choose Google Sign-In, Google is involved in the
+                            authentication flow.</li>
+                        <li><strong>Hugging Face:</strong> if you use Lingobot, your encrypted token is decrypted on
+                            our server and used to authenticate requests sent to Hugging Face together with the
+                            prompts you submit.</li>
+                        <li><strong>YouTube and other embedded content providers:</strong> if you load embedded or
+                            linked third-party content, those providers may receive request and usage data from
+                            your browser.</li>
+                        <li><strong>PayPal:</strong> if you choose to donate, payment processing happens through
+                            PayPal and is governed by PayPal's own terms and privacy practices.</li>
+                        <li><strong>Email delivery and infrastructure providers:</strong> account and security
+                            emails may pass through the mail provider configured for Aprelendo.</li>
+                    </ul>
+                </section>
+                <br>
+
+                <section aria-labelledby="retention-and-deletion">
+                    <h2 id="retention-and-deletion" class="h6">5. Retention and deletion</h2>
+                    <p>We keep your account data while your account remains active and while it is needed to
+                        provide the service.</p>
+                    <p>You can update your information from your account settings. You can also delete your account
+                        from your profile page. Deleting your account removes your profile information, uploaded
+                        files, word list, and your private and shared texts from Aprelendo's servers.</p>
+                </section>
+                <br>
+
+                <section aria-labelledby="your-choices">
+                    <h2 id="your-choices" class="h6">6. Your choices and rights</h2>
+                    <ul>
+                        <li>You can access and update your account data from your profile page.</li>
+                        <li>You can choose not to use optional features such as Google Sign-In, Lingobot, or PayPal
+                            donations.</li>
+                        <li>You can remove or replace your Hugging Face token at any time from your profile and can
+                            revoke it from your Hugging Face account.</li>
+                        <li>You can manage cookie preferences in your browser.</li>
+                        <li>You can contact us if you have questions about your data.</li>
+                    </ul>
+                </section>
+                <br>
+
+                <section aria-labelledby="privacy-changes">
+                    <h2 id="privacy-changes" class="h6">7. Changes to this policy</h2>
+                    <p>We may update this Privacy Policy to reflect product, operational, legal, or security
+                        changes. If an update materially changes how Aprelendo handles personal data, we will post
+                        the revised policy on this page and update the date above.</p>
+                </section>
+                <br>
+
+                <section aria-labelledby="privacy-contact">
+                    <h2 id="privacy-contact" class="h6">8. Contact us</h2>
+                    <p>If you have questions or concerns about this Privacy Policy, please contact us through our
+                        <a href="/contact">contact page</a>.
                     </p>
-                </section>
-                <br>
-                <section>
-                    <h6>2. How We Use Your Information</h6>
-                    <p>The information we collect is used to:</p>
-                    <ul>
-                        <li>Provide and improve our services.</li>
-                        <li>Communicate with you about your account or any issues you encounter.</li>
-                        <li>Analyze how our website is used to enhance your experience.</li>
-                    </ul>
-                </section>
-                <br>
-                <section>
-                    <h6>3. Cookies and Tracking Technologies</h6>
-                    <p>Cookies are small text files stored on your device to help us improve your experience on
-                        our website. We use minimal cookies, primarily to support essential site functions such
-                        as auto-login and managing your preferences.</p>
-                    <p>Unlike most websites, <strong>we do not use cookies for analytics or delivering
-                            personalized ads</strong>.</p>
-                    <p>Here is a detailed description of the cookies we store on your computer:</p>
-                    <ul>
-                        <li><strong>user_token:</strong> a token to enable auto-login.</li>
-                        <li><strong>accept_cookies:</strong> indicates that you have accepted the use of
-                            cookies.</li>
-                        <li><strong>hide_welcome_msg:</strong> hides the welcome message that introduces
-                            Aprelendo to new users.</li>
-                    </ul>
-                    <br>
-                    <strong>Third-party Cookies</strong>
-                    <p>We use third-party services that may store cookies on your computer. These include:</p>
-                    <ul>
-                        <li><strong>Google Sign-In:</strong> stores cookies to manage your login session
-                            securely.</li>
-                        <li><strong>YouTube:</strong> may place cookies when you watch embedded videos on our
-                            site.</li>
-                        <li><strong>External Dictionaries:</strong> certain features may use cookies to enhance
-                            your experience when using external resources.</li>
-                    </ul>
-                    <br>
-                    <strong>Deleting/blocking cookies</strong>
-                    <p>You can manage your cookie preferences through your browser settings. Please note that
-                        blocking cookies may affect the functionality of our site and limit your ability to use
-                        certain features.</p>
-                </section>
-                <br>
-                <section>
-                    <h6>4. Sharing Your Information</h6>
-                    <p>We do not share your personal information with third parties.</p>
-                    <p>In cases where we work with third-party services, we ensure they adhere to strict privacy
-                        standards.</p>
-                </section>
-                <br>
-                <section>
-                    <h6>5. Your Rights</h6>
-                    <p>You have the right to access, update, or delete your personal information at any time.
-                        You can do this by visiting your account settings or contacting us directly.</p>
-                    <p>If you have any concerns about how your data is handled, please contact us, and we will
-                        address them promptly.</p>
-                </section>
-                <br>
-                <section>
-                    <h6>6. Changes to This Privacy Policy</h6>
-                    <p>We may update our Privacy Policy from time to time to reflect changes in our practices or
-                        for other operational, legal, or regulatory reasons.</p>
-                    <p>We will notify you of any significant changes by posting the new policy on this page. We
-                        encourage you to review this Privacy Policy periodically for any updates.</p>
-                </section>
-                <br>
-                <section>
-                    <h6>7. Contact Us</h6>
-                    <p>If you have any questions or concerns about this Privacy Policy, please do not hesitate
-                        to contact us through our <a href="/contact">contact page</a>.</p>
-                </section>
-                <br>
-                <section>
-                    <h6>8. Consent</h6>
-                    <p>By using our website, you consent to the collection and use of your information as
-                        described in this Privacy Policy. If you do not agree with this policy, please do not
-                        use our services.</p>
                 </section>
             </main>
         </div>
