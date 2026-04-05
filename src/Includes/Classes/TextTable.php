@@ -23,7 +23,13 @@ class TextTable extends Table
             : ['mArchive' => 'Archive', 'mDelete' => 'Delete'];
         $this->individual_action_menu = $show_archived
             ? ['imArchive' => 'Unarchive', 'imDelete' => 'Delete']
-            : ['imEdit' => 'Edit', 'imArchive' => 'Archive', 'imShare' => 'Share', 'imDelete' => 'Delete'];
+            : [
+                'imOpen' => 'Open',
+                'imEdit' => 'Edit',
+                'imArchive' => 'Archive',
+                'imShare' => 'Share',
+                'imDelete' => 'Delete'
+            ];
         $this->sort_menu = ['mSortByNew' => 'New first', 'mSortByOld' => 'Old first'];
         $this->rows = $rows;
         $this->has_chkbox = true;
@@ -115,23 +121,25 @@ class TextTable extends Table
             return $title;
         }
 
-        $link_html = '';
-        if (!empty($row['type'])) {
-            $link_url = match ((int)$row['type']) {
-                5 => 'showvideo?id=' . $row['id'],
-                6 => 'showebook?id=' . $row['id'],
-                default => 'showtext?id=' . $row['id'],
-            };
-
-            $link_html = '<a href="' . $link_url;
-    
-            $link_html .= $this->is_shared ? '&sh=1">' : '&sh=0">';
-        }
-    
-        $link_html .= $title . '</a>';
-
-        return $link_html ;
+        return '<a href="' . $this->generateTextUrl($row) . '">' . $title . '</a>';
     } 
+
+    /**
+     * Generates the destination URL for opening a text row.
+     *
+     * @param array $row
+     * @return string
+     */
+    private function generateTextUrl(array $row): string
+    {
+        $text_url = match ((int)$row['type']) {
+            5 => 'showvideo?id=' . $row['id'],
+            6 => 'showebook?id=' . $row['id'],
+            default => 'showtext?id=' . $row['id'],
+        };
+
+        return $text_url . ($this->is_shared ? '&sh=1' : '&sh=0');
+    }
 
     /**
      * Prints action menu
@@ -165,6 +173,12 @@ class TextTable extends Table
             $text = htmlspecialchars($menu_text, ENT_QUOTES, 'UTF-8');
 
             $text = $this->generateActionMenuIcon($menu_text) . ' ' . $text;
+
+            if ($menu_text === 'Open') {
+                $open_url = htmlspecialchars($this->generateTextUrl($row), ENT_QUOTES, 'UTF-8');
+                $html .= "<a class='{$id} dropdown-item' href='{$open_url}'>{$text}</a>";
+                continue;
+            }
 
             if ($menu_text === 'Delete') {
                 $html .= "<a class='{$id} dropdown-item text-danger'>{$text}</a>";

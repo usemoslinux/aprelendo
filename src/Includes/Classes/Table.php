@@ -132,6 +132,7 @@ abstract class Table
     protected function generateActionMenuIcon(string $menu_text): string
     {
         $icons = [
+            'Open' => '<span title="Open" class="bi bi-box-arrow-up-right me-2"></span>',
             'Edit' => '<span title="Edit" class="bi bi-pencil me-2"></span>',
             'Share' => '<span title="Share" class="bi bi-share me-2"></span>',
             'Archive' => '<span title="Archive" class="bi bi-archive me-2"></span>',
@@ -139,7 +140,7 @@ abstract class Table
             'Delete' => '<span title="Delete" class="bi bi-trash me-2"></span>'
         ];
 
-        return $icons[$menu_text];
+        return $icons[$menu_text] ?? '';
     } 
 
     /**
