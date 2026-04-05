@@ -10,6 +10,35 @@ use Aprelendo\UserAuth;
 $user = new User($pdo);
 $user_auth = new UserAuth($user);
 
+$forwarded_proto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '';
+
+if (!empty($forwarded_proto)) {
+    $app_scheme = strtolower(trim(explode(',', $forwarded_proto)[0]));
+} elseif (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+    $app_scheme = 'https';
+} else {
+    $app_scheme = 'http';
+}
+
+$app_origin = $app_scheme . '://' . $_SERVER['HTTP_HOST'];
+
+$bookmarklet_script = '(function(){'
+    . 'var current_url=location.href;'
+    . 'var youtube_prefixes=["https://www.youtube.com/watch","https://m.youtube.com/watch","https://youtu.be/"];'
+    . 'var is_youtube_url=false;'
+    . 'for(var i=0;i<youtube_prefixes.length;i++){'
+    . 'if(current_url.indexOf(youtube_prefixes[i])===0){'
+    . 'location.href=' . json_encode($app_origin . '/addvideo?url=') . '+encodeURIComponent(current_url);'
+    . 'is_youtube_url=true;'
+    . 'break;'
+    . '}'
+    . '}'
+    . 'if(!is_youtube_url){'
+    . 'location.href=' . json_encode($app_origin . '/addtext?url=') . '+encodeURIComponent(current_url);'
+    . '}'
+    . '})();';
+$bookmarklet_href = 'javascript:' . rawurlencode($bookmarklet_script);
+
 if (!$user_auth->isLoggedIn()) {
     require_once PUBLIC_PATH . 'simpleheader.php';
 } else {
@@ -26,104 +55,162 @@ if (!$user_auth->isLoggedIn()) {
                         <a href="/">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <span class="active">Extensions & Bookmarklet</span>
+                        <span class="active">Extensions and bookmarklet</span>
                     </li>
                 </ol>
             </nav>
             <main class="simple-text">
-                <section>
-                    <h4 id="extensions">Extensions</h4>
-                    <p>Install the extension that corresponds to your favorite Web browser by clicking on the
-                        matching button below.</p>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-success"
-                            onclick="window.open('//chrome.google.com/webstore/detail/aprelendo/aocicejjgilfkeeklfcomejgphjhjonj/related?hl=en-US', '_blank')">
-                            <span class="bi bi-browser-chrome"></span>&nbsp;Install Chrome extension
-                        </button>
-                        <button type="button" class="btn btn-primary"
-                            onclick="window.open('//microsoftedge.microsoft.com/addons/detail/aprelendo/ckgnfejigfdfppodkhfmdbockfilcefg', '_blank')">
-                            <span class="bi bi-browser-edge"></span>&nbsp;Install Edge extension
-                        </button>
-                        <button type="button" class="btn btn-danger"
-                            onclick="window.open('//addons.mozilla.org/en-US/firefox/addon/aprelendo/', '_blank')">
-                            <span class="bi bi-browser-firefox"></span>&nbsp;Install Firefox extension
-                        </button>
+                <section aria-labelledby="extensions-title">
+                    <h1 id="extensions-title" class="h4">Extensions and bookmarklet</h1>
+                    <p>Capture articles and videos in fewer steps. Use an extension on Chrome, Edge, or Firefox
+                        when possible, and use the bookmarklet as a fallback on unsupported browsers or mobile
+                        devices.</p>
+                    <div class="alert alert-light border my-4">
+                        <p class="mb-2"><strong>Choose the right option</strong></p>
+                        <ul class="mb-0">
+                            <li><strong>Extension:</strong> the fastest option for supported desktop browsers.</li>
+                            <li><strong>Bookmarklet:</strong> the fallback option for other browsers and mobile.</li>
+                        </ul>
                     </div>
-                    <p>Once installed, click the Aprelendo button (which should have been added to your
-                        browser's main toolbar) to import the content of the page being displayed in the
-                        active tab. You can also use the extension's shortcut. By default, it is set to
-                        <kbd>Shift</kbd>+<kbd>Ctrl</kbd>+<kbd>L</kbd>, but you may need to configure this
-                        manually.
-                    </p>
-                    <p>For a step-by-step guide, we recommend you to watch the following video:</p>
-                    <iframe width="560" height="315" style="max-width: 100%; text-align:center;"
-                        src="https://www.youtube-nocookie.com/embed/dZ3-Jwn41mo" title="YouTube video player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media;
-                                gyroscope; picture-in-picture" allowfullscreen></iframe>
-
                 </section>
-                <br>
-                <section>
-                    <h4 id="bookmarklets">Bookmarklets</h4>
-                    <p>Bookmarklets are a "one-click" tool which add functionality to the browser. From a user
-                        perspective, they work very much like regular bookmarks.</p>
-                    <p>For more information on bookmarklets, we suggest reading
-                        <a href="https://en.wikipedia.org/wiki/Bookmarklet">Wikipedia's article</a> on this
-                        subject.
-                    </p>
-                    <br>
-                    <h6>How are bookmarklets different from extensions?</h6>
-                    <ul>
-                        <li>They do basic tasks on clicking.</li>
-                        <li>They are universal, i.e. they usually work on any browser and whatever the
-                            platform, mobile or desktop.</li>
-                        <li>They are managed as any bookmarks.</li>
-                    </ul>
-                    <br>
-                    <h6>What does Aprelendo use bookmarklets for?</h6>
-                    <p>Aprelendo uses bookmarklets to automagically parse the text of the current web page and
-                        add it to your library.</p>
-                    <p>It's an alternative to creating specific addons for different browsers. It's easier to
-                        implement and has the added advantage that it works in almost any device and/or
-                        browser.</p>
-                    <br>
-                    <h6>How do I install Aprelendo's bookmarklet in my web browser?</h6>
-                    <p>To install the bookmarklet, simply:</p>
-                    <strong>Desktops</strong>
-                    <ol>
-                        <li>Show the Bookmarks Toolbar:
-                            <p>In Firefox: Go to
-                                <kbd>View</kbd> >
-                                <kbd>Toolbars</kbd> >
-                                <kbd>Bookmarks toolbar</kbd>
-                            </p>
-                            <p>In Google Chrome: Go to
-                                <kbd>View</kbd> >
-                                <kbd>Show bookmarks bar</kbd>
-                            </p>
-                        </li>
-                        <li>
-                            <p>Drag the following link to your Bookmarks Toolbar.</p>
-                            <a href="javascript:(function()%7Bvar%20is_yt_url%20%3D%20false%3B%0A%20%20%20%20%20%20%20%20var%20url%20%3D%20location.href%3B%0A%20%20%20%20%20%20%20%20var%20yt_urls%20%3D%20new%20Array('https%3A%2F%2Fwww.youtube.com%2Fwatch'%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20'https%3A%2F%2Fm.youtube.com%2Fwatch'%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20'https%3A%2F%2Fyoutu.be%2F')%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20for%20(let%20i%20%3D%200%3B%20i%20%3C%20yt_urls.length%3B%20i%2B%2B)%20%7B%0A%20%20%20%20%20%20%20%20%09if%20(url.lastIndexOf(yt_urls%5Bi%5D)%20%3D%3D%3D%200)%20%7B%0A%09%09%09%09location.href%3D'https%3A%2F%2Fwww.aprelendo.com%2Faddvideo%3Furl%3D'%2BencodeURIComponent(url)%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20is_yt_url%20%3D%20true%3B%0A%20%20%20%20%20%20%20%20%09%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20if%20(!is_yt_url)%0A%20%20%20%20%20%20%20%20%09location.href%3D'https%3A%2F%2Fwww.aprelendo.com%2Faddtext%3Furl%3D'%2BencodeURIComponent(url)%3B%7D)()%3B"
-                                class="btn btn-primary"><span class="bi bi-bookmark-fill"></span> Add
-                                to Aprelendo</a>
-                            <p>It should now appear on the toolbar.
-                        </li>
-                    </ol>
-                    <strong>Mobile devices</strong>
-                    <p>The easiest way is to add the bookmarklet in your desktop device, synchronize your
-                        favorite Internet browser and wait for the bookmarklet to be automatically added to
-                        your mobile device.</p>
-                    <br>
-                    <h6>How to use Aprelendo's bookmarklet once installed</h6>
-                    <strong>Desktops</strong>
-                    <p>Simply go to the web page you would like to add to you library and click on Aprelendo's
-                        bookmarklet. It's as easy as it gets.</p>
-                    <strong>Mobile devices</strong>
-                    <p>Go to the web page you would like to add to you library, tap on the URL bar and start
-                        to write "Aprelendo". Choose Aprelendo's bookmarklet and let the magic happen.</p>
-                    <p>In both cases, you'll be redirected to Aprelendo so that you can do changes to the text
-                        before uploading it to your library.</p>
+
+                <section aria-labelledby="extensions-install-title" class="mt-5">
+                    <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+                        <div>
+                            <h2 id="extensions-install-title" class="h5 mb-2">Install an extension</h2>
+                            <p class="mb-0">After installation, open the page you want to import and click the
+                                Aprelendo button in your browser toolbar.</p>
+                        </div>
+                        <p class="small text-muted mb-0">Shortcut support depends on the browser and operating
+                            system. If needed, assign your own shortcut from the browser's extension settings.</p>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6 col-xl-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body d-flex flex-column">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="bi bi-browser-chrome fs-3 text-success me-3"
+                                            aria-hidden="true"></span>
+                                        <h3 class="h6 mb-0">Chrome</h3>
+                                    </div>
+                                    <p class="mb-4">Best for Chrome and most Chromium-based browsers on desktop.</p>
+                                    <a href="https://chrome.google.com/webstore/detail/aprelendo/aocicejjgilfkeeklfcomejgphjhjonj/related?hl=en-US"
+                                        class="btn btn-success mt-auto" target="_blank" rel="noopener noreferrer">
+                                        Install Chrome extension
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-xl-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body d-flex flex-column">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="bi bi-browser-edge fs-3 text-primary me-3"
+                                            aria-hidden="true"></span>
+                                        <h3 class="h6 mb-0">Edge</h3>
+                                    </div>
+                                    <p class="mb-4">Use this if you browse with Microsoft Edge on desktop.</p>
+                                    <a href="https://microsoftedge.microsoft.com/addons/detail/aprelendo/ckgnfejigfdfppodkhfmdbockfilcefg"
+                                        class="btn btn-primary mt-auto" target="_blank" rel="noopener noreferrer">
+                                        Install Edge extension
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-xl-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body d-flex flex-column">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="bi bi-browser-firefox fs-3 text-danger me-3"
+                                            aria-hidden="true"></span>
+                                        <h3 class="h6 mb-0">Firefox</h3>
+                                    </div>
+                                    <p class="mb-4">Use this if you browse with Firefox on desktop.</p>
+                                    <a href="https://addons.mozilla.org/en-US/firefox/addon/aprelendo/"
+                                        class="btn btn-danger mt-auto" target="_blank" rel="noopener noreferrer">
+                                        Install Firefox extension
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section aria-labelledby="extensions-usage-title" class="mt-5">
+                    <div class="row g-4">
+                        <div class="col-12 col-lg-6">
+                            <h2 id="extensions-usage-title" class="h5 mb-3">How to use it</h2>
+                            <ol class="mb-0">
+                                <li>Open the article or video page you want to import.</li>
+                                <li>Click the Aprelendo extension icon in the browser toolbar.</li>
+                                <li>Review the imported content in Aprelendo before saving it to your library.</li>
+                            </ol>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="alert alert-light border h-100 mb-0">
+                                <p class="mb-2"><strong>Tip</strong></p>
+                                <p class="mb-0">If you do not see the icon right away, your browser may place new
+                                    extensions behind a toolbar or puzzle icon until you pin them.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <p class="mb-3">Need a walkthrough? Watch the short video tutorial below.</p>
+                        <div class="ratio ratio-16x9">
+                            <iframe src="https://www.youtube-nocookie.com/embed/dZ3-Jwn41mo"
+                                title="How to install and use the Aprelendo browser extension"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </section>
+
+                <section aria-labelledby="bookmarklet-title" class="mt-5">
+                    <h2 id="bookmarklet-title" class="h5 mb-3">Use the bookmarklet when an extension is not available</h2>
+                    <p>The bookmarklet acts like a normal browser bookmark, but it opens Aprelendo's import flow
+                        for the page you are viewing.</p>
+
+                    <div class="alert alert-light border my-4">
+                        <p class="mb-2"><strong>What the bookmarklet does</strong></p>
+                        <ul class="mb-0">
+                            <li>On YouTube pages, it opens the video import screen.</li>
+                            <li>On other web pages, it opens the text import screen.</li>
+                        </ul>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-12 col-lg-6">
+                            <h3 class="h6">Install it on desktop</h3>
+                            <ol class="mb-0">
+                                <li>Show your browser's bookmarks bar or bookmarks toolbar.</li>
+                                <li>Drag this button to it:
+                                    <div class="mt-2">
+                                        <a href="<?php echo htmlspecialchars($bookmarklet_href, ENT_QUOTES, 'UTF-8'); ?>"
+                                            class="btn btn-primary">
+                                            <span class="bi bi-bookmark-fill" aria-hidden="true"></span>
+                                            Add to Aprelendo
+                                        </a>
+                                    </div>
+                                </li>
+                                <li>Open a page you want to import and click the bookmarklet.</li>
+                            </ol>
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+                            <h3 class="h6">Use it on mobile or unsupported browsers</h3>
+                            <p>The easiest setup is to add the bookmarklet on desktop first, then sync your
+                                browser bookmarks to your mobile device.</p>
+                            <p class="mb-0">Once it appears in your mobile browser, open the page you want to
+                                import, tap the address bar, and search for the Aprelendo bookmarklet.</p>
+                        </div>
+                    </div>
+
+                    <p class="mt-4 mb-0">After the redirect, you can review and adjust the imported content before
+                        saving it to your library.</p>
                 </section>
             </main>
         </div>
