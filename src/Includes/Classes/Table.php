@@ -36,7 +36,8 @@ abstract class Table
     {
         $html = '<div class="row">
             <div class="col-sm-12">
-            <table class="table table-bordered table-hover">
+            <div class="table-responsive rounded overflow-hidden border shadow-sm mb-3">
+            <table class="table table-hover mb-0">
             <colgroup>';
 
         foreach ($this->col_widths as $col_width) {
@@ -74,8 +75,8 @@ abstract class Table
      */
     protected function printFooter(int $sort_by): string
     {
-        $html = '</tbody></table>'; // close table
-        $html .= '<div class="row"><div class="col-sm-12">'; // add footer row
+        $html = '</tbody></table></div>'; // close table and wrapper
+        $html .= '<div class="row mt-2"><div class="col-sm-12">'; // add footer row
         $html .= $this->printActionMenu();
         $html .= $this->printSortMenu($sort_by);
         $html .= '</div></div>'; // close footer row

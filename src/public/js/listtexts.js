@@ -11,6 +11,16 @@ $(document).ready(function() {
     };
 
     /**
+     * Determines whether a click originated from an interactive element inside a table row.
+     *
+     * @param {HTMLElement} element
+     * @returns {boolean}
+     */
+    function isInteractiveRowElement(element) {
+        return $(element).closest("a, button, input, label, .dropdown-menu").length > 0;
+    }
+
+    /**
      * Loads texts list via AJAX
      */
     async function loadTexts() {
@@ -185,6 +195,23 @@ $(document).ready(function() {
     $(document).on("click", "#chkbox-selall", function(e) {
         $(".chkbox-selrow").prop("checked", $(this).prop("checked"));
         toggleActionMenu();
+    });
+
+    /**
+     * Toggles the row checkbox when the user clicks a non-interactive part of the row.
+     */
+    $(document).on("click", "#texts-content tbody tr", function(e) {
+        if (isInteractiveRowElement(e.target)) {
+            return;
+        }
+
+        const $checkbox = $(this).find(".chkbox-selrow").first();
+
+        if ($checkbox.length === 0) {
+            return;
+        }
+
+        $checkbox.prop("checked", !$checkbox.prop("checked")).trigger("change");
     });
 
     /**
