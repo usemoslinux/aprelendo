@@ -158,7 +158,7 @@ $(document).ready(function () {
 
             let examples_array = [];
             let examples_html = '';
-            const lang_iso = $("#card").data("lang");
+            const lang_iso = getStudyLanguage();
 
             const word_boundary = '(?<![\\p{L}])' + escapeRegex(original_word) + '(?![\\p{L}])';
             const sentence_start = '([^\\n.?!]|[\\d][.][\\d]|[A-Z][.](?:[A-Z][.])+)*';
@@ -288,16 +288,31 @@ $(document).ready(function () {
     function preserveInitialCase(display_text, match_text) {
         const normalized_display_text = display_text.replace(/\s\s+/g, ' ');
         const first_match_char = match_text.charAt(0);
+        const study_lang = getStudyLanguage();
 
         if (
             first_match_char !== '' &&
-            first_match_char === first_match_char.toLocaleUpperCase() &&
-            first_match_char !== first_match_char.toLocaleLowerCase()
+            first_match_char === first_match_char.toLocaleUpperCase(study_lang) &&
+            first_match_char !== first_match_char.toLocaleLowerCase(study_lang)
         ) {
-            return normalized_display_text.charAt(0).toLocaleUpperCase() + normalized_display_text.slice(1);
+            return normalized_display_text.charAt(0).toLocaleUpperCase(study_lang) + normalized_display_text.slice(1);
         }
 
         return normalized_display_text;
+    }
+
+    /**
+     * Gets the current study language used for locale-sensitive string operations.
+     * @returns {(string|undefined)} Study language ISO code, or undefined if unavailable
+     */
+    function getStudyLanguage() {
+        const study_lang = $("#study-card").data("lang");
+
+        if (typeof study_lang !== "string" || study_lang.trim() === "") {
+            return undefined;
+        }
+
+        return study_lang;
     }
 
     /**
@@ -719,7 +734,9 @@ $(document).ready(function () {
      * @returns {string} Normalized string
      */
     function normalize(s) {
-        return s.toLocaleLowerCase().normalize("NFKC").trim();
+        const study_lang = getStudyLanguage();
+
+        return s.toLocaleLowerCase(study_lang).normalize("NFKC").trim();
     }
 
     /**
