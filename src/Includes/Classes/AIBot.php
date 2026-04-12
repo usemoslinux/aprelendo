@@ -34,8 +34,10 @@ class AIBot
         $STOP = "<END>";
 
         $data = [
-            "model" => "Qwen/Qwen3-VL-8B-Instruct",
-            // "model" => "Qwen/Qwen2.5-7B-Instruct",
+            // "model" => "Qwen/Qwen3-VL-8B-Instruct",
+            "model" => "deepseek-ai/DeepSeek-V3.2-Exp",
+            // "model" => "google/gemma-4-26B-A4B-it",
+            // "model" => "Qwen/Qwen3-VL-30B-A3B-Instruct",
             "provider" => "auto",
             "messages" => [
                 [

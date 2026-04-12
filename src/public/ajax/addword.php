@@ -31,14 +31,6 @@ function processSingleWord(\PDO $pdo, $user, array $post): void {
     $lang_id = $user->lang_id;
     $text_is_shared = filter_var($post['text_is_shared'], FILTER_VALIDATE_BOOLEAN);
 
-    // If a source_id is provided, load the text record and update the language id accordingly.
-    if (isset($post['source_id']) && is_numeric($post['source_id'])) {
-        $text_class_name = $text_is_shared ? 'Aprelendo\SharedTexts' : 'Aprelendo\Texts';
-        $text = new $text_class_name($pdo, $user_id, $lang_id);
-        $text->loadRecord($post['source_id']);
-        $lang_id = $text->lang_id;
-    }
-
     $word = $post['word'];
     $is_phrase = !empty($post['is_phrase']) ? (bool) $post['is_phrase'] : false;
 
