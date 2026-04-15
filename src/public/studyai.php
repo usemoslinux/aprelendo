@@ -36,15 +36,7 @@ require_once PUBLIC_PATH . 'header.php';
                             <div id="study-card-body" class="card-body">                
                                 <div id="ai-card">
                                     <div class="mb-3">
-                                        <label for="select-prompt" class="form-label">Select a question for Lingobot:</label>
-                                        <select id="select-prompt" class="form-select mb-3">
-                                            <option value="example_sentences" selected>Give one or more example sentences using {word}</option>
-                                            <option value="synonym_antonym">Give one synonym & antonym for {word}</option>
-                                            <option value="register">Is {word} formal, informal, or neutral?</option>
-                                            <option value="multiple_meanings">If {word} has multiple meanings, give at least two</option>
-                                        </select>
-
-                                        <label for="text-user-answer" class="form-label">Your answer:</label>
+                                        <label id="label-user-answer" for="text-user-answer" class="form-label">Write one or more sentences using this word:</label>
                                         <textarea id="text-user-answer" class="form-control" rows="6"></textarea>
                                         
                                         <button id="btn-submit-user-answer" type="button" class="btn btn-primary my-2">Ask Lingobot to Evaluate</button>

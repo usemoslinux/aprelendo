@@ -67,27 +67,17 @@ $(document).ready(function () {
         updateLiveProgressBar(); // update live progress bar
         $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
         $("#study-card-word-title").removeClass('placeholder').text(wordObj.word);
-        updatePromptSelect(wordObj.word);
+        updateAnswerLabel(wordObj.word);
         showWordFrequency(words[cur_card_index].is_phrase);
         adaptCardStyleToWordStatus(wordObj.status);
     } 
 
     /**
-     * Updates the prompt select options to include the current word.
+     * Updates the answer label to include the current word.
      * @param {string} word 
      */
-    function updatePromptSelect(word) {
-        $('#select-prompt option').each(function() {
-            const $option = $(this);
-            const template = $option.data('template') || $option.text();
-
-            if (!$option.data('template')) {
-                $option.data('template', template);
-            }
-
-            const updated_text = template.replace(/{word}/, `"${word}"`);
-            $option.text(updated_text);
-        });
+    function updateAnswerLabel(word) {
+        $('#label-user-answer').text(`Write one or more sentences using "${word}":`);
     }
 
     /**
@@ -258,7 +248,7 @@ $(document).ready(function () {
     function buildEvalPrompt(vocab_piece, user_answer) {
         const answer_format = `Evaluate the user's example sentence. The primary focus is whether "${vocab_piece}" itself is used correctly. Rate on this scale — choose the one that best fits: (1) Completely incorrect — "${vocab_piece}" is absent, used with the wrong meaning, or the sentence is too broken to judge its usage; (2) Incorrect — "${vocab_piece}" is present and its intent is recognizable, but it is grammatically or semantically incorrect (e.g. wrong form, wrong preposition required by this word, wrong register); (3) Mostly Correct — "${vocab_piece}" is used correctly and naturally. The only issues are in other parts of the sentence (e.g. agreement of an unrelated word, spelling of another word, a small grammar slip unrelated to "${vocab_piece}"); (4) Perfect — "${vocab_piece}" and the rest of the sentence are both correct, or any remaining imperfections are too trivial to mention. Do not penalize a short sentence for limited context. Output format — two lines only: Line 1: the rating, e.g. (3) Mostly Correct; Line 2: one concise sentence of feedback; include a corrected version only if something needs fixing.`;
         
-        return `${answer_format}\nQuestion: ${$('#select-prompt').val()}\nAnswer: ${user_answer}`;
+        return `${answer_format}\nAnswer: ${user_answer}`;
     }
 
     /**
