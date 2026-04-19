@@ -20,8 +20,6 @@ $(document).ready(function () {
     ];
 
     // initial UI state for the scramble game
-    $(".btn-answer").prop('disabled', true);
-    $("#answer-card").addClass("d-none"); // hide answer buttons until reveal
     Dictionaries.fetchURIs();
     ensureGuessUI(); // inject guess UI into existing HTML
     getListofCards();
@@ -59,6 +57,95 @@ $(document).ready(function () {
     }
 
     /**
+     * Enables or disables all answer buttons.
+     * @param {boolean} is_disabled - Whether the buttons should be disabled
+     */
+    function setAnswerButtonsDisabled(is_disabled) {
+        $(".btn-answer").prop("disabled", is_disabled);
+    }
+
+    /**
+     * Shows the loading placeholder state in the study card header.
+     */
+    function showStudyCardHeaderLoading() {
+        $("#study-card-word-title")
+            .addClass("placeholder w-50 rounded")
+            .html("&nbsp;");
+
+        $("#study-card-freq-badge")
+            .removeClass("d-none border border-light")
+            .addClass("placeholder w-25")
+            .html("&nbsp;");
+    }
+
+    /**
+     * Updates the two-column layout for the current study state.
+     * @param {string} layout_state - One of: active, complete, empty
+     */
+    function setLayoutState(layout_state) {
+        const is_empty = layout_state === "empty";
+
+        $("#study-column")
+            .toggleClass("col-md-12", is_empty)
+            .toggleClass("col-md-6", !is_empty);
+        $("#review-column").toggleClass("d-none", is_empty);
+    }
+
+    /**
+     * Shows the requested answer-card page.
+     * @param {number} page_number - Page number to display
+     */
+    function showAnswerCardPage(page_number) {
+        $("#answer-card-page-1").toggleClass("d-none", page_number !== 1);
+        $("#answer-card-page-2").toggleClass("d-none", page_number !== 2);
+    }
+
+    /**
+     * Shows the pre-reveal prompt in the right column.
+     */
+    function showAnswerPrompt() {
+        $("#answer-card-prompt").removeClass("d-none");
+        $("#answer-card-body").addClass("d-none");
+        setAnswerButtonsDisabled(true);
+    }
+
+    /**
+     * Shows the answer rating card in the right column.
+     */
+    function showAnswerCard() {
+        $("#answer-card-prompt").addClass("d-none");
+        $("#answer-card-body").removeClass("d-none");
+        setAnswerButtonsDisabled(false);
+        showAnswerCardPage(1);
+    }
+
+    /**
+     * Renders example sentences with either the scrambled or revealed word.
+     * @param {Array} examples_array - Examples to render
+     * @param {string} original_word - The original word to detect in examples
+     * @param {string} display_word - The word form to render
+     * @param {boolean} scrambled_display - Whether the display is still scrambled
+     */
+    function renderExamples(examples_array, original_word, display_word, scrambled_display) {
+        let examples_html = '';
+
+        examples_array.forEach(example => {
+            examples_html += buildExampleHTML(example, original_word, display_word, scrambled_display);
+        });
+
+        $("#study-card-examples").html(examples_html);
+    }
+
+    /**
+     * Hides the controls that only apply while a study card is active.
+     */
+    function hideStudyControls() {
+        $("#examples-placeholder").addClass("d-none");
+        $("#live-progress").addClass("d-none");
+        $("#guess-ui").addClass("d-none");
+    }
+
+    /**
      * Fetches the list of words to study from the server.
      */
     async function getListofCards() {
@@ -79,7 +166,7 @@ $(document).ready(function () {
             }
 
             if (data.payload.length == 0) {
-                showNoMoreCardsMsg();
+                showEmptyDeckState();
                 return true;
             }
 
@@ -92,6 +179,7 @@ $(document).ready(function () {
 
             max_cards = words.length > max_cards ? max_cards : words.length;
 
+            setLayoutState("active");
             $("#card-counter").text("1" + "/" + max_cards);
             adaptCardStyleToWordStatus(words[0].status);
             await startCard(words[0].word);
@@ -107,8 +195,8 @@ $(document).ready(function () {
      */
     async function startCard(original_word) {
         // reset UI to scramble mode
-        $("#answer-card").addClass("d-none");
-        $(".btn-answer").prop('disabled', true);
+        showAnswerPrompt();
+        showStudyCardHeaderLoading();
         $("#guess-ui").removeClass("d-none");
         $("#guess-input").val("").trigger("focus");
         $("#guess-feedback")
@@ -123,7 +211,9 @@ $(document).ready(function () {
         $("#study-card").data('revealed', false);
 
         // update title to scrambled
-        $("#study-card-word-title").removeClass('placeholder').text(scrambled);
+        $("#study-card-word-title")
+            .removeClass("placeholder w-50 rounded")
+            .text(scrambled);
 
         // fetch examples for this card
         await getExampleSentencesforCard(original_word, scrambled);
@@ -157,7 +247,6 @@ $(document).ready(function () {
             }
 
             let examples_array = [];
-            let examples_html = '';
             const lang_iso = getStudyLanguage();
 
             const word_boundary = '(?<![\\p{L}])' + escapeRegex(original_word) + '(?![\\p{L}])';
@@ -200,14 +289,10 @@ $(document).ready(function () {
                 if (lastCardReached()) return;
                 await startCard(words[cur_card_index].word); // Await recursive call
             } else {
-                examples_array.forEach(example => {
-                    examples_html += buildExampleHTML(example, original_word, scrambled_word, true);
-                });
-
                 showWordFrequency(words[cur_card_index].is_phrase);
 
                 $("#examples-placeholder").addClass('d-none');
-                $("#study-card-examples").html(examples_html);
+                renderExamples(examples_array, original_word, scrambled_word, true);
             }
         } catch (error) {
             console.error(error);
@@ -361,12 +446,15 @@ $(document).ready(function () {
      */
     function lastCardReached() {
         if (max_cards == 0) {
-            showNoMoreCardsMsg();
+            showEmptyDeckState();
             return true;
         } else if (cur_card_index >= max_cards) {
-            $("#study-card-word-title").text("Congratulations!");
+            setLayoutState("complete");
+            $("#study-card-word-title")
+                .removeClass("placeholder w-50 rounded")
+                .text("Congratulations!");
             $("#study-card-freq-badge").addClass('d-none');
-            adaptCardStyleToWordStatus();
+            adaptCardStyleToWordStatus(0); // green styling for completion
 
             let progress_html = "";
             for (const answer of answers) {
@@ -387,24 +475,29 @@ $(document).ready(function () {
                     </div>`;
             }
 
+            $("#study-card-body").addClass("d-flex flex-column justify-content-center");
             $("#study-card-examples").html(`
-                <div class="bi bi-trophy text-warning display-3 mt-3"></div>
+                <img src="/img/gamification/finished.gif" style="max-width: 300px;" alt="Finished!">
                 <div class="mt-3">You have reached the end of your study.</div>
-                <div class="mt-3">These were your results:</div>
-                <div class="progress mx-auto mt-3 fw-bold" style="height: 25px; max-width: 550px">
-                    ${progress_html}
-                </div>
-                ${buildResultsTable()}
-                <div class="small mt-4">
-                    If you want to continue, you can refresh this page (F5).<br>
-                    However, we strongly recommend that you keep your study sessions short 
-                    and take rest intervals.
+            `);
+            $("#study-card-body").after(`
+                <div class="card-footer small">
+                    To continue, press F5. Keep your study sessions short and take rest intervals.
                 </div>
             `);
-            $("#study-card-footer").addClass("d-none");
-            $("#examples-placeholder").addClass("d-none");
-            $("#live-progress").addClass("d-none");
-            $("#guess-ui").addClass("d-none");
+            $("#answer-card-title").text("Review your answers");
+            $("#answer-card-prompt").addClass("d-none");
+            $("#answer-card-body")
+                .removeClass("d-none")
+                .html(`
+                    <div class="progress mx-auto mt-3 fw-bold" style="height: 25px; max-width: 550px">
+                        ${progress_html}
+                    </div>
+                    ${buildResultsTable()}
+                `);
+            $("#card-counter").addClass("d-none");
+            $("#answer-card .card-footer").addClass("d-none");
+            hideStudyControls();
             scrollToPageTop();
             return true;
         }
@@ -412,16 +505,16 @@ $(document).ready(function () {
     }
 
     /**
-     * Displays message when there are no cards available to study.
+     * Displays the empty-deck state for the study page.
+     * Updates the card header and body and collapses the layout to the left column only.
      */
-    function showNoMoreCardsMsg() {
-        $("#study-card-header").text("Sorry, no cards to practice");
+    function showEmptyDeckState() {
+        setLayoutState("empty");
+        $("#study-card-header").html('<h4 id="study-no-cards" class="my-0 fw-bold">Sorry, no cards to practice</h4>');
         adaptCardStyleToWordStatus(3);
         $("#study-card-examples").html("<div class='bi bi-exclamation-circle text-danger display-3'></div><div class='mt-3'>It seems there are no cards in your deck. Add some words to your library and try again.</div>");
-        $("#study-card-footer").addClass("d-none");
-        $("#examples-placeholder").addClass("d-none");
-        $("#live-progress").addClass("d-none");
-        $("#guess-ui").addClass("d-none");
+        $("#card-counter").addClass("d-none");
+        hideStudyControls();
     }
 
     /**
@@ -489,10 +582,12 @@ $(document).ready(function () {
         const word = $("#study-card").data('word');
         const answer = $(this).attr("value");
 
+        if (typeof(answer) === 'undefined') { return; }
+
         answers[answer][1] = answers[answer][1] + 1;
         words[cur_card_index].status = answer;
 
-        $(".btn-answer").prop('disabled', true);
+        setAnswerButtonsDisabled(true);
 
         try {
             const form_data = new URLSearchParams({ word: word, answer: answer });
@@ -518,8 +613,6 @@ $(document).ready(function () {
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
-
-        $('#btn-answer-prev').trigger('click'); // hide answer card page 2
     });
 
     /**
@@ -528,8 +621,7 @@ $(document).ready(function () {
      */
     $('#btn-answer-prev').on('click', function (e) {
         e.preventDefault();
-        $('#answer-card-page-1').removeClass('d-none');
-        $('#answer-card-page-2').addClass('d-none');
+        showAnswerCardPage(1);
     });
 
     /**
@@ -538,8 +630,7 @@ $(document).ready(function () {
      */
     $('#btn-answer-more').on('click', function (e) {
         e.preventDefault();
-        $('#answer-card-page-1').addClass('d-none');
-        $('#answer-card-page-2').removeClass('d-none');
+        showAnswerCardPage(2);
     });
 
     /**
@@ -562,7 +653,7 @@ $(document).ready(function () {
 
         words.forEach(w => {
             table_rows += '<tr>'
-                + '<td><a class="word fw-bold bg-warning-subtle border-bottom p-1">' + encodeHtml(w.word) + '</a></td>'
+                + '<td><a class="word fw-bold">' + encodeHtml(w.word) + '</a></td>'
                 + '<td><span class="word-description ' + answers[w.status][2] + '">' + answers[w.status][3] + '</span></td>'
                 + '</tr>';
         });
@@ -577,10 +668,10 @@ $(document).ready(function () {
     function showWordFrequency(is_phrase) {
         const $freq_badge = $("#study-card-freq-badge");
         if (is_phrase) {
-            $freq_badge.removeClass('placeholder').addClass('border border-light').text('Phrase/Expression');
+            $freq_badge.removeClass('placeholder w-25').addClass('border border-light').text('Phrase/Expression');
         } else {
             const freq_level = Dictionaries.getWordFrequency(words[cur_card_index].frequency_index) + ' frequency';
-            $freq_badge.removeClass('placeholder').addClass('border border-light').text(freq_level);
+            $freq_badge.removeClass('placeholder w-25').addClass('border border-light').text(freq_level);
         }
     }
 
@@ -672,19 +763,15 @@ $(document).ready(function () {
         if ($("#study-card").data('revealed')) return;
 
         $("#study-card").data('revealed', true);
-        $("#study-card-word-title").text(original);
+        $("#study-card-word-title")
+            .removeClass("placeholder w-50 rounded")
+            .text(original);
 
         // rebuild examples with original word shown, preserving order
-        let examples_html = '';
-        const scrambled = $("#study-card").data('scrambled');
-        for (const example of current_examples_array) {
-            examples_html += buildExampleHTML(example, original, scrambled, false); // false => show original (adds class "word")
-        }
-        $("#study-card-examples").html(examples_html);
+        renderExamples(current_examples_array, original, original, false);
 
         // show answer card and enable buttons
-        $("#answer-card").removeClass("d-none");
-        $(".btn-answer").prop('disabled', false);
+        showAnswerCard();
 
         // hide guess UI after reveal
         $("#guess-ui").addClass("d-none");

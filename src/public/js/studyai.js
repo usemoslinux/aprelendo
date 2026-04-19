@@ -14,9 +14,73 @@ $(document).ready(function () {
         ["3", 0, "bg-danger", "No recall"]
     ];
 
-    $(".btn-answer").prop('disabled', true); // disable answer buttons
     Dictionaries.fetchURIs(); // get dictionary & translator URIs
     getListofCards();
+
+    /**
+     * Enables or disables all answer buttons.
+     * @param {boolean} is_disabled - Whether the buttons should be disabled
+     */
+    function setAnswerButtonsDisabled(is_disabled) {
+        $(".btn-answer").prop("disabled", is_disabled);
+    }
+
+    /**
+     * Updates the two-column layout for the current study state.
+     * @param {string} layout_state - One of: active, complete, empty
+     */
+    function setLayoutState(layout_state) {
+        const is_empty = layout_state === "empty";
+
+        $("#study-column")
+            .toggleClass("col-md-12", is_empty)
+            .toggleClass("col-md-6", !is_empty);
+        $("#review-column").toggleClass("d-none", is_empty);
+    }
+
+    /**
+     * Shows or hides the AI feedback box.
+     * @param {boolean} is_visible - Whether the feedback box should be visible
+     */
+    function setStudyAiAnswerVisible(is_visible) {
+        $("#studyai-answer").toggleClass("d-none", !is_visible);
+    }
+
+    /**
+     * Shows the pre-feedback prompt in the right column.
+     */
+    function showAnswerPrompt() {
+        $("#answer-card-prompt").removeClass("d-none");
+        $("#answer-card-body").addClass("d-none");
+        setAnswerButtonsDisabled(true);
+    }
+
+    /**
+     * Shows the answer rating card in the right column.
+     */
+    function showAnswerCard() {
+        $("#answer-card-prompt").addClass("d-none");
+        $("#answer-card-body").removeClass("d-none");
+        setAnswerButtonsDisabled(false);
+    }
+
+    /**
+     * Hides the controls that only apply while a study card is active.
+     */
+    function hideStudyControls() {
+        $("#answer-card-prompt").addClass("d-none");
+        $("#live-progress").addClass("d-none");
+    }
+
+    /**
+     * Resets the current card UI to its pre-feedback state.
+     */
+    function resetExerciseState() {
+        showAnswerPrompt();
+        setStudyAiAnswerVisible(false);
+        $("#text-user-answer").val("").trigger("focus");
+        $("#text-studyai-answer").val("");
+    }
 
     /**
      * Fetches list of words user is learning
@@ -38,7 +102,7 @@ $(document).ready(function () {
             }
 
             if (data.payload.length == 0) {
-                showNoMoreCardsMsg();
+                showEmptyDeckState();
                 return true;
             }
 
@@ -51,6 +115,7 @@ $(document).ready(function () {
 
             max_cards = words.length > max_cards ? max_cards : words.length;
 
+            setLayoutState("active");
             updateCard(words[0]);
         } catch (error) {
             console.error(error);
@@ -66,10 +131,13 @@ $(document).ready(function () {
         $("#study-card").data('word', wordObj.word);
         updateLiveProgressBar(); // update live progress bar
         $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
-        $("#study-card-word-title").removeClass('placeholder').text(wordObj.word);
+        $("#study-card-word-title")
+            .removeClass("placeholder w-50 rounded")
+            .text(wordObj.word);
         updateAnswerLabel(wordObj.word);
         showWordFrequency(words[cur_card_index].is_phrase);
         adaptCardStyleToWordStatus(wordObj.status);
+        resetExerciseState();
     } 
 
     /**
@@ -89,12 +157,15 @@ $(document).ready(function () {
      */
     function lastCardReached() {
         if (max_cards == 0) {
-            showNoMoreCardsMsg();
+            showEmptyDeckState();
             return true;
         } else if (cur_card_index >= max_cards) {
-            $("#study-card-word-title").text("Congratulations!");
+            setLayoutState("complete");
+            $("#study-card-word-title")
+                .removeClass("placeholder w-50 rounded")
+                .text("Congratulations!");
             $("#study-card-freq-badge").addClass('d-none');
-            adaptCardStyleToWordStatus();
+            adaptCardStyleToWordStatus(0); // green styling for completion
 
             let progress_html = "";
             for (const answer of answers) {
@@ -115,22 +186,30 @@ $(document).ready(function () {
                     </div>`;
             }
 
+            $("#study-card-body").addClass("d-flex flex-column justify-content-center");
             $("#ai-card").html(`
-                <div class="bi bi-trophy text-warning display-3 mt-3"></div>
+                <img src="/img/gamification/finished.gif" style="max-width: 300px;" alt="Finished!">
                 <div class="mt-3">You have reached the end of your study.</div>
-                <div class="mt-3">These were your results:</div>
-                <div class="progress mx-auto mt-3 fw-bold" style="height: 25px; max-width: 550px">
-                    ${progress_html}
-                </div>
-                ${buildResultsTable()}
-                <div class="small mt-4">
-                    If you want to continue, you can refresh this page (F5).<br>
-                    However, we strongly recommend that you keep your study sessions short 
-                    and take rest intervals.
+            `);
+            $("#study-card-body").after(`
+                <div class="card-footer small">
+                    To continue, press F5. Keep your study sessions short and take rest intervals.
                 </div>
             `);
-            $("#study-card-footer").addClass("d-none");
-            $("#live-progress").addClass("d-none");
+
+            $("#answer-card-title").text("Review your answers");
+            $("#answer-card-prompt").addClass("d-none");
+            $("#answer-card-body")
+                .removeClass("d-none")
+                .html(`
+                    <div class="progress mx-auto mt-3 fw-bold" style="height: 25px; max-width: 550px">
+                        ${progress_html}
+                    </div>
+                    ${buildResultsTable()}
+                `);
+            $("#card-counter").addClass("d-none");
+            $("#answer-card .card-footer").addClass("d-none");
+            hideStudyControls();
             scrollToPageTop();
             return true;
         }
@@ -138,21 +217,21 @@ $(document).ready(function () {
     } 
 
     /**
-     * Displays a message indicating that there are no more cards available for practice.
-     * Updates the card header and body to reflect the lack of cards, encouraging the user
-     * to add more words to their library. Hides the footer.
+     * Displays the empty-deck state for the study page.
+     * Updates the card header and body and collapses the layout to the left column only.
      * @returns {void}
      */
-    function showNoMoreCardsMsg() {
-        $("#study-card-header").text("Sorry, no cards to practice");
+    function showEmptyDeckState() {
+        setLayoutState("empty");
+        $("#study-card-header").html('<h4 id="study-no-cards" class="my-0 fw-bold">Sorry, no cards to practice</h4>');
         adaptCardStyleToWordStatus(3); // title in red
         $("#ai-card").html(`
             <div class='bi bi-exclamation-circle text-danger display-3'></div>
             <div class='mt-3'>It seems there are no cards in your deck. Add
             some words to your library and try again.</div>
         `);
-        $("#study-card-footer").addClass("d-none");
-        $("#live-progress").addClass("d-none");
+        $("#card-counter").addClass("d-none");
+        hideStudyControls();
     } 
 
     /**
@@ -215,8 +294,9 @@ $(document).ready(function () {
         const user_answer = $('#text-user-answer').val().trim();
         const vocab_piece = words[cur_card_index].word;
         const is_vocab_piece_present = user_answer.toLowerCase().includes(vocab_piece.toLowerCase());
-        
-        $(".btn-answer").prop('disabled', false); // enable answer buttons
+
+        showAnswerCard();
+        setStudyAiAnswerVisible(true);
 
         if (user_answer === '') {
             return $('#text-studyai-answer').val("(1) Completely incorrect — couldn't provide an answer.");
@@ -260,12 +340,12 @@ $(document).ready(function () {
         const word = $("#study-card").data('word');
         const answer = $(this).attr("value");
 
+        if (typeof(answer) === 'undefined') { return; }
+
         answers[answer][1] = answers[answer][1] + 1;
         words[cur_card_index].status = answer;
 
-        $(".btn-answer").prop('disabled', true); // disable answer buttons
-        $("#text-studyai-answer").val(''); // clear AI answer box
-        $("#text-user-answer").val('').trigger("focus"); // clear user answer box and focus it
+        setAnswerButtonsDisabled(true);
 
         try {
             const form_data = new URLSearchParams({ word: word, answer: answer });
@@ -317,7 +397,7 @@ $(document).ready(function () {
 
         words.forEach(word => {
             table_rows += '<tr>'
-                + '<td><a class="word bw-bold">' + word.word + '</a></td>'
+                + '<td><a class="word fw-bold">' + encodeHtml(word.word) + '</a></td>'
                 + '<td><span class="word-description ' + answers[word.status][2] + '">' + answers[word.status][3]
                 + '</span></td>'
                 + '</tr>';
@@ -334,13 +414,13 @@ $(document).ready(function () {
 
         if (is_phrase) {
             $freq_badge
-                .removeClass('placeholder')
+                .removeClass('placeholder w-25')
                 .addClass('border border-light')
                 .text('Phrase/Expression');
         } else {
             const freq_level = Dictionaries.getWordFrequency(words[cur_card_index].frequency_index) + ' frequency';
             $freq_badge
-                .removeClass('placeholder')
+                .removeClass('placeholder w-25')
                 .addClass('border border-light')
                 .text(freq_level);
         }
@@ -408,4 +488,18 @@ $(document).ready(function () {
         e.stopPropagation();
         $button.trigger("click");
     }); 
+
+    /**
+     * Encodes HTML special characters to prevent XSS.
+     * @param {string} s - String to encode
+     * @returns {string} HTML-safe string
+     */
+    function encodeHtml(s) {
+        return String(s)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 });
