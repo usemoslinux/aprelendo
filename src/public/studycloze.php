@@ -100,31 +100,31 @@ require_once PUBLIC_PATH . 'header.php';
                                         <button id="btn-answer-more" type="button"
                                             class="btn btn-lg btn-danger btn-answer my-3">
                                             <span class="fw-bold">(+) No, not really</span>
-                                            <br><span class="small">I had little to no understanding.</span>
+                                            <br><span class="small">Let me explain why...</span>
                                         </button>
                                         <button id="btn-answer-excellent" type="button" value="0"
                                             class="btn btn-lg btn-success btn-answer mb-3">
                                             <span class="fw-bold">(4) Yes, of course!</span>
-                                            <br><span class="small">I knew exactly what it meant.</span>
+                                            <br><span class="small">I already knew exactly what this word meant</span>
                                         </button>
                                     </div>
                                 </div>
                                 <div id="answer-card-page-2" class="smooth-transition">
                                     <div class="card-body d-flex flex-column">
-                                        <h5 class="card-title">After reviewing the examples, how well do you understand it now?</h5>
+                                        <h5 class="card-title">Is it clearer now after the examples?</h5>
                                         <button id="btn-answer-no-recall" type="button" value="3"
                                             class="btn btn-lg btn-danger btn-answer my-3">
-                                            <span class="fw-bold">(1) Still no clue</span>
+                                            <span class="fw-bold">(1) Not at all</span>
                                             <br><span class="small">I have no idea what it means or confuse this word with something else.</span>
                                         </button>
                                         <button id="btn-answer-fuzzy" type="button" value="2"
                                             class="btn btn-lg btn-primary btn-answer mb-3">
-                                            <span class="fw-bold">(2) General idea</span>
+                                            <span class="fw-bold">(2) Somewhat</span>
                                             <br><span class="small">I have a sense, but can't give the exact meaning or translation.</span>
                                         </button>
                                         <button id="btn-answer-partial" type="button" value="1"
                                             class="btn btn-lg btn-warning btn-answer mb-3">
-                                            <span class="fw-bold">(3) Completely understand</span>
+                                            <span class="fw-bold">(3) Totally</span>
                                             <br><span class="small">I now fully understand what it means.</span>
                                         </button>
                                         <button id="btn-answer-prev" class="btn btn-lg btn-outline-secondary mb-3">← Back to previous question</button>
