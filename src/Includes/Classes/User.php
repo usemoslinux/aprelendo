@@ -304,7 +304,9 @@ class User extends DBEntity
     public function setActiveLang(int $lang_id): void
     {
         $lang = new Language($this->pdo, $this->id);
-        $lang->loadRecordById($lang_id);
+        if (!$lang->loadRecordById($lang_id)) {
+            throw new UserException('Unauthorized access.', 403);
+        }
         $lang_name = $lang->name;
 
         $sql = "UPDATE `{$this->table}` SET `learning_lang_iso`=? WHERE `id`=?";

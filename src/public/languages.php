@@ -4,24 +4,33 @@
 require_once '../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-if (isset($_GET['act'])) {
-    $user->setActiveLang($_GET['act']);
-}
-
-require_once PUBLIC_PATH . 'head.php';
-require_once PUBLIC_PATH . 'header.php';
-
+use Aprelendo\UserException;
 use Aprelendo\Language;
 use Aprelendo\SupportedLanguages;
+
+if (isset($_GET['act'])) {
+    try {
+        $user->setActiveLang((int)$_GET['act']);
+    } catch (UserException $e) {
+        http_response_code(403);
+        exit;
+    }
+}
 
 $user_id = $user->id;
 $lang = new Language($pdo, $user_id);
 
 if (isset($_GET['chg'])) {
-    $lang->loadRecordById($_GET['chg']);
+    if (!$lang->loadRecordById((int)$_GET['chg'])) {
+        http_response_code(403);
+        exit;
+    }
 } elseif (isset($_GET['act'])) {
-    $lang->loadRecordById($_GET['act']);
+    $lang->loadRecordById($user->lang_id);
 }
+
+require_once PUBLIC_PATH . 'head.php';
+require_once PUBLIC_PATH . 'header.php';
 
 ?>
 

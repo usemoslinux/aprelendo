@@ -68,35 +68,38 @@ class Language extends DBEntity
      * Loads record data in object
      *
      * @param array $record
-     * @return void
+     * @return bool
      */
-    private function loadRecord(array $record): void
+    private function loadRecord(array $record): bool
     {
-        if ($record) {
-            $this->id                 = $record['id'];
-            $this->user_id            = $record['user_id'];
-            $this->name               = $record['name'];
-            $this->dictionary_uri     = $record['dictionary_uri'];
-            $this->img_dictionary_uri = $record['img_dictionary_uri'];
-            $this->translator_uri     = $record['translator_uri'];
-            $this->rss_feed1_uri      = $this->setUri($record['rss_feed1_uri']);
-            $this->rss_feed2_uri      = $this->setUri($record['rss_feed2_uri']);
-            $this->rss_feed3_uri      = $this->setUri($record['rss_feed3_uri']);
-            $this->show_freq_words    = $record['show_freq_words'];
-            $this->level              = $record['level'];
+        if (empty($record)) {
+            return false;
         }
+
+        $this->id                 = $record['id'];
+        $this->name               = $record['name'];
+        $this->dictionary_uri     = $record['dictionary_uri'];
+        $this->img_dictionary_uri = $record['img_dictionary_uri'];
+        $this->translator_uri     = $record['translator_uri'];
+        $this->rss_feed1_uri      = $this->setUri($record['rss_feed1_uri']);
+        $this->rss_feed2_uri      = $this->setUri($record['rss_feed2_uri']);
+        $this->rss_feed3_uri      = $this->setUri($record['rss_feed3_uri']);
+        $this->show_freq_words    = $record['show_freq_words'];
+        $this->level              = $record['level'];
+
+        return true;
     } 
 
     /**
      * Loads record data in object properties by id
      *
      * @param int $id
-     * @return void
+     * @return bool
      */
-    public function loadRecordById(int $id): void
+    public function loadRecordById(int $id): bool
     {
-        $sql = "SELECT * FROM `{$this->table}` WHERE `id` = ?";
-        $this->loadRecord($this->sqlFetch($sql, [$id]));
+        $sql = "SELECT * FROM `{$this->table}` WHERE `user_id`=? AND `id`=?";
+        return $this->loadRecord($this->sqlFetch($sql, [$this->user_id, $id]));
     } 
 
     /**

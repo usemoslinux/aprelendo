@@ -17,8 +17,16 @@ use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
 try {
+    $lang_id = (int)$_POST['id'];
+
+    if ($lang_id === 0) {
+        throw new UserException('Unauthorized access.', 403);
+    }
+
     $lang = new Language($pdo, $user->id);
-    $lang->loadRecordById($_POST['id']);
+    if (!$lang->loadRecordById($lang_id)) {
+        throw new UserException('Unauthorized access.', 403);
+    }
     $lang->editRecord($_POST);
 
     $response = ['success' => true];
