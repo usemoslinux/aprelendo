@@ -4,11 +4,8 @@
 require_once '../../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-header('Content-Type: application/json; charset=utf-8');
-$response = ['success' => false];
-
 if (empty($_GET) || !isset($_GET['id'])) {
-    echo json_encode($response);
+    http_response_code(400);
     exit;
 }
 
@@ -32,15 +29,21 @@ try {
     $ebook_file = new EbookFile($file_name);
     $ebook_content = $ebook_file->get();
     
-    if (!$ebook_content) {
+    if ($ebook_content === '') {
         throw new UserException('Book content is empty.', 404);
     }
 
-    $response = ['success' => true];
-    echo json_encode($response);
+    header('Content-Type: application/epub+zip');
+    header('Content-Length: ' . strlen($ebook_content));
+    echo $ebook_content;
     exit;
 } catch (Throwable $e) {
-    // catches UserException but also possible Exceptions from fileread() in $ebook_file->get()
-    http_response_code($e->getCode());
+    $status_code = (int)$e->getCode();
+
+    if ($status_code < 400 || $status_code > 599) {
+        $status_code = 500;
+    }
+
+    http_response_code($status_code);
     exit;
 }

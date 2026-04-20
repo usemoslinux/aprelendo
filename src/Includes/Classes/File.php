@@ -133,6 +133,12 @@ class File
             throw new UserException('Unauthorized access.', 401);
         }
 
-        return readfile($file);
+        $file_contents = file_get_contents($file);
+
+        if ($file_contents === false) {
+            throw new UserException('Error reading file.', 500);
+        }
+
+        return $file_contents;
     } 
 }
