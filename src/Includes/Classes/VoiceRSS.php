@@ -23,7 +23,7 @@ class VoiceRSS
      * @param array $settings
      * @return void
      */
-    private function validate($settings): void
+    private function validate(array $settings): void
     {
         if (empty($settings)) {
             throw new UserException('The settings are undefined');
@@ -47,7 +47,7 @@ class VoiceRSS
      */
     private function request(array $settings): array
     {
-        $url = (($settings['ssl'] ?? false) ? 'https' : 'http') . '://api.voicerss.org/';
+        $url = 'https://api.voicerss.org/';
         
         $curl_options = [
             CURLOPT_RETURNTRANSFER => 1,

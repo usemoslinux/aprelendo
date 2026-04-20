@@ -18,7 +18,10 @@ use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
 try {
-    if (!isset($_POST['text']) || empty($_POST['text'] || !isset($_POST['langiso']) || empty($_POST['langiso']))) {
+    $text = trim((string) ($_POST['text'] ?? ''));
+    $lang_iso = trim((string) ($_POST['langiso'] ?? ''));
+
+    if ($text === '' || $lang_iso === '') {
         throw new UserException('Malformed request', 400);
     }
 
@@ -61,11 +64,15 @@ try {
         'vi' => 'vi-vn'  // Vietnamese
     ];
 
+    if (!isset($audiolang[$lang_iso])) {
+        throw new UserException('Malformed request', 400);
+    }
+
     $tts = new VoiceRSS;
     $payload = $tts->speech([
         'key' => VOICERSS_API_KEY,
-        'hl' => $audiolang[$_POST['langiso']],
-        'src' => $_POST['text'],
+        'hl' => $audiolang[$lang_iso],
+        'src' => $text,
         'r' => '0',
         'c' => 'mp3',
         'f' => '44khz_16bit_mono',
@@ -73,8 +80,8 @@ try {
         'b64' => 'true'
     ]);
 
-    if (!$payload['error'] === null || !$payload['response']) {
-        throw new UserException($payload['error'], 400);
+    if ($payload['error'] !== null || empty($payload['response'])) {
+        throw new UserException($payload['error'] ?? 'No audio response received', 400);
     }
         
     $stream_log->addRecord(); // if no errors, log audio stream
@@ -82,6 +89,7 @@ try {
     echo json_encode($response);
     exit;
 } catch (Throwable $e) {
-    http_response_code($e->getCode());
+    $status_code = (int) $e->getCode();
+    http_response_code(($status_code >= 400 && $status_code <= 599) ? $status_code : 500);
     exit;
 }
