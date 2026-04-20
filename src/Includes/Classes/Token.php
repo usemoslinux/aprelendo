@@ -88,6 +88,22 @@ class Token extends DBEntity
     } 
 
     /**
+     * Persists the auth token in a secure cookie.
+     *
+     * @param string $token
+     * @param int $time_stamp
+     * @return void
+     */
+    private function setAuthCookie(string $token, int $time_stamp): void
+    {
+        $domain = $_SERVER['HTTP_HOST'];
+
+        if (!setcookie('user_token', $token, $time_stamp, "/", $domain, true, true)) {
+            throw new UserException('Error creating token cookie.');
+        }
+    }
+
+    /**
      * Adds token to db
      *
      * @param int $user_id
@@ -95,8 +111,6 @@ class Token extends DBEntity
      */
     public function add(int $user_id): void
     {
-        $domain = $_SERVER['HTTP_HOST'];
-
         // first, remove old tokens from auth_tokens table
         $this->deleteOld();
         $this->loadRecord($user_id);
@@ -104,9 +118,7 @@ class Token extends DBEntity
         // check if valid token is already in db
         if (!empty($this->token)) {
             // a valid token is already in the db (force use of https)
-            if (!setcookie('user_token', $this->token, strtotime($this->expires), "/", $domain, true)) {
-                throw new UserException('Error creating token cookie.');
-            }
+            $this->setAuthCookie($this->token, strtotime($this->expires));
         } else {
             // create new token, insert it in db & set cookie
             $token = $this->generate();
@@ -116,9 +128,7 @@ class Token extends DBEntity
             $sql = "INSERT INTO `{$this->table}` (`token`, `user_id`, `expires`) VALUES (?, ?, ?)";
             $this->sqlExecute($sql, [$token, $user_id, $expires]);
 
-            if (!setcookie('user_token', $token, $time_stamp, "/", $domain, true)) {
-                throw new UserException('Error creating token cookie.');
-            }
+            $this->setAuthCookie($token, $time_stamp);
         }
     } 
 }

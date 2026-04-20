@@ -60,7 +60,7 @@ try {
 function printRSSFeed($feed, $groupindex): string
 {
     // Get feed's title and articles
-    $feed_title = $feed->title;
+    $feed_title = escapeHtml((string)$feed->title);
     $feed_articles = $feed->articles;
 
     if (empty($feed_title)) {
@@ -88,10 +88,10 @@ function printRSSFeed($feed, $groupindex): string
         $itemindex = 1; // initialize counter for accordion items
         foreach ($feed_articles as $article) {
             // Get article data
-            $text_title = $article['title'];
-            $art_date = $article['date'];
-            $text_author = $article['author'];
-            $art_src = $article['src'];
+            $text_title = escapeHtml((string)$article['title']);
+            $art_date = escapeHtml((string)$article['date']);
+            $text_author = escapeHtml((string)$article['author']);
+            $art_src = escapeHtml(sanitizeExternalUrl((string)$article['src']));
             $text_content = $article['content'];
             
             // Initialize variables for accordion item
@@ -112,7 +112,7 @@ function printRSSFeed($feed, $groupindex): string
                 . "data-bs-parent='#$accordion_id'>"
                 . "<div class='accordion-body'>";
 
-            $html .= '<div class="entry-text">' . strip_tags($text_content, '<p>') . '</div>';
+            $html .= '<div class="entry-text">' . renderEntryText($text_content) . '</div>';
             
             $html .= "<hr>
                         <div>
@@ -124,5 +124,69 @@ function printRSSFeed($feed, $groupindex): string
     }
     $html .= '</div></div></div>';
     
+    return $html;
+}
+
+/**
+ * Escapes text before rendering it into HTML.
+ *
+ * @param string $value
+ * @return string
+ */
+function escapeHtml(string $value): string
+{
+    return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+/**
+ * Returns a URL only when it uses an allowed external scheme.
+ *
+ * @param string $url
+ * @return string
+ */
+function sanitizeExternalUrl(string $url): string
+{
+    $url = trim($url);
+
+    if ($url === '') {
+        return '';
+    }
+
+    $scheme = strtolower((string)parse_url($url, PHP_URL_SCHEME));
+
+    if (!in_array($scheme, ['http', 'https'], true)) {
+        return '';
+    }
+
+    return $url;
+}
+
+/**
+ * Converts RSS HTML content into safe paragraph markup.
+ *
+ * @param mixed $text_content
+ * @return string
+ */
+function renderEntryText($text_content): string
+{
+    $text_content = (string)$text_content;
+    $text_content = html_entity_decode($text_content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $text_content = preg_replace('/<(?:br\s*\/?|\/p|\/div|\/li|\/blockquote|\/h[1-6])>/i', "\n", $text_content);
+    $plain_text = strip_tags((string)$text_content);
+    $plain_text = preg_replace("/\r\n|\r/u", "\n", $plain_text);
+    $plain_text = preg_replace("/\n{3,}/u", "\n\n", $plain_text);
+    $paragraphs = preg_split("/\n\s*\n/u", trim($plain_text)) ?: [];
+    $html = '';
+
+    foreach ($paragraphs as $paragraph) {
+        $paragraph = trim((string)preg_replace('/[ \t]+/u', ' ', $paragraph));
+
+        if ($paragraph === '') {
+            continue;
+        }
+
+        $html .= '<p>' . escapeHtml($paragraph) . '</p>';
+    }
+
     return $html;
 }

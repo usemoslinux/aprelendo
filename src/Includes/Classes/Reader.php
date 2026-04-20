@@ -56,23 +56,28 @@ class Reader
         $audio_uri = TextsUtilities::isGoogleDriveLink($this->text->audio_uri)
             ? TextsUtilities::getGoogleDriveAudioUri($this->text->audio_uri)
             : $this->text->audio_uri;
+        $safe_reader_css = $this->escapeHtml($reader_css);
+        $safe_source_uri = $this->getSafeExternalUrl((string)$this->text->source_uri);
+        $safe_title = $this->escapeHtml((string)$this->text->title);
+        $safe_author = $this->escapeHtml((string)$this->text->author);
+        $safe_text = $this->escapeHtml((string)$this->text->text);
         
-        $html = '<div id="text-container" style="' . $reader_css . '" class="reader-scroll-area d-flex flex-column m-2 p-3" data-type="text" data-IdText="'
+        $html = '<div id="text-container" style="' . $safe_reader_css . '" class="reader-scroll-area d-flex flex-column m-2 p-3" data-type="text" data-IdText="'
             . $this->text->id . '" data-assisted-learning="' . (int)$this->prefs->assisted_learning
             . '" data-is-long-text="' . (int)$this->is_long_text . '">';
         
         // display source, if available
-        if (!empty($this->text->source_uri)) {
-            $html .= '<a class="source" href="' . $this->text->source_uri
+        if (!empty($safe_source_uri)) {
+            $html .= '<a class="source" href="' . $this->escapeHtml($safe_source_uri)
                 . '" target="_blank" rel="noopener noreferrer">'
-                . Url::getDomainName($this->text->source_uri) . '</a>';
+                . $this->escapeHtml((string)Url::getDomainName($safe_source_uri)) . '</a>';
         }
         
-        $html .= '<h2 class="my-3">' . $this->text->title . '</h2>'; // display title
+        $html .= '<h2 class="my-3">' . $safe_title . '</h2>'; // display title
         
         // display author, if available
         if (!empty($this->text->author)) {
-            $html .= '<div class="author">' . $this->text->author . '</div>';
+            $html .= '<div class="author">' . $safe_author . '</div>';
         }
         
         // display audio player, if necessary
@@ -109,10 +114,44 @@ class Reader
         }
         
         // display text
-        $html .= '<div id="text">' . $this->text->text . '</div>';
+        $html .= '<div id="text">' . $safe_text . '</div>';
         $html .= '</div>';
         return $html;
     } 
+
+    /**
+     * Escapes text before rendering it into HTML.
+     *
+     * @param string $value
+     * @return string
+     */
+    private function escapeHtml(string $value): string
+    {
+        return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+
+    /**
+     * Returns a URL only when it uses an allowed external scheme.
+     *
+     * @param string $url
+     * @return string
+     */
+    private function getSafeExternalUrl(string $url): string
+    {
+        $url = trim($url);
+
+        if ($url === '') {
+            return '';
+        }
+
+        $scheme = strtolower((string)parse_url($url, PHP_URL_SCHEME));
+
+        if (!in_array($scheme, ['http', 'https'], true)) {
+            return '';
+        }
+
+        return $url;
+    }
 
     /**
      * Constructs HTML code to show text in reader
