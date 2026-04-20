@@ -214,16 +214,30 @@ class Words extends DBEntity
     /**
      * Deletes words in database using ids as a parameter to select them
      *
-     * @param string $ids JSON that identifies the texts to be deleted
+     * @param array $word_ids
      * @return void
      */
-    public function delete(string $ids): void
+    public function delete(array $word_ids): void
     {
-        $ids_array = json_decode($ids);
-        $id_params = str_repeat("?,", count($ids_array) - 1) . "?";
+        if (empty($word_ids)) {
+            throw new UserException('No words were selected.');
+        }
 
-        $sql = "DELETE FROM `{$this->table}` WHERE `id` IN ($id_params)";
-        $this->sqlExecute($sql, $ids_array);
+        $word_ids = array_map(static function ($word_id): int {
+            $validated_id = filter_var($word_id, FILTER_VALIDATE_INT);
+
+            if ($validated_id === false || $validated_id <= 0) {
+                throw new UserException('Invalid word selection.');
+            }
+
+            return (int)$validated_id;
+        }, $word_ids);
+
+        $id_params = str_repeat("?,", count($word_ids) - 1) . "?";
+        $params = array_merge([$this->user_id, $this->lang_id], $word_ids);
+
+        $sql = "DELETE FROM `{$this->table}` WHERE `user_id`=? AND `lang_id`=? AND `id` IN ($id_params)";
+        $this->sqlExecute($sql, $params);
     } // delete()
 
     /**
