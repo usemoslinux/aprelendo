@@ -20,7 +20,7 @@ class UserAuth extends DBEntity
      * @param string $password
      * @return void
      */
-    public function login($username = "", $password = "", $google_id = ""): void
+    public function login(string $username = "", string $password = ""): void
     {
         $sql = "SELECT *
             FROM `{$this->table}`
@@ -41,14 +41,46 @@ class UserAuth extends DBEntity
             throw new UserException('You need to activate your account first. Check your email for the '
             . 'activation link.');
         }
-        
-        if (!empty($google_id) || password_verify($password, $hashedPassword)) { // login successful, remember me
-            $token = new Token($this->pdo);
-            $token->add($user_id);
-        } else { // wrong password
-            throw new UserException('Username and password combination is incorrect. Please try again.');
+
+        UserPassword::verify($password, $hashedPassword);
+        $this->createLoginToken($user_id);
+    }
+
+    /**
+     * Logs a user in with a verified Google account.
+     *
+     * @param string $google_id
+     * @return void
+     */
+    public function loginWithGoogle(string $google_id): void
+    {
+        if (!$this->user->id) {
+            throw new UserException('Google sign-in failed. Please try again.');
         }
-    } 
+
+        if (!$this->user->is_active) {
+            throw new UserException('You need to activate your account first. Check your email for the '
+            . 'activation link.');
+        }
+
+        if (empty($this->user->google_id) || !hash_equals($this->user->google_id, $google_id)) {
+            throw new UserException('This Google account is not linked to your Aprelendo account.');
+        }
+
+        $this->createLoginToken($this->user->id);
+    }
+
+    /**
+     * Creates the persistent auth token for a successful login.
+     *
+     * @param int $user_id
+     * @return void
+     */
+    private function createLoginToken(int $user_id): void
+    {
+        $token = new Token($this->pdo);
+        $token->add($user_id);
+    }
     
     /**
      * Logout user

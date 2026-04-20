@@ -23,6 +23,10 @@ defined('DB_CHARSET')             ? null : define('DB_CHARSET', 'utf8mb4');
 defined('YOUTUBE_API_KEY')        ? null : define('YOUTUBE_API_KEY', 'your_youtube_api_key'); // << update this
 // Google Drive API key used to support audio for ebooks
 defined('GOOGLE_DRIVE_API_KEY')   ? null : define('GOOGLE_DRIVE_API_KEY', 'your_google_api_key'); // << update this
+// Google Sign-In web client ID used by the login page and backend audience checks
+defined('GOOGLE_CLIENT_ID')
+    ? null
+    : define('GOOGLE_CLIENT_ID', '913422235077-082170c2l6b58ck8ie0f03rigombl2pc.apps.googleusercontent.com');
 // VoiceRSS API key to provide TTS support in assisted learning mode (voicerss.org)
 defined('VOICERSS_API_KEY')       ? null : define('VOICERSS_API_KEY', 'your_voicerss_api_key'); // << update this
 
@@ -43,4 +47,3 @@ defined('PYTHON_VENV')            ? null : define('PYTHON_VENV', '/opt/venv');
 defined('PROXY')                  ? null : define('PROXY', '');
 
 define('ENCRYPTION_KEY', 'Replace this with a nice encryption key'); // << update this
-
