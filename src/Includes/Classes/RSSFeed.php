@@ -65,7 +65,7 @@ class RSSFeed
                 'date' => date("d/m/Y - H:i", strtotime($articleDate)),
                 'author' => $article->author,
                 'src' => ($feed_type === 'atom') ? ($article->link?->attributes()?->href ?? '') : $article->link,
-                'content' => ($feed_type === 'atom') ? $article->pdotent : $article->description,
+                'content' => ($feed_type === 'atom') ? $article->content : $article->description,
             ];
 
             if ($itemIndex >= self::MAX_NR_OF_ARTICLES) {
