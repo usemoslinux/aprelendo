@@ -101,9 +101,9 @@ $(document).ready(function () {
     /**
      * Checks if audio URL is a Google Drive link
      */
-    $('#audio-url').on('input', function () {
+    $('#audio-uri').on('input', function () {
         const audio_url = $(this).val();
-        const help_text = $('#audio-url-helptext');
+        const help_text = $('#audio-uri-helptext');
 
         if (audio_url.includes('drive.google.com')) {
             help_text.html('<i class="bi bi-cloud-fill"></i> Remember to <a href="https://support.google.com/drive/answer/2494822?hl=en&co=GENIE.Platform%3DDesktop#zippy=%2Cshare-a-file-publicly" target="_blank" rel="noopener noreferrer" class="alert-link">share this file publicly</a>, allowing access to anyone with the link.');

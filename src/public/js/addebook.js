@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 $(document).ready(function() {
+    const MAX_EBOOK_SIZE_BYTES = 64 * 1024 * 1024;
+
     resetControls(true);
 
     /**
@@ -18,7 +20,13 @@ $(document).ready(function() {
         $("#alert-box").addClass("d-none");
 
         const $epub_file = $(this);
-        const file_name = $epub_file[0].files[0].name.split(".");
+        const file = $epub_file[0].files[0];
+
+        if (!file) {
+            return;
+        }
+
+        const file_name = file.name.split(".");
         const ext = file_name.pop().toLowerCase();
 
         if (ext != "epub") {
@@ -27,10 +35,16 @@ $(document).ready(function() {
                 "alert-danger"
             );
             resetControls(true);
+        } else if (file.size > MAX_EBOOK_SIZE_BYTES) {
+            showMessage(
+                `The selected ebook is too large. Maximum size is ${formatBytes(MAX_EBOOK_SIZE_BYTES)}.`,
+                "alert-danger"
+            );
+            resetControls(true);
         } else if (window.FileReader) {
             const reader = new FileReader();
             reader.onload = openBook;
-            reader.readAsArrayBuffer($epub_file[0].files[0]);
+            reader.readAsArrayBuffer(file);
         }
     }); 
 
@@ -42,6 +56,7 @@ $(document).ready(function() {
     $("#form-addebook").on("submit", async function(e) {
         e.preventDefault();
         const $progressbar = $("#upload-progress-bar");
+        const file = $("#url")[0].files[0];
         const form_data = new FormData(document.getElementById("form-addebook"));
         const audio_uri = $("#audio-uri").val();
 
@@ -51,6 +66,10 @@ $(document).ready(function() {
             // validate audio URL
             if (audio_uri != "" && !isValidHttpUrl(audio_uri)) {
                 throw new Error("Invalid audio URL.");
+            }
+
+            if (file && file.size > MAX_EBOOK_SIZE_BYTES) {
+                throw new Error(`The selected ebook is too large. Maximum size is ${formatBytes(MAX_EBOOK_SIZE_BYTES)}.`);
             }
 
             // show progress bar & disable buttons
@@ -65,7 +84,12 @@ $(document).ready(function() {
                 body: form_data
             });
 
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+            if (!response.ok) {
+                if (response.status === 413) {
+                    throw new Error(`The selected ebook is too large. Maximum size is ${formatBytes(MAX_EBOOK_SIZE_BYTES)}.`);
+                }
+                throw new Error(`HTTP error: ${response.status}`);
+            }
 
             const data = await response.json();
 
@@ -90,7 +114,7 @@ $(document).ready(function() {
      */
     $('#audio-uri').on('input', function() {
         const audio_url = $(this).val();
-        const help_text = $('#audio-url-helptext');
+        const help_text = $('#audio-uri-helptext');
     
         if (audio_url.includes('drive.google.com')) {
             help_text.html('<i class="bi bi-cloud-fill"></i> Remember to <a href="https://support.google.com/drive/answer/2494822?hl=en&co=GENIE.Platform%3DDesktop#zippy=%2Cshare-a-file-publicly" target="_blank" rel="noopener noreferrer" class="alert-link">share this file publicly</a>, allowing access to anyone with the link.');
@@ -167,5 +191,9 @@ $(document).ready(function() {
             return false;
         }
         return url.protocol === "http:" || url.protocol === "https:";
+    }
+
+    function formatBytes(bytes) {
+        return `${Math.round(bytes / (1024 * 1024))} MB`;
     }
 });

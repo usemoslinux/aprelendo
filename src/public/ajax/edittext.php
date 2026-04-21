@@ -65,7 +65,7 @@ try {
     $title      = $post['title']      ?? '';
     $author     = $post['author']     ?? '';
     $source_uri = $post['url']        ?? '';
-    $audio_uri  = $post['audio-url']  ?? '';
+    $audio_uri  = $post['audio-uri']  ?? '';
     $text       = $post['text']       ?? '';
     $type       = (int)($post['type'] ?? 0);
     $level      = (int)($post['level'] ?? DEFAULT_LEVEL);

@@ -70,7 +70,7 @@ require_once PUBLIC_PATH . 'header.php';
                             <label for="audio-uri">Audio:</label>
                             <input type="text" id="audio-uri" name="audio-uri" class="form-control" maxlength="200"
                                 placeholder="Audio URL (optional)">
-                            <div class="form-text" id="audio-url-helptext">
+                            <div class="form-text" id="audio-uri-helptext">
                                 Accepts URLs from YouTube, Google Drive, M3U playlists, RSS feeds, or any standard audio source.
                             </div>
                         </div>

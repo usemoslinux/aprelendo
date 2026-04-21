@@ -45,7 +45,7 @@ $text_types_arr = $text_types->getAll();
                 $text_title = $text->title;
                 $text_author = $text->author;
                 $text_url = $text->source_uri;
-                $text_audio_url = $text->audio_uri;
+                $text_audio_uri = $text->audio_uri;
                 $text_content = $text->text;
             } elseif (isset($_POST['text_title'])) {
                 // rss
@@ -132,13 +132,13 @@ $text_types_arr = $text_types->getAll();
                     </div>
                     <div class="row">
                         <div class="mb-3 col-12">
-                            <label class="me-2 mt-2" for="audio-url">Audio URL:</label>
-                            <input type="text" id="audio-url" name="audio-url" class="form-control"
+                            <label class="me-2 mt-2" for="audio-uri">Audio URL:</label>
+                            <input type="text" id="audio-uri" name="audio-uri" class="form-control"
                                 placeholder="Audio URL (optional)"
-                                value="<?php if (isset($text_audio_url)) {
-                                            echo $text_audio_url;
+                                value="<?php if (isset($text_audio_uri)) {
+                                            echo $text_audio_uri;
                                         } ?>">
-                            <div class="form-text" id="audio-url-helptext">
+                            <div class="form-text" id="audio-uri-helptext">
                                 Accepts URLs from Google Drive, M3U playlists, RSS feeds, or any standard audio source.
                             </div>
                         </div>

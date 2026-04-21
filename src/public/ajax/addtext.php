@@ -4,14 +4,6 @@
 require_once '../../Includes/dbinit.php'; // connect to database
 require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
 
-header('Content-Type: application/json; charset=utf-8');
-$response = ['success' => false];
-
-if (empty($_POST)) {
-    echo json_encode($response);
-    exit;
-}
-
 use Aprelendo\Texts;
 use Aprelendo\SharedTexts;
 use Aprelendo\Videos;
@@ -22,9 +14,62 @@ use Aprelendo\Curl;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
+
 const DEFAULT_LEVEL = 2;
 const TYPE_ARTICLE  = 1;
 const TYPE_EBOOK    = 6;
+const MAX_EBOOK_SIZE_BYTES = 67108864;
+
+if (isOversizedPostRequest()) {
+    echo (new UserException(
+        'The uploaded file is too large. Maximum ebook size is ' . formatBytes(MAX_EBOOK_SIZE_BYTES) . '.'
+    ))->getJsonError();
+    exit;
+}
+
+if (empty($_POST)) {
+    echo json_encode($response);
+    exit;
+}
+
+function formatBytes(int $bytes): string
+{
+    $size_mb = $bytes / (1024 * 1024);
+
+    return rtrim(rtrim(number_format($size_mb, 1), '0'), '.') . ' MB';
+}
+
+function iniSizeToBytes(string $size): int
+{
+    $size = trim($size);
+
+    if ($size === '') {
+        return 0;
+    }
+
+    $unit = strtolower(substr($size, -1));
+    $value = (int)$size;
+
+    return match ($unit) {
+        'g' => $value * 1024 * 1024 * 1024,
+        'm' => $value * 1024 * 1024,
+        'k' => $value * 1024,
+        default => (int)$size,
+    };
+}
+
+function isOversizedPostRequest(): bool
+{
+    $content_length = (int)($_SERVER['CONTENT_LENGTH'] ?? 0);
+    $post_max_size = iniSizeToBytes((string)ini_get('post_max_size'));
+
+    return ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST'
+        && $content_length > 0
+        && $post_max_size > 0
+        && $content_length > $post_max_size;
+}
 
 function normalize_post(array $post): array {
     return array_map(static function ($v) {
@@ -81,7 +126,7 @@ function handle_simple_or_video(PDO $pdo, int $userId, int $langId, array $r, st
         $source_uri = Videos::toDesktopUrl($r['url']);
     }
 
-    $audio_uri  = $r['audio-url']  ?? '';
+    $audio_uri  = $r['audio-uri']  ?? '';
     $text       = $r['text']       ?? '';
     $type       = (int)($r['type'] ?? 0);
     $level      = (int)($r['level'] ?? DEFAULT_LEVEL);
@@ -143,13 +188,15 @@ function handle_ebook(PDO $pdo, int $userId, int $langId, array $r, array $files
         throw new UserException('File not found. Please select a file to upload.');
     }
 
+    validate_audio($audio);
+
     $file_upload_log = new LogFileUploads($pdo, $userId);
     if ($file_upload_log->countTodayRecords() >= $file_upload_log::MAX_UPLOAD_LIMIT) {
         throw new UserException('Sorry, you have reached your file upload limit for today.');
     }
 
     $ebook = new EbookFile($files['url']['name']);
-    $ebook->put($files['url'], true);
+    $ebook->put($files['url'], false);
     $ebook->strip();
     $stored = $ebook->name;
 
