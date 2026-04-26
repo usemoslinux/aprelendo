@@ -1,0 +1,52 @@
+name: Test Docker config
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  docker-compose-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build containers
+        run: docker compose build
+
+      - name: Start stack
+        run: docker compose up -d
+
+      - name: Show running containers
+        run: docker compose ps
+
+      - name: Show logs if startup fails
+        if: always()
+        run: docker compose logs
+
+      - name: Test nginx config
+        run: docker exec aprelendo_nginx nginx -t
+
+      - name: Test PHP config
+        run: docker exec aprelendo_php php -v
+
+      - name: Test PHP syntax
+        run: docker exec aprelendo_php sh -c 'find /var/www/aprelendo -name "*.php" -not -path "*/vendor/*" -print0 | xargs -0 -n1 php -l'
+
+      - name: Test website responds
+        run: |
+          for i in {1..20}; do
+            if curl -fsS http://localhost/ > /dev/null; then
+              echo "Website is responding"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Website did not respond"
+          docker compose logs
+          exit 1
+
+      - name: Shut down stack
+        if: always()
+        run: docker compose down -v
