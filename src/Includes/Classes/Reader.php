@@ -9,9 +9,9 @@ class Reader
 {
     private $pdo;
     private $user_id;
-    private $text;
+    private Texts|SharedTexts $text;
     public $is_long_text = false;
-    public $prefs;
+    public Preferences $prefs;
     public $show_freq_words   = false;
     
     public const MAX_TEXT_LENGTH = 10000;

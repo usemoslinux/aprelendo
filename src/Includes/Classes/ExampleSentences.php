@@ -18,7 +18,6 @@ class ExampleSentences extends DBEntity
      * Initializes class variables (id, name, etc.)
      *
      * @param \PDO $pdo
-     * @param int $id
      * @param int $user_id
      */
     public function __construct(\PDO $pdo, int $user_id)
@@ -31,7 +30,7 @@ class ExampleSentences extends DBEntity
     /**
      * Loads record data in object properties by id
      *
-     * @param array $new_record
+     * @param array $record
      * @return void
      */
     public function addRecord(array $record): void

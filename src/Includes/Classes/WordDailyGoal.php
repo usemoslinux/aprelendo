@@ -8,7 +8,7 @@ class WordDailyGoal extends DBEntity
     public $id              = 0;
     public $user_id         = 0;
     public $lang_id         = 0;
-    public $last_streak     = null; // last streak date
+    public ?string $last_streak = null; // last streak date
     public $days_streak     = 0;    // nr of days streak
     public $daily_goal      = 10;
     private $time_zone      = '';
@@ -36,7 +36,7 @@ class WordDailyGoal extends DBEntity
     /**
      * Loads word_daily_goal record data
      *
-     * @param int $id
+     * @param bool $today_is_streak
      * @return void
      */
     private function loadRecord(bool $today_is_streak): void

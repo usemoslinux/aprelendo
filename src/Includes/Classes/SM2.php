@@ -36,7 +36,7 @@ class SM2 {
      *   3 = Easy        (perfect recall)
      *
      * @param int $quality
-     * @throws \InternalException if quality is not between 0 and 3.
+     * @throws InternalException if quality is not between 0 and 3.
      */
     public function processReview(int $quality): void {
         if ($quality < 0 || $quality > 3) {

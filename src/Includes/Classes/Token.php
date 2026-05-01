@@ -14,7 +14,6 @@ class Token extends DBEntity
      * Constructor
      *
      * @param \PDO $pdo
-     * @param int $user_id
      */
     public function __construct(\PDO $pdo)
     {
@@ -25,7 +24,7 @@ class Token extends DBEntity
     /**
      * Deletes old tokens from db
      *
-     * @return \PDO
+     * @return void
      */
     private function deleteOld(): void
     {

@@ -20,7 +20,7 @@ class Texts extends DBEntity
     public $text_pos      = '';
     public $audio_pos     = '';
     public $is_archived   = false;
-    protected $archive_filter = null;
+    protected ?bool $archive_filter = null;
     
     /**
     * Constructor
@@ -338,7 +338,8 @@ class Texts extends DBEntity
     *
     * Used for pagination
     *
-    * @param string $filter_type A string with the SQL statement to be used as a filter for the search
+    * @param int $filter_type
+    * @param int $filter_level
     * @param string $search_text
     * @return int
     */

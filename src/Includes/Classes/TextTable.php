@@ -224,7 +224,6 @@ class TextTable extends Table
      * Generates the HTML for the checkbox cell
      *
      * @param array $row
-     * @param integer $text_id
      * @return string
      */
     private function generateCheckboxCell(array $row): string

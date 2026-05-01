@@ -59,7 +59,6 @@ class ReportedTexts extends DBEntity
     /**
      * Loads reported text data into class properties
      *
-     * @param int $text_id
      * @return void
      */
     public function loadRecord(): void

@@ -185,7 +185,7 @@ class User extends DBEntity
      * Updates password hash in db
      *
      * @param string $password_hash
-     * @param string $name
+     * @param string $email
      * @return void
      */
     public function updatePasswordHash(string $password_hash, string $email): void

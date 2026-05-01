@@ -46,7 +46,7 @@ abstract class WordsUtilities
      * or the specific subset that results from applying additional filters (e.g. $search_text).
      * Results are ordered using $order_by.
      *
-     * @param SearchWordsParameters $search_params
+     * @param array $words
      * @return void
      */
     public static function exportToCSV(array $words): void

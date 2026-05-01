@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\SMTP;
 
 class EmailSender
 {
-    public $mail;
+    public PHPMailer $mail;
 
     /**
      * Constructor

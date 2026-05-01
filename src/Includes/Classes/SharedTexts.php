@@ -106,7 +106,8 @@ class SharedTexts extends Texts
     *
     * Used for pagination
     *
-    * @param string $filter_type A string with the SQL statement to be used as a filter for the search
+    * @param int $filter_type
+    * @param int $filter_level
     * @param string $search_text
     * @return int
     */

@@ -17,7 +17,7 @@ class Language extends DBEntity
     public bool $show_freq_words        = false;
     public int $level                   = 0;
 
-    private static $iso_code = [
+    private static array $iso_code = [
         'ar' => 'arabic',
         'bg' => 'bulgarian',
         'ca' => 'catalan',
@@ -54,7 +54,6 @@ class Language extends DBEntity
      * Initializes class variables (id, name, etc.)
      *
      * @param \PDO $pdo
-     * @param int $id
      * @param int $user_id
      */
     public function __construct(\PDO $pdo, int $user_id)
@@ -117,7 +116,7 @@ class Language extends DBEntity
     /**
      * Updates language settings in db
      *
-     * @param array $array
+     * @param array $new_record
      * @return void
      */
     public function editRecord(array $new_record): void
@@ -160,7 +159,7 @@ class Language extends DBEntity
     /**
      * Creates & saves default preferences for user
      *
-     * @param string $lang
+     * @param string $native_lang
      * @return void
      */
     public function createInitialRecordsForUser(string $native_lang): void

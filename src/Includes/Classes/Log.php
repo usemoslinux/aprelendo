@@ -40,7 +40,7 @@ abstract class Log extends DBEntity
     /**
      * Adds log record for current user
      *
-     * @return bool
+     * @return void
      */
     public function addRecord(): void
     {

@@ -6,6 +6,7 @@ use Aprelendo\UserAuth;
 
 if (!isset($user)) {
     require_once 'dbinit.php'; // connect to database
+    /** @var \PDO $pdo */
 
     $user = new User($pdo);
     $user_auth = new UserAuth($user);

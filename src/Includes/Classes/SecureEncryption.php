@@ -5,7 +5,7 @@ namespace Aprelendo;
 
 class SecureEncryption
 {
-    private $encryption_key;
+    private string $encryption_key;
 
     /**
      * Constructor to initialize the encryption key
@@ -22,9 +22,9 @@ class SecureEncryption
      * Encrypt the given text
      *
      * @param string $text
-     * @return void
+     * @return string
      */
-    public function encrypt(string $text)
+    public function encrypt(string $text): string
     {
         $iv_length = openssl_cipher_iv_length('aes-256-cbc');
         $iv = openssl_random_pseudo_bytes($iv_length);
@@ -45,12 +45,18 @@ class SecureEncryption
      * Decrypt the given text
      *
      * @param string $encrypted_data
-     * @return void
+     * @return string|false
      */
-    public function decrypt(string $encrypted_data)
+    public function decrypt(string $encrypted_data): string|false
     {
         $data = base64_decode($encrypted_data);
         $iv_length = openssl_cipher_iv_length('aes-256-cbc');
+
+        // Validate that the data is long enough to contain the IV
+        if ($data === false || strlen($data) < $iv_length) {
+            return false;
+        }
+
         $iv = substr($data, 0, $iv_length);
         $encrypted_text = substr($data, $iv_length);
 
@@ -63,4 +69,3 @@ class SecureEncryption
         );
     } 
 }
-

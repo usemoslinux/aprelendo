@@ -35,7 +35,6 @@ class Url
     /**
      * Build URL string including all query parameters
      *
-     * @param array $query_options
      * @return string
      */
     private function buildQueryStr(): string {

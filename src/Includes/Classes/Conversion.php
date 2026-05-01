@@ -19,7 +19,7 @@ class Conversion
     /**
      * Converts Array to CSV
      *
-     * @param array
+     * @param array $array
      * @return string in CSV format
      */
     public static function arrayToCsv(array $array): string
@@ -34,7 +34,7 @@ class Conversion
     /**
      * Convert an array to XML
      * @param array $array
-     * @param SimpleXMLElement $xml
+     * @param \SimpleXMLElement $xml
      */
     public static function arrayToXml($array, &$xml)
     {

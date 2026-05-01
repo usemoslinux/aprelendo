@@ -126,7 +126,7 @@ abstract class Table
     /**
      * Generates action menu icons HTML
      *
-     * @param array $row
+     * @param string $menu_text
      * @return string
      */
     protected function generateActionMenuIcon(string $menu_text): string

@@ -8,7 +8,10 @@ class SearchWordsParameters extends SearchParameters
     /**
      * Constructor
      *
-     * @param string $text
+     * @param string $search_text
+     * @param int $sort_by
+     * @param int $offset
+     * @param int $limit
      */
     public function __construct(
         string $search_text,

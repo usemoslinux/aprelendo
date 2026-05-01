@@ -66,7 +66,6 @@ class Preferences extends DBEntity
     /**
      * Loads user preferences data
      *
-     * @param int $user_id
      * @return void
      */
     public function loadRecord(): void

@@ -9,7 +9,7 @@ class SupportedLanguages
     // Norwegian: nor is the "umbrella", nob is Bokmål (the version 90% of people use).
     // Chinese: zho is the "umbrella", cmn is Mandarin specifically.
 
-    private static $languages = [
+    private static array $languages = [
         'ar' => ['ISO-639-1' => 'ar', 'ISO-639-3' => 'ara', 'name' => 'arabic'],
         'bg' => ['ISO-639-1' => 'bg', 'ISO-639-3' => 'bul', 'name' => 'bulgarian'],
         'ca' => ['ISO-639-1' => 'ca', 'ISO-639-3' => 'cat', 'name' => 'catalan'],

@@ -13,7 +13,10 @@ abstract class SearchParameters
     /**
      * Constructor
      *
-     * @param string $text
+     * @param string $search_text
+     * @param int $offset
+     * @param int $limit
+     * @param int $sort_by
      */
     public function __construct(
         string $search_text,
@@ -27,4 +30,3 @@ abstract class SearchParameters
         $this->sort_by = $sort_by;
     }
 }
-

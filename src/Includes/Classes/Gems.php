@@ -9,7 +9,7 @@ class Gems extends DBEntity
     public int $user_id            = 0;
     public int $lang_id            = 0;
     public int $gems               = 0;
-    public $last_study_session     = null;  // last study session date
+    public ?string $last_study_session = null;  // last study session date
     public int $days_streak        = 0;     // study streak
     public bool $today_is_streak   = false; // indicates if user continued his streak today or not yet
     private string $time_zone      = '';
@@ -36,7 +36,6 @@ class Gems extends DBEntity
     /**
      * Loads gems record data
      *
-     * @param int $id
      * @return void
      */
     private function loadUserRecord(): void

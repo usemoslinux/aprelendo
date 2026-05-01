@@ -5,7 +5,7 @@ namespace Aprelendo;
 
 abstract class DBEntity
 {
-    protected $pdo;
+    protected \PDO $pdo;
     protected $table   = '';
     
     /**
