@@ -1,17 +1,21 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+require_once '../../Includes/bootstrap.php'; // initialize application
 
-header('Content-Type: application/json; charset=utf-8');
-$response = ['success' => false];
-
+use Aprelendo\AuthGuard;
+use Aprelendo\Database;
 use Aprelendo\SharedTexts;
 use Aprelendo\SharedTextTable;
 use Aprelendo\SearchTextsParameters;
 use Aprelendo\Pagination;
 use Aprelendo\Url;
+
+$pdo = Database::connection();
+$user = AuthGuard::requireAjaxUser();
+
+header('Content-Type: application/json; charset=utf-8');
+$response = ['success' => false];
 
 try {
     $user_id = $user->id;

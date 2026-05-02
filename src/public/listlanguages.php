@@ -1,11 +1,15 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/bootstrap.php'; // initialize application
 
+use Aprelendo\AuthGuard;
+use Aprelendo\Database;
 use Aprelendo\Language;
 use Aprelendo\SupportedLanguages;
+
+$pdo = Database::connection();
+$user = AuthGuard::requirePageUser();
 
 $lang = new Language($pdo, $user->id);
 $available_langs = $lang->getAvailableLangs();

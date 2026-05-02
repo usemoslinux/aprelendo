@@ -1,8 +1,18 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+require_once '../../Includes/bootstrap.php'; // initialize application
+
+use Aprelendo\AuthGuard;
+use Aprelendo\Database;
+use Aprelendo\User;
+use Aprelendo\Language;
+use Aprelendo\WordStats;
+use Aprelendo\InternalException;
+use Aprelendo\UserException;
+
+$pdo = Database::connection();
+$user = AuthGuard::requireAjaxUser();
 
 header('Content-Type: application/json; charset=utf-8');
 $response = ['success' => false];
@@ -11,12 +21,6 @@ if (empty($_GET)) {
     echo json_encode($response);
     exit;
 }
-
-use Aprelendo\User;
-use Aprelendo\Language;
-use Aprelendo\WordStats;
-use Aprelendo\InternalException;
-use Aprelendo\UserException;
 
 try {
     $user_name = !empty($_GET['u']) ? $_GET['u'] : $user->name;
@@ -34,10 +38,12 @@ try {
         $user->lang_id = $lang->id;
     }
 
-    if ($_GET['type'] === "words") {
-        $stats = new WordStats($pdo, $user->id, $user->lang_id);
-        $payload = $stats->getTotals();
+    if (($_GET['type'] ?? '') !== "words") {
+        throw new UserException('Invalid stats type.');
     }
+
+    $stats = new WordStats($pdo, $user->id, $user->lang_id);
+    $payload = $stats->getTotals();
     
     $response = ['success' => true, 'payload' => $payload];
     echo json_encode($response);

@@ -1,14 +1,17 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+require_once '../../Includes/bootstrap.php'; // initialize application
 
+use Aprelendo\AuthGuard;
+use Aprelendo\Database;
 use Aprelendo\Words;
 use Aprelendo\SearchWordsParameters;
 use Aprelendo\WordsUtilities;
-use Aprelendo\InternalException;
 use Aprelendo\UserException;
+
+$pdo = Database::connection();
+$user = AuthGuard::requireAjaxUser();
 
 $user_id = $user->id;
 $lang_id = $user->lang_id;
@@ -28,6 +31,6 @@ try {
     http_response_code($e->getCode());
     exit;
 } catch (Throwable $e) {
-    echo json_encode($response);
+    http_response_code(500);
     exit;
 }

@@ -1,12 +1,16 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../Includes/dbinit.php';  // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/bootstrap.php';  // initialize application
 
+use Aprelendo\AuthGuard;
+use Aprelendo\Database;
 use Aprelendo\Reader;
 use Aprelendo\Likes;
 use Aprelendo\UserException;
+
+$pdo = Database::connection();
+$user = AuthGuard::requirePageUser();
 
 try {
     $reader_class = "class='dvh-100 dvw-100 ";

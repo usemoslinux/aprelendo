@@ -1,13 +1,17 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../Includes/dbinit.php';  // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+require_once '../Includes/bootstrap.php';  // initialize application
 
+use Aprelendo\AuthGuard;
+use Aprelendo\Database;
 use Aprelendo\Reader;
 use Aprelendo\Videos;
 use Aprelendo\Likes;
 use Aprelendo\UserException;
+
+$pdo = Database::connection();
+$user = AuthGuard::requirePageUser();
 
 try {
     if (empty($_GET['id'])){
@@ -82,7 +86,7 @@ require_once PUBLIC_PATH . 'head.php';
                         <div class="d-flex align-items-center">
                             <span class="bi <?php echo $user_liked_class; ?>" data-idText="<?php echo $text_id; ?>">
                             </span>
-                            <small class="px-1"><?php echo $likes->get($text_id);?></small>
+                            <small class="px-1"><?php echo $likes->get();?></small>
                         </div>
                     </div>
                     <?php if (!IS_SELF_HOSTED): ?>

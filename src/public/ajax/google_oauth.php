@@ -1,7 +1,18 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../../Includes/dbinit.php'; // connect to database
+require_once '../../Includes/bootstrap.php'; // initialize application
+
+use Aprelendo\Database;
+use Aprelendo\User;
+use Aprelendo\UserAuth;
+use Aprelendo\UserRegistrationManager;
+use Aprelendo\GoogleIdTokenVerifier;
+use Aprelendo\InternalException;
+use Aprelendo\UserException;
+use Aprelendo\UserPassword;
+
+$pdo = Database::connection();
 
 header('Content-Type: application/json; charset=utf-8');
 $response = ['success' => false];
@@ -10,14 +21,6 @@ if (empty($_POST)) {
     echo json_encode($response);
     exit;
 }
-
-use Aprelendo\User;
-use Aprelendo\UserAuth;
-use Aprelendo\UserRegistrationManager;
-use Aprelendo\GoogleIdTokenVerifier;
-use Aprelendo\InternalException;
-use Aprelendo\UserException;
-use Aprelendo\UserPassword;
 
 try {
     if (empty($_POST['credential'])) {

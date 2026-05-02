@@ -1,13 +1,17 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+require_once '../Includes/bootstrap.php'; // initialize application
+
+use Aprelendo\AuthGuard;
+
 if (empty($_POST)) {
     header('Location:/texts');
     exit;
 }
 
-require_once '../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+$user = AuthGuard::requirePageUser();
+
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'header.php';
 
@@ -56,7 +60,10 @@ $array_table2 = [
     ['Total', $total, '100%']
 ];
 
-function printTableRows($array_table_rows)
+/**
+ * @param array<int, array<int, scalar>> $array_table_rows
+ */
+function printTableRows(array $array_table_rows): string
 {
     $html = '';
 
@@ -76,7 +83,10 @@ function printTableRows($array_table_rows)
     return $html;
 }
 
-function printTableFooter($array_table_rows)
+/**
+ * @param array<int, array<int, scalar>> $array_table_rows
+ */
+function printTableFooter(array $array_table_rows): string
 {
     $html = "<tr>";
 

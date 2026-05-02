@@ -1,11 +1,13 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+require_once '../../Includes/bootstrap.php'; // initialize application
 
+use Aprelendo\AuthGuard;
 use Aprelendo\AIBot;
 use Aprelendo\UserException;
+
+$user = AuthGuard::requireAjaxUser();
 
 header('Content-Type: text/plain');
 header('Cache-Control: no-cache');
@@ -25,6 +27,6 @@ try {
     echo "Error: " . $e->getMessage();
     exit;
 } catch (Throwable $e) {
-    echo json_encode($response);
+    echo "Error: Unable to get AI response.";
     exit;
 }

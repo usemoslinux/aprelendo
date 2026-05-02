@@ -1,7 +1,9 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../Includes/dbinit.php';  // connect to database
+use Aprelendo\AuthGuard;
+
+require_once '../Includes/bootstrap.php';  // initialize application
 
 $curpage = basename($_SERVER['PHP_SELF'], '.php'); // returns the current file Name
 $show_pages = ['showtext', 'showvideo', 'showebook', 'showofflinevideo'];
@@ -17,13 +19,13 @@ $use_google_login = false;
 
 // check if login is required to access page
 if (!in_array($curpage, $no_login_required_pages)) {
-    require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
+    $user = AuthGuard::requirePageUser();
     $google_id = $user->google_id;
     $use_google_login = !empty($google_id);
 }
 
 $this_is_show_page = in_array($curpage, $show_pages);
-$doclang = $this_is_show_page ? $user->lang : 'en';
+$doclang = ($this_is_show_page && isset($user)) ? $user->lang : 'en';
 $reader_font_pages = ['showtext', 'showvideo', 'showofflinevideo'];
 $load_reader_fonts = in_array($curpage, $reader_font_pages);
 

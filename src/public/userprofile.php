@@ -1,13 +1,15 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../Includes/dbinit.php'; // connect to database
-require_once APP_ROOT . 'Includes/checklogin.php'; // check if logged in and set $user
-require_once PUBLIC_PATH . 'head.php';
-require_once PUBLIC_PATH . 'header.php';
+require_once '../Includes/bootstrap.php'; // initialize application
 
+use Aprelendo\AuthGuard;
 use Aprelendo\SupportedLanguages;
 use Aprelendo\SecureEncryption;
+
+$user = AuthGuard::requirePageUser();
+require_once PUBLIC_PATH . 'head.php';
+require_once PUBLIC_PATH . 'header.php';
 
 $google_login = !empty($user->google_id);
 

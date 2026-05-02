@@ -1,7 +1,11 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../../Includes/dbinit.php'; // connect to database
+require_once '../../Includes/bootstrap.php'; // initialize application
+
+use Aprelendo\EmailSender;
+use Aprelendo\InternalException;
+use Aprelendo\UserException;
 
 header('Content-Type: application/json; charset=utf-8');
 $response = ['success' => false];
@@ -10,10 +14,6 @@ if (empty($_POST)) {
     echo json_encode($response);
     exit;
 }
-
-use Aprelendo\EmailSender;
-use Aprelendo\InternalException;
-use Aprelendo\UserException;
 
 try {
     if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['message'])) {
