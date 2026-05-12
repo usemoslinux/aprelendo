@@ -1,5 +1,6 @@
 .rsyncignore
 .vscode/
+.zed/
 **/*.log
 AGENTS.md
 docker-compose.yml

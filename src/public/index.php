@@ -1,7 +1,7 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../Includes/bootstrap.php'; // initialize application
+require_once "../Includes/bootstrap.php"; // initialize application
 
 use Aprelendo\Database;
 use Aprelendo\User;
@@ -13,11 +13,11 @@ $user_auth = new UserAuth($user);
 
 // if user is already logged in, go to "My Texts" section
 if ($user_auth->isLoggedIn()) {
-    header('Location:/texts');
-    exit;
+    header("Location:/texts");
+    exit();
 }
 
-require_once PUBLIC_PATH . 'head.php';
+require_once PUBLIC_PATH . "head.php";
 ?>
 
 <main class="landing-page">
@@ -25,7 +25,7 @@ require_once PUBLIC_PATH . 'head.php';
     <section class="landing-hero">
         <div id="headerwrap" class="headerwrap">
             <div class="blurry-background">
-                <?php require_once PUBLIC_PATH . 'simpleheader.php'; ?>
+                <?php require_once PUBLIC_PATH . "simpleheader.php"; ?>
 
                 <div class="container landing-hero-content d-flex justify-content-center py-4 py-lg-5">
                     <div class="row justify-content-center w-100">
@@ -350,4 +350,4 @@ require_once PUBLIC_PATH . 'head.php';
     </section>
 </main>
 
-<?php require_once 'footer.php' ?>
+<?php require_once "footer.php"; ?>
