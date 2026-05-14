@@ -1,14 +1,14 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../Includes/bootstrap.php'; // initialize application
+require_once "../Includes/bootstrap.php"; // initialize application
 
 use Aprelendo\AuthGuard;
 
 $user = AuthGuard::requirePageUser();
 
-require_once PUBLIC_PATH . 'head.php';
-require_once PUBLIC_PATH . 'header.php';
+require_once PUBLIC_PATH . "head.php";
+require_once PUBLIC_PATH . "header.php";
 ?>
 
 <div class="container mtb d-flex flex-grow-1 flex-column">
@@ -77,6 +77,9 @@ require_once PUBLIC_PATH . 'header.php';
                                     <p class="small text-secondary mb-2">
                                         Press <strong>Ask Lingobot to Evaluate</strong> or use <strong>Ctrl/Cmd + Enter</strong>.
                                     </p>
+                                    <p class="small text-secondary mb-2">
+                                        On supported devices, you can also use voice input to enter your answer.
+                                    </p>
                                     <p class="small text-secondary mb-0">
                                         Your self-rating buttons will appear here after you request feedback.
                                     </p>
@@ -119,8 +122,10 @@ require_once PUBLIC_PATH . 'header.php';
 </div>
 
 <?php
-require_once PUBLIC_PATH . 'showactionbuttons.php'; // load dictionary modal window
-require_once PUBLIC_PATH . 'showaibotmodal.php'; // load AI bot modal window
+require_once PUBLIC_PATH . "showactionbuttons.php"; // load dictionary modal window
+require_once PUBLIC_PATH . "showaibotmodal.php";
+
+// load AI bot modal window
 ?>
 
 <script defer src="/js/dictionaries.js"></script>
@@ -131,4 +136,4 @@ require_once PUBLIC_PATH . 'showaibotmodal.php'; // load AI bot modal window
 <script defer src="/js/tooltips.js"></script>
 <script defer src="/js/studyai.js"></script>
 
-<?php require_once 'footer.php' ?>
+<?php require_once "footer.php"; ?>
