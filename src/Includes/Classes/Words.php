@@ -175,6 +175,44 @@ class Words extends DBEntity
     } 
 
     /**
+     * Updates status and SM2 scheduling after a Nuance Battle answer.
+     *
+     * Correct answers move the word one status step toward learned. Incorrect
+     * answers mark the word as forgotten.
+     *
+     * @param string $word
+     * @param bool $is_correct
+     * @return WordStatus
+     */
+    public function updateNuanceBattleReview(string $word, bool $is_correct): WordStatus
+    {
+        $word = mb_strtolower(trim($word));
+        $this->loadRecordbyWord($word);
+
+        if ($this->id < 1) {
+            throw new UserException('Word not found.');
+        }
+
+        $new_status_value = $is_correct
+            ? max(WordStatus::learned->value, $this->status->value - 1)
+            : WordStatus::forgotten->value;
+        $new_status = WordStatus::fromInt($new_status_value);
+
+        $sm2 = new SM2($this->easiness, $this->repetitions, $this->review_interval);
+        $sm2->processReview($new_status->value);
+
+        $this->updateSM2(
+            $word,
+            $sm2->getInterval(),
+            $sm2->getEasiness(),
+            $sm2->getRepetitions()
+        );
+        $this->updateStatus($word, $new_status);
+
+        return $new_status;
+    }
+
+    /**
      * Updates the SM2 algorithm parameters for a specific word in the database.
      *
      * This method updates the review interval, easiness factor, and repetition count

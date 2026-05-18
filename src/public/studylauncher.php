@@ -15,6 +15,9 @@ $lingobot_configured = !empty($user->hf_token);
 $ai_card_border_class = $lingobot_configured ? 'border-success' : 'border-secondary';
 $ai_card_text_bg_class = $lingobot_configured ? 'text-bg-success' : 'text-bg-secondary';
 $ai_button_class = $lingobot_configured ? 'btn-success' : 'btn-secondary';
+$nuance_card_border_class = $lingobot_configured ? 'border-info' : 'border-secondary';
+$nuance_card_text_bg_class = $lingobot_configured ? 'text-bg-info' : 'text-bg-secondary';
+$nuance_button_class = $lingobot_configured ? 'btn-info text-dark' : 'btn-secondary text-light';
 ?>
 
 <div class="container mtb d-flex flex-grow-1 flex-column">
@@ -139,10 +142,14 @@ $ai_button_class = $lingobot_configured ? 'btn-success' : 'btn-secondary';
                         </div>
                     </div>
                     <div class="col">
-                        <div class="card h-100 border-info shadow-sm">
-                            <div class="card-header bg-gradient text-bg-info d-flex align-items-center">
+                        <div class="card h-100 <?php echo $nuance_card_border_class; ?> shadow-sm">
+                            <div class="card-header bg-gradient <?php echo $nuance_card_text_bg_class; ?> d-flex align-items-center">
                                 <span class="bi bi-intersect me-2"></span>
                                 Nuance Battle
+                                <?php if (!$lingobot_configured): ?>
+                                    <span class="bi bi-lock-fill ms-auto text-warning"
+                                        title="Configure Lingobot in your profile to use this feature"></span>
+                                <?php endif; ?>
                             </div>
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">Compare Similar Words</h5>
@@ -156,9 +163,17 @@ $ai_button_class = $lingobot_configured ? 'btn-success' : 'btn-secondary';
                                     <li><b>Drawbacks</b>: Requires prepared word sets before the game can be useful.</li>
                                 </ul>
                                 <div class="mt-auto d-grid">
-                                    <a href="/studynuance" class="btn btn-info text-dark">
-                                        Open Nuance Battle
-                                    </a>
+                                    <?php if ($lingobot_configured): ?>
+                                        <a href="/studynuance" class="btn <?php echo $nuance_button_class; ?>">
+                                            Open Nuance Battle
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="/userprofile"
+                                            class="btn <?php echo $nuance_button_class; ?>"
+                                            title="Configure Lingobot in your profile to use this feature">
+                                            Configure Lingobot
+                                        </a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

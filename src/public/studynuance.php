@@ -1,17 +1,18 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../Includes/bootstrap.php'; // initialize application
+require_once "../Includes/bootstrap.php"; // initialize application
 
 use Aprelendo\AuthGuard;
 
 $user = AuthGuard::requirePageUser();
 
-require_once PUBLIC_PATH . 'head.php';
-require_once PUBLIC_PATH . 'header.php';
+require_once PUBLIC_PATH . "head.php";
+require_once PUBLIC_PATH . "header.php";
 ?>
 
-<div class="container mtb d-flex flex-grow-1 flex-column">
+<div id="nuance-page" class="container mtb d-flex flex-grow-1 flex-column"
+    data-has-lingobot="<?php echo !empty($user->hf_token) ? "1" : "0"; ?>">
     <div class="row">
         <div class="col-12">
             <nav>
@@ -87,15 +88,12 @@ require_once PUBLIC_PATH . 'header.php';
                                             <div class="mb-3">
                                                 <label for="set-title" class="form-label">Title</label>
                                                 <input type="text" id="set-title" name="title" class="form-control"
-                                                    maxlength="255" placeholder="Light verbs, motion verbs, shine words">
+                                                    maxlength="255" placeholder="Give the set a descriptive title">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="set-words" class="form-label">Words</label>
                                                 <textarea id="set-words" name="words" class="form-control" rows="8"
-                                                    placeholder="glittering&#10;glinting&#10;shimmering&#10;glowing"></textarea>
-                                                <div class="form-text">
-                                                    Add one word per line, or separate words with commas.
-                                                </div>
+                                                    placeholder="Add one word per line, or separate words with commas."></textarea>
                                             </div>
                                             <div class="d-flex flex-wrap gap-2">
                                                 <button type="submit" class="btn btn-primary">
@@ -123,14 +121,40 @@ require_once PUBLIC_PATH . 'header.php';
                                         <select id="play-set-select" class="form-select"></select>
                                     </div>
                                     <div class="col-12 col-md-4 d-grid">
-                                        <button type="button" class="btn btn-secondary" disabled>
-                                            Game Coming Soon
+                                        <button id="start-battle-btn" type="button" class="btn btn-success">
+                                            Start Battle
                                         </button>
                                     </div>
                                 </div>
-                                <p class="mt-3 mb-0 text-secondary">
-                                    The battle UI is reserved here. Set management is ready first.
+                                <p id="play-help" class="mt-3 mb-0 text-secondary">
+                                    Lingobot creates contrastive cards where one word is the clearest fit.
                                 </p>
+                            </div>
+                        </div>
+                        <div id="battle-card" class="card shadow-sm mt-3 text-center d-none">
+                            <div class="card-header d-flex flex-column align-items-center gap-1">
+                                <span id="battle-title">Nuance Battle</span>
+                                <span id="battle-counter" class="badge text-bg-secondary"></span>
+                            </div>
+                            <div class="card-body">
+                                <div id="battle-loading" class="d-none">
+                                    <div class="placeholder-glow">
+                                        <p><span class="placeholder col-8"></span></p>
+                                        <p><span class="placeholder col-6"></span></p>
+                                        <p><span class="placeholder col-7"></span></p>
+                                    </div>
+                                </div>
+                                <div id="battle-question" class="d-none">
+                                    <p id="battle-sentence" class="fs-5"></p>
+                                    <div id="battle-choices" class="d-grid gap-2 d-md-flex flex-md-wrap justify-content-md-center"></div>
+                                    <div id="battle-feedback" class="alert mt-3 d-none"></div>
+                                    <div class="d-flex justify-content-center">
+                                        <button id="next-card-btn" type="button" class="btn btn-primary d-none">
+                                            Next
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="battle-results" class="d-none"></div>
                             </div>
                         </div>
                     </section>
@@ -140,6 +164,15 @@ require_once PUBLIC_PATH . 'header.php';
     </div>
 </div>
 
+<?php require_once PUBLIC_PATH . "showactionbuttons.php"; ?>
+<?php require_once PUBLIC_PATH . "showaibotmodal.php"; ?>
+
+<script defer src="/js/dictionaries.js"></script>
+<script defer src="/js/underlinewords.js"></script>
+<script defer src="/js/wordselection.js"></script>
+<script defer src="/js/actionbtns.js"></script>
+<script defer src="/js/helpers.js"></script>
+<script defer src="/js/tooltips.js"></script>
 <script defer src="/js/studynuance.js"></script>
 
-<?php require_once 'footer.php'; ?>
+<?php require_once "footer.php"; ?>

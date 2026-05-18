@@ -68,6 +68,25 @@ class ConfusionSets extends DBEntity
     }
 
     /**
+     * Returns one confusion set for the active user and language.
+     *
+     * @param int $set_id
+     * @return array
+     */
+    public function getById(int $set_id): array
+    {
+        $this->validateSetId($set_id);
+
+        foreach ($this->getAll() as $set) {
+            if ((int)$set['id'] === $set_id) {
+                return $set;
+            }
+        }
+
+        throw new UserException('Set not found.');
+    }
+
+    /**
      * Creates a confusion set and saves its words.
      *
      * @param string $title
