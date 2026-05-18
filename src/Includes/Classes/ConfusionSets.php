@@ -44,27 +44,43 @@ class ConfusionSets extends DBEntity
                 ORDER BY cs.`date_modified` DESC, cs.`id` DESC, w.`word` ASC";
 
         $rows = $this->sqlFetchAll($sql, [$this->user_id, $this->lang_id]);
-        $sets = [];
+        return $this->buildSetsFromRows($rows);
+    }
 
-        foreach ($rows as $row) {
-            $set_id = (int)$row['id'];
+    /**
+     * Returns public confusion sets for the active language ISO.
+     *
+     * @param string $lang_iso
+     * @return array
+     */
+    public function getPublicSets(string $lang_iso): array
+    {
+        $sql = "SELECT cs.`id`, cs.`title`, cs.`created_at`, cs.`date_modified`, w.`word`
+                FROM `confusion_sets` cs
+                INNER JOIN `languages` l ON cs.`lang_id` = l.`id`
+                LEFT JOIN `confusion_set_words` csw ON cs.`id` = csw.`confusion_set_id`
+                LEFT JOIN `words` w ON csw.`word_id` = w.`id`
+                WHERE l.`name`=? AND cs.`user_id`<>?
+                ORDER BY cs.`date_modified` DESC, cs.`id` DESC, w.`word` ASC";
 
-            if (!isset($sets[$set_id])) {
-                $sets[$set_id] = [
-                    'id' => $set_id,
-                    'title' => $row['title'],
-                    'created_at' => $row['created_at'],
-                    'date_modified' => $row['date_modified'],
-                    'words' => []
-                ];
-            }
+        $sets = $this->buildSetsFromRows($this->sqlFetchAll($sql, [$lang_iso, $this->user_id]));
 
-            if (!empty($row['word'])) {
-                $sets[$set_id]['words'][] = $row['word'];
-            }
-        }
+        return array_values(array_filter($sets, static function (array $set): bool {
+            return count($set['words']) >= 2;
+        }));
+    }
 
-        return array_values($sets);
+    /**
+     * Copies a public confusion set into the active user's current language.
+     *
+     * @param int $source_set_id
+     * @param string $lang_iso
+     * @return int
+     */
+    public function copyPublicSet(int $source_set_id, string $lang_iso): int
+    {
+        $source_set = $this->getPublicSetById($source_set_id, $lang_iso);
+        return $this->create($source_set['title'], $source_set['words']);
     }
 
     /**
@@ -195,6 +211,64 @@ class ConfusionSets extends DBEntity
         if ($this->sqlCount($sql, [$set_id, $this->user_id, $this->lang_id]) < 1) {
             throw new UserException('Set not found.');
         }
+    }
+
+    /**
+     * Returns a public confusion set by source ID and language ISO.
+     *
+     * @param int $source_set_id
+     * @param string $lang_iso
+     * @return array
+     */
+    private function getPublicSetById(int $source_set_id, string $lang_iso): array
+    {
+        $this->validateSetId($source_set_id);
+
+        $sql = "SELECT cs.`id`, cs.`title`, cs.`created_at`, cs.`date_modified`, w.`word`
+                FROM `confusion_sets` cs
+                INNER JOIN `languages` l ON cs.`lang_id` = l.`id`
+                LEFT JOIN `confusion_set_words` csw ON cs.`id` = csw.`confusion_set_id`
+                LEFT JOIN `words` w ON csw.`word_id` = w.`id`
+                WHERE cs.`id`=? AND l.`name`=? AND cs.`user_id`<>?
+                ORDER BY w.`word` ASC";
+        $sets = $this->buildSetsFromRows($this->sqlFetchAll($sql, [$source_set_id, $lang_iso, $this->user_id]));
+
+        if (empty($sets)) {
+            throw new UserException('Set not found.');
+        }
+
+        return $sets[0];
+    }
+
+    /**
+     * Builds nested set rows from flat SQL results.
+     *
+     * @param array $rows
+     * @return array
+     */
+    private function buildSetsFromRows(array $rows): array
+    {
+        $sets = [];
+
+        foreach ($rows as $row) {
+            $set_id = (int)$row['id'];
+
+            if (!isset($sets[$set_id])) {
+                $sets[$set_id] = [
+                    'id' => $set_id,
+                    'title' => $row['title'],
+                    'created_at' => $row['created_at'],
+                    'date_modified' => $row['date_modified'],
+                    'words' => []
+                ];
+            }
+
+            if (!empty($row['word'])) {
+                $sets[$set_id]['words'][] = $row['word'];
+            }
+        }
+
+        return array_values($sets);
     }
 
     /**

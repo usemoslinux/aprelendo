@@ -70,12 +70,19 @@ require_once PUBLIC_PATH . "header.php";
                                 <div class="card h-100 shadow-sm">
                                     <div class="card-header d-flex align-items-center justify-content-between">
                                         <span>Your Sets</span>
-                                        <button id="new-set-btn" type="button" class="btn btn-sm btn-outline-primary">
-                                            New Set
-                                        </button>
+                                        <div class="d-flex gap-2">
+                                            <button id="browse-sets-btn" type="button"
+                                                class="btn btn-sm btn-outline-secondary">
+                                                Browse Sets
+                                            </button>
+                                            <button id="new-set-btn" type="button" class="btn btn-sm btn-outline-primary">
+                                                New Set
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="card-body">
-                                        <div id="confusion-set-list" class="list-group"></div>
+                                        <div id="confusion-set-list" class="list-group overflow-auto"
+                                            style="max-height: 420px;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -160,6 +167,21 @@ require_once PUBLIC_PATH . "header.php";
                     </section>
                 </div>
             </main>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="public-sets-modal" tabindex="-1" aria-labelledby="public-sets-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="public-sets-modal-label">Browse Sets</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="public-set-list" class="list-group overflow-auto" style="max-height: 60vh;"></div>
+            </div>
         </div>
     </div>
 </div>

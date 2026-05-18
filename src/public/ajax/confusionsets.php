@@ -30,6 +30,17 @@ try {
         exit;
     }
 
+    if ($action === 'public_list') {
+        $response = [
+            'success' => true,
+            'payload' => [
+                'sets' => $confusion_sets->getPublicSets($user->lang)
+            ]
+        ];
+        echo json_encode($response);
+        exit;
+    }
+
     if (empty($_POST)) {
         echo json_encode($response);
         exit;
@@ -63,6 +74,20 @@ try {
         $response = [
             'success' => true,
             'payload' => [
+                'sets' => $confusion_sets->getAll()
+            ]
+        ];
+        echo json_encode($response);
+        exit;
+    }
+
+    if ($action === 'copy_public') {
+        $set_id = $confusion_sets->copyPublicSet((int)($_POST['id'] ?? 0), $user->lang);
+
+        $response = [
+            'success' => true,
+            'payload' => [
+                'id' => $set_id,
                 'sets' => $confusion_sets->getAll()
             ]
         ];

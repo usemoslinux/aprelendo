@@ -7,8 +7,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const set_id_input = document.getElementById("set-id");
     const set_title_input = document.getElementById("set-title");
     const set_words_input = document.getElementById("set-words");
+    const browse_sets_btn = document.getElementById("browse-sets-btn");
     const new_set_btn = document.getElementById("new-set-btn");
     const delete_set_btn = document.getElementById("delete-set-btn");
+    const public_sets_modal_elem = document.getElementById("public-sets-modal");
+    const public_set_list = document.getElementById("public-set-list");
     const play_set_select = document.getElementById("play-set-select");
     const nuance_page = document.getElementById("nuance-page");
     const start_battle_btn = document.getElementById("start-battle-btn");
@@ -25,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const battle_results = document.getElementById("battle-results");
 
     let sets = [];
+    let public_sets = [];
     let selected_set_id = 0;
     let battle_cards = [];
     let battle_words = [];
@@ -33,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let selected_answers = [];
     const has_lingobot = nuance_page.dataset.hasLingobot === "1";
     const start_battle_btn_text = start_battle_btn.textContent.trim();
+    const public_sets_modal = new bootstrap.Modal(public_sets_modal_elem);
 
     Dictionaries.fetchURIs();
 
@@ -145,6 +150,116 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
             })
             .join("");
+    }
+
+    /**
+     * Loads public sets for the active language.
+     */
+    async function loadPublicSets() {
+        public_set_list.innerHTML = `
+            <div class="placeholder-glow">
+                <p><span class="placeholder col-8"></span></p>
+                <p><span class="placeholder col-6"></span></p>
+            </div>
+        `;
+        public_sets_modal.show();
+
+        try {
+            const data = await sendRequest("public_list");
+
+            if (!data.success) {
+                public_set_list.innerHTML = `
+                    <div class="alert alert-danger mb-0">
+                        ${escapeHtml(data.error_msg || "Could not load public sets.")}
+                    </div>
+                `;
+                return;
+            }
+
+            public_sets = data.payload.sets;
+            renderPublicSets();
+        } catch (error) {
+            public_set_list.innerHTML = `
+                <div class="alert alert-danger mb-0">
+                    ${escapeHtml(error.message || "Could not load public sets.")}
+                </div>
+            `;
+        }
+    }
+
+    /**
+     * Renders public sets that can be copied.
+     */
+    function renderPublicSets() {
+        if (public_sets.length === 0) {
+            public_set_list.innerHTML = `
+                <div class="text-secondary">
+                    No sets from other users are available for this language yet.
+                </div>
+            `;
+            return;
+        }
+
+        public_set_list.innerHTML = public_sets
+            .map((set) => {
+                const word_count =
+                    set.words.length === 1
+                        ? "1 word"
+                        : `${set.words.length} words`;
+
+                return `
+                    <div class="list-group-item">
+                        <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+                            <div>
+                                <div class="fw-semibold">${escapeHtml(set.title)}</div>
+                                <div class="small text-secondary">
+                                    ${word_count}: ${escapeHtml(set.words.join(", "))}
+                                </div>
+                            </div>
+                            <div class="d-grid align-self-md-center">
+                                <button type="button" class="btn btn-sm btn-outline-primary copy-public-set-btn"
+                                    data-set-id="${set.id}">
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            })
+            .join("");
+    }
+
+    /**
+     * Copies a public set into the current user's list.
+     * @param {number} source_set_id
+     * @param {HTMLButtonElement} button
+     */
+    async function copyPublicSet(source_set_id, button) {
+        button.disabled = true;
+        button.textContent = "Copying...";
+
+        const form_data = new FormData();
+        form_data.set("id", source_set_id);
+        try {
+            const data = await sendRequest("copy_public", form_data);
+
+            if (!data.success) {
+                button.disabled = false;
+                button.textContent = "Copy";
+                showAlert(data.error_msg || "Could not copy this set.", "danger");
+                return;
+            }
+
+            sets = data.payload.sets;
+            selectSet(Number(data.payload.id));
+            renderPlayOptions();
+            public_sets_modal.hide();
+            showAlert("Set copied.");
+        } catch (error) {
+            button.disabled = false;
+            button.textContent = "Copy";
+            showAlert(error.message || "Could not copy this set.", "danger");
+        }
     }
 
     /**
@@ -561,6 +676,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         selectSet(Number(item.dataset.setId));
+    });
+
+    browse_sets_btn.addEventListener("click", () => {
+        clearAlert();
+        loadPublicSets();
+    });
+
+    public_set_list.addEventListener("click", (event) => {
+        const button = event.target.closest(".copy-public-set-btn");
+
+        if (!button) {
+            return;
+        }
+
+        copyPublicSet(Number(button.dataset.setId), button);
     });
 
     new_set_btn.addEventListener("click", () => {
