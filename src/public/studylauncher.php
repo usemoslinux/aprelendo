@@ -44,7 +44,7 @@ $ai_button_class = $lingobot_configured ? 'btn-success' : 'btn-secondary';
                         </div>
                     </div>
                 </div>
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
                     <div class="col">
                         <div class="card h-100 border-primary shadow-sm">
                             <div class="card-header bg-gradient text-bg-primary d-flex align-items-center">
@@ -134,6 +134,31 @@ $ai_button_class = $lingobot_configured ? 'btn-success' : 'btn-secondary';
                                             Configure Lingobot
                                         </a>
                                     <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-info shadow-sm">
+                            <div class="card-header bg-gradient text-bg-info d-flex align-items-center">
+                                <span class="bi bi-intersect me-2"></span>
+                                Nuance Battle
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">Compare Similar Words</h5>
+                                <p class="card-text">
+                                    Build sets of words that are easy to confuse, then practice choosing the best fit
+                                    for subtle differences in meaning.
+                                </p>
+                                <ul class="small text-start ps-3">
+                                    <li><b>Benefits</b>: Targets confusing near-synonyms directly and makes fine
+                                        distinctions easier to notice.</li>
+                                    <li><b>Drawbacks</b>: Requires prepared word sets before the game can be useful.</li>
+                                </ul>
+                                <div class="mt-auto d-grid">
+                                    <a href="/studynuance" class="btn btn-info text-dark">
+                                        Open Nuance Battle
+                                    </a>
                                 </div>
                             </div>
                         </div>
