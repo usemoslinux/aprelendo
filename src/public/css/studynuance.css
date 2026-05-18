@@ -1,0 +1,183 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+
+.nuance-battle-stage {
+    --clash-x: 50%;
+    --clash-scale: 1;
+    --beam-opacity: 1;
+    --beam-user-core: #d8f4ff;
+    --beam-user-main: #52b7ff;
+    --beam-user-mid: #2d7dff;
+    --beam-user-dark: #123caa;
+    --beam-lexicus-core: #ffe0d8;
+    --beam-lexicus-main: #ff6b52;
+    --beam-lexicus-mid: #e63b2e;
+    --beam-lexicus-dark: #8f1414;
+    --beam-clash-core: #ffffff;
+    --beam-clash-glow: #ffd86b;
+    --beam-clash-hot: #ff8cf0;
+    --beam-user-start: 34%;
+    --beam-lexicus-end: 66%;
+    aspect-ratio: 941 / 418;
+    background-image: url("/img/gamification/nuance_battle_background.webp");
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    isolation: isolate;
+    overflow: hidden;
+    position: relative;
+}
+
+.nuance-battle-stage::after {
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.35)
+    );
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+}
+
+.nuance-battle-stage.is-draw {
+    background-position: center 33.3333%;
+}
+
+.nuance-battle-stage.is-win {
+    background-position: center 66.6667%;
+}
+
+.nuance-battle-stage.is-lose {
+    background-position: center 100%;
+}
+
+.nuance-battle-stage.is-draw::after,
+.nuance-battle-stage.is-win::after,
+.nuance-battle-stage.is-lose::after {
+    content: none;
+}
+
+.nuance-beam {
+    border-radius: 999px;
+    height: clamp(6px, 1.4vw, 18px);
+    opacity: var(--beam-opacity);
+    position: absolute;
+    top: 47%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
+.nuance-beam::before,
+.nuance-beam::after {
+    border-radius: inherit;
+    content: "";
+    inset: 0;
+    position: absolute;
+}
+
+.nuance-beam::before {
+    filter: blur(8px);
+    opacity: 0.72;
+    transform: scaleY(2.4);
+}
+
+.nuance-beam::after {
+    height: 36%;
+    top: 32%;
+}
+
+.nuance-beam-user {
+    background: linear-gradient(
+        to right,
+        var(--beam-user-dark),
+        var(--beam-user-mid),
+        var(--beam-user-main),
+        var(--beam-user-core)
+    );
+    box-shadow:
+        0 0 10px var(--beam-user-main),
+        0 0 18px rgba(45, 125, 255, 0.75);
+    left: var(--beam-user-start);
+    width: max(0px, calc(var(--clash-x) - var(--beam-user-start)));
+}
+
+.nuance-beam-user::before {
+    background: var(--beam-user-main);
+}
+
+.nuance-beam-user::after {
+    background: var(--beam-user-core);
+}
+
+.nuance-beam-lexicus {
+    background: linear-gradient(
+        to left,
+        var(--beam-lexicus-dark),
+        var(--beam-lexicus-mid),
+        var(--beam-lexicus-main),
+        var(--beam-lexicus-core)
+    );
+    box-shadow:
+        0 0 10px var(--beam-lexicus-main),
+        0 0 18px rgba(230, 59, 46, 0.75);
+    right: 34%;
+    width: max(0px, calc(var(--beam-lexicus-end) - var(--clash-x)));
+}
+
+.nuance-beam-lexicus::before {
+    background: var(--beam-lexicus-main);
+}
+
+.nuance-beam-lexicus::after {
+    background: var(--beam-lexicus-core);
+}
+
+.nuance-clash {
+    background: radial-gradient(
+        circle,
+        var(--beam-clash-core) 0 18%,
+        var(--beam-clash-glow) 19% 42%,
+        var(--beam-clash-hot) 43% 68%,
+        rgba(255, 140, 240, 0) 69%
+    );
+    border-radius: 50%;
+    filter: drop-shadow(0 0 12px var(--beam-clash-glow))
+        drop-shadow(0 0 20px var(--beam-clash-hot));
+    height: clamp(22px, 4.2vw, 58px);
+    left: var(--clash-x);
+    position: absolute;
+    top: 47%;
+    transform: translate(-50%, -50%) scale(var(--clash-scale));
+    transition: left 260ms ease-out;
+    width: clamp(22px, 4.2vw, 58px);
+    z-index: 3;
+}
+
+.nuance-beam,
+.nuance-clash {
+    transition:
+        left 260ms ease-out,
+        opacity 360ms ease-out,
+        transform 360ms ease-out,
+        width 260ms ease-out;
+}
+
+.nuance-battle-stage.is-ending-win,
+.nuance-battle-stage.is-ending-lose {
+    --clash-scale: 2.1;
+}
+
+.nuance-battle-stage.is-ending-draw {
+    --beam-opacity: 0.18;
+    --clash-scale: 0.72;
+}
+
+.nuance-battle-stage.is-draw .nuance-beam,
+.nuance-battle-stage.is-draw .nuance-clash,
+.nuance-battle-stage.is-win .nuance-beam,
+.nuance-battle-stage.is-win .nuance-clash,
+.nuance-battle-stage.is-lose .nuance-beam,
+.nuance-battle-stage.is-lose .nuance-clash {
+    display: none;
+}

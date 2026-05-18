@@ -136,6 +136,7 @@ require_once PUBLIC_PATH . "header.php";
                                 <p id="play-help" class="mt-3 mb-0 text-secondary">
                                     Lingobot creates contrastive cards where one word is the clearest fit.
                                 </p>
+                                <p id="battle-goal" class="mt-2 mb-0 small text-secondary d-none"></p>
                             </div>
                         </div>
                         <div id="battle-card" class="card shadow-sm mt-3 text-center d-none">
@@ -144,6 +145,11 @@ require_once PUBLIC_PATH . "header.php";
                                 <span id="battle-counter" class="badge text-bg-secondary"></span>
                             </div>
                             <div class="card-body">
+                                <div id="battle-stage" class="nuance-battle-stage rounded mb-3" aria-hidden="true">
+                                    <div class="nuance-beam nuance-beam-user"></div>
+                                    <div class="nuance-beam nuance-beam-lexicus"></div>
+                                    <div class="nuance-clash"></div>
+                                </div>
                                 <div id="battle-loading" class="d-none">
                                     <div class="placeholder-glow">
                                         <p><span class="placeholder col-8"></span></p>

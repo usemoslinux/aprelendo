@@ -16,9 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const nuance_page = document.getElementById("nuance-page");
     const start_battle_btn = document.getElementById("start-battle-btn");
     const play_help = document.getElementById("play-help");
+    const battle_goal = document.getElementById("battle-goal");
     const battle_card = document.getElementById("battle-card");
     const battle_title = document.getElementById("battle-title");
     const battle_counter = document.getElementById("battle-counter");
+    const battle_stage = document.getElementById("battle-stage");
     const battle_loading = document.getElementById("battle-loading");
     const battle_question = document.getElementById("battle-question");
     const battle_sentence = document.getElementById("battle-sentence");
@@ -38,6 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const has_lingobot = nuance_page.dataset.hasLingobot === "1";
     const start_battle_btn_text = start_battle_btn.textContent.trim();
     const public_sets_modal = new bootstrap.Modal(public_sets_modal_elem);
+    const CLASH_MIN_X = 42;
+    const CLASH_MAX_X = 58;
+    const OUTCOME_ANIMATION_MS = 700;
 
     Dictionaries.fetchURIs();
 
@@ -270,6 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
             play_set_select.innerHTML = "<option>No sets available</option>";
             play_set_select.disabled = true;
             start_battle_btn.disabled = true;
+            renderBattleGoal(0);
             return;
         }
 
@@ -280,6 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return `<option value="${set.id}">${escapeHtml(set.title)} (${set.words.length})</option>`;
             })
             .join("");
+        updateBattleGoalFromSelectedSet();
 
         if (!has_lingobot) {
             play_help.innerHTML =
@@ -356,6 +363,145 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
+     * Clears the final stage artwork state.
+     */
+    function clearBattleOutcome() {
+        battle_stage.classList.remove(
+            "is-draw",
+            "is-win",
+            "is-lose",
+            "is-ending-draw",
+            "is-ending-win",
+            "is-ending-lose",
+        );
+    }
+
+    /**
+     * Returns the final result from a score ratio.
+     * @param {number} score_ratio
+     * @returns {string}
+     */
+    function getBattleOutcome(score_ratio) {
+        if (score_ratio <= 1 / 3) {
+            return "lose";
+        }
+
+        if (score_ratio >= 2 / 3) {
+            return "win";
+        }
+
+        return "draw";
+    }
+
+    /**
+     * Shows the final stage artwork for the completed session.
+     * @param {string} outcome
+     */
+    function setBattleOutcome(outcome) {
+        clearBattleOutcome();
+        battle_stage.classList.add(`is-${outcome}`);
+    }
+
+    /**
+     * Returns the current score as a 0-1 ratio. A session with no answers starts centered.
+     * @returns {number}
+     */
+    function getCurrentScoreRatio() {
+        const answered_cards = selected_answers.length;
+
+        return answered_cards > 0 ? correct_answers / answered_cards : 0.5;
+    }
+
+    /**
+     * Moves the beam clash to the score ratio.
+     * 0 means minimum user beam, 0.5 is centered, and 1 means maximum user beam.
+     * @param {number} score_ratio
+     */
+    function setBattleClash(score_ratio) {
+        const bounded_ratio = Math.min(Math.max(score_ratio, 0), 1);
+        const clash_range = CLASH_MAX_X - CLASH_MIN_X;
+        const clash_x = CLASH_MIN_X + bounded_ratio * clash_range;
+
+        battle_stage.style.setProperty("--clash-x", `${clash_x}%`);
+    }
+
+    /**
+     * Updates the beam clash point based on the current answer score.
+     */
+    function updateBattleStage() {
+        setBattleClash(getCurrentScoreRatio());
+    }
+
+    /**
+     * Shows a loading placeholder in the card counter.
+     */
+    function showBattleCounterPlaceholder() {
+        battle_counter.className = "badge text-bg-secondary placeholder col-2";
+        battle_counter.textContent = "";
+        battle_counter.setAttribute("aria-hidden", "true");
+    }
+
+    /**
+     * Updates the card counter text.
+     * @param {string} text
+     */
+    function setBattleCounterText(text) {
+        battle_counter.className = "badge text-bg-secondary";
+        battle_counter.removeAttribute("aria-hidden");
+        battle_counter.textContent = text;
+    }
+
+    /**
+     * Animates the active beams before the final artwork is shown.
+     * @param {string} outcome
+     * @returns {Promise<void>}
+     */
+    function animateBattleOutcome(outcome) {
+        clearBattleOutcome();
+
+        if (outcome === "win") {
+            setBattleClash(1);
+        } else if (outcome === "lose") {
+            setBattleClash(0);
+        } else {
+            setBattleClash(0.5);
+        }
+
+        battle_stage.classList.add(`is-ending-${outcome}`);
+
+        return new Promise((resolve) => {
+            window.setTimeout(resolve, OUTCOME_ANIMATION_MS);
+        });
+    }
+
+    /**
+     * Updates the visible goal text for the selected set.
+     * @param {number} card_count
+     */
+    function renderBattleGoal(card_count) {
+        if (card_count <= 0) {
+            battle_goal.classList.add("d-none");
+            battle_goal.textContent = "";
+            return;
+        }
+
+        const win_count = Math.ceil(card_count * 2 / 3);
+        const lose_count = Math.floor(card_count / 3);
+
+        battle_goal.textContent =
+            `Choose at least ${win_count} of ${card_count} correctly to win. ${lose_count} or fewer means you lose.`;
+        battle_goal.classList.remove("d-none");
+    }
+
+    /**
+     * Updates the visible goal text from the selected play set.
+     */
+    function updateBattleGoalFromSelectedSet() {
+        const set = getSelectedPlaySet();
+        renderBattleGoal(set ? set.words.length : 0);
+    }
+
+    /**
      * Shows or hides the loading state for battle generation.
      * @param {boolean} is_loading
      */
@@ -364,6 +510,13 @@ document.addEventListener("DOMContentLoaded", () => {
         battle_loading.classList.toggle("d-none", !is_loading);
         battle_question.classList.add("d-none");
         battle_results.classList.add("d-none");
+
+        if (is_loading) {
+            clearBattleOutcome();
+            setBattleClash(0.5);
+            showBattleCounterPlaceholder();
+        }
+
         start_battle_btn.disabled =
             is_loading || !has_lingobot || sets.length === 0;
     }
@@ -465,6 +618,9 @@ document.addEventListener("DOMContentLoaded", () => {
             current_card_index = 0;
             correct_answers = 0;
             selected_answers = [];
+            renderBattleGoal(battle_cards.length);
+            clearBattleOutcome();
+            updateBattleStage();
             renderBattleCard();
         } catch (error) {
             showAlert(error.message, "danger");
@@ -486,7 +642,8 @@ document.addEventListener("DOMContentLoaded", () => {
         battle_feedback.className = "alert mt-3 d-none";
         battle_feedback.textContent = "";
         next_card_btn.classList.add("d-none");
-        battle_counter.textContent = `Round ${current_card_index + 1}/${battle_cards.length}`;
+        clearBattleOutcome();
+        setBattleCounterText(`Card ${current_card_index + 1}/${battle_cards.length}`);
         battle_sentence.innerHTML = escapeHtml(card.sentence).replace(
             "____",
             '<span class="border-bottom border-2 px-4" aria-label="blank">&nbsp;</span>',
@@ -573,6 +730,8 @@ document.addEventListener("DOMContentLoaded", () => {
             correct_answers++;
         }
 
+        updateBattleStage();
+
         document.querySelectorAll(".battle-choice").forEach((button) => {
             const button_word = button.dataset.word;
 
@@ -591,7 +750,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         battle_feedback.className = `alert mt-3 ${is_correct ? "alert-success" : "alert-warning"}`;
         battle_feedback.innerHTML = `
-            <div class="fw-semibold">${is_correct ? "Hit" : "Miss"}</div>
+            <div class="fw-semibold">${is_correct ? "Correct" : "Not quite"}</div>
             <div>${escapeHtml(card.explanation)}</div>
         `;
         next_card_btn.textContent =
@@ -619,20 +778,22 @@ document.addEventListener("DOMContentLoaded", () => {
     /**
      * Renders the battle session summary.
      */
-    function renderBattleResults() {
+    async function renderBattleResults() {
         battle_question.classList.add("d-none");
-        battle_results.classList.remove("d-none");
-        battle_counter.textContent = `${battle_cards.length}/${battle_cards.length} cards shown`;
+        battle_results.classList.add("d-none");
+        setBattleCounterText(`${battle_cards.length}/${battle_cards.length} cards shown`);
         const score_ratio = correct_answers / battle_cards.length;
-        let result_title = "Defeat";
+        const outcome = getBattleOutcome(score_ratio);
+        let result_title = "Draw";
 
-        if (score_ratio === 1) {
-            result_title = "Perfect Victory";
-        } else if (score_ratio >= 0.7) {
-            result_title = "Victory";
-        } else if (score_ratio >= 0.4) {
-            result_title = "Close Battle";
+        if (outcome === "lose") {
+            result_title = "You Lose";
+        } else if (outcome === "win") {
+            result_title = "You Win";
         }
+
+        await animateBattleOutcome(outcome);
+        setBattleOutcome(outcome);
 
         const rows = selected_answers
             .map((answer) => {
@@ -654,7 +815,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         battle_results.innerHTML = `
             <h5>${result_title}</h5>
-            <p class="text-secondary">You won ${correct_answers} of ${battle_cards.length} rounds.</p>
+            <p class="text-secondary">You chose ${correct_answers} of ${battle_cards.length} words correctly.</p>
             <table class="table table-bordered table-striped text-center mx-auto mt-3 small" style="max-width: 550px">
                 <thead>
                     <tr>
@@ -666,6 +827,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </table>
             <button type="button" class="btn btn-success" id="play-again-btn">Play Again</button>
         `;
+        battle_results.classList.remove("d-none");
     }
 
     set_list.addEventListener("click", (event) => {
@@ -739,6 +901,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     start_battle_btn.addEventListener("click", startBattle);
+
+    play_set_select.addEventListener("change", updateBattleGoalFromSelectedSet);
 
     battle_choices.addEventListener("click", (event) => {
         const selected_button = event.target.closest(".battle-choice");

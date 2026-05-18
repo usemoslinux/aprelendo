@@ -93,6 +93,9 @@ if (!empty($google_font_families)) {
     <?php if ($curpage === 'showvideo' || $curpage === 'showofflinevideo'): ?>
         <link href="/css/showvideo.css" rel="stylesheet">
     <?php endif; ?>
+    <?php if ($curpage === 'studynuance'): ?>
+        <link href="/css/studynuance.css" rel="stylesheet">
+    <?php endif; ?>
     
     <!-- Bootstrap icons -->
     <link rel="stylesheet"
