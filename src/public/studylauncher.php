@@ -1,23 +1,33 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../Includes/bootstrap.php'; // initialize application
+require_once "../Includes/bootstrap.php"; // initialize application
 
 use Aprelendo\AuthGuard;
 
 $user = AuthGuard::requirePageUser();
 
-require_once PUBLIC_PATH . 'head.php';
-require_once PUBLIC_PATH . 'header.php';
+require_once PUBLIC_PATH . "head.php";
+require_once PUBLIC_PATH . "header.php";
 
 $lingobot_configured = !empty($user->hf_token);
 
-$ai_card_border_class = $lingobot_configured ? 'border-success' : 'border-secondary';
-$ai_card_text_bg_class = $lingobot_configured ? 'text-bg-success' : 'text-bg-secondary';
-$ai_button_class = $lingobot_configured ? 'btn-success' : 'btn-secondary';
-$nuance_card_border_class = $lingobot_configured ? 'border-info' : 'border-secondary';
-$nuance_card_text_bg_class = $lingobot_configured ? 'text-bg-info' : 'text-bg-secondary';
-$nuance_button_class = $lingobot_configured ? 'btn-info text-dark' : 'btn-secondary text-light';
+$ai_card_border_class = $lingobot_configured
+    ? "border-success"
+    : "border-secondary";
+$ai_card_text_bg_class = $lingobot_configured
+    ? "text-bg-success"
+    : "text-bg-secondary";
+$ai_button_class = $lingobot_configured ? "btn-success" : "btn-secondary";
+$nuance_card_border_class = $lingobot_configured
+    ? "border-info"
+    : "border-secondary";
+$nuance_card_text_bg_class = $lingobot_configured
+    ? "text-bg-info"
+    : "text-bg-secondary";
+$nuance_button_class = $lingobot_configured
+    ? "btn-info text-dark"
+    : "btn-secondary text-light";
 ?>
 
 <div class="container mtb d-flex flex-grow-1 flex-column">
@@ -82,16 +92,16 @@ $nuance_button_class = $lingobot_configured ? 'btn-info text-dark' : 'btn-second
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">Reconstruct the Expression</h5>
                                 <p class="card-text">
-                                    Unscramble the hint to complete the blank. Each word in the expression 
+                                    Unscramble the hint to complete the blank. Each word in the expression
                                     is scrambled but <b>retains its original first letter and position</b> to guide you.
                                 </p>
                                 <ul class="small text-start ps-3">
                                     <li>
-                                        <b>Benefits</b>: Reinforces spelling and active recall of the specific 
+                                        <b>Benefits</b>: Reinforces spelling and active recall of the specific
                                         expression without the complexity of full sentence building.
                                     </li>
                                     <li>
-                                        <b>Drawbacks</b>: Highly focused on vocabulary; provides less practice 
+                                        <b>Drawbacks</b>: Highly focused on vocabulary; provides less practice
                                         with broader grammar and sentence structure.
                                     </li>
                                 </ul>
@@ -160,7 +170,7 @@ $nuance_button_class = $lingobot_configured ? 'btn-info text-dark' : 'btn-second
                                 <ul class="small text-start ps-3">
                                     <li><b>Benefits</b>: Targets confusing near-synonyms directly and makes fine
                                         distinctions easier to notice.</li>
-                                    <li><b>Drawbacks</b>: Requires prepared word sets before the game can be useful.</li>
+                                    <li><b>Drawbacks</b>: Requires pre-made word sets to start playing.</li>
                                 </ul>
                                 <div class="mt-auto d-grid">
                                     <?php if ($lingobot_configured): ?>
@@ -184,4 +194,4 @@ $nuance_button_class = $lingobot_configured ? 'btn-info text-dark' : 'btn-second
     </div>
 </div>
 
-<?php require_once 'footer.php'; ?>
+<?php require_once "footer.php"; ?>

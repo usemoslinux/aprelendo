@@ -371,7 +371,7 @@ document.addEventListener("DOMContentLoaded", () => {
         battle_feedback.className = "alert mt-3 d-none";
         battle_feedback.textContent = "";
         next_card_btn.classList.add("d-none");
-        battle_counter.textContent = `${current_card_index + 1}/${battle_cards.length}`;
+        battle_counter.textContent = `Round ${current_card_index + 1}/${battle_cards.length}`;
         battle_sentence.innerHTML = escapeHtml(card.sentence).replace(
             "____",
             '<span class="border-bottom border-2 px-4" aria-label="blank">&nbsp;</span>',
@@ -476,7 +476,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         battle_feedback.className = `alert mt-3 ${is_correct ? "alert-success" : "alert-warning"}`;
         battle_feedback.innerHTML = `
-            <div class="fw-semibold">${is_correct ? "Correct" : "Not quite"}</div>
+            <div class="fw-semibold">${is_correct ? "Hit" : "Miss"}</div>
             <div>${escapeHtml(card.explanation)}</div>
         `;
         next_card_btn.textContent =
@@ -508,6 +508,16 @@ document.addEventListener("DOMContentLoaded", () => {
         battle_question.classList.add("d-none");
         battle_results.classList.remove("d-none");
         battle_counter.textContent = `${battle_cards.length}/${battle_cards.length} cards shown`;
+        const score_ratio = correct_answers / battle_cards.length;
+        let result_title = "Defeat";
+
+        if (score_ratio === 1) {
+            result_title = "Perfect Victory";
+        } else if (score_ratio >= 0.7) {
+            result_title = "Victory";
+        } else if (score_ratio >= 0.4) {
+            result_title = "Close Battle";
+        }
 
         const rows = selected_answers
             .map((answer) => {
@@ -528,8 +538,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .join("");
 
         battle_results.innerHTML = `
-            <h5>Battle Complete</h5>
-            <p class="text-secondary">You chose ${correct_answers} of ${battle_cards.length} words correctly.</p>
+            <h5>${result_title}</h5>
+            <p class="text-secondary">You won ${correct_answers} of ${battle_cards.length} rounds.</p>
             <table class="table table-bordered table-striped text-center mx-auto mt-3 small" style="max-width: 550px">
                 <thead>
                     <tr>
