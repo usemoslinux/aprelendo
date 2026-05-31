@@ -36,7 +36,7 @@ abstract class Table
     {
         $html = '<div class="row">
             <div class="col-sm-12">
-            <div class="table-responsive rounded overflow-hidden border shadow-sm mb-3">
+            <div class="rounded border shadow-sm mb-3">
             <table class="table table-hover mb-0">
             <colgroup>';
 
