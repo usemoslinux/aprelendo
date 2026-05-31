@@ -234,7 +234,6 @@ require_once PUBLIC_PATH . "head.php";
                                             src="https://www.youtube-nocookie.com/embed/AmRq3tNFu9I"
                                             loading="lazy"
                                             title="Aprelendo total reading walkthrough"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                             allowfullscreen>
                                         </iframe>
                                     </div>
