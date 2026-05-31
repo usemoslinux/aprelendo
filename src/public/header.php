@@ -37,7 +37,7 @@ $today_is_reading_streak = $gems->today_is_streak;
         <nav class="navbar navbar-expand-md navbar-light">
             <div class="container mtb">
                 <!-- Brand -->
-                <a class="navbar-brand" href="/"></a>
+                <a class="navbar-brand" href="/" aria-label="Aprelendo home page"></a>
 
                 <!-- Toggler Button -->
                 <button class="navbar-toggler" type="button" aria-label="toggler button" data-bs-toggle="collapse"

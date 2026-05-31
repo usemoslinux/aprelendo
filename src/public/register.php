@@ -80,51 +80,51 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <p class="auth-side-caption mb-2">Popular choices</p>
                         <div class="auth-language-grid mb-3">
                             <button type="button" class="btn btn-secondary auth-language-pill<?php echo $to_lang == 'Arabic' ? ' is-active' : ''; ?>" data-learning-lang="ar">
-                                <img src="img/flags/ar.svg" alt="Arabic">
+                                <img src="img/flags/ar.svg" alt="Arabic flag">
                                 Arabic
                             </button>
                             <button type="button" class="btn btn-secondary auth-language-pill<?php echo $to_lang == 'Chinese' ? ' is-active' : ''; ?>" data-learning-lang="zh">
-                                <img src="img/flags/zh.svg" alt="Chinese">
+                                <img src="img/flags/zh.svg" alt="Chinese flag">
                                 Chinese
                             </button>
                             <button type="button" class="btn btn-secondary auth-language-pill<?php echo $to_lang == 'English' ? ' is-active' : ''; ?>" data-learning-lang="en">
-                                <img src="img/flags/en.svg" alt="English">
+                                <img src="img/flags/en.svg" alt="English flag">
                                 English
                             </button>
                             <button type="button" class="btn btn-secondary auth-language-pill<?php echo $to_lang == 'French' ? ' is-active' : ''; ?>" data-learning-lang="fr">
-                                <img src="img/flags/fr.svg" alt="French">
+                                <img src="img/flags/fr.svg" alt="French flag">
                                 French
                             </button>
                             <button type="button" class="btn btn-secondary auth-language-pill<?php echo $to_lang == 'German' ? ' is-active' : ''; ?>" data-learning-lang="de">
-                                <img src="img/flags/de.svg" alt="German">
+                                <img src="img/flags/de.svg" alt="German flag">
                                 German
                             </button>
                             <button type="button" class="btn btn-secondary auth-language-pill<?php echo $to_lang == 'Italian' ? ' is-active' : ''; ?>" data-learning-lang="it">
-                                <img src="img/flags/it.svg" alt="Italian">
+                                <img src="img/flags/it.svg" alt="Italian flag">
                                 Italian
                             </button>
                             <button type="button" class="btn btn-secondary auth-language-pill<?php echo $to_lang == 'Japanese' ? ' is-active' : ''; ?>" data-learning-lang="ja">
-                                <img src="img/flags/ja.svg" alt="Japanese">
+                                <img src="img/flags/ja.svg" alt="Japanese flag">
                                 Japanese
                             </button>
                             <button type="button" class="btn btn-secondary auth-language-pill<?php echo $to_lang == 'Korean' ? ' is-active' : ''; ?>" data-learning-lang="ko">
-                                <img src="img/flags/ko.svg" alt="Korean">
+                                <img src="img/flags/ko.svg" alt="Korean flag">
                                 Korean
                             </button>
                             <button type="button" class="btn btn-secondary auth-language-pill<?php echo $to_lang == 'Portuguese' ? ' is-active' : ''; ?>" data-learning-lang="pt">
-                                <img src="img/flags/pt.svg" alt="Portuguese">
+                                <img src="img/flags/pt.svg" alt="Portuguese flag">
                                 Portuguese
                             </button>
                             <button type="button" class="btn btn-secondary auth-language-pill<?php echo $to_lang == 'Russian' ? ' is-active' : ''; ?>" data-learning-lang="ru">
-                                <img src="img/flags/ru.svg" alt="Russian">
+                                <img src="img/flags/ru.svg" alt="Russian flag">
                                 Russian
                             </button>
                             <button type="button" class="btn btn-secondary auth-language-pill<?php echo $to_lang == 'Spanish' ? ' is-active' : ''; ?>" data-learning-lang="es">
-                                <img src="img/flags/es.svg" alt="Spanish">
+                                <img src="img/flags/es.svg" alt="Spanish flag">
                                 Spanish
                             </button>
                             <button type="button" class="btn btn-secondary auth-language-pill" data-focus-learning-lang="true">
-                                <img src="img/flags/un.svg" alt="All languages">
+                                <img src="img/flags/un.svg" alt="All languages icon">
                                 +19 more
                             </button>
                         </div>

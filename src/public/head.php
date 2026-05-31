@@ -98,10 +98,16 @@ if (!empty($google_font_families)) {
     <?php endif; ?>
     
     <!-- Bootstrap icons -->
-    <link rel="stylesheet"
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
-        integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g==" 
+        integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
+            integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer">
+    </noscript>
 
     <!-- JQuery JS -->
     <script defer src="https://code.jquery.com/jquery-4.0.0.slim.min.js"

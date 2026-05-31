@@ -17,7 +17,7 @@ if (isset($curpage) && $curpage === 'login') {
         <nav class="navbar navbar-expand-md navbar-light">
             <div class="container mtb">
                 <!-- Brand -->
-                <a class="navbar-brand" href="/"></a>
+                <a class="navbar-brand" href="/" aria-label="Aprelendo home page"></a>
 
                 <!-- Toggler Button -->
                 <button class="navbar-toggler" aria-label="toggler button" type="button" data-bs-toggle="collapse"

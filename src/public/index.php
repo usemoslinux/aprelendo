@@ -72,51 +72,51 @@ require_once PUBLIC_PATH . "head.php";
                                         <div class="col-lg-8">
                                             <div class="d-flex flex-wrap justify-content-center justify-content-lg-end">
                                                 <a href="/register?tolang=arabic" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/ar.svg" alt="Arabic" class="flag-icon">
+                                                    <img src="img/flags/ar.svg" alt="Arabic flag" class="flag-icon">
                                                     &nbsp;Arabic
                                                 </a>
                                                 <a href="/register?tolang=chinese" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/zh.svg" alt="Chinese" class="flag-icon">
+                                                    <img src="img/flags/zh.svg" alt="Chinese flag" class="flag-icon">
                                                     &nbsp;Chinese
                                                 </a>
                                                 <a href="/register?tolang=english" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/en.svg" alt="English" class="flag-icon">
+                                                    <img src="img/flags/en.svg" alt="English flag" class="flag-icon">
                                                     &nbsp;English
                                                 </a>
                                                 <a href="/register?tolang=french" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/fr.svg" alt="French" class="flag-icon">
+                                                    <img src="img/flags/fr.svg" alt="French flag" class="flag-icon">
                                                     &nbsp;French
                                                 </a>
                                                 <a href="/register?tolang=german" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/de.svg" alt="German" class="flag-icon">
+                                                    <img src="img/flags/de.svg" alt="German flag" class="flag-icon">
                                                     &nbsp;German
                                                 </a>
                                                 <a href="/register?tolang=italian" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/it.svg" alt="Italian" class="flag-icon">
+                                                    <img src="img/flags/it.svg" alt="Italian flag" class="flag-icon">
                                                     &nbsp;Italian
                                                 </a>
                                                 <a href="/register?tolang=japanese" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/ja.svg" alt="Japanese" class="flag-icon">
+                                                    <img src="img/flags/ja.svg" alt="Japanese flag" class="flag-icon">
                                                     &nbsp;Japanese
                                                 </a>
                                                 <a href="/register?tolang=korean" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/ko.svg" alt="Korean" class="flag-icon">
+                                                    <img src="img/flags/ko.svg" alt="Korean flag" class="flag-icon">
                                                     &nbsp;Korean
                                                 </a>
                                                 <a href="/register?tolang=portuguese" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/pt.svg" alt="Portuguese" class="flag-icon">
+                                                    <img src="img/flags/pt.svg" alt="Portuguese flag" class="flag-icon">
                                                     &nbsp;Portuguese
                                                 </a>
                                                 <a href="/register?tolang=russian" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/ru.svg" alt="Russian" class="flag-icon">
+                                                    <img src="img/flags/ru.svg" alt="Russian flag" class="flag-icon">
                                                     &nbsp;Russian
                                                 </a>
                                                 <a href="/register?tolang=spanish" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/es.svg" alt="Spanish" class="flag-icon">
+                                                    <img src="img/flags/es.svg" alt="Spanish flag" class="flag-icon">
                                                     &nbsp;Spanish
                                                 </a>
                                                 <a href="/register" class="btn btn-secondary m-1 language-pill">
-                                                    <img src="img/flags/un.svg" alt="All languages" class="flag-icon">
+                                                    <img src="img/flags/un.svg" alt="All languages icon" class="flag-icon">
                                                     &nbsp;+19 more
                                                 </a>
                                             </div>
@@ -230,9 +230,13 @@ require_once PUBLIC_PATH . "head.php";
                                 </div>
                                 <div class="col-lg-7 p-4 p-lg-5">
                                     <div class="ratio ratio-16x9 landing-video-frame">
-                                        <iframe src="https://www.youtube-nocookie.com/embed/AmRq3tNFu9I"
-                                            allowfullscreen
-                                            title="Aprelendo total reading walkthrough"></iframe>
+                                        <iframe
+                                            src="https://www.youtube-nocookie.com/embed/AmRq3tNFu9I"
+                                            loading="lazy"
+                                            title="Aprelendo total reading walkthrough"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                            allowfullscreen>
+                                        </iframe>
                                     </div>
                                 </div>
                             </div>

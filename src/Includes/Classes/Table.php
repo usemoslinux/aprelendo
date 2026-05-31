@@ -5,13 +5,13 @@ namespace Aprelendo;
 
 abstract class Table
 {
-    protected array $headings                = [];
-    protected array $col_widths              = [];
-    protected array $rows                    = [];
-    protected array $action_menu             = [];
-    protected array $individual_action_menu  = [];
-    protected array $sort_menu               = [];
-    protected bool  $has_chkbox              = false;
+    protected array $headings = [];
+    protected array $col_widths = [];
+    protected array $rows = [];
+    protected array $action_menu = [];
+    protected array $individual_action_menu = [];
+    protected array $sort_menu = [];
+    protected bool $has_chkbox = false;
 
     /**
      * Prints table
@@ -25,7 +25,7 @@ abstract class Table
         $html .= $this->printContent();
         $html .= $this->printFooter($sort_by);
         return $html;
-    } 
+    }
 
     /**
      * Prints table header
@@ -55,17 +55,17 @@ abstract class Table
             aria-label="Select all" type="checkbox"><label class="form-check-label" for="chkbox-selall"></label>
             </div></th>';
         } else {
-            $html .= '<th></th>';
+            $html .= "<th></th>";
         }
 
         foreach ($this->headings as $heading) {
             $html .= "<th class='col-title'>$heading</th>";
         }
 
-        $html .= '</tr></thead><tbody>';
+        $html .= "</tr></thead><tbody>";
 
         return $html;
-    } 
+    }
 
     /**
      * Prints table footer
@@ -75,15 +75,15 @@ abstract class Table
      */
     protected function printFooter(int $sort_by): string
     {
-        $html = '</tbody></table></div>'; // close table and wrapper
+        $html = "</tbody></table></div>"; // close table and wrapper
         $html .= '<div class="row mt-2"><div class="col-sm-12">'; // add footer row
         $html .= $this->printActionMenu();
         $html .= $this->printSortMenu($sort_by);
-        $html .= '</div></div>'; // close footer row
-        $html .= '</div></div>'; // close table containers
+        $html .= "</div></div>"; // close footer row
+        $html .= "</div></div>"; // close table containers
 
         return $html;
-    } 
+    }
 
     /**
      * Prints action menu
@@ -93,32 +93,32 @@ abstract class Table
     private function printActionMenu(): string
     {
         if (empty($this->action_menu)) {
-            return '';
+            return "";
         }
 
         $html = <<<HTML_ACTION_MENU
-            <div class="dropdown d-inline-block">
-                <button class="btn btn-secondary dropdown-toggle disabled" type="button"
-                    id="actions-menu" data-bs-toggle="dropdown">
-                    Actions <span class="caret"></span>
-                </button>
-            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="actions-menu" role="menu">
-            HTML_ACTION_MENU;
+        <div class="dropdown d-inline-block">
+            <button class="btn btn-secondary dropdown-toggle disabled" type="button"
+                id="actions-menu" data-bs-toggle="dropdown">
+                Actions <span class="caret"></span>
+            </button>
+        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="actions-menu" role="menu">
+        HTML_ACTION_MENU;
 
         foreach ($this->action_menu as $menu_id => $menu_text) {
-            $id = htmlspecialchars($menu_id, ENT_QUOTES, 'UTF-8');
-            $text = htmlspecialchars($menu_text, ENT_QUOTES, 'UTF-8');
+            $id = htmlspecialchars($menu_id, ENT_QUOTES, "UTF-8");
+            $text = htmlspecialchars($menu_text, ENT_QUOTES, "UTF-8");
 
-            $text = $this->generateActionMenuIcon($menu_text) . ' ' . $text;
+            $text = $this->generateActionMenuIcon($menu_text) . " " . $text;
 
-            if ($menu_text === 'Delete') {
+            if ($menu_text === "Delete") {
                 $html .= "<a id='{$id}' class='dropdown-item text-danger'>{$text}</a>";
             } else {
                 $html .= "<a id='{$id}' class='dropdown-item'>{$text}</a>";
             }
         }
 
-        $html .= '</div></div>';
+        $html .= "</div></div>";
 
         return $html;
     }
@@ -132,16 +132,19 @@ abstract class Table
     protected function generateActionMenuIcon(string $menu_text): string
     {
         $icons = [
-            'Open' => '<span title="Open" class="bi bi-box-arrow-up-right me-2"></span>',
-            'Edit' => '<span title="Edit" class="bi bi-pencil me-2"></span>',
-            'Share' => '<span title="Share" class="bi bi-share me-2"></span>',
-            'Archive' => '<span title="Archive" class="bi bi-archive me-2"></span>',
-            'Unarchive' => '<span title="Unarchive" class="bi bi-archive-fill me-2"></span>',
-            'Delete' => '<span title="Delete" class="bi bi-trash me-2"></span>'
+            "Open" =>
+                '<span title="Open" class="bi bi-box-arrow-up-right me-2"></span>',
+            "Edit" => '<span title="Edit" class="bi bi-pencil me-2"></span>',
+            "Share" => '<span title="Share" class="bi bi-share me-2"></span>',
+            "Archive" =>
+                '<span title="Archive" class="bi bi-archive me-2"></span>',
+            "Unarchive" =>
+                '<span title="Unarchive" class="bi bi-archive-fill me-2"></span>',
+            "Delete" => '<span title="Delete" class="bi bi-trash me-2"></span>',
         ];
 
-        return $icons[$menu_text] ?? '';
-    } 
+        return $icons[$menu_text] ?? "";
+    }
 
     /**
      * Prints sort menu
@@ -152,33 +155,38 @@ abstract class Table
     private function printSortMenu(string $sort_by): string
     {
         if (empty($this->sort_menu)) {
-            return '';
+            return "";
         }
 
         $html = <<<HTML_SORT_MENU
-            <div class="dropdown d-inline-block float-end">
-            <button class="btn btn-secondary dropdown-toggle float-end" type="button"
-                id="sort-menu" data-bs-toggle="dropdown">
-                Sort by <span class="caret"></span>
-            </button>
-            <div id="dropdown-menu-sort" class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-menu" role="menu">
-            HTML_SORT_MENU;
+        <div class="dropdown d-inline-block float-end">
+        <button class="btn btn-secondary dropdown-toggle float-end" type="button"
+            id="sort-menu" data-bs-toggle="dropdown">
+            Sort by <span class="caret"></span>
+        </button>
+        <div id="dropdown-menu-sort" class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-menu" role="menu">
+        HTML_SORT_MENU;
 
         $sort_index = 0;
         foreach ($this->sort_menu as $menu_id => $menu_text) {
-            $id = htmlspecialchars($menu_id, ENT_QUOTES, 'UTF-8');
-            $text = htmlspecialchars($menu_text, ENT_QUOTES, 'UTF-8');
-            $is_active = ($sort_by == $sort_index) ? 'active' : '';
+            $id = htmlspecialchars($menu_id, ENT_QUOTES, "UTF-8");
+            $text = htmlspecialchars($menu_text, ENT_QUOTES, "UTF-8");
+            $is_active = $sort_by == $sort_index ? "active" : "";
 
             $html .= "<a id='{$id}' data-value='{$sort_index}' class='dropdown-item o {$is_active}'>{$text}</a>";
             $sort_index++;
         }
 
-        $html .= '</div></div>';
+        $html .= "</div></div>";
 
         return $html;
     }
 
-
+    /**
+     * Abstract method to print table content.
+     * Implemented by derived classes.
+     *
+     * @return void
+     */
     abstract protected function printContent();
 }
