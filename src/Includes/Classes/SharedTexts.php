@@ -41,6 +41,11 @@ class SharedTexts extends Texts
             $this->type          = $row['type'];
             $this->word_count    = $row['word_count'];
             $this->level         = $row['level'];
+            $this->difficulty_score = $row['difficulty_score'] ?? null;
+            $this->difficulty_confidence = $row['difficulty_confidence'] ?? null;
+            $this->difficulty_metrics = $row['difficulty_metrics'] ?? null;
+            $this->difficulty_version = $row['difficulty_version'] ?? null;
+            $this->difficulty_updated_at = $row['difficulty_updated_at'] ?? null;
             $this->date_created  = $row['date_created'];
             $this->text_pos      = $row['text_pos'] ?? '';
             $this->audio_pos     = $row['audio_pos'] ?? '';

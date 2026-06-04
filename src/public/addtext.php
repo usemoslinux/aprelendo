@@ -92,12 +92,7 @@ $text_types_arr = $text_types->getAll();
                         </div>
                         <div class="mb-3 col-lg-6">
                             <label for="level">Level:</label>
-                            <select name="level" id="level" class="form-control form-select">
-                                <?php foreach ([1 => 'Beginner', 2 => 'Intermediate', 3 => 'Advanced'] as $level => $level_name): ?>
-                                    <option value="<?= $level ?>"
-                                    <?= $text_level == $level ? 'selected' : '' ?>><?= $level_name ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                            <input type="text" id="level" class="form-control" value="Automatic" disabled>
                         </div>
                     </div>
                     <div class="row">
