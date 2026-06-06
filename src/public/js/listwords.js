@@ -22,7 +22,7 @@ $(document).ready(function () {
      */
     async function loadWords() {
         $("#words-loader").removeClass("d-none");
-        $("#words-content").addClass("opacity-50");
+        $("#words-content").addClass("d-none");
 
         try {
             const query_str = new URLSearchParams(current_params).toString();
@@ -54,7 +54,7 @@ $(document).ready(function () {
             $("#words-content").html(`<div class="alert alert-danger">Error: ${error.message}</div>`);
         } finally {
             $("#words-loader").addClass("d-none");
-            $("#words-content").removeClass("opacity-50");
+            $("#words-content").removeClass("d-none");
         }
     }
 

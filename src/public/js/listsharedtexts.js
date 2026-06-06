@@ -14,7 +14,7 @@ $(document).ready(function() {
      */
     async function loadSharedTexts() {
         $("#shared-texts-loader").removeClass("d-none");
-        $("#shared-texts-content").addClass("opacity-50");
+        $("#shared-texts-content").addClass("d-none");
 
         try {
             const query_str = new URLSearchParams(current_params).toString();
@@ -41,7 +41,7 @@ $(document).ready(function() {
             $("#shared-texts-content").html(`<div class="alert alert-danger">Error: ${error.message}</div>`);
         } finally {
             $("#shared-texts-loader").addClass("d-none");
-            $("#shared-texts-content").removeClass("opacity-50");
+            $("#shared-texts-content").removeClass("d-none");
         }
     }
 

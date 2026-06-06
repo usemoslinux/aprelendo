@@ -25,7 +25,7 @@ $(document).ready(function() {
      */
     async function loadTexts() {
         $("#texts-loader").removeClass("d-none");
-        $("#texts-content").addClass("opacity-50");
+        $("#texts-content").addClass("d-none");
 
         try {
             const query_str = new URLSearchParams(current_params).toString();
@@ -53,7 +53,7 @@ $(document).ready(function() {
             $("#texts-content").html(`<div class="alert alert-danger">Error: ${error.message}</div>`);
         } finally {
             $("#texts-loader").addClass("d-none");
-            $("#texts-content").removeClass("opacity-50");
+            $("#texts-content").removeClass("d-none");
         }
     }
 
