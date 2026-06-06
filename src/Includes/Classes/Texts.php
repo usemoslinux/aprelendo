@@ -145,13 +145,8 @@ class Texts extends DBEntity
         $lang->loadRecordById($this->lang_id);
         $lang_iso = $lang->name;
 
-        // if $text is XML code (video transcript), extract text from XML string
-        $xml_text = TextsUtilities::extractFromXML($text);
-
         // count words in text
-        $word_count = ($xml_text !== false)
-            ? preg_match_all('/\w+/u', $xml_text, $words)
-            : preg_match_all('/\w+/u', $text, $words);
+        $word_count = TextsUtilities::countWordsInText($text);
 
         // fix string casings before saving
         if (mb_strtoupper($title, 'UTF-8') == $title) {

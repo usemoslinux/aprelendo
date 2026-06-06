@@ -5,6 +5,7 @@ namespace Aprelendo;
 
 class TextsUtilities
 {
+    private const WORD_PATTERN = "/[\p{L}\p{M}]+(?:[\p{Pd}'’][\p{L}\p{M}]+)*/u";
     
     /**
     * Determines if $text is valid XML code & extracts text from it
@@ -36,6 +37,45 @@ class TextsUtilities
 
         return implode(' ', $text_parts);
     } 
+
+    /**
+     * Prepares stored text for word counting.
+     *
+     * @param string $text
+     * @return string
+     */
+    public static function prepareForWordCount(string $text): string
+    {
+        $xml_text = self::extractFromXML($text);
+        $countable_text = $xml_text !== false ? $xml_text : $text;
+        $countable_text = html_entity_decode($countable_text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $countable_text = strip_tags($countable_text);
+        $countable_text = preg_replace('/\s+/u', ' ', $countable_text);
+
+        return trim($countable_text ?? '');
+    }
+
+    /**
+     * Counts words while ignoring numbers and keeping apostrophe/hyphen compounds together.
+     *
+     * @param string $text
+     * @return int
+     */
+    public static function countWords(string $text): int
+    {
+        return preg_match_all(self::WORD_PATTERN, $text);
+    }
+
+    /**
+     * Counts words in stored text, including XML video transcripts.
+     *
+     * @param string $text
+     * @return int
+     */
+    public static function countWordsInText(string $text): int
+    {
+        return self::countWords(self::prepareForWordCount($text));
+    }
 
     /**
      * Get audio_uri for embedding
