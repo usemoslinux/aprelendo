@@ -14,11 +14,27 @@ class TextsUtilities
     */
     public static function extractFromXML(string $xml): string|bool
     {
-        // check if $text is valid XML (video transcript) or simple text
         libxml_use_internal_errors(true); // used to avoid raising Exceptions in case of error
-        $xml = (array)simplexml_load_string(html_entity_decode(stripslashes($xml)));
-        
-        return array_key_exists('text', $xml) ? implode(" ", $xml['text']) : false;
+        $xml_object = simplexml_load_string(stripslashes($xml), \SimpleXMLElement::class, LIBXML_NOCDATA);
+        libxml_clear_errors();
+
+        if ($xml_object === false) {
+            return false;
+        }
+
+        $text_nodes = $xml_object->xpath('//text');
+
+        if ($text_nodes === false || empty($text_nodes)) {
+            return false;
+        }
+
+        $text_parts = array_map(static function (\SimpleXMLElement $node): string {
+            return trim((string)$node);
+        }, $text_nodes);
+
+        $text_parts = array_filter($text_parts, static fn(string $text): bool => $text !== '');
+
+        return implode(' ', $text_parts);
     } 
 
     /**
