@@ -33,7 +33,7 @@ defined('GOOGLE_CLIENT_ID')
 // VoiceRSS API key to provide TTS support in assisted learning mode (voicerss.org)
 defined('VOICERSS_API_KEY')       ? null : define('VOICERSS_API_KEY', 'your_voicerss_api_key'); // << update this
 
-define('IS_SELF_HOSTED', $_SERVER['HTTP_HOST'] !== 'www.aprelendo.com');
+define('IS_SELF_HOSTED', ($_SERVER['HTTP_HOST'] ?? 'localhost') !== 'www.aprelendo.com');
 
 // Email (shouldn't be necessary to set these if IS_SELF_HOSTED is TRUE)
 defined('EMAIL_HOST')             ? null : define('EMAIL_HOST', 'EMAIL_HOST');
