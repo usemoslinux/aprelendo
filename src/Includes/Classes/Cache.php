@@ -88,7 +88,7 @@ class Cache
             return self::$cache_dir;
         }
 
-        $cache_dir = defined('CACHE_PATH') ? CACHE_PATH : '/var/cache/aprelendo/';
+        $cache_dir = defined('CACHE_PATH') ? CACHE_PATH : '/var/www/aprelendo/cache/';
         $cache_dir = rtrim($cache_dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
         if (!is_dir($cache_dir) && !@mkdir($cache_dir, 0755, true) && !is_dir($cache_dir)) {

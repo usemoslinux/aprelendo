@@ -6,7 +6,7 @@ define('APP_ROOT', dirname(__DIR__) . DIRECTORY_SEPARATOR);
 define('PUBLIC_PATH', APP_ROOT . 'public' . DIRECTORY_SEPARATOR);
 define('UPLOADS_PATH', dirname(APP_ROOT) . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR);
 define('TEMPLATES_PATH', dirname(APP_ROOT) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR);
-define('CACHE_PATH', '/var/cache/aprelendo' . DIRECTORY_SEPARATOR);
+define('CACHE_PATH', dirname(APP_ROOT) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR);
 
 // Database
 define('DB_DRIVER', 'mysql');

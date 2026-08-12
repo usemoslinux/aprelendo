@@ -10,4 +10,5 @@ src/public/tests/
 src/scripts/__pycache__/
 todo.md
 uploads/*
+cache/
 vendor/
