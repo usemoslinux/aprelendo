@@ -23,6 +23,9 @@ jobs:
       - name: Test website responds
         run: curl -fsS http://localhost/ > /dev/null
 
+      - name: Test cache is writable by PHP
+        run: docker compose exec -T php php -r "\$_SERVER['HTTP_HOST'] = 'localhost'; require 'src/Includes/bootstrap.php'; Aprelendo\\Cache::set('ci-cache-test', true);"
+
       - name: Show Docker status
         if: always()
         run: |

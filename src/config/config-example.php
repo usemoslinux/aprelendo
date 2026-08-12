@@ -10,6 +10,9 @@ defined('UPLOADS_PATH')
 defined('TEMPLATES_PATH')
     ? null
     : define('TEMPLATES_PATH', dirname(APP_ROOT) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR);
+defined('CACHE_PATH')
+    ? null
+    : define('CACHE_PATH', '/var/cache/aprelendo' . DIRECTORY_SEPARATOR);
 
 // Database
 defined('DB_DRIVER')              ? null : define('DB_DRIVER', 'mysql');

@@ -19,6 +19,7 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       #- .:/var/www/aprelendo ## only use this if on development env
+      - cachedata:/var/cache/aprelendo
       - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
@@ -49,3 +50,4 @@ services:
       - 8081:80
 volumes:
   mysqldata: {}
+  cachedata: {}

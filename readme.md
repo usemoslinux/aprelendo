@@ -69,6 +69,7 @@ This script provides installation progress feedback and does the following:
 - Creates `src/config/config.php` from template if missing.
 - Creates `docker-compose.yml` from template if missing.
 - Builds and starts containers.
+- Creates a persistent Docker volume for runtime cache data.
 - Runs one-time DB bootstrap using `src/scripts/install.php`.
 
 4. Update local credentials

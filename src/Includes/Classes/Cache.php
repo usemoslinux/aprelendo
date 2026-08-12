@@ -5,7 +5,7 @@ namespace Aprelendo;
 
 class Cache
 {
-    private static string $cache_dir = APP_ROOT . 'Includes/Cache/';
+    private static ?string $cache_dir = null;
 
     /**
      * Set a value in the cache.
@@ -16,12 +16,12 @@ class Cache
      */
     public static function set(string $key, $data): void
     {
-        if (!is_dir(self::$cache_dir)) {
-            mkdir(self::$cache_dir, 0755, true);
-        }
+        $cache_dir = self::cacheDir();
 
-        $file_path = self::$cache_dir . $key . '.cache';
-        file_put_contents($file_path, serialize($data));
+        $file_path = $cache_dir . $key . '.cache';
+        if (@file_put_contents($file_path, serialize($data), LOCK_EX) === false) {
+            throw new \RuntimeException("Unable to write cache file: {$file_path}");
+        }
     }
 
     /**
@@ -33,7 +33,7 @@ class Cache
      */
     public static function get(string $key, int $ttl = 604800)
     {
-        $file_path = self::$cache_dir . $key . '.cache';
+        $file_path = self::cacheDir() . $key . '.cache';
 
         if (file_exists($file_path)) {
             // Check if the file is still valid (not expired)
@@ -57,7 +57,7 @@ class Cache
      */
     public static function delete(string $key): void
     {
-        $file_path = self::$cache_dir . $key . '.cache';
+        $file_path = self::cacheDir() . $key . '.cache';
         if (file_exists($file_path)) {
             unlink($file_path);
         }
@@ -70,13 +70,37 @@ class Cache
      */
     public static function clearAll(): void
     {
-        if (is_dir(self::$cache_dir)) {
-            $files = glob(self::$cache_dir . '*.cache');
+        $cache_dir = self::cacheDir();
+
+        if (is_dir($cache_dir)) {
+            $files = glob($cache_dir . '*.cache');
             foreach ($files as $file) {
                 if (is_file($file)) {
                     unlink($file);
                 }
             }
         }
+    }
+
+    private static function cacheDir(): string
+    {
+        if (self::$cache_dir !== null) {
+            return self::$cache_dir;
+        }
+
+        $cache_dir = defined('CACHE_PATH') ? CACHE_PATH : '/var/cache/aprelendo/';
+        $cache_dir = rtrim($cache_dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+
+        if (!is_dir($cache_dir) && !@mkdir($cache_dir, 0755, true) && !is_dir($cache_dir)) {
+            throw new \RuntimeException("Unable to create cache directory: {$cache_dir}");
+        }
+
+        if (!is_writable($cache_dir)) {
+            throw new \RuntimeException("Cache directory is not writable: {$cache_dir}");
+        }
+
+        self::$cache_dir = $cache_dir;
+
+        return self::$cache_dir;
     }
 }

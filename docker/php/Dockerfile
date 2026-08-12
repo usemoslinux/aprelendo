@@ -36,6 +36,9 @@ RUN composer install --no-scripts --no-autoloader
 RUN groupmod -g 33 www-data && \
     usermod -u 33 -g 33 www-data
 
+# Keep runtime cache data outside the application source tree.
+RUN mkdir -p /var/cache/aprelendo && chown www-data:www-data /var/cache/aprelendo
+
 # Copy the rest of the application code
 COPY --chown=www-data:www-data . /var/www/aprelendo/
 
