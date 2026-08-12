@@ -7,6 +7,7 @@ docker-compose.yml
 src/config/config.php
 src/GEMINI.md
 src/public/tests/
+src/scripts/__pycache__/
 todo.md
 uploads/*
 vendor/
