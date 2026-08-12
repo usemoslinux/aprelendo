@@ -33,7 +33,7 @@ $(document).ready(function() {
 
         document.getElementById('words-upload-wrap').classList.toggle('d-none');
         document.getElementById('words-table-wrap').classList.toggle('d-none');
-        document.getElementById('btn-import-words').disabled = false;
+        document.getElementById('btn-confirm-import-words').disabled = false;
         document.getElementById('words-upload-input').value = '';
     }); 
     
@@ -72,14 +72,14 @@ $(document).ready(function() {
         document.getElementById('words-table-wrap').classList.add('d-none');
         document.getElementById('words-upload-wrap').classList.remove('d-none');
         document.getElementById('words-table').querySelector('tbody').innerHTML = '';
-        document.getElementById('btn-import-words').disabled = true;
+        document.getElementById('btn-confirm-import-words').disabled = true;
         if (last_trigger_element) {
             last_trigger_element.focus();
             last_trigger_element = null;
         }
     }) 
 
-    $('#btn-import-words').on('click', async function() {
+    $('#btn-confirm-import-words').on('click', async function() {
         try {
             const form_data = new URLSearchParams();
             words_array.forEach(word => form_data.append('words[]', word));

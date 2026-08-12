@@ -42,7 +42,7 @@ $user = AuthGuard::requirePageUser();
             </div>
             <div class="modal-footer">
                 <button id="btn-cancel-import" type="button" class="btn btn-link">Cancel</button>
-                <button id="btn-import-words" type="button" class="btn btn-primary"
+                <button id="btn-confirm-import-words" type="button" class="btn btn-primary"
                     disabled>Import</button>
             </div>
         </div>
