@@ -80,11 +80,12 @@ class Card extends DBEntity
             preg_match_all($re, $text['text'], $matches, PREG_SET_ORDER, 0);
 
             foreach ($matches as $match) {
-                $match_to_add['title'] = $text['title'];
-                $match_to_add['author'] = $text['author'];
-                $match_to_add['text'] = $match[0];
-                $match_to_add['source_uri'] = $text['source_uri'];
-                $result[] = $match_to_add;
+                $result[] = [
+                    'title' => $text['title'],
+                    'author' => $text['author'],
+                    'text' => $match[0],
+                    'source_uri' => $text['source_uri'],
+                ];
             }
         }
         

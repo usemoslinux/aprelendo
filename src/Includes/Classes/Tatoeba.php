@@ -76,12 +76,12 @@ class Tatoeba
         // usually also returns approximate matches.
         foreach ($response?->data ?? [] as $item) {
             if (mb_stripos($item->text, $this->word)) {
-                $match_to_add['title'] = 'Tatoeba';
-                $match_to_add['author'] = $item->owner ? ucfirst($item->owner) : 'Anonymous';
-                $match_to_add['text'] = $item->text;
-                $match_to_add['source_uri'] = 'https://tatoeba.org';
-
-                $filtered_sentences[] = $match_to_add;
+                $filtered_sentences[] = [
+                    'title' => 'Tatoeba',
+                    'author' => $item->owner ? ucfirst($item->owner) : 'Anonymous',
+                    'text' => $item->text,
+                    'source_uri' => 'https://tatoeba.org',
+                ];
             }
         }
 
