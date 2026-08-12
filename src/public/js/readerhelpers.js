@@ -40,6 +40,10 @@ const ReaderHelpers = (() => {
      * @returns {Promise<string>}
      */
     async function annotateText(text_html, doclang) {
+        if (!text_html || !text_html.trim()) {
+            return text_html;
+        }
+
         const data = await postFormJson("/ajax/getuserwords.php", {
             txt: text_html
         }, "Failed to get user words for underlining");
