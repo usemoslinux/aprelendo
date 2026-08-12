@@ -91,7 +91,7 @@ This script provides installation progress feedback and does the following:
 In `src/config/config.php`:
 
 - Change `DB_USER` and `DB_PASSWORD`.
-- Change API credentials (YouTube, Google Drive, etc.).
+- Change API credentials and OAuth client IDs (YouTube, Google Drive, Google Sign-In, etc.).
 - Change email credentials.
 
 Optional commands:

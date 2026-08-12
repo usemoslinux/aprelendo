@@ -29,7 +29,7 @@ defined('GOOGLE_DRIVE_API_KEY')   ? null : define('GOOGLE_DRIVE_API_KEY', 'your_
 // Google Sign-In web client ID used by the login page and backend audience checks
 defined('GOOGLE_CLIENT_ID')
     ? null
-    : define('GOOGLE_CLIENT_ID', '913422235077-082170c2l6b58ck8ie0f03rigombl2pc.apps.googleusercontent.com');
+    : define('GOOGLE_CLIENT_ID', 'your_google_client_id.apps.googleusercontent.com'); // << update this
 // VoiceRSS API key to provide TTS support in assisted learning mode (voicerss.org)
 defined('VOICERSS_API_KEY')       ? null : define('VOICERSS_API_KEY', 'your_voicerss_api_key'); // << update this
 

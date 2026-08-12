@@ -27,11 +27,7 @@ try {
         throw new UserException('Google credential was not provided. Please try again.');
     }
 
-    $google_client_id = defined('GOOGLE_CLIENT_ID')
-        ? GOOGLE_CLIENT_ID
-        : '913422235077-082170c2l6b58ck8ie0f03rigombl2pc.apps.googleusercontent.com';
-
-    $google_verifier = new GoogleIdTokenVerifier($google_client_id);
+    $google_verifier = new GoogleIdTokenVerifier(GOOGLE_CLIENT_ID);
     $google_profile = $google_verifier->verify($_POST['credential']);
 
     $google_id = $google_profile['sub'];

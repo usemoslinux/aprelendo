@@ -17,10 +17,6 @@ if ($user_auth->isLoggedIn()) {
     exit;
 }
 
-$google_client_id = defined('GOOGLE_CLIENT_ID')
-    ? GOOGLE_CLIENT_ID
-    : '913422235077-082170c2l6b58ck8ie0f03rigombl2pc.apps.googleusercontent.com';
-
 require_once PUBLIC_PATH . 'head.php';
 require_once PUBLIC_PATH . 'simpleheader.php';
 ?>
@@ -86,7 +82,7 @@ require_once PUBLIC_PATH . 'simpleheader.php';
                         <?php if (!IS_SELF_HOSTED): ?>
                             <hr class="or-divider" data-text="Or continue with">
                             <div id="g_id_onload"
-                                data-client_id="<?php echo htmlspecialchars($google_client_id, ENT_QUOTES, 'UTF-8'); ?>"
+                                data-client_id="<?php echo htmlspecialchars(GOOGLE_CLIENT_ID, ENT_QUOTES, 'UTF-8'); ?>"
                                 data-callback="googleLogIn">
                             </div>
                             <div class="google-btn-wrapper">
