@@ -51,6 +51,20 @@ If you prefer a lighter setup, you can rely on reading plus flashcards or cloze 
 
 Follow the appropriate installation instructions described [here](https://docs.docker.com/engine/install/).
 
+Before continuing, verify that Docker works without `sudo`:
+
+```bash
+docker ps
+```
+
+If this reports a permission error while connecting to the Docker socket, add your user to the `docker` group:
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+Log out completely and log back in, then run `docker ps` again. It should run without `sudo` before you continue.
+
 2. Clone repository
 
 ```bash
