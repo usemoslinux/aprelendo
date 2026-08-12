@@ -9,6 +9,7 @@ $(document).ready(function () {
     const reader = document.getElementById("readerpage");
     const next = document.getElementById("next");
     let text_pos = "";
+    let current_section = null;
     let has_unsaved_reviews = false;
 
     window.parent.show_confirmation_dialog = true; // show confirmation dialog on close
@@ -416,6 +417,11 @@ $(document).ready(function () {
         if ($nav.offsetHeight + 60 < window.innerHeight) {
             $nav.classList.add("fixed");
         }
+
+        if (current_section) {
+            updateNextChapterButton(current_section, text_pos);
+            updateToc(text_pos);
+        }
     }
 
     /**
@@ -481,13 +487,14 @@ $(document).ready(function () {
     /**
      * Renders annotated section HTML into the text container.
      * @param {string} text_html
+     * @param {string|number} item
      * @returns {void}
      */
-    function renderSectionContent(text_html) {
+    function renderSectionContent(text_html, item) {
         text.innerHTML = text_html;
         TextProcessor.updateAnchorsList();
         has_unsaved_reviews = $("#text").find(".reviewing").length > 0;
-        scrollToPageTop();
+        scrollToChapterFragment(item);
     } 
 
     /**
@@ -498,9 +505,10 @@ $(document).ready(function () {
      * @returns {void}
      */
     function updateSectionNavigation(section, item) {
-        updateNextChapterButton(section);
+        current_section = section;
+        updateNextChapterButton(section, item);
         text_pos = item;
-        updateToc(section.href);
+        updateToc(item);
     }
 
     /**
@@ -517,7 +525,7 @@ $(document).ready(function () {
 
         try {
             const text_html = await loadAnnotatedHtml($parsed.html());
-            renderSectionContent(text_html);
+            renderSectionContent(text_html, item);
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
@@ -570,6 +578,45 @@ $(document).ready(function () {
     } 
 
     /**
+     * Returns a decoded EPUB fragment identifier from a chapter href.
+     * @param {string|number|null} chapter_href
+     * @returns {string}
+     */
+    function getChapterFragment(chapter_href) {
+        if (chapter_href === null || chapter_href === undefined) {
+            return '';
+        }
+
+        try {
+            return decodeURIComponent(new URL(String(chapter_href), 'https://ebook.local/').hash.slice(1));
+        } catch (error) {
+            const fragment = String(chapter_href).split('#')[1] || '';
+            try {
+                return decodeURIComponent(fragment);
+            } catch (decode_error) {
+                return fragment;
+            }
+        }
+    }
+
+    /**
+     * Moves the reader to the requested in-section EPUB fragment, if present.
+     * @param {string|number} chapter_href
+     * @returns {void}
+     */
+    function scrollToChapterFragment(chapter_href) {
+        const fragment = getChapterFragment(chapter_href);
+        const target = fragment ? document.getElementById(fragment) : null;
+
+        if (target) {
+            target.scrollIntoView({ block: 'start' });
+            return;
+        }
+
+        scrollToPageTop();
+    }
+
+    /**
      * Returns the TOC link for the current chapter using normalized href matching.
      * @param {HTMLElement} $nav
      * @param {string|number|null} current_chapter_url
@@ -592,12 +639,13 @@ $(document).ready(function () {
     /**
      * Updates the next chapter button, preferring TOC order so it behaves like clicking a TOC item.
      * @param {object} section
+     * @param {string|number} item
      */
-    function updateNextChapterButton(section) {
+    function updateNextChapterButton(section, item) {
         let next_href = '';
         let next_label = 'Next chapter';
         const $nav = document.getElementById('toc');
-        const current_toc_link = getCurrentTocLink($nav, section.href);
+        const current_toc_link = getCurrentTocLink($nav, item);
         const next_toc_link = current_toc_link ? current_toc_link.nextElementSibling : null;
 
         if (next_toc_link && next_toc_link.classList.contains('toc-item')) {
@@ -655,7 +703,7 @@ $(document).ready(function () {
     }
 
     /**
-     * Removes formatting attributes while preserving minimal image attributes.
+     * Removes formatting attributes while preserving fragment target IDs.
      *
      * @param {JQuery} $parsed
      * @returns {void}
@@ -664,7 +712,7 @@ $(document).ready(function () {
         $parsed.find("*").each(function () {
             const tag = this.tagName.toLowerCase();
             if (tag !== "img") {
-                $(this).removeAttr("class").removeAttr("style").removeAttr("id");
+                $(this).removeAttr("class").removeAttr("style");
                 return;
             }
 
@@ -702,6 +750,11 @@ $(document).ready(function () {
         $(node).contents().each(function () {
             content += serializeEbookNode(this, block_elements);
         });
+
+        if (node.id) {
+            const $target = $("<span/>").attr("id", node.id).append(content);
+            content = $target.prop("outerHTML");
+        }
 
         if (block_elements.includes(tag)) {
             return "\n" + content + "\n";

@@ -91,7 +91,15 @@ $(document).ready(function() {
                 throw new Error(`HTTP error: ${response.status}`);
             }
 
-            const data = await response.json();
+            const response_text = await response.text();
+            let data;
+
+            try {
+                data = JSON.parse(response_text);
+            } catch (error) {
+                console.error("Invalid upload response:", response_text);
+                throw new Error("The server returned an invalid response while processing the ebook.");
+            }
 
             if (!data.success) {
                 throw new Error(data.error_msg || 'Failed to add ebook');                

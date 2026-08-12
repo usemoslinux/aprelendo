@@ -43,7 +43,8 @@ RUN mkdir -p /var/cache/aprelendo && chown www-data:www-data /var/cache/aprelend
 COPY --chown=www-data:www-data . /var/www/aprelendo/
 
 # Ensure correct permissions again after copy
-RUN chown -R www-data:www-data /var/www/aprelendo/
+RUN mkdir -p /var/www/aprelendo/uploads && \
+    chown -R www-data:www-data /var/www/aprelendo/
 
 # Run the autoloader
 RUN composer dump-autoload --optimize 

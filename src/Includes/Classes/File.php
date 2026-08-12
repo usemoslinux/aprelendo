@@ -64,6 +64,7 @@ class File
      */
     public function put(array $file_array, bool $is_temporary): void
     {
+        $errors = [];
         $this->name = basename($file_array['name']);
         $this->extension = pathinfo($this->name, PATHINFO_EXTENSION);
         $this->size = $file_array['size'];
@@ -127,11 +128,13 @@ class File
     {
         // if target dir does not exist, create it
         if (!is_dir($this->folder)) {
-            mkdir($this->folder);
+            if (!mkdir($this->folder, 0775, true) && !is_dir($this->folder)) {
+                throw new InternalException('Unable to create the upload storage directory.');
+            }
         }
         // try to move file to uploads folder. If this fails, show error message
         if (!move_uploaded_file($source_path, $destination_path)) {
-            throw new UserException("<li>There was an error uploading your file.</li>");
+            throw new UserException('<li>There was an error moving the uploaded file.</li>');
         }
     } 
     

@@ -61,7 +61,10 @@ def find_opf_path(zf):
 def resolve_path(base_dir, href):
     if not href or href.startswith("data:"):
         return href
-    return posixpath.normpath(posixpath.join(base_dir, href))
+    path = href.split("#", 1)[0].split("?", 1)[0]
+    if "://" in path or path.startswith("//"):
+        return path
+    return posixpath.normpath(posixpath.join(base_dir, path))
 
 # Detect cover image path from OPF metadata
 def detect_cover_image_path(opf_root, opf_dir):
@@ -72,7 +75,7 @@ def detect_cover_image_path(opf_root, opf_dir):
     # EPUB 3 cover via properties
     for item in manifest.findall("opf:item", NS):
         properties = (item.get("properties") or "").lower()
-        if "cover-image" in properties:
+        if "cover-image" in properties.split():
             href = item.get("href", "")
             return resolve_path(opf_dir, href)
 
@@ -98,7 +101,7 @@ def detect_nav_paths(opf_root, opf_dir):
     for item in manifest.findall("opf:item", NS):
         props = (item.get("properties") or "").lower()
         href = item.get("href", "")
-        if "nav" in props and href:
+        if "nav" in props.split() and href:
             paths.add(resolve_path(opf_dir, href))
 
     # EPUB 2: spine toc="idref" -> NCX
@@ -119,6 +122,28 @@ def detect_nav_paths(opf_root, opf_dir):
             href = item.get("href", "")
             if href:
                 paths.add(resolve_path(opf_dir, href))
+
+    return paths
+
+# Find local resources referenced directly by preserved navigation documents
+def detect_nav_resource_paths(zf, nav_paths):
+    paths = set()
+    file_paths = set(zf.namelist())
+
+    for nav_path in nav_paths:
+        if nav_path not in file_paths:
+            continue
+        root = read_xml(zf.read(nav_path))
+        if root is None:
+            continue
+
+        nav_dir = posixpath.dirname(nav_path)
+        for elem in root.iter():
+            for attr in ("href", "src", "{" + NS["xlink"] + "}href"):
+                reference = elem.get(attr)
+                resource_path = resolve_path(nav_dir, reference)
+                if resource_path in file_paths:
+                    paths.add(resource_path)
 
     return paths
 
@@ -158,10 +183,15 @@ def clean_content_page(xhtml_bytes, cover_image_path):
         if "class" in elem.attrib:
             del elem.attrib["class"]
 
+        tag = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
+        if tag == "a" and "name" in elem.attrib and "id" not in elem.attrib:
+            elem.set("id", elem.get("name"))
+
     formatting_tags = {"a", "b", "i", "u", "strong", "em"}
     for elem in list(root.iter()):
         tag = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
-        if tag in formatting_tags:
+        has_anchor_target = tag == "a" and (elem.get("id") or elem.get("name"))
+        if tag in formatting_tags and not has_anchor_target:
             parent = find_parent(root, elem)
             if parent is not None:
                 idx = list(parent).index(elem)
@@ -211,6 +241,7 @@ def find_parent(root, child):
 
 # Determine if a file should be removed based on media type and href
 def should_remove_file(media_type, href):
+    media_type = media_type.lower()
     if media_type in FONT_MEDIA_TYPES or media_type in CSS_MEDIA_TYPES:
         return True
     if href:
@@ -240,8 +271,9 @@ def process_epub(input_path, output_path):
         if manifest is None:
             raise RuntimeError("No manifest found")
 
-        # NEW: compute navigation paths (to keep untouched)
+        # Navigation documents and their directly referenced local resources stay intact.
         nav_paths = detect_nav_paths(opf_root, opf_dir)
+        nav_resource_paths = detect_nav_resource_paths(zin, nav_paths)
 
         remove_ids = set()
         items = {}
@@ -252,6 +284,8 @@ def process_epub(input_path, output_path):
             media_type = item.get("media-type", "")
             full_path = resolve_path(opf_dir, href) if href else href
             items[item_id] = (full_path, media_type)
+            if full_path in nav_resource_paths:
+                continue
             if should_remove_file(media_type, href):
                 if cover_image_path and full_path == cover_image_path:
                     continue

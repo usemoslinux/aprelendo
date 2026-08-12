@@ -1,6 +1,8 @@
 <?php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+ob_start();
+
 require_once '../../Includes/bootstrap.php'; // initialize application
 
 use Aprelendo\AuthGuard;
@@ -26,16 +28,23 @@ const TYPE_ARTICLE  = 1;
 const TYPE_EBOOK    = 6;
 const MAX_EBOOK_SIZE_BYTES = 67108864;
 
-if (isOversizedPostRequest()) {
-    echo (new UserException(
-        'The uploaded file is too large. Maximum ebook size is ' . formatBytes(MAX_EBOOK_SIZE_BYTES) . '.'
-    ))->getJsonError();
+function send_json_response(array $response): never
+{
+    ob_clean();
+    echo json_encode($response);
     exit;
 }
 
+if (isOversizedPostRequest()) {
+    send_json_response([
+        'success' => false,
+        'error_msg' => 'The uploaded file is too large. Maximum ebook size is '
+            . formatBytes(MAX_EBOOK_SIZE_BYTES) . '.',
+    ]);
+}
+
 if (empty($_POST)) {
-    echo json_encode($response);
-    exit;
+    send_json_response($response);
 }
 
 function formatBytes(int $bytes): string
@@ -242,12 +251,14 @@ try {
         award_gems($pdo, $user_id, $lang_id, $user->time_zone);
     }
     
-    echo json_encode($response);
-    exit;
+    send_json_response($response);
 } catch (InternalException | UserException $e) {
-    echo $e->getJsonError();
-    exit;
+    send_json_response([
+        'success' => false,
+        'error_msg' => $e instanceof UserException
+            ? $e->getMessage()
+            : 'Oops! There was an unexpected error processing your request.',
+    ]);
 } catch (Throwable $e) {
-    echo json_encode($response);
-    exit;
+    send_json_response($response);
 }
