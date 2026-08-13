@@ -27,7 +27,9 @@ require_once PUBLIC_PATH . 'header.php';
             <main>
                 <div class="alert alert-info">
                     Ebooks will remain in your <a href="/texts" class="alert-link">private library</a>. Only you
-                    will be able to access to them.
+                    will be able to access to them. Uploaded EPUB files are converted to text only; images,
+                    formatting, and other embedded content are not retained. EPUBs with non-standard or malformed
+                    table-of-contents structures may not import correctly.
                 </div>
                 <div id="alert-box" class="d-none"></div>
                 <div class="progress d-none">
