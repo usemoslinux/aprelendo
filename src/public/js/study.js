@@ -537,9 +537,6 @@ $(document).ready(function () {
 
         if (typeof(answer) === 'undefined') { return; }
 
-        answers[answer][1] = answers[answer][1] + 1;
-        words[cur_card_index].status = answer;
-
         // disable answer buttons
         setAnswerButtonsDisabled(true);
 
@@ -558,6 +555,8 @@ $(document).ready(function () {
                 throw new Error(data.error_msg || 'Failed to update card status.');
             }
 
+            answers[answer][1] = answers[answer][1] + 1;
+            words[cur_card_index].status = answer;
             cur_card_index++;
     
             if (lastCardReached()) {

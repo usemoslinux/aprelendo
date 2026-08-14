@@ -342,9 +342,6 @@ $(document).ready(function () {
 
         if (typeof(answer) === 'undefined') { return; }
 
-        answers[answer][1] = answers[answer][1] + 1;
-        words[cur_card_index].status = answer;
-
         setAnswerButtonsDisabled(true);
 
         try {
@@ -362,6 +359,8 @@ $(document).ready(function () {
                 throw new Error(data.error_msg || 'Failed to update word status.');
             }
 
+            answers[answer][1] = answers[answer][1] + 1;
+            words[cur_card_index].status = answer;
             cur_card_index++;
     
             if (lastCardReached()) {
@@ -371,6 +370,7 @@ $(document).ready(function () {
             updateCard(words[cur_card_index]);
             scrollToPageTop();
         } catch (error) {
+            setAnswerButtonsDisabled(false);
             console.error(error);
             alert(`Oops! ${error.message}`);
         }
