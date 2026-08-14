@@ -73,6 +73,7 @@ $(document).ready(function () {
      * Executes when the user presses the big green button at the end
      */
     $(document).on("click", "#btn-save-ytvideo", async function () {
+        VideoActionBtns.hide();
         const text_ids = [$("#text-container").attr("data-IdText")];
 
         try {

@@ -60,6 +60,7 @@ $(document).ready(function () {
      * Archives text and updates status of all underlined words & phrases
      */
     async function updateWordsLearningStatus() {
+        VideoActionBtns.hide();
         const text_ids = [$("#text-container").attr("data-IdText")];
 
         try {
@@ -93,6 +94,7 @@ $(document).ready(function () {
      */
     $("#video-file-input").on("change", function () {
         if (this.files[0]) {
+            VideoActionBtns.hide();
             const file = this.files[0];
             const type = file.type;
             if (player.canPlayType(type)) {
@@ -119,6 +121,7 @@ $(document).ready(function () {
      */
     $("#subs-file-input").on("change", function () {
         if (this.files[0]) {
+            VideoActionBtns.hide();
             const file = this.files[0];
             const reader = new FileReader();
 

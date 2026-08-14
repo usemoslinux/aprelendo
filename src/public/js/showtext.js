@@ -113,6 +113,7 @@ $(document).ready(function() {
      * Phases: 1 = reading; 2 = listening; 3 = speaking; 4 = writing; 5 = reviewing
      */
     $("body").on("click", "#btn-next-phase", function() {
+        TextActionBtns.hide();
         const audio_is_loaded = hasAudioSource();
         const btn_next_phase = document.getElementById('btn-next-phase');
         let $msg_phase = $("#alert-box-phase");
@@ -247,6 +248,7 @@ $(document).ready(function() {
      * Archives text (only if necessary) and updates status of all underlined words & phrases
      */
     async function updateWordsLearningStatus() {
+        TextActionBtns.hide();
         let archive_text = true;
         const is_shared = $("#is_shared").length > 0;
         let text_ids = [$("#text-container").attr("data-IdText")];

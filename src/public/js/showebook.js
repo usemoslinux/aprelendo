@@ -282,6 +282,7 @@ $(document).ready(function () {
      */
     async function handleNextChapterClick(event) {
         event.preventDefault();
+        TextActionBtns.hide();
         disposeTooltip(next);
 
         const save_succeeded = await saveWords();
@@ -299,6 +300,7 @@ $(document).ready(function () {
      * @returns {Promise<void>}
      */
     async function handleCloseEbookClick() {
+        TextActionBtns.hide();
         // save word status before closing
         const save_succeeded = await saveWords();
         if (!save_succeeded) {
@@ -395,6 +397,7 @@ $(document).ready(function () {
             a.textContent = label;
 
             a.onclick = function () {
+                TextActionBtns.hide();
                 const url = a.getAttribute("href");
                 document.getElementById("opener").click();
                 display(url);
