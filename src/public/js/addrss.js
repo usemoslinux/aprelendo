@@ -6,16 +6,14 @@ $(document).ready(function () {
     const feed_count = $accordion_items.length;
 
     if (feed_count == 0) {
-        $("#accordion").html(function () {
-            return showMessage(
-                '<p>No RSS feeds detected yet.</p>'
-                + '<p>To begin discovering new content, visit the <a class="alert-link" href="/languages">languages</a> '
-                + 'section and add up to three feeds per language.</p><p>If you need further guidance, explore our quick '
-                + '<a href="https://blog.aprelendo.com/2024/12/a-step-by-step-guide-to-adding-rss-texts-to-aprelendo/" '
-                + 'target="_blank" rel="noopener noreferrer" class="alert-link">setup guide</a>.</p>',
-                'alert-warning','Get Started'
-            );
-        });
+        showHtmlMessage(
+            '<p>No RSS feeds detected yet.</p>'
+            + '<p>To begin discovering new content, visit the <a class="alert-link" href="/languages">languages</a> '
+            + 'section and add up to three feeds per language.</p><p>If you need further guidance, explore our quick '
+            + '<a href="https://blog.aprelendo.com/2024/12/a-step-by-step-guide-to-adding-rss-texts-to-aprelendo/" '
+            + 'target="_blank" rel="noopener noreferrer" class="alert-link">setup guide</a>.</p>',
+            'alert-warning', 'Get Started'
+        );
         return;
     }
 
@@ -131,4 +129,3 @@ $(document).ready(function () {
         );
     });
 });
-

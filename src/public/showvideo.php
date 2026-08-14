@@ -117,11 +117,11 @@ require_once PUBLIC_PATH . 'head.php';
 
     <script defer src="/js/ytvideoplayer.js"></script>
     <script defer src="/js/dictionaries.js"></script>
+    <script defer src="/js/helpers.js"></script>
     <script defer src="/js/underlinewords.js"></script>
     <script defer src="/js/wordselection.js"></script>
     <script defer src="/js/actionbtns.js"></script>
     <script defer src="/js/readerhelpers.js"></script>
-    <script defer src="/js/helpers.js"></script>
     <script defer src="/js/tooltips.js"></script>
     <script defer src="/js/likes.js"></script>
     <script defer src="/js/showvideo.js"></script>

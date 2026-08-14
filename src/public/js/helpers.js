@@ -1,36 +1,54 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 /**
- * Shows custom message in the top section of the screen
+ * Shows a plain-text message in an alert box.
+ * @param {string} message
+ * @param {string} type
+ * @param {?string} custom_title Optional custom title to override the default
+ * @param {string} box_id Optional alert box ID
+ */
+function showMessage(message, type, custom_title = null, box_id = 'alert-box') {
+    return renderMessage(message, type, custom_title, box_id, false);
+}
+
+/**
+ * Shows developer-controlled HTML in an alert box.
+ * Callers must sanitize content before passing it here.
  * @param {string} html
  * @param {string} type
- * @param {string} custom_title Optional custom title to override the default
- * @param {string} box Optional custom html element ID to show message
+ * @param {?string} custom_title Optional custom title to override the default
+ * @param {string} box_id Optional alert box ID
  */
-function showMessage(html, type, custom_title = null, box = 'alert-box') {
-    const alert = {
+function showHtmlMessage(html, type, custom_title = null, box_id = 'alert-box') {
+    return renderMessage(html, type, custom_title, box_id, true);
+}
+
+function renderMessage(message, type, custom_title, box_id, allow_html) {
+    const alerts = {
         'alert-success': { title: 'Success', image: 'bi-check-circle-fill' },
         'alert-info': { title: 'Information', image: 'bi-info-circle-fill' },
         'alert-warning': { title: 'Careful', image: 'bi-exclamation-triangle-fill' },
         'alert-danger': { title: 'Oops!', image: 'bi-exclamation-circle-fill' }
     };
+    const alert_config = alerts[type] || alerts['alert-info'];
+    const $box = $(document.getElementById(box_id));
 
-    let title = '';
-    let image = '';
-
-    for (const key in alert) {
-        if (key === type) {
-            title = custom_title ? custom_title : alert[key].title;
-            image = alert[key].image;
-            break;
-        }
+    if ($box.length === 0) {
+        return;
     }
 
-    const div_flag_html = '<i class="bi ' + image + '"></i>' + title;
-    const $div_flag = $("<div>").addClass("alert-flag fs-5").html(div_flag_html);
-    const $div_msg = $("<div>").addClass("alert-msg").html(html);
+    const $div_flag = $("<div>").addClass("alert-flag fs-5");
+    $("<i>").addClass("bi " + alert_config.image).appendTo($div_flag);
+    $div_flag.append(document.createTextNode(custom_title || alert_config.title));
 
-    $(`#${box}`)
+    const $div_msg = $("<div>").addClass("alert-msg");
+    if (allow_html) {
+        $div_msg.html(message);
+    } else {
+        $div_msg.text(message);
+    }
+
+    $box
         .empty()
         .removeAttr('style')
         .removeClass()
@@ -41,7 +59,7 @@ function showMessage(html, type, custom_title = null, box = 'alert-box') {
 } 
 
 /**
- * Smoothly scrolls the webpage to the top.
+ * Scrolls the current reader container or page to the top.
  * @returns {void}
  */
 function scrollToPageTop() {
@@ -58,111 +76,36 @@ function scrollToPageTop() {
 
 
 /**
- * Calculates the number of unique elements of a specific class in the document, providing a count of unique occurrences.
- *
- * @param {string} class_name - The class name to target within the document.
- * @returns {number} The count of unique textual elements of the specified class.
+ * Locks or unlocks scrolling on an element without extending jQuery globally.
+ * @param {jQuery} $element
+ * @param {boolean} is_locked
  */
-function getUniqueElements(class_name) {
-    let unique_elements = new Set();
-
-    $(class_name).each(function () {
-        let text = $(this).text().toLowerCase().trim();
-        unique_elements.add(text);
+function setScrollLocked($element, is_locked) {
+    $element.each(function () {
+        this.style.overflow = is_locked ? 'hidden' : '';
+        this.classList.toggle('overflow-hidden', is_locked);
+        this.classList.toggle('overflow-auto', !is_locked);
     });
-
-    return unique_elements.size;
-} 
+}
 
 /**
- * Retrieves the current URI parameters from the URL.
- * Parses the query string of the current page's URL and returns an object
- * containing key-value pairs of the parameters.
- * @returns {Object} An object with the current URI parameters as key-value pairs.
+ * Opens an HTTP(S) URL in a new tab.
+ * @param {string} url
+ * @returns {Window|null}
  */
-function getCurrentURIParameters() {
-    const params = new URLSearchParams(window.location.search);
-    const result = {};
-
-    for (const [key, value] of params.entries()) {
-        result[key] = value;
-    }
-
-    return result;
-} 
-
-/**
- * Converts an object of key-value pairs into a URI query string.
- * Takes an object and converts it into a URL-encoded query string format,
- * ensuring only parameters with values are included.
- * If the object is empty, it returns an empty string.
- * @param {Object} paramsObject - An object containing key-value pairs to be parameterized.
- * @returns {string} A URI query string with parameters.
- */
-function buildQueryString(paramsObject) {
-    if (Object.keys(paramsObject).length === 0) {
-        return '';
-    }
-
-    const params = new URLSearchParams();
-
-    for (const [key, value] of Object.entries(paramsObject)) {
-        if (value) {
-            params.append(key, value);
+function openInNewTab(url) {
+    try {
+        const target_url = new URL(url, window.location.href);
+        if (target_url.protocol !== 'http:' && target_url.protocol !== 'https:') {
+            return null;
         }
+
+        return window.open(target_url.href, '_blank', 'noopener,noreferrer');
+    } catch (error) {
+        console.warn('Refused to open invalid URL.', error);
+        return null;
     }
-
-    return params.toString() ? '?' + params.toString() : '';
-} 
-
-/**
- * Retrieves the file name of the current page.
- * Extracts the file name from the current page's URL, ignoring the path.
- * Returns only the file name, without any directories or parameters.
- * @returns {string} The file name of the current page.
- */
-function getCurrentFileName() {
-    const pathname = new URL(window.location.href).pathname;
-    return pathname.substring(pathname.lastIndexOf('/') + 1);
-} 
-
-/**
- * Renables scrolling without making text jump around
- */
-$.fn.enableScroll = function () {
-    return this.each(function () {
-        this.style.overflow = '';
-        this.classList.remove('overflow-hidden');
-        this.classList.add('overflow-auto');
-    });
-}; 
-
-/**
- * Disables scrolling without making text jump around
- */
-$.fn.disableScroll = function () {
-    return this.each(function () {
-        this.style.overflow = 'hidden';
-        this.classList.remove('overflow-auto');
-        this.classList.add('overflow-hidden');
-    });
-}; 
-
-/**
- * Determines if an element is after another one
- * @param {Jquery object} sel
- */
-$.fn.isAfter = function (sel) {
-    return this.prevUntil(sel).length !== this.prevAll().length;
-}; 
-
-/**
- * Opens link in new tab
- * @param {string} $url 
- */
-function openInNewTab($url) {
-    window.open($url, '_blank', 'noopener,noreferrer');
-} 
+}
 
 /**
  * Determines if the user is on a touch-only device.

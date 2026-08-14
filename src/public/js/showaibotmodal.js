@@ -118,14 +118,14 @@ function initializeAIBotModal() {
     /**
      * Displays an inline alert message inside the AI modal.
      *
-     * @param {string} message_html - Alert body HTML.
+     * @param {string} message - Alert body text.
      * @param {string} alert_type - Bootstrap alert class name.
      * @param {?string} alert_title - Optional alert title.
      * @returns {void}
      */
-    function showAIBotAlert(message_html, alert_type = 'alert-warning', alert_title = null) {
+    function showAIBotAlert(message, alert_type = 'alert-warning', alert_title = null) {
         $('#ai-bot-alert-box').removeClass('d-none');
-        showMessage(message_html, alert_type, alert_title, 'ai-bot-alert-box');
+        showMessage(message, alert_type, alert_title, 'ai-bot-alert-box');
     }
 
     /**

@@ -196,10 +196,10 @@ require_once PUBLIC_PATH . "header.php";
 <?php require_once PUBLIC_PATH . "showaibotmodal.php"; ?>
 
 <script defer src="/js/dictionaries.js"></script>
+<script defer src="/js/helpers.js"></script>
 <script defer src="/js/underlinewords.js"></script>
 <script defer src="/js/wordselection.js"></script>
 <script defer src="/js/actionbtns.js"></script>
-<script defer src="/js/helpers.js"></script>
 <script defer src="/js/tooltips.js"></script>
 <script defer src="/js/studynuance.js"></script>
 

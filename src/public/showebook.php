@@ -231,6 +231,7 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
     ?>
 
     <script defer src="/js/dictionaries.js"></script>
+    <script defer src="/js/helpers.js"></script>
     <script defer src="/js/underlinewords.js"></script>
     <script defer src="/js/wordselection.js"></script>
     <script defer src="/js/actionbtns.js"></script>
@@ -240,7 +241,6 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
     <?php else: ?>
         <script defer src="/js/audioplayer.js"></script>
     <?php endif; ?>
-    <script defer src="/js/helpers.js"></script>
     <script defer src="/js/tooltips.js"></script>
     <script defer src="/js/showebook.js"></script>
 </body>

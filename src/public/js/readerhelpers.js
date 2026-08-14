@@ -82,9 +82,9 @@ const ReaderHelpers = (() => {
     function buildReviewData() {
         return {
             words: {
-                new: getUniqueElements(".reviewing.new"),
-                learning: getUniqueElements(".reviewing.learning"),
-                forgotten: getUniqueElements(".reviewing.forgotten")
+                new: collectUniqueWords(".reviewing.new").length,
+                learning: collectUniqueWords(".reviewing.learning").length,
+                forgotten: collectUniqueWords(".reviewing.forgotten").length
             },
             texts: { reviewed: 1 }
         };

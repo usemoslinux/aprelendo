@@ -189,7 +189,7 @@ const TextActionBtns = (() => {
      */
     const show = ($selword) => {
         ActionBtns.createWordActionBtns($selword, false);
-        $("#text-container").disableScroll();
+        setScrollLocked($("#text-container"), true);
         ActionBtns.bindDictionaryBtnsOnClick($selword, 'text');
         ActionBtns.show($selword);
     } 
@@ -198,7 +198,7 @@ const TextActionBtns = (() => {
      * Hides actions pop up toolbar
      */
     const hide = () => {
-        $("#text-container").enableScroll();
+        setScrollLocked($("#text-container"), false);
         ActionBtns.hide();
     } 
 
@@ -214,7 +214,7 @@ const VideoActionBtns = (() => {
      * Shows pop up toolbar when user clicks a word
      */
     const show = ($selword) => {
-        $("#text-container").disableScroll();
+        setScrollLocked($("#text-container"), true);
         ActionBtns.createWordActionBtns($selword, false);
         ActionBtns.bindDictionaryBtnsOnClick($selword, 'video');
         ActionBtns.show($selword);
@@ -224,7 +224,7 @@ const VideoActionBtns = (() => {
      * Hides actions pop up toolbar
      */
     const hide = () => {
-        $("#text-container").enableScroll();
+        setScrollLocked($("#text-container"), false);
         ActionBtns.hide();
     } 
 
