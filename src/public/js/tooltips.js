@@ -67,3 +67,16 @@ function initTooltips() {
 }
 
 $(document).ready(initTooltips);
+
+// Dismiss a visible action-menu tooltip before its button action executes.
+document.addEventListener('click', (event) => {
+    const action_button = event.target.closest('#action-buttons button[data-bs-toggle="tooltip"]');
+    if (!action_button || typeof bootstrap === 'undefined' || !bootstrap.Tooltip) {
+        return;
+    }
+
+    const tooltip = bootstrap.Tooltip.getInstance(action_button);
+    if (tooltip) {
+        tooltip.hide();
+    }
+}, true);
