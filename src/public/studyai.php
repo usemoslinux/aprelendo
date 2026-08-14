@@ -134,6 +134,7 @@ require_once PUBLIC_PATH . "showaibotmodal.php";
 <script defer src="/js/actionbtns.js"></script>
 <script defer src="/js/helpers.js"></script>
 <script defer src="/js/tooltips.js"></script>
+<script defer src="/js/studysession.js"></script>
 <script defer src="/js/studyai.js"></script>
 
 <?php require_once "footer.php"; ?>

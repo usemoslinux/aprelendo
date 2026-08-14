@@ -3,26 +3,21 @@
 $(document).ready(function () {
 
     let $selword = $();             // jQuery object used to open dictionary modal
-    let words = [];                 // array containing all words user is learning
-    let max_cards = 10;             // maximum nr. of cards
-    let cur_card_index = 0;         // current card/word index
-
     // cache of current examples (so we can re-render on reveal without changing order)
     let current_examples_array = [];
 
-    // nr. of words recalled during practice
-    let answers = [
+    const answers = [
         ["0", 0, "bg-success", "Excellent"],
         ["1", 0, "bg-warning", "Partial"],
         ["2", 0, "bg-primary", "Fuzzy"],
         ["3", 0, "bg-danger", "No recall"],
         ["4", 0, "text-warning bg-dark", "No example sentence found!"],
     ];
+    let session;
 
     // initial UI state for the scramble game
     Dictionaries.fetchURIs();
     ensureGuessUI(); // inject guess UI into existing HTML
-    getListofCards();
 
     /**
      * Injects the guess UI (input field and buttons) into the card body if not already present.
@@ -57,14 +52,6 @@ $(document).ready(function () {
     }
 
     /**
-     * Enables or disables all answer buttons.
-     * @param {boolean} is_disabled - Whether the buttons should be disabled
-     */
-    function setAnswerButtonsDisabled(is_disabled) {
-        $(".btn-answer").prop("disabled", is_disabled);
-    }
-
-    /**
      * Shows the loading placeholder state in the study card header.
      */
     function showStudyCardHeaderLoading() {
@@ -76,19 +63,6 @@ $(document).ready(function () {
             .removeClass("d-none border border-light")
             .addClass("placeholder w-25")
             .html("&nbsp;");
-    }
-
-    /**
-     * Updates the two-column layout for the current study state.
-     * @param {string} layout_state - One of: active, complete, empty
-     */
-    function setLayoutState(layout_state) {
-        const is_empty = layout_state === "empty";
-
-        $("#study-column")
-            .toggleClass("col-md-12", is_empty)
-            .toggleClass("col-md-6", !is_empty);
-        $("#review-column").toggleClass("d-none", is_empty);
     }
 
     /**
@@ -106,7 +80,7 @@ $(document).ready(function () {
     function showAnswerPrompt() {
         $("#answer-card-prompt").removeClass("d-none");
         $("#answer-card-body").addClass("d-none");
-        setAnswerButtonsDisabled(true);
+        session.setAnswerButtonsDisabled(true);
     }
 
     /**
@@ -115,7 +89,7 @@ $(document).ready(function () {
     function showAnswerCard() {
         $("#answer-card-prompt").addClass("d-none");
         $("#answer-card-body").removeClass("d-none");
-        setAnswerButtonsDisabled(false);
+        session.setAnswerButtonsDisabled(false);
         showAnswerCardPage(1);
     }
 
@@ -143,50 +117,6 @@ $(document).ready(function () {
         $("#examples-placeholder").addClass("d-none");
         $("#live-progress").addClass("d-none");
         $("#guess-ui").addClass("d-none");
-    }
-
-    /**
-     * Fetches the list of words to study from the server.
-     */
-    async function getListofCards() {
-        try {
-            const form_data = new URLSearchParams({ limit: max_cards });
-            
-            const response = await fetch("/ajax/getcards.php", {
-                method: "POST",
-                body: form_data
-            });
-
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-            const data = await response.json();
-
-            if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to fetch list of cards.');
-            }
-
-            if (data.payload.length == 0) {
-                showEmptyDeckState();
-                return true;
-            }
-
-            words = data.payload.map(item => {
-                return {
-                    ...item,
-                    word: item.word.replace(/\r?\n|\r/g, " ")
-                };
-            });
-
-            max_cards = words.length > max_cards ? max_cards : words.length;
-
-            setLayoutState("active");
-            $("#card-counter").text("1" + "/" + max_cards);
-            adaptCardStyleToWordStatus(words[0].status);
-            await startCard(words[0].word);
-        } catch (error) {
-            console.error(error);
-            alert(`Oops! ${error.message}`);
-        }
     }
 
     /**
@@ -225,8 +155,6 @@ $(document).ready(function () {
      * @param {string} scrambled_word - The scrambled version to display
      */
     async function getExampleSentencesforCard(original_word, scrambled_word) {
-        if (lastCardReached()) return;
-
         $("#examples-placeholder").removeClass('d-none');
         $("#study-card-examples").empty();
 
@@ -275,21 +203,21 @@ $(document).ready(function () {
             });
 
             $("#study-card").data('word', original_word);
-            updateLiveProgressBar();
-            $("#card-counter").text((cur_card_index + 1) + "/" + max_cards);
+            session.updateLiveProgressBar();
+            $("#card-counter").text((session.getCurrentCardIndex() + 1) + "/" + session.getMaxCards());
 
             // shuffle once and store that order for both scrambled and revealed display
             examples_array = shuffleExamples(examples_array);
             current_examples_array = examples_array;
 
             if (examples_array.length === 0) {
-                words[cur_card_index].status = 4;
-                answers[4][1] = answers[4][1] + 1;
-                cur_card_index++;
-                if (lastCardReached()) return;
-                await startCard(words[cur_card_index].word); // Await recursive call
+                if (session.recordAnswer(4)) {
+                    session.showCompleteState();
+                    return;
+                }
+                await startCard(session.getCurrentCard().word);
             } else {
-                showWordFrequency(words[cur_card_index].is_phrase);
+                showWordFrequency(session.getCurrentCard().is_phrase);
 
                 $("#examples-placeholder").addClass('d-none');
                 renderExamples(examples_array, original_word, scrambled_word, true);
@@ -348,7 +276,7 @@ $(document).ready(function () {
             const anchor_class = (is_unscrambled ? 'word ' : '') + base_classes; // "word" only when revealed
             const hint_title = scrambled_display ? "title='scrambled – guess the original word'" : "";
 
-            return `<a class='${anchor_class}' ${hint_title}>${encodeHtml(shown)}</a>`;
+            return `<a class='${anchor_class}' ${hint_title}>${StudySession.encodeHtml(shown)}</a>`;
         });
 
         example_html = `<blockquote cite='${text.source_uri}'>`;
@@ -441,130 +369,6 @@ $(document).ready(function () {
     }
 
     /**
-     * Checks if all cards have been studied and displays appropriate end screen.
-     * @returns {boolean} True if last card was reached
-     */
-    function lastCardReached() {
-        if (max_cards == 0) {
-            showEmptyDeckState();
-            return true;
-        } else if (cur_card_index >= max_cards) {
-            setLayoutState("complete");
-            $("#study-card-word-title")
-                .removeClass("placeholder w-50 rounded")
-                .text("Congratulations!");
-            $("#study-card-freq-badge").addClass('d-none');
-            adaptCardStyleToWordStatus(0); // green styling for completion
-
-            let progress_html = "";
-            for (const answer of answers) {
-                let subtotal = answer[1];
-                let percentage = subtotal / max_cards * 100;
-                let bg_class = answer[2];
-                let title = answer[3];
-
-                progress_html += `
-                    <div class="progress-bar ${bg_class}" 
-                        role="progressbar" 
-                        aria-valuenow="${percentage}" 
-                        aria-valuemin="0" 
-                        aria-valuemax="100" 
-                        style="width: ${percentage}%" 
-                        title="${title}: ${subtotal} answer(s)">
-                        ${Math.round(percentage)} %
-                    </div>`;
-            }
-
-            $("#study-card-body").addClass("d-flex flex-column justify-content-center");
-            $("#study-card-examples").html(`
-                <img src="/img/gamification/finished.gif" style="max-width: 300px;" alt="Finished!">
-                <div class="mt-3">You have reached the end of your study.</div>
-            `);
-            $("#study-card-body").after(`
-                <div class="card-footer small">
-                    To continue, press F5. Keep your study sessions short and take rest intervals.
-                </div>
-            `);
-            $("#answer-card-title").text("Review your answers");
-            $("#answer-card-prompt").addClass("d-none");
-            $("#answer-card-body")
-                .removeClass("d-none")
-                .html(`
-                    <div class="progress mx-auto mt-3 fw-bold" style="height: 25px; max-width: 550px">
-                        ${progress_html}
-                    </div>
-                    ${buildResultsTable()}
-                `);
-            $("#card-counter").addClass("d-none");
-            $("#answer-card .card-footer").addClass("d-none");
-            hideStudyControls();
-            scrollToPageTop();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Displays the empty-deck state for the study page.
-     * Updates the card header and body and collapses the layout to the left column only.
-     */
-    function showEmptyDeckState() {
-        setLayoutState("empty");
-        $("#study-card-header").html('<h4 id="study-no-cards" class="my-0 fw-bold">Sorry, no cards to practice</h4>');
-        adaptCardStyleToWordStatus(3);
-        $("#study-card-examples").html("<div class='bi bi-exclamation-circle text-danger display-3'></div><div class='mt-3'>It seems there are no cards in your deck. Add some words to your library and try again.</div>");
-        $("#card-counter").addClass("d-none");
-        hideStudyControls();
-    }
-
-    /**
-     * Updates the progress bar showing study session completion.
-     */
-    function updateLiveProgressBar() {
-        const percentage = Math.round((cur_card_index + 1) / max_cards * 100);
-        $("#live-progress-bar").css("width", percentage + "%").attr("aria-valuenow", percentage);
-    }
-
-    /**
-     * Updates card styling based on word status (recall level).
-     * @param {number} status - Status code (0=excellent, 1=partial, 2=fuzzy, 3=no recall)
-     */
-    function adaptCardStyleToWordStatus(status) {
-        const $card = $("#study-card");
-        const $card_header = $("#study-card-header");
-
-        $card.removeClass(function (index, className) {
-            return (className.match(/\bborder-\S+/g) || []).join(' ');
-        });
-        $card_header.removeClass(function (index, className) {
-            return (className.match(/\bborder-\S+|\bbg-\S+/g) || []).join(' ');
-        });
-
-        switch (status) {
-            case 0:
-                $card.addClass('border-success');
-                $card_header.addClass('bg-gradient bg-success border-success');
-                break;
-            case 1:
-                $card.addClass('border-warning');
-                $card_header.addClass('bg-gradient bg-warning border-warning');
-                break;
-            case 2:
-                $card.addClass('border-primary');
-                $card_header.addClass('bg-gradient bg-primary border-primary');
-                break;
-            case 3:
-                $card.addClass('border-danger');
-                $card_header.addClass('bg-gradient bg-danger border-danger');
-                break;
-            default:
-                $card.addClass('border-secondary');
-                $card_header.addClass('bg-gradient bg-secondary border-secondary');
-                break;
-        }
-    }
-
-    /**
      * Event: Triggered when clicking on a revealed word (has "word" class).
      * Opens the dictionary modal for the selected word.
      */
@@ -579,40 +383,11 @@ $(document).ready(function () {
      */
     $(".btn-answer").on("click", async function (e) {
         e.preventDefault();
-        const word = $("#study-card").data('word');
         const answer = $(this).attr("value");
 
         if (typeof(answer) === 'undefined') { return; }
 
-        setAnswerButtonsDisabled(true);
-
-        try {
-            const form_data = new URLSearchParams({ word: word, answer: answer });
-            const response = await fetch("/ajax/updatecard.php", {
-                method: "POST",
-                body: form_data
-            });
-
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-            const data = await response.json();
-
-            if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to update card status.');
-            }
-            
-            answers[answer][1] = answers[answer][1] + 1;
-            words[cur_card_index].status = answer;
-            cur_card_index++;
-            if (lastCardReached()) return;
-            adaptCardStyleToWordStatus(words[cur_card_index].status);
-            scrollToPageTop();
-            await startCard(words[cur_card_index].word);
-        } catch (error) {
-            setAnswerButtonsDisabled(false);
-            console.error(error);
-            alert(`Oops! ${error.message}`);
-        }
+        await session.saveAnswer(answer);
     });
 
     /**
@@ -634,34 +409,6 @@ $(document).ready(function () {
     });
 
     /**
-     * Builds the HTML table showing all studied words and their recall levels.
-     * @returns {string} HTML table string
-     */
-    function buildResultsTable() {
-        const table_header =
-            `<table class="table table-bordered table-striped text-end small mx-auto mt-3" style="max-width: 550px">
-                <thead>
-                    <tr class="table-light">
-                        <th>Word</th>
-                        <th>Recall level</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-
-        let table_rows = '';
-        const table_footer = '</tbody></table>';
-
-        words.forEach(w => {
-            table_rows += '<tr>'
-                + '<td><a class="word fw-bold">' + encodeHtml(w.word) + '</a></td>'
-                + '<td><span class="word-description ' + answers[w.status][2] + '">' + answers[w.status][3] + '</span></td>'
-                + '</tr>';
-        });
-
-        return table_header + table_rows + table_footer;
-    }
-
-    /**
      * Displays the frequency badge for the current word.
      * @param {boolean} is_phrase - Whether the current item is a phrase or single word
      */
@@ -670,7 +417,7 @@ $(document).ready(function () {
         if (is_phrase) {
             $freq_badge.removeClass('placeholder w-25').addClass('border border-light').text('Phrase/Expression');
         } else {
-            const freq_level = Dictionaries.getWordFrequency(words[cur_card_index].frequency_index) + ' frequency';
+            const freq_level = Dictionaries.getWordFrequency(session.getCurrentCard().frequency_index) + ' frequency';
             $freq_badge.removeClass('placeholder w-25').addClass('border border-light').text(freq_level);
         }
     }
@@ -835,17 +582,25 @@ $(document).ready(function () {
         return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    /**
-     * Encodes HTML special characters to prevent XSS.
-     * @param {string} s - String to encode
-     * @returns {string} HTML-safe string
-     */
-    function encodeHtml(s) {
-        return String(s)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
+    session = StudySession.create({
+        answers,
+        on_card_ready: async (word) => {
+            session.adaptCardStyleToWordStatus(word.status);
+            await startCard(word.word);
+        },
+        on_empty: () => {
+            $("#study-card-examples").html("<div class='bi bi-exclamation-circle text-danger display-3'></div><div class='mt-3'>It seems there are no cards in your deck. Add some words to your library and try again.</div>");
+            hideStudyControls();
+        },
+        on_complete: () => {
+            $("#study-card-examples").html(`
+                <img src="/img/gamification/finished.gif" style="max-width: 300px;" alt="Finished!">
+                <div class="mt-3">You have reached the end of your study.</div>
+            `);
+            $("#answer-card-prompt").addClass("d-none");
+            $("#answer-card-body").removeClass("d-none");
+            hideStudyControls();
+        }
+    });
+    session.load();
 });
