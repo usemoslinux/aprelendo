@@ -114,6 +114,7 @@ $text_types_arr = $text_types->getAll(true);
 require_once 'footer.php';
 ?>
 
-<script defer src="/js/listsharedtexts.js"></script>
 <script defer src="/js/likes.js"></script>
 <script defer src="/js/helpers.js"></script>
+<script defer src="/js/listloader.js"></script>
+<script defer src="/js/listsharedtexts.js"></script>

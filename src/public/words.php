@@ -78,4 +78,5 @@ require_once PUBLIC_PATH . 'footer.php';
 <script defer src="/js/dictionaries.js"></script>
 <script defer src="/js/helpers.js"></script>
 <script defer src="/js/tooltips.js"></script>
+<script defer src="/js/listloader.js"></script>
 <script defer src="/js/listwords.js"></script>

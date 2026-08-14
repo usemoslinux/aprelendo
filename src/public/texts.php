@@ -126,6 +126,7 @@ require_once 'achievementsmodal.php';
 require_once 'footer.php';
 ?>
 
-<script defer src="/js/listtexts.js"></script>
 <script defer src="/js/helpers.js"></script>
 <script defer src="/js/cookies.js"></script>
+<script defer src="/js/listloader.js"></script>
+<script defer src="/js/listtexts.js"></script>

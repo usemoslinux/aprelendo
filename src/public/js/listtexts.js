@@ -1,14 +1,21 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 $(document).ready(function() {
-    let current_params = {
-        s: new URLSearchParams(window.location.search).get('s') || '',
-        o: new URLSearchParams(window.location.search).get('o') || 0,
-        ft: new URLSearchParams(window.location.search).get('ft') || 0,
-        fl: new URLSearchParams(window.location.search).get('fl') || 0,
-        sa: new URLSearchParams(window.location.search).get('sa') || 0,
-        p: new URLSearchParams(window.location.search).get('p') || 1
-    };
+    const list = ListLoader.create({
+        endpoint: "/ajax/gettexts.php",
+        content_selector: "#texts-content",
+        loader_selector: "#texts-loader",
+        parameter_defaults: { s: "", o: 0, ft: 0, fl: 0, sa: 0, p: 1 },
+        on_render: () => {
+            if (typeof initTooltips === "function") {
+                initTooltips();
+            }
+            toggleActionMenu();
+        },
+        on_popstate: (params) => {
+            $("#s").val(params.s);
+        }
+    });
 
     /**
      * Determines whether a click originated from an interactive element inside a table row.
@@ -20,45 +27,7 @@ $(document).ready(function() {
         return $(element).closest("a, button, input, label, .dropdown-menu").length > 0;
     }
 
-    /**
-     * Loads texts list via AJAX
-     */
-    async function loadTexts() {
-        $("#texts-loader").removeClass("d-none");
-        $("#texts-content").addClass("d-none");
-
-        try {
-            const query_str = new URLSearchParams(current_params).toString();
-            const response = await fetch(`/ajax/gettexts.php?${query_str}`);
-            
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-            const data = await response.json();
-
-            if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to fetch texts');
-            }
-            
-            $("#texts-content").html(data.payload.html);
-            
-            // Update URL without reloading
-            const new_url = window.location.pathname + '?' + query_str;
-            window.history.pushState(current_params, '', new_url);
-
-            // Re-initialize tooltips if available
-            if (typeof Tooltips !== 'undefined') Tooltips.init();
-            toggleActionMenu();
-        } catch (error) {
-            console.error(error);
-            $("#texts-content").html(`<div class="alert alert-danger">Error: ${error.message}</div>`);
-        } finally {
-            $("#texts-loader").addClass("d-none");
-            $("#texts-content").removeClass("d-none");
-        }
-    }
-
-    // Initial load
-    loadTexts();
+    list.initialize();
 
     $("#search").trigger("focus");
 
@@ -68,9 +37,7 @@ $(document).ready(function() {
 
     $("#texts-filter-form").on("submit", function(e) {
         e.preventDefault();
-        current_params.s = $("#s").val().trim();
-        current_params.p = 1;
-        loadTexts();
+        list.updateParams({ s: $("#s").val().trim() }, { reset_page: true });
     });
 
     /**
@@ -93,7 +60,7 @@ $(document).ready(function() {
             try {
                 const form_data = new URLSearchParams();
                 form_data.append('textIDs', JSON.stringify(ids));
-                form_data.append('is_archived', current_params.sa == "1" ? 1 : 0);
+                form_data.append('is_archived', list.getParams().sa == "1" ? 1 : 0);
 
                 const response = await fetch("/ajax/removetext.php", {
                     method: "POST",
@@ -104,7 +71,7 @@ $(document).ready(function() {
                 const data = await response.json();
                 if (!data.success) throw new Error(data.error_msg || 'Failed to delete texts.');
 
-                loadTexts();
+                list.reload();
             } catch (error) {
                 console.error(error);
                 alert(`Oops! ${error.message}`);
@@ -143,7 +110,7 @@ $(document).ready(function() {
             const data = await response.json();
             if (!data.success) throw new Error(data.error_msg || 'Failed to archive texts.');
 
-            loadTexts();
+            list.reload();
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
@@ -169,7 +136,7 @@ $(document).ready(function() {
                 const data = await response.json();
                 if (!data.success) throw new Error(data.error_msg || 'Sharing text failed.');
                 
-                loadTexts();
+                list.reload();
             } catch (error) {
                 console.error(error);
                 alert(`Oops! ${error.message}`);
@@ -223,7 +190,7 @@ $(document).ready(function() {
 
         if ($item.is('.sa')) {
             $item.toggleClass("active");
-            current_params.sa = $item.hasClass('active') ? 1 : 0;
+            list.updateParams({ sa: $item.hasClass('active') ? 1 : 0 }, { reset_page: true });
         } else {
             const is_type = $item.is('.ft');
             const selector = is_type ? '.ft' : '.fl';
@@ -232,14 +199,11 @@ $(document).ready(function() {
             $item.addClass('active');
 
             if (is_type) {
-                current_params.ft = $item.data('value') || 0;
+                list.updateParams({ ft: $item.data('value') || 0 }, { reset_page: true });
             } else {
-                current_params.fl = $item.data('value') || 0;
+                list.updateParams({ fl: $item.data('value') || 0 }, { reset_page: true });
             }
         }
-
-        current_params.p = 1;
-        loadTexts();
     });
 
     /**
@@ -247,9 +211,7 @@ $(document).ready(function() {
      */
     $(document).on("click", "#dropdown-menu-sort .o", function(e) {
         e.preventDefault();
-        current_params.o = $(this).data('value') || 0;
-        current_params.p = 1;
-        loadTexts();
+        list.updateParams({ o: $(this).data('value') || 0 }, { reset_page: true });
     });
 
     /**
@@ -258,23 +220,14 @@ $(document).ready(function() {
     $(document).on("click", ".pagination a", function(e) {
         e.preventDefault();
         const url = new URL($(this).attr('href'), window.location.origin);
-        current_params.p = url.searchParams.get('p') || 1;
-        loadTexts();
+        list.updateParams({ p: url.searchParams.get('p') || 1 });
     });
 
     /**
      * Hides welcome message
      */
-    $(document).on("click", "#welcome-close", function(e) {
+    $(document).on("click", "#welcome-close", function() {
         setCookie("hide_welcome_msg", true, 365 * 10);
     });
 
-    // Handle browser back/forward
-    window.onpopstate = function(event) {
-        if (event.state) {
-            current_params = event.state;
-            $("#s").val(current_params.s);
-            loadTexts();
-        }
-    };
 });

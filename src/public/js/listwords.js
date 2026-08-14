@@ -1,11 +1,21 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 $(document).ready(function () {
-    let current_params = {
-        s: new URLSearchParams(window.location.search).get('s') || '',
-        o: new URLSearchParams(window.location.search).get('o') || 0,
-        p: new URLSearchParams(window.location.search).get('p') || 1
-    };
+    const list = ListLoader.create({
+        endpoint: "/ajax/getwords.php",
+        content_selector: "#words-content",
+        loader_selector: "#words-loader",
+        parameter_defaults: { s: "", o: 0, p: 1 },
+        on_render: () => {
+            if (typeof initTooltips === "function") {
+                initTooltips();
+            }
+            toggleActionMenu();
+        },
+        on_popstate: (params) => {
+            $("#s").val(params.s);
+        }
+    });
 
     /**
      * Determines whether a click originated from an interactive element inside a table row.
@@ -17,49 +27,7 @@ $(document).ready(function () {
         return $(element).closest("a, button, input, label, .dropdown-menu").length > 0;
     }
 
-    /**
-     * Loads words list via AJAX
-     */
-    async function loadWords() {
-        $("#words-loader").removeClass("d-none");
-        $("#words-content").addClass("d-none");
-
-        try {
-            const query_str = new URLSearchParams(current_params).toString();
-            const response = await fetch(`/ajax/getwords.php?${query_str}`);
-            
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-            const data = await response.json();
-
-            if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to fetch words');
-            }
-            
-            $("#words-content").html(data.payload.html);
-            
-            // Update URL without reloading
-            const new_url = window.location.pathname + '?' + query_str;
-            window.history.pushState(current_params, '', new_url);
-
-            // Re-initialize tooltips and event listeners for new content
-            if (typeof Tooltips !== 'undefined') {
-                Tooltips.init();
-            } else if (typeof initTooltips === 'function') {
-                initTooltips();
-            }
-            toggleActionMenu();
-        } catch (error) {
-            console.error(error);
-            $("#words-content").html(`<div class="alert alert-danger">Error: ${error.message}</div>`);
-        } finally {
-            $("#words-loader").addClass("d-none");
-            $("#words-content").removeClass("d-none");
-        }
-    }
-
-    // Initial load
-    loadWords();
+    list.initialize();
 
     // Fetch dictionary and translator URIs
     (async () => {
@@ -69,25 +37,20 @@ $(document).ready(function () {
     // Search form submission
     $("#words-filter-form").on("submit", function (e) {
         e.preventDefault();
-        current_params.s = $("#s").val().trim();
-        current_params.p = 1; // reset to first page on search
-        loadWords();
+        list.updateParams({ s: $("#s").val().trim() }, { reset_page: true });
     });
 
     // Handle sorting
     $(document).on("click", "#dropdown-menu-sort .o", function (e) {
         e.preventDefault();
-        current_params.o = $(this).data('value') || 0;
-        current_params.p = 1;
-        loadWords();
+        list.updateParams({ o: $(this).data('value') || 0 }, { reset_page: true });
     });
 
     // Handle pagination clicks
     $(document).on("click", ".pagination a", function (e) {
         e.preventDefault();
         const url = new URL($(this).attr('href'), window.location.origin);
-        current_params.p = url.searchParams.get('p') || 1;
-        loadWords();
+        list.updateParams({ p: url.searchParams.get('p') || 1 });
     });
 
     /**
@@ -213,7 +176,7 @@ $(document).ready(function () {
         if (confirm("Really delete?")) {
             try {
                 await deleteWords($(this));
-                loadWords(); // Reload list after deletion
+                list.reload();
             } catch (error) {
                 console.error(error);
                 alert(`Oops! ${error.message}`);
@@ -233,7 +196,7 @@ $(document).ready(function () {
 
         try {
             await markWordAsForgotten(row_data.word);
-            loadWords();
+            list.reload();
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
@@ -326,12 +289,4 @@ $(document).ready(function () {
         openInNewTab(dic_link);
     });
 
-    // Handle browser back/forward
-    window.onpopstate = function(event) {
-        if (event.state) {
-            current_params = event.state;
-            $("#s").val(current_params.s);
-            loadWords();
-        }
-    };
 });
