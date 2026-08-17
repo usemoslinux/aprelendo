@@ -144,6 +144,23 @@ function parse_creation_method(mixed $value): ?CreationMethod {
     return $method;
 }
 
+function parse_level(mixed $value): ?int {
+    if ($value === null || $value === '') {
+        return null;
+    }
+
+    if (is_array($value) || filter_var($value, FILTER_VALIDATE_INT) === false) {
+        throw new UserException('Invalid text level.');
+    }
+
+    $level = (int)$value;
+    if (!in_array($level, [1, 2, 3], true)) {
+        throw new UserException('Invalid text level.');
+    }
+
+    return $level;
+}
+
 function award_gems(PDO $pdo, int $userId, int $langId, string $tz): void {
     $events = ['texts' => ['new' => 1]];
     (new Gems($pdo, $userId, $langId, $tz))->updateScore($events);
@@ -165,7 +182,9 @@ function handle_simple_or_video(PDO $pdo, int $userId, int $langId, array $r, st
     $audio_uri  = $r['audio-uri']  ?? '';
     $text       = $r['text']       ?? '';
     $type       = (int)($r['type'] ?? 0);
-    $level      = (int)($r['level'] ?? DEFAULT_LEVEL);
+    $level      = $mode === 'simple'
+        ? parse_level($r['level'] ?? null)
+        : DEFAULT_LEVEL;
     $is_shared  = ($mode === 'video') || !empty($r['shared-text']);
     $creation_method = parse_creation_method($r['text_creation_method_id'] ?? null);
 
@@ -185,7 +204,17 @@ function handle_simple_or_video(PDO $pdo, int $userId, int $langId, array $r, st
     $texts_table = selected_texts_table($pdo, $userId, $langId, $is_shared);
     ensure_not_exists($texts_table, $source_uri, $is_shared);
 
-    $texts_table->add($title, $author, $text, $source_uri, $audio_uri, $type, $level, $creation_method);
+    $texts_table->add(
+        $title,
+        $author,
+        $text,
+        $source_uri,
+        $audio_uri,
+        $type,
+        $level,
+        $creation_method,
+        $mode === 'simple' && $level !== null
+    );
 
     return null;
 }

@@ -5,6 +5,8 @@ namespace Aprelendo;
 
 class Texts extends DBEntity
 {
+    private const DEFAULT_LEVEL = 2;
+
     public $id            = 0;
     public $user_id       = 0;
     public $lang_id       = 0;
@@ -119,10 +121,13 @@ class Texts extends DBEntity
     * @param string $title
     * @param string $author
     * @param string $text
-    * @param string $source_url
-    * @param string $audio_url
-    * @param int $type
-    * @return int
+     * @param string $source_url
+     * @param string $audio_url
+     * @param int $type
+     * @param ?int $level
+     * @param ?CreationMethod $text_creation_method
+     * @param bool $is_manual_level
+     * @return int
     */
     public function add(
         string $title,
@@ -131,8 +136,9 @@ class Texts extends DBEntity
         string $source_url,
         string $audio_url,
         int $type,
-        int $level,
-        ?CreationMethod $text_creation_method = null
+        ?int $level,
+        ?CreationMethod $text_creation_method = null,
+        bool $is_manual_level = false
         ): int {
 
         // get language iso
@@ -151,7 +157,9 @@ class Texts extends DBEntity
 
         $author = TextsUtilities::formatAuthorCase($author);
         
-        $level = $this->classifyLevel($text, $lang_iso, $level);
+        if (!$is_manual_level) {
+            $level = $this->classifyLevel($text, $lang_iso, self::DEFAULT_LEVEL);
+        }
 
         // add text to table
         $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `title`, `author`,
@@ -172,18 +180,18 @@ class Texts extends DBEntity
     /**
     * Updates existing text in database
     *
-    * @param int $id
-    * @param array $columns
-    * @return void
+     * @param int $id
+     * @param array $columns
+     * @param bool $is_manual_level
+     * @return void
     */
-    public function update(int $id, array $columns): void
+    public function update(int $id, array $columns, bool $is_manual_level = false): void
     {
-        $level = $this->classifyLevelForUpdate($id, $columns);
-
-        if ($level === null) {
-            unset($columns['level']);
-        } else {
-            $columns['level'] = $level;
+        if (!$is_manual_level) {
+            $level = $this->classifyLevelForUpdate($id, $columns);
+            if ($level !== null) {
+                $columns['level'] = $level;
+            }
         }
 
         if (empty($columns)) {
@@ -463,9 +471,7 @@ class Texts extends DBEntity
             return null;
         }
 
-        $fallback_level = isset($columns['level'])
-            ? (int)$columns['level']
-            : ($row['level'] === null ? null : (int)$row['level']);
+        $fallback_level = $row['level'] === null ? null : (int)$row['level'];
 
         return $this->classifyLevel($new_text, $this->getLangIsoById($new_lang_id), $fallback_level);
     }

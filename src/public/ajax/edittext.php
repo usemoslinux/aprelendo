@@ -22,9 +22,6 @@ if (empty($_POST)) {
     exit;
 }
 
-
-const DEFAULT_LEVEL = 2;
-
 function normalize_post(array $post): array {
     return array_map(static function ($v) {
         return is_string($v) ? trim(str_replace("\r", '', $v)) : $v; // unify CRLF/LF once
@@ -65,6 +62,23 @@ function parse_creation_method(mixed $value): ?CreationMethod {
     return $method;
 }
 
+function parse_level(mixed $value): ?int {
+    if ($value === null || $value === '') {
+        return null;
+    }
+
+    if (is_array($value) || filter_var($value, FILTER_VALIDATE_INT) === false) {
+        throw new UserException('Invalid text level.');
+    }
+
+    $level = (int)$value;
+    if (!in_array($level, [1, 2, 3], true)) {
+        throw new UserException('Invalid text level.');
+    }
+
+    return $level;
+}
+
 /**
  * Loads the text record and verifies the current user can edit it.
  * Keeps your original authorization logic: if loadRecord leaves title/text empty, deny.
@@ -91,7 +105,7 @@ try {
     $audio_uri  = $post['audio-uri']  ?? '';
     $text       = $post['text']       ?? '';
     $type       = (int)($post['type'] ?? 0);
-    $level      = (int)($post['level'] ?? DEFAULT_LEVEL);
+    $level      = parse_level($post['level'] ?? null);
     $is_shared  = !empty($post['shared-text']);
 
     if ($id === 0) {
@@ -105,12 +119,15 @@ try {
     validate_audio($audio_uri);
 
     // partial update of the existing private text
-    $update_record = compact('title', 'author', 'text', 'source_uri', 'audio_uri', 'type', 'level');
+    $update_record = compact('title', 'author', 'text', 'source_uri', 'audio_uri', 'type');
+    if ($level !== null) {
+        $update_record['level'] = $level;
+    }
     if (array_key_exists('text_creation_method_id', $post)) {
         $creation_method = parse_creation_method($post['text_creation_method_id']);
         $update_record['text_creation_method_id'] = $creation_method?->value;
     }
-    $texts_table->update($id, $update_record);
+    $texts_table->update($id, $update_record, $level !== null);
     
     if ($is_shared) {
         $texts_table->share($id);

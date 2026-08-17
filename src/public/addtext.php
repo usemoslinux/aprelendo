@@ -35,7 +35,7 @@ $text_types_arr = $text_types->getAll();
             <?php
             $text_lang = $user->lang;
             $text_type = 1;  // Article: default type
-            $text_level = 2; // Intermediate: default level
+            $text_level = null;
             $text_creation_method_id = null;
             $rss_import = false;
 
@@ -94,7 +94,24 @@ $text_types_arr = $text_types->getAll();
                         </div>
                         <div class="mb-3 col-lg-4">
                             <label for="level">Level:</label>
-                            <input type="text" id="level" class="form-control" value="Automatic" disabled>
+                            <select name="level" id="level" class="form-control form-select"
+                                aria-describedby="level-help">
+                                <option value="" <?= $text_level === null ? 'selected' : '' ?>>
+                                    Automatic
+                                </option>
+                                <option value="1" <?= $text_level === 1 ? 'selected' : '' ?>>
+                                    Beginner
+                                </option>
+                                <option value="2" <?= $text_level === 2 ? 'selected' : '' ?>>
+                                    Intermediate
+                                </option>
+                                <option value="3" <?= $text_level === 3 ? 'selected' : '' ?>>
+                                    Advanced
+                                </option>
+                            </select>
+                            <div id="level-help" class="form-text">
+                                Change only if you are confident about the text's level.
+                            </div>
                         </div>
                         <div class="mb-3 col-lg-4">
                             <label for="text-creation-method">Text origin:</label>
