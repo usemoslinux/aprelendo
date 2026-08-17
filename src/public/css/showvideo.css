@@ -10,12 +10,12 @@
     line-height: 1;
 }
 
-.video-subtitle-origin-machine {
-    color: var(--bs-secondary-color);
-}
-
 .video-subtitle-origin-human {
     color: var(--bs-success-text-emphasis);
+}
+
+.darkmode .video-subtitle-origin-human {
+    filter: brightness(2.8) contrast(0.85) saturate(0.8);
 }
 
 .video-subtitle-origin-info {

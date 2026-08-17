@@ -73,7 +73,7 @@ $today_is_reading_streak = $gems->today_is_streak;
                                 </span>
                                 <strong class="caret"></strong>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="language-menu">
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="language-menu">
                                 <a class="dropdown-item" href="<?php echo 'languages?chg=' . $user->lang_id; ?>">
                                     <?php echo $lang_full; ?> settings</a>
                                 <a class="dropdown-item" href="/languages">Change current language</a>
@@ -87,7 +87,7 @@ $today_is_reading_streak = $gems->today_is_streak;
                                 <?php echo ucfirst($user->name); ?>
                                 <strong class="caret"></strong>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu">
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="user-menu">
                                 <div class="dropdown-header">
                                     Sections
                                 </div>

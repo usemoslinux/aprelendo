@@ -19,7 +19,7 @@
     --color-bg-sepia: rgba(235, 231, 217, 0.96);
     --color-bg-dark:  rgba(33, 37, 41, 0.96);
 }
-                     
+
 * {
     margin: 0;
     padding: 0;
@@ -239,10 +239,6 @@ body.blue-gradient-wallpaper .navbar-light {
 
 .dropdown-menu {
     background: white;
-}
-
-.dropdown-menu-left {
-    left: 15px;
 }
 
 .breadcrumb,

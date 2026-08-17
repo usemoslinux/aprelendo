@@ -79,13 +79,13 @@ $text_types_arr = $text_types->getAll(true);
                                     <span class="bi bi-search"></span>
                                 </button>
                             </div>
-                            
+
                             <div class="dropdown dropdown-add ms-md-2 mb-3">
                                 <button id="btn-add-text" type="button" class="btn btn-success dropdown-toggle"
                                     data-bs-toggle="dropdown">
                                     <span class="bi bi bi-plus-lg"></span> Add
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-right">
+                                <div class="dropdown-menu dropdown-menu-end">
                                     <a class="dropdown-item" href="/addtext?sh">Plain text</a>
                                     <a class="dropdown-item" href="/addvideo">YouTube video</a>
                                     <a href="/addrss" class="dropdown-item">RSS text</a>

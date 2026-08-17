@@ -102,7 +102,7 @@ abstract class Table
                 id="actions-menu" data-bs-toggle="dropdown">
                 Actions <span class="caret"></span>
             </button>
-        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="actions-menu" role="menu">
+        <div class="dropdown-menu" aria-labelledby="actions-menu" role="menu">
         HTML_ACTION_MENU;
 
         foreach ($this->action_menu as $menu_id => $menu_text) {
@@ -164,7 +164,7 @@ abstract class Table
             id="sort-menu" data-bs-toggle="dropdown">
             Sort by <span class="caret"></span>
         </button>
-        <div id="dropdown-menu-sort" class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-menu" role="menu">
+        <div id="dropdown-menu-sort" class="dropdown-menu dropdown-menu-end" aria-labelledby="sort-menu" role="menu">
         HTML_SORT_MENU;
 
         $sort_index = 0;
