@@ -42,6 +42,7 @@ try {
         'dark' => 'darkmode',
         default => '',
     };
+    $wallpaper_class = $prefs->show_wallpaper ? ' show-wallpaper' : '';
 
     $font_family = $prefs->font_family;
     $font_size = $prefs->getFontSizeCssValue();
@@ -133,7 +134,7 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
     <?php endif; ?>
 </head>
 
-<body id="readerpage" <?php echo ' class="dvh-100 dvw-100 ' . $color_mode . '"' ?>>
+<body id="readerpage" <?php echo ' class="dvh-100 dvw-100 ' . $color_mode . $wallpaper_class . '"' ?>>
     <div class="offcanvas offcanvas-start <?php echo $color_mode; ?>"
         data-bs-scroll="true" tabindex="-1" id="navigation" aria-labelledby="navigation-title">
         <div class="offcanvas-header">

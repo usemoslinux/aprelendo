@@ -653,7 +653,6 @@ a[role="menuitem"] {
     background-position: center center;
     background-size: cover;
     background-attachment: fixed;
-    background-image: var(--bg-image);
 }
 
 @media (max-width: 1024px) {
@@ -662,9 +661,30 @@ a[role="menuitem"] {
     }
 }
 
-#readerpage.lightmode { --bg-image: url("../img/backgrounds/container-light.webp"); }
-#readerpage.sepiamode { --bg-image: url("../img/backgrounds/container-sepia.webp"); }
-#readerpage.darkmode  { --bg-image: url("../img/backgrounds/container-dark.webp"); }
+#readerpage.lightmode {
+    background-color: #FAF7F0;
+    background-image:
+        radial-gradient(circle at 8% 8%, rgba(233, 222, 196, 0.55) 0%, rgba(233, 222, 196, 0) 40%),
+        radial-gradient(circle at 94% 94%, rgba(216, 225, 221, 0.5) 0%, rgba(216, 225, 221, 0) 45%);
+}
+
+#readerpage.sepiamode {
+    background-color: #EEDBB8;
+    background-image:
+        radial-gradient(circle at 8% 8%, rgba(201, 164, 103, 0.45) 0%, rgba(201, 164, 103, 0) 40%),
+        radial-gradient(circle at 94% 94%, rgba(184, 137, 90, 0.4) 0%, rgba(184, 137, 90, 0) 45%);
+}
+
+#readerpage.darkmode {
+    background-color: #1B1D21;
+    background-image:
+        radial-gradient(circle at 8% 8%, rgba(58, 63, 71, 0.55) 0%, rgba(58, 63, 71, 0) 40%),
+        radial-gradient(circle at 94% 94%, rgba(46, 59, 58, 0.5) 0%, rgba(46, 59, 58, 0) 45%);
+}
+
+#readerpage.lightmode.show-wallpaper { background-image: url("../img/backgrounds/container-light.webp"); }
+#readerpage.sepiamode.show-wallpaper { background-image: url("../img/backgrounds/container-sepia.webp"); }
+#readerpage.darkmode.show-wallpaper  { background-image: url("../img/backgrounds/container-dark.webp"); }
 
 .word:hover,
 .highlighted {

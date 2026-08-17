@@ -29,6 +29,7 @@ try {
         $_POST['lineheight'],
         $_POST['alignment'],
         $_POST['mode'],
+        $_POST['showwallpaper'],
         $_POST['assistedlearning']
     );
 

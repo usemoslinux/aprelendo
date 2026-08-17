@@ -33,11 +33,12 @@ try {
     $prefs = $reader->prefs;
 
     $reader_class .= match ($prefs->display_mode) {
-        'light' => "lightmode'",
-        'sepia' => "sepiamode'",
-        'dark' => "darkmode'",
-        default => "'",
+        'light' => 'lightmode',
+        'sepia' => 'sepiamode',
+        'dark' => 'darkmode',
+        default => '',
     };
+    $reader_class .= $prefs->show_wallpaper ? " show-wallpaper'" : "'";
     $font_family = $prefs->font_family;
     $font_size = $prefs->getFontSizeCssValue();
     $line_height = $prefs->line_height;

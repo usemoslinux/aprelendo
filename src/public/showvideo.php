@@ -39,11 +39,12 @@ try {
     $body_class = "class='dvh-100 dvw-100 ";
     
     $body_css = match ($prefs->display_mode) {
-        'light' => $body_class . "lightmode'",
-        'sepia' => $body_class . "sepiamode'",
-        'dark' => $body_class . "darkmode'",
+        'light' => $body_class . 'lightmode',
+        'sepia' => $body_class . 'sepiamode',
+        'dark' => $body_class . 'darkmode',
         default => '',
     };
+    $body_css .= $prefs->show_wallpaper ? " show-wallpaper'" : "'";
     $font_family = $prefs->font_family;
     $font_size = $prefs->getFontSizeCssValue();
     $line_height = $prefs->line_height;

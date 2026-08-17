@@ -18,6 +18,7 @@ $font_size = $prefs->font_size;
 $line_height = $prefs->line_height;
 $text_align = $prefs->text_alignment;
 $display_mode = $prefs->display_mode;
+$show_wallpaper = $prefs->show_wallpaper;
 $assisted_learning = $prefs->assisted_learning;
 
 $video_pages = ['showvideo', 'showofflinevideo'];
@@ -133,6 +134,16 @@ $sel = ' selected ';
                                 </option>
                                 <option value="dark" <?php echo $display_mode == 'dark' ? $sel : ''; ?>>Dark
                                 </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="showwallpaper">Wallpaper:</label>
+                        <div>
+                            <select name="showwallpaper" id="showwallpaper" class="form-control form-select"
+                                autocomplete="off">
+                                <option value="1" <?php echo $show_wallpaper ? $sel : ''; ?>>On</option>
+                                <option value="0" <?php echo !$show_wallpaper ? $sel : ''; ?>>Off</option>
                             </select>
                         </div>
                     </div>

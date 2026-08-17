@@ -18,6 +18,7 @@ $(document).ready(function() {
         let $doc = $(parent.document.body);
         let $text_container = $("#text-container");
         $doc.removeClass(color_modes).addClass(class_name);
+        $doc.toggleClass('show-wallpaper', $('#showwallpaper').val() === '1');
         
         $text_container.css({
             'font-family' : $('#fontfamily').val(),

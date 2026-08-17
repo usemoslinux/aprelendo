@@ -405540,6 +405540,7 @@ CREATE TABLE `preferences` (
   `line_height` varchar(4) NOT NULL,
   `text_alignment` varchar(7) NOT NULL,
   `display_mode` varchar(5) NOT NULL,
+  `show_wallpaper` tinyint(1) NOT NULL DEFAULT 1,
   `assisted_learning` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

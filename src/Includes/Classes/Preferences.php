@@ -11,6 +11,7 @@ class Preferences extends DBEntity
     public string $line_height        = '1.5';
     public string $text_alignment     = 'left';
     public string $display_mode       = 'light';
+    public bool $show_wallpaper       = true;
     public bool $assisted_learning    = true;
 
     /**
@@ -34,6 +35,7 @@ class Preferences extends DBEntity
      * @param string $line_height
      * @param string $text_alignment
      * @param string $display_mode
+     * @param bool $show_wallpaper
      * @param bool $assisted_learning
      * @return void
      */
@@ -43,6 +45,7 @@ class Preferences extends DBEntity
         string $line_height,
         string $text_alignment,
         string $display_mode,
+        bool $show_wallpaper,
         bool $assisted_learning
         ): void
         {
@@ -52,14 +55,15 @@ class Preferences extends DBEntity
         $this->line_height = $line_height ?? $this->line_height;
         $this->text_alignment = $text_alignment ?? $this->text_alignment;
         $this->display_mode = $display_mode ?? $this->display_mode;
+        $this->show_wallpaper = (bool)$show_wallpaper;
         $this->assisted_learning = (int)$assisted_learning ?? $this->assisted_learning;
 
         $sql = "REPLACE INTO `{$this->table}` (`user_id`, `font_family`,
-                `font_size`, `line_height`, `text_alignment`, `display_mode`, `assisted_learning`)
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
+                `font_size`, `line_height`, `text_alignment`, `display_mode`, `show_wallpaper`, `assisted_learning`)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $this->sqlExecute($sql, [
             $this->user_id, $this->font_family, $this->font_size, $this->line_height,
-            $this->text_alignment, $this->display_mode, (int)$this->assisted_learning
+            $this->text_alignment, $this->display_mode, (int)$this->show_wallpaper, (int)$this->assisted_learning
         ]);
     } 
 
@@ -79,6 +83,7 @@ class Preferences extends DBEntity
             $this->line_height       = $row['line_height'];
             $this->text_alignment    = $row['text_alignment'];
             $this->display_mode      = $row['display_mode'];
+            $this->show_wallpaper    = (bool)$row['show_wallpaper'];
             $this->assisted_learning = $row['assisted_learning'];
         }
     } 
