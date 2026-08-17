@@ -405575,11 +405575,6 @@ CREATE TABLE `shared_texts` (
   `text_creation_method_id` tinyint(3) UNSIGNED DEFAULT NULL,
   `word_count` mediumint(8) UNSIGNED DEFAULT NULL,
   `level` tinyint(3) UNSIGNED DEFAULT NULL,
-  `difficulty_score` tinyint(3) UNSIGNED DEFAULT NULL,
-  `difficulty_confidence` tinyint(3) UNSIGNED DEFAULT NULL,
-  `difficulty_metrics` json DEFAULT NULL,
-  `difficulty_version` varchar(20) DEFAULT NULL,
-  `difficulty_updated_at` timestamp NULL DEFAULT NULL,
   `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -405602,11 +405597,6 @@ CREATE TABLE `texts` (
   `text_creation_method_id` tinyint(3) UNSIGNED DEFAULT NULL,
   `word_count` mediumint(8) UNSIGNED DEFAULT NULL,
   `level` tinyint(3) UNSIGNED DEFAULT NULL,
-  `difficulty_score` tinyint(3) UNSIGNED DEFAULT NULL,
-  `difficulty_confidence` tinyint(3) UNSIGNED DEFAULT NULL,
-  `difficulty_metrics` json DEFAULT NULL,
-  `difficulty_version` varchar(20) DEFAULT NULL,
-  `difficulty_updated_at` timestamp NULL DEFAULT NULL,
   `is_archived` tinyint(1) NOT NULL DEFAULT 0,
   `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
   `text_pos` varchar(100) DEFAULT NULL,

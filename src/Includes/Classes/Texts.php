@@ -17,11 +17,6 @@ class Texts extends DBEntity
     public ?int $text_creation_method_id = null;
     public $word_count    = 0;
     public $level         = 0;
-    public $difficulty_score = null;
-    public $difficulty_confidence = null;
-    public $difficulty_metrics = null;
-    public $difficulty_version = null;
-    public $difficulty_updated_at = null;
     public $date_created  = '';
     public $text_pos      = '';
     public $audio_pos     = '';
@@ -111,11 +106,6 @@ class Texts extends DBEntity
                 : null;
             $this->word_count    = $row['word_count'];
             $this->level         = $row['level'];
-            $this->difficulty_score = $row['difficulty_score'] ?? null;
-            $this->difficulty_confidence = $row['difficulty_confidence'] ?? null;
-            $this->difficulty_metrics = $row['difficulty_metrics'] ?? null;
-            $this->difficulty_version = $row['difficulty_version'] ?? null;
-            $this->difficulty_updated_at = $row['difficulty_updated_at'] ?? null;
             $this->date_created  = $row['date_created'];
             $this->text_pos      = $row['text_pos'] ?? '';
             $this->audio_pos     = $row['audio_pos'] ?? '';
@@ -161,18 +151,14 @@ class Texts extends DBEntity
 
         $author = TextsUtilities::formatAuthorCase($author);
         
-        $difficulty_record = $this->buildDifficultyRecord($text, $lang_iso, $level);
+        $level = $this->classifyLevel($text, $lang_iso, $level);
 
         // add text to table
         $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `title`, `author`,
-                    `text`, `audio_uri`, `source_uri`, `type`, `text_creation_method_id`, `word_count`, `level`,
-                    `difficulty_score`, `difficulty_confidence`, `difficulty_metrics`, `difficulty_version`,
-                    `difficulty_updated_at`)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                    `text`, `audio_uri`, `source_uri`, `type`, `text_creation_method_id`, `word_count`, `level`)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $this->sqlExecute($sql, [$this->user_id,$this->lang_id, $title, $author, $text, $audio_url,
-        $source_url, $type, $text_creation_method?->value, $word_count, $difficulty_record['level'],
-        $difficulty_record['difficulty_score'], $difficulty_record['difficulty_confidence'],
-        $difficulty_record['difficulty_metrics'], $difficulty_record['difficulty_version']]);
+        $source_url, $type, $text_creation_method?->value, $word_count, $level]);
 
         $insert_id = $this->pdo->lastInsertId();
 
@@ -192,13 +178,12 @@ class Texts extends DBEntity
     */
     public function update(int $id, array $columns): void
     {
-        $difficulty_record = $this->buildDifficultyRecordForUpdate($id, $columns);
+        $level = $this->classifyLevelForUpdate($id, $columns);
 
-        if ($difficulty_record === []) {
+        if ($level === null) {
             unset($columns['level']);
         } else {
-            $columns = array_merge($columns, $difficulty_record);
-            $columns['difficulty_updated_at'] = date('Y-m-d H:i:s');
+            $columns['level'] = $level;
         }
 
         if (empty($columns)) {
@@ -320,8 +305,7 @@ class Texts extends DBEntity
         // columns shared by both tables, in the exact order they appear in `shared_texts`
         $cols = [
             'user_id', 'lang_id', 'title', 'author', 'text', 'audio_uri', 'source_uri', 'type',
-            'text_creation_method_id', 'word_count', 'level', 'difficulty_score', 'difficulty_confidence',
-            'difficulty_metrics', 'difficulty_version', 'difficulty_updated_at', 'date_created'
+            'text_creation_method_id', 'word_count', 'level', 'date_created'
         ];
         $cols_sql = implode(', ', array_map(fn($c) => "`$c`", $cols));
 
@@ -433,74 +417,57 @@ class Texts extends DBEntity
     } 
 
     /**
-     * Builds difficulty fields for storage.
+     * Classifies a text level, preserving the fallback for empty text.
      *
      * @param string $text
      * @param string $lang_iso
      * @param ?int $fallback_level
-     * @return array
+     * @return ?int
      */
-    private function buildDifficultyRecord(string $text, string $lang_iso, ?int $fallback_level = null): array
+    private function classifyLevel(string $text, string $lang_iso, ?int $fallback_level = null): ?int
     {
         $classifier = new TextDifficultyClassifier($this->pdo);
         $result = $classifier->classify($text, $lang_iso);
-        $metrics_json = json_encode($result['metrics'], JSON_UNESCAPED_UNICODE);
-
-        if ($metrics_json === false) {
-            throw new InternalException('Could not encode difficulty metrics.');
-        }
 
         if ($result['metrics']['total_tokens'] === 0) {
-            return [
-                'level' => $fallback_level,
-                'difficulty_score' => null,
-                'difficulty_confidence' => TextDifficultyClassifier::DIFFICULTY_CONFIDENCE_LOW,
-                'difficulty_metrics' => $metrics_json,
-                'difficulty_version' => $result['version'],
-            ];
+            return $fallback_level;
         }
 
-        return [
-            'level' => $result['level'],
-            'difficulty_score' => $result['score'],
-            'difficulty_confidence' => $result['confidence'],
-            'difficulty_metrics' => $metrics_json,
-            'difficulty_version' => $result['version'],
-        ];
+        return $result['level'];
     }
 
     /**
-     * Builds difficulty fields only when text body or language changed.
+     * Classifies a new level only when text body or language changed.
      *
      * @param int $id
      * @param array $columns
-     * @return array
+     * @return ?int
      */
-    private function buildDifficultyRecordForUpdate(int $id, array $columns): array
+    private function classifyLevelForUpdate(int $id, array $columns): ?int
     {
         if (!array_key_exists('text', $columns) && !array_key_exists('lang_id', $columns)) {
-            return [];
+            return null;
         }
 
         $sql = "SELECT `text`, `lang_id` FROM `{$this->table}` WHERE `id` = ? AND `user_id` = ?";
         $row = $this->sqlFetch($sql, [$id, $this->user_id]);
 
         if (empty($row)) {
-            return [];
+            return null;
         }
 
         $new_text = array_key_exists('text', $columns) ? $columns['text'] : $row['text'];
         $new_lang_id = array_key_exists('lang_id', $columns) ? (int)$columns['lang_id'] : (int)$row['lang_id'];
 
         if ($new_text === $row['text'] && $new_lang_id === (int)$row['lang_id']) {
-            return [];
+            return null;
         }
 
         $fallback_level = isset($columns['level'])
             ? (int)$columns['level']
             : ($row['level'] === null ? null : (int)$row['level']);
 
-        return $this->buildDifficultyRecord($new_text, $this->getLangIsoById($new_lang_id), $fallback_level);
+        return $this->classifyLevel($new_text, $this->getLangIsoById($new_lang_id), $fallback_level);
     }
 
     /**
