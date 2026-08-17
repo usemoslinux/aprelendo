@@ -7,6 +7,7 @@ use Aprelendo\AuthGuard;
 use Aprelendo\Database;
 use Aprelendo\Texts;
 use Aprelendo\Curl;
+use Aprelendo\CreationMethod;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
@@ -45,6 +46,23 @@ function validate_audio(?string &$audioUri): void {
     if (!$headers || stripos($headers[0], '200') === false) {
         throw new UserException('The provided audio file cannot be accessed. Try another URL address.');
     }
+}
+
+function parse_creation_method(mixed $value): ?CreationMethod {
+    if ($value === null || $value === '') {
+        return null;
+    }
+
+    if (is_array($value) || filter_var($value, FILTER_VALIDATE_INT) === false) {
+        throw new UserException('Invalid text creation method.');
+    }
+
+    $method = CreationMethod::tryFrom((int)$value);
+    if ($method === null) {
+        throw new UserException('Invalid text creation method.');
+    }
+
+    return $method;
 }
 
 /**
@@ -88,6 +106,10 @@ try {
 
     // partial update of the existing private text
     $update_record = compact('title', 'author', 'text', 'source_uri', 'audio_uri', 'type', 'level');
+    if (array_key_exists('text_creation_method_id', $post)) {
+        $creation_method = parse_creation_method($post['text_creation_method_id']);
+        $update_record['text_creation_method_id'] = $creation_method?->value;
+    }
     $texts_table->update($id, $update_record);
     
     if ($is_shared) {

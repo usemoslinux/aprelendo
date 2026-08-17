@@ -171,7 +171,31 @@ class Reader
                 '</div>';
 
         $html .= '<div id="text-container" class="reader-scroll-area overflow-auto m-0 my-1 p-2 z-1" data-type="video" data-IdText="'
-            . $this->text->id . '" style="' . $safe_reader_css . '"><div id="text" class="text-center">';
+            . $this->text->id . '" style="' . $safe_reader_css . '">';
+
+        $creation_method = CreationMethod::tryFrom($this->text->text_creation_method_id ?? 0);
+        if ($creation_method !== null) {
+            $is_machine = $creation_method === CreationMethod::machine;
+            $status_class = $is_machine ? 'video-subtitle-origin-machine' : 'video-subtitle-origin-human';
+            $icon = $is_machine ? 'bi-cpu' : 'bi-check-circle-fill';
+            $label = $is_machine ? 'Auto-generated' : 'Human-made';
+            $html .= '<div class="video-subtitle-origin ' . $status_class
+                . ' d-flex align-items-center justify-content-end gap-1 mb-1" aria-label="Subtitle origin: '
+                . $label . '"><span class="bi ' . $icon . '" aria-hidden="true"></span><span>'
+                . $label . '</span>';
+
+            if ($is_machine) {
+                $html .= '<button type="button" class="video-subtitle-origin-info btn btn-link p-0 ms-1"'
+                    . ' aria-label="About auto-generated subtitles" data-bs-toggle="tooltip"'
+                    . ' data-bs-custom-class="custom-tooltip" data-bs-placement="top"'
+                    . ' data-bs-title="May contain transcription or timing errors.">'
+                    . '<span class="bi bi-info-circle" aria-hidden="true"></span></button>';
+            }
+
+            $html .= '</div>';
+        }
+
+        $html .= '<div id="text" class="text-center">';
         $xml = new SimpleXMLElement($this->text->text);
 
         for ($i=0; $i < sizeof($xml); $i++) {

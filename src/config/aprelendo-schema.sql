@@ -144,6 +144,25 @@ CREATE TABLE `confusion_set_words` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `creation_methods`
+--
+
+CREATE TABLE `creation_methods` (
+  `id` tinyint(3) UNSIGNED NOT NULL,
+  `name` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `creation_methods`
+--
+
+INSERT INTO `creation_methods` (`id`, `name`) VALUES
+(1, 'human'),
+(2, 'machine');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `dictionaries`
 --
 
@@ -405553,6 +405572,7 @@ CREATE TABLE `shared_texts` (
   `audio_uri` varchar(400) DEFAULT NULL,
   `source_uri` varchar(400) DEFAULT NULL,
   `type` tinyint(3) UNSIGNED NOT NULL,
+  `text_creation_method_id` tinyint(3) UNSIGNED DEFAULT NULL,
   `word_count` mediumint(8) UNSIGNED DEFAULT NULL,
   `level` tinyint(3) UNSIGNED DEFAULT NULL,
   `difficulty_score` tinyint(3) UNSIGNED DEFAULT NULL,
@@ -405579,6 +405599,7 @@ CREATE TABLE `texts` (
   `audio_uri` varchar(400) DEFAULT NULL,
   `source_uri` varchar(400) DEFAULT NULL,
   `type` tinyint(3) UNSIGNED NOT NULL,
+  `text_creation_method_id` tinyint(3) UNSIGNED DEFAULT NULL,
   `word_count` mediumint(8) UNSIGNED DEFAULT NULL,
   `level` tinyint(3) UNSIGNED DEFAULT NULL,
   `difficulty_score` tinyint(3) UNSIGNED DEFAULT NULL,
@@ -405754,6 +405775,12 @@ ALTER TABLE `confusion_set_words`
   ADD KEY `idx_confusion_set_words__word_id` (`word_id`);
 
 --
+-- Indices de la tabla `creation_methods`
+--
+ALTER TABLE `creation_methods`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `dictionaries`
 --
 ALTER TABLE `dictionaries`
@@ -405849,6 +405876,7 @@ ALTER TABLE `reported_texts`
 ALTER TABLE `shared_texts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_shared_texts__type` (`type`),
+  ADD KEY `idx_shared_texts__text_creation_method_id` (`text_creation_method_id`),
   ADD KEY `idx_shared_texts__user_id_source_uri` (`user_id`,`source_uri`),
   ADD KEY `idx_shared_texts__lang_id_level_type_id` (`lang_id`,`level`,`type`,`id`);
 ALTER TABLE `shared_texts` ADD FULLTEXT KEY `ft_shared_texts__text` (`text`);
@@ -405860,6 +405888,7 @@ ALTER TABLE `texts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_texts__lang_id` (`lang_id`),
   ADD KEY `idx_texts__type` (`type`),
+  ADD KEY `idx_texts__text_creation_method_id` (`text_creation_method_id`),
   ADD KEY `idx_texts__user_id_source_uri` (`user_id`,`source_uri`),
   ADD KEY `idx_texts__user_id_is_archived_lang_id_level_type_id` (`user_id`,`is_archived`,`lang_id`,`level`,`type`,`id`);
 ALTER TABLE `texts` ADD FULLTEXT KEY `ft_texts__text` (`text`);
@@ -405945,6 +405974,12 @@ ALTER TABLE `confusion_sets`
 --
 ALTER TABLE `confusion_set_words`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `creation_methods`
+--
+ALTER TABLE `creation_methods`
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `dictionaries`
@@ -406156,6 +406191,7 @@ ALTER TABLE `reported_texts`
 --
 ALTER TABLE `shared_texts`
   ADD CONSTRAINT `fk_shared_texts__lang_id__languages` FOREIGN KEY (`lang_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_shared_texts__text_creation_method_id__creation_methods` FOREIGN KEY (`text_creation_method_id`) REFERENCES `creation_methods` (`id`),
   ADD CONSTRAINT `fk_shared_texts__type__text_types` FOREIGN KEY (`type`) REFERENCES `text_types` (`id`),
   ADD CONSTRAINT `fk_shared_texts__user_id__users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -406164,6 +406200,7 @@ ALTER TABLE `shared_texts`
 --
 ALTER TABLE `texts`
   ADD CONSTRAINT `fk_texts__lang_id__languages` FOREIGN KEY (`lang_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_texts__text_creation_method_id__creation_methods` FOREIGN KEY (`text_creation_method_id`) REFERENCES `creation_methods` (`id`),
   ADD CONSTRAINT `fk_texts__type__text_types` FOREIGN KEY (`type`) REFERENCES `text_types` (`id`),
   ADD CONSTRAINT `fk_texts__user_id__users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 

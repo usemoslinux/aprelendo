@@ -14,6 +14,7 @@ class Texts extends DBEntity
     public $audio_uri     = '';
     public $source_uri    = '';
     public $type          = 0;
+    public ?int $text_creation_method_id = null;
     public $word_count    = 0;
     public $level         = 0;
     public $difficulty_score = null;
@@ -105,6 +106,9 @@ class Texts extends DBEntity
             $this->audio_uri     = $row['audio_uri'] ?? '';
             $this->source_uri    = $row['source_uri'] ?? '';
             $this->type          = $row['type'];
+            $this->text_creation_method_id = isset($row['text_creation_method_id'])
+                ? (int)$row['text_creation_method_id']
+                : null;
             $this->word_count    = $row['word_count'];
             $this->level         = $row['level'];
             $this->difficulty_score = $row['difficulty_score'] ?? null;
@@ -137,7 +141,8 @@ class Texts extends DBEntity
         string $source_url,
         string $audio_url,
         int $type,
-        int $level
+        int $level,
+        ?CreationMethod $text_creation_method = null
         ): int {
 
         // get language iso
@@ -160,14 +165,14 @@ class Texts extends DBEntity
 
         // add text to table
         $sql = "INSERT INTO `{$this->table}` (`user_id`, `lang_id`, `title`, `author`,
-                    `text`, `audio_uri`, `source_uri`, `type`, `word_count`, `level`,
+                    `text`, `audio_uri`, `source_uri`, `type`, `text_creation_method_id`, `word_count`, `level`,
                     `difficulty_score`, `difficulty_confidence`, `difficulty_metrics`, `difficulty_version`,
                     `difficulty_updated_at`)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
         $this->sqlExecute($sql, [$this->user_id,$this->lang_id, $title, $author, $text, $audio_url,
-        $source_url, $type, $word_count, $difficulty_record['level'], $difficulty_record['difficulty_score'],
-        $difficulty_record['difficulty_confidence'], $difficulty_record['difficulty_metrics'],
-        $difficulty_record['difficulty_version']]);
+        $source_url, $type, $text_creation_method?->value, $word_count, $difficulty_record['level'],
+        $difficulty_record['difficulty_score'], $difficulty_record['difficulty_confidence'],
+        $difficulty_record['difficulty_metrics'], $difficulty_record['difficulty_version']]);
 
         $insert_id = $this->pdo->lastInsertId();
 
@@ -315,8 +320,8 @@ class Texts extends DBEntity
         // columns shared by both tables, in the exact order they appear in `shared_texts`
         $cols = [
             'user_id', 'lang_id', 'title', 'author', 'text', 'audio_uri', 'source_uri', 'type',
-            'word_count', 'level', 'difficulty_score', 'difficulty_confidence', 'difficulty_metrics',
-            'difficulty_version', 'difficulty_updated_at', 'date_created'
+            'text_creation_method_id', 'word_count', 'level', 'difficulty_score', 'difficulty_confidence',
+            'difficulty_metrics', 'difficulty_version', 'difficulty_updated_at', 'date_created'
         ];
         $cols_sql = implode(', ', array_map(fn($c) => "`$c`", $cols));
 

@@ -119,6 +119,7 @@ $(document).ready(function () {
     function resetControls(exceptSourceURI) {
         $("#alert-box").addClass("d-none");
         $("#type").prop("selectedIndex", 0);
+        $("#text-creation-method").val("");
         $("#title").val("");
         $("#author").val("");
         $("#title").val("");

@@ -93,7 +93,26 @@ $(document).ready(function() {
                 throw new Error("There are no subtitles available for this video.");
             } else {
                 $("#text").val(data.payload.text);
-                $("#alert-box").addClass("d-none");
+                $("#text-creation-method").val(data.payload.text_creation_method_id);
+
+                const language = data.payload.transcript_language_code
+                    ? ` (${data.payload.transcript_language_code})`
+                    : "";
+
+                if (Number(data.payload.text_creation_method_id) === 2) {
+                    showMessage(
+                        `YouTube's automatically generated subtitles${language} will be used. ` +
+                        "They may contain recognition, punctuation, or timing errors.",
+                        "alert-warning",
+                        "Auto-generated subtitles"
+                    );
+                } else {
+                    showMessage(
+                        `Human-made subtitles${language} were found in your target language.`,
+                        "alert-info",
+                        "Human-made subtitles"
+                    );
+                }
             }
         } catch (error) {
             console.error(error);
@@ -114,6 +133,7 @@ $(document).ready(function() {
                 .not(":hidden")
                 .val("");
             $("#text").val("");
+            $("#text-creation-method").val("");
             $("#yt-video").attr("src", "about:blank");
         }
     } 

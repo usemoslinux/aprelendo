@@ -56,6 +56,7 @@ require_once PUBLIC_PATH . 'header.php';
                         <form id="form-addvideo" class="add-form" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="mode" value="video">
                             <input type="hidden" name="type" id="type" class="form-control" value="5">
+                            <input type="hidden" name="text_creation_method_id" id="text-creation-method" value="">
                             <div class="row">
                                 <div class="mb-3 col-sm-12">
                                     <label for="title">Title:</label>
@@ -85,7 +86,7 @@ require_once PUBLIC_PATH . 'header.php';
                                 </div>
                             </div>
 
-                            <input type="hidden" name="text" id="text" class="form-control" value="5">
+                            <input type="hidden" name="text" id="text" class="form-control" value="">
 
                             <div class="row">
                                 <div class="mb-3 col-sm-12 text-end">

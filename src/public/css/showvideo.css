@@ -4,6 +4,33 @@
     border-radius: 5px;
 }
 
+.video-subtitle-origin {
+    font-family: var(--bs-body-font-family);
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
+.video-subtitle-origin-machine {
+    color: var(--bs-secondary-color);
+}
+
+.video-subtitle-origin-human {
+    color: var(--bs-success-text-emphasis);
+}
+
+.video-subtitle-origin-info {
+    color: inherit;
+    font-size: inherit;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.video-subtitle-origin-info:hover,
+.video-subtitle-origin-info:focus-visible {
+    color: inherit;
+    opacity: 0.75;
+}
+
 @media screen and (min-width: 1200px) {
     #main-container {
         --showvideo_content_width: min(100%, 80vw, calc(60vh * 16 / 9));

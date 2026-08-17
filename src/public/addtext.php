@@ -36,6 +36,7 @@ $text_types_arr = $text_types->getAll();
             $text_lang = $user->lang;
             $text_type = 1;  // Article: default type
             $text_level = 2; // Intermediate: default level
+            $text_creation_method_id = null;
             $rss_import = false;
 
             if (isset($_GET['id'])) {
@@ -47,6 +48,7 @@ $text_types_arr = $text_types->getAll();
 
                 $text_type = $text->type;
                 $text_level = $text->level;
+                $text_creation_method_id = $text->text_creation_method_id;
                 $text_title = $text->title;
                 $text_author = $text->author;
                 $text_url = $text->source_uri;
@@ -79,7 +81,7 @@ $text_types_arr = $text_types->getAll();
                                                             } ?>">
                     <input type="hidden" name="mode" value="simple">
                     <div class="row">
-                        <div class="mb-3 col-lg-6">
+                        <div class="mb-3 col-lg-4">
                             <label for="type">Type:</label>
                             <select name="type" id="type" class="form-control form-select">
                                 <?php foreach ([1,2,3,4,7] as $i): ?>
@@ -90,9 +92,27 @@ $text_types_arr = $text_types->getAll();
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <div class="mb-3 col-lg-6">
+                        <div class="mb-3 col-lg-4">
                             <label for="level">Level:</label>
                             <input type="text" id="level" class="form-control" value="Automatic" disabled>
+                        </div>
+                        <div class="mb-3 col-lg-4">
+                            <label for="text-creation-method">Text origin:</label>
+                            <select name="text_creation_method_id" id="text-creation-method"
+                                class="form-control form-select" aria-describedby="text-creation-method-help">
+                                <option value="" <?= $text_creation_method_id === null ? 'selected' : '' ?>>
+                                    Unknown
+                                </option>
+                                <option value="1" <?= $text_creation_method_id === 1 ? 'selected' : '' ?>>
+                                    Human-made
+                                </option>
+                                <option value="2" <?= $text_creation_method_id === 2 ? 'selected' : '' ?>>
+                                    Machine/AI-made
+                                </option>
+                            </select>
+                            <div id="text-creation-method-help" class="form-text">
+                                Choose only when you know how the text was created.
+                            </div>
                         </div>
                     </div>
                     <div class="row">

@@ -14,6 +14,7 @@ use Aprelendo\EbookFile;
 use Aprelendo\LogFileUploads;
 use Aprelendo\Gems;
 use Aprelendo\Curl;
+use Aprelendo\CreationMethod;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
@@ -25,6 +26,7 @@ $response = ['success' => false];
 
 const DEFAULT_LEVEL = 2;
 const TYPE_ARTICLE  = 1;
+const TYPE_VIDEO    = 5;
 const TYPE_EBOOK    = 6;
 const MAX_EBOOK_SIZE_BYTES = 67108864;
 
@@ -125,6 +127,23 @@ function ensure_not_exists(Texts|SharedTexts $table, string $sourceUri, bool $is
     }
 }
 
+function parse_creation_method(mixed $value): ?CreationMethod {
+    if ($value === null || $value === '') {
+        return null;
+    }
+
+    if (is_array($value) || filter_var($value, FILTER_VALIDATE_INT) === false) {
+        throw new UserException('Invalid text creation method.');
+    }
+
+    $method = CreationMethod::tryFrom((int)$value);
+    if ($method === null) {
+        throw new UserException('Invalid text creation method.');
+    }
+
+    return $method;
+}
+
 function award_gems(PDO $pdo, int $userId, int $langId, string $tz): void {
     $events = ['texts' => ['new' => 1]];
     (new Gems($pdo, $userId, $langId, $tz))->updateScore($events);
@@ -135,8 +154,12 @@ function handle_simple_or_video(PDO $pdo, int $userId, int $langId, array $r, st
     $author     = $r['author']     ?? '';
     $source_uri = $r['url']        ?? '';
 
-    if ($mode === 'video' && Videos::isYTVideo($r['url'])) {
-        $source_uri = Videos::toDesktopUrl($r['url']);
+    if ($mode === 'video') {
+        if (!Videos::isYTVideo($source_uri)) {
+            throw new UserException('Enter a valid YouTube URL and fetch its subtitles before saving.');
+        }
+
+        $source_uri = Videos::toDesktopUrl($source_uri);
     }
 
     $audio_uri  = $r['audio-uri']  ?? '';
@@ -144,6 +167,16 @@ function handle_simple_or_video(PDO $pdo, int $userId, int $langId, array $r, st
     $type       = (int)($r['type'] ?? 0);
     $level      = (int)($r['level'] ?? DEFAULT_LEVEL);
     $is_shared  = ($mode === 'video') || !empty($r['shared-text']);
+    $creation_method = parse_creation_method($r['text_creation_method_id'] ?? null);
+
+    if ($mode === 'video') {
+        $type = TYPE_VIDEO;
+        if ($creation_method === null) {
+            throw new UserException('Fetch the video subtitles before saving.');
+        }
+    } elseif ($type === TYPE_VIDEO) {
+        throw new UserException('YouTube videos must be added from the Add video page.');
+    }
 
     ensure_required($title, 'Title is a required field. Please enter one and try again.');
     ensure_required($text, 'Text is a required field. Please enter one and try again. In case you are uploading a video, enter a valid YouTube URL and fetch the correct transcript. Only videos with subtitles in your target language are supported.');
@@ -152,7 +185,7 @@ function handle_simple_or_video(PDO $pdo, int $userId, int $langId, array $r, st
     $texts_table = selected_texts_table($pdo, $userId, $langId, $is_shared);
     ensure_not_exists($texts_table, $source_uri, $is_shared);
 
-    $texts_table->add($title, $author, $text, $source_uri, $audio_uri, $type, $level);
+    $texts_table->add($title, $author, $text, $source_uri, $audio_uri, $type, $level, $creation_method);
 
     return null;
 }
@@ -214,7 +247,16 @@ function handle_ebook(PDO $pdo, int $userId, int $langId, array $r, array $files
     $stored = $ebook->name;
 
     $texts_table = new Texts($pdo, $userId, $langId);
-    $insert_id = (int)$texts_table->add($title, $author, '', $stored, $audio, $type, $level);
+    $insert_id = (int)$texts_table->add(
+        $title,
+        $author,
+        '',
+        $stored,
+        $audio,
+        $type,
+        $level,
+        CreationMethod::human
+    );
     if ($insert_id <= 0) {
         throw new UserException('There was an error uploading this text.');
     }

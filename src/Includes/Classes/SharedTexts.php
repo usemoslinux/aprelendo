@@ -39,6 +39,9 @@ class SharedTexts extends Texts
             $this->audio_uri     = $row['audio_uri'] ?? '';
             $this->source_uri    = $row['source_uri'] ?? '';
             $this->type          = $row['type'];
+            $this->text_creation_method_id = isset($row['text_creation_method_id'])
+                ? (int)$row['text_creation_method_id']
+                : null;
             $this->word_count    = $row['word_count'];
             $this->level         = $row['level'];
             $this->difficulty_score = $row['difficulty_score'] ?? null;

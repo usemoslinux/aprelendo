@@ -15,99 +15,9 @@ class Videos extends DBEntity
     public $source_url        = '';
     public $date_created      = '';
     public $youtube_id        = '';
+    public ?int $text_creation_method_id = null;
     private const YT_DESKTOP_BASE_URL = 'https://www.youtube.com/watch?v=';
     private const YT_REGEX = '#(?:youtube\.com/watch\?v=|youtu\.be/)([^&?/\s]{11})#i';
-    private const SUPPORTED_VIDEO_LANGUAGES = [
-        'ar'       => 'Arabic',
-        'ar-DZ'    => 'Arabic (Algeria)',
-        'ar-BH'    => 'Arabic (Bahrain)',
-        'ar-EG'    => 'Arabic (Egypt)',
-        'ar-IQ'    => 'Arabic (Iraq)',
-        'ar-JO'    => 'Arabic (Jordan)',
-        'ar-KW'    => 'Arabic (Kuwait)',
-        'ar-LB'    => 'Arabic (Lebanon)',
-        'ar-LY'    => 'Arabic (Libya)',
-        'ar-MA'    => 'Arabic (Morocco)',
-        'ar-OM'    => 'Arabic (Oman)',
-        'ar-QA'    => 'Arabic (Qatar)',
-        'ar-SA'    => 'Arabic (Saudi Arabia)',
-        'ar-SY'    => 'Arabic (Syria)',
-        'ar-TN'    => 'Arabic (Tunisia)',
-        'ar-AE'    => 'Arabic (U.A.E.)',
-        'ar-YE'    => 'Arabic (Yemen)',
-        'bg'       => 'Bulgarian',
-        'ca'       => 'Catalan',
-        'cs'       => 'Czech',
-        'da'       => 'Danish',
-        'de'       => 'German (Standard)',
-        'de-AT'    => 'German (Austria)',
-        'de-CH'    => 'German (Switzerland)',
-        'de-LUX'    => 'German (Luxembourg)',
-        'de-LI'    => 'German (Liechtenstein)',
-        'el'       => 'Greek',
-        'en'       => 'English',
-        'en-GB'    => 'English (United Kingdom)',
-        'en-US'    => 'English (United States)',
-        'en-AU'    => 'English (Australia)',
-        'en-BZ'    => 'English (Belize)',
-        'en-CA'    => 'English (Canada)',
-        'en-IN'    => 'English (India)',
-        'en-IE'    => 'English (Ireland)',
-        'en-JM'    => 'English (Jamaica)',
-        'en-NZ'    => 'English (New Zealand)',
-        'en-ZA'    => 'English (South Africa)',
-        'en-TT'    => 'English (Trinidad)',
-        'es'       => 'Spanish',
-        'es-419'   => 'Spanish (Latin America)',
-        'es-AR'    => 'Spanish (Argentina)',
-        'es-BO'    => 'Spanish (Bolivia)',
-        'es-CL'    => 'Spanish (Chile)',
-        'es-CO'    => 'Spanish (Colombia)',
-        'es-CR'    => 'Spanish (Costa Rica)',
-        'es-DO'    => 'Spanish (Dominican Republic)',
-        'es-EC'    => 'Spanish (Ecuador)',
-        'es-SV'    => 'Spanish (El Salvador)',
-        'es-GT'    => 'Spanish (Guatemala)',
-        'es-HN'    => 'Spanish (Honduras)',
-        'es-MX'    => 'Spanish (Mexico)',
-        'es-NI'    => 'Spanish (Nicaragua)',
-        'es-PA'    => 'Spanish (Panama)',
-        'es-PY'    => 'Spanish (Paraguay)',
-        'es-PE'    => 'Spanish (Peru)',
-        'es-PR'    => 'Spanish (Puerto Rico)',
-        'fr'       => 'French (Standard)',
-        'fr-BE'    => 'French (Belgium)',
-        'fr-CA'    => 'French (Canada)',
-        'fr-CH'    => 'French (Switzerland)',
-        'fr-LU'    => 'French (Luxembourg)',
-        'he'       => 'Hebrew',
-        'hi'       => 'Hindi',
-        'hr'       => 'Croatian',
-        'hu'       => 'Hungarian',
-        'it'       => 'Italian (Standard)',
-        'it-CH'    => 'Italian (Switzerland)',
-        'ja'       => 'Japanese',
-        'ko'       => 'Korean',
-        'nl'       => 'Dutch (Standard)',
-        'nl-BE'    => 'Dutch (Belgium)',
-        'no'       => 'Norwegian',
-        'pl'       => 'Polish',
-        'pt'       => 'Portuguese (Portugal)',
-        'pt-BR'    => 'Portuguese (Brazil)',
-        'ro'       => 'Romanian',
-        'ru'       => 'Russian',
-        'ru-MD'    => 'Russian (Republic of Moldova)',
-        'sk'       => 'Slovak',
-        'sl'       => 'Slovenian',
-        'sv'       => 'Swedish',
-        'tr'       => 'Turkish',
-        'vi'       => 'Vietnamese',
-        'zh'       => 'Chinese',
-        'zh-CN'    => 'Chinese (PRC)',
-        'zh-HK'    => 'Chinese (Hong Kong)',
-        'zh-SG'    => 'Chinese (Singapore)',
-        'zh-TW'    => 'Chinese (Taiwan)'
-    ];
 
     /**
      * Constructor
@@ -138,42 +48,30 @@ class Videos extends DBEntity
         header('Content-Type: application/json');
         $this->lang = $lang;
 
-        $available_subs = $this->getAvailableSubs();
-        $transcript_xml = $this->fetchTranscript($youtube_id, $available_subs);
+        $transcript = $this->fetchTranscript($youtube_id);
         $metadata = $this->fetchVideoMetadata($youtube_id);
 
         // Combine metadata & transcript in a single array for response
-        $result = array_merge($metadata, ['text' => $transcript_xml->asXML()]);
+        $result = array_merge($metadata, [
+            'text' => $transcript['xml']->asXML(),
+            'text_creation_method_id' => $transcript['creation_method']->value,
+            'transcript_language_code' => $transcript['language_code'],
+        ]);
 
         return $result;
     }
 
     /**
-     * Get list of available subtitles based on provided language
-     *
-     * @return array List of language codes
-     */
-    private function getAvailableSubs(): array
-    {
-        $available_langs = array_filter(self::SUPPORTED_VIDEO_LANGUAGES, function ($key) {
-            return $key == $this->lang || str_starts_with($key, $this->lang . "-");
-        }, ARRAY_FILTER_USE_KEY);
-
-        return array_keys($available_langs);
-    }
-    /**
-     * Fetch transcript XML for the given YouTube video ID and supported languages
-     *
-     * @param string $youtube_id YouTube video ID
-     * @param array $available_subs List of supported languages
-     * @return \SimpleXMLElement Transcript XML
-     */
-    private function fetchTranscript(string $youtube_id, array $available_subs): \SimpleXMLElement
+      * Fetch transcript XML and provenance for the given YouTube video ID
+      *
+      * @param string $youtube_id YouTube video ID
+      * @return array Transcript XML and metadata
+      */
+    private function fetchTranscript(string $youtube_id): array
     {
         $error_message = "The video might lack subtitles or they're unavailable in the desired language. "
-            . "Auto-generated subtitles are of low quality and, thus, are not supported. Consider using the "
-            . "<a href='" . $this->getFilmotUrl() . "' target='_blank' class='alert-link'>Filmot search engine</a> "
-            . "to find YouTube videos with manually created subtitles.";
+            . "Consider using the <a href='" . $this->getFilmotUrl()
+            . "' target='_blank' class='alert-link'>Filmot search engine</a> to find another video.";
 
         if (!preg_match('/^[A-Za-z0-9_-]{11}$/', $youtube_id)) {
             throw new UserException('Invalid video ID.');
@@ -183,7 +81,7 @@ class Videos extends DBEntity
             PYTHON_VENV . '/bin/python',
             APP_ROOT . 'scripts/fetch-transcript.py',
             $youtube_id,
-            implode(',', $available_subs)
+            $this->lang
         ];
 
         $descriptor_spec = [
@@ -210,18 +108,28 @@ class Videos extends DBEntity
             throw new UserException($error_message);
         }
 
-        $transcript_array = json_decode($stdout, true);
+        $transcript_result = json_decode($stdout, true);
 
-        if (!$transcript_array || !is_array($transcript_array) || empty($transcript_array)) {
+        if (!is_array($transcript_result)
+            || !isset($transcript_result['is_generated'], $transcript_result['language_code'])
+            || !is_bool($transcript_result['is_generated'])
+            || !is_string($transcript_result['language_code'])
+            || empty($transcript_result['snippets'])
+            || !is_array($transcript_result['snippets'])) {
             throw new UserException($error_message);
         }
 
         // Convert transcript array to XML
-        // The Python script now returns the transcript directly as an array of snippets
         $transcript_xml = new \SimpleXMLElement('<root/>');
-        Conversion::arrayToXml($transcript_array, $transcript_xml);
+        Conversion::arrayToXml($transcript_result['snippets'], $transcript_xml);
 
-        return $transcript_xml;
+        return [
+            'xml' => $transcript_xml,
+            'creation_method' => $transcript_result['is_generated']
+                ? CreationMethod::machine
+                : CreationMethod::human,
+            'language_code' => $transcript_result['language_code'],
+        ];
     }
 
     /**
@@ -314,6 +222,9 @@ class Videos extends DBEntity
             $this->transcript_xml = $row['text'];
             $this->source_url     = $row['source_uri'];
             $this->date_created   = $row['date_created'];
+            $this->text_creation_method_id = isset($row['text_creation_method_id'])
+                ? (int)$row['text_creation_method_id']
+                : null;
             $this->youtube_id     = self::extractYTId($this->source_url);
         }
     } 
