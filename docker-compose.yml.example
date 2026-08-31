@@ -1,6 +1,7 @@
 services:
   nginx:
     container_name: aprelendo_nginx
+    restart: unless-stopped
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
@@ -12,6 +13,7 @@ services:
       - .:/var/www/aprelendo
   php:
     container_name: aprelendo_php
+    restart: unless-stopped
     build:
       context: .
       dockerfile: docker/php/Dockerfile
@@ -27,6 +29,7 @@ services:
   mysql:
     image: mariadb:latest
     container_name: aprelendo_db
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: 'root_password' ## change as necessary
       MYSQL_USER: 'aprelendo_user' ## change and keep the same as in src/config/config.php
@@ -39,7 +42,7 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
-    restart: always
+    restart: unless-stopped
     links:
       - mysql
     environment:
