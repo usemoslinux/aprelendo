@@ -157,6 +157,11 @@ if (!empty($google_font_families)) {
         <!-- Matomo Analytics -->
         <script src="/js/matomo.js" async defer></script>
     <?php endif; ?>
+
+    <?php if ($curpage === 'contact' && !IS_SELF_HOSTED): ?>
+        <link rel="preconnect" href="https://challenges.cloudflare.com">
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <?php endif; ?>
 </head>
 
 <?php

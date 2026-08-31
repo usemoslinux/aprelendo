@@ -10,12 +10,62 @@ use Aprelendo\UserException;
 header('Content-Type: application/json; charset=utf-8');
 $response = ['success' => false];
 
+function validateTurnstile(string $token): bool
+{
+    if ($token === '' || TURNSTILE_SECRET_KEY === '') {
+        return false;
+    }
+
+    $request_body = http_build_query([
+        'secret' => TURNSTILE_SECRET_KEY,
+        'response' => $token,
+        'remoteip' => $_SERVER['REMOTE_ADDR'] ?? '',
+    ]);
+
+    $curl = curl_init('https://challenges.cloudflare.com/turnstile/v0/siteverify');
+    if ($curl === false) {
+        error_log('Unable to initialize Turnstile verification request.');
+        return false;
+    }
+
+    curl_setopt_array($curl, [
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $request_body,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded'],
+    ]);
+
+    $response_body = curl_exec($curl);
+    $curl_error = curl_error($curl);
+    curl_close($curl);
+
+    if ($response_body === false) {
+        error_log('Turnstile verification request failed: ' . $curl_error);
+        return false;
+    }
+
+    $result = json_decode($response_body, true);
+    if (!is_array($result) || empty($result['success'])) {
+        $error_codes = is_array($result['error-codes'] ?? null) ? implode(', ', $result['error-codes']) : 'unknown';
+        error_log('Turnstile validation failed: ' . $error_codes);
+        return false;
+    }
+
+    return true;
+}
+
 if (empty($_POST)) {
     echo json_encode($response);
     exit;
 }
 
 try {
+    if (!IS_SELF_HOSTED && !validateTurnstile($_POST['cf-turnstile-response'] ?? '')) {
+        throw new UserException('Verification failed. Please try again.');
+    }
+
     if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['message'])) {
         throw new UserException('You need to complete all required form fields. Please try again.');
     }

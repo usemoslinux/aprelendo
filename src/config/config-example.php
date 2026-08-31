@@ -35,9 +35,14 @@ define('EMAIL_SENDER_USERNAME', 'USER');
 define('EMAIL_SENDER_PASSWORD', 'PASSWORD');
 define('SUPPORT_EMAIL', 'example@mail.com');
 
+// Cloudflare Turnstile keys used to protect the public contact form.
+// Shouldn't be necessary to set these if IS_SELF_HOSTED is TRUE
+define('TURNSTILE_SITE_KEY', 'your_turnstile_site_key');
+define('TURNSTILE_SECRET_KEY', 'your_turnstile_secret_key');
+
 define('MOCK_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
     .'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
-    
+
 define('PYTHON_VENV', '/opt/venv');
 
 define('PROXY', '');

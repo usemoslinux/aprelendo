@@ -33,6 +33,9 @@ $(document).ready(function() {
                     "Your message was successfully sent. You shall receive an answer briefly.",
                     "alert-success"
                 );
+            if (window.turnstile) {
+                window.turnstile.reset();
+            }
             setTimeout(resetControls, 2000);
         } catch (error) {
             console.error(error);

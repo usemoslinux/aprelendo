@@ -69,6 +69,15 @@ if (!$user_auth->isLoggedIn()) {
                                     required></textarea>
                             </div>
                         </div>
+                        <?php if (!IS_SELF_HOSTED): ?>
+                            <div class="row">
+                                <div class="mb-3 col-sm-12">
+                                    <div class="cf-turnstile"
+                                        data-sitekey="<?php echo htmlspecialchars(TURNSTILE_SITE_KEY, ENT_QUOTES, 'UTF-8'); ?>">
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                         <div class="row">
                             <div class="mb-3 col-sm-12 text-end">
                                 <button type="button" id="btn-cancel" class="btn btn-link"
