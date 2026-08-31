@@ -20,7 +20,12 @@ async function googleLogIn(googleUser) {
         const data = await response.json();
 
         if (!data.success) {
-            throw new Error(data.error_msg || 'Failed to log in with Google.');
+            const message = data.error_msg || 'Failed to log in with Google.';
+            if (data.error_html) {
+                showHtmlMessage(message, "alert-danger");
+                return;
+            }
+            throw new Error(message);
         }
                 
         window.location.replace("/texts");

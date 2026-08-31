@@ -97,7 +97,12 @@ $(document).ready(function () {
 
             $("#btn_register").prop("disabled", false); // Re-enable button
             if (!data.success) {
-                throw new Error(data.error_msg || 'Registration failed.');
+                const message = data.error_msg || 'Registration failed.';
+                if (data.error_html) {
+                    showHtmlMessage(message, "alert-danger");
+                    return;
+                }
+                throw new Error(message);
             }
 
             if (data.is_self_hosted === true) {

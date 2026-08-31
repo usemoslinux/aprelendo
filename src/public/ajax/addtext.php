@@ -324,11 +324,14 @@ try {
     
     send_json_response($response);
 } catch (InternalException | UserException $e) {
+    $error_msg = $e instanceof UserException
+        ? $e->getMessage()
+        : 'Oops! There was an unexpected error processing your request.';
+
     send_json_response([
         'success' => false,
-        'error_msg' => $e instanceof UserException
-            ? $e->getMessage()
-            : 'Oops! There was an unexpected error processing your request.',
+        'error_msg' => $error_msg,
+        'error_html' => $e instanceof UserException && str_contains($error_msg, '<'),
     ]);
 } catch (Throwable $e) {
     send_json_response($response);

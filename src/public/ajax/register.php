@@ -64,7 +64,13 @@ try {
     exit;
 } catch (InternalException | UserException $e) {
     $user->delete();
-    echo $e->getJsonError();
+    echo json_encode([
+        'success' => false,
+        'error_msg' => $e instanceof UserException
+            ? $e->getMessage()
+            : 'Oops! There was an unexpected error processing your request.',
+        'error_html' => $e instanceof UserException && str_contains($e->getMessage(), '<a '),
+    ]);
     exit;
 } catch (Throwable $e) {
     echo json_encode($response);

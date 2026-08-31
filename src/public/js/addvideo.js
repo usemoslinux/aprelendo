@@ -29,7 +29,12 @@ $(document).ready(function() {
             const data = await response.json();
 
             if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to add video');
+                const message = data.error_msg || 'Failed to add video';
+                if (data.error_html) {
+                    showHtmlMessage(message, "alert-danger");
+                    return;
+                }
+                throw new Error(message);
             }
 
             window.location.replace("/sharedtexts");
@@ -73,7 +78,12 @@ $(document).ready(function() {
             const data = await response.json();
 
             if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to fetch video data');
+                const message = data.error_msg || 'Failed to fetch video data';
+                if (data.error_html) {
+                    showHtmlMessage(message, "alert-danger");
+                    return;
+                }
+                throw new Error(message);
             }
             
             if ($("#yt-video").length) {

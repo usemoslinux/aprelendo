@@ -102,7 +102,13 @@ $(document).ready(function() {
             }
 
             if (!data.success) {
-                throw new Error(data.error_msg || 'Failed to add ebook');                
+                const message = data.error_msg || 'Failed to add ebook';
+                if (data.error_html) {
+                    showHtmlMessage(message, "alert-danger");
+                    resetControls(false);
+                    return;
+                }
+                throw new Error(message);
             }
 
             $progressbar.width("100%");
