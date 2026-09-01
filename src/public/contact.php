@@ -73,7 +73,8 @@ if (!$user_auth->isLoggedIn()) {
                             <div class="row">
                                 <div class="mb-3 col-sm-12">
                                     <div class="cf-turnstile"
-                                        data-sitekey="<?php echo htmlspecialchars(TURNSTILE_SITE_KEY, ENT_QUOTES, 'UTF-8'); ?>">
+                                        data-sitekey="<?php echo htmlspecialchars(TURNSTILE_SITE_KEY, ENT_QUOTES, 'UTF-8'); ?>"
+                                        data-action="contact">
                                     </div>
                                 </div>
                             </div>

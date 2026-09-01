@@ -10,9 +10,10 @@ use Aprelendo\UserException;
 header('Content-Type: application/json; charset=utf-8');
 $response = ['success' => false];
 
-function validateTurnstile(string $token): bool
+function validateTurnstile(string $token, string $expected_action, array $expected_host_names): bool
 {
-    if ($token === '' || TURNSTILE_SECRET_KEY === '') {
+    // Tokens over 2048 characters are invalid per Turnstile specs
+    if ($token === '' || strlen($token) > 2048 || TURNSTILE_SECRET_KEY === '' || empty($expected_host_names)) {
         return false;
     }
 
@@ -47,9 +48,23 @@ function validateTurnstile(string $token): bool
     }
 
     $result = json_decode($response_body, true);
+
+    // 1. Verify the challenge was successful
     if (!is_array($result) || empty($result['success'])) {
         $error_codes = is_array($result['error-codes'] ?? null) ? implode(', ', $result['error-codes']) : 'unknown';
         error_log('Turnstile validation failed: ' . $error_codes);
+        return false;
+    }
+
+    // 2. Verify the action matches the specific form submitted
+    if (($result['action'] ?? '') !== $expected_action) {
+        error_log('Turnstile validation failed: action mismatch. Expected ' . $expected_action . ', got ' . ($result['action'] ?? 'none'));
+        return false;
+    }
+
+    // 3. Verify the token was generated on an approved domain
+    if (!in_array($result['hostname'] ?? '', $expected_host_names, true)) {
+        error_log('Turnstile validation failed: hostname mismatch. Got ' . ($result['hostname'] ?? 'none'));
         return false;
     }
 
@@ -62,14 +77,18 @@ if (empty($_POST)) {
 }
 
 try {
-    if (!IS_SELF_HOSTED && !validateTurnstile($_POST['cf-turnstile-response'] ?? '')) {
+    // Define the action you set in data-action="contact" on your frontend HTML
+    $expected_action = 'contact';
+    $expected_host_names = ['aprelendo.com', 'www.aprelendo.com'];
+
+    if (!IS_SELF_HOSTED && !validateTurnstile($_POST['cf-turnstile-response'] ?? '', $expected_action, $expected_host_names)) {
         throw new UserException('Verification failed. Please try again.');
     }
 
     if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['message'])) {
         throw new UserException('You need to complete all required form fields. Please try again.');
     }
-        
+
     $name = $_POST['name'];
     $reply_to = $_POST['email'];
     $message = $_POST['message'];
@@ -90,7 +109,7 @@ try {
     $message .= "\r\n\r\nE-mail: " . $reply_to;
     $message .= "\r\n\r\nIP: " . $_SERVER['REMOTE_ADDR'];
     $message .= "\r\n\r\nDevice: " . $_SERVER['HTTP_USER_AGENT'] . "\r\n\r\n";
-    
+
     $email_sender = new EmailSender();
 
     $email_sender->mail->setFrom(SUPPORT_EMAIL, 'Aprelendo - Contact Form');
