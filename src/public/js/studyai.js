@@ -107,8 +107,8 @@ $(document).ready(function () {
             onUpdate(markdown_so_far) {
                 $('#text-studyai-answer').val(markdown_so_far);
             },
-            onError() {
-                $('#text-studyai-answer').val('Failed to get response from AI. Please try again.');
+            onError(error) {
+                $('#text-studyai-answer').val(error.message || 'Failed to get response from AI. Please try again.');
             }
         });
     }); 

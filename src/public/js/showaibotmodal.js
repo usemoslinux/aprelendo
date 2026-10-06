@@ -209,8 +209,8 @@ function initializeAIBotModal() {
             onUpdate(markdown_so_far) {
                 $('#text-ai-answer').val(markdown_so_far);
             },
-            onError() {
-                $('#text-ai-answer').val('Failed to get response from AI. Please try again.');
+            onError(error) {
+                $('#text-ai-answer').val(error.message || 'Failed to get response from AI. Please try again.');
             }
         });
     }

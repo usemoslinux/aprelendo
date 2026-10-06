@@ -8,6 +8,7 @@ use Aprelendo\SupportedLanguages;
 class AIBot
 {
     private const BASE_URL = 'https://router.huggingface.co/v1/chat/completions';
+    private const MODEL = 'Qwen/Qwen3.8-27B:novita';
     private const NUANCE_BLANK = '____';
     private $api_key = '';
     private $lang = '';
@@ -35,11 +36,8 @@ class AIBot
         $STOP = "<END>";
 
         $data = [
-            // "model" => "Qwen/Qwen3-VL-8B-Instruct",
-            "model" => "deepseek-ai/DeepSeek-V4.1-Flash",
-            // "model" => "google/gemma-4-26B-A4B-it",
-            // "model" => "Qwen/Qwen3-VL-30B-A3B-Instruct",
-            "provider" => "auto",
+            "model" => self::MODEL,
+            "chat_template_kwargs" => ["enable_thinking" => false],
             "messages" => [
                 [
                     "role" => "system",
@@ -57,13 +55,14 @@ class AIBot
                     "content" => $prompt
                 ]
             ],
-            "max_tokens" => 160,  // conservative cap; raise to ~220 only if you see frequent length stops
+            "max_tokens" => 512,  // Allow translations while the prompt keeps the answer concise.
             "temperature" => 0.1, // low = terse, less rambling
             "top_p" => 0.9,       // optional; keeps sampling stable
             "stop" => [$STOP],    // the model must end with this marker
             "stream" => true
         ];
 
+        $state = ['content' => false, 'finished' => false, 'finish_reason' => null, 'error' => false];
         $options = [
             CURLOPT_HTTPHEADER => [
                 "Authorization: Bearer {$this->api_key}",
@@ -72,17 +71,40 @@ class AIBot
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => json_encode($data),
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_WRITEFUNCTION => $this->createWriteFunction()
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_TIMEOUT => 60,
+            CURLOPT_WRITEFUNCTION => $this->createWriteFunction($state)
         ];
 
         ob_start();
 
         $ch = curl_init(self::BASE_URL);
         curl_setopt_array($ch, $options);
-        curl_exec($ch);
-        // curl_close($ch);
-
-        ob_end_flush();
+        try {
+            $result = curl_exec($ch);
+            $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if ($result === false) {
+                throw new UserException(curl_errno($ch) === CURLE_OPERATION_TIMEDOUT
+                    ? 'Lingobot timed out. Please try again.' : 'Unable to connect to the AI provider. Please try again.');
+            }
+            $this->checkResponseStatus($status);
+            if ($state['error']) {
+                throw new UserException('The AI provider reported an error. Please try again.');
+            }
+            if ($state['finish_reason'] === 'length') {
+                throw new UserException('Lingobot reached its response token limit. Please try a shorter question.');
+            }
+            if (!$state['content']) {
+                throw new UserException('Lingobot returned no answer. The model may have used its token budget on reasoning. Please try again.');
+            }
+            if (!$state['finished']) {
+                throw new UserException('The AI response was interrupted. Please try again.');
+            }
+            $this->emitStreamEvent(['type' => 'done']);
+        } finally {
+            curl_close($ch);
+            ob_end_flush();
+        }
     }
 
     /**
@@ -128,8 +150,8 @@ class AIBot
         float $temperature = 0.1
     ): string {
         $data = [
-            "model" => "deepseek-ai/DeepSeek-V4.1-Flash",
-            "provider" => "auto",
+            "model" => self::MODEL,
+            "chat_template_kwargs" => ["enable_thinking" => false],
             "messages" => [
                 [
                     "role" => "system",
@@ -155,21 +177,33 @@ class AIBot
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => json_encode($data),
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_TIMEOUT => 45
         ]);
 
         $reply = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if ($reply === false) {
+            $timed_out = curl_errno($ch) === CURLE_OPERATION_TIMEDOUT;
             curl_close($ch);
-            throw new InternalException('Unable to get AI response.');
+            throw new UserException($timed_out ? 'Lingobot timed out. Please try again.'
+                : 'Unable to connect to the AI provider. Please try again.');
         }
 
         curl_close($ch);
+        $this->checkResponseStatus($status);
         $decoded_reply = json_decode($reply, true);
 
-        if (!isset($decoded_reply['choices'][0]['message']['content'])) {
-            throw new InternalException('Malformed AI response.');
+        if (isset($decoded_reply['error'])) {
+            throw new UserException('The AI provider reported an error. Please try again.');
+        }
+        if (($decoded_reply['choices'][0]['finish_reason'] ?? null) === 'length') {
+            throw new UserException('Lingobot reached its response token limit. Please try fewer words.');
+        }
+        if (!is_string($decoded_reply['choices'][0]['message']['content'] ?? null)
+            || trim($decoded_reply['choices'][0]['message']['content']) === '') {
+            throw new UserException('Lingobot returned an empty or malformed answer. Please try again.');
         }
 
         return $decoded_reply['choices'][0]['message']['content'];
@@ -242,20 +276,31 @@ class AIBot
     }
 
     /**
-     * Create a reusable write function for handling API responses.
+     * Buffer SSE events across arbitrary cURL chunks and track stream completion.
      *
+     * @param array $state
      * @return callable
      */
-    private function createWriteFunction(): callable
+    private function createWriteFunction(array &$state): callable
     {
-        return function ($ch, $chunk) {
-            $lines = explode("\n", $chunk);
-            foreach ($lines as $line) {
-                if ($this->isDataLine($line)) {
-                    $this->processDataLine($line);
-                } elseif ($this->isErrorLine($line)) {
-                    $this->processErrorLine($line);
-                    return strlen($chunk); // Stop further processing
+        $buffer = '';
+        $data_lines = [];
+        return function ($ch, $chunk) use (&$buffer, &$data_lines, &$state) {
+            // HTTP error bodies are not SSE and must not be forwarded as answer text.
+            if (curl_getinfo($ch, CURLINFO_HTTP_CODE) >= 400) {
+                return strlen($chunk);
+            }
+            $buffer .= $chunk;
+            while (($newline = strpos($buffer, "\n")) !== false) {
+                $line = rtrim(substr($buffer, 0, $newline), "\r");
+                $buffer = substr($buffer, $newline + 1);
+                if ($line === '') {
+                    if ($data_lines) {
+                        $this->processStreamData(implode("\n", $data_lines), $state);
+                        $data_lines = [];
+                    }
+                } elseif (str_starts_with($line, 'data:')) {
+                    $data_lines[] = preg_replace('/^ /', '', substr($line, 5));
                 }
             }
             return strlen($chunk);
@@ -263,57 +308,60 @@ class AIBot
     }
 
     /**
-     * Check if a line contains data.
+     * Forward answer text, keeping reasoning and provider errors out of the answer.
      *
-     * @param string $line
-     * @return bool
-     */
-    private function isDataLine(string $line): bool
-    {
-        return str_starts_with($line, 'data: ');
-    }
-
-    /**
-     * Check if a line contains an error.
-     *
-     * @param string $line
-     * @return bool
-     */
-    private function isErrorLine(string $line): bool
-    {
-        return str_starts_with($line, '{"error":');
-    }
-
-    /**
-     * Process a data line and flush the content.
-     *
-     * @param string $line
+     * @param string $data
+     * @param array $state
      * @return void
      */
-    private function processDataLine(string $line): void
+    private function processStreamData(string $data, array &$state): void
     {
-        $json = substr($line, 6);
-        $decoded = json_decode($json, true);
-
-        if (isset($decoded['choices'][0]['delta']['content'])) {
-            echo $decoded['choices'][0]['delta']['content']; // Send only the content
-            $this->flushOutput();
+        if ($data === '[DONE]') {
+            $state['finished'] = true;
+            return;
+        }
+        $decoded = json_decode($data, true);
+        if (!is_array($decoded) || isset($decoded['error'])) {
+            $state['error'] = true;
+            return;
+        }
+        $choice = $decoded['choices'][0] ?? [];
+        if (isset($choice['finish_reason'])) {
+            $state['finish_reason'] = $choice['finish_reason'];
+            $state['finished'] = true;
+        }
+        $content = $choice['delta']['content'] ?? null;
+        if (is_string($content) && $content !== '') {
+            $state['content'] = $state['content'] || trim($content) !== '';
+            $this->emitStreamEvent(['type' => 'delta', 'content' => $content]);
         }
     }
 
     /**
-     * Process an error line and flush the error message.
+     * Send a newline-delimited JSON event to the browser.
      *
-     * @param string $line
+     * @param array $event
      * @return void
      */
-    private function processErrorLine(string $line): void
+    private function emitStreamEvent(array $event): void
     {
-        $decoded = json_decode($line, true);
-        if (isset($decoded['error'])) {
-            echo "Hugging Face Error: " . print_r($decoded['error']); // Send the error message
-            $this->flushOutput();
+        echo json_encode($event, JSON_INVALID_UTF8_SUBSTITUTE) . "\n";
+        $this->flushOutput();
+    }
+
+    private function checkResponseStatus(int $status): void
+    {
+        if ($status >= 200 && $status < 300) {
+            return;
         }
+        $message = match ($status) {
+            401, 403 => 'Check your Hugging Face token and its Inference Providers permission in your profile.',
+            402 => 'Your Hugging Face inference credits are exhausted. Check your Hugging Face billing settings.',
+            429 => 'The AI provider is rate limiting requests. Please try again shortly.',
+            404, 410, 503 => 'The selected AI model or provider is unavailable. Please try again later.',
+            default => 'The AI provider could not complete the request. Please try again.'
+        };
+        throw new UserException("{$message} (HTTP {$status})");
     }
 
     /**
