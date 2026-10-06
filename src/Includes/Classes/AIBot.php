@@ -22,7 +22,7 @@ class AIBot
         $this->api_key = $crypto->decrypt($api_key);
         $this->lang = SupportedLanguages::get($learning_lang_iso, 'name');
         $this->native_lang = SupportedLanguages::get($native_lang_iso, 'name');
-    } 
+    }
 
     /**
      * Stream a reply from the AI model based on the given prompt.
@@ -36,7 +36,7 @@ class AIBot
 
         $data = [
             // "model" => "Qwen/Qwen3-VL-8B-Instruct",
-            "model" => "deepseek-ai/DeepSeek-V3.2-Exp",
+            "model" => "deepseek-ai/DeepSeek-V4.1-Flash",
             // "model" => "google/gemma-4-26B-A4B-it",
             // "model" => "Qwen/Qwen3-VL-30B-A3B-Instruct",
             "provider" => "auto",
@@ -128,7 +128,7 @@ class AIBot
         float $temperature = 0.1
     ): string {
         $data = [
-            "model" => "deepseek-ai/DeepSeek-V3.2-Exp",
+            "model" => "deepseek-ai/DeepSeek-V4.1-Flash",
             "provider" => "auto",
             "messages" => [
                 [
