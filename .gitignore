@@ -12,3 +12,4 @@ todo.md
 uploads/*
 cache/
 vendor/
+log-report.php
