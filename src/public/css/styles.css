@@ -665,24 +665,18 @@ a[role="menuitem"] {
 }
 
 #readerpage.lightmode:not(.ebook-reader) {
-    background-color: #FAF7F0;
-    background-image:
-        radial-gradient(circle at 8% 8%, rgba(233, 222, 196, 0.55) 0%, rgba(233, 222, 196, 0) 40%),
-        radial-gradient(circle at 94% 94%, rgba(216, 225, 221, 0.5) 0%, rgba(216, 225, 221, 0) 45%);
+    background-color: #dbece2;
+    background-image: linear-gradient(135deg, #dbece2 0%, #dde9d9 100%);
 }
 
 #readerpage.sepiamode:not(.ebook-reader) {
-    background-color: #EEDBB8;
-    background-image:
-        radial-gradient(circle at 8% 8%, rgba(201, 164, 103, 0.45) 0%, rgba(201, 164, 103, 0) 40%),
-        radial-gradient(circle at 94% 94%, rgba(184, 137, 90, 0.4) 0%, rgba(184, 137, 90, 0) 45%);
+    background-color: #dad8f4;
+    background-image: linear-gradient(135deg, #dad8f4 0%, #dcd5e3 100%);
 }
 
 #readerpage.darkmode:not(.ebook-reader) {
-    background-color: #1B1D21;
-    background-image:
-        radial-gradient(circle at 8% 8%, rgba(58, 63, 71, 0.55) 0%, rgba(58, 63, 71, 0) 40%),
-        radial-gradient(circle at 94% 94%, rgba(46, 59, 58, 0.5) 0%, rgba(46, 59, 58, 0) 45%);
+    background-color: #2c3033;
+    background-image: linear-gradient(135deg, #2c3033 0%, #0f1112 100%);
 }
 
 #readerpage.lightmode.show-wallpaper:not(.ebook-reader) { background-image: url("../img/backgrounds/container-light.webp"); }
