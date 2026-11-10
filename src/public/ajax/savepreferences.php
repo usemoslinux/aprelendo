@@ -29,8 +29,9 @@ try {
         $_POST['lineheight'],
         $_POST['alignment'],
         $_POST['mode'],
-        $_POST['showwallpaper'],
-        $_POST['assistedlearning']
+        $_POST['showwallpaper'] ?? null,
+        $_POST['assistedlearning'],
+        $_POST['ebookmode'] ?? null
     );
 
     $response = ['success' => true];

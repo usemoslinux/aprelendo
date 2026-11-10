@@ -13,6 +13,7 @@ class Preferences extends DBEntity
     public string $display_mode       = 'light';
     public bool $show_wallpaper       = true;
     public bool $assisted_learning    = true;
+    public string $ebook_mode         = 'auto';
 
     /**
      * Constructor
@@ -35,8 +36,9 @@ class Preferences extends DBEntity
      * @param string $line_height
      * @param string $text_alignment
      * @param string $display_mode
-     * @param bool $show_wallpaper
+     * @param ?bool $show_wallpaper Null preserves the setting for other readers.
      * @param bool $assisted_learning
+     * @param ?string $ebook_mode
      * @return void
      */
     public function edit(
@@ -45,25 +47,37 @@ class Preferences extends DBEntity
         string $line_height,
         string $text_alignment,
         string $display_mode,
-        bool $show_wallpaper,
-        bool $assisted_learning
+        ?bool $show_wallpaper,
+        bool $assisted_learning,
+        ?string $ebook_mode = null
         ): void
         {
         
+        // Other reader forms do not submit ebook-specific settings.
+        $this->loadRecord();
+        if ($ebook_mode !== null) {
+            if (!in_array($ebook_mode, ['auto', 'single', 'scroll'], true)) {
+                throw new UserException('Invalid ebook reading mode.');
+            }
+            $this->ebook_mode = $ebook_mode;
+        }
         $this->font_family = $font_family ?? $this->font_family;
         $this->font_size = $font_size ?? $this->font_size;
         $this->line_height = $line_height ?? $this->line_height;
         $this->text_alignment = $text_alignment ?? $this->text_alignment;
         $this->display_mode = $display_mode ?? $this->display_mode;
-        $this->show_wallpaper = (bool)$show_wallpaper;
+        if ($show_wallpaper !== null) {
+            $this->show_wallpaper = $show_wallpaper;
+        }
         $this->assisted_learning = (int)$assisted_learning ?? $this->assisted_learning;
 
         $sql = "REPLACE INTO `{$this->table}` (`user_id`, `font_family`,
-                `font_size`, `line_height`, `text_alignment`, `display_mode`, `show_wallpaper`, `assisted_learning`)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                `font_size`, `line_height`, `text_alignment`, `display_mode`, `show_wallpaper`, `assisted_learning`, `ebook_mode`)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $this->sqlExecute($sql, [
             $this->user_id, $this->font_family, $this->font_size, $this->line_height,
-            $this->text_alignment, $this->display_mode, (int)$this->show_wallpaper, (int)$this->assisted_learning
+            $this->text_alignment, $this->display_mode, (int)$this->show_wallpaper, (int)$this->assisted_learning,
+            $this->ebook_mode
         ]);
     } 
 
@@ -85,6 +99,7 @@ class Preferences extends DBEntity
             $this->display_mode      = $row['display_mode'];
             $this->show_wallpaper    = (bool)$row['show_wallpaper'];
             $this->assisted_learning = $row['assisted_learning'];
+            $this->ebook_mode        = $row['ebook_mode'] ?? 'auto';
         }
     } 
 

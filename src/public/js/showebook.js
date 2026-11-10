@@ -3,14 +3,135 @@
 $(document).ready(function () {
     const doclang = $("html").attr("lang");
     const ebook_id = $("#text").attr("data-idText");
-    const book = ePub();
+    const book = ePub({ replacements: 'blobUrl' });
     const media_controller = ReaderHelpers.resolveMediaController();
     const text = document.getElementById("text");
     const reader = document.getElementById("readerpage");
-    const next = document.getElementById("next");
     let text_pos = "";
     let current_section = null;
-    let has_unsaved_reviews = false;
+    let navigating = false;
+    let closing = false;
+    let restoring = false;
+    let save_timer = null;
+    let save_queue = Promise.resolve(true);
+    let pending_review = null;
+    const reviewed_words = new Set();
+    const reviewed_sections = new Set();
+    const viewport = document.getElementById('ebook-viewport');
+    const page_status = document.getElementById('ebook-page-status');
+    const progress = document.getElementById('ebook-progress');
+    const previous_page = document.getElementById('ebook-prev');
+    const next_page = document.getElementById('ebook-next');
+    const pagination = new EbookPagination(viewport, text, {
+        mode: reader.dataset.ebookMode,
+        onChange: updateVisibleLocation
+    });
+    text.dir = ['ar', 'fa', 'he', 'ur'].includes(doclang.split('-')[0]) ? 'rtl' : 'ltr';
+
+    function showReaderMessage(message = '') {
+        const element = document.getElementById('ebook-message');
+        element.textContent = message;
+        element.hidden = !message;
+    }
+
+    function clearSelection() {
+        const had_selection = Boolean(text.querySelector('.highlighted'));
+        TextActionBtns.hide();
+        TextHighlighter.removeAll();
+        if (had_selection && media_controller && typeof media_controller.resume === 'function') {
+            media_controller.resume();
+        }
+    }
+
+    function updateVisibleLocation(state) {
+        if (!current_section || restoring) return;
+        clearSelection();
+        for (const word of text.querySelectorAll('.reviewing')) {
+            if (Array.from(word.getClientRects()).some(rect => pagination.isVisible(rect))) {
+                word.classList.add('ebook-visited');
+            }
+        }
+        const maximum = viewport.scrollHeight - viewport.clientHeight;
+        const fraction = state.scrolling
+            ? (maximum > 0 ? viewport.scrollTop / maximum : 1)
+            : (state.pages > state.columns
+                ? state.page / (Math.floor((state.pages - 1) / state.columns) * state.columns) : 1);
+        page_status.textContent = state.scrolling
+            ? `Chapter progress · ${Math.round(fraction * 100)}%`
+            : `Chapter · ${state.columns === 2 && state.page + 1 < state.pages ? 'Pages' : 'Page'} ${state.page + 1}`
+                + (state.columns === 2 && state.page + 1 < state.pages ? `–${Math.min(state.page + 2, state.pages)}` : '')
+                + ` of ${state.pages}`;
+        progress.value = String(Math.round(fraction * 1000));
+        progress.setAttribute('aria-valuetext', page_status.textContent);
+        progress.disabled = false;
+        previous_page.disabled = !(current_section.prev && current_section.prev())
+            && (state.scrolling ? viewport.scrollTop <= 1 : state.page === 0);
+        next_page.disabled = !current_section.next()
+            && (state.scrolling ? viewport.scrollTop >= maximum - 1 : state.page + state.columns >= state.pages);
+        text_pos = JSON.stringify({ version: 1, href: current_section.href, offset: state.offset });
+        clearTimeout(save_timer);
+        if (!closing) save_timer = setTimeout(() => queuePositionSave(), 800);
+    }
+
+    function getAudioPosition() {
+        const audio = document.getElementById('audioplayer');
+        if (audio) {
+            return typeof AudioController !== 'undefined' && AudioController.isPlaylist()
+                ? AudioController.getPlaylistPositionString() : audio.currentTime;
+        }
+        return document.getElementById('videoplayer') && typeof VideoController !== 'undefined'
+            ? VideoController.getCurrentTime() : 0;
+    }
+
+    function queuePositionSave() {
+        if (!text_pos) return Promise.resolve(true);
+        const position = text_pos;
+        const audio_position = getAudioPosition();
+        save_queue = save_queue.then(() => saveTextAndAudioPos(position, audio_position));
+        return save_queue;
+    }
+
+    async function turnPage(direction) {
+        if (navigating || closing || !current_section) return;
+        clearSelection();
+        if (pagination.turn(direction)) return;
+        const section = direction < 0
+            ? (current_section.prev ? current_section.prev() : null) : current_section.next();
+        if (section) await display(section.href, { end: direction < 0 });
+    }
+
+    /** Normalize mouse/trackpad input and avoid turning many pages in a wheel burst. */
+    function bindWheelNavigation() {
+        let accumulated = 0;
+        let last_event = 0;
+        let last_turn = -Infinity;
+        const progress_area = progress.closest('.ebook-progress');
+        const handleWheel = event => {
+            if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey
+                || document.querySelector('.modal.show, .offcanvas.show')) return;
+            // The explicit scrolling layout keeps native scrolling over the book.
+            if (pagination.mode === 'scroll' && event.currentTarget !== progress_area) return;
+            event.preventDefault();
+            if (navigating || closing || !current_section) return;
+            const horizontal = Math.abs(event.deltaX) > Math.abs(event.deltaY);
+            let delta = horizontal ? event.deltaX * (pagination.rtl ? -1 : 1) : event.deltaY;
+            if (event.deltaMode === 1) delta *= parseFloat(getComputedStyle(text).lineHeight) || 24;
+            else if (event.deltaMode === 2) delta *= viewport.clientHeight;
+            const now = performance.now();
+            if (now - last_event > 180 || Math.sign(delta) !== Math.sign(accumulated)) accumulated = 0;
+            last_event = now;
+            if (now - last_turn < 320) return;
+            accumulated += delta;
+            if (Math.abs(accumulated) >= 40) {
+                const direction = Math.sign(accumulated);
+                accumulated = 0;
+                last_turn = now;
+                turnPage(direction);
+            }
+        };
+        document.getElementById('text-container').addEventListener('wheel', handleWheel, { passive: false });
+        progress_area.addEventListener('wheel', handleWheel, { passive: false });
+    }
 
     window.parent.show_confirmation_dialog = true; // show confirmation dialog on close
 
@@ -31,18 +152,12 @@ $(document).ready(function () {
      * Ajax call to fetch an ebook. Response has to be converted to arrayBuffer to allow
      * epub.js (book.open function) to process it correctly
      */
-    function getEbook(ebook_id, fetchStatusHandler, book, reader) {
+    function getEbook(ebook_id, fetchStatusHandler, book) {
         return fetch("/ajax/getebook.php?id=" + ebook_id)
             .then(fetchStatusHandler)
             .then(response => response.arrayBuffer())
             .then(arraybuffer => {
                 const book_open_promise = book.open(arraybuffer);
-                const rendition = book.renderTo("text", {
-                    flow: "scrolled-doc"
-                });
-
-                setupRendition(rendition, reader);
-
                 return book_open_promise;
             })
             .catch((error) => {
@@ -53,57 +168,13 @@ $(document).ready(function () {
     }
 
     /**
-     * Returns the promise that resolves to the book sections collection for the active epub.js build.
-     * @param {object} book
-     * @returns {Promise<object>|undefined}
-     */
-    function getLoadedSections(book) {
-        if (!book.loaded) {
-            return undefined;
-        }
-
-        return book.loaded.sections || book.loaded.spine;
-    }
-
-    /**
-     * Preloads section documents so later manual section rendering stays responsive.
-     * @param {object} book
-     * @returns {void}
-     */
-    function preloadBookSections(book) {
-        const loaded_sections = getLoadedSections(book);
-
-        if (!loaded_sections || typeof loaded_sections.then !== "function") {
-            return;
-        }
-
-        loaded_sections.then((sections) => {
-            if (!sections) {
-                return;
-            }
-
-            if (typeof sections.each === "function") {
-                sections.each((section) => {
-                    section.load(book.load.bind(book));
-                });
-                return;
-            }
-
-            if (typeof sections.forEach === "function") {
-                sections.forEach((section) => {
-                    section.load(book.load.bind(book));
-                });
-            }
-        });
-    }
-
-    /**
      * Returns a book section using the API available in the current epub.js build.
      * @param {object} book
      * @param {string|number} item
      * @returns {object|null}
      */
     function getBookSection(book, item) {
+        if (typeof item === 'string' && /^\d+$/.test(item)) item = Number(item);
         if (typeof book.section === "function") {
             return book.section(item);
         }
@@ -196,135 +267,27 @@ $(document).ready(function () {
     }
 
     /**
-     * Applies reader typography defaults using the theming API available in the active epub.js build.
-     * @param {object} rendition
-     * @param {HTMLElement} reader
-     * @returns {void}
-     */
-    function applyReaderThemeDefaults(rendition, reader) {
-        const body_styles = {
-            "font-family": reader.style.fontFamily + " !important",
-            "font-size": reader.style.fontSize + " !important",
-            "text-align": reader.style.textAlign + " !important",
-            "line-height": reader.style.lineHeight + " !important",
-            "padding": "0 5% !important"
-        };
-
-        if (typeof rendition.themes.default === "function") {
-            rendition.themes.default({
-                body: body_styles
-            });
-            return;
-        }
-
-        if (typeof rendition.themes.font === "function" && reader.style.fontFamily) {
-            rendition.themes.font(reader.style.fontFamily);
-        }
-
-        if (typeof rendition.themes.fontSize === "function" && reader.style.fontSize) {
-            rendition.themes.fontSize(reader.style.fontSize);
-        }
-
-        if (typeof rendition.themes.appendRule === "function") {
-            if (reader.style.textAlign) {
-                rendition.themes.appendRule("text-align", reader.style.textAlign, true);
-            }
-
-            if (reader.style.lineHeight) {
-                rendition.themes.appendRule("line-height", reader.style.lineHeight, true);
-            }
-
-            rendition.themes.appendRule("padding", "0 5%", true);
-        }
-    }
-
-    /**
-     * Returns the active reader theme class expected by epub.js.
-     * @param {HTMLElement} reader
-     * @returns {string|null}
-     */
-    function getReaderThemeName(reader) {
-        const theme_names = ["darkmode", "lightmode", "sepiamode"];
-
-        for (const theme_name of theme_names) {
-            if (reader.classList.contains(theme_name)) {
-                return theme_name;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Applies theme registration and reader defaults to a rendition once it exists.
-     * @param {object} rendition
-     * @param {HTMLElement} reader
-     * @returns {void}
-     */
-    function setupRendition(rendition, reader) {
-        rendition.themes.register("darkmode", "/css/showebook.css");
-        rendition.themes.register("lightmode", "/css/showebook.css");
-        rendition.themes.register("sepiamode", "/css/showebook.css");
-
-        applyReaderThemeDefaults(rendition, reader);
-
-        const reader_theme_name = getReaderThemeName(reader);
-        if (reader_theme_name) {
-            rendition.themes.select(reader_theme_name);
-        }
-    }
-
-    /**
-     * Handles the next chapter button click.
-     *
-     * @param {Event} event
-     * @returns {Promise<void>}
-     */
-    async function handleNextChapterClick(event) {
-        event.preventDefault();
-        TextActionBtns.hide();
-        disposeTooltip(next);
-
-        const save_succeeded = await saveWords();
-        if (!save_succeeded) {
-            return;
-        }
-
-        const url = next.getAttribute("href");
-        await display(url);
-    }
-
-    /**
      * Saves review state and reading position before closing the ebook reader.
      *
      * @returns {Promise<void>}
      */
     async function handleCloseEbookClick() {
+        if (navigating || closing) return;
+        closing = true;
+        clearTimeout(save_timer);
+        pagination.notify();
         TextActionBtns.hide();
         // save word status before closing
         const save_succeeded = await saveWords();
         if (!save_succeeded) {
+            closing = false;
             return;
         }
 
-        // save book position to resume reading from there later
-        let audio_pos = 0;
-        const audio = document.getElementById("audioplayer");
-        const video = document.getElementById("videoplayer");
-
-        if (audio) {
-            if (typeof AudioController !== "undefined" && AudioController.isPlaylist()) {
-                audio_pos = AudioController.getPlaylistPositionString();
-            } else {
-                audio_pos = audio.currentTime;
-            }
-        } else if (video) {
-            audio_pos = VideoController.getCurrentTime();
-        }
-
         if (text_pos) {
-            const position_saved = await saveTextAndAudioPos(text_pos, audio_pos);
+            const position_saved = await queuePositionSave();
             if (!position_saved) {
+                closing = false;
                 return;
             }
 
@@ -332,6 +295,7 @@ $(document).ready(function () {
             window.parent.show_confirmation_dialog = false;
             window.location.replace("/texts");
         }
+        closing = false;
     }
 
     /**
@@ -340,6 +304,8 @@ $(document).ready(function () {
      * @returns {void}
      */
     function handleReaderUnload() {
+        pagination.destroy();
+        clearTimeout(save_timer);
         book.destroy();
     }
 
@@ -348,21 +314,37 @@ $(document).ready(function () {
      * @returns {Promise<boolean>}
      */
     async function saveWords() {
-        if (!has_unsaved_reviews) {
-            return true;
-        }
-
-        if ($("#text").find(".reviewing").length === 0) {
-            has_unsaved_reviews = false;
-            return true;
-        }
-
         try {
-            await ReaderHelpers.saveReviewProgress({
-                words_selector: "#text .reviewing"
-            });
-            has_unsaved_reviews = false;
-            return true;
+            if (!pending_review) {
+                const words = new Map();
+                text.querySelectorAll('.reviewing.ebook-visited').forEach(element => {
+                    const name = element.textContent.toLowerCase().trim();
+                    if (!reviewed_words.has(name)) words.set(name, element);
+                });
+                if (!words.size) return true;
+                const elements = $(Array.from(words.values()));
+                pending_review = {
+                    words: Array.from(words.keys()),
+                    data: ReaderHelpers.buildReviewData(elements, reviewed_sections.has(current_section.href) ? 0 : 1),
+                    href: current_section.href,
+                    words_saved: false
+                };
+            }
+            // A score-save retry must not advance the words' learning status twice.
+            if (!pending_review.words_saved) {
+                await ReaderHelpers.postFormJson('/ajax/updatewords.php', {
+                    words: JSON.stringify(pending_review.words)
+                }, 'Failed to save reviewed words.');
+                pending_review.words_saved = true;
+            }
+            await ReaderHelpers.postFormJson('/ajax/updateuserscore.php', {
+                review_data: JSON.stringify(pending_review.data)
+            }, 'Failed to save review score.');
+            pending_review.words.forEach(word => reviewed_words.add(word));
+            reviewed_sections.add(pending_review.href);
+            pending_review = null;
+            // More pages may have been visited after a failed save and before retrying.
+            return saveWords();
         } catch (error) {
             console.error(error);
             alert(`Oops! ${error.message}`);
@@ -399,7 +381,7 @@ $(document).ready(function () {
             a.onclick = function () {
                 TextActionBtns.hide();
                 const url = a.getAttribute("href");
-                document.getElementById("opener").click();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('navigation')).hide();
                 display(url);
                 return false;
             };
@@ -421,10 +403,7 @@ $(document).ready(function () {
             $nav.classList.add("fixed");
         }
 
-        if (current_section) {
-            updateNextChapterButton(current_section, text_pos);
-            updateToc(text_pos);
-        }
+        if (current_section) updateToc(current_section.href);
     }
 
     /**
@@ -445,11 +424,12 @@ $(document).ready(function () {
         $book_title.textContent = (meta.title && meta.title.trim() !== "") ? meta.title : "Untitled";
         $author.textContent = (meta.creator && meta.creator.trim() !== "") ? meta.creator : "Unknown";
         $publisher.textContent = (meta.publisher && meta.publisher.trim() !== "") ? meta.publisher : "Unknown";
-        $pubdate.textContent = (meta.pubdate && meta.pubdate.trim() !== "") ? new Intl.DateTimeFormat("en-US", {
+        const publication_date = new Date(meta.pubdate);
+        $pubdate.textContent = !Number.isNaN(publication_date.getTime()) ? new Intl.DateTimeFormat("en-US", {
             year: "numeric",
             month: "long",
             day: "numeric"
-        }).format(new Date(meta.pubdate)) : "Not available";
+        }).format(publication_date) : "Not available";
 
         const url = await getBookCoverUrl(book);
         if (url) {
@@ -458,24 +438,13 @@ $(document).ready(function () {
     }
 
     /**
-     * Resets the next chapter button before rendering a new section.
-     * @returns {void}
-     */
-    function resetNextChapterButton() {
-        disposeTooltip(next);
-        next.textContent = "";
-        next.classList.add('d-none');
-        next.href = "#";
-    } 
-
-    /**
      * Toggles the loading state for the reader content area.
      * @param {boolean} is_loading
      * @returns {void}
      */
     function setLoadingState(is_loading) {
         $(".loading-spinner-container").toggleClass("show", is_loading);
-        $("#text-container").toggleClass("show", !is_loading);
+        $("#text-container").toggleClass("show", !is_loading).attr('aria-busy', String(is_loading));
     } 
 
     /**
@@ -490,14 +459,11 @@ $(document).ready(function () {
     /**
      * Renders annotated section HTML into the text container.
      * @param {string} text_html
-     * @param {string|number} item
      * @returns {void}
      */
-    function renderSectionContent(text_html, item) {
+    function renderSectionContent(text_html) {
         text.innerHTML = text_html;
         TextProcessor.updateAnchorsList();
-        has_unsaved_reviews = $("#text").find(".reviewing").length > 0;
-        scrollToChapterFragment(item);
     } 
 
     /**
@@ -509,9 +475,7 @@ $(document).ready(function () {
      */
     function updateSectionNavigation(section, item) {
         current_section = section;
-        updateNextChapterButton(section, item);
-        text_pos = item;
-        updateToc(item);
+        updateToc(typeof item === 'number' || /^\d+$/.test(item) ? section.href : item);
     }
 
     /**
@@ -520,23 +484,19 @@ $(document).ready(function () {
      * @param {string|number} item
      * @returns {Promise<void>}
      */
-    async function renderSection(section, item) {
+    async function renderSection(section, item, options = {}) {
         const ebook_html = await section.render(book.load.bind(book));
         const $parsed = cleanEbookHTML(ebook_html);
-
-        setLoadingState(true);
-
-        try {
-            const text_html = await loadAnnotatedHtml($parsed.html());
-            renderSectionContent(text_html, item);
-        } catch (error) {
-            console.error(error);
-            alert(`Oops! ${error.message}`);
-        } finally {
-            setLoadingState(false);
-        }
-
+        const text_html = await loadAnnotatedHtml($parsed.html());
+        restoring = true;
+        renderSectionContent(text_html);
         updateSectionNavigation(section, item);
+        await document.fonts.ready;
+        pagination.setContent(options.offset || 0);
+        if (options.end) pagination.goToEnd();
+        else if (!options.offset) scrollToChapterFragment(item);
+        restoring = false;
+        pagination.notify();
     } 
 
     /**
@@ -544,16 +504,28 @@ $(document).ready(function () {
      * @param {string|number} item
      * @returns {Promise<object|undefined>}
      */
-    async function display(item) {
-        let section = getBookSection(book, item);
-
-        resetNextChapterButton();
-
-        if (section) {
-            await renderSection(section, item);
+    async function display(item, options = {}) {
+        if (navigating || closing) return;
+        navigating = true;
+        clearTimeout(save_timer);
+        clearSelection();
+        try {
+            const section = getBookSection(book, item);
+            if (!section) throw new Error('This chapter could not be found. Choose another chapter from Contents.');
+            if (current_section && !(await saveWords())) return;
+            if (current_section && !(await queuePositionSave())) return;
+            showReaderMessage();
+            setLoadingState(true);
+            await renderSection(section, item, options);
+            return section;
+        } catch (error) {
+            console.error(error);
+            showReaderMessage(error.message);
+        } finally {
+            restoring = false;
+            navigating = false;
+            setLoadingState(false);
         }
-
-        return section;
     } 
 
     /**
@@ -609,14 +581,14 @@ $(document).ready(function () {
      */
     function scrollToChapterFragment(chapter_href) {
         const fragment = getChapterFragment(chapter_href);
-        const target = fragment ? document.getElementById(fragment) : null;
+        const target = fragment ? Array.from(text.querySelectorAll('[id]')).find(element => element.id === fragment) : null;
 
         if (target) {
-            target.scrollIntoView({ block: 'start' });
+            pagination.reveal(target);
             return;
         }
 
-        scrollToPageTop();
+        pagination.restore(0);
     }
 
     /**
@@ -637,46 +609,6 @@ $(document).ready(function () {
         return toc_links.find(($link) => $link.dataset.chapter_href === normalized_href)
             || toc_links.find(($link) => $link.dataset.chapter_path === normalized_path)
             || null;
-    } 
-
-    /**
-     * Updates the next chapter button, preferring TOC order so it behaves like clicking a TOC item.
-     * @param {object} section
-     * @param {string|number} item
-     */
-    function updateNextChapterButton(section, item) {
-        let next_href = '';
-        let next_label = 'Next chapter';
-        const $nav = document.getElementById('toc');
-        const current_toc_link = getCurrentTocLink($nav, item);
-        const next_toc_link = current_toc_link ? current_toc_link.nextElementSibling : null;
-
-        if (next_toc_link && next_toc_link.classList.contains('toc-item')) {
-            next_href = next_toc_link.getAttribute('href');
-            next_label = next_toc_link.textContent;
-        } else {
-            const next_section = section.next();
-
-            if (!next_section) {
-                return;
-            }
-
-            next_href = next_section.href;
-
-            const next_nav = getNavigationItem(book, next_section.href);
-            if (next_nav && next_nav.label) {
-                next_label = next_nav.label;
-            }
-        }
-
-        next.textContent = next_label + ' »';
-        next.href = next_href;
-
-        if (!isMobileDevice()) {
-            setNewTooltip(next, 'Go to next chapter & mark underlined words as reviewed');
-        }
-
-        next.classList.remove('d-none');
     } 
 
     /**
@@ -811,11 +743,13 @@ $(document).ready(function () {
 
         $active_items_in_nav.forEach(($item) => {
             $item.classList.remove('bg-primary', 'text-light');
+            $item.removeAttribute('aria-current');
         });
 
         // Apply classes and update the title if the link was found
         if ($selector) {
             $selector.classList.add('bg-primary', 'text-light');
+            $selector.setAttribute('aria-current', 'location');
         }
 
         if (!current_nav && $selector) {
@@ -823,9 +757,9 @@ $(document).ready(function () {
         }
 
         if (current_nav && current_nav.label) {
-            $title.textContent = ' - ' + current_nav.label;
+            $title.textContent = current_nav.label;
         } else if ($selector) {
-            $title.textContent = ' - ' + $selector.textContent;
+            $title.textContent = $selector.textContent;
         } else {
             $title.textContent = '';
         }
@@ -852,9 +786,16 @@ $(document).ready(function () {
 
             // load text position, if available
             if (saved_text_pos) {
-                await display(saved_text_pos);
+                let location = null;
+                try { location = JSON.parse(saved_text_pos); } catch (error) { /* Legacy chapter href. */ }
+                if (location && location.version === 1 && typeof location.href === 'string') {
+                    const section = await display(location.href, { offset: location.offset });
+                    if (!section) await display(0);
+                } else {
+                    await display(saved_text_pos);
+                }
             } else {
-                await display(1);
+                await display(0);
             }
 
             // load audio position, if available
@@ -871,7 +812,7 @@ $(document).ready(function () {
             }
         } catch (error) {
             console.error(error);
-            await display(1);
+            await display(0);
             const audio = document.getElementById("audioplayer");
             if (audio != null) {
                 audio.currentTime = 0;
@@ -894,10 +835,11 @@ $(document).ready(function () {
                 audio_pos: audio_pos,
                 text_pos: text_pos
             }, "Failed to save text and audio position.");
+            showReaderMessage();
             return true;
         } catch (error) {
             console.error(error);
-            alert(`Oops! ${error.message}`);
+            showReaderMessage('Reading position could not be saved. It will retry on your next page turn.');
             return false;
         }
     }
@@ -934,19 +876,44 @@ $(document).ready(function () {
             return window.parent.show_confirmation_dialog;
         });
 
-        next.addEventListener("click", handleNextChapterClick, false);
         $("body").on("click", "#btn-close-ebook", handleCloseEbookClick);
         parent.window.addEventListener("unload", handleReaderUnload);
+        previous_page.addEventListener('click', () => turnPage(-1));
+        next_page.addEventListener('click', () => turnPage(1));
+        bindWheelNavigation();
+        progress.addEventListener('input', () => {
+            if (!navigating && !closing) pagination.progress(Number(progress.value) / 1000);
+        });
+        document.addEventListener('keydown', event => {
+            if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey
+                || event.target.closest('input, textarea, select, button, a, [contenteditable="true"]')
+                || document.querySelector('.modal.show, .offcanvas.show')
+                || text.querySelector('.highlighted') || window.getSelection()?.toString()) return;
+            const direction = { ArrowLeft: pagination.rtl ? 1 : -1, ArrowRight: pagination.rtl ? -1 : 1,
+                PageUp: -1, PageDown: 1 }[event.key];
+            if (direction) {
+                event.preventDefault();
+                turnPage(direction);
+            }
+        });
+        document.addEventListener('reader-preferences-changed', event => {
+            clearSelection();
+            pagination.setMode(event.detail.ebook_mode || pagination.mode);
+        });
+        document.getElementById('navigation').addEventListener('shown.bs.offcanvas', () => {
+            document.querySelector('#toc [aria-current]')?.scrollIntoView({ block: 'nearest' });
+        });
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden' && !navigating && !closing) {
+                clearTimeout(save_timer);
+                queuePositionSave();
+            }
+        });
 
-        await getEbook(ebook_id, fetchStatusHandler, book, reader);
+        await getEbook(ebook_id, fetchStatusHandler, book);
 
-        preloadBookSections(book);
-
-        await Promise.all([
-            setTextAndAudioPos(),
-            buildToc(),
-            populateBookMetadata()
-        ]);
+        await Promise.all([buildToc(), populateBookMetadata()]);
+        await setTextAndAudioPos();
     }
 
     initializeEbookReader().catch((error) => {

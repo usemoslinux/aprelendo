@@ -79,14 +79,14 @@ const ReaderHelpers = (() => {
      *
      * @returns {object}
      */
-    function buildReviewData() {
+    function buildReviewData(elements = $('.reviewing'), texts_reviewed = 1) {
         return {
             words: {
-                new: collectUniqueWords(".reviewing.new").length,
-                learning: collectUniqueWords(".reviewing.learning").length,
-                forgotten: collectUniqueWords(".reviewing.forgotten").length
+                new: collectUniqueWords(elements.filter('.new')).length,
+                learning: collectUniqueWords(elements.filter('.learning')).length,
+                forgotten: collectUniqueWords(elements.filter('.forgotten')).length
             },
-            texts: { reviewed: 1 }
+            texts: { reviewed: texts_reviewed }
         };
     }
 
@@ -133,7 +133,7 @@ const ReaderHelpers = (() => {
 
         const update_user_score_data = await postFormJson(
             "/ajax/updateuserscore.php",
-            { review_data: JSON.stringify(buildReviewData()) },
+            { review_data: JSON.stringify(buildReviewData($(words_selector))) },
             "Failed to update user score."
         );
 
@@ -551,6 +551,7 @@ const ReaderHelpers = (() => {
     return {
         postFormJson,
         annotateText,
+        buildReviewData,
         saveReviewProgress,
         submitTextStatsForm,
         resolveMediaController,

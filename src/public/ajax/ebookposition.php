@@ -6,6 +6,7 @@ require_once '../../Includes/bootstrap.php'; // initialize application
 use Aprelendo\AuthGuard;
 use Aprelendo\Database;
 use Aprelendo\Texts;
+use Aprelendo\EbookPosition;
 use Aprelendo\InternalException;
 use Aprelendo\UserException;
 
@@ -22,6 +23,9 @@ if (empty($_POST) || !isset($_POST['mode'])) {
 
 
 try {
+    if (empty($_POST['id']) || !$user->isAllowedToAccessElement('texts', (int)$_POST['id'])) {
+        throw new UserException('This ebook is not available.');
+    }
     $text = new Texts($pdo, $user->id, $user->lang_id);
 
     if ($_POST['mode'] == "GET") {
@@ -31,7 +35,7 @@ try {
         $response = ['success' => true, 'payload' => $payload];
     } elseif ($_POST['mode'] == "SAVE") {
         $payload['audio_pos'] = !empty($_POST['audio_pos']) ? $_POST['audio_pos'] : null;
-        $payload['text_pos'] = !empty($_POST['text_pos']) ? $_POST['text_pos'] : null;
+        $payload['text_pos'] = EbookPosition::normalize($_POST['text_pos'] ?? null);
         $text->update($_POST['id'], $payload);
         $response = ['success' => true];
     }

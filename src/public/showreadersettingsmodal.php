@@ -18,11 +18,11 @@ $font_size = $prefs->font_size;
 $line_height = $prefs->line_height;
 $text_align = $prefs->text_alignment;
 $display_mode = $prefs->display_mode;
-$show_wallpaper = $prefs->show_wallpaper;
 $assisted_learning = $prefs->assisted_learning;
 
 $video_pages = ['showvideo', 'showofflinevideo'];
 $is_video_page = in_array(basename($_SERVER['PHP_SELF']), $video_pages);
+$is_ebook_page = basename($_SERVER['PHP_SELF']) === 'showebook.php';
 
 $sel = ' selected ';
 ?>
@@ -39,6 +39,16 @@ $sel = ' selected ';
             </div>
             <div class="modal-body">
                 <form id="prefs-modal-form" method="post">
+                    <?php if ($is_ebook_page): ?>
+                    <div class="mb-3">
+                        <label for="ebookmode">Reading layout:</label>
+                        <select name="ebookmode" id="ebookmode" class="form-select">
+                            <option value="auto" <?php echo $prefs->ebook_mode === 'auto' ? $sel : ''; ?>>Automatic (two pages on wide screens)</option>
+                            <option value="single" <?php echo $prefs->ebook_mode === 'single' ? $sel : ''; ?>>Single page</option>
+                            <option value="scroll" <?php echo $prefs->ebook_mode === 'scroll' ? $sel : ''; ?>>Scrolling</option>
+                        </select>
+                    </div>
+                    <?php endif; ?>
                     <div class="mb-3">
                         <label for="fontfamily">Font Family:</label>
                         <div>
@@ -137,16 +147,18 @@ $sel = ' selected ';
                             </select>
                         </div>
                     </div>
+                    <?php if (!$is_ebook_page): ?>
                     <div class="mb-3">
                         <label for="showwallpaper">Wallpaper:</label>
                         <div>
                             <select name="showwallpaper" id="showwallpaper" class="form-control form-select"
                                 autocomplete="off">
-                                <option value="1" <?php echo $show_wallpaper ? $sel : ''; ?>>On</option>
-                                <option value="0" <?php echo !$show_wallpaper ? $sel : ''; ?>>Off</option>
+                                <option value="1" <?php echo $prefs->show_wallpaper ? $sel : ''; ?>>On</option>
+                                <option value="0" <?php echo !$prefs->show_wallpaper ? $sel : ''; ?>>Off</option>
                             </select>
                         </div>
                     </div>
+                    <?php endif; ?>
                     <div class="mb-3 d-none">
                         <label for="assistedlearning">Mode:</label>
                         <div>

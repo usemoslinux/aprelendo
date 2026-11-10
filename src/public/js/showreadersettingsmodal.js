@@ -18,7 +18,10 @@ $(document).ready(function() {
         let $doc = $(parent.document.body);
         let $text_container = $("#text-container");
         $doc.removeClass(color_modes).addClass(class_name);
-        $doc.toggleClass('show-wallpaper', $('#showwallpaper').val() === '1');
+        const $wallpaper_setting = $('#showwallpaper');
+        if ($wallpaper_setting.length) {
+            $doc.toggleClass('show-wallpaper', $wallpaper_setting.val() === '1');
+        }
         
         $text_container.css({
             'font-family' : $('#fontfamily').val(),
@@ -26,6 +29,9 @@ $(document).ready(function() {
             'text-align' : $('#alignment').val(),
             'line-height': $('#lineheight').val()
         });
+        document.dispatchEvent(new CustomEvent('reader-preferences-changed', {
+            detail: { ebook_mode: $('#ebookmode').val() }
+        }));
 
         // change offcanvas color mode if exists
         const $off_canvas = $doc.find('.offcanvas');

@@ -42,7 +42,6 @@ try {
         'dark' => 'darkmode',
         default => '',
     };
-    $wallpaper_class = $prefs->show_wallpaper ? ' show-wallpaper' : '';
 
     $font_family = $prefs->font_family;
     $font_size = $prefs->getFontSizeCssValue();
@@ -92,8 +91,8 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Extra style sheets -->
-    <link rel="stylesheet" type="text/css" href="/css/showebook.css">
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/css/showebook.css">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -134,10 +133,12 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
     <?php endif; ?>
 </head>
 
-<body id="readerpage" <?php echo ' class="dvh-100 dvw-100 ' . $color_mode . $wallpaper_class . '"' ?>>
+<body id="readerpage" data-ebook-mode="<?php echo htmlspecialchars($prefs->ebook_mode, ENT_QUOTES, 'UTF-8'); ?>"
+    <?php echo ' class="ebook-reader dvh-100 dvw-100 ' . $color_mode . '"' ?>>
     <div class="offcanvas offcanvas-start <?php echo $color_mode; ?>"
         data-bs-scroll="true" tabindex="-1" id="navigation" aria-labelledby="navigation-title">
         <div class="offcanvas-header">
+            <h2 id="navigation-title" class="h6 mb-0">Contents</h2>
             <button id="close-offcanvas" type="button"
                 class="btn-close <?php echo $color_mode == 'darkmode' ? 'btn-close-white' : ''; ?>"
                 data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -168,9 +169,8 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
         ?>
     </div>
 
-    <div id="main" class="offset-lg-2 col-lg-8 h-100">
-        <div class="d-flex flex-column h-100">
-            <div id="header" class="mt-2 mx-3">
+    <main id="main" class="ebook-shell">
+            <header id="header" class="ebook-toolbar">
                 <span class="d-flex flex-row-reverse">
                     <button id="btn-close-ebook" type="button" data-bs-toggle="tooltip"
                         data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
@@ -180,8 +180,8 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
                     <span class="me-2" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
                         data-bs-placement="bottom" data-bs-title="Reader settings">
                         <button type="button" data-bs-toggle="modal" data-bs-target="#reader-settings-modal"
-                            class="btn btn-sm btn-secondary">
-                            <span class="bi bi-gear-fill"></span>
+                            class="btn ebook-icon-button" aria-label="Reading appearance">
+                            <span class="bi bi-fonts" aria-hidden="true"></span>
                         </button>
                     </span>
 
@@ -195,12 +195,14 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
                         </div>
                     </div>
 
-                    <span id="book-title-chapter" class="fw-bold pe-2 me-auto my-auto text-truncate"></span>
-                    <span id="book-title" class="fw-bold ms-2 me-2 my-auto text-nowrap text-truncate"></span>
+                    <span class="ebook-heading me-auto">
+                        <span id="book-title" class="text-truncate"></span>
+                        <span id="book-title-chapter" class="text-truncate"></span>
+                    </span>
 
                     <button id="opener" class="btn btn-link" type="button"
                         data-bs-toggle="offcanvas" data-bs-target="#navigation"
-                        aria-controls="navigation">
+                        aria-controls="navigation" aria-label="Open table of contents">
                         <svg id="hamburger"
                             xmlns="http://www.w3.org/2000/svg"
                             width="28" height="28"
@@ -213,17 +215,27 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
                     </button>
 
                 </span>
-            </div>
-            <div id="text-container" class="reader-scroll-area d-flex flex-column m-2 p-3 fade" style="<?php echo $reader_css; ?>">
-                <div id="text" class="flex-grow-1" data-idText="<?php echo $_GET['id'] ?? '' ?>">
+            </header>
+            <div id="ebook-message" class="ebook-message" role="status" hidden></div>
+            <section id="text-container" class="fade" aria-label="Book content" style="<?php echo $reader_css; ?>">
+                <div id="ebook-viewport" class="reader-scroll-area" tabindex="0" aria-label="Reading area">
+                    <div id="text" data-idText="<?php echo (int)$_GET['id']; ?>"></div>
                 </div>
-                <div class="navlink">
-                    <a id="next" class="btn btn-outline-success d-none" data-bs-toggle="tooltip"
-                        data-bs-custom-class="custom-tooltip" data-bs-placement="top" href="#next"></a>
+            </section>
+            <footer class="ebook-footer">
+                <button id="ebook-prev" type="button" class="btn ebook-icon-button" aria-label="Previous page" disabled>
+                    <span class="bi bi-chevron-left" aria-hidden="true"></span>
+                </button>
+                <div class="ebook-progress">
+                    <span id="ebook-page-status" role="status" aria-live="polite">Opening book…</span>
+                    <input id="ebook-progress" type="range" min="0" max="1000" value="0" disabled
+                        aria-label="Position within this chapter">
                 </div>
-            </div>
-        </div>
-    </div>
+                <button id="ebook-next" type="button" class="btn ebook-icon-button" aria-label="Next page" disabled>
+                    <span class="bi bi-chevron-right" aria-hidden="true"></span>
+                </button>
+            </footer>
+    </main>
 
     <?php
     require_once PUBLIC_PATH . 'showactionbuttons.php'; // load dictionary modal window
@@ -243,6 +255,7 @@ $google_fonts_href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;7
         <script defer src="/js/audioplayer.js"></script>
     <?php endif; ?>
     <script defer src="/js/tooltips.js"></script>
+    <script defer src="/js/ebookpagination.js"></script>
     <script defer src="/js/showebook.js"></script>
 </body>
 

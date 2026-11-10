@@ -13,6 +13,22 @@ const ActionBtns = (() => {
         const $actions = $('#action-buttons');
         const actions_width = $actions.outerWidth();
         const screen_width = $(window).width();
+        const ebook_viewport = document.getElementById('ebook-viewport');
+        if (ebook_viewport) {
+            const bounds = ebook_viewport.getBoundingClientRect();
+            const rects = $selword.toArray().flatMap(element => Array.from(element.getClientRects()));
+            const rect = rects.find(rect => rect.right > bounds.left && rect.left < bounds.right
+                && rect.bottom > bounds.top && rect.top < bounds.bottom);
+            if (!rect) return;
+            const height = $actions.outerHeight();
+            const top = rect.top - height - 6 >= 4 ? rect.top - height - 6 : rect.bottom + 6;
+            $actions.css({
+                top: window.scrollY + Math.max(4, Math.min(top, window.innerHeight - height - 4)),
+                left: window.scrollX + Math.max(4, Math.min(rect.left, screen_width - actions_width - 4))
+            });
+            $actions.removeClass('invisible');
+            return;
+        }
         const offset = $selword.offset();
         const word_width = $selword.outerWidth();
 
@@ -189,7 +205,9 @@ const TextActionBtns = (() => {
      */
     const show = ($selword) => {
         ActionBtns.createWordActionBtns($selword, false);
-        setScrollLocked($("#text-container"), true);
+        if (!document.getElementById('ebook-viewport')) {
+            setScrollLocked($("#text-container"), true);
+        }
         ActionBtns.bindDictionaryBtnsOnClick($selword, 'text');
         ActionBtns.show($selword);
     } 
@@ -198,7 +216,9 @@ const TextActionBtns = (() => {
      * Hides actions pop up toolbar
      */
     const hide = () => {
-        setScrollLocked($("#text-container"), false);
+        if (!document.getElementById('ebook-viewport')) {
+            setScrollLocked($("#text-container"), false);
+        }
         ActionBtns.hide();
     } 
 

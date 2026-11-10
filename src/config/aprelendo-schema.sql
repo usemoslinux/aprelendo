@@ -405541,7 +405541,8 @@ CREATE TABLE `preferences` (
   `text_alignment` varchar(7) NOT NULL,
   `display_mode` varchar(5) NOT NULL,
   `show_wallpaper` tinyint(1) NOT NULL DEFAULT 1,
-  `assisted_learning` tinyint(1) NOT NULL DEFAULT 1
+  `assisted_learning` tinyint(1) NOT NULL DEFAULT 1,
+  `ebook_mode` varchar(6) NOT NULL DEFAULT 'auto'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -405600,7 +405601,7 @@ CREATE TABLE `texts` (
   `level` tinyint(3) UNSIGNED DEFAULT NULL,
   `is_archived` tinyint(1) NOT NULL DEFAULT 0,
   `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
-  `text_pos` varchar(100) DEFAULT NULL,
+  `text_pos` text DEFAULT NULL,
   `audio_pos` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
