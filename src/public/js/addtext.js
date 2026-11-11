@@ -304,11 +304,21 @@ $(document).ready(function () {
 
             const data = await response.json();
 
-            if (!data.success) {
-                throw new Error(data.error_msg || 'No data received from Wikipedia API.');
+            if (data.error) {
+                throw new Error(data.error.info || 'Wikipedia API request failed.');
             }
 
-            const page = data.query.pages[Object.keys(data.query.pages)[0]];
+            const pages = data.query && data.query.pages;
+            const page = pages && Object.values(pages)[0];
+            if (!page) {
+                throw new Error('No data received from Wikipedia API.');
+            }
+            if ('missing' in page || 'invalid' in page) {
+                throw new Error('Wikipedia article not found.');
+            }
+            if (typeof page.extract !== 'string' || !page.extract.trim()) {
+                throw new Error('No article text received from Wikipedia API.');
+            }
             let raw_text = page.extract;
 
             let clean_text = stripTrailingSections(raw_text, text_lang);
